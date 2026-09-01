@@ -1,12 +1,70 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import { getOpenLibraryCoverUrl } from '@/lib/books/covers';
 
+const resolvedCoverCache = new Map<string, Promise<string[]>>();
+
+async function loadResolvedCovers(book: Book): Promise<string[]> {
+  if (!book.openLibraryWorkId) return [];
+
+  const cacheKey = book.openLibraryWorkId;
+  const cached = resolvedCoverCache.get(cacheKey);
+  if (cached) return cached;
+
+  const params = new URLSearchParams({
+    workId: book.openLibraryWorkId,
+    title: book.title,
+    author: book.author,
+  });
+  if (book.firstPublishYear) {
+    params.set('year', String(book.firstPublishYear));
+  }
+
+  const request = fetch(`/api/open-library/covers?${params}`)
+    .then(async (response) => {
+      if (!response.ok) return [];
+
+      const data = (await response.json()) as { coverUrls?: unknown };
+      return Array.isArray(data.coverUrls)
+        ? data.coverUrls.filter(
+            (url): url is string => typeof url === 'string' && url.length > 0,
+          )
+        : [];
+    })
+    .catch(() => []);
+
+  resolvedCoverCache.set(cacheKey, request);
+  return request;
+}
+
 function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
-  const coverUrl = getOpenLibraryCoverUrl(book.isbn13);
+  const initialCoverUrls = useMemo(
+    () =>
+      book.coverUrls?.length
+        ? book.coverUrls
+        : [getOpenLibraryCoverUrl(book.isbn13)].filter(
+            (url): url is string => url !== null,
+          ),
+    [book.coverUrls, book.isbn13],
+  );
+  const [coverUrls, setCoverUrls] = useState(initialCoverUrls);
+  const [coverIndex, setCoverIndex] = useState(0);
+  const resolvedRequested = useRef(false);
+  const coverUrl = coverUrls[coverIndex] ?? null;
+
+  useEffect(() => {
+    if (coverUrl || resolvedRequested.current || !book.openLibraryWorkId) return;
+
+    resolvedRequested.current = true;
+    void loadResolvedCovers(book).then((resolvedUrls) => {
+      setCoverUrls((currentUrls) => [
+        ...new Set([...currentUrls, ...resolvedUrls]),
+      ]);
+    });
+  }, [book, coverUrl]);
 
   return (
     <div className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`} aria-hidden="true">
@@ -16,6 +74,7 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
       <span className="cover-author">{book.author}</span>
       {coverUrl && (
         <Image
+          key={coverUrl}
           className="book-cover-image"
           src={coverUrl}
           alt=""
@@ -23,9 +82,7 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading="lazy"
           unoptimized
-          onError={(event) => {
-            event.currentTarget.hidden = true;
-          }}
+          onError={() => setCoverIndex((index) => index + 1)}
         />
       )}
     </div>

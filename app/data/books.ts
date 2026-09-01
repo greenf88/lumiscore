@@ -3,6 +3,8 @@ export type Book = {
   source: 'demo' | 'supabase';
   workId?: string | null;
   editionId?: string | null;
+  openLibraryWorkId?: string | null;
+  openLibraryEditionId?: string | null;
   title: string;
   author: string;
   firstPublishYear?: number | null;
@@ -11,6 +13,7 @@ export type Book = {
   match: number | null;
   cover: string;
   isbn13?: string | null;
+  coverUrls?: string[];
   genre?: string;
 };
 

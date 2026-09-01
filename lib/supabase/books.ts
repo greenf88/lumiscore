@@ -1,5 +1,12 @@
 import type { Book } from '@/app/data/books';
-import { normalizeIsbn13 } from '@/lib/books/covers';
+import {
+  getOpenLibraryCoverIdUrl,
+  getOpenLibraryCoverUrl,
+  getOpenLibraryOlidCoverUrl,
+  normalizeIsbn13,
+  normalizeOpenLibraryId,
+  uniqueCoverUrls,
+} from '@/lib/books/covers';
 import { supabase } from './client';
 
 type DatabaseRow = Record<string, unknown>;
@@ -7,6 +14,22 @@ type DatabaseRow = Record<string, unknown>;
 const ISBN_13_COLUMNS = ['isbn13', 'isbn_13', 'isbn-13'] as const;
 const AUTHOR_ID_COLUMNS = ['author_id', 'primary_author_id', 'author'] as const;
 const WORK_ID_COLUMNS = ['work_id', 'workId', 'work'] as const;
+const OPEN_LIBRARY_WORK_ID_COLUMNS = [
+  'open_library_id',
+  'open_library_work_id',
+  'open_library_key',
+  'openlibrary_id',
+  'ol_id',
+  'ol_key',
+] as const;
+const OPEN_LIBRARY_EDITION_ID_COLUMNS = [
+  'open_library_edition_id',
+  'open_library_id',
+  'open_library_key',
+  'openlibrary_id',
+  'ol_id',
+  'ol_key',
+] as const;
 const COVER_STYLES = ['orbit', 'laurel', 'copper', 'women', 'road', 'matter'] as const;
 
 function asRow(value: unknown): DatabaseRow | null {
@@ -59,6 +82,79 @@ function readIsbn13(edition: DatabaseRow): string | null {
   }
 
   return null;
+}
+
+function readOpenLibraryId(
+  row: DatabaseRow,
+  columns: readonly string[],
+  type: 'edition' | 'work',
+): string | null {
+  for (const column of columns) {
+    const value = readString(row, [column]);
+    const openLibraryId = normalizeOpenLibraryId(value, type);
+    if (openLibraryId) return openLibraryId;
+  }
+
+  return null;
+}
+
+function readCoverIds(row: DatabaseRow): number[] {
+  const values = ['cover_id', 'cover_i', 'covers'].flatMap((column) => {
+    const value = row[column];
+    return Array.isArray(value) ? value : [value];
+  });
+
+  return values
+    .map((value) => Number(value))
+    .filter(
+      (value) => Number.isSafeInteger(value) && value > 0,
+    );
+}
+
+function isEnglishEdition(edition: DatabaseRow): boolean {
+  const language = readString(edition, ['language', 'language_code']);
+  if (language && /^(eng|en|english)$/i.test(language)) return true;
+
+  return asRows(edition.languages).some((candidate) =>
+    /(?:^|\/)eng$/i.test(readString(candidate, ['key', 'code']) ?? ''),
+  );
+}
+
+function editionPreferenceScore(edition: DatabaseRow): number {
+  return (
+    (readIsbn13(edition) ? 100 : 0) +
+    (isEnglishEdition(edition) ? 20 : 0) +
+    (readCoverIds(edition).length > 0 ? 10 : 0)
+  );
+}
+
+function getStoredCoverCandidates(
+  work: DatabaseRow,
+  editions: DatabaseRow[],
+): string[] {
+  const preferredEditions = [...editions].sort(
+    (left, right) =>
+      editionPreferenceScore(right) - editionPreferenceScore(left),
+  );
+
+  return uniqueCoverUrls([
+    ...preferredEditions.map((edition) =>
+      getOpenLibraryCoverUrl(readIsbn13(edition)),
+    ),
+    ...preferredEditions.map((edition) =>
+      getOpenLibraryOlidCoverUrl(
+        readOpenLibraryId(
+          edition,
+          OPEN_LIBRARY_EDITION_ID_COLUMNS,
+          'edition',
+        ),
+      ),
+    ),
+    ...preferredEditions.flatMap((edition) =>
+      readCoverIds(edition).map(getOpenLibraryCoverIdUrl),
+    ),
+    ...readCoverIds(work).map(getOpenLibraryCoverIdUrl),
+  ]);
 }
 
 function getWorkId(work: DatabaseRow): string | null {
@@ -141,16 +237,31 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const edition =
-    relatedEditions.find((candidate) => readIsbn13(candidate) !== null) ??
-    relatedEditions[0] ??
-    null;
+  const preferredEditions = [...relatedEditions].sort(
+    (left, right) =>
+      editionPreferenceScore(right) - editionPreferenceScore(left),
+  );
+  const edition = preferredEditions[0] ?? null;
+  const openLibraryWorkId = readOpenLibraryId(
+    work,
+    OPEN_LIBRARY_WORK_ID_COLUMNS,
+    'work',
+  );
+  const openLibraryEditionId = edition
+    ? readOpenLibraryId(
+        edition,
+        OPEN_LIBRARY_EDITION_ID_COLUMNS,
+        'edition',
+      )
+    : null;
 
   return {
     id: `work-${workId}`,
     source: 'supabase',
     workId,
     editionId: edition ? readString(edition, ['id']) : null,
+    openLibraryWorkId,
+    openLibraryEditionId,
     title,
     author: author
       ? readString(author, ['name', 'author_name']) ?? 'Unknown author'
@@ -160,6 +271,7 @@ function mapCatalogBook(
       'first_published_year',
     ]),
     isbn13: edition ? readIsbn13(edition) : null,
+    coverUrls: getStoredCoverCandidates(work, preferredEditions),
     score: null,
     ratingsCount: null,
     match: null,
