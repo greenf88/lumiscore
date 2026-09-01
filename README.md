@@ -46,7 +46,9 @@ The script is not part of the app runtime and never runs during development,
 builds, or deployments. To expand the seed later, extend `SEED_BOOKS` in
 `scripts/import-open-library.ts` with the expected author and original publish
 year. Add an original-language title to `alternateTitles` when Open Library's
-canonical work title differs from the familiar English title.
+canonical work title differs from the familiar English title. Set
+`preferredDisplayTitle` when LumiScore should store a different reader-facing
+title in `works.title`; Open Library IDs remain unchanged for deduplication.
 
 ## Included
 

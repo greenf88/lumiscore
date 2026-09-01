@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
+  getWorkDisplayTitle,
   matchesExpectedAuthor,
   selectBestWorkMatch,
   type BookMatchSeed,
@@ -48,6 +49,7 @@ const SEED_BOOKS: SeedBook[] = [
     alternateTitles: ['Nineteen Eighty-Four'],
     author: 'George Orwell',
     firstPublishYear: 1949,
+    preferredDisplayTitle: '1984',
   },
   { title: 'Pride and Prejudice', author: 'Jane Austen', firstPublishYear: 1813 },
   { title: 'To Kill a Mockingbird', author: 'Harper Lee', firstPublishYear: 1960 },
@@ -62,6 +64,7 @@ const SEED_BOOKS: SeedBook[] = [
     alternateTitles: ['O Alquimista'],
     author: 'Paulo Coelho',
     firstPublishYear: 1988,
+    preferredDisplayTitle: 'The Alchemist',
   },
 ];
 
@@ -194,7 +197,8 @@ async function loadOpenLibraryBook(seed: SeedBook) {
     author,
     work: {
       id: workId,
-      title: work.title,
+      openLibraryTitle: work.title,
+      title: getWorkDisplayTitle(seed, work),
       firstPublishYear: work.first_publish_year,
     },
     edition: {
@@ -393,7 +397,10 @@ async function importBook(
     openLibraryIdColumn: columns.works.openLibraryId,
     openLibraryId: book.work.id,
     payload: workPayload,
-    fallbackFilters: [{ [columns.works.title]: book.work.title }],
+    fallbackFilters: [
+      { [columns.works.title]: book.work.title },
+      { [columns.works.title]: book.work.openLibraryTitle },
+    ],
   });
 
   const editionPayload: Row = {

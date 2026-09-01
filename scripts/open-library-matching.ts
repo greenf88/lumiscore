@@ -3,6 +3,7 @@ export type BookMatchSeed = {
   author?: string;
   firstPublishYear?: number;
   alternateTitles?: string[];
+  preferredDisplayTitle?: string;
 };
 
 export type OpenLibrarySearchDocument = {
@@ -53,6 +54,19 @@ export function matchesExpectedAuthor(
   const expectedName = normalizeMatchText(expected).replace(/ author$/, '');
 
   return actualName === expectedName;
+}
+
+export function getWorkDisplayTitle(
+  seed: BookMatchSeed,
+  document: OpenLibrarySearchDocument,
+): string {
+  const preferredTitle = seed.preferredDisplayTitle?.trim();
+  const openLibraryTitle = document.title?.trim();
+
+  if (preferredTitle) return preferredTitle;
+  if (openLibraryTitle) return openLibraryTitle;
+
+  throw new Error(`Open Library returned no title for “${seed.title}”.`);
 }
 
 function titleScore(seed: BookMatchSeed, document: OpenLibrarySearchDocument) {

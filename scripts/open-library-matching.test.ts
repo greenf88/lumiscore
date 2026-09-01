@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  getWorkDisplayTitle,
   scoreWorkMatch,
   selectBestWorkMatch,
   type BookMatchSeed,
@@ -114,4 +115,26 @@ test('uses a canonical-title alias and edition count to prefer the main work', (
   ]);
 
   assert.equal(result.key, '/works/OL1168083W');
+});
+
+test('uses a preferred display title without changing work identity', () => {
+  const work = alchemistResults[2];
+  const displayTitle = getWorkDisplayTitle(
+    { ...alchemistSeed, preferredDisplayTitle: 'The Alchemist' },
+    work,
+  );
+
+  assert.equal(work.key, '/works/OL796465W');
+  assert.equal(work.title, 'O Alquimista');
+  assert.equal(displayTitle, 'The Alchemist');
+});
+
+test('falls back to the raw Open Library title', () => {
+  assert.equal(
+    getWorkDisplayTitle(
+      { title: 'Dune', author: 'Frank Herbert' },
+      { key: '/works/OL893414W', title: 'Dune' },
+    ),
+    'Dune',
+  );
 });
