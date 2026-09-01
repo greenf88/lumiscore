@@ -32,6 +32,14 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
   );
 }
 
+function getDemoScore(book: Book): number | null {
+  return book.source === 'demo' ? book.score : null;
+}
+
+function getDemoMatch(book: Book): number | null {
+  return book.source === 'demo' ? book.match : null;
+}
+
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   return (
     <label className={`search-bar${mobile ? ' search-bar-mobile' : ''}`}>
@@ -77,15 +85,18 @@ function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => 
 }
 
 function RecommendationRow({ book }: { book: Book }) {
+  const score = getDemoScore(book);
+  const match = getDemoMatch(book);
+
   return (
     <a className="recommendation-row" href={`#${book.id}`}>
       <BookCover book={book} small />
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
         <span>{book.author}</span>
-        <span className="match-line"><i /> {book.match}% match</span>
+        <span className="match-line"><i /> {match === null ? 'Not rated yet' : `${match}% match`}</span>
       </span>
-      <span className="mini-score"><strong>{book.score.toFixed(1)}</strong><small>LumiScore</small></span>
+      <span className="mini-score"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
     </a>
   );
 }
@@ -138,17 +149,26 @@ function formatRatings(count: number) {
 }
 
 function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
+  const score = getDemoScore(book);
+  const match = getDemoMatch(book);
+
   return (
     <article className="book-card" id={book.id}>
       <div className="card-cover-wrap">
         <BookCover book={book} />
-        <span className="score-badge"><strong>{book.score.toFixed(1)}</strong><small>LumiScore</small></span>
+        <span className="score-badge"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
       </div>
       <div className="book-card-body">
-        <span className="book-genre">{book.genre}</span>
+        <span className="book-genre">{book.genre ?? (book.firstPublishYear ? `First published ${book.firstPublishYear}` : 'Publication year unavailable')}</span>
         <h3>{book.title}</h3>
         <p>{book.author}</p>
-        <div className="book-meta"><span>{formatRatings(book.ratingsCount)}</span><span className="book-match"><i /> {book.match}% match</span></div>
+        <div className="book-meta">
+          {book.source === 'demo' && book.ratingsCount !== null && match !== null ? (
+            <><span>{formatRatings(book.ratingsCount)}</span><span className="book-match"><i /> {match}% match</span></>
+          ) : (
+            <span>Not rated yet</span>
+          )}
+        </div>
         <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book.id)} aria-pressed={wanted}>
           <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{wanted ? 'Want to read' : 'Want to read'}
         </button>
@@ -161,7 +181,7 @@ function FeaturedBooks({ books, query, wanted, onToggle }: { books: Book[]; quer
   const filteredBooks = useMemo(() => {
     const search = query.trim().toLowerCase();
     if (!search) return books;
-    return books.filter((book) => `${book.title} ${book.author} ${book.genre ?? ''}`.toLowerCase().includes(search));
+    return books.filter((book) => `${book.title} ${book.author} ${book.genre ?? ''} ${book.firstPublishYear ?? ''} ${book.isbn13 ?? ''}`.toLowerCase().includes(search));
   }, [books, query]);
 
   return (
@@ -227,9 +247,9 @@ export function LumiScoreHome() {
     let active = true;
 
     void import('@/lib/supabase/books')
-      .then(({ addEditionIsbns }) => addEditionIsbns(books))
-      .then((enrichedBooks) => {
-        if (active) setCatalogBooks(enrichedBooks);
+      .then(({ loadCatalogBooks }) => loadCatalogBooks(50))
+      .then((supabaseBooks) => {
+        if (active) setCatalogBooks(supabaseBooks);
       })
       .catch(() => {
         // The local catalog and styled cover placeholders remain available.

@@ -59,8 +59,9 @@ distribution, unique seed identities, and the original ten titles.
 
 - Ink dark and Paper light themes with first-visit system preference detection and persisted selection
 - Responsive editorial hero and personalized recommendation panel
-- Typed local book data separated from presentation code
-- Client-side title, author, and genre filtering
+- Supabase-backed 50-book catalog with authors, editions, ISBN covers, and deterministic title sorting
+- Typed local demo data retained only as an availability fallback
+- Client-side title, author, year, ISBN, and genre filtering
 - Persistent “Want to read” controls
 - Mobile expandable search and swipeable book shelf
 - Keyboard focus states and `Ctrl/⌘ + K` search shortcut
@@ -71,10 +72,14 @@ distribution, unique seed identities, and the original ten titles.
 ```text
 app/
   components/LumiScoreHome.tsx  # Reusable page components and interactions
-  data/books.ts                 # Typed mock data
+  data/books.ts                 # Typed demo fallback data
   globals.css                   # Theme tokens and responsive presentation
   layout.tsx                    # Metadata and pre-hydration theme setup
   page.tsx                      # App Router entry page
+lib/
+  books/covers.ts               # Open Library ISBN cover helper
+  supabase/books.ts             # Real catalog query and database-row mapping
+  supabase/client.ts            # Reusable browser-safe Supabase client
 public/
   assets/                       # Original generated hero scenes
   og.png                        # LumiScore social card

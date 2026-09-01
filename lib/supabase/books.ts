@@ -5,7 +5,9 @@ import { supabase } from './client';
 type DatabaseRow = Record<string, unknown>;
 
 const ISBN_13_COLUMNS = ['isbn13', 'isbn_13', 'isbn-13'] as const;
+const AUTHOR_ID_COLUMNS = ['author_id', 'primary_author_id', 'author'] as const;
 const WORK_ID_COLUMNS = ['work_id', 'workId', 'work'] as const;
+const COVER_STYLES = ['orbit', 'laurel', 'copper', 'women', 'road', 'matter'] as const;
 
 function asRow(value: unknown): DatabaseRow | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -27,11 +29,20 @@ function readString(row: DatabaseRow, columns: readonly string[]): string | null
     const value = row[column];
 
     if (typeof value === 'string' || typeof value === 'number') {
-      return String(value);
+      const text = String(value).trim();
+      if (text) return text;
     }
   }
 
   return null;
+}
+
+function readNumber(row: DatabaseRow, columns: readonly string[]): number | null {
+  const value = readString(row, columns);
+  if (!value) return null;
+
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function readIsbn13(edition: DatabaseRow): string | null {
@@ -50,27 +61,21 @@ function readIsbn13(edition: DatabaseRow): string | null {
   return null;
 }
 
-function normalizeTitle(title: string): string {
-  return title.trim().toLocaleLowerCase('en');
-}
-
-function findWork(book: Book, works: DatabaseRow[]): DatabaseRow | undefined {
-  if (book.workId) {
-    const matchingId = works.find(
-      (work) => readString(work, ['id']) === book.workId,
-    );
-    if (matchingId) return matchingId;
-  }
-
-  const bookTitle = normalizeTitle(book.title);
-  return works.find((work) => {
-    const title = readString(work, ['title', 'name']);
-    return title ? normalizeTitle(title) === bookTitle : false;
-  });
-}
-
 function getWorkId(work: DatabaseRow): string | null {
   return readString(work, ['id']);
+}
+
+function getRelatedAuthor(
+  work: DatabaseRow,
+  authors: DatabaseRow[],
+): DatabaseRow | null {
+  const embedded = [...asRows(work.author), ...asRows(work.authors)][0];
+  if (embedded) return embedded;
+
+  const authorId = readString(work, AUTHOR_ID_COLUMNS);
+  return (
+    authors.find((author) => readString(author, ['id']) === authorId) ?? null
+  );
 }
 
 function getRelatedEditions(
@@ -88,41 +93,88 @@ function getRelatedEditions(
   );
 }
 
-async function loadWorksAndEditions(): Promise<{
+async function loadCatalogRows(limit: number): Promise<{
   works: DatabaseRow[];
+  authors: DatabaseRow[];
   editions: DatabaseRow[];
 }> {
-  const joined = await supabase.from('works').select('*, editions(*)');
+  const joined = await supabase
+    .from('works')
+    .select('*, authors(*), editions(*)')
+    .order('title', { ascending: true })
+    .limit(limit);
 
   if (!joined.error) {
-    return { works: asRows(joined.data), editions: [] };
+    return { works: asRows(joined.data), authors: [], editions: [] };
   }
 
-  const [worksResult, editionsResult] = await Promise.all([
-    supabase.from('works').select('*'),
+  const [worksResult, authorsResult, editionsResult] = await Promise.all([
+    supabase
+      .from('works')
+      .select('*')
+      .order('title', { ascending: true })
+      .limit(limit),
+    supabase.from('authors').select('*'),
     supabase.from('editions').select('*'),
   ]);
 
   if (worksResult.error) throw worksResult.error;
+  if (authorsResult.error) throw authorsResult.error;
   if (editionsResult.error) throw editionsResult.error;
 
   return {
     works: asRows(worksResult.data),
+    authors: asRows(authorsResult.data),
     editions: asRows(editionsResult.data),
   };
 }
 
-export async function addEditionIsbns(books: Book[]): Promise<Book[]> {
-  const { works, editions } = await loadWorksAndEditions();
+function mapCatalogBook(
+  work: DatabaseRow,
+  authors: DatabaseRow[],
+  editions: DatabaseRow[],
+  index: number,
+): Book | null {
+  const workId = getWorkId(work);
+  const title = readString(work, ['title', 'name']);
+  if (!workId || !title) return null;
 
-  return books.map((book) => {
-    const work = findWork(book, works);
-    if (!work) return book;
+  const author = getRelatedAuthor(work, authors);
+  const relatedEditions = getRelatedEditions(work, editions);
+  const edition =
+    relatedEditions.find((candidate) => readIsbn13(candidate) !== null) ??
+    relatedEditions[0] ??
+    null;
 
-    const isbn13 = getRelatedEditions(work, editions)
-      .map(readIsbn13)
-      .find((isbn): isbn is string => isbn !== null);
+  return {
+    id: `work-${workId}`,
+    source: 'supabase',
+    workId,
+    editionId: edition ? readString(edition, ['id']) : null,
+    title,
+    author: author
+      ? readString(author, ['name', 'author_name']) ?? 'Unknown author'
+      : 'Unknown author',
+    firstPublishYear: readNumber(work, [
+      'first_publish_year',
+      'first_published_year',
+    ]),
+    isbn13: edition ? readIsbn13(edition) : null,
+    score: null,
+    ratingsCount: null,
+    match: null,
+    cover: COVER_STYLES[index % COVER_STYLES.length],
+  };
+}
 
-    return isbn13 ? { ...book, workId: getWorkId(work), isbn13 } : book;
-  });
+export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
+  const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
+  const { works, authors, editions } = await loadCatalogRows(safeLimit);
+
+  return works
+    .map((work, index) => mapCatalogBook(work, authors, editions, index))
+    .filter((book): book is Book => book !== null)
+    .sort((left, right) =>
+      left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }),
+    );
 }
