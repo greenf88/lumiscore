@@ -1,0 +1,145 @@
+import type { BookMatchSeed } from './open-library-matching.ts';
+
+export const SEED_CATEGORIES = [
+  'fantasy-science-fiction',
+  'classics',
+  'thriller-crime',
+  'romance',
+  'non-fiction',
+  'young-adult-children',
+] as const;
+
+export type SeedCategory = (typeof SEED_CATEGORIES)[number];
+
+export type SeedBook = BookMatchSeed & {
+  author: string;
+  category: SeedCategory;
+};
+
+export const SEED_BOOKS: readonly SeedBook[] = [
+  // Fantasy and science fiction (25)
+  { title: 'The Hobbit', author: 'J. R. R. Tolkien', firstPublishYear: 1937, category: 'fantasy-science-fiction' },
+  { title: 'The Lord of the Rings', author: 'J. R. R. Tolkien', firstPublishYear: 1954, category: 'fantasy-science-fiction' },
+  { title: 'Dune', author: 'Frank Herbert', firstPublishYear: 1965, category: 'fantasy-science-fiction' },
+  { title: "The Handmaid's Tale", author: 'Margaret Atwood', firstPublishYear: 1985, category: 'fantasy-science-fiction' },
+  { title: 'Frankenstein', alternateTitles: ['Frankenstein; or, The Modern Prometheus'], author: 'Mary Shelley', firstPublishYear: 1818, category: 'fantasy-science-fiction' },
+  { title: 'Brave New World', author: 'Aldous Huxley', firstPublishYear: 1932, category: 'fantasy-science-fiction' },
+  { title: 'Fahrenheit 451', author: 'Ray Bradbury', firstPublishYear: 1953, category: 'fantasy-science-fiction' },
+  { title: 'The Martian', author: 'Andy Weir', firstPublishYear: 2011, category: 'fantasy-science-fiction' },
+  { title: 'Project Hail Mary', author: 'Andy Weir', firstPublishYear: 2021, category: 'fantasy-science-fiction' },
+  { title: 'Foundation', author: 'Isaac Asimov', firstPublishYear: 1951, category: 'fantasy-science-fiction' },
+  { title: 'Neuromancer', author: 'William Gibson', firstPublishYear: 1984, category: 'fantasy-science-fiction' },
+  { title: 'Snow Crash', author: 'Neal Stephenson', firstPublishYear: 1992, category: 'fantasy-science-fiction' },
+  { title: 'The Left Hand of Darkness', author: 'Ursula K. Le Guin', firstPublishYear: 1969, category: 'fantasy-science-fiction' },
+  { title: 'A Wizard of Earthsea', author: 'Ursula K. Le Guin', firstPublishYear: 1968, category: 'fantasy-science-fiction' },
+  { title: 'The Name of the Wind', author: 'Patrick Rothfuss', firstPublishYear: 2007, category: 'fantasy-science-fiction' },
+  { title: 'The Way of Kings', author: 'Brandon Sanderson', firstPublishYear: 2010, category: 'fantasy-science-fiction' },
+  { title: 'A Game of Thrones', author: 'George R. R. Martin', firstPublishYear: 1996, category: 'fantasy-science-fiction' },
+  { title: 'The Lion, the Witch and the Wardrobe', author: 'C. S. Lewis', firstPublishYear: 1950, category: 'fantasy-science-fiction' },
+  { title: 'Good Omens', author: 'Terry Pratchett', firstPublishYear: 1990, category: 'fantasy-science-fiction' },
+  { title: 'American Gods', author: 'Neil Gaiman', firstPublishYear: 2001, category: 'fantasy-science-fiction' },
+  { title: 'The Colour of Magic', author: 'Terry Pratchett', firstPublishYear: 1983, category: 'fantasy-science-fiction' },
+  { title: 'The Fifth Season', author: 'N. K. Jemisin', firstPublishYear: 2015, category: 'fantasy-science-fiction' },
+  { title: 'The Three-Body Problem', alternateTitles: ['Three Body Problem', 'San Ti', '三体'], preferredDisplayTitle: 'The Three-Body Problem', author: 'Cixin Liu', firstPublishYear: 2006, category: 'fantasy-science-fiction' },
+  { title: 'Do Androids Dream of Electric Sheep?', author: 'Philip K. Dick', firstPublishYear: 1968, category: 'fantasy-science-fiction' },
+  { title: "The Hitchhiker's Guide to the Galaxy", author: 'Douglas Adams', firstPublishYear: 1979, category: 'fantasy-science-fiction' },
+
+  // Classics (20)
+  { title: '1984', alternateTitles: ['Nineteen Eighty-Four'], preferredDisplayTitle: '1984', author: 'George Orwell', firstPublishYear: 1949, category: 'classics' },
+  { title: 'Pride and Prejudice', author: 'Jane Austen', firstPublishYear: 1813, category: 'classics' },
+  { title: 'To Kill a Mockingbird', author: 'Harper Lee', firstPublishYear: 1960, category: 'classics' },
+  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', firstPublishYear: 1925, category: 'classics' },
+  { title: 'The Alchemist', alternateTitles: ['O Alquimista'], preferredDisplayTitle: 'The Alchemist', author: 'Paulo Coelho', firstPublishYear: 1988, category: 'classics' },
+  { title: 'Jane Eyre', author: 'Charlotte Brontë', firstPublishYear: 1847, category: 'classics' },
+  { title: 'Wuthering Heights', author: 'Emily Brontë', firstPublishYear: 1847, category: 'classics' },
+  { title: 'Moby-Dick', alternateTitles: ['Moby Dick', 'Moby-Dick; or, The Whale'], preferredDisplayTitle: 'Moby-Dick', author: 'Herman Melville', firstPublishYear: 1851, category: 'classics' },
+  { title: 'The Catcher in the Rye', author: 'J. D. Salinger', firstPublishYear: 1951, category: 'classics' },
+  { title: 'The Grapes of Wrath', author: 'John Steinbeck', firstPublishYear: 1939, category: 'classics' },
+  { title: 'Of Mice and Men', author: 'John Steinbeck', firstPublishYear: 1937, category: 'classics' },
+  { title: 'The Picture of Dorian Gray', author: 'Oscar Wilde', firstPublishYear: 1890, category: 'classics' },
+  { title: 'Crime and Punishment', alternateTitles: ['Prestuplenie i nakazanie', 'Преступление и наказание'], preferredDisplayTitle: 'Crime and Punishment', author: 'Fyodor Dostoevsky', firstPublishYear: 1866, category: 'classics' },
+  { title: 'War and Peace', alternateTitles: ['Voina i mir', 'Война и мир'], preferredDisplayTitle: 'War and Peace', author: 'Leo Tolstoy', firstPublishYear: 1869, category: 'classics' },
+  { title: 'Anna Karenina', author: 'Leo Tolstoy', firstPublishYear: 1878, category: 'classics' },
+  { title: 'One Hundred Years of Solitude', alternateTitles: ['Cien años de soledad'], preferredDisplayTitle: 'One Hundred Years of Solitude', author: 'Gabriel García Márquez', firstPublishYear: 1967, category: 'classics' },
+  { title: 'The Stranger', alternateTitles: ["L'Étranger", 'The Outsider'], preferredDisplayTitle: 'The Stranger', author: 'Albert Camus', firstPublishYear: 1942, category: 'classics' },
+  { title: 'The Old Man and the Sea', author: 'Ernest Hemingway', firstPublishYear: 1952, category: 'classics' },
+  { title: 'Little Women', author: 'Louisa May Alcott', firstPublishYear: 1868, category: 'classics' },
+  { title: 'The Count of Monte Cristo', alternateTitles: ['Le Comte de Monte-Cristo'], preferredDisplayTitle: 'The Count of Monte Cristo', author: 'Alexandre Dumas', firstPublishYear: 1844, category: 'classics' },
+
+  // Thriller and crime (15)
+  { title: 'The Girl with the Dragon Tattoo', alternateTitles: ['Män som hatar kvinnor', 'Men Who Hate Women'], preferredDisplayTitle: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', firstPublishYear: 2005, category: 'thriller-crime' },
+  { title: 'Gone Girl', author: 'Gillian Flynn', firstPublishYear: 2012, category: 'thriller-crime' },
+  { title: 'The Da Vinci Code', author: 'Dan Brown', firstPublishYear: 2003, category: 'thriller-crime' },
+  { title: 'The Silence of the Lambs', author: 'Thomas Harris', firstPublishYear: 1988, category: 'thriller-crime' },
+  { title: 'The Talented Mr. Ripley', author: 'Patricia Highsmith', firstPublishYear: 1955, category: 'thriller-crime' },
+  { title: 'And Then There Were None', alternateTitles: ['Ten Little Indians'], preferredDisplayTitle: 'And Then There Were None', author: 'Agatha Christie', firstPublishYear: 1939, category: 'thriller-crime' },
+  { title: 'Murder on the Orient Express', author: 'Agatha Christie', firstPublishYear: 1934, category: 'thriller-crime' },
+  { title: 'The Big Sleep', author: 'Raymond Chandler', firstPublishYear: 1939, category: 'thriller-crime' },
+  { title: 'The Maltese Falcon', author: 'Dashiell Hammett', firstPublishYear: 1930, category: 'thriller-crime' },
+  { title: 'In Cold Blood', author: 'Truman Capote', firstPublishYear: 1966, category: 'thriller-crime' },
+  { title: 'The Shining', author: 'Stephen King', firstPublishYear: 1977, category: 'thriller-crime' },
+  { title: 'Misery', author: 'Stephen King', firstPublishYear: 1987, category: 'thriller-crime' },
+  { title: 'The Bourne Identity', author: 'Robert Ludlum', firstPublishYear: 1980, category: 'thriller-crime' },
+  { title: 'The Spy Who Came in from the Cold', author: 'John le Carré', firstPublishYear: 1963, category: 'thriller-crime' },
+  { title: 'The Name of the Rose', alternateTitles: ['Il nome della rosa'], preferredDisplayTitle: 'The Name of the Rose', author: 'Umberto Eco', firstPublishYear: 1980, category: 'thriller-crime' },
+
+  // Romance (15)
+  { title: 'The Notebook', author: 'Nicholas Sparks', firstPublishYear: 1996, category: 'romance' },
+  { title: 'Me Before You', author: 'Jojo Moyes', firstPublishYear: 2012, category: 'romance' },
+  { title: 'Outlander', author: 'Diana Gabaldon', firstPublishYear: 1991, category: 'romance' },
+  { title: "The Time Traveler's Wife", author: 'Audrey Niffenegger', firstPublishYear: 2003, category: 'romance' },
+  { title: 'The Fault in Our Stars', author: 'John Green', firstPublishYear: 2012, category: 'romance' },
+  { title: 'Love in the Time of Cholera', alternateTitles: ['El amor en los tiempos del cólera'], preferredDisplayTitle: 'Love in the Time of Cholera', author: 'Gabriel García Márquez', firstPublishYear: 1985, category: 'romance' },
+  { title: 'The Bridges of Madison County', author: 'Robert James Waller', firstPublishYear: 1992, category: 'romance' },
+  { title: 'A Room with a View', author: 'E. M. Forster', firstPublishYear: 1908, category: 'romance' },
+  { title: 'Persuasion', author: 'Jane Austen', firstPublishYear: 1817, category: 'romance' },
+  { title: 'Sense and Sensibility', author: 'Jane Austen', firstPublishYear: 1811, category: 'romance' },
+  { title: 'North and South', author: 'Elizabeth Gaskell', firstPublishYear: 1854, category: 'romance' },
+  { title: 'The Princess Bride', author: 'William Goldman', firstPublishYear: 1973, category: 'romance' },
+  { title: 'Call Me by Your Name', author: 'André Aciman', firstPublishYear: 2007, category: 'romance' },
+  { title: 'The Rosie Project', author: 'Graeme Simsion', firstPublishYear: 2013, category: 'romance' },
+  { title: 'The Kiss Quotient', author: 'Helen Hoang', firstPublishYear: 2018, category: 'romance' },
+
+  // Non-fiction (15)
+  { title: 'Sapiens', alternateTitles: ['Sapiens: A Brief History of Humankind'], preferredDisplayTitle: 'Sapiens', author: 'Yuval Noah Harari', firstPublishYear: 2011, category: 'non-fiction' },
+  { title: 'The Diary of a Young Girl', alternateTitles: ['Het Achterhuis', 'Anne Frank: The Diary of a Young Girl'], preferredDisplayTitle: 'The Diary of a Young Girl', author: 'Anne Frank', firstPublishYear: 1947, category: 'non-fiction' },
+  { title: 'The Immortal Life of Henrietta Lacks', author: 'Rebecca Skloot', firstPublishYear: 2010, category: 'non-fiction' },
+  { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', firstPublishYear: 2011, category: 'non-fiction' },
+  { title: 'Educated', author: 'Tara Westover', firstPublishYear: 2018, category: 'non-fiction' },
+  { title: 'Becoming', author: 'Michelle Obama', firstPublishYear: 2018, category: 'non-fiction' },
+  { title: 'Long Walk to Freedom', author: 'Nelson Mandela', firstPublishYear: 1994, category: 'non-fiction' },
+  { title: 'Into the Wild', author: 'Jon Krakauer', firstPublishYear: 1996, category: 'non-fiction' },
+  { title: 'A Brief History of Time', author: 'Stephen Hawking', firstPublishYear: 1988, category: 'non-fiction' },
+  { title: 'Silent Spring', author: 'Rachel Carson', firstPublishYear: 1962, category: 'non-fiction' },
+  { title: 'The Selfish Gene', author: 'Richard Dawkins', firstPublishYear: 1976, category: 'non-fiction' },
+  { title: 'Guns, Germs, and Steel', alternateTitles: ['Guns, Germs and Steel'], author: 'Jared Diamond', firstPublishYear: 1997, category: 'non-fiction' },
+  { title: "Man's Search for Meaning", alternateTitles: ['From Death-Camp to Existentialism'], preferredDisplayTitle: "Man's Search for Meaning", author: 'Viktor E. Frankl', firstPublishYear: 1946, category: 'non-fiction' },
+  { title: 'The Glass Castle', author: 'Jeannette Walls', firstPublishYear: 2005, category: 'non-fiction' },
+  { title: "The Omnivore's Dilemma", author: 'Michael Pollan', firstPublishYear: 2006, category: 'non-fiction' },
+
+  // Young adult and children's classics (10)
+  { title: 'The Book Thief', author: 'Markus Zusak', firstPublishYear: 2005, category: 'young-adult-children' },
+  { title: "Harry Potter and the Philosopher's Stone", alternateTitles: ["Harry Potter and the Sorcerer's Stone"], preferredDisplayTitle: "Harry Potter and the Philosopher's Stone", author: 'J. K. Rowling', firstPublishYear: 1997, category: 'young-adult-children' },
+  { title: 'The Little Prince', alternateTitles: ['Le Petit Prince'], preferredDisplayTitle: 'The Little Prince', author: 'Antoine de Saint-Exupéry', firstPublishYear: 1943, category: 'young-adult-children' },
+  { title: "Alice's Adventures in Wonderland", alternateTitles: ['Alice in Wonderland'], author: 'Lewis Carroll', firstPublishYear: 1865, category: 'young-adult-children' },
+  { title: 'The Secret Garden', author: 'Frances Hodgson Burnett', firstPublishYear: 1911, category: 'young-adult-children' },
+  { title: 'Anne of Green Gables', author: 'L. M. Montgomery', firstPublishYear: 1908, category: 'young-adult-children' },
+  { title: 'The Wind in the Willows', author: 'Kenneth Grahame', firstPublishYear: 1908, category: 'young-adult-children' },
+  { title: "Charlotte's Web", author: 'E. B. White', firstPublishYear: 1952, category: 'young-adult-children' },
+  { title: 'The Giver', author: 'Lois Lowry', firstPublishYear: 1993, category: 'young-adult-children' },
+  { title: 'A Wrinkle in Time', author: "Madeleine L'Engle", firstPublishYear: 1962, category: 'young-adult-children' },
+];
+
+export const MANUAL_VERIFICATION_TITLES = [
+  'The Lord of the Rings',
+  'The Three-Body Problem',
+  'Crime and Punishment',
+  'War and Peace',
+  'One Hundred Years of Solitude',
+  'The Stranger',
+  'The Girl with the Dragon Tattoo',
+  'And Then There Were None',
+  'The Diary of a Young Girl',
+  "Man's Search for Meaning",
+  'The Little Prince',
+] as const;

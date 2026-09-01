@@ -22,7 +22,7 @@ pnpm lint
 
 ## Open Library seed importer
 
-The importer is a server-only script. It fetches metadata for ten seed books
+The importer is a server-only script. It fetches metadata for 100 seed books
 from Open Library and inserts or updates `authors`, `works`, and `editions`
 without duplicating Open Library IDs.
 
@@ -43,12 +43,14 @@ pnpm import:open-library
 ```
 
 The script is not part of the app runtime and never runs during development,
-builds, or deployments. To expand the seed later, extend `SEED_BOOKS` in
-`scripts/import-open-library.ts` with the expected author and original publish
-year. Add an original-language title to `alternateTitles` when Open Library's
-canonical work title differs from the familiar English title. Set
-`preferredDisplayTitle` when LumiScore should store a different reader-facing
-title in `works.title`; Open Library IDs remain unchanged for deduplication.
+builds, or deployments. The balanced seed catalog lives in
+`scripts/open-library-seeds.ts`; every entry includes a category, expected
+author, and original or approximate first-publish year. Add an original-language
+title to `alternateTitles` when Open Library's canonical work title differs from
+the familiar English title. Set `preferredDisplayTitle` when LumiScore should
+store a different reader-facing title in `works.title`; Open Library IDs remain
+unchanged for deduplication. The matching test also guards the total count,
+category distribution, unique seed identities, and the original ten titles.
 
 ## Included
 

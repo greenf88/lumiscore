@@ -3,11 +3,10 @@ import {
   getWorkDisplayTitle,
   matchesExpectedAuthor,
   selectBestWorkMatch,
-  type BookMatchSeed,
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
+import { SEED_BOOKS, type SeedBook } from './open-library-seeds.ts';
 
-type SeedBook = BookMatchSeed & { author: string };
 type Row = Record<string, unknown>;
 
 type OpenLibraryEdition = {
@@ -42,31 +41,6 @@ type DatabaseColumns = {
     publisher: string | null;
   };
 };
-
-const SEED_BOOKS: SeedBook[] = [
-  {
-    title: '1984',
-    alternateTitles: ['Nineteen Eighty-Four'],
-    author: 'George Orwell',
-    firstPublishYear: 1949,
-    preferredDisplayTitle: '1984',
-  },
-  { title: 'Pride and Prejudice', author: 'Jane Austen', firstPublishYear: 1813 },
-  { title: 'To Kill a Mockingbird', author: 'Harper Lee', firstPublishYear: 1960 },
-  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', firstPublishYear: 1925 },
-  { title: 'The Hobbit', author: 'J. R. R. Tolkien', firstPublishYear: 1937 },
-  { title: 'The Lord of the Rings', author: 'J. R. R. Tolkien', firstPublishYear: 1954 },
-  { title: 'Dune', author: 'Frank Herbert', firstPublishYear: 1965 },
-  { title: "The Handmaid's Tale", author: 'Margaret Atwood', firstPublishYear: 1985 },
-  { title: 'The Book Thief', author: 'Markus Zusak', firstPublishYear: 2005 },
-  {
-    title: 'The Alchemist',
-    alternateTitles: ['O Alquimista'],
-    author: 'Paulo Coelho',
-    firstPublishYear: 1988,
-    preferredDisplayTitle: 'The Alchemist',
-  },
-];
 
 const OPEN_LIBRARY_BASE_URL = 'https://openlibrary.org';
 const OPEN_LIBRARY_ID_COLUMNS = [
@@ -184,9 +158,12 @@ async function loadOpenLibraryBook(seed: SeedBook) {
   const editionResult = await fetchOpenLibraryJson<{
     entries?: OpenLibraryEdition[];
   }>(`/works/${workId}/editions.json?limit=100`);
-  const edition = [...(editionResult.entries ?? [])].sort(
-    (left, right) => editionScore(right) - editionScore(left),
-  )[0];
+  const edition = [...(editionResult.entries ?? [])].sort((left, right) => {
+    const scoreDifference = editionScore(right) - editionScore(left);
+    if (scoreDifference !== 0) return scoreDifference;
+
+    return (left.key ?? '').localeCompare(right.key ?? '');
+  })[0];
   const editionId = normalizeOpenLibraryId(edition?.key);
 
   if (!edition || !editionId) {
@@ -398,8 +375,14 @@ async function importBook(
     openLibraryId: book.work.id,
     payload: workPayload,
     fallbackFilters: [
-      { [columns.works.title]: book.work.title },
-      { [columns.works.title]: book.work.openLibraryTitle },
+      {
+        [columns.works.title]: book.work.title,
+        [columns.works.authorId]: author.id,
+      },
+      {
+        [columns.works.title]: book.work.openLibraryTitle,
+        [columns.works.authorId]: author.id,
+      },
     ],
   });
 
@@ -426,6 +409,7 @@ async function importBook(
     [columns.editions.workId]: work.id,
     [columns.editions.title]: book.edition.title,
   });
+  editionFallbacks.push({ [columns.editions.workId]: work.id });
   const edition = await saveWithoutDuplicates({
     table: 'editions',
     idColumn: columns.editions.id,

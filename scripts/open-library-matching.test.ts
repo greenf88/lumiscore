@@ -2,11 +2,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   getWorkDisplayTitle,
+  normalizeMatchText,
   scoreWorkMatch,
   selectBestWorkMatch,
   type BookMatchSeed,
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
+import {
+  MANUAL_VERIFICATION_TITLES,
+  SEED_BOOKS,
+  SEED_CATEGORIES,
+} from './open-library-seeds.ts';
 
 const alchemistSeed: BookMatchSeed = {
   title: 'The Alchemist',
@@ -137,4 +143,91 @@ test('falls back to the raw Open Library title', () => {
     ),
     'Dune',
   );
+});
+
+test('configures exactly 100 unique seed works', () => {
+  assert.equal(SEED_BOOKS.length, 100);
+
+  const identities = SEED_BOOKS.map((seed) =>
+    `${normalizeMatchText(seed.title)}::${normalizeMatchText(seed.author)}`,
+  );
+  assert.equal(new Set(identities).size, SEED_BOOKS.length);
+});
+
+test('keeps the requested category balance', () => {
+  const expectedCounts = {
+    'fantasy-science-fiction': 25,
+    classics: 20,
+    'thriller-crime': 15,
+    romance: 15,
+    'non-fiction': 15,
+    'young-adult-children': 10,
+  };
+
+  assert.deepEqual(
+    Object.fromEntries(
+      SEED_CATEGORIES.map((category) => [
+        category,
+        SEED_BOOKS.filter((seed) => seed.category === category).length,
+      ]),
+    ),
+    expectedCounts,
+  );
+});
+
+test('keeps all original ten titles in the expanded seed list', () => {
+  const originalTitles = [
+    '1984',
+    'Pride and Prejudice',
+    'To Kill a Mockingbird',
+    'The Great Gatsby',
+    'The Hobbit',
+    'The Lord of the Rings',
+    'Dune',
+    "The Handmaid's Tale",
+    'The Book Thief',
+    'The Alchemist',
+  ];
+  const configuredTitles = new Set(SEED_BOOKS.map((seed) => seed.title));
+
+  for (const title of originalTitles) assert.ok(configuredTitles.has(title));
+});
+
+test('gives every seed an author and first-publication-year hint', () => {
+  for (const seed of SEED_BOOKS) {
+    assert.ok(seed.author.trim(), `${seed.title} is missing an author`);
+    assert.ok(
+      Number.isInteger(seed.firstPublishYear),
+      `${seed.title} is missing a first publish year`,
+    );
+  }
+});
+
+test('does not seed derivative or guide titles', () => {
+  const rejectedPhrases = [
+    'abridged',
+    'adaptation',
+    'companion',
+    'graphic novel',
+    'study guide',
+    'summary',
+    'workbook',
+  ];
+
+  for (const seed of SEED_BOOKS) {
+    const title = normalizeMatchText(seed.title);
+    assert.equal(
+      rejectedPhrases.some((phrase) => title.includes(phrase)),
+      false,
+      `${seed.title} looks like a derivative work`,
+    );
+  }
+});
+
+test('tracks only configured seeds as manual-verification candidates', () => {
+  const configuredTitles = new Set(SEED_BOOKS.map((seed) => seed.title));
+
+  for (const title of MANUAL_VERIFICATION_TITLES) {
+    assert.ok(configuredTitles.has(title));
+  }
 });
