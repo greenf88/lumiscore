@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
-import { books, type Book } from '../data/books';
+import type { Book } from '../data/books';
 import { getOpenLibraryCoverUrl } from '@/lib/books/covers';
 
 function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
@@ -231,34 +231,10 @@ function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   );
 }
 
-export function LumiScoreHome() {
-  const [catalogBooks, setCatalogBooks] = useState<Book[]>(books);
+export function LumiScoreHome({ initialBooks }: { initialBooks: Book[] }) {
+  const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [wanted, setWanted] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-    ) {
-      return;
-    }
-
-    let active = true;
-
-    void import('@/lib/supabase/books')
-      .then(({ loadCatalogBooks }) => loadCatalogBooks(50))
-      .then((supabaseBooks) => {
-        if (active) setCatalogBooks(supabaseBooks);
-      })
-      .catch(() => {
-        // The local catalog and styled cover placeholders remain available.
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   useEffect(() => {
     let animationFrame = 0;
