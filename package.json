@@ -10,6 +10,7 @@
     "build": "vinext build",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "test:importer-matching": "node --experimental-strip-types --test scripts/open-library-matching.test.ts",
     "import:open-library": "node --env-file=.env.local --experimental-strip-types scripts/import-open-library.ts"
   },
   "dependencies": {

@@ -1,15 +1,13 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  matchesExpectedAuthor,
+  selectBestWorkMatch,
+  type BookMatchSeed,
+  type OpenLibrarySearchDocument,
+} from './open-library-matching.ts';
 
-type SeedBook = { title: string; author: string };
+type SeedBook = BookMatchSeed & { author: string };
 type Row = Record<string, unknown>;
-
-type OpenLibrarySearchDocument = {
-  key?: string;
-  title?: string;
-  author_key?: string[];
-  author_name?: string[];
-  first_publish_year?: number;
-};
 
 type OpenLibraryEdition = {
   key?: string;
@@ -45,16 +43,26 @@ type DatabaseColumns = {
 };
 
 const SEED_BOOKS: SeedBook[] = [
-  { title: '1984', author: 'George Orwell' },
-  { title: 'Pride and Prejudice', author: 'Jane Austen' },
-  { title: 'To Kill a Mockingbird', author: 'Harper Lee' },
-  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-  { title: 'The Hobbit', author: 'J. R. R. Tolkien' },
-  { title: 'The Lord of the Rings', author: 'J. R. R. Tolkien' },
-  { title: 'Dune', author: 'Frank Herbert' },
-  { title: "The Handmaid's Tale", author: 'Margaret Atwood' },
-  { title: 'The Book Thief', author: 'Markus Zusak' },
-  { title: 'The Alchemist', author: 'Paulo Coelho' },
+  {
+    title: '1984',
+    alternateTitles: ['Nineteen Eighty-Four'],
+    author: 'George Orwell',
+    firstPublishYear: 1949,
+  },
+  { title: 'Pride and Prejudice', author: 'Jane Austen', firstPublishYear: 1813 },
+  { title: 'To Kill a Mockingbird', author: 'Harper Lee', firstPublishYear: 1960 },
+  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', firstPublishYear: 1925 },
+  { title: 'The Hobbit', author: 'J. R. R. Tolkien', firstPublishYear: 1937 },
+  { title: 'The Lord of the Rings', author: 'J. R. R. Tolkien', firstPublishYear: 1954 },
+  { title: 'Dune', author: 'Frank Herbert', firstPublishYear: 1965 },
+  { title: "The Handmaid's Tale", author: 'Margaret Atwood', firstPublishYear: 1985 },
+  { title: 'The Book Thief', author: 'Markus Zusak', firstPublishYear: 2005 },
+  {
+    title: 'The Alchemist',
+    alternateTitles: ['O Alquimista'],
+    author: 'Paulo Coelho',
+    firstPublishYear: 1988,
+  },
 ];
 
 const OPEN_LIBRARY_BASE_URL = 'https://openlibrary.org';
@@ -80,15 +88,6 @@ if (!supabaseUrl || !supabaseSecretKey) {
 const supabase = createClient(supabaseUrl, supabaseSecretKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-
-function normalizeText(value: string): string {
-  return value
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9]+/g, ' ')
-    .trim()
-    .toLowerCase();
-}
 
 function normalizeOpenLibraryId(value: string | undefined): string | null {
   const id = value?.split('/').filter(Boolean).at(-1);
@@ -127,25 +126,6 @@ async function fetchOpenLibraryJson<T>(path: string): Promise<T> {
   throw new Error(`Open Library did not respond successfully for ${url.pathname}.`);
 }
 
-function selectSearchResult(
-  seed: SeedBook,
-  documents: OpenLibrarySearchDocument[],
-): OpenLibrarySearchDocument {
-  const expectedTitle = normalizeText(seed.title);
-  const expectedAuthor = normalizeText(seed.author);
-  const exact = documents.find((document) => {
-    const titleMatches = normalizeText(document.title ?? '') === expectedTitle;
-    const authorMatches = document.author_name?.some(
-      (name) => normalizeText(name) === expectedAuthor,
-    );
-    return titleMatches && authorMatches;
-  });
-
-  const result = exact ?? documents[0];
-  if (!result) throw new Error(`No Open Library work found for “${seed.title}”.`);
-  return result;
-}
-
 function selectAuthor(
   seed: SeedBook,
   work: OpenLibrarySearchDocument,
@@ -153,7 +133,7 @@ function selectAuthor(
   const names = work.author_name ?? [];
   const ids = work.author_key ?? [];
   const matchingIndex = names.findIndex(
-    (name) => normalizeText(name) === normalizeText(seed.author),
+    (name) => matchesExpectedAuthor(name, seed.author),
   );
   const index = matchingIndex >= 0 ? matchingIndex : 0;
   const id = normalizeOpenLibraryId(ids[index]);
@@ -182,15 +162,15 @@ function editionScore(edition: OpenLibraryEdition): number {
 
 async function loadOpenLibraryBook(seed: SeedBook) {
   const search = new URLSearchParams({
-    title: seed.title,
-    author: seed.author,
-    fields: 'key,title,author_key,author_name,first_publish_year',
-    limit: '5',
+    q: `${seed.title} ${seed.author}`,
+    fields:
+      'key,title,subtitle,author_key,author_name,first_publish_year,edition_count',
+    limit: '20',
   });
   const searchResult = await fetchOpenLibraryJson<{
     docs?: OpenLibrarySearchDocument[];
   }>(`/search.json?${search}`);
-  const work = selectSearchResult(seed, searchResult.docs ?? []);
+  const work = selectBestWorkMatch(seed, searchResult.docs ?? []);
   const workId = normalizeOpenLibraryId(work.key);
   const author = selectAuthor(seed, work);
 

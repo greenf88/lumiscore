@@ -34,15 +34,19 @@ SUPABASE_SECRET_KEY=your-server-only-secret-key
 ```
 
 Keep the secret key server-side and never prefix it with `NEXT_PUBLIC_`. Then
-run the importer explicitly from the project root:
+run the matching tests, followed by the importer, explicitly from the project
+root:
 
 ```bash
+pnpm test:importer-matching
 pnpm import:open-library
 ```
 
 The script is not part of the app runtime and never runs during development,
 builds, or deployments. To expand the seed later, extend `SEED_BOOKS` in
-`scripts/import-open-library.ts`.
+`scripts/import-open-library.ts` with the expected author and original publish
+year. Add an original-language title to `alternateTitles` when Open Library's
+canonical work title differs from the familiar English title.
 
 ## Included
 
