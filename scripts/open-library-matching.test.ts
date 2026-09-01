@@ -10,6 +10,8 @@ import {
 } from './open-library-matching.ts';
 import {
   ADDITIONAL_SEED_BOOKS,
+  EXPANDED_SEED_BOOKS,
+  LEGACY_SEED_BOOKS,
   MANUAL_VERIFICATION_TITLES,
   ORIGINAL_SEED_BOOKS,
   SEED_BOOKS,
@@ -53,6 +55,17 @@ const alchemistResults: OpenLibrarySearchDocument[] = [
     edition_count: 1,
   },
 ];
+
+function seedIdentity(seed: { title: string; author: string }): string {
+  const normalizeIdentityPart = (value: string) =>
+    value
+      .normalize('NFKC')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim()
+      .toLocaleLowerCase('en');
+
+  return `${normalizeIdentityPart(seed.title)}::${normalizeIdentityPart(seed.author)}`;
+}
 
 test('selects Paulo Coelho’s original Alchemist work', () => {
   const result = selectBestWorkMatch(alchemistSeed, alchemistResults);
@@ -235,15 +248,22 @@ test('uses the requested display titles for the remaining title variants', () =>
   }
 });
 
-test('configures exactly 115 unique seed works while preserving the original 100', () => {
+test('configures exactly 1000 unique seed works while preserving all 115 existing seeds', () => {
   assert.equal(ORIGINAL_SEED_BOOKS.length, 100);
   assert.equal(ADDITIONAL_SEED_BOOKS.length, 15);
-  assert.equal(SEED_BOOKS.length, 115);
+  assert.equal(LEGACY_SEED_BOOKS.length, 115);
+  assert.equal(EXPANDED_SEED_BOOKS.length, 885);
+  assert.equal(SEED_BOOKS.length, 1000);
 
-  const identities = SEED_BOOKS.map((seed) =>
-    `${normalizeMatchText(seed.title)}::${normalizeMatchText(seed.author)}`,
-  );
+  const identities = SEED_BOOKS.map(seedIdentity);
   assert.equal(new Set(identities).size, SEED_BOOKS.length);
+
+  const pinnedWorkIds = SEED_BOOKS.flatMap((seed) =>
+    seed.expectedOpenLibraryWorkId
+      ? [seed.expectedOpenLibraryWorkId.toUpperCase()]
+      : [],
+  );
+  assert.equal(new Set(pinnedWorkIds).size, pinnedWorkIds.length);
 });
 
 test('keeps the requested category balance', () => {
@@ -254,7 +274,28 @@ test('keeps the requested category balance', () => {
     romance: 18,
     'non-fiction': 18,
     'young-adult-children': 14,
+    'contemporary-general-fiction': 0,
   };
+
+  const expandedExpectedCounts = {
+    'fantasy-science-fiction': 220,
+    classics: 150,
+    'thriller-crime': 140,
+    romance: 130,
+    'non-fiction': 140,
+    'young-adult-children': 120,
+    'contemporary-general-fiction': 100,
+  };
+
+  assert.deepEqual(
+    Object.fromEntries(
+      SEED_CATEGORIES.map((category) => [
+        category,
+        LEGACY_SEED_BOOKS.filter((seed) => seed.category === category).length,
+      ]),
+    ),
+    expectedCounts,
+  );
 
   assert.deepEqual(
     Object.fromEntries(
@@ -263,7 +304,7 @@ test('keeps the requested category balance', () => {
         SEED_BOOKS.filter((seed) => seed.category === category).length,
       ]),
     ),
-    expectedCounts,
+    expandedExpectedCounts,
   );
 });
 
@@ -318,6 +359,12 @@ test('gives every seed an author and first-publication-year hint', () => {
       `${seed.title} is missing a first publish year`,
     );
   }
+});
+
+test('has no duplicate title and author combinations', () => {
+  const identities = SEED_BOOKS.map(seedIdentity);
+
+  assert.equal(new Set(identities).size, 1000);
 });
 
 test('does not seed derivative or guide titles', () => {

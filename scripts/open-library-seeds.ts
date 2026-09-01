@@ -1,4 +1,7 @@
 import type { BookMatchSeed } from './open-library-matching.ts';
+import { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
+
+export { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
 
 export const SEED_CATEGORIES = [
   'fantasy-science-fiction',
@@ -7,6 +10,7 @@ export const SEED_CATEGORIES = [
   'romance',
   'non-fiction',
   'young-adult-children',
+  'contemporary-general-fiction',
 ] as const;
 
 export type SeedCategory = (typeof SEED_CATEGORIES)[number];
@@ -148,9 +152,14 @@ export const ADDITIONAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'Circe', author: 'Madeline Miller', firstPublishYear: 2018, category: 'fantasy-science-fiction' },
 ];
 
-export const SEED_BOOKS: readonly SeedBook[] = [
+export const LEGACY_SEED_BOOKS: readonly SeedBook[] = [
   ...ORIGINAL_SEED_BOOKS,
   ...ADDITIONAL_SEED_BOOKS,
+];
+
+export const SEED_BOOKS: readonly SeedBook[] = [
+  ...LEGACY_SEED_BOOKS,
+  ...EXPANDED_SEED_BOOKS,
 ];
 
 export const MANUAL_VERIFICATION_TITLES = [
@@ -165,4 +174,25 @@ export const MANUAL_VERIFICATION_TITLES = [
   'The Diary of a Young Girl',
   "Man's Search for Meaning",
   'The Little Prince',
+  'コーヒーが冷めないうちに',
+  'Don Quijote de la Mancha',
+  'La Divina Commedia',
+  'Доктор Живаго',
+  'The Adventures of Sherlock Holmes [12 stories]',
+  'The Alchemist, 1612',
+  'Pippi Långstrump',
+  'Arsène Lupin, gentleman-cambrioleur',
+  '嫌われる勇気',
+  'Cadáver exquisito',
+  'Der Proceß',
+  'Мы',
+  'Ἰλιάς',
+  'Ὀδύσσεια',
+  'Смерть Ивана Ильича',
+  'Записки изъ подполья',
+  'Идиот',
+  '夏物語',
+  'キッチン',
+  'Cantik Itu Luka',
+  "Le Ventre de l'Atlantique",
 ] as const;
