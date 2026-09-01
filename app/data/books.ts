@@ -1,11 +1,13 @@
 export type Book = {
   id: string;
+  workId?: string | null;
   title: string;
   author: string;
   score: number;
   ratingsCount: number;
   match: number;
   cover: string;
+  isbn13?: string | null;
   genre?: string;
 };
 

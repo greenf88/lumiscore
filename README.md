@@ -20,6 +20,30 @@ pnpm build
 pnpm lint
 ```
 
+## Open Library seed importer
+
+The importer is a server-only script. It fetches metadata for ten seed books
+from Open Library and inserts or updates `authors`, `works`, and `editions`
+without duplicating Open Library IDs.
+
+Add the following values to `.env.local`:
+
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+SUPABASE_SECRET_KEY=your-server-only-secret-key
+```
+
+Keep the secret key server-side and never prefix it with `NEXT_PUBLIC_`. Then
+run the importer explicitly from the project root:
+
+```bash
+pnpm import:open-library
+```
+
+The script is not part of the app runtime and never runs during development,
+builds, or deployments. To expand the seed later, extend `SEED_BOOKS` in
+`scripts/import-open-library.ts`.
+
 ## Included
 
 - Ink dark and Paper light themes with first-visit system preference detection and persisted selection

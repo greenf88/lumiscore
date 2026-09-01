@@ -1,15 +1,33 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { books, type Book } from '../data/books';
+import { getOpenLibraryCoverUrl } from '@/lib/books/covers';
 
 function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
+  const coverUrl = getOpenLibraryCoverUrl(book.isbn13);
+
   return (
     <div className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`} aria-hidden="true">
       <span className="cover-kicker">Lumi edition</span>
       <span className="cover-title">{book.title}</span>
       <span className="cover-mark">✦</span>
       <span className="cover-author">{book.author}</span>
+      {coverUrl && (
+        <Image
+          className="book-cover-image"
+          src={coverUrl}
+          alt=""
+          fill
+          sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
+          loading="lazy"
+          unoptimized
+          onError={(event) => {
+            event.currentTarget.hidden = true;
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -72,8 +90,10 @@ function RecommendationRow({ book }: { book: Book }) {
   );
 }
 
-function RecommendationPanel() {
-  const recommendations = [books[1], books[2], books[5]];
+function RecommendationPanel({ books }: { books: Book[] }) {
+  const recommendations = [books[1], books[2], books[5]].filter(
+    (book): book is Book => Boolean(book),
+  );
   return (
     <aside className="recommendation-panel" aria-labelledby="up-next-title">
       <div className="panel-heading">
@@ -86,7 +106,7 @@ function RecommendationPanel() {
   );
 }
 
-function Hero() {
+function Hero({ books }: { books: Book[] }) {
   return (
     <section className="hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
@@ -107,7 +127,7 @@ function Hero() {
             <div><dt>4.2M+</dt><dd>Books rated</dd></div><div><dt>860K</dt><dd>Active readers</dd></div><div><dt>94%</dt><dd>Find a match</dd></div>
           </dl>
         </div>
-        <RecommendationPanel />
+        <RecommendationPanel books={books} />
       </div>
     </section>
   );
@@ -137,12 +157,12 @@ function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onT
   );
 }
 
-function FeaturedBooks({ query, wanted, onToggle }: { query: string; wanted: Set<string>; onToggle: (id: string) => void }) {
+function FeaturedBooks({ books, query, wanted, onToggle }: { books: Book[]; query: string; wanted: Set<string>; onToggle: (id: string) => void }) {
   const filteredBooks = useMemo(() => {
     const search = query.trim().toLowerCase();
     if (!search) return books;
     return books.filter((book) => `${book.title} ${book.author} ${book.genre ?? ''}`.toLowerCase().includes(search));
-  }, [query]);
+  }, [books, query]);
 
   return (
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
@@ -192,8 +212,33 @@ function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 }
 
 export function LumiScoreHome() {
+  const [catalogBooks, setCatalogBooks] = useState<Book[]>(books);
   const [query, setQuery] = useState('');
   const [wanted, setWanted] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    ) {
+      return;
+    }
+
+    let active = true;
+
+    void import('@/lib/supabase/books')
+      .then(({ addEditionIsbns }) => addEditionIsbns(books))
+      .then((enrichedBooks) => {
+        if (active) setCatalogBooks(enrichedBooks);
+      })
+      .catch(() => {
+        // The local catalog and styled cover placeholders remain available.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     let animationFrame = 0;
@@ -234,8 +279,8 @@ export function LumiScoreHome() {
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} />
-      <Hero />
-      <FeaturedBooks query={query} wanted={wanted} onToggle={toggleWanted} />
+      <Hero books={catalogBooks} />
+      <FeaturedBooks books={catalogBooks} query={query} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />
     </main>
