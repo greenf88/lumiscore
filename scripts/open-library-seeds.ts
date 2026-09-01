@@ -16,7 +16,7 @@ export type SeedBook = BookMatchSeed & {
   category: SeedCategory;
 };
 
-export const SEED_BOOKS: readonly SeedBook[] = [
+export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   // Fantasy and science fiction (25)
   { title: 'The Hobbit', author: 'J. R. R. Tolkien', firstPublishYear: 1937, category: 'fantasy-science-fiction' },
   { title: 'The Lord of the Rings', author: 'J. R. R. Tolkien', firstPublishYear: 1954, category: 'fantasy-science-fiction' },
@@ -128,6 +128,29 @@ export const SEED_BOOKS: readonly SeedBook[] = [
   { title: "Charlotte's Web", author: 'E. B. White', firstPublishYear: 1952, category: 'young-adult-children' },
   { title: 'The Giver', author: 'Lois Lowry', firstPublishYear: 1993, category: 'young-adult-children' },
   { title: 'A Wrinkle in Time', author: "Madeleine L'Engle", firstPublishYear: 1962, category: 'young-adult-children' },
+];
+
+export const ADDITIONAL_SEED_BOOKS: readonly SeedBook[] = [
+  { title: 'The Hunger Games', author: 'Suzanne Collins', firstPublishYear: 2008, category: 'young-adult-children' },
+  { title: 'The Road', author: 'Cormac McCarthy', firstPublishYear: 2006, category: 'fantasy-science-fiction' },
+  { title: 'The Seven Husbands of Evelyn Hugo', author: 'Taylor Jenkins Reid', firstPublishYear: 2017, category: 'romance' },
+  { title: 'Normal People', author: 'Sally Rooney', firstPublishYear: 2018, category: 'romance' },
+  { title: 'It', author: 'Stephen King', firstPublishYear: 1986, category: 'thriller-crime' },
+  { title: 'Atomic Habits', alternateTitles: ['Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones'], preferredDisplayTitle: 'Atomic Habits', author: 'James Clear', firstPublishYear: 2018, category: 'non-fiction' },
+  { title: 'The Subtle Art of Not Giving a F*ck', alternateTitles: ['The Subtle Art of Not Giving a Fuck', 'The Subtle Art of Not Giving a F**k'], preferredDisplayTitle: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', firstPublishYear: 2016, category: 'non-fiction' },
+  { title: 'Born a Crime', alternateTitles: ['Born a Crime: Stories from a South African Childhood'], preferredDisplayTitle: 'Born a Crime', author: 'Trevor Noah', firstPublishYear: 2016, category: 'non-fiction' },
+  { title: 'Matilda', author: 'Roald Dahl', firstPublishYear: 1988, category: 'young-adult-children' },
+  { title: 'Charlie and the Chocolate Factory', author: 'Roald Dahl', firstPublishYear: 1964, category: 'young-adult-children' },
+  { title: 'The Very Hungry Caterpillar', author: 'Eric Carle', firstPublishYear: 1969, category: 'young-adult-children' },
+  { title: 'The Midnight Library', author: 'Matt Haig', firstPublishYear: 2020, category: 'fantasy-science-fiction' },
+  { title: 'Where the Crawdads Sing', author: 'Delia Owens', firstPublishYear: 2018, category: 'thriller-crime' },
+  { title: 'The Song of Achilles', author: 'Madeline Miller', firstPublishYear: 2011, category: 'romance' },
+  { title: 'Circe', author: 'Madeline Miller', firstPublishYear: 2018, category: 'fantasy-science-fiction' },
+];
+
+export const SEED_BOOKS: readonly SeedBook[] = [
+  ...ORIGINAL_SEED_BOOKS,
+  ...ADDITIONAL_SEED_BOOKS,
 ];
 
 export const MANUAL_VERIFICATION_TITLES = [

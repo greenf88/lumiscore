@@ -22,7 +22,7 @@ pnpm lint
 
 ## Open Library seed importer
 
-The importer is a server-only script. It fetches metadata for 100 seed books
+The importer is a server-only script. It fetches metadata for 115 seed books
 from Open Library and inserts or updates `authors`, `works`, and `editions`
 without duplicating Open Library IDs.
 

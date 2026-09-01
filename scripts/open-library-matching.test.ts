@@ -9,7 +9,9 @@ import {
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
 import {
+  ADDITIONAL_SEED_BOOKS,
   MANUAL_VERIFICATION_TITLES,
+  ORIGINAL_SEED_BOOKS,
   SEED_BOOKS,
   SEED_CATEGORIES,
 } from './open-library-seeds.ts';
@@ -145,8 +147,10 @@ test('falls back to the raw Open Library title', () => {
   );
 });
 
-test('configures exactly 100 unique seed works', () => {
-  assert.equal(SEED_BOOKS.length, 100);
+test('configures exactly 115 unique seed works while preserving the original 100', () => {
+  assert.equal(ORIGINAL_SEED_BOOKS.length, 100);
+  assert.equal(ADDITIONAL_SEED_BOOKS.length, 15);
+  assert.equal(SEED_BOOKS.length, 115);
 
   const identities = SEED_BOOKS.map((seed) =>
     `${normalizeMatchText(seed.title)}::${normalizeMatchText(seed.author)}`,
@@ -156,12 +160,12 @@ test('configures exactly 100 unique seed works', () => {
 
 test('keeps the requested category balance', () => {
   const expectedCounts = {
-    'fantasy-science-fiction': 25,
+    'fantasy-science-fiction': 28,
     classics: 20,
-    'thriller-crime': 15,
-    romance: 15,
-    'non-fiction': 15,
-    'young-adult-children': 10,
+    'thriller-crime': 17,
+    romance: 18,
+    'non-fiction': 18,
+    'young-adult-children': 14,
   };
 
   assert.deepEqual(
@@ -172,6 +176,31 @@ test('keeps the requested category balance', () => {
       ]),
     ),
     expectedCounts,
+  );
+});
+
+test('includes all 15 requested additions', () => {
+  const expectedTitles = [
+    'The Hunger Games',
+    'The Road',
+    'The Seven Husbands of Evelyn Hugo',
+    'Normal People',
+    'It',
+    'Atomic Habits',
+    'The Subtle Art of Not Giving a F*ck',
+    'Born a Crime',
+    'Matilda',
+    'Charlie and the Chocolate Factory',
+    'The Very Hungry Caterpillar',
+    'The Midnight Library',
+    'Where the Crawdads Sing',
+    'The Song of Achilles',
+    'Circe',
+  ];
+
+  assert.deepEqual(
+    ADDITIONAL_SEED_BOOKS.map((seed) => seed.title),
+    expectedTitles,
   );
 });
 
