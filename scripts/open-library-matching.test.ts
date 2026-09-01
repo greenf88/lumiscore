@@ -125,6 +125,77 @@ test('uses a canonical-title alias and edition count to prefer the main work', (
   assert.equal(result.key, '/works/OL1168083W');
 });
 
+test('pins Little Women to the main Open Library novel work', () => {
+  const seed = SEED_BOOKS.find((book) => book.title === 'Little Women');
+  assert.ok(seed);
+
+  const result = selectBestWorkMatch(seed, [
+    {
+      key: '/works/OL999999W',
+      title: "Kitty's Class Day and Other Stories",
+      author_name: ['Louisa May Alcott'],
+      first_publish_year: 1868,
+      edition_count: 900,
+    },
+    {
+      key: '/works/OL29983W',
+      title: 'Little Women',
+      author_name: ['Louisa May Alcott'],
+      first_publish_year: 1848,
+      edition_count: 765,
+    },
+  ]);
+
+  assert.equal(result.key, '/works/OL29983W');
+});
+
+test('selects the original Chinese Three-Body Problem work by exact ID', () => {
+  const seed = SEED_BOOKS.find(
+    (book) => book.title === 'The Three-Body Problem',
+  );
+  assert.ok(seed);
+
+  const result = selectBestWorkMatch(seed, [
+    {
+      key: '/works/OL44576333W',
+      title:
+        "Cixin Liu Bestselling Collecting Books Series, Set of 4 Books. the Three-Body Problem, the Wandering Earth, the Dark Forest and Death's End",
+      author_name: ['Cixin Liu'],
+      first_publish_year: 2022,
+      edition_count: 1,
+    },
+    {
+      key: '/works/OL17267881W',
+      title: '三体 (sān tǐ)',
+      author_name: ['刘慈欣'],
+      first_publish_year: 2008,
+      edition_count: 44,
+    },
+  ]);
+
+  assert.equal(result.key, '/works/OL17267881W');
+  assert.equal(getWorkDisplayTitle(seed, result), 'The Three-Body Problem');
+});
+
+test('fails instead of accepting the wrong work when a pinned work is absent', () => {
+  const seed = SEED_BOOKS.find((book) => book.title === 'Little Women');
+  assert.ok(seed);
+
+  assert.throws(
+    () =>
+      selectBestWorkMatch(seed, [
+        {
+          key: '/works/OL999999W',
+          title: "Kitty's Class Day and Other Stories",
+          author_name: ['Louisa May Alcott'],
+          first_publish_year: 1868,
+          edition_count: 900,
+        },
+      ]),
+    /No trustworthy Open Library work found/,
+  );
+});
+
 test('uses a preferred display title without changing work identity', () => {
   const work = alchemistResults[2];
   const displayTitle = getWorkDisplayTitle(
@@ -145,6 +216,23 @@ test('falls back to the raw Open Library title', () => {
     ),
     'Dune',
   );
+});
+
+test('uses the requested display titles for the remaining title variants', () => {
+  const expectedTitles = [
+    'The Spy Who Came in from the Cold',
+    'Thinking, Fast and Slow',
+    "The Omnivore's Dilemma",
+  ];
+
+  for (const title of expectedTitles) {
+    const seed = SEED_BOOKS.find((book) => book.title === title);
+    assert.ok(seed);
+    assert.equal(
+      getWorkDisplayTitle(seed, { key: '/works/OL1W', title: 'Raw title' }),
+      title,
+    );
+  }
 });
 
 test('configures exactly 115 unique seed works while preserving the original 100', () => {

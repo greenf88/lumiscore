@@ -49,8 +49,11 @@ author, and original or approximate first-publish year. Add an original-language
 title to `alternateTitles` when Open Library's canonical work title differs from
 the familiar English title. Set `preferredDisplayTitle` when LumiScore should
 store a different reader-facing title in `works.title`; Open Library IDs remain
-unchanged for deduplication. The matching test also guards the total count,
-category distribution, unique seed identities, and the original ten titles.
+unchanged for deduplication. For a known ambiguous catalog entry,
+`expectedOpenLibraryWorkId` can conservatively pin that seed to one verified
+Open Library work; the seed fails rather than accepting another work when that
+ID is absent. The matching test also guards the total count, category
+distribution, unique seed identities, and the original ten titles.
 
 ## Included
 

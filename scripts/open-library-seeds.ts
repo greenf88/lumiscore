@@ -40,7 +40,7 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'American Gods', author: 'Neil Gaiman', firstPublishYear: 2001, category: 'fantasy-science-fiction' },
   { title: 'The Colour of Magic', author: 'Terry Pratchett', firstPublishYear: 1983, category: 'fantasy-science-fiction' },
   { title: 'The Fifth Season', author: 'N. K. Jemisin', firstPublishYear: 2015, category: 'fantasy-science-fiction' },
-  { title: 'The Three-Body Problem', alternateTitles: ['Three Body Problem', 'San Ti', '三体'], preferredDisplayTitle: 'The Three-Body Problem', author: 'Cixin Liu', firstPublishYear: 2006, category: 'fantasy-science-fiction' },
+  { title: 'The Three-Body Problem', alternateTitles: ['三体', '三体 (sān tǐ)', 'Three-Body Problem', 'Three Body Problem', 'San Ti'], preferredDisplayTitle: 'The Three-Body Problem', expectedOpenLibraryWorkId: 'OL17267881W', author: 'Cixin Liu', firstPublishYear: 2006, category: 'fantasy-science-fiction' },
   { title: 'Do Androids Dream of Electric Sheep?', author: 'Philip K. Dick', firstPublishYear: 1968, category: 'fantasy-science-fiction' },
   { title: "The Hitchhiker's Guide to the Galaxy", author: 'Douglas Adams', firstPublishYear: 1979, category: 'fantasy-science-fiction' },
 
@@ -63,7 +63,7 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'One Hundred Years of Solitude', alternateTitles: ['Cien años de soledad'], preferredDisplayTitle: 'One Hundred Years of Solitude', author: 'Gabriel García Márquez', firstPublishYear: 1967, category: 'classics' },
   { title: 'The Stranger', alternateTitles: ["L'Étranger", 'The Outsider'], preferredDisplayTitle: 'The Stranger', author: 'Albert Camus', firstPublishYear: 1942, category: 'classics' },
   { title: 'The Old Man and the Sea', author: 'Ernest Hemingway', firstPublishYear: 1952, category: 'classics' },
-  { title: 'Little Women', author: 'Louisa May Alcott', firstPublishYear: 1868, category: 'classics' },
+  { title: 'Little Women', alternateTitles: ['Little Women; or, Meg, Jo, Beth and Amy'], preferredDisplayTitle: 'Little Women', expectedOpenLibraryWorkId: 'OL29983W', author: 'Louisa May Alcott', firstPublishYear: 1868, category: 'classics' },
   { title: 'The Count of Monte Cristo', alternateTitles: ['Le Comte de Monte-Cristo'], preferredDisplayTitle: 'The Count of Monte Cristo', author: 'Alexandre Dumas', firstPublishYear: 1844, category: 'classics' },
 
   // Thriller and crime (15)
@@ -80,7 +80,7 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'The Shining', author: 'Stephen King', firstPublishYear: 1977, category: 'thriller-crime' },
   { title: 'Misery', author: 'Stephen King', firstPublishYear: 1987, category: 'thriller-crime' },
   { title: 'The Bourne Identity', author: 'Robert Ludlum', firstPublishYear: 1980, category: 'thriller-crime' },
-  { title: 'The Spy Who Came in from the Cold', author: 'John le Carré', firstPublishYear: 1963, category: 'thriller-crime' },
+  { title: 'The Spy Who Came in from the Cold', preferredDisplayTitle: 'The Spy Who Came in from the Cold', author: 'John le Carré', firstPublishYear: 1963, category: 'thriller-crime' },
   { title: 'The Name of the Rose', alternateTitles: ['Il nome della rosa'], preferredDisplayTitle: 'The Name of the Rose', author: 'Umberto Eco', firstPublishYear: 1980, category: 'thriller-crime' },
 
   // Romance (15)
@@ -104,7 +104,7 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'Sapiens', alternateTitles: ['Sapiens: A Brief History of Humankind'], preferredDisplayTitle: 'Sapiens', author: 'Yuval Noah Harari', firstPublishYear: 2011, category: 'non-fiction' },
   { title: 'The Diary of a Young Girl', alternateTitles: ['Het Achterhuis', 'Anne Frank: The Diary of a Young Girl'], preferredDisplayTitle: 'The Diary of a Young Girl', author: 'Anne Frank', firstPublishYear: 1947, category: 'non-fiction' },
   { title: 'The Immortal Life of Henrietta Lacks', author: 'Rebecca Skloot', firstPublishYear: 2010, category: 'non-fiction' },
-  { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', firstPublishYear: 2011, category: 'non-fiction' },
+  { title: 'Thinking, Fast and Slow', preferredDisplayTitle: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', firstPublishYear: 2011, category: 'non-fiction' },
   { title: 'Educated', author: 'Tara Westover', firstPublishYear: 2018, category: 'non-fiction' },
   { title: 'Becoming', author: 'Michelle Obama', firstPublishYear: 2018, category: 'non-fiction' },
   { title: 'Long Walk to Freedom', author: 'Nelson Mandela', firstPublishYear: 1994, category: 'non-fiction' },
@@ -115,7 +115,7 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'Guns, Germs, and Steel', alternateTitles: ['Guns, Germs and Steel'], author: 'Jared Diamond', firstPublishYear: 1997, category: 'non-fiction' },
   { title: "Man's Search for Meaning", alternateTitles: ['From Death-Camp to Existentialism'], preferredDisplayTitle: "Man's Search for Meaning", author: 'Viktor E. Frankl', firstPublishYear: 1946, category: 'non-fiction' },
   { title: 'The Glass Castle', author: 'Jeannette Walls', firstPublishYear: 2005, category: 'non-fiction' },
-  { title: "The Omnivore's Dilemma", author: 'Michael Pollan', firstPublishYear: 2006, category: 'non-fiction' },
+  { title: "The Omnivore's Dilemma", preferredDisplayTitle: "The Omnivore's Dilemma", author: 'Michael Pollan', firstPublishYear: 2006, category: 'non-fiction' },
 
   // Young adult and children's classics (10)
   { title: 'The Book Thief', author: 'Markus Zusak', firstPublishYear: 2005, category: 'young-adult-children' },

@@ -4,6 +4,7 @@ export type BookMatchSeed = {
   firstPublishYear?: number;
   alternateTitles?: string[];
   preferredDisplayTitle?: string;
+  expectedOpenLibraryWorkId?: string;
 };
 
 export type OpenLibrarySearchDocument = {
@@ -54,6 +55,22 @@ export function matchesExpectedAuthor(
   const expectedName = normalizeMatchText(expected).replace(/ author$/, '');
 
   return actualName === expectedName;
+}
+
+function normalizeOpenLibraryWorkId(value: string | undefined): string {
+  return value?.split('/').filter(Boolean).at(-1)?.toUpperCase() ?? '';
+}
+
+export function matchesExpectedWorkId(
+  seed: BookMatchSeed,
+  document: OpenLibrarySearchDocument,
+): boolean {
+  if (!seed.expectedOpenLibraryWorkId) return true;
+
+  return (
+    normalizeOpenLibraryWorkId(document.key) ===
+    normalizeOpenLibraryWorkId(seed.expectedOpenLibraryWorkId)
+  );
 }
 
 export function getWorkDisplayTitle(
@@ -137,6 +154,10 @@ export function scoreWorkMatch(
   seed: BookMatchSeed,
   document: OpenLibrarySearchDocument,
 ): number {
+  if (!matchesExpectedWorkId(seed, document)) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
   return (
     titleScore(seed, document) +
     authorScore(seed, document) +

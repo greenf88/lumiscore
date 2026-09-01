@@ -2,6 +2,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
   getWorkDisplayTitle,
   matchesExpectedAuthor,
+  matchesExpectedWorkId,
   selectBestWorkMatch,
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
@@ -137,17 +138,62 @@ function editionScore(edition: OpenLibraryEdition): number {
   );
 }
 
-async function loadOpenLibraryBook(seed: SeedBook) {
-  const search = new URLSearchParams({
+const OPEN_LIBRARY_SEARCH_FIELDS =
+  'key,title,subtitle,author_key,author_name,first_publish_year,edition_count';
+
+async function searchOpenLibraryWorks(
+  seed: SeedBook,
+): Promise<OpenLibrarySearchDocument[]> {
+  const primarySearch = new URLSearchParams({
     q: `${seed.title} ${seed.author}`,
-    fields:
-      'key,title,subtitle,author_key,author_name,first_publish_year,edition_count',
+    fields: OPEN_LIBRARY_SEARCH_FIELDS,
     limit: '20',
   });
-  const searchResult = await fetchOpenLibraryJson<{
+  const primaryResult = await fetchOpenLibraryJson<{
     docs?: OpenLibrarySearchDocument[];
-  }>(`/search.json?${search}`);
-  const work = selectBestWorkMatch(seed, searchResult.docs ?? []);
+  }>(`/search.json?${primarySearch}`);
+  const documents = new Map(
+    (primaryResult.docs ?? [])
+      .filter((document) => document.key)
+      .map((document) => [document.key!, document]),
+  );
+
+  if (
+    !seed.expectedOpenLibraryWorkId ||
+    [...documents.values()].some((document) =>
+      matchesExpectedWorkId(seed, document),
+    )
+  ) {
+    return [...documents.values()];
+  }
+
+  for (const title of [seed.title, ...(seed.alternateTitles ?? [])]) {
+    const aliasSearch = new URLSearchParams({
+      title,
+      fields: OPEN_LIBRARY_SEARCH_FIELDS,
+      limit: '20',
+    });
+    const aliasResult = await fetchOpenLibraryJson<{
+      docs?: OpenLibrarySearchDocument[];
+    }>(`/search.json?${aliasSearch}`);
+
+    for (const document of aliasResult.docs ?? []) {
+      if (document.key) documents.set(document.key, document);
+    }
+    if (
+      [...documents.values()].some((document) =>
+        matchesExpectedWorkId(seed, document),
+      )
+    ) {
+      break;
+    }
+  }
+
+  return [...documents.values()];
+}
+
+async function loadOpenLibraryBook(seed: SeedBook) {
+  const work = selectBestWorkMatch(seed, await searchOpenLibraryWorks(seed));
   const workId = normalizeOpenLibraryId(work.key);
   const author = selectAuthor(seed, work);
 
