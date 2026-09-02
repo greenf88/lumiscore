@@ -826,6 +826,7 @@ export const EXPANDED_SEED_BOOKS = [
   { title: "Kushiel's dart", expectedOpenLibraryWorkId: "OL2719901W", author: "Jacqueline Carey", firstPublishYear: 2001, category: "contemporary-general-fiction" },
   { title: "What Is the What", expectedOpenLibraryWorkId: "OL114663W", author: "Dave Eggers", firstPublishYear: 2006, category: "contemporary-general-fiction" },
   { title: "Afterparties", expectedOpenLibraryWorkId: "OL23687105W", author: "Anthony Veasna So", firstPublishYear: 2021, category: "contemporary-general-fiction" },
+  // Intentional: this is the most useful edition cluster among Open Library's split work records.
   { title: "Cantik Itu Luka", alternateTitles: ["Beauty Is a Wound"], preferredDisplayTitle: "Beauty Is a Wound", expectedOpenLibraryWorkId: "OL34965326W", author: "Eka Kurniawan", firstPublishYear: 2002, category: "contemporary-general-fiction" },
   { title: "How to write an autobiographical novel", expectedOpenLibraryWorkId: "OL19738261W", author: "Alexander Chee", firstPublishYear: 2018, category: "contemporary-general-fiction" },
   { title: "Four Treasures of the Sky", expectedOpenLibraryWorkId: "OL24529907W", author: "Jenny Tinghui Zhang", firstPublishYear: 2022, category: "contemporary-general-fiction" },

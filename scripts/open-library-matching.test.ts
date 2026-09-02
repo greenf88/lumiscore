@@ -248,6 +248,78 @@ test('uses the requested display titles for the remaining title variants', () =>
   }
 });
 
+test('pins all 32 manually verified titles to their requested Open Library works', () => {
+  const expectedPins = new Map([
+    ['The Lord of the Rings', 'OL27448W'],
+    ['The Three-Body Problem', 'OL17267881W'],
+    ['Crime and Punishment', 'OL166894W'],
+    ['War and Peace', 'OL267171W'],
+    ['One Hundred Years of Solitude', 'OL274505W'],
+    ['The Stranger', 'OL1230613W'],
+    ['The Girl with the Dragon Tattoo', 'OL5784622W'],
+    ['And Then There Were None', 'OL471565W'],
+    ['The Diary of a Young Girl', 'OL266178W'],
+    ["Man's Search for Meaning", 'OL1268413W'],
+    ['The Little Prince', 'OL10263W'],
+    ['Before the Coffee Gets Cold', 'OL20019347W'],
+    ['Don Quixote', 'OL503666W'],
+    ['The Divine Comedy', 'OL93082W'],
+    ['Doctor Zhivago', 'OL258301W'],
+    ['The Adventures of Sherlock Holmes', 'OL262421W'],
+    ['The Alchemist', 'OL796465W'],
+    ['Pippi Longstocking', 'OL14872925W'],
+    ['Arsène Lupin, Gentleman Burglar', 'OL1064277W'],
+    ['The Courage to Be Disliked', 'OL19744000W'],
+    ['Tender Is the Flesh', 'OL17864836W'],
+    ['The Trial', 'OL498463W'],
+    ['We', 'OL10215W'],
+    ['The Iliad', 'OL61981W'],
+    ['The Odyssey', 'OL61982W'],
+    ['The Death of Ivan Ilyich', 'OL267174W'],
+    ['Notes from Underground', 'OL21025633W'],
+    ['The Idiot', 'OL166925W'],
+    ['Breasts and Eggs', 'OL20835348W'],
+    ['Kitchen', 'OL2637599W'],
+    ['Beauty Is a Wound', 'OL34965326W'],
+    ['The Belly of the Atlantic', 'OL9037402W'],
+  ]);
+
+  const configuredNames = (seed: (typeof SEED_BOOKS)[number]) => [
+    seed.title,
+    seed.preferredDisplayTitle,
+    ...(seed.alternateTitles ?? []),
+  ].filter((title): title is string => Boolean(title));
+
+  for (const [title, expectedWorkId] of expectedPins) {
+    const matchingSeeds = SEED_BOOKS.filter((seed) =>
+      configuredNames(seed).some(
+        (configuredTitle) =>
+          normalizeMatchText(configuredTitle) === normalizeMatchText(title),
+      ),
+    );
+    const configuredPins = matchingSeeds.flatMap((seed) =>
+      seed.expectedOpenLibraryWorkId
+        ? [seed.expectedOpenLibraryWorkId]
+        : [],
+    );
+
+    assert.ok(matchingSeeds.length > 0, `${title} is not configured`);
+    assert.deepEqual(
+      [...new Set(configuredPins)],
+      [expectedWorkId],
+      `${title} is not pinned exclusively to ${expectedWorkId}`,
+    );
+  }
+
+  const pauloCoelhoAlchemist = SEED_BOOKS.find(
+    (seed) => seed.title === 'The Alchemist' && seed.author === 'Paulo Coelho',
+  );
+  assert.equal(
+    pauloCoelhoAlchemist?.expectedOpenLibraryWorkId,
+    'OL796465W',
+  );
+});
+
 test('configures exactly 1000 unique seed works while preserving all 115 existing seeds', () => {
   assert.equal(ORIGINAL_SEED_BOOKS.length, 100);
   assert.equal(ADDITIONAL_SEED_BOOKS.length, 15);
