@@ -439,6 +439,26 @@ test('has no duplicate title and author combinations', () => {
   assert.equal(new Set(identities).size, 1000);
 });
 
+test('leaves only the two canonical-ID collision cases for manual review', () => {
+  const pinnedSeeds = SEED_BOOKS.filter(
+    (seed) => seed.expectedOpenLibraryWorkId,
+  );
+  const pinnedWorkIds = pinnedSeeds.map((seed) =>
+    seed.expectedOpenLibraryWorkId!.toUpperCase(),
+  );
+  const unpinnedSeeds = SEED_BOOKS
+    .filter((seed) => !seed.expectedOpenLibraryWorkId)
+    .map(({ title, author }) => ({ title, author }));
+
+  assert.equal(pinnedSeeds.length, 998);
+  assert.equal(new Set(pinnedWorkIds).size, 998);
+  assert.ok(pinnedWorkIds.every((workId) => /^OL\d+W$/.test(workId)));
+  assert.deepEqual(unpinnedSeeds, [
+    { title: 'War and Peace', author: 'Leo Tolstoy' },
+    { title: 'The Count of Monte Cristo', author: 'Alexandre Dumas' },
+  ]);
+});
+
 test('does not seed derivative or guide titles', () => {
   const rejectedPhrases = [
     'abridged',
