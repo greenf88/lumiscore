@@ -439,24 +439,62 @@ test('has no duplicate title and author combinations', () => {
   assert.equal(new Set(identities).size, 1000);
 });
 
-test('leaves only the two canonical-ID collision cases for manual review', () => {
+test('pins every seed to a unique Open Library work', () => {
   const pinnedSeeds = SEED_BOOKS.filter(
     (seed) => seed.expectedOpenLibraryWorkId,
   );
   const pinnedWorkIds = pinnedSeeds.map((seed) =>
     seed.expectedOpenLibraryWorkId!.toUpperCase(),
   );
-  const unpinnedSeeds = SEED_BOOKS
-    .filter((seed) => !seed.expectedOpenLibraryWorkId)
-    .map(({ title, author }) => ({ title, author }));
 
-  assert.equal(pinnedSeeds.length, 998);
-  assert.equal(new Set(pinnedWorkIds).size, 998);
+  assert.equal(pinnedSeeds.length, 1000);
+  assert.equal(new Set(pinnedWorkIds).size, 1000);
   assert.ok(pinnedWorkIds.every((workId) => /^OL\d+W$/.test(workId)));
-  assert.deepEqual(unpinnedSeeds, [
+});
+
+test('keeps one canonical seed for each resolved semantic duplicate', () => {
+  const warAndPeaceSeeds = SEED_BOOKS.filter(
+    (seed) => seed.expectedOpenLibraryWorkId === 'OL267171W',
+  );
+  const monteCristoSeeds = SEED_BOOKS.filter(
+    (seed) => seed.expectedOpenLibraryWorkId === 'OL36287W',
+  );
+
+  assert.deepEqual(warAndPeaceSeeds.map(({ title, author }) => ({ title, author })), [
     { title: 'War and Peace', author: 'Leo Tolstoy' },
+  ]);
+  assert.deepEqual(monteCristoSeeds.map(({ title, author }) => ({ title, author })), [
     { title: 'The Count of Monte Cristo', author: 'Alexandre Dumas' },
   ]);
+  assert.equal(
+    SEED_BOOKS.some(
+      (seed) => seed.title === 'War and Peace' && seed.author === 'Лев Толстой',
+    ),
+    false,
+  );
+  assert.equal(
+    SEED_BOOKS.some((seed) => seed.title.startsWith('Hrabě Monte Cristo')),
+    false,
+  );
+});
+
+test('uses distinct canonical works for the two replacement classics', () => {
+  assert.ok(
+    SEED_BOOKS.some(
+      (seed) =>
+        seed.title === 'The Remains of the Day' &&
+        seed.author === 'Kazuo Ishiguro' &&
+        seed.expectedOpenLibraryWorkId === 'OL59048W',
+    ),
+  );
+  assert.ok(
+    SEED_BOOKS.some(
+      (seed) =>
+        seed.title === 'Native Son' &&
+        seed.author === 'Richard Wright' &&
+        seed.expectedOpenLibraryWorkId === 'OL275128W',
+    ),
+  );
 });
 
 test('does not seed derivative or guide titles', () => {

@@ -62,13 +62,13 @@ export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
   { title: 'Of Mice and Men', expectedOpenLibraryWorkId: 'OL23204W', author: 'John Steinbeck', firstPublishYear: 1937, category: 'classics' },
   { title: 'The Picture of Dorian Gray', expectedOpenLibraryWorkId: 'OL8193416W', author: 'Oscar Wilde', firstPublishYear: 1890, category: 'classics' },
   { title: 'Crime and Punishment', alternateTitles: ['Prestuplenie i nakazanie', 'Преступление и наказание'], preferredDisplayTitle: 'Crime and Punishment', expectedOpenLibraryWorkId: 'OL166894W', author: 'Fyodor Dostoevsky', firstPublishYear: 1866, category: 'classics' },
-  { title: 'War and Peace', alternateTitles: ['Voina i mir', 'Война и мир'], preferredDisplayTitle: 'War and Peace', author: 'Leo Tolstoy', firstPublishYear: 1869, category: 'classics' },
+  { title: 'War and Peace', alternateTitles: ['Voina i mir', 'Война и мир'], preferredDisplayTitle: 'War and Peace', expectedOpenLibraryWorkId: 'OL267171W', author: 'Leo Tolstoy', firstPublishYear: 1869, category: 'classics' },
   { title: 'Anna Karenina', expectedOpenLibraryWorkId: 'OL267096W', author: 'Leo Tolstoy', firstPublishYear: 1878, category: 'classics' },
   { title: 'One Hundred Years of Solitude', alternateTitles: ['Cien años de soledad'], preferredDisplayTitle: 'One Hundred Years of Solitude', expectedOpenLibraryWorkId: 'OL274505W', author: 'Gabriel García Márquez', firstPublishYear: 1967, category: 'classics' },
   { title: 'The Stranger', alternateTitles: ["L'Étranger", 'The Outsider'], preferredDisplayTitle: 'The Stranger', expectedOpenLibraryWorkId: 'OL1230613W', author: 'Albert Camus', firstPublishYear: 1942, category: 'classics' },
   { title: 'The Old Man and the Sea', expectedOpenLibraryWorkId: 'OL63073W', author: 'Ernest Hemingway', firstPublishYear: 1952, category: 'classics' },
   { title: 'Little Women', alternateTitles: ['Little Women; or, Meg, Jo, Beth and Amy'], preferredDisplayTitle: 'Little Women', expectedOpenLibraryWorkId: 'OL29983W', author: 'Louisa May Alcott', firstPublishYear: 1868, category: 'classics' },
-  { title: 'The Count of Monte Cristo', alternateTitles: ['Le Comte de Monte-Cristo'], preferredDisplayTitle: 'The Count of Monte Cristo', author: 'Alexandre Dumas', firstPublishYear: 1844, category: 'classics' },
+  { title: 'The Count of Monte Cristo', alternateTitles: ['Le Comte de Monte-Cristo'], preferredDisplayTitle: 'The Count of Monte Cristo', expectedOpenLibraryWorkId: 'OL36287W', author: 'Alexandre Dumas', firstPublishYear: 1844, category: 'classics' },
 
   // Thriller and crime (15)
   { title: 'The Girl with the Dragon Tattoo', alternateTitles: ['Män som hatar kvinnor', 'Men Who Hate Women'], preferredDisplayTitle: 'The Girl with the Dragon Tattoo', expectedOpenLibraryWorkId: 'OL5784622W', author: 'Stieg Larsson', firstPublishYear: 2005, category: 'thriller-crime' },
