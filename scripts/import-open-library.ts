@@ -19,6 +19,15 @@ type OpenLibraryEdition = {
   publishers?: string[];
 };
 
+type OpenLibraryWork = {
+  key?: string;
+  title?: string;
+  authors?: Array<{
+    key?: string;
+    author?: { key?: string };
+  }>;
+};
+
 type DatabaseColumns = {
   authors: {
     id: string;
@@ -83,25 +92,39 @@ function wait(milliseconds: number): Promise<void> {
 
 async function fetchOpenLibraryJson<T>(path: string): Promise<T> {
   const url = new URL(path, OPEN_LIBRARY_BASE_URL);
+  let lastError: unknown;
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const response = await fetch(url, {
-      headers: {
-        Accept: 'application/json',
-        'User-Agent': 'LumiScoreSeedImporter/1.0 (https://lumiscore.greenf88.chatgpt.site)',
-      },
-    });
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'LumiScoreSeedImporter/1.0 (https://lumiscore.greenf88.chatgpt.site)',
+        },
+      });
 
-    if (response.ok) return (await response.json()) as T;
+      if (response.ok) return (await response.json()) as T;
 
-    if (response.status !== 429 && response.status < 500) {
-      throw new Error(`Open Library returned ${response.status} for ${url.pathname}.`);
+      if (response.status !== 429 && response.status < 500) {
+        throw new Error(
+          `Open Library returned ${response.status} for ${url.pathname}.`,
+        );
+      }
+
+      lastError = new Error(
+        `Open Library returned ${response.status} for ${url.pathname}.`,
+      );
+    } catch (error) {
+      lastError = error;
     }
 
     await wait(500 * 2 ** attempt);
   }
 
-  throw new Error(`Open Library did not respond successfully for ${url.pathname}.`);
+  const detail = lastError instanceof Error ? ` ${lastError.message}` : '';
+  throw new Error(
+    `Open Library did not respond successfully for ${url.pathname}.${detail}`,
+  );
 }
 
 function selectAuthor(
@@ -141,6 +164,25 @@ function editionScore(edition: OpenLibraryEdition): number {
 const OPEN_LIBRARY_SEARCH_FIELDS =
   'key,title,subtitle,author_key,author_name,first_publish_year,edition_count';
 
+function hasTrustworthyPinnedDocument(
+  seed: SeedBook,
+  documents: Iterable<OpenLibrarySearchDocument>,
+): boolean {
+  if (!seed.expectedOpenLibraryWorkId) return true;
+
+  const pinnedDocuments = [...documents].filter((document) =>
+    matchesExpectedWorkId(seed, document),
+  );
+  if (pinnedDocuments.length === 0) return false;
+
+  try {
+    selectBestWorkMatch(seed, pinnedDocuments);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function searchOpenLibraryWorks(
   seed: SeedBook,
 ): Promise<OpenLibrarySearchDocument[]> {
@@ -160,9 +202,7 @@ async function searchOpenLibraryWorks(
 
   if (
     !seed.expectedOpenLibraryWorkId ||
-    [...documents.values()].some((document) =>
-      matchesExpectedWorkId(seed, document),
-    )
+    hasTrustworthyPinnedDocument(seed, documents.values())
   ) {
     return [...documents.values()];
   }
@@ -180,13 +220,38 @@ async function searchOpenLibraryWorks(
     for (const document of aliasResult.docs ?? []) {
       if (document.key) documents.set(document.key, document);
     }
-    if (
-      [...documents.values()].some((document) =>
-        matchesExpectedWorkId(seed, document),
-      )
-    ) {
+    if (hasTrustworthyPinnedDocument(seed, documents.values())) {
       break;
     }
+  }
+
+  if (
+    seed.expectedOpenLibraryWorkId &&
+    !hasTrustworthyPinnedDocument(seed, documents.values())
+  ) {
+    const pinnedWork = await fetchOpenLibraryJson<OpenLibraryWork>(
+      `/works/${seed.expectedOpenLibraryWorkId}.json`,
+    );
+    const authorKeys = (pinnedWork.authors ?? [])
+      .map((entry) => entry.author?.key ?? entry.key)
+      .filter((key): key is string => Boolean(key));
+
+    if (!pinnedWork.key || !pinnedWork.title || authorKeys.length === 0) {
+      throw new Error(
+        `Pinned Open Library work ${seed.expectedOpenLibraryWorkId} is incomplete.`,
+      );
+    }
+
+    documents.set(pinnedWork.key, {
+      key: pinnedWork.key,
+      title: seed.title,
+      author_key: authorKeys.map(
+        (key) => normalizeOpenLibraryId(key) ?? key,
+      ),
+      author_name: authorKeys.map(() => seed.author),
+      first_publish_year: seed.firstPublishYear,
+      edition_count: 0,
+    });
   }
 
   return [...documents.values()];
@@ -395,6 +460,12 @@ async function importBook(
   columns: DatabaseColumns,
 ): Promise<string> {
   const book = await loadOpenLibraryBook(seed);
+  const legacyAuthor = await findExistingRow(
+    supabase,
+    'authors',
+    columns.authors.id,
+    { [columns.authors.name]: seed.author },
+  );
   const authorPayload: Row = {
     [columns.authors.openLibraryId]: book.author.id,
     [columns.authors.name]: book.author.name,
@@ -429,6 +500,18 @@ async function importBook(
         [columns.works.title]: book.work.openLibraryTitle,
         [columns.works.authorId]: author.id,
       },
+      ...(legacyAuthor && String(legacyAuthor[columns.authors.id]) !== author.id
+        ? [
+            {
+              [columns.works.title]: book.work.title,
+              [columns.works.authorId]: legacyAuthor[columns.authors.id],
+            },
+            {
+              [columns.works.title]: book.work.openLibraryTitle,
+              [columns.works.authorId]: legacyAuthor[columns.authors.id],
+            },
+          ]
+        : []),
     ],
   });
 
@@ -474,15 +557,39 @@ async function main(): Promise<void> {
   console.log('Checking the existing Supabase schema…');
   const columns = await resolveDatabaseColumns();
   const failures: string[] = [];
+  const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true';
+  const requestedWorkIds = new Set(
+    (process.env.OPEN_LIBRARY_IMPORT_WORK_IDS ?? '')
+      .split(',')
+      .map((workId) => workId.trim().toUpperCase())
+      .filter(Boolean),
+  );
+  const seeds =
+    requestedWorkIds.size === 0
+      ? SEED_BOOKS
+      : SEED_BOOKS.filter((seed) =>
+          requestedWorkIds.has(seed.expectedOpenLibraryWorkId!.toUpperCase()),
+        );
 
-  for (const [index, seed] of SEED_BOOKS.entries()) {
+  if (requestedWorkIds.size > 0 && seeds.length !== requestedWorkIds.size) {
+    throw new Error('One or more requested recovery Work IDs are not configured.');
+  }
+
+  for (const [index, seed] of seeds.entries()) {
     try {
-      const result = await importBook(seed, columns);
-      console.log(`[${index + 1}/${SEED_BOOKS.length}] Imported ${result}`);
+      if (dryRun) {
+        const book = await loadOpenLibraryBook(seed);
+        console.log(
+          `[${index + 1}/${seeds.length}] Verified ${book.work.title} — ${book.author.name}`,
+        );
+      } else {
+        const result = await importBook(seed, columns);
+        console.log(`[${index + 1}/${seeds.length}] Imported ${result}`);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       failures.push(`${seed.title}: ${message}`);
-      console.error(`[${index + 1}/${SEED_BOOKS.length}] Failed ${seed.title}: ${message}`);
+      console.error(`[${index + 1}/${seeds.length}] Failed ${seed.title}: ${message}`);
     }
 
     await wait(150);
@@ -492,7 +599,11 @@ async function main(): Promise<void> {
     throw new Error(`${failures.length} import(s) failed. Rerun after fixing the errors above.`);
   }
 
-  console.log(`Done. ${SEED_BOOKS.length} seed books are present without duplicates.`);
+  console.log(
+    dryRun
+      ? `Done. ${seeds.length} seed books passed the metadata preflight.`
+      : `Done. ${seeds.length} seed books are present without duplicates.`,
+  );
 }
 
 await main();

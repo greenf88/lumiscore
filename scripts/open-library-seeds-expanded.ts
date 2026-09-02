@@ -137,7 +137,7 @@ export const EXPANDED_SEED_BOOKS = [
   { title: "Speaker for the Dead", expectedOpenLibraryWorkId: "OL49580W", author: "Orson Scott Card", firstPublishYear: 1986, category: "fantasy-science-fiction" },
   { title: "A Court of Silver Flames", expectedOpenLibraryWorkId: "OL21703979W", author: "Sarah J. Maas", firstPublishYear: 2021, category: "fantasy-science-fiction" },
   { title: "Cinder", expectedOpenLibraryWorkId: "OL16282945W", author: "Marissa Meyer", firstPublishYear: 2011, category: "fantasy-science-fiction" },
-  { title: "The Hunger Games Trilogy (Hunger Games / Catching Fire / Mockingjay)", expectedOpenLibraryWorkId: "OL15518787W", author: "Suzanne Collins", firstPublishYear: 2010, category: "fantasy-science-fiction" },
+  { title: "The Girl Who Drank the Moon", expectedOpenLibraryWorkId: "OL17627845W", author: "Kelly Regan Barnhill", firstPublishYear: 2016, category: "fantasy-science-fiction" },
   { title: "The Lies of Locke Lamora", expectedOpenLibraryWorkId: "OL8369445W", author: "Scott Lynch", firstPublishYear: 2001, category: "fantasy-science-fiction" },
   { title: "Fight Club", expectedOpenLibraryWorkId: "OL18941W", author: "Chuck Palahniuk", firstPublishYear: 1996, category: "fantasy-science-fiction" },
   { title: "A Darker Shade of Magic", expectedOpenLibraryWorkId: "OL17332803W", author: "V. E. Schwab", firstPublishYear: 2015, category: "fantasy-science-fiction" },

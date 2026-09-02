@@ -497,14 +497,33 @@ test('uses distinct canonical works for the two replacement classics', () => {
   );
 });
 
+test('replaces the Hunger Games omnibus with The Girl Who Drank the Moon', () => {
+  assert.equal(
+    SEED_BOOKS.some((seed) => seed.expectedOpenLibraryWorkId === 'OL15518787W'),
+    false,
+  );
+  assert.ok(
+    SEED_BOOKS.some(
+      (seed) =>
+        seed.title === 'The Girl Who Drank the Moon' &&
+        seed.author === 'Kelly Regan Barnhill' &&
+        seed.category === 'fantasy-science-fiction' &&
+        seed.expectedOpenLibraryWorkId === 'OL17627845W',
+    ),
+  );
+});
+
 test('does not seed derivative or guide titles', () => {
   const rejectedPhrases = [
     'abridged',
     'adaptation',
+    'box set',
     'companion',
     'graphic novel',
+    'omnibus',
     'study guide',
     'summary',
+    'trilogy',
     'workbook',
   ];
 
