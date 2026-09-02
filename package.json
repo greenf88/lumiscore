@@ -11,6 +11,8 @@
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "test:importer-matching": "node --experimental-strip-types --test scripts/open-library-matching.test.ts",
+    "test:cover-resolution": "node --experimental-strip-types --test lib/books/open-library-covers.test.ts",
+    "audit:open-library-covers": "node --env-file=.env.local --experimental-strip-types scripts/audit-open-library-covers.ts",
     "validate:supabase-catalog": "node --env-file=.env.local --experimental-strip-types scripts/validate-supabase-catalog.ts",
     "import:open-library": "node --env-file=.env.local --experimental-strip-types scripts/import-open-library.ts"
   },

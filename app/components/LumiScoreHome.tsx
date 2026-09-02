@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import { getOpenLibraryCoverUrl } from '@/lib/books/covers';
 
@@ -40,7 +41,11 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
   return request;
 }
 
-function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
+export function getBookHref(book: Book): string {
+  return `/books/${encodeURIComponent(book.workId ?? book.id)}`;
+}
+
+export function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
   const initialCoverUrls = useMemo(
     () =>
       book.coverUrls?.length
@@ -55,8 +60,8 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
 
-  useEffect(() => {
-    if (coverUrl || resolvedRequested.current || !book.openLibraryWorkId) return;
+  const requestResolvedCovers = useCallback(() => {
+    if (resolvedRequested.current || !book.openLibraryWorkId) return;
 
     resolvedRequested.current = true;
     void loadResolvedCovers(book).then((resolvedUrls) => {
@@ -64,7 +69,11 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
         ...new Set([...currentUrls, ...resolvedUrls]),
       ]);
     });
-  }, [book, coverUrl]);
+  }, [book]);
+
+  useEffect(() => {
+    if (!coverUrl) requestResolvedCovers();
+  }, [coverUrl, requestResolvedCovers]);
 
   return (
     <div className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`} aria-hidden="true">
@@ -82,7 +91,10 @@ function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading="lazy"
           unoptimized
-          onError={() => setCoverIndex((index) => index + 1)}
+          onError={() => {
+            requestResolvedCovers();
+            setCoverIndex((index) => index + 1);
+          }}
         />
       )}
     </div>
@@ -108,7 +120,7 @@ function SearchBar({ query, onChange, mobile = false }: { query: string; onChang
   );
 }
 
-function ThemeToggle({ onToggle, labeled = false }: { onToggle: () => void; labeled?: boolean }) {
+export function ThemeToggle({ onToggle, labeled = false }: { onToggle: () => void; labeled?: boolean }) {
   return (
     <button className={`theme-toggle${labeled ? ' theme-toggle-labeled' : ''}`} type="button" onClick={onToggle} aria-label="Toggle Ink and Paper theme">
       {labeled && <><span className="toggle-label toggle-label-ink">Ink</span><span className="toggle-label toggle-label-paper">Paper</span></>}
@@ -146,7 +158,7 @@ function RecommendationRow({ book }: { book: Book }) {
   const match = getDemoMatch(book);
 
   return (
-    <a className="recommendation-row" href={`#${book.id}`}>
+    <Link className="recommendation-row" href={getBookHref(book)}>
       <BookCover book={book} small />
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
@@ -154,7 +166,7 @@ function RecommendationRow({ book }: { book: Book }) {
         <span className="match-line"><i /> {match === null ? 'Not rated yet' : `${match}% match`}</span>
       </span>
       <span className="mini-score"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
-    </a>
+    </Link>
   );
 }
 
@@ -174,7 +186,7 @@ function RecommendationPanel({ books }: { books: Book[] }) {
   );
 }
 
-function Hero({ books }: { books: Book[] }) {
+function Hero({ books, catalogStats }: { books: Book[]; catalogStats: CatalogStats }) {
   return (
     <section className="hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
@@ -192,7 +204,8 @@ function Hero({ books }: { books: Book[] }) {
           </div>
           <a className="learn-link" href="#how-it-works">New here? Learn how LumiScore works <span>→</span></a>
           <dl className="hero-stats">
-            <div><dt>4.2M+</dt><dd>Books rated</dd></div><div><dt>860K</dt><dd>Active readers</dd></div><div><dt>94%</dt><dd>Find a match</dd></div>
+            <div><dt>{catalogStats.books.toLocaleString('en-US')}</dt><dd>Curated books</dd></div>
+            <div><dt>{catalogStats.categories}</dt><dd>Categories</dd></div>
           </dl>
         </div>
         <RecommendationPanel books={books} />
@@ -212,12 +225,14 @@ function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onT
   return (
     <article className="book-card" id={book.id}>
       <div className="card-cover-wrap">
-        <BookCover book={book} />
         <span className="score-badge"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
+        <Link className="book-cover-link" href={getBookHref(book)} aria-label={`View ${book.title} by ${book.author}`}>
+          <BookCover book={book} />
+        </Link>
       </div>
       <div className="book-card-body">
         <span className="book-genre">{book.genre ?? (book.firstPublishYear ? `First published ${book.firstPublishYear}` : 'Publication year unavailable')}</span>
-        <h3>{book.title}</h3>
+        <h3><Link href={getBookHref(book)}>{book.title}</Link></h3>
         <p>{book.author}</p>
         <div className="book-meta">
           {book.source === 'demo' && book.ratingsCount !== null && match !== null ? (
@@ -288,7 +303,9 @@ function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   );
 }
 
-export function LumiScoreHome({ initialBooks }: { initialBooks: Book[] }) {
+type CatalogStats = { books: number; categories: number };
+
+export function LumiScoreHome({ initialBooks, catalogStats }: { initialBooks: Book[]; catalogStats: CatalogStats }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [wanted, setWanted] = useState<Set<string>>(new Set());
@@ -332,7 +349,7 @@ export function LumiScoreHome({ initialBooks }: { initialBooks: Book[] }) {
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} />
-      <Hero books={catalogBooks} />
+      <Hero books={catalogBooks} catalogStats={catalogStats} />
       <FeaturedBooks books={catalogBooks} query={query} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />

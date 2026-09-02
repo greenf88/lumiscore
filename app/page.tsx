@@ -1,5 +1,6 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
 import { books } from './data/books';
+import { SEED_BOOKS, SEED_CATEGORIES } from '@/scripts/open-library-seeds';
 
 async function loadHomepageBooks() {
   if (
@@ -18,5 +19,13 @@ async function loadHomepageBooks() {
 }
 
 export default async function Home() {
-  return <LumiScoreHome initialBooks={await loadHomepageBooks()} />;
+  return (
+    <LumiScoreHome
+      initialBooks={await loadHomepageBooks()}
+      catalogStats={{
+        books: SEED_BOOKS.length,
+        categories: SEED_CATEGORIES.length,
+      }}
+    />
+  );
 }

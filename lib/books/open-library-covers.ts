@@ -17,6 +17,11 @@ type OpenLibraryWork = {
   covers?: unknown;
 };
 
+type OpenLibraryEditionsResult = {
+  entries?: OpenLibraryEdition[];
+  size?: number;
+};
+
 type OpenLibrarySearchDocument = {
   title?: string;
   author_name?: string[];
@@ -116,16 +121,51 @@ function searchDocumentScore(
 }
 
 async function fetchOpenLibraryJson<T>(url: URL): Promise<T | null> {
-  try {
-    const response = await fetch(url, {
-      headers: OPEN_LIBRARY_HEADERS,
-      signal: AbortSignal.timeout(8_000),
-    });
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: OPEN_LIBRARY_HEADERS,
+        signal: AbortSignal.timeout(10_000),
+      });
 
-    return response.ok ? ((await response.json()) as T) : null;
-  } catch {
-    return null;
+      if (response.ok) return (await response.json()) as T;
+      if (response.status !== 429 && response.status < 500) return null;
+    } catch {
+      // Retry transient Open Library/network failures below.
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 350 * 2 ** attempt));
   }
+
+  return null;
+}
+
+async function fetchWorkEditions(workId: string): Promise<OpenLibraryEdition[]> {
+  const editions: OpenLibraryEdition[] = [];
+  const pageSize = 100;
+
+  for (let offset = 0; offset < 500; offset += pageSize) {
+    const editionsUrl = new URL(
+      `/works/${workId}/editions.json?limit=${pageSize}&offset=${offset}`,
+      OPEN_LIBRARY_BASE_URL,
+    );
+    const page = await fetchOpenLibraryJson<OpenLibraryEditionsResult>(editionsUrl);
+    const entries = page?.entries ?? [];
+    editions.push(...entries);
+
+    const foundSameWorkCover = editions.some(
+      (edition) => asPositiveCoverIds(edition.covers).length > 0,
+    );
+    if (
+      foundSameWorkCover ||
+      entries.length < pageSize ||
+      editions.length >= (page?.size ?? 0)
+    ) {
+      break;
+    }
+  }
+
+  return editions;
 }
 
 async function findExactSearchCover(
@@ -160,15 +200,11 @@ export async function resolveOpenLibraryCoverCandidates(
   if (!workId) return [];
 
   const workUrl = new URL(`/works/${workId}.json`, OPEN_LIBRARY_BASE_URL);
-  const editionsUrl = new URL(
-    `/works/${workId}/editions.json?limit=100`,
-    OPEN_LIBRARY_BASE_URL,
-  );
   const [work, editionsResult] = await Promise.all([
     fetchOpenLibraryJson<OpenLibraryWork>(workUrl),
-    fetchOpenLibraryJson<{ entries?: OpenLibraryEdition[] }>(editionsUrl),
+    fetchWorkEditions(workId),
   ]);
-  const editions = [...(editionsResult?.entries ?? [])].sort(
+  const editions = [...editionsResult].sort(
     (left, right) => editionScore(right) - editionScore(left),
   );
 

@@ -40,7 +40,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--bg); }
-body { margin: 0; min-width: 320px; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { margin: 0; min-width: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 button, input { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
@@ -172,17 +172,20 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .book-card { min-width: 0; border: 1px solid var(--border); border-radius: 3px; background: var(--surface); overflow: hidden; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.09); transition: transform 190ms ease, box-shadow 190ms ease, border-color 190ms ease, background-color 280ms ease; }
 .book-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--teal) 44%, var(--border)); box-shadow: 0 22px 44px rgba(0, 0, 0, 0.16); }
 .card-cover-wrap { position: relative; padding: 20px 22px 0; background: color-mix(in srgb, var(--bg-2) 84%, var(--surface)); }
+.book-cover-link { display: block; border-radius: 2px 4px 4px 2px; }
 .card-cover-wrap .book-cover { width: 100%; }
 .card-cover-wrap .cover-kicker { font-size: clamp(5px, 0.43vw, 7px); }
 .card-cover-wrap .cover-title { font-size: clamp(12px, 1.02vw, 17px); }
 .card-cover-wrap .cover-mark { font-size: clamp(20px, 2vw, 32px); }
 .card-cover-wrap .cover-author { font-size: clamp(5px, 0.42vw, 7px); }
-.score-badge { position: absolute; right: 12px; bottom: -17px; display: flex; width: 47px; height: 47px; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--surface); border-radius: 50%; background: var(--gold); color: #1d1a15; box-shadow: 0 7px 18px rgba(0,0,0,.2); }
+.score-badge { position: absolute; z-index: 5; right: 12px; bottom: 12px; display: flex; width: clamp(42px, 3.3vw, 48px); height: clamp(42px, 3.3vw, 48px); flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--surface); border-radius: 50%; background: var(--gold); color: #1d1a15; box-shadow: 0 7px 18px rgba(0,0,0,.24); pointer-events: none; }
 .score-badge strong { font-family: var(--serif); font-size: 17px; line-height: 1; }
 .score-badge small { margin-top: 2px; font-size: 5px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
-.book-card-body { padding: 25px 17px 17px; }
+.book-card-body { padding: 17px; }
 .book-genre { display: block; margin-bottom: 6px; overflow: hidden; color: var(--teal); font-size: 8px; font-weight: 800; letter-spacing: .09em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
-.book-card h3 { min-height: 39px; margin: 0; font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.16; letter-spacing: -.025em; }
+.book-card h3 { min-height: 39px; margin: 0; overflow: hidden; display: -webkit-box; font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.16; letter-spacing: -.025em; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.book-card h3 a { transition: color 160ms ease; }
+.book-card h3 a:hover { color: var(--teal); }
 .book-card-body > p { margin: 7px 0 13px; color: var(--muted); font-size: 10px; }
 .book-meta { display: flex; min-height: 22px; align-items: center; justify-content: space-between; gap: 5px; border-top: 1px solid var(--border); color: var(--muted); font-size: 8px; }
 .book-match { display: inline-flex; align-items: center; gap: 4px; color: var(--teal); font-weight: 800; }
@@ -220,6 +223,23 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 :root[data-theme='paper'] .toggle-label-paper { display: inline; }
 .footer-bottom { grid-column: 1 / -1; display: flex; justify-content: space-between; margin-top: 5px; padding-top: 21px; border-top: 1px solid var(--border); color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
 
+.book-detail-shell { min-height: 100vh; background: radial-gradient(circle at 76% 20%, color-mix(in srgb, var(--teal) 14%, transparent), transparent 34%), var(--bg); }
+.detail-header { min-height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 80px); border-bottom: 1px solid var(--border); background: var(--header); backdrop-filter: blur(18px); }
+.book-detail { width: min(1080px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; display: grid; grid-template-columns: minmax(250px, 360px) minmax(0, 1fr); align-items: center; gap: clamp(48px, 8vw, 110px); padding: 64px 0 80px; }
+.detail-cover-wrap { position: relative; padding: 24px; background: color-mix(in srgb, var(--surface) 88%, transparent); box-shadow: var(--panel-shadow); }
+.detail-cover-wrap .book-cover { width: 100%; }
+.detail-score-badge { right: 12px; bottom: 12px; }
+.detail-copy { min-width: 0; }
+.detail-back-link { display: block; width: fit-content; margin-bottom: 42px; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.detail-copy > .eyebrow { display: flex; width: fit-content; }
+.detail-copy h1 { max-width: 700px; margin: 18px 0 12px; font-family: var(--serif); font-size: clamp(48px, 6vw, 82px); font-weight: 400; line-height: .98; letter-spacing: -.05em; }
+.detail-author { margin: 0 0 38px; color: var(--muted); font-family: var(--serif); font-size: 21px; font-style: italic; }
+.detail-metadata { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+.detail-metadata div { min-height: 88px; padding: 19px 20px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.detail-metadata dt { margin-bottom: 8px; color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.detail-metadata dd { margin: 0; overflow-wrap: anywhere; font-family: var(--serif); font-size: 17px; }
+.detail-note { max-width: 580px; margin: 26px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+
 :root[data-theme='paper'] .book-card { box-shadow: 0 14px 36px rgba(83, 65, 42, .08); }
 :root[data-theme='paper'] .book-card:hover { box-shadow: 0 22px 46px rgba(83, 65, 42, .13); }
 :root[data-theme='paper'] .value-strip { background: #ede6db; }
@@ -255,6 +275,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .site-footer { grid-template-columns: 1fr 1fr; }
   .footer-theme { grid-column: 2; grid-row: 1; justify-self: end; }
   .footer-nav { grid-column: 1 / -1; grid-row: 2; grid-template-columns: repeat(4, 1fr); }
+  .book-detail { grid-template-columns: minmax(190px, 260px) minmax(0, 1fr); gap: 40px; }
+  .detail-copy h1 { font-size: clamp(40px, 7vw, 58px); }
 }
 
 @media (max-width: 560px) {
@@ -264,6 +286,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .main-nav { gap: 10px; }
   .theme-sun, .theme-moon { display: none; }
   .avatar { width: 32px; height: 32px; }
+  .mobile-search-button, .avatar { width: 40px; height: 40px; }
   .hero-inner { width: calc(100% - 32px); padding: 54px 0 56px; gap: 32px; }
   .hero-copy { padding-right: 0; }
   .hero-copy h1 { margin-top: 15px; font-size: clamp(48px, 15vw, 64px); }
@@ -279,14 +302,19 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .recommendation-list { padding-inline: 7px; }
   .recommendation-row { grid-template-columns: 43px minmax(0, 1fr) auto; gap: 11px; padding-inline: 8px; }
   .view-all { padding-inline: 20px; }
-  .featured-section { padding: 52px 16px 58px; overflow: hidden; }
+  .featured-section { padding: 52px 16px 58px; }
   .section-heading { align-items: flex-start; margin-bottom: 25px; }
   .section-heading h2 { font-size: 34px; }
   .section-tools > span { display: none; }
-  .book-grid { display: flex; width: auto; margin-right: -16px; padding-right: 16px; gap: 15px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .book-grid::-webkit-scrollbar { display: none; }
-  .book-card { flex: 0 0 min(68vw, 245px); scroll-snap-align: start; }
-  .card-cover-wrap .cover-title { font-size: 19px; }
+  .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .card-cover-wrap { padding: 12px 12px 0; }
+  .card-cover-wrap .cover-title { font-size: clamp(12px, 4vw, 17px); }
+  .score-badge { right: 7px; bottom: 7px; width: clamp(40px, 11vw, 46px); height: clamp(40px, 11vw, 46px); }
+  .score-badge strong { font-size: 15px; }
+  .book-card-body { padding: 14px 12px 12px; }
+  .book-card h3 { min-height: 36px; font-size: 15px; }
+  .book-card-body > p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .want-button { min-height: 44px; }
   .value-inner { width: 100%; grid-template-columns: 1fr; }
   .value-item { min-height: 86px; border-top: 1px solid var(--border); border-left: 0; justify-content: flex-start; padding-inline: 24px; }
   .value-item:first-child { border-top: 0; }
@@ -294,6 +322,21 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .footer-theme { grid-column: 1; grid-row: auto; justify-self: start; }
   .footer-nav { grid-column: 1; grid-row: auto; grid-template-columns: repeat(2, 1fr); }
   .footer-bottom { flex-direction: column; gap: 8px; }
+  .detail-header { min-height: 68px; padding-inline: 17px; }
+  .detail-header .theme-toggle-labeled { padding: 8px; }
+  .detail-header .toggle-label { display: none; }
+  .book-detail { min-height: auto; width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; padding: 42px 0 64px; }
+  .detail-cover-wrap { width: min(78vw, 290px); margin-inline: auto; padding: 20px; }
+  .detail-back-link { margin-bottom: 28px; }
+  .detail-copy h1 { font-size: clamp(42px, 14vw, 60px); }
+  .detail-metadata { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 360px) {
+  .book-grid { grid-template-columns: 1fr; }
+  .book-card { width: min(100%, 270px); margin-inline: auto; }
+  .card-cover-wrap { padding: 18px 20px 0; }
+  .card-cover-wrap .cover-title { font-size: 19px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -290,3 +290,43 @@ export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
       left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }),
     );
 }
+
+export async function loadCatalogBook(workId: string): Promise<Book | null> {
+  const joined = await supabase
+    .from('works')
+    .select('*, authors(*), editions(*)')
+    .eq('id', workId)
+    .maybeSingle();
+
+  if (!joined.error && joined.data) {
+    return mapCatalogBook(asRow(joined.data)!, [], [], 0);
+  }
+
+  const workResult = await supabase
+    .from('works')
+    .select('*')
+    .eq('id', workId)
+    .maybeSingle();
+
+  if (workResult.error) throw workResult.error;
+  const work = asRow(workResult.data);
+  if (!work) return null;
+
+  const authorId = readString(work, AUTHOR_ID_COLUMNS);
+  const [authorResult, editionsResult] = await Promise.all([
+    authorId
+      ? supabase.from('authors').select('*').eq('id', authorId)
+      : Promise.resolve({ data: [], error: null }),
+    supabase.from('editions').select('*').eq('work_id', workId),
+  ]);
+
+  if (authorResult.error) throw authorResult.error;
+  if (editionsResult.error) throw editionsResult.error;
+
+  return mapCatalogBook(
+    work,
+    asRows(authorResult.data),
+    asRows(editionsResult.data),
+    0,
+  );
+}
