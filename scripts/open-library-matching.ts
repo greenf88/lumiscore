@@ -5,6 +5,7 @@ export type BookMatchSeed = {
   alternateTitles?: string[];
   preferredDisplayTitle?: string;
   expectedOpenLibraryWorkId?: string;
+  expectedOpenLibraryAuthorId?: string;
 };
 
 export type OpenLibrarySearchDocument = {
@@ -59,6 +60,38 @@ export function matchesExpectedAuthor(
 
 function normalizeOpenLibraryWorkId(value: string | undefined): string {
   return value?.split('/').filter(Boolean).at(-1)?.toUpperCase() ?? '';
+}
+
+export function completePinnedWorkMetadata(
+  seed: BookMatchSeed,
+  document: OpenLibrarySearchDocument,
+): OpenLibrarySearchDocument {
+  if (
+    !seed.expectedOpenLibraryWorkId ||
+    !seed.expectedOpenLibraryAuthorId ||
+    !matchesExpectedWorkId(seed, document)
+  ) {
+    return document;
+  }
+
+  const authorId = seed.expectedOpenLibraryAuthorId.toUpperCase();
+  if (!/^OL\d+A$/.test(authorId)) return document;
+  const hasCompleteAuthorMetadata = Boolean(
+    document.author_key?.length && document.author_name?.length,
+  );
+
+  return {
+    ...document,
+    title: document.title?.trim() || seed.title,
+    author_key: hasCompleteAuthorMetadata
+      ? document.author_key
+      : [authorId],
+    author_name: hasCompleteAuthorMetadata
+      ? document.author_name
+      : [seed.author ?? ''],
+    first_publish_year:
+      document.first_publish_year ?? seed.firstPublishYear,
+  };
 }
 
 export function matchesExpectedWorkId(

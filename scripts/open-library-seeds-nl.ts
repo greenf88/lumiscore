@@ -1,4 +1,8 @@
 import type { SeedBook } from './open-library-seeds.ts';
+import {
+  NETHERLANDS_NATIVE_DISPOSITIONS,
+  type NativeSeedMetadata,
+} from './lumiscore-native-seeds-nl.ts';
 
 export const NETHERLANDS_SEED_CATEGORIES = [
   'literary-general-fiction',
@@ -18,6 +22,9 @@ export type NetherlandsSeedBook = SeedBook & {
   collection: 'netherlands-core' | 'suzanne-vermeer';
   manualReviewCandidates?: readonly string[];
   manualReviewReason?: string;
+  nativeMetadata?: NativeSeedMetadata;
+  importDisposition?: 'NEEDS_MORE_RESEARCH' | 'REJECT';
+  dispositionReason?: string;
 };
 
 const seedKey = (title: string, author: string) => `${title}\u0000${author}`;
@@ -86,7 +93,7 @@ const OPEN_LIBRARY_WORK_IDS: Readonly<Record<string, string>> = {
   "Wachtwoord\u0000Charles den Tex": "OL33763745W",
   "Pluk van de Petteflet\u0000Annie M.G. Schmidt": "OL34952258W",
   "Abeltje\u0000Annie M.G. Schmidt": "OL39413096W",
-  "Wiplala\u0000Annie M.G. Schmidt": "OL34926590W",
+  "Wiplala\u0000Annie M.G. Schmidt": "OL3173349W",
   "Kinderen van Moeder Aarde\u0000Thea Beckman": "OL24343787W",
   "Lover of loser\u0000Carry Slee": "OL26178174W",
   "Kappen!\u0000Carry Slee": "OL20660640W",
@@ -325,6 +332,23 @@ const OPEN_LIBRARY_WORK_IDS: Readonly<Record<string, string>> = {
   "Flamingo Beach\u0000Suzanne Vermeer": "OL44984219W",
 };
 
+const OPEN_LIBRARY_AUTHOR_IDS: Readonly<Record<string, string>> = {
+  "Bonuskind\u0000Saskia Noort": 'OL3091091A',
+  "Alles te verliezen\u0000Esther Verhoef": 'OL3087562A',
+  "Foeksia de miniheks\u0000Paul van Loon": 'OL300379A',
+  "Weerwolvenbos\u0000Paul van Loon": 'OL300379A',
+  "Het boek van alle dingen\u0000Guus Kuijer": 'OL865499A',
+  "Achtste-groepers huilen niet\u0000Jacques Vriens": 'OL200176A',
+  "Oorlogsgeheimen\u0000Jacques Vriens": 'OL200176A',
+  "Zwaar verliefd!\u0000Chantal van Gastel": 'OL9301506A',
+  "Sneeuwexpress\u0000Suzanne Vermeer": 'OL7535086A',
+  "Kinderen van Moeder Aarde\u0000Thea Beckman": 'OL200233A',
+  "Abeltje\u0000Annie M.G. Schmidt": 'OL507781A',
+  "Wiplala\u0000Annie M.G. Schmidt": 'OL507781A',
+  "November\u0000Thomas Olde Heuvelt": 'OL7482809A',
+  "Pluk van de Petteflet\u0000Annie M.G. Schmidt": 'OL507781A',
+};
+
 const MANUAL_REVIEWS: Readonly<
   Record<string, { candidates: readonly string[]; reason: string }>
 > = {
@@ -432,12 +456,23 @@ const MANUAL_REVIEWS: Readonly<
 const openLibraryMetadata = (title: string, author: string) => {
   const key = seedKey(title, author);
   const expectedOpenLibraryWorkId = OPEN_LIBRARY_WORK_IDS[key];
+  const expectedOpenLibraryAuthorId = OPEN_LIBRARY_AUTHOR_IDS[key];
   const review = MANUAL_REVIEWS[key];
   const matchOverrides = OPEN_LIBRARY_MATCH_OVERRIDES[key];
+  const nativeDisposition = NETHERLANDS_NATIVE_DISPOSITIONS[key];
   return {
     ...(expectedOpenLibraryWorkId ? { expectedOpenLibraryWorkId } : {}),
+    ...(expectedOpenLibraryAuthorId ? { expectedOpenLibraryAuthorId } : {}),
     ...matchOverrides,
-    ...(!expectedOpenLibraryWorkId && review
+    ...(nativeDisposition?.status === 'LUMISCORE_NATIVE_READY'
+      ? { nativeMetadata: nativeDisposition }
+      : nativeDisposition
+        ? {
+            importDisposition: nativeDisposition.status,
+            dispositionReason: nativeDisposition.reason,
+          }
+        : {}),
+    ...(!expectedOpenLibraryWorkId && !nativeDisposition && review
       ? {
           manualReviewCandidates: review.candidates,
           manualReviewReason: review.reason,

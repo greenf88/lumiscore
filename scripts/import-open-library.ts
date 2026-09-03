@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
+  completePinnedWorkMetadata,
   getWorkDisplayTitle,
   matchesExpectedAuthor,
   matchesExpectedWorkId,
@@ -9,6 +10,13 @@ import {
 import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
 import { SEED_BOOKS, type SeedBook } from './open-library-seeds.ts';
 import { NETHERLANDS_SEEDS } from './open-library-seeds-nl.ts';
+import {
+  assertNativeSeedIsSafe,
+  getNativeWorkIdentityKey,
+  normalizeNativeIdentityPart,
+  normalizeNativeIsbn13,
+} from './lumiscore-native-import.ts';
+import type { NativeSeedMetadata } from './lumiscore-native-seeds-nl.ts';
 
 type Row = Record<string, unknown>;
 
@@ -42,6 +50,9 @@ type DatabaseColumns = {
     title: string;
     authorId: string;
     firstPublishYear: string;
+    sourceType: string;
+    workType: string;
+    nativeIdentityKey: string;
   };
   editions: {
     id: string;
@@ -238,29 +249,38 @@ async function searchOpenLibraryWorks(
       .map((entry) => entry.author?.key ?? entry.key)
       .filter((key): key is string => Boolean(key));
 
-    if (!pinnedWork.key || !pinnedWork.title || authorKeys.length === 0) {
+    const pinnedDocument = completePinnedWorkMetadata(seed, {
+      key: pinnedWork.key ?? `/works/${seed.expectedOpenLibraryWorkId}`,
+      title: pinnedWork.title,
+      author_key: authorKeys.map(
+        (key) => normalizeOpenLibraryId(key) ?? key,
+      ),
+      author_name: authorKeys.map(() => seed.author),
+      first_publish_year: undefined,
+      edition_count: 0,
+    });
+
+    if (
+      !pinnedDocument.key ||
+      !pinnedDocument.title ||
+      !pinnedDocument.author_key?.length
+    ) {
       throw new Error(
         `Pinned Open Library work ${seed.expectedOpenLibraryWorkId} is incomplete.`,
       );
     }
 
-    documents.set(pinnedWork.key, {
-      key: pinnedWork.key,
-      title: seed.title,
-      author_key: authorKeys.map(
-        (key) => normalizeOpenLibraryId(key) ?? key,
-      ),
-      author_name: authorKeys.map(() => seed.author),
-      first_publish_year: seed.firstPublishYear,
-      edition_count: 0,
-    });
+    documents.set(pinnedDocument.key, pinnedDocument);
   }
 
   return [...documents.values()];
 }
 
 async function loadOpenLibraryBook(seed: SeedBook) {
-  const work = selectBestWorkMatch(seed, await searchOpenLibraryWorks(seed));
+  const work = completePinnedWorkMetadata(
+    seed,
+    selectBestWorkMatch(seed, await searchOpenLibraryWorks(seed)),
+  );
   const workId = normalizeOpenLibraryId(work.key);
   const author = selectAuthor(seed, work);
 
@@ -353,6 +373,11 @@ async function resolveDatabaseColumns(): Promise<DatabaseColumns> {
       firstPublishYear: (await resolveColumn('works', 'first publish year', [
         'first_publish_year',
         'first_published_year',
+      ]))!,
+      sourceType: (await resolveColumn('works', 'source type', ['source_type']))!,
+      workType: (await resolveColumn('works', 'work type', ['work_type']))!,
+      nativeIdentityKey: (await resolveColumn('works', 'native identity key', [
+        'native_identity_key',
       ]))!,
     },
     editions: {
@@ -486,6 +511,7 @@ async function importBook(
     [columns.works.title]: book.work.title,
     [columns.works.authorId]: author.id,
     [columns.works.firstPublishYear]: book.work.firstPublishYear,
+    [columns.works.sourceType]: 'open_library',
   };
   const work = await saveWithoutDuplicates({
     table: 'works',
@@ -555,6 +581,122 @@ async function importBook(
   return `${book.work.title} — ${book.author.name} (${actions} new row${actions === 1 ? '' : 's'})`;
 }
 
+type NativeSeed = SeedBook & { nativeMetadata: NativeSeedMetadata };
+
+async function findNativeAuthorByNormalizedName(
+  name: string,
+  columns: DatabaseColumns,
+): Promise<Row | null> {
+  const { data, error } = await supabase
+    .from('authors')
+    .select(`${columns.authors.id},${columns.authors.name}`);
+  if (error) throw error;
+  const normalizedName = normalizeNativeIdentityPart(name);
+  return (
+    ((data ?? []) as unknown as Row[]).find(
+      (row) =>
+        normalizeNativeIdentityPart(String(row[columns.authors.name] ?? '')) ===
+        normalizedName,
+    ) ?? null
+  );
+}
+
+async function importNativeBook(
+  seed: NativeSeed,
+  columns: DatabaseColumns,
+): Promise<string> {
+  assertNativeSeedIsSafe(seed);
+  const metadata = seed.nativeMetadata;
+  const isbn13 = normalizeNativeIsbn13(metadata.isbn13)!;
+  const identityKey = getNativeWorkIdentityKey(seed.title, seed.author!);
+
+  let author = await findNativeAuthorByNormalizedName(seed.author!, columns);
+  let authorCreated = false;
+  if (!author) {
+    const { data, error } = await supabase
+      .from('authors')
+      .insert({
+        [columns.authors.openLibraryId]: null,
+        [columns.authors.name]: seed.author,
+      } as Row)
+      .select(columns.authors.id)
+      .single();
+    if (error) throw error;
+    author = data as unknown as Row;
+    authorCreated = true;
+  }
+  const authorId = String(author[columns.authors.id]);
+
+  const nativeWorkPayload: Row = {
+    [columns.works.openLibraryId]: null,
+    [columns.works.title]: seed.preferredDisplayTitle ?? seed.title,
+    [columns.works.authorId]: authorId,
+    [columns.works.firstPublishYear]: metadata.publicationYear,
+    [columns.works.sourceType]: 'lumiscore_native',
+    [columns.works.workType]: metadata.workType,
+    [columns.works.nativeIdentityKey]: identityKey,
+  };
+  let work = await findExistingRow(supabase, 'works', columns.works.id, {
+    [columns.works.nativeIdentityKey]: identityKey,
+  });
+  let workCreated = false;
+  if (work) {
+    const { error } = await supabase
+      .from('works')
+      .update(nativeWorkPayload)
+      .eq(columns.works.id, work[columns.works.id]);
+    if (error) throw error;
+  } else {
+    const { data, error } = await supabase
+      .from('works')
+      .insert(nativeWorkPayload)
+      .select(columns.works.id)
+      .single();
+    if (error) throw error;
+    work = data as unknown as Row;
+    workCreated = true;
+  }
+  const workId = String(work[columns.works.id]);
+
+  const existingEdition = await findExistingRow(
+    supabase,
+    'editions',
+    columns.editions.id,
+    { [columns.editions.isbn13]: isbn13 },
+  );
+  let editionCreated = false;
+  if (existingEdition) {
+    const { data, error } = await supabase
+      .from('editions')
+      .select(columns.editions.workId)
+      .eq(columns.editions.id, existingEdition[columns.editions.id])
+      .single();
+    if (error) throw error;
+    if (String((data as unknown as Row)[columns.editions.workId]) !== workId) {
+      throw new Error(`ISBN-13 ${isbn13} already belongs to another work.`);
+    }
+  } else {
+    const editionPayload: Row = {
+      [columns.editions.openLibraryId]: null,
+      [columns.editions.title]: seed.preferredDisplayTitle ?? seed.title,
+      [columns.editions.workId]: workId,
+      [columns.editions.isbn13]: isbn13,
+    };
+    if (columns.editions.publishDate) {
+      editionPayload[columns.editions.publishDate] = String(metadata.publicationYear);
+    }
+    if (columns.editions.publisher) {
+      editionPayload[columns.editions.publisher] = metadata.publisher;
+    }
+    const { error } = await supabase.from('editions').insert(editionPayload);
+    if (error) throw error;
+    editionCreated = true;
+  }
+
+  const actions = [authorCreated, workCreated, editionCreated].filter(Boolean).length;
+  return `${seed.title} — ${seed.author} (${actions} new row${actions === 1 ? '' : 's'})`;
+}
+
 async function main(): Promise<void> {
   const scopeArgument = process.argv.find((argument) =>
     argument.startsWith('--scope='),
@@ -596,7 +738,10 @@ async function main(): Promise<void> {
 
   if (requestedWorkIds.size === 0) {
     for (const seed of plan.skippedManualReviewSeeds) {
-      console.log(`[SKIPPED MANUAL REVIEW] ${seed.title} — ${seed.author}`);
+      console.log(`[SKIPPED REVIEW] ${seed.title} — ${seed.author}`);
+    }
+    for (const seed of plan.rejectedSeeds) {
+      console.log(`[REJECTED] ${seed.title} — ${seed.author}`);
     }
   }
 
@@ -610,11 +755,11 @@ async function main(): Promise<void> {
       if (dryRun) {
         const book = await loadOpenLibraryBook(seed);
         console.log(
-          `[${index + 1}/${seeds.length}] Verified ${book.work.title} — ${book.author.name}`,
+          `[OPEN LIBRARY] [${index + 1}/${seeds.length}] Verified ${book.work.title} — ${book.author.name}`,
         );
       } else {
         const result = await importBook(seed, columns);
-        console.log(`[${index + 1}/${seeds.length}] Imported ${result}`);
+        console.log(`[OPEN LIBRARY] [${index + 1}/${seeds.length}] Imported ${result}`);
       }
       processed += 1;
     } catch (error) {
@@ -626,11 +771,33 @@ async function main(): Promise<void> {
     await wait(150);
   }
 
+  let nativeProcessed = 0;
+  if (requestedWorkIds.size === 0) {
+    for (const [index, seed] of plan.nativeSeeds.entries()) {
+      try {
+        const nativeSeed = seed as NativeSeed;
+        assertNativeSeedIsSafe(nativeSeed);
+        if (dryRun) {
+          console.log(`[LUMISCORE NATIVE] [${index + 1}/${plan.nativeSeeds.length}] Verified ${seed.title} — ${seed.author}`);
+        } else {
+          const result = await importNativeBook(nativeSeed, columns);
+          console.log(`[LUMISCORE NATIVE] [${index + 1}/${plan.nativeSeeds.length}] Imported ${result}`);
+        }
+        nativeProcessed += 1;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        failures.push(`${seed.title}: ${message}`);
+        console.error(`[LUMISCORE NATIVE] Failed ${seed.title}: ${message}`);
+      }
+    }
+  }
+
   const skipped = requestedWorkIds.size === 0
     ? plan.skippedManualReviewSeeds.length
     : 0;
+  const rejected = requestedWorkIds.size === 0 ? plan.rejectedSeeds.length : 0;
   console.log(
-    `Summary: ${processed} processed, ${skipped} skipped for manual review, ${failures.length} failed.`,
+    `Summary: ${processed} Open Library processed, ${nativeProcessed} LumiScore native processed, ${skipped} skipped for review, ${rejected} rejected, ${failures.length} failed.`,
   );
 
   if (failures.length > 0) {
@@ -639,8 +806,8 @@ async function main(): Promise<void> {
 
   console.log(
     dryRun
-      ? `Done. ${processed} seed books passed the metadata preflight.`
-      : `Done. ${processed} seed books are present without duplicates.`,
+      ? `Done. ${processed + nativeProcessed} seed books passed the metadata preflight.`
+      : `Done. ${processed + nativeProcessed} seed books are present without duplicates.`,
   );
 }
 

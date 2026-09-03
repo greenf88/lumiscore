@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  completePinnedWorkMetadata,
   getWorkDisplayTitle,
   normalizeMatchText,
   scoreWorkMatch,
@@ -25,6 +26,11 @@ import {
   SUZANNE_VERMEER_SEEDS,
 } from './open-library-seeds-nl.ts';
 import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
+import {
+  assertNativeSeedIsSafe,
+  getNativeWorkIdentityKey,
+  normalizeNativeIsbn13,
+} from './lumiscore-native-import.ts';
 
 const alchemistSeed: BookMatchSeed = {
   title: 'The Alchemist',
@@ -452,7 +458,7 @@ test('has no duplicate title and author combinations', () => {
   assert.equal(new Set(identities).size, 1303);
 });
 
-test('pins every pre-existing seed and tracks only explicit Netherlands review cases', () => {
+test('pins every pre-existing seed and explicitly classifies every Netherlands seed', () => {
   const pinnedSeeds = SEED_BOOKS.filter(
     (seed) => seed.expectedOpenLibraryWorkId,
   );
@@ -469,10 +475,9 @@ test('pins every pre-existing seed and tracks only explicit Netherlands review c
   );
   assert.equal(unpinnedSeeds.length, 49);
   for (const seed of unpinnedSeeds) {
-    assert.ok(seed.manualReviewReason, `${seed.title} needs a review reason`);
     assert.ok(
-      (seed.manualReviewCandidates?.length ?? 0) <= 3,
-      `${seed.title} has too many review candidates`,
+      seed.nativeMetadata || seed.importDisposition,
+      `${seed.title} needs a native or skip disposition`,
     );
   }
 });
@@ -503,20 +508,67 @@ test('pins the reviewed Netherlands works and keeps clean Dutch display titles',
   );
 });
 
-test('imports verified Netherlands seeds and safely skips manual reviews', () => {
+test('plans verified, native, unresolved and rejected Netherlands seeds separately', () => {
   const plan = createOpenLibraryImportPlan(NETHERLANDS_SEEDS);
 
   assert.equal(plan.verifiedSeeds.length, 254);
-  assert.equal(plan.skippedManualReviewSeeds.length, 49);
+  assert.equal(plan.nativeSeeds.length, 47);
+  assert.equal(plan.skippedManualReviewSeeds.length, 1);
+  assert.equal(plan.rejectedSeeds.length, 1);
   assert.equal(plan.invalidUnpinnedSeeds.length, 0);
   assert.ok(
     plan.verifiedSeeds.every((seed) => seed.expectedOpenLibraryWorkId),
   );
-  assert.ok(
-    plan.skippedManualReviewSeeds.every(
-      (seed) => !seed.expectedOpenLibraryWorkId && seed.manualReviewReason,
-    ),
+  assert.equal(plan.skippedManualReviewSeeds[0]?.title, 'Onbreekbaar');
+  assert.equal(plan.rejectedSeeds[0]?.title, 'De eilanden');
+});
+
+test('creates stable normalized native identities and ISBN keys', () => {
+  assert.equal(
+    getNativeWorkIdentityKey('Joël', 'Carry Slee'),
+    getNativeWorkIdentityKey('  JOEL ', 'Carry  Slee'),
   );
+  assert.equal(normalizeNativeIsbn13('978-90-449-7081-4'), '9789044970814');
+});
+
+test('keeps native works free of Open Library identity', () => {
+  const seed = NETHERLANDS_SEEDS.find((candidate) => candidate.title === 'Vogeleiland')!;
+  assert.doesNotThrow(() => assertNativeSeedIsSafe(seed));
+  assert.equal(seed.expectedOpenLibraryWorkId, undefined);
+});
+
+test('preserves native ISBN edition deduplication and repeat-run identity', () => {
+  const seed = NETHERLANDS_SEEDS.find((candidate) => candidate.title === 'Festival')!;
+  const firstIdentity = getNativeWorkIdentityKey(seed.title, seed.author!);
+  const secondIdentity = getNativeWorkIdentityKey(seed.title, seed.author!);
+  assert.equal(firstIdentity, secondIdentity);
+  assert.equal(normalizeNativeIsbn13(seed.nativeMetadata!.isbn13), '9789400517134');
+});
+
+test('keeps Open Library seeds on their unchanged identity path', () => {
+  const seed = NETHERLANDS_SEEDS.find((candidate) => candidate.title === 'Sneeuwexpress')!;
+  assert.equal(seed.expectedOpenLibraryWorkId, 'OL30710666W');
+  assert.equal(seed.nativeMetadata, undefined);
+});
+
+test('retains Suzanne Vermeer work distinctions', () => {
+  const byTitle = new Map(SUZANNE_VERMEER_SEEDS.map((seed) => [seed.title, seed]));
+  assert.equal(byTitle.get('De eilanden')?.importDisposition, 'REJECT');
+  assert.equal(byTitle.get('Sterrennacht')?.nativeMetadata?.workType, 'audiobook_original');
+  for (const title of ['Vakantiegeld', 'De scheiding', 'Een vluchtig gebaar', 'Madonna', 'In de mist']) {
+    assert.equal(byTitle.get(title)?.nativeMetadata?.workType, 'short_story');
+  }
+});
+
+test('keeps all 47 native ISBN identities unique', () => {
+  const nativeSeeds = NETHERLANDS_SEEDS.filter((seed) => seed.nativeMetadata);
+  const isbns = nativeSeeds.map((seed) => seed.nativeMetadata!.isbn13);
+  const identities = nativeSeeds.map((seed) =>
+    getNativeWorkIdentityKey(seed.title, seed.author!),
+  );
+  assert.equal(nativeSeeds.length, 47);
+  assert.equal(new Set(isbns).size, 47);
+  assert.equal(new Set(identities).size, 47);
 });
 
 test('keeps an unexpected unpinned seed as a hard import error', () => {
@@ -532,6 +584,56 @@ test('keeps an unexpected unpinned seed as a hard import error', () => {
   assert.equal(plan.verifiedSeeds.length, 0);
   assert.equal(plan.skippedManualReviewSeeds.length, 0);
   assert.equal(plan.invalidUnpinnedSeeds.length, 1);
+});
+
+test('completes only explicitly verified pinned metadata overrides', () => {
+  const seed: BookMatchSeed = {
+    title: 'Pluk van de Petteflet',
+    author: 'Annie M.G. Schmidt',
+    firstPublishYear: 1971,
+    expectedOpenLibraryWorkId: 'OL34952258W',
+    expectedOpenLibraryAuthorId: 'OL507781A',
+  };
+  const completed = completePinnedWorkMetadata(seed, {
+    key: '/works/OL34952258W',
+    title: 'Pluk van de Petteflet',
+  });
+
+  assert.deepEqual(completed.author_key, ['OL507781A']);
+  assert.deepEqual(completed.author_name, ['Annie M.G. Schmidt']);
+  assert.equal(completed.first_publish_year, 1971);
+
+  const unrelated = { key: '/works/OL1W', title: 'Other' };
+  assert.equal(completePinnedWorkMetadata(seed, unrelated), unrelated);
+});
+
+test('configures verified author fallbacks for all 14 failed Dutch imports', () => {
+  const expected = new Map([
+    ['Bonuskind', 'OL26420829W'],
+    ['Alles te verliezen', 'OL34876668W'],
+    ['Foeksia de miniheks', 'OL35159241W'],
+    ['Weerwolvenbos', 'OL34942140W'],
+    ['Het boek van alle dingen', 'OL34875388W'],
+    ['Achtste-groepers huilen niet', 'OL24360162W'],
+    ['Oorlogsgeheimen', 'OL29233044W'],
+    ['Zwaar verliefd!', 'OL34869705W'],
+    ['Sneeuwexpress', 'OL30710666W'],
+    ['Kinderen van Moeder Aarde', 'OL24343787W'],
+    ['Abeltje', 'OL39413096W'],
+    ['Wiplala', 'OL3173349W'],
+    ['November', 'OL34958609W'],
+    ['Pluk van de Petteflet', 'OL34952258W'],
+  ]);
+
+  for (const [title, workId] of expected) {
+    const seed = NETHERLANDS_SEEDS.find((candidate) => candidate.title === title);
+    assert.equal(seed?.expectedOpenLibraryWorkId, workId, `${title} work ID`);
+    assert.match(
+      seed?.expectedOpenLibraryAuthorId ?? '',
+      /^OL\d+A$/,
+      `${title} author fallback`,
+    );
+  }
 });
 
 test('keeps the requested Netherlands core category balance', () => {
