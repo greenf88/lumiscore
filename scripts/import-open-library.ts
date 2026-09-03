@@ -6,7 +6,9 @@ import {
   selectBestWorkMatch,
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
+import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
 import { SEED_BOOKS, type SeedBook } from './open-library-seeds.ts';
+import { NETHERLANDS_SEEDS } from './open-library-seeds-nl.ts';
 
 type Row = Record<string, unknown>;
 
@@ -554,20 +556,26 @@ async function importBook(
 }
 
 async function main(): Promise<void> {
-  const unpinnedSeeds = SEED_BOOKS.filter(
-    (seed) => !seed.expectedOpenLibraryWorkId,
+  const scopeArgument = process.argv.find((argument) =>
+    argument.startsWith('--scope='),
   );
-  if (unpinnedSeeds.length > 0) {
+  const scope = scopeArgument?.slice('--scope='.length) ?? 'all';
+  if (scope !== 'all' && scope !== 'netherlands') {
     throw new Error(
-      `Refusing to import ${unpinnedSeeds.length} unpinned seed(s): ${unpinnedSeeds
-        .map((seed) => `“${seed.title}”`)
-        .join(', ')}. Resolve their exact Open Library Work IDs first.`,
+      `Unsupported import scope “${scope}”. Use “all” or “netherlands”.`,
     );
   }
 
-  console.log('Checking the existing Supabase schema…');
-  const columns = await resolveDatabaseColumns();
-  const failures: string[] = [];
+  const scopedSeeds = scope === 'netherlands' ? NETHERLANDS_SEEDS : SEED_BOOKS;
+  const plan = createOpenLibraryImportPlan(scopedSeeds);
+  if (plan.invalidUnpinnedSeeds.length > 0) {
+    throw new Error(
+      `Refusing to import ${plan.invalidUnpinnedSeeds.length} unpinned seed(s) without a manual-review marker: ${plan.invalidUnpinnedSeeds
+        .map((seed) => `“${seed.title}”`)
+        .join(', ')}. Pin or explicitly mark them for manual review first.`,
+    );
+  }
+
   const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true';
   const requestedWorkIds = new Set(
     (process.env.OPEN_LIBRARY_IMPORT_WORK_IDS ?? '')
@@ -577,14 +585,25 @@ async function main(): Promise<void> {
   );
   const seeds =
     requestedWorkIds.size === 0
-      ? SEED_BOOKS
-      : SEED_BOOKS.filter((seed) =>
+      ? plan.verifiedSeeds
+      : plan.verifiedSeeds.filter((seed) =>
           requestedWorkIds.has(seed.expectedOpenLibraryWorkId!.toUpperCase()),
         );
 
   if (requestedWorkIds.size > 0 && seeds.length !== requestedWorkIds.size) {
     throw new Error('One or more requested recovery Work IDs are not configured.');
   }
+
+  if (requestedWorkIds.size === 0) {
+    for (const seed of plan.skippedManualReviewSeeds) {
+      console.log(`[SKIPPED MANUAL REVIEW] ${seed.title} — ${seed.author}`);
+    }
+  }
+
+  console.log('Checking the existing Supabase schema…');
+  const columns = await resolveDatabaseColumns();
+  const failures: string[] = [];
+  let processed = 0;
 
   for (const [index, seed] of seeds.entries()) {
     try {
@@ -597,6 +616,7 @@ async function main(): Promise<void> {
         const result = await importBook(seed, columns);
         console.log(`[${index + 1}/${seeds.length}] Imported ${result}`);
       }
+      processed += 1;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       failures.push(`${seed.title}: ${message}`);
@@ -606,14 +626,21 @@ async function main(): Promise<void> {
     await wait(150);
   }
 
+  const skipped = requestedWorkIds.size === 0
+    ? plan.skippedManualReviewSeeds.length
+    : 0;
+  console.log(
+    `Summary: ${processed} processed, ${skipped} skipped for manual review, ${failures.length} failed.`,
+  );
+
   if (failures.length > 0) {
     throw new Error(`${failures.length} import(s) failed. Rerun after fixing the errors above.`);
   }
 
   console.log(
     dryRun
-      ? `Done. ${seeds.length} seed books passed the metadata preflight.`
-      : `Done. ${seeds.length} seed books are present without duplicates.`,
+      ? `Done. ${processed} seed books passed the metadata preflight.`
+      : `Done. ${processed} seed books are present without duplicates.`,
   );
 }
 

@@ -24,6 +24,7 @@ import {
   NETHERLANDS_SEEDS,
   SUZANNE_VERMEER_SEEDS,
 } from './open-library-seeds-nl.ts';
+import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
 
 const alchemistSeed: BookMatchSeed = {
   title: 'The Alchemist',
@@ -500,6 +501,37 @@ test('pins the reviewed Netherlands works and keeps clean Dutch display titles',
       ?.preferredDisplayTitle,
     'Ons creatieve brein',
   );
+});
+
+test('imports verified Netherlands seeds and safely skips manual reviews', () => {
+  const plan = createOpenLibraryImportPlan(NETHERLANDS_SEEDS);
+
+  assert.equal(plan.verifiedSeeds.length, 254);
+  assert.equal(plan.skippedManualReviewSeeds.length, 49);
+  assert.equal(plan.invalidUnpinnedSeeds.length, 0);
+  assert.ok(
+    plan.verifiedSeeds.every((seed) => seed.expectedOpenLibraryWorkId),
+  );
+  assert.ok(
+    plan.skippedManualReviewSeeds.every(
+      (seed) => !seed.expectedOpenLibraryWorkId && seed.manualReviewReason,
+    ),
+  );
+});
+
+test('keeps an unexpected unpinned seed as a hard import error', () => {
+  const plan = createOpenLibraryImportPlan([
+    {
+      title: 'Unexpected unpinned work',
+      author: 'Test Author',
+      firstPublishYear: 2026,
+      category: 'contemporary-general-fiction',
+    },
+  ]);
+
+  assert.equal(plan.verifiedSeeds.length, 0);
+  assert.equal(plan.skippedManualReviewSeeds.length, 0);
+  assert.equal(plan.invalidUnpinnedSeeds.length, 1);
 });
 
 test('keeps the requested Netherlands core category balance', () => {
