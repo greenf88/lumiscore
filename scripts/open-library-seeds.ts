@@ -1,5 +1,6 @@
 import type { BookMatchSeed } from './open-library-matching.ts';
 import { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
+import { NETHERLANDS_SEEDS } from './open-library-seeds-nl.ts';
 
 export { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
 
@@ -157,9 +158,16 @@ export const LEGACY_SEED_BOOKS: readonly SeedBook[] = [
   ...ADDITIONAL_SEED_BOOKS,
 ];
 
-export const SEED_BOOKS: readonly SeedBook[] = [
+export const PRE_NETHERLANDS_SEED_BOOKS: readonly SeedBook[] = [
   ...LEGACY_SEED_BOOKS,
   ...EXPANDED_SEED_BOOKS,
+];
+
+// Keep manual-review entries visible in the catalog, but the importer has a
+// strict preflight and cannot process them until they receive a Work ID.
+export const SEED_BOOKS: readonly SeedBook[] = [
+  ...PRE_NETHERLANDS_SEED_BOOKS,
+  ...NETHERLANDS_SEEDS,
 ];
 
 export const MANUAL_VERIFICATION_TITLES = [

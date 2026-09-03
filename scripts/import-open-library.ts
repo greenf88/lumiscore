@@ -554,6 +554,17 @@ async function importBook(
 }
 
 async function main(): Promise<void> {
+  const unpinnedSeeds = SEED_BOOKS.filter(
+    (seed) => !seed.expectedOpenLibraryWorkId,
+  );
+  if (unpinnedSeeds.length > 0) {
+    throw new Error(
+      `Refusing to import ${unpinnedSeeds.length} unpinned seed(s): ${unpinnedSeeds
+        .map((seed) => `“${seed.title}”`)
+        .join(', ')}. Resolve their exact Open Library Work IDs first.`,
+    );
+  }
+
   console.log('Checking the existing Supabase schema…');
   const columns = await resolveDatabaseColumns();
   const failures: string[] = [];

@@ -14,9 +14,16 @@ import {
   LEGACY_SEED_BOOKS,
   MANUAL_VERIFICATION_TITLES,
   ORIGINAL_SEED_BOOKS,
+  PRE_NETHERLANDS_SEED_BOOKS,
   SEED_BOOKS,
   SEED_CATEGORIES,
 } from './open-library-seeds.ts';
+import {
+  NETHERLANDS_CORE_SEEDS,
+  NETHERLANDS_SEED_CATEGORIES,
+  NETHERLANDS_SEEDS,
+  SUZANNE_VERMEER_SEEDS,
+} from './open-library-seeds-nl.ts';
 
 const alchemistSeed: BookMatchSeed = {
   title: 'The Alchemist',
@@ -320,21 +327,26 @@ test('pins all 32 manually verified titles to their requested Open Library works
   );
 });
 
-test('configures exactly 1000 unique seed works while preserving all 115 existing seeds', () => {
+test('preserves the existing 1000-book catalog while adding the Netherlands collection', () => {
   assert.equal(ORIGINAL_SEED_BOOKS.length, 100);
   assert.equal(ADDITIONAL_SEED_BOOKS.length, 15);
   assert.equal(LEGACY_SEED_BOOKS.length, 115);
   assert.equal(EXPANDED_SEED_BOOKS.length, 885);
-  assert.equal(SEED_BOOKS.length, 1000);
+  assert.equal(PRE_NETHERLANDS_SEED_BOOKS.length, 1000);
+  assert.equal(NETHERLANDS_CORE_SEEDS.length, 250);
+  assert.equal(SUZANNE_VERMEER_SEEDS.length, 53);
+  assert.equal(NETHERLANDS_SEEDS.length, 303);
+  assert.equal(SEED_BOOKS.length, 1303);
 
   const identities = SEED_BOOKS.map(seedIdentity);
   assert.equal(new Set(identities).size, SEED_BOOKS.length);
 
-  const pinnedWorkIds = SEED_BOOKS.flatMap((seed) =>
+  const pinnedWorkIds = PRE_NETHERLANDS_SEED_BOOKS.flatMap((seed) =>
     seed.expectedOpenLibraryWorkId
       ? [seed.expectedOpenLibraryWorkId.toUpperCase()]
       : [],
   );
+  assert.equal(pinnedWorkIds.length, 1000);
   assert.equal(new Set(pinnedWorkIds).size, pinnedWorkIds.length);
 });
 
@@ -373,7 +385,7 @@ test('keeps the requested category balance', () => {
     Object.fromEntries(
       SEED_CATEGORIES.map((category) => [
         category,
-        SEED_BOOKS.filter((seed) => seed.category === category).length,
+        PRE_NETHERLANDS_SEED_BOOKS.filter((seed) => seed.category === category).length,
       ]),
     ),
     expandedExpectedCounts,
@@ -436,10 +448,10 @@ test('gives every seed an author and first-publication-year hint', () => {
 test('has no duplicate title and author combinations', () => {
   const identities = SEED_BOOKS.map(seedIdentity);
 
-  assert.equal(new Set(identities).size, 1000);
+  assert.equal(new Set(identities).size, 1303);
 });
 
-test('pins every seed to a unique Open Library work', () => {
+test('pins every pre-existing seed and tracks only explicit Netherlands review cases', () => {
   const pinnedSeeds = SEED_BOOKS.filter(
     (seed) => seed.expectedOpenLibraryWorkId,
   );
@@ -447,9 +459,43 @@ test('pins every seed to a unique Open Library work', () => {
     seed.expectedOpenLibraryWorkId!.toUpperCase(),
   );
 
-  assert.equal(pinnedSeeds.length, 1000);
-  assert.equal(new Set(pinnedWorkIds).size, 1000);
+  assert.equal(pinnedSeeds.length, 1204);
+  assert.equal(new Set(pinnedWorkIds).size, 1204);
   assert.ok(pinnedWorkIds.every((workId) => /^OL\d+W$/.test(workId)));
+
+  const unpinnedSeeds = NETHERLANDS_SEEDS.filter(
+    (seed) => !seed.expectedOpenLibraryWorkId,
+  );
+  assert.equal(unpinnedSeeds.length, 99);
+  for (const seed of unpinnedSeeds) {
+    assert.ok(seed.manualReviewReason, `${seed.title} needs a review reason`);
+    assert.ok(
+      (seed.manualReviewCandidates?.length ?? 0) <= 3,
+      `${seed.title} has too many review candidates`,
+    );
+  }
+});
+
+test('keeps the requested Netherlands core category balance', () => {
+  assert.deepEqual(
+    Object.fromEntries(
+      NETHERLANDS_SEED_CATEGORIES.map((category) => [
+        category,
+        NETHERLANDS_CORE_SEEDS.filter(
+          (seed) => seed.netherlandsCategory === category,
+        ).length,
+      ]),
+    ),
+    {
+      'literary-general-fiction': 65,
+      'thriller-crime': 40,
+      'young-adult-children': 55,
+      'non-fiction': 35,
+      'romance-feelgood': 25,
+      classics: 20,
+      'fantasy-science-fiction': 10,
+    },
+  );
 });
 
 test('keeps one canonical seed for each resolved semantic duplicate', () => {
