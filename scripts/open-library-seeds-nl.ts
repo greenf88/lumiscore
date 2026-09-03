@@ -22,7 +22,103 @@ export type NetherlandsSeedBook = SeedBook & {
 
 const seedKey = (title: string, author: string) => `${title}\u0000${author}`;
 
+const OPEN_LIBRARY_MATCH_OVERRIDES: Readonly<
+  Record<
+    string,
+    Pick<SeedBook, 'alternateTitles' | 'preferredDisplayTitle'>
+  >
+> = {
+  "Abeltje\u0000Annie M.G. Schmidt": {
+    alternateTitles: ['Abeltje (Jeugdsalamander)'],
+    preferredDisplayTitle: 'Abeltje',
+  },
+  "Anna\u0000Annejet van der Zijl": {
+    alternateTitles: ['Anna - Het leven van Annie M.G. Schmidt'],
+    preferredDisplayTitle: 'Anna',
+  },
+  "De meeste mensen deugen\u0000Rutger Bregman": {
+    alternateTitles: ['Humankind', 'Humankind: A Hopeful History'],
+    preferredDisplayTitle: 'De meeste mensen deugen',
+  },
+  "Morele ambitie\u0000Rutger Bregman": {
+    alternateTitles: [
+      'Moral Ambition',
+      'Moral Ambition: Stop Wasting Your Talent and Start Making a Difference',
+    ],
+    preferredDisplayTitle: 'Morele ambitie',
+  },
+  "Honderd uur nacht\u0000Anna Woltz": {
+    alternateTitles: ['Hundred Hours of Night', 'Hundert Stunden Nacht'],
+    preferredDisplayTitle: 'Honderd uur nacht',
+  },
+  "De tunnel\u0000Anna Woltz": {
+    alternateTitles: ['Tunnel'],
+    preferredDisplayTitle: 'De tunnel',
+  },
+  "Het zijn net mensen\u0000Joris Luyendijk": {
+    alternateTitles: [
+      'Zijn net mensen',
+      'Zijn net mensen: misrepresenting the Middle East',
+    ],
+    preferredDisplayTitle: 'Het zijn net mensen',
+  },
+  "Ons creatieve brein\u0000Dick Swaab": {
+    alternateTitles: ['Unser kreatives Gehirn'],
+    preferredDisplayTitle: 'Ons creatieve brein',
+  },
+};
+
 const OPEN_LIBRARY_WORK_IDS: Readonly<Record<string, string>> = {
+  "De geruchten\u0000Hugo Claus": "OL34920661W",
+  "De verwondering\u0000Hugo Claus": "OL15056319W",
+  "Het volgende verhaal\u0000Cees Nooteboom": "OL643733W",
+  "Het woud der verwachting\u0000Hella S. Haasse": "OL34953098W",
+  "Problemski Hotel\u0000Dimitri Verhulst": "OL866308W",
+  "Opwaaiende zomerjurken\u0000Oek de Jong": "OL1687249W",
+  "Nieuwe buren\u0000Saskia Noort": "OL8937618W",
+  "Bonuskind\u0000Saskia Noort": "OL26420829W",
+  "Rendez-vous\u0000Esther Verhoef": "OL19335865W",
+  "Alles te verliezen\u0000Esther Verhoef": "OL34876668W",
+  "Het laatste offer\u0000Simone van der Vlugt": "OL24269387W",
+  "Herfstlied\u0000Simone van der Vlugt": "OL19943872W",
+  "De macht van meneer Miller\u0000Charles den Tex": "OL26180417W",
+  "Cel\u0000Charles den Tex": "OL34875672W",
+  "Wachtwoord\u0000Charles den Tex": "OL33763745W",
+  "Pluk van de Petteflet\u0000Annie M.G. Schmidt": "OL34952258W",
+  "Abeltje\u0000Annie M.G. Schmidt": "OL39413096W",
+  "Wiplala\u0000Annie M.G. Schmidt": "OL34926590W",
+  "Kinderen van Moeder Aarde\u0000Thea Beckman": "OL24343787W",
+  "Lover of loser\u0000Carry Slee": "OL26178174W",
+  "Kappen!\u0000Carry Slee": "OL20660640W",
+  "Foeksia de miniheks\u0000Paul van Loon": "OL35159241W",
+  "Weerwolvenbos\u0000Paul van Loon": "OL34942140W",
+  "Het boek van alle dingen\u0000Guus Kuijer": "OL34875388W",
+  "Achtste-groepers huilen niet\u0000Jacques Vriens": "OL24360162W",
+  "Oorlogsgeheimen\u0000Jacques Vriens": "OL29233044W",
+  "De brug\u0000Geert Mak": "OL20112304W",
+  "Gratis geld voor iedereen\u0000Rutger Bregman": "OL31712603W",
+  "De meeste mensen deugen\u0000Rutger Bregman": "OL20726133W",
+  "Morele ambitie\u0000Rutger Bregman": "OL43449005W",
+  "Anna\u0000Annejet van der Zijl": "OL9096581W",
+  "Sonny Boy\u0000Annejet van der Zijl": "OL759017W",
+  "De Amerikaanse prinses\u0000Annejet van der Zijl": "OL24447276W",
+  "Anna Boom\u0000Judith Koelemeijer": "OL34536597W",
+  "Revolusi\u0000David Van Reybrouck": "OL24234444W",
+  "Wij zijn ons brein\u0000Dick Swaab": "OL24713032W",
+  "De Bourgondiërs\u0000Bart Van Loo": "OL34943539W",
+  "De omwenteling\u0000Suzanna Jansen": "OL34961957W",
+  "Zwaar verliefd!\u0000Chantal van Gastel": "OL34869705W",
+  "De kleine Johannes\u0000Frederik van Eeden": "OL27339889W",
+  "Pijpelijntjes\u0000Jacob Israël de Haan": "OL3698641W",
+  "Bint\u0000F. Bordewijk": "OL37342453W",
+  "Kaas\u0000Willem Elsschot": "OL1232228W",
+  "Het dwaallicht\u0000Willem Elsschot": "OL23961881W",
+  "Ivanov\u0000Hanna Bervoets": "OL44206159W",
+  "Sneeuwexpress\u0000Suzanne Vermeer": "OL30710666W",
+  "Honderd uur nacht\u0000Anna Woltz": "OL21294698W",
+  "De tunnel\u0000Anna Woltz": "OL42541061W",
+  "Het zijn net mensen\u0000Joris Luyendijk": "OL15082537W",
+  "Ons creatieve brein\u0000Dick Swaab": "OL20921817W",
   "De ontdekking van de hemel\u0000Harry Mulisch": "OL659062W",
   "De aanslag\u0000Harry Mulisch": "OL16253633W",
   "Twee vrouwen\u0000Harry Mulisch": "OL659103W",
@@ -337,9 +433,11 @@ const openLibraryMetadata = (title: string, author: string) => {
   const key = seedKey(title, author);
   const expectedOpenLibraryWorkId = OPEN_LIBRARY_WORK_IDS[key];
   const review = MANUAL_REVIEWS[key];
+  const matchOverrides = OPEN_LIBRARY_MATCH_OVERRIDES[key];
   return {
     ...(expectedOpenLibraryWorkId ? { expectedOpenLibraryWorkId } : {}),
-    ...(review
+    ...matchOverrides,
+    ...(!expectedOpenLibraryWorkId && review
       ? {
           manualReviewCandidates: review.candidates,
           manualReviewReason: review.reason,
@@ -532,7 +630,7 @@ export const NETHERLANDS_CORE_SEEDS: readonly NetherlandsSeedBook[] = [
   core('Foeksia de miniheks', 'Paul van Loon', 1989, 'young-adult-children'),
   core('Meester Kikker', 'Paul van Loon', 1995, 'young-adult-children'),
   core('Raveleijn', 'Paul van Loon', 2011, 'young-adult-children'),
-  core('Weerwolvenbos', 'Paul van Loon', 1998, 'young-adult-children'),
+  core('Weerwolvenbos', 'Paul van Loon', 2003, 'young-adult-children'),
   core('Het boek van alle dingen', 'Guus Kuijer', 2004, 'young-adult-children'),
   core('Op je kop in de prullenbak', 'Guus Kuijer', 1977, 'young-adult-children'),
   core('Krassen in het tafelblad', 'Guus Kuijer', 1978, 'young-adult-children'),
@@ -673,7 +771,7 @@ export const SUZANNE_VERMEER_SEEDS: readonly NetherlandsSeedBook[] = [
   suzanne('Het strandhuis', 2019),
   suzanne('De eilanden', 2019),
   suzanne('Zuidenwind', 2020),
-  suzanne('Sneeuwexpress', 2021),
+  suzanne('Sneeuwexpress', 2019),
   suzanne('Lentevuur', 2021),
   suzanne('Souvenir', 2021),
   suzanne('Roadtrip', 2022),

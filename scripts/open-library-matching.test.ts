@@ -459,14 +459,14 @@ test('pins every pre-existing seed and tracks only explicit Netherlands review c
     seed.expectedOpenLibraryWorkId!.toUpperCase(),
   );
 
-  assert.equal(pinnedSeeds.length, 1204);
-  assert.equal(new Set(pinnedWorkIds).size, 1204);
+  assert.equal(pinnedSeeds.length, 1254);
+  assert.equal(new Set(pinnedWorkIds).size, 1254);
   assert.ok(pinnedWorkIds.every((workId) => /^OL\d+W$/.test(workId)));
 
   const unpinnedSeeds = NETHERLANDS_SEEDS.filter(
     (seed) => !seed.expectedOpenLibraryWorkId,
   );
-  assert.equal(unpinnedSeeds.length, 99);
+  assert.equal(unpinnedSeeds.length, 49);
   for (const seed of unpinnedSeeds) {
     assert.ok(seed.manualReviewReason, `${seed.title} needs a review reason`);
     assert.ok(
@@ -474,6 +474,32 @@ test('pins every pre-existing seed and tracks only explicit Netherlands review c
       `${seed.title} has too many review candidates`,
     );
   }
+});
+
+test('pins the reviewed Netherlands works and keeps clean Dutch display titles', () => {
+  const reviewed = new Map(
+    NETHERLANDS_SEEDS.map((seed) => [`${seed.title}\u0000${seed.author}`, seed]),
+  );
+
+  assert.equal(
+    reviewed.get('Ivanov\u0000Hanna Bervoets')?.expectedOpenLibraryWorkId,
+    'OL44206159W',
+  );
+  assert.equal(
+    reviewed.get('Honderd uur nacht\u0000Anna Woltz')
+      ?.expectedOpenLibraryWorkId,
+    'OL21294698W',
+  );
+  assert.equal(
+    reviewed.get('De meeste mensen deugen\u0000Rutger Bregman')
+      ?.preferredDisplayTitle,
+    'De meeste mensen deugen',
+  );
+  assert.equal(
+    reviewed.get('Ons creatieve brein\u0000Dick Swaab')
+      ?.preferredDisplayTitle,
+    'Ons creatieve brein',
+  );
 });
 
 test('keeps the requested Netherlands core category balance', () => {
