@@ -335,6 +335,12 @@ const OPEN_LIBRARY_WORK_IDS: Readonly<Record<string, string>> = {
 const OPEN_LIBRARY_AUTHOR_IDS: Readonly<Record<string, string>> = {
   "Bonuskind\u0000Saskia Noort": 'OL3091091A',
   "Alles te verliezen\u0000Esther Verhoef": 'OL3087562A',
+  // These three verified works have valid editions/authors but omit a work-level
+  // first publication year. The explicit author pins opt them into the narrow
+  // pinned-work metadata fallback without relaxing matching for other seeds.
+  "Rendez-vous\u0000Esther Verhoef": 'OL7482830A',
+  "Close-up\u0000Esther Verhoef": 'OL3087562A',
+  "De tunnel\u0000Anna Woltz": 'OL7481875A',
   "Foeksia de miniheks\u0000Paul van Loon": 'OL300379A',
   "Weerwolvenbos\u0000Paul van Loon": 'OL300379A',
   "Het boek van alle dingen\u0000Guus Kuijer": 'OL865499A',
@@ -490,6 +496,7 @@ const core = (
   title,
   author,
   firstPublishYear,
+  preferredEditionLanguages: ['nld'],
   netherlandsCategory,
   collection: 'netherlands-core',
   ...openLibraryMetadata(title, author),
@@ -508,6 +515,7 @@ const suzanne = (
   title,
   author: 'Suzanne Vermeer',
   firstPublishYear,
+  preferredEditionLanguages: ['nld'],
   netherlandsCategory: 'thriller-crime',
   collection: 'suzanne-vermeer',
   ...openLibraryMetadata(title, 'Suzanne Vermeer'),

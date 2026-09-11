@@ -19,6 +19,7 @@ export type SeedCategory = (typeof SEED_CATEGORIES)[number];
 export type SeedBook = BookMatchSeed & {
   author: string;
   category: SeedCategory;
+  preferredEditionLanguages?: readonly string[];
 };
 
 export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [

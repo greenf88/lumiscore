@@ -1,30 +1,33 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
 import { books } from './data/books';
-import { SEED_BOOKS, SEED_CATEGORIES } from '@/scripts/open-library-seeds';
+
+const CATALOG_CATEGORY_COUNT = 7;
 
 async function loadHomepageBooks() {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
   ) {
-    return books;
+    return { books, total: books.length };
   }
 
   try {
-    const { loadCatalogBooks } = await import('@/lib/supabase/books');
-    return await loadCatalogBooks(50);
+    const { loadHomepageCatalog } = await import('@/lib/supabase/books');
+    return await loadHomepageCatalog(18);
   } catch {
-    return books;
+    return { books, total: books.length };
   }
 }
 
 export default async function Home() {
+  const catalog = await loadHomepageBooks();
+
   return (
     <LumiScoreHome
-      initialBooks={await loadHomepageBooks()}
+      initialBooks={catalog.books}
       catalogStats={{
-        books: SEED_BOOKS.length,
-        categories: SEED_CATEGORIES.length,
+        books: catalog.total,
+        categories: CATALOG_CATEGORY_COUNT,
       }}
     />
   );

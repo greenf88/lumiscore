@@ -1,25 +1,46 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
-import { getOpenLibraryCoverUrl } from '@/lib/books/covers';
+import {
+  getOpenLibraryCoverUrl,
+  getOpenLibraryCoverVariantUrl,
+} from '@/lib/books/covers';
+import { getBookHref } from '@/lib/books/book-navigation';
+import {
+  CATALOG_SEARCH_DEBOUNCE_MS,
+  isCatalogSearchQuery,
+  normalizeCatalogSearchQuery,
+} from '@/lib/books/catalog-search';
+import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
+import { LumiScoreWordmark } from './LumiScoreWordmark';
 
-const resolvedCoverCache = new Map<string, Promise<string[]>>();
+const resolvedCoverCache = new Map<
+  string,
+  { expiresAt: number; result: Promise<string[]> }
+>();
+const RESOLVED_COVER_CACHE_MS = 30 * 24 * 60 * 60 * 1_000;
+const MISSING_COVER_CACHE_MS = 60 * 60 * 1_000;
+const TEMPORARY_COVER_FAILURE_CACHE_MS = 60 * 1_000;
+const catalogSearchCache = new Map<string, Book[]>();
+const MAX_CACHED_SEARCHES = 50;
 
 async function loadResolvedCovers(book: Book): Promise<string[]> {
-  if (!book.openLibraryWorkId) return [];
+  if (!book.openLibraryWorkId && !book.isbn13) return [];
 
-  const cacheKey = book.openLibraryWorkId;
+  const cacheKey = `${book.workId ?? 'unknown'}:${book.openLibraryWorkId ?? 'native'}:${book.isbn13 ?? ''}`;
   const cached = resolvedCoverCache.get(cacheKey);
-  if (cached) return cached;
+  if (cached && cached.expiresAt > Date.now()) return cached.result;
+  if (cached) resolvedCoverCache.delete(cacheKey);
 
   const params = new URLSearchParams({
-    workId: book.openLibraryWorkId,
     title: book.title,
     author: book.author,
   });
+  if (book.openLibraryWorkId) params.set('workId', book.openLibraryWorkId);
+  if (book.workId) params.set('lumiScoreWorkId', book.workId);
+  if (book.isbn13) params.set('isbn13', book.isbn13);
   if (book.firstPublishYear) {
     params.set('year', String(book.firstPublishYear));
   }
@@ -28,24 +49,39 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
     .then(async (response) => {
       if (!response.ok) return [];
 
-      const data = (await response.json()) as { coverUrls?: unknown };
-      return Array.isArray(data.coverUrls)
+      const data = (await response.json()) as {
+        coverUrls?: unknown;
+        state?: unknown;
+      };
+      const coverUrls = Array.isArray(data.coverUrls)
         ? data.coverUrls.filter(
             (url): url is string => typeof url === 'string' && url.length > 0,
           )
         : [];
+      const ttl = coverUrls.length
+        ? RESOLVED_COVER_CACHE_MS
+        : data.state === 'temporary_failure'
+          ? TEMPORARY_COVER_FAILURE_CACHE_MS
+          : MISSING_COVER_CACHE_MS;
+      resolvedCoverCache.set(cacheKey, {
+        expiresAt: Date.now() + ttl,
+        result: Promise.resolve(coverUrls),
+      });
+      return coverUrls;
     })
-    .catch(() => []);
+    .catch(() => {
+      resolvedCoverCache.delete(cacheKey);
+      return [];
+    });
 
-  resolvedCoverCache.set(cacheKey, request);
+  resolvedCoverCache.set(cacheKey, {
+    expiresAt: Date.now() + TEMPORARY_COVER_FAILURE_CACHE_MS,
+    result: request,
+  });
   return request;
 }
 
-export function getBookHref(book: Book): string {
-  return `/books/${encodeURIComponent(book.workId ?? book.id)}`;
-}
-
-export function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
+export const BookCover = memo(function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
   const initialCoverUrls = useMemo(
     () =>
       book.coverUrls?.length
@@ -59,9 +95,15 @@ export function BookCover({ book, small = false }: { book: Book; small?: boolean
   const [coverIndex, setCoverIndex] = useState(0);
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
+  const displayedCoverUrl = coverUrl
+    ? getOpenLibraryCoverVariantUrl(coverUrl, small ? 'M' : 'L')
+    : null;
 
   const requestResolvedCovers = useCallback(() => {
-    if (resolvedRequested.current || !book.openLibraryWorkId) return;
+    if (
+      resolvedRequested.current ||
+      (!book.openLibraryWorkId && !book.isbn13)
+    ) return;
 
     resolvedRequested.current = true;
     void loadResolvedCovers(book).then((resolvedUrls) => {
@@ -81,11 +123,11 @@ export function BookCover({ book, small = false }: { book: Book; small?: boolean
       <span className="cover-title">{book.title}</span>
       <span className="cover-mark">✦</span>
       <span className="cover-author">{book.author}</span>
-      {coverUrl && (
+      {displayedCoverUrl && (
         <Image
-          key={coverUrl}
+          key={displayedCoverUrl}
           className="book-cover-image"
-          src={coverUrl}
+          src={displayedCoverUrl}
           alt=""
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
@@ -99,11 +141,7 @@ export function BookCover({ book, small = false }: { book: Book; small?: boolean
       )}
     </div>
   );
-}
-
-function getDemoScore(book: Book): number | null {
-  return book.source === 'demo' ? book.score : null;
-}
+});
 
 function getDemoMatch(book: Book): number | null {
   return book.source === 'demo' ? book.match : null;
@@ -112,9 +150,9 @@ function getDemoMatch(book: Book): number | null {
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   return (
     <label className={`search-bar${mobile ? ' search-bar-mobile' : ''}`}>
-      <span className="sr-only">Search books, authors, or ISBNs</span>
+      <span className="sr-only">Search books or authors</span>
       <span className="search-icon" aria-hidden="true" />
-      <input value={query} onChange={(event) => onChange(event.target.value)} placeholder="Search books, authors, ISBNs" />
+      <input value={query} onChange={(event) => onChange(event.target.value)} placeholder="Search books or authors" />
       {!mobile && <kbd>⌘ K</kbd>}
     </label>
   );
@@ -136,41 +174,52 @@ function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => 
 
   return (
     <header className="site-header">
-      <a className="wordmark" href="#top" aria-label="LumiScore home">
-        <span className="logo-mark" aria-hidden="true"><i /><i /><i /></span>
-        <span>Lumi<span>Score</span></span>
-      </a>
+      <LumiScoreWordmark />
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label="Main navigation">
         <a href="#discover">Discover</a>
-        <a href="#lists">My lists</a>
+        <span className="nav-unavailable" aria-disabled="true" title="Reading lists are coming soon">My lists</span>
         <button className="mobile-search-button" type="button" aria-label="Open search" aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
-        <button className="avatar" type="button" aria-label="Open profile">RG</button>
+        <button className="avatar" type="button" aria-label="Reader profile is not available yet" title="Reader profile is coming soon" disabled>RG</button>
       </nav>
       {mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
     </header>
   );
 }
 
-function RecommendationRow({ book }: { book: Book }) {
-  const score = getDemoScore(book);
+const RecommendationRow = memo(function RecommendationRow({ book }: { book: Book }) {
+  const score = book.score;
   const match = getDemoMatch(book);
-
-  return (
-    <Link className="recommendation-row" href={getBookHref(book)}>
+  const ratingDisplay = formatPublicRatingDisplay(
+    score,
+    book.ratingsCount ?? 0,
+  );
+  const ratingStatus =
+    book.source === 'demo' && score !== null && (book.ratingsCount ?? 0) > 0
+      ? formatCardRatingCount(book)
+      : ratingDisplay.count;
+  const href = getBookHref(book);
+  const content = (
+    <>
       <BookCover book={book} small />
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
         <span>{book.author}</span>
-        <span className="match-line"><i /> {match === null ? 'Not rated yet' : `${match}% match`}</span>
+        <span className="match-line"><i /> {match === null ? ratingStatus : `${match}% match`}</span>
       </span>
-      <span className="mini-score"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
-    </Link>
+      <span className="mini-score"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
+    </>
   );
-}
 
-function RecommendationPanel({ books }: { books: Book[] }) {
+  return href ? (
+    <a className="recommendation-row" href={href}>{content}</a>
+  ) : (
+    <div className="recommendation-row">{content}</div>
+  );
+});
+
+const RecommendationPanel = memo(function RecommendationPanel({ books }: { books: Book[] }) {
   const recommendations = [books[1], books[2], books[5]].filter(
     (book): book is Book => Boolean(book),
   );
@@ -178,15 +227,15 @@ function RecommendationPanel({ books }: { books: Book[] }) {
     <aside className="recommendation-panel" aria-labelledby="up-next-title">
       <div className="panel-heading">
         <div><span className="eyebrow">CURATED FOR YOUR TASTE</span><h2 id="up-next-title">Up next for you</h2></div>
-        <button type="button" aria-label="Refresh recommendations">↻</button>
+        <button type="button" aria-label="More recommendations are not available yet" title="More recommendations are coming soon" disabled>↻</button>
       </div>
       <div className="recommendation-list">{recommendations.map((book) => <RecommendationRow key={book.id} book={book} />)}</div>
       <a className="view-all" href="#discover">View all recommendations <span>→</span></a>
     </aside>
   );
-}
+});
 
-function Hero({ books, catalogStats }: { books: Book[]; catalogStats: CatalogStats }) {
+const Hero = memo(function Hero({ books, catalogStats }: { books: Book[]; catalogStats: CatalogStats }) {
   return (
     <section className="hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
@@ -212,60 +261,87 @@ function Hero({ books, catalogStats }: { books: Book[]; catalogStats: CatalogSta
       </div>
     </section>
   );
-}
+});
 
 function formatRatings(count: number) {
   return count >= 1000 ? `${Math.round(count / 1000)}k ratings` : `${count} ratings`;
 }
 
-function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
-  const score = getDemoScore(book);
-  const match = getDemoMatch(book);
+function formatCardRatingCount(book: Book): string {
+  const count = book.ratingsCount ?? 0;
+  return book.source === 'demo'
+    ? formatRatings(count)
+    : formatPublicRatingDisplay(book.score, count).count;
+}
 
-  return (
-    <article className="book-card" id={book.id}>
+const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
+  const score = book.score;
+  const match = getDemoMatch(book);
+  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0);
+  const hasRatings = ratingDisplay.score !== '—';
+  const href = getBookHref(book);
+  const bookContent = (
+    <>
       <div className="card-cover-wrap">
-        <span className="score-badge"><strong>{score === null ? '—' : score.toFixed(1)}</strong><small>LumiScore</small></span>
-        <Link className="book-cover-link" href={getBookHref(book)} aria-label={`View ${book.title} by ${book.author}`}>
-          <BookCover book={book} />
-        </Link>
+        <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
+        <BookCover book={book} />
       </div>
       <div className="book-card-body">
         <span className="book-genre">{book.genre ?? (book.firstPublishYear ? `First published ${book.firstPublishYear}` : 'Publication year unavailable')}</span>
-        <h3><Link href={getBookHref(book)}>{book.title}</Link></h3>
+        <h3>{book.title}</h3>
         <p>{book.author}</p>
         <div className="book-meta">
-          {book.source === 'demo' && book.ratingsCount !== null && match !== null ? (
-            <><span>{formatRatings(book.ratingsCount)}</span><span className="book-match"><i /> {match}% match</span></>
-          ) : (
-            <span>Not rated yet</span>
-          )}
+          <span>{hasRatings ? formatCardRatingCount(book) : 'Not rated yet'}</span>
+          {match !== null && <span className="book-match"><i /> {match}% match</span>}
         </div>
+      </div>
+    </>
+  );
+
+  return (
+    <article className="book-card" id={book.id}>
+      {href ? (
+        // Vinext's production Link chunk loses navigateClientSide's named export.
+        // Use native document navigation: Link cancels the click before throwing.
+        <a
+          className="book-card-main-link"
+          href={href}
+          aria-label={`View ${book.title} by ${book.author}`}
+        >
+          {bookContent}
+        </a>
+      ) : bookContent}
+      <div className="book-card-action">
         <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book.id)} aria-pressed={wanted}>
           <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{wanted ? 'Want to read' : 'Want to read'}
         </button>
       </div>
     </article>
   );
-}
+});
 
-function FeaturedBooks({ books, query, wanted, onToggle }: { books: Book[]; query: string; wanted: Set<string>; onToggle: (id: string) => void }) {
-  const filteredBooks = useMemo(() => {
-    const search = query.trim().toLowerCase();
-    if (!search) return books;
-    return books.filter((book) => `${book.title} ${book.author} ${book.genre ?? ''} ${book.firstPublishYear ?? ''} ${book.isbn13 ?? ''}`.toLowerCase().includes(search));
-  }, [books, query]);
+type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
+
+function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (id: string) => void }) {
+  const searchActive = isCatalogSearchQuery(query);
+  const displayedBooks = searchActive ? searchResults : books;
+  const isLoading = searchActive && searchStatus === 'loading';
+  const hasError = searchActive && searchStatus === 'error';
 
   return (
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
       <div className="section-heading">
-        <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{query ? 'Search results' : 'Featured today'}</h2></div>
-        <div className="section-tools"><span>{filteredBooks.length} {filteredBooks.length === 1 ? 'book' : 'books'}</span><a href="#top">Explore all <b>→</b></a></div>
+        <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{searchActive ? 'Search results' : 'Featured today'}</h2></div>
+        <div className="section-tools"><span aria-live="polite">{isLoading ? 'Searching…' : `${displayedBooks.length} ${displayedBooks.length === 1 ? 'book' : 'books'}`}</span><span className="section-note">Search for the full catalog</span></div>
       </div>
-      {filteredBooks.length > 0 ? (
-        <div className="book-grid">{filteredBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />)}</div>
+      {hasError ? (
+        <div className="empty-results" role="status"><span>⌕</span><h3>Search unavailable</h3><p>Please try again in a moment.</p></div>
+      ) : isLoading && displayedBooks.length === 0 ? (
+        <div className="search-loading" role="status">Searching the LumiScore catalog…</div>
+      ) : displayedBooks.length > 0 ? (
+        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />)}</div>
       ) : (
-        <div className="empty-results"><span>⌕</span><h3>No books found</h3><p>Try another title, author, or genre.</p></div>
+        <div className="empty-results"><span>⌕</span><h3>No books found</h3><p>Try another title or author.</p></div>
       )}
     </section>
   );
@@ -278,7 +354,7 @@ const values = [
   { icon: '✓', title: 'Track & discover', copy: 'One library, always with you' },
 ];
 
-function ValueStrip() {
+const ValueStrip = memo(function ValueStrip() {
   return (
     <section className="value-strip" id="how-it-works" aria-label="Why LumiScore">
       <div className="value-inner">{values.map((value) => (
@@ -286,17 +362,17 @@ function ValueStrip() {
       ))}</div>
     </section>
   );
-}
+});
 
 function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   return (
     <footer className="site-footer">
       <div className="footer-brand">
-        <a className="wordmark" href="#top"><span className="logo-mark" aria-hidden="true"><i /><i /><i /></span><span>Lumi<span>Score</span></span></a>
+        <LumiScoreWordmark />
         <p>Your next great read is closer than you think.</p>
-        <a className="domain-link" href="#top">lumisco.re</a>
+        <a className="domain-link" href="/">lumisco.re</a>
       </div>
-      <nav className="footer-nav" aria-label="Footer navigation"><a href="#top">About</a><a href="#how-it-works">How it works</a><a href="#top">For publishers</a><a href="#top">Help</a></nav>
+      <nav className="footer-nav" aria-label="Footer navigation"><span aria-disabled="true" title="About page coming soon">About</span><a href="#how-it-works">How it works</a><span aria-disabled="true" title="Publisher information coming soon">For publishers</span><span aria-disabled="true" title="Help center coming soon">Help</span></nav>
       <div className="footer-theme"><span>Reading mode</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
       <div className="footer-bottom"><span>© 2026 LumiScore</span><span>Made for readers everywhere.</span></div>
     </footer>
@@ -308,7 +384,66 @@ type CatalogStats = { books: number; categories: number };
 export function LumiScoreHome({ initialBooks, catalogStats }: { initialBooks: Book[]; catalogStats: CatalogStats }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [searchStatus, setSearchStatus] = useState<SearchStatus>('idle');
   const [wanted, setWanted] = useState<Set<string>>(new Set());
+
+  const updateQuery = useCallback((value: string) => {
+    setQuery(value);
+    const normalizedQuery = normalizeCatalogSearchQuery(value);
+    const cachedResults = catalogSearchCache.get(
+      normalizedQuery.toLocaleLowerCase('en-US'),
+    );
+
+    if (cachedResults) {
+      setSearchResults(cachedResults);
+      setSearchStatus('success');
+    } else if (isCatalogSearchQuery(normalizedQuery)) {
+      setSearchStatus('loading');
+    } else {
+      setSearchResults([]);
+      setSearchStatus('idle');
+    }
+  }, []);
+
+  useEffect(() => {
+    const normalizedQuery = normalizeCatalogSearchQuery(query);
+    if (!isCatalogSearchQuery(normalizedQuery)) return;
+
+    const searchCacheKey = normalizedQuery.toLocaleLowerCase('en-US');
+    if (catalogSearchCache.has(searchCacheKey)) return;
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      void fetch(`/api/catalog/search?q=${encodeURIComponent(normalizedQuery)}`, {
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok) throw new Error('Catalog search failed.');
+          const payload = (await response.json()) as { results?: unknown };
+          const results = Array.isArray(payload.results)
+            ? (payload.results as Book[])
+            : [];
+          if (catalogSearchCache.size >= MAX_CACHED_SEARCHES) {
+            const oldestKey = catalogSearchCache.keys().next().value;
+            if (oldestKey) catalogSearchCache.delete(oldestKey);
+          }
+          catalogSearchCache.set(searchCacheKey, results);
+          setSearchResults(results);
+          setSearchStatus('success');
+        })
+        .catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === 'AbortError') return;
+          setSearchResults([]);
+          setSearchStatus('error');
+        });
+    }, CATALOG_SEARCH_DEBOUNCE_MS);
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [query]);
 
   useEffect(() => {
     let animationFrame = 0;
@@ -330,27 +465,27 @@ export function LumiScoreHome({ initialBooks, catalogStats }: { initialBooks: Bo
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
     document.documentElement.dataset.theme = next;
     document.documentElement.style.colorScheme = next === 'paper' ? 'light' : 'dark';
     localStorage.setItem('lumiscore-theme', next);
-  };
+  }, []);
 
-  const toggleWanted = (id: string) => {
+  const toggleWanted = useCallback((id: string) => {
     setWanted((current) => {
       const next = new Set(current);
       if (next.has(id)) next.delete(id); else next.add(id);
       localStorage.setItem('lumiscore-wanted', JSON.stringify([...next]));
       return next;
     });
-  };
+  }, []);
 
   return (
     <main className="site-shell">
-      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} />
+      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} />
       <Hero books={catalogBooks} catalogStats={catalogStats} />
-      <FeaturedBooks books={catalogBooks} query={query} wanted={wanted} onToggle={toggleWanted} />
+      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />
     </main>

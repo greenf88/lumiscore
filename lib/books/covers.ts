@@ -1,5 +1,7 @@
 const OPEN_LIBRARY_COVER_BASE_URL = 'https://covers.openlibrary.org/b';
 
+export type OpenLibraryCoverSize = 'S' | 'M' | 'L';
+
 function buildOpenLibraryCoverUrl(key: 'id' | 'isbn' | 'olid', value: string) {
   return `${OPEN_LIBRARY_COVER_BASE_URL}/${key}/${value}-L.jpg?default=false`;
 }
@@ -54,4 +56,13 @@ export function uniqueCoverUrls(
   urls: Array<string | null | undefined>,
 ): string[] {
   return [...new Set(urls.filter((url): url is string => Boolean(url)))];
+}
+
+export function getOpenLibraryCoverVariantUrl(
+  url: string,
+  size: OpenLibraryCoverSize,
+): string {
+  if (!url.startsWith(`${OPEN_LIBRARY_COVER_BASE_URL}/`)) return url;
+
+  return url.replace(/-[SML]\.jpg(?=\?|$)/, `-${size}.jpg`);
 }

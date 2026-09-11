@@ -5,7 +5,18 @@ import nextTs from 'eslint-config-next/typescript';
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  {
+    // Vinext's current next/link client chunk cancels navigation before
+    // throwing. Native anchors are an intentional runtime compatibility fix.
+    rules: { '@next/next/no-html-link-for-pages': 'off' },
+  },
+  globalIgnores([
+    '.next/**',
+    '.vercel/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
 ]);
 
 export default eslintConfig;

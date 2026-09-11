@@ -7,7 +7,16 @@ import {
   normalizeOpenLibraryId,
   uniqueCoverUrls,
 } from '@/lib/books/covers';
+import {
+  getWorkFirstPublishYear,
+  rankEditionsForCover,
+  selectRepresentativeEdition,
+  type EditionCandidate,
+  type EditionRankingContext,
+} from '@/lib/books/edition-ranking';
+import { applyRatingSummaries } from '@/lib/ratings/card-summaries';
 import { supabase } from './client';
+import { loadPublicRatingSummaries } from './public-rating-summaries';
 
 type DatabaseRow = Record<string, unknown>;
 
@@ -31,6 +40,30 @@ const OPEN_LIBRARY_EDITION_ID_COLUMNS = [
   'ol_key',
 ] as const;
 const COVER_STYLES = ['orbit', 'laurel', 'copper', 'women', 'road', 'matter'] as const;
+const HOMEPAGE_CATALOG_SELECT = [
+  'id',
+  'title',
+  'first_publish_year',
+  'open_library_id',
+  'source_type',
+  'work_type',
+  'author_id',
+  'cover_id',
+  'authors(id,name)',
+  'editions(id,open_library_edition_id,isbn_13,language)',
+].join(',');
+const BOOK_DETAIL_SELECT = [
+  'id',
+  'title',
+  'first_publish_year',
+  'open_library_id',
+  'source_type',
+  'work_type',
+  'author_id',
+  'cover_id',
+  'authors(id,name)',
+  'editions(id,open_library_edition_id,isbn_10,isbn_13,language,publisher,title)',
+].join(',');
 
 function asRow(value: unknown): DatabaseRow | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -111,31 +144,56 @@ function readCoverIds(row: DatabaseRow): number[] {
     );
 }
 
-function isEnglishEdition(edition: DatabaseRow): boolean {
-  const language = readString(edition, ['language', 'language_code']);
-  if (language && /^(eng|en|english)$/i.test(language)) return true;
+type RankedEditionRow = EditionCandidate & { row: DatabaseRow };
 
-  return asRows(edition.languages).some((candidate) =>
-    /(?:^|\/)eng$/i.test(readString(candidate, ['key', 'code']) ?? ''),
-  );
+function toRankedEditionRow(edition: DatabaseRow): RankedEditionRow {
+  const language = readString(edition, ['language', 'language_code']);
+  return {
+    row: edition,
+    id: readString(edition, ['id']),
+    openLibraryEditionId: readOpenLibraryId(
+      edition,
+      OPEN_LIBRARY_EDITION_ID_COLUMNS,
+      'edition',
+    ),
+    title: readString(edition, ['title']),
+    subtitle: readString(edition, ['subtitle']),
+    physicalFormat: readString(edition, ['physical_format', 'format']),
+    languageCodes: language ? [language] : [],
+    isbn10: readString(edition, ['isbn_10', 'isbn10']),
+    isbn13: readIsbn13(edition),
+    publishDate: readString(edition, ['publish_date', 'published_at']),
+    publishers: readString(edition, ['publisher']),
+    coverIds: readCoverIds(edition),
+  };
 }
 
-function editionPreferenceScore(edition: DatabaseRow): number {
-  return (
-    (readIsbn13(edition) ? 100 : 0) +
-    (isEnglishEdition(edition) ? 20 : 0) +
-    (readCoverIds(edition).length > 0 ? 10 : 0)
-  );
+function getEditionRankingContext(
+  work: DatabaseRow,
+  title: string,
+): EditionRankingContext {
+  return {
+    workTitle: title,
+    workType: readString(work, ['work_type']),
+    firstPublishYear: getWorkFirstPublishYear(
+      readNumber(work, ['first_publish_year', 'first_published_year']),
+    ),
+    preferredLanguages:
+      readString(work, ['source_type']) === 'lumiscore_native'
+        ? ['nld']
+        : ['eng'],
+  };
 }
 
 function getStoredCoverCandidates(
   work: DatabaseRow,
   editions: DatabaseRow[],
+  context: EditionRankingContext,
 ): string[] {
-  const preferredEditions = [...editions].sort(
-    (left, right) =>
-      editionPreferenceScore(right) - editionPreferenceScore(left),
-  );
+  const preferredEditions = rankEditionsForCover(
+    editions.map(toRankedEditionRow),
+    context,
+  ).map((edition) => edition.row);
 
   return uniqueCoverUrls([
     ...preferredEditions.map((edition) =>
@@ -193,21 +251,27 @@ async function loadCatalogRows(limit: number): Promise<{
   works: DatabaseRow[];
   authors: DatabaseRow[];
   editions: DatabaseRow[];
+  total: number | null;
 }> {
   const joined = await supabase
     .from('works')
-    .select('*, authors(*), editions(*)')
+    .select(HOMEPAGE_CATALOG_SELECT, { count: 'exact' })
     .order('title', { ascending: true })
     .limit(limit);
 
   if (!joined.error) {
-    return { works: asRows(joined.data), authors: [], editions: [] };
+    return {
+      works: asRows(joined.data),
+      authors: [],
+      editions: [],
+      total: joined.count,
+    };
   }
 
   const [worksResult, authorsResult, editionsResult] = await Promise.all([
     supabase
       .from('works')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('title', { ascending: true })
       .limit(limit),
     supabase.from('authors').select('*'),
@@ -222,6 +286,7 @@ async function loadCatalogRows(limit: number): Promise<{
     works: asRows(worksResult.data),
     authors: asRows(authorsResult.data),
     editions: asRows(editionsResult.data),
+    total: worksResult.count,
   };
 }
 
@@ -237,11 +302,12 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const preferredEditions = [...relatedEditions].sort(
-    (left, right) =>
-      editionPreferenceScore(right) - editionPreferenceScore(left),
-  );
-  const edition = preferredEditions[0] ?? null;
+  const editionRankingContext = getEditionRankingContext(work, title);
+  const edition =
+    selectRepresentativeEdition(
+      relatedEditions.map(toRankedEditionRow),
+      editionRankingContext,
+    )?.row ?? null;
   const openLibraryWorkId = readOpenLibraryId(
     work,
     OPEN_LIBRARY_WORK_ID_COLUMNS,
@@ -260,18 +326,28 @@ function mapCatalogBook(
     source: 'supabase',
     workId,
     editionId: edition ? readString(edition, ['id']) : null,
+    sourceType: readString(work, ['source_type']),
     openLibraryWorkId,
     openLibraryEditionId,
     title,
     author: author
       ? readString(author, ['name', 'author_name']) ?? 'Unknown author'
       : 'Unknown author',
-    firstPublishYear: readNumber(work, [
-      'first_publish_year',
-      'first_published_year',
-    ]),
+    firstPublishYear: getWorkFirstPublishYear(
+      readNumber(work, ['first_publish_year', 'first_published_year']),
+    ),
+    isbn10: edition ? readString(edition, ['isbn_10', 'isbn10']) : null,
     isbn13: edition ? readIsbn13(edition) : null,
-    coverUrls: getStoredCoverCandidates(work, preferredEditions),
+    editionTitle: edition ? readString(edition, ['title']) : null,
+    editionPublisher: edition ? readString(edition, ['publisher']) : null,
+    editionLanguage: edition
+      ? readString(edition, ['language', 'language_code'])
+      : null,
+    coverUrls: getStoredCoverCandidates(
+      work,
+      relatedEditions,
+      editionRankingContext,
+    ),
     score: null,
     ratingsCount: null,
     match: null,
@@ -279,54 +355,49 @@ function mapCatalogBook(
   };
 }
 
-export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
-  const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
-  const { works, authors, editions } = await loadCatalogRows(safeLimit);
+export function mapCatalogWorks(rows: unknown): Book[] {
+  return asRows(rows)
+    .map((work, index) => mapCatalogBook(work, [], [], index))
+    .filter((book): book is Book => book !== null);
+}
 
-  return works
+export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
+  return (await loadHomepageCatalog(limit)).books;
+}
+
+export async function loadHomepageCatalog(limit = 18): Promise<{
+  books: Book[];
+  total: number;
+}> {
+  const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
+  const { works, authors, editions, total } = await loadCatalogRows(safeLimit);
+
+  const catalogBooks = works
     .map((work, index) => mapCatalogBook(work, authors, editions, index))
     .filter((book): book is Book => book !== null)
     .sort((left, right) =>
       left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }),
     );
+
+  const summaries = await loadPublicRatingSummaries(
+    supabase,
+    catalogBooks.flatMap((book) => (book.workId ? [book.workId] : [])),
+  );
+
+  return {
+    books: applyRatingSummaries(catalogBooks, summaries),
+    total: total ?? catalogBooks.length,
+  };
 }
 
 export async function loadCatalogBook(workId: string): Promise<Book | null> {
-  const joined = await supabase
+  const result = await supabase
     .from('works')
-    .select('*, authors(*), editions(*)')
+    .select(BOOK_DETAIL_SELECT)
     .eq('id', workId)
     .maybeSingle();
 
-  if (!joined.error && joined.data) {
-    return mapCatalogBook(asRow(joined.data)!, [], [], 0);
-  }
-
-  const workResult = await supabase
-    .from('works')
-    .select('*')
-    .eq('id', workId)
-    .maybeSingle();
-
-  if (workResult.error) throw workResult.error;
-  const work = asRow(workResult.data);
-  if (!work) return null;
-
-  const authorId = readString(work, AUTHOR_ID_COLUMNS);
-  const [authorResult, editionsResult] = await Promise.all([
-    authorId
-      ? supabase.from('authors').select('*').eq('id', authorId)
-      : Promise.resolve({ data: [], error: null }),
-    supabase.from('editions').select('*').eq('work_id', workId),
-  ]);
-
-  if (authorResult.error) throw authorResult.error;
-  if (editionsResult.error) throw editionsResult.error;
-
-  return mapCatalogBook(
-    work,
-    asRows(authorResult.data),
-    asRows(editionsResult.data),
-    0,
-  );
+  if (result.error) throw result.error;
+  const work = asRow(result.data);
+  return work ? mapCatalogBook(work, [], [], 0) : null;
 }

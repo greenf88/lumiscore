@@ -636,6 +636,34 @@ test('configures verified author fallbacks for all 14 failed Dutch imports', () 
   }
 });
 
+test('configures verified sparse-work fallbacks for the final 3 Dutch imports', () => {
+  const expected = [
+    ['Rendez-vous', 'OL19335865W', 'OL7482830A', 2006],
+    ['Close-up', 'OL18647037W', 'OL3087562A', 2007],
+    ['De tunnel', 'OL42541061W', 'OL7481875A', 2021],
+  ] as const;
+
+  for (const [title, workId, authorId, firstPublishYear] of expected) {
+    const seed = NETHERLANDS_SEEDS.find((candidate) => candidate.title === title);
+    assert.equal(seed?.expectedOpenLibraryWorkId, workId, `${title} work ID`);
+    assert.equal(
+      seed?.expectedOpenLibraryAuthorId,
+      authorId,
+      `${title} author fallback`,
+    );
+    assert.equal(seed?.firstPublishYear, firstPublishYear, `${title} year fallback`);
+
+    const completed = completePinnedWorkMetadata(seed!, {
+      key: `/works/${workId}`,
+      title: title === 'De tunnel' ? 'Tunnel' : title,
+      author_key: [authorId],
+      author_name: [seed!.author],
+    });
+    assert.equal(completed.first_publish_year, firstPublishYear);
+    assert.equal(getWorkDisplayTitle(seed!, completed), title);
+  }
+});
+
 test('keeps the requested Netherlands core category balance', () => {
   assert.deepEqual(
     Object.fromEntries(

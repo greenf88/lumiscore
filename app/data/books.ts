@@ -3,6 +3,7 @@ export type Book = {
   source: 'demo' | 'supabase';
   workId?: string | null;
   editionId?: string | null;
+  sourceType?: 'open_library' | 'lumiscore_native' | string | null;
   openLibraryWorkId?: string | null;
   openLibraryEditionId?: string | null;
   title: string;
@@ -12,7 +13,11 @@ export type Book = {
   ratingsCount: number | null;
   match: number | null;
   cover: string;
+  isbn10?: string | null;
   isbn13?: string | null;
+  editionTitle?: string | null;
+  editionPublisher?: string | null;
+  editionLanguage?: string | null;
   coverUrls?: string[];
   genre?: string;
 };

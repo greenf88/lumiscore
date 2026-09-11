@@ -1,7 +1,8 @@
 import { sites } from '@openai/sites-vite-plugin';
 import tailwindcss from '@tailwindcss/postcss';
+import { nitro } from 'nitro/vite';
 import vinext from 'vinext';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import hostingConfig from './.openai/hosting.json';
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
@@ -34,7 +35,24 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig(async () => {
+export default defineConfig(async ({ mode }) => {
+  const fileEnvironment = loadEnv(mode, process.cwd(), '');
+  const environmentValue = (name: string) =>
+    process.env[name] ?? fileEnvironment[name] ?? '';
+  const isVercelBuild =
+    process.env.VERCEL === '1' || process.env.NITRO_PRESET === 'vercel';
+  const runtimeBindingConfig = {
+    ...localBindingConfig,
+    vars: {
+      NEXT_PUBLIC_SUPABASE_URL: environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: environmentValue(
+        'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+      ),
+      SUPABASE_SECRET_KEY: environmentValue('SUPABASE_SECRET_KEY'),
+      GOOGLE_BOOKS_API_KEY: environmentValue('GOOGLE_BOOKS_API_KEY'),
+    },
+  };
+
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= 'false';
@@ -45,17 +63,27 @@ export default defineConfig(async () => {
   const { cloudflare } = await import('@cloudflare/vite-plugin');
 
   return {
+    define: {
+      'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(
+        environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
+      ),
+      'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
+        environmentValue('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
+      ),
+    },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
-    plugins: [
-      vinext(),
-      sites(),
-      cloudflare({
-        viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
-        config: localBindingConfig,
-      }),
-    ],
+    plugins: isVercelBuild
+      ? [vinext(), nitro()]
+      : [
+          vinext(),
+          sites(),
+          cloudflare({
+            viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
+            config: runtimeBindingConfig,
+          }),
+        ],
   };
 });

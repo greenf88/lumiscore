@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { selectRepresentativeEdition } from '../lib/books/edition-ranking.ts';
 import {
   completePinnedWorkMetadata,
   getWorkDisplayTitle,
@@ -23,10 +24,14 @@ type Row = Record<string, unknown>;
 type OpenLibraryEdition = {
   key?: string;
   title?: string;
+  subtitle?: string;
+  physical_format?: string;
+  isbn_10?: string[];
   isbn_13?: string[];
   languages?: Array<{ key?: string }>;
   publish_date?: string;
   publishers?: string[];
+  covers?: number[];
 };
 
 type OpenLibraryWork = {
@@ -62,6 +67,7 @@ type DatabaseColumns = {
     isbn13: string;
     publishDate: string | null;
     publisher: string | null;
+    language: string | null;
   };
 };
 
@@ -160,18 +166,33 @@ function selectAuthor(
   return { id, name };
 }
 
-function editionScore(edition: OpenLibraryEdition): number {
-  const hasIsbn13 = edition.isbn_13?.some((isbn) => normalizeIsbn13(isbn));
-  const isEnglish = edition.languages?.some(
-    (language) => language.key === '/languages/eng',
-  );
+type RankedOpenLibraryEdition = OpenLibraryEdition & {
+  openLibraryEditionId: string | null;
+  physicalFormat: string | null;
+  languageCodes: string[];
+  isbn10: string[];
+  isbn13: string[];
+  publishDate: string | null;
+  publishers: string[];
+  coverIds: number[];
+};
 
-  return (
-    (hasIsbn13 ? 100 : 0) +
-    (isEnglish ? 20 : 0) +
-    (edition.publish_date ? 5 : 0) +
-    (edition.publishers?.length ? 2 : 0)
-  );
+function toRankedOpenLibraryEdition(
+  edition: OpenLibraryEdition,
+): RankedOpenLibraryEdition {
+  return {
+    ...edition,
+    openLibraryEditionId: normalizeOpenLibraryId(edition.key),
+    physicalFormat: edition.physical_format ?? null,
+    languageCodes: (edition.languages ?? [])
+      .map((language) => language.key ?? '')
+      .filter(Boolean),
+    isbn10: edition.isbn_10 ?? [],
+    isbn13: edition.isbn_13 ?? [],
+    publishDate: edition.publish_date ?? null,
+    publishers: edition.publishers ?? [],
+    coverIds: edition.covers ?? [],
+  };
 }
 
 const OPEN_LIBRARY_SEARCH_FIELDS =
@@ -290,13 +311,15 @@ async function loadOpenLibraryBook(seed: SeedBook) {
 
   const editionResult = await fetchOpenLibraryJson<{
     entries?: OpenLibraryEdition[];
-  }>(`/works/${workId}/editions.json?limit=100`);
-  const edition = [...(editionResult.entries ?? [])].sort((left, right) => {
-    const scoreDifference = editionScore(right) - editionScore(left);
-    if (scoreDifference !== 0) return scoreDifference;
-
-    return (left.key ?? '').localeCompare(right.key ?? '');
-  })[0];
+  }>(`/works/${workId}/editions.json?limit=500`);
+  const edition = selectRepresentativeEdition(
+    (editionResult.entries ?? []).map(toRankedOpenLibraryEdition),
+    {
+      workTitle: work.title,
+      firstPublishYear: work.first_publish_year,
+      preferredLanguages: seed.preferredEditionLanguages ?? ['eng'],
+    },
+  );
   const editionId = normalizeOpenLibraryId(edition?.key);
 
   if (!edition || !editionId) {
@@ -319,6 +342,7 @@ async function loadOpenLibraryBook(seed: SeedBook) {
         .find((isbn): isbn is string => isbn !== null) ?? null,
       publishDate: edition.publish_date ?? null,
       publisher: edition.publishers?.[0] ?? null,
+      language: edition.languages?.[0]?.key?.split('/').filter(Boolean).at(-1) ?? null,
     },
   };
 }
@@ -402,6 +426,12 @@ async function resolveDatabaseColumns(): Promise<DatabaseColumns> {
         'editions',
         'publisher',
         ['publisher'],
+        false,
+      ),
+      language: await resolveColumn(
+        'editions',
+        'language',
+        ['language', 'language_code'],
         false,
       ),
     },
@@ -555,6 +585,9 @@ async function importBook(
   if (columns.editions.publisher && book.edition.publisher) {
     editionPayload[columns.editions.publisher] = book.edition.publisher;
   }
+  if (columns.editions.language && book.edition.language) {
+    editionPayload[columns.editions.language] = book.edition.language;
+  }
 
   const editionFallbacks: Row[] = [];
   if (book.edition.isbn13) {
@@ -687,6 +720,9 @@ async function importNativeBook(
     }
     if (columns.editions.publisher) {
       editionPayload[columns.editions.publisher] = metadata.publisher;
+    }
+    if (columns.editions.language) {
+      editionPayload[columns.editions.language] = metadata.language;
     }
     const { error } = await supabase.from('editions').insert(editionPayload);
     if (error) throw error;
