@@ -179,14 +179,25 @@ test('requests full Google Books metadata and keeps the API key server-side', as
     assert.doesNotMatch(clientDefine, /SUPABASE_SECRET_KEY/);
     assert.match(
       clientDefine,
-      /define:\s*isVercelBuild\s*\?\s*undefined/,
-      'Vercel must read Supabase configuration from the server runtime instead of baking build-time values into the function',
+      /define:\s*\{[\s\S]*NEXT_PUBLIC_SUPABASE_URL/,
+      'Vinext must embed client-safe Supabase configuration at build time',
+    );
+    assert.match(viteConfig, /VERCEL_ENV\s*===\s*'production'/);
+    assert.match(
+      viteConfig,
+      /Production cannot be built with the demo fallback/,
     );
     const serverEnvironment = await readFile(
       new URL('../server-environment.ts', import.meta.url),
       'utf8',
     );
-    assert.match(serverEnvironment, /Reflect\.get\(process\.env, name\)/);
+    assert.doesNotMatch(serverEnvironment, /Reflect\.get/);
+    assert.match(
+      serverEnvironment,
+      /process\.env\.NEXT_PUBLIC_SUPABASE_URL/,
+    );
+    assert.match(serverEnvironment, /process\.env\.SUPABASE_SECRET_KEY/);
+    assert.match(serverEnvironment, /process\.env\.GOOGLE_BOOKS_API_KEY/);
   } finally {
     if (previousApiKey === undefined) {
       delete process.env.GOOGLE_BOOKS_API_KEY;

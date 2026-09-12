@@ -8,17 +8,25 @@ export type LumiScoreServerEnvironmentName =
 let didLogEnvironmentPresence = false;
 
 /**
- * Read deployment configuration at server runtime.
+ * Read deployment configuration without exposing server secrets to clients.
  *
- * Vinext follows Next.js and statically substitutes direct
- * `process.env.NEXT_PUBLIC_*` access during a production build. Using a
- * dynamic property read keeps Vercel Function environment variables available
- * when the custom Vite build itself cannot see their values.
+ * Vinext follows Next.js and statically substitutes direct NEXT_PUBLIC_* access
+ * during a production build. Vercel server values retain direct, literal
+ * process.env access so the Function runtime can inject them normally.
  */
 export function readServerEnvironment(
   name: LumiScoreServerEnvironmentName,
 ): string | null {
-  const value = Reflect.get(process.env, name);
+  const value =
+    name === 'NEXT_PUBLIC_SUPABASE_URL'
+      ? process.env.NEXT_PUBLIC_SUPABASE_URL
+      : name === 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'
+        ? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+        : name === 'SUPABASE_SECRET_KEY'
+          ? process.env.SUPABASE_SECRET_KEY
+          : name === 'SUPABASE_SERVICE_ROLE_KEY'
+            ? process.env.SUPABASE_SERVICE_ROLE_KEY
+            : process.env.GOOGLE_BOOKS_API_KEY;
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 

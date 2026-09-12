@@ -41,13 +41,46 @@ export default defineConfig(async ({ mode }) => {
     process.env[name] ?? fileEnvironment[name] ?? '';
   const isVercelBuild =
     process.env.VERCEL === '1' || process.env.NITRO_PRESET === 'vercel';
+  const publicSupabaseUrl = environmentValue('NEXT_PUBLIC_SUPABASE_URL');
+  const publicSupabasePublishableKey = environmentValue(
+    'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+  );
+  const vercelEnvironmentPresence = {
+    NEXT_PUBLIC_SUPABASE_URL_configured: Boolean(publicSupabaseUrl),
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY_configured: Boolean(
+      publicSupabasePublishableKey,
+    ),
+    SUPABASE_SECRET_KEY_configured: Boolean(
+      environmentValue('SUPABASE_SECRET_KEY') ||
+        environmentValue('SUPABASE_SERVICE_ROLE_KEY'),
+    ),
+    GOOGLE_BOOKS_API_KEY_configured: Boolean(
+      environmentValue('GOOGLE_BOOKS_API_KEY'),
+    ),
+  };
+
+  if (isVercelBuild) {
+    console.info(
+      '[LumiScore Vercel build environment]',
+      vercelEnvironmentPresence,
+    );
+  }
+
+  if (
+    isVercelBuild &&
+    process.env.VERCEL_ENV === 'production' &&
+    (!publicSupabaseUrl || !publicSupabasePublishableKey)
+  ) {
+    throw new Error(
+      '[LumiScore Vercel build] Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. Production cannot be built with the demo fallback.',
+    );
+  }
+
   const runtimeBindingConfig = {
     ...localBindingConfig,
     vars: {
-      NEXT_PUBLIC_SUPABASE_URL: environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: environmentValue(
-        'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
-      ),
+      NEXT_PUBLIC_SUPABASE_URL: publicSupabaseUrl,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publicSupabasePublishableKey,
       SUPABASE_SECRET_KEY: environmentValue('SUPABASE_SECRET_KEY'),
       GOOGLE_BOOKS_API_KEY: environmentValue('GOOGLE_BOOKS_API_KEY'),
     },
@@ -63,22 +96,15 @@ export default defineConfig(async ({ mode }) => {
   const { cloudflare } = await import('@cloudflare/vite-plugin');
 
   return {
-    // Nitro/Vercel supplies project environment variables to the server
-    // function at runtime. Compiling these two values into the server bundle
-    // would permanently bake in an empty string when the custom build cannot
-    // see them, even though they are available to the deployed function.
-    // Cloudflare Workers still need their public values compiled for client
-    // code and receive all server values through runtime bindings below.
-    define: isVercelBuild
-      ? undefined
-      : {
-          'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(
-            environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
-          ),
-          'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
-            environmentValue('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
-          ),
-        },
+    // NEXT_PUBLIC_* follows Next/Vinext semantics: public values are embedded
+    // at build time. Server secrets are deliberately absent from this block.
+    define: {
+      'process.env.NEXT_PUBLIC_SUPABASE_URL':
+        JSON.stringify(publicSupabaseUrl),
+      'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
+        publicSupabasePublishableKey,
+      ),
+    },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
