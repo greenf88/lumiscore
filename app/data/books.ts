@@ -1,3 +1,12 @@
+export type VerifiedBookCoverAsset = {
+  side: 'back';
+  url: string;
+  source: string;
+  sourceKey: string;
+  isbn13?: string | null;
+  verified: true;
+};
+
 export type Book = {
   id: string;
   source: 'demo' | 'supabase';
@@ -19,6 +28,7 @@ export type Book = {
   editionPublisher?: string | null;
   editionLanguage?: string | null;
   coverUrls?: string[];
+  backCover?: VerifiedBookCoverAsset | null;
   genre?: string;
 };
 

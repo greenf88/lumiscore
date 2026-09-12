@@ -1,8 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import type { Book } from '../data/books';
-import { getCatalogSourceLabel } from '@/lib/books/book-detail';
+import {
+  getCatalogSourceLabel,
+  getVerifiedBackCover,
+} from '@/lib/books/book-detail';
 import {
   formatRatingCount,
   MAX_RATING,
@@ -35,6 +39,7 @@ export function LumiScoreBookDetail({
     ratingState.ratingCount > 0 && ratingState.lumiscore !== null
       ? ratingState.lumiscore.toFixed(1)
       : '—';
+  const backCover = getVerifiedBackCover(book);
 
   const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -121,10 +126,31 @@ export function LumiScoreBookDetail({
         </div>
       </header>
 
-      <article className="book-detail">
-        <div className="detail-cover-wrap">
-          <span className="score-badge detail-score-badge"><strong>{score}</strong><small>LumiScore</small></span>
-          <BookCover book={book} />
+      <article className={`book-detail${backCover ? ' has-back-cover' : ''}`}>
+        <div className="detail-cover-gallery" role="group" aria-label="Book covers">
+          <figure className="detail-cover-figure">
+            <div className="detail-cover-wrap">
+              <span className="score-badge detail-score-badge"><strong>{score}</strong><small>LumiScore</small></span>
+              <BookCover book={book} label={`Front cover of ${book.title}`} />
+            </div>
+            <figcaption>Front cover</figcaption>
+          </figure>
+          {backCover && (
+            <figure className="detail-cover-figure">
+              <div className="detail-cover-wrap detail-back-cover-wrap">
+                <div className="book-cover detail-back-cover">
+                  <Image
+                    src={backCover.url}
+                    alt={`Back cover of ${book.title}`}
+                    fill
+                    sizes="(max-width: 560px) 78vw, 250px"
+                    unoptimized
+                  />
+                </div>
+              </div>
+              <figcaption>Back cover</figcaption>
+            </figure>
+          )}
         </div>
         <div className="detail-copy">
           <a className="detail-back-link" href="/">← Back to books</a>

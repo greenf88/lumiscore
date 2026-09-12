@@ -18,6 +18,7 @@
     "test:book-detail": "node --experimental-strip-types --test lib/books/book-detail.test.ts",
     "test:ratings": "node --experimental-strip-types --test lib/ratings/*.test.ts lib/auth/request.test.ts",
     "audit:open-library-covers": "node --env-file=.env.local --experimental-strip-types scripts/audit-open-library-covers.ts",
+    "audit:suzanne-vermeer-covers": "node --env-file=.env.local --experimental-strip-types scripts/audit-suzanne-vermeer-covers.ts",
     "audit:representative-editions": "node --env-file=.env.local --experimental-strip-types scripts/audit-representative-editions.ts",
     "repair:representative-editions": "node --env-file=.env.local --experimental-strip-types scripts/repair-representative-editions.ts",
     "validate:supabase-catalog": "node --env-file=.env.local --experimental-strip-types scripts/validate-supabase-catalog.ts",

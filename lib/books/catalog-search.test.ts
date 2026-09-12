@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Book } from '@/app/data/books';
 import {
+  CATALOG_SEARCH_PAGE_LIMIT,
   isCatalogSearchQuery,
   rankCatalogSearchResults,
 } from './catalog-search.ts';
@@ -62,4 +63,27 @@ test('returns no results for empty, one-character, and unmatched queries', () =>
   assert.equal(isCatalogSearchQuery('a'), false);
   assert.deepEqual(rankCatalogSearchResults(catalog, ''), []);
   assert.deepEqual(rankCatalogSearchResults(catalog, 'zzzz-not-found'), []);
+});
+
+test('supports a dedicated results page with at least twenty ranked matches', () => {
+  const matches = Array.from({ length: 30 }, (_, index) =>
+    fixture(
+      String(index + 100),
+      `Catalog title ${String(index + 1).padStart(2, '0')}`,
+      'Catalog Author',
+    ),
+  );
+
+  const results = rankCatalogSearchResults(
+    matches,
+    'catalog',
+    CATALOG_SEARCH_PAGE_LIMIT,
+  );
+
+  assert.equal(CATALOG_SEARCH_PAGE_LIMIT >= 20, true);
+  assert.equal(results.length, CATALOG_SEARCH_PAGE_LIMIT);
+  assert.deepEqual(
+    results.slice(0, 3).map((book) => book.title),
+    ['Catalog title 01', 'Catalog title 02', 'Catalog title 03'],
+  );
 });

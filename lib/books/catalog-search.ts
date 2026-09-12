@@ -1,7 +1,10 @@
 import type { Book } from '@/app/data/books';
 
 export const CATALOG_SEARCH_MIN_LENGTH = 2;
-export const CATALOG_SEARCH_LIMIT = 18;
+export const CATALOG_SEARCH_SUGGESTION_LIMIT = 18;
+export const CATALOG_SEARCH_PAGE_LIMIT = 24;
+export const CATALOG_SEARCH_MAX_LIMIT = 40;
+export const CATALOG_SEARCH_LIMIT = CATALOG_SEARCH_SUGGESTION_LIMIT;
 export const CATALOG_SEARCH_DEBOUNCE_MS = 300;
 
 export type CatalogSearchResult = Book;

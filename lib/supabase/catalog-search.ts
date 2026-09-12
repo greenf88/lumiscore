@@ -1,4 +1,5 @@
 import {
+  CATALOG_SEARCH_MAX_LIMIT,
   CATALOG_SEARCH_LIMIT,
   normalizeCatalogSearchQuery,
   rankCatalogSearchResults,
@@ -72,7 +73,7 @@ export async function searchCatalog(
       ...(authorWorksResult.data ?? []),
     ]),
     normalizedQuery,
-    Math.min(CATALOG_SEARCH_LIMIT, Math.max(1, Math.trunc(limit))),
+    Math.min(CATALOG_SEARCH_MAX_LIMIT, Math.max(1, Math.trunc(limit))),
   );
   const summaries = await loadPublicRatingSummaries(
     supabase,

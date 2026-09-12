@@ -4,6 +4,7 @@ import type { Book } from '@/app/data/books';
 import {
   getBookMetadataDescription,
   getCatalogSourceLabel,
+  getVerifiedBackCover,
   isCatalogWorkId,
 } from './book-detail.ts';
 import { getBookHref } from './book-navigation.ts';
@@ -70,5 +71,38 @@ test('builds useful metadata without inventing missing publication data', () => 
       fixture({ title: 'Vogeleiland', author: 'Marion Pauw', firstPublishYear: null }),
     ),
     'Vogeleiland by Marion Pauw. View book information and its LumiScore rating status.',
+  );
+});
+
+test('keeps verified back-cover media separate and tied to the edition ISBN', () => {
+  const backCover = {
+    side: 'back' as const,
+    url: 'https://metadata.example.test/dune-back.jpg',
+    source: 'trusted-onix-feed',
+    sourceKey: '9780441172719:back',
+    isbn13: '9780441172719',
+    verified: true as const,
+  };
+
+  assert.equal(
+    getVerifiedBackCover(
+      fixture({ isbn13: '9780441172719', backCover }),
+    ),
+    backCover,
+  );
+  assert.equal(
+    getVerifiedBackCover(
+      fixture({
+        isbn13: '9780441172719',
+        backCover: { ...backCover, isbn13: '9780593099322' },
+      }),
+    ),
+    null,
+  );
+  assert.equal(
+    getVerifiedBackCover(
+      fixture({ backCover: { ...backCover, url: 'http://example.test/back.jpg' } }),
+    ),
+    null,
   );
 });

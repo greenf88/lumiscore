@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import {
   getOpenLibraryCoverUrl,
@@ -81,7 +81,7 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
   return request;
 }
 
-export const BookCover = memo(function BookCover({ book, small = false }: { book: Book; small?: boolean }) {
+export const BookCover = memo(function BookCover({ book, small = false, label }: { book: Book; small?: boolean; label?: string }) {
   const initialCoverUrls = useMemo(
     () =>
       book.coverUrls?.length
@@ -118,7 +118,12 @@ export const BookCover = memo(function BookCover({ book, small = false }: { book
   }, [coverUrl, requestResolvedCovers]);
 
   return (
-    <div className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`} aria-hidden="true">
+    <div
+      className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
+      role={label ? 'img' : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+    >
       <span className="cover-kicker">Lumi edition</span>
       <span className="cover-title">{book.title}</span>
       <span className="cover-mark">✦</span>
@@ -148,13 +153,15 @@ function getDemoMatch(book: Book): number | null {
 }
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
+  const inputId = useId();
+
   return (
-    <label className={`search-bar${mobile ? ' search-bar-mobile' : ''}`}>
-      <span className="sr-only">Search books or authors</span>
+    <form className={`search-bar${mobile ? ' search-bar-mobile' : ''}`} action="/search" method="get" role="search">
+      <label className="sr-only" htmlFor={inputId}>Search books or authors</label>
       <span className="search-icon" aria-hidden="true" />
-      <input value={query} onChange={(event) => onChange(event.target.value)} placeholder="Search books or authors" />
+      <input id={inputId} name="q" value={query} onChange={(event) => onChange(event.target.value)} placeholder="Search books or authors" />
       {!mobile && <kbd>⌘ K</kbd>}
-    </label>
+    </form>
   );
 }
 
@@ -169,7 +176,7 @@ export function ThemeToggle({ onToggle, labeled = false }: { onToggle: () => voi
   );
 }
 
-function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => void; query: string; onQueryChange: (value: string) => void }) {
+export function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => void; query: string; onQueryChange: (value: string) => void }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return (
@@ -177,7 +184,7 @@ function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => 
       <LumiScoreWordmark />
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label="Main navigation">
-        <a href="#discover">Discover</a>
+        <a href="/#discover">Discover</a>
         <span className="nav-unavailable" aria-disabled="true" title="Reading lists are coming soon">My lists</span>
         <button className="mobile-search-button" type="button" aria-label="Open search" aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
@@ -274,7 +281,7 @@ function formatCardRatingCount(book: Book): string {
     : formatPublicRatingDisplay(book.score, count).count;
 }
 
-const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
+export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
   const score = book.score;
   const match = getDemoMatch(book);
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0);
@@ -332,7 +339,14 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
       <div className="section-heading">
         <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{searchActive ? 'Search results' : 'Featured today'}</h2></div>
-        <div className="section-tools"><span aria-live="polite">{isLoading ? 'Searching…' : `${displayedBooks.length} ${displayedBooks.length === 1 ? 'book' : 'books'}`}</span><span className="section-note">Search for the full catalog</span></div>
+        <div className="section-tools">
+          <span aria-live="polite">{isLoading ? 'Searching…' : `${displayedBooks.length} ${displayedBooks.length === 1 ? 'book' : 'books'}`}</span>
+          {searchActive && displayedBooks.length > 0 ? (
+            <a href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>View all results <b aria-hidden="true">→</b></a>
+          ) : (
+            <span className="section-note">Search for the full catalog</span>
+          )}
+        </div>
       </div>
       {hasError ? (
         <div className="empty-results" role="status"><span>⌕</span><h3>Search unavailable</h3><p>Please try again in a moment.</p></div>
@@ -364,7 +378,7 @@ const ValueStrip = memo(function ValueStrip() {
   );
 });
 
-function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
+export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   return (
     <footer className="site-footer">
       <div className="footer-brand">
@@ -372,7 +386,7 @@ function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
         <p>Your next great read is closer than you think.</p>
         <a className="domain-link" href="/">lumisco.re</a>
       </div>
-      <nav className="footer-nav" aria-label="Footer navigation"><span aria-disabled="true" title="About page coming soon">About</span><a href="#how-it-works">How it works</a><span aria-disabled="true" title="Publisher information coming soon">For publishers</span><span aria-disabled="true" title="Help center coming soon">Help</span></nav>
+      <nav className="footer-nav" aria-label="Footer navigation"><span aria-disabled="true" title="About page coming soon">About</span><a href="/#how-it-works">How it works</a><span aria-disabled="true" title="Publisher information coming soon">For publishers</span><span aria-disabled="true" title="Help center coming soon">Help</span></nav>
       <div className="footer-theme"><span>Reading mode</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
       <div className="footer-bottom"><span>© 2026 LumiScore</span><span>Made for readers everywhere.</span></div>
     </footer>
