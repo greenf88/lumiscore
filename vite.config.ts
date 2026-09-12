@@ -63,14 +63,22 @@ export default defineConfig(async ({ mode }) => {
   const { cloudflare } = await import('@cloudflare/vite-plugin');
 
   return {
-    define: {
-      'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(
-        environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
-      ),
-      'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
-        environmentValue('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
-      ),
-    },
+    // Nitro/Vercel supplies project environment variables to the server
+    // function at runtime. Compiling these two values into the server bundle
+    // would permanently bake in an empty string when the custom build cannot
+    // see them, even though they are available to the deployed function.
+    // Cloudflare Workers still need their public values compiled for client
+    // code and receive all server values through runtime bindings below.
+    define: isVercelBuild
+      ? undefined
+      : {
+          'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(
+            environmentValue('NEXT_PUBLIC_SUPABASE_URL'),
+          ),
+          'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
+            environmentValue('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
+          ),
+        },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }

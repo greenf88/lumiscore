@@ -1,12 +1,18 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
 import { books } from './data/books';
+import {
+  logServerEnvironmentPresence,
+  readServerEnvironment,
+} from '@/lib/server-environment';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
 async function loadHomepageBooks() {
+  logServerEnvironmentPresence();
+
   if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    !readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') ||
+    !readServerEnvironment('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY')
   ) {
     return { books, total: books.length };
   }

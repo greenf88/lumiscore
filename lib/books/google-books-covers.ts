@@ -1,4 +1,5 @@
 import { normalizeIsbn13 } from './covers.ts';
+import { readServerEnvironment } from '../server-environment.ts';
 import {
   resolvedCover,
   unresolvedCover,
@@ -118,7 +119,7 @@ async function fetchGoogleBooksCover(
   url.searchParams.set('q', `isbn:${isbn13}`);
   url.searchParams.set('maxResults', '5');
   url.searchParams.set('projection', 'full');
-  const apiKey = process.env.GOOGLE_BOOKS_API_KEY?.trim();
+  const apiKey = readServerEnvironment('GOOGLE_BOOKS_API_KEY');
   if (apiKey) url.searchParams.set('key', apiKey);
 
   for (

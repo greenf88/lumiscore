@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { readServerEnvironment } from '../server-environment.ts';
 import type {
   CoverResolutionState,
   CoverSource,
@@ -24,10 +25,11 @@ let client: SupabaseClient | null | undefined;
 function getCoverCacheClient(): SupabaseClient | null {
   if (client !== undefined) return client;
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const url = readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL');
   const secret = (
-    process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
-  )?.trim();
+    readServerEnvironment('SUPABASE_SECRET_KEY') ??
+    readServerEnvironment('SUPABASE_SERVICE_ROLE_KEY')
+  );
   client =
     url && secret
       ? createClient(url, secret, {
