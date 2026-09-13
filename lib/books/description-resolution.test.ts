@@ -6,6 +6,7 @@ import {
 } from './description-resolution.ts';
 import {
   normalizeBookDescription,
+  normalizeVerifiedBookDescription,
   splitBookDescriptionParagraphs,
 } from './description-text.ts';
 
@@ -31,6 +32,30 @@ test('removes unsafe and layout-breaking markup while retaining all readable tex
   assert.equal(normalized, 'Hello reader.\n\nNext & final paragraph.');
   assert.equal(normalized?.includes('alert'), false);
   assert.equal(normalized?.includes('<'), false);
+});
+
+test('normalizes empty trusted-source payloads to no description', () => {
+  const metadata = {
+    source: 'google_books',
+    sourceKey: '9789048854943',
+    verifiedAt: '2026-09-13T00:00:00.000Z',
+  } as const;
+
+  assert.equal(
+    normalizeVerifiedBookDescription({ ...metadata, text: '' }),
+    null,
+  );
+  assert.equal(
+    normalizeVerifiedBookDescription({ ...metadata, text: ' \n\t ' }),
+    null,
+  );
+  assert.equal(
+    normalizeVerifiedBookDescription({
+      ...metadata,
+      text: '<p>&nbsp;</p><script>not readable</script>',
+    }),
+    null,
+  );
 });
 
 test('uses only the exact Open Library work and keeps it ahead of Google Books', async () => {
@@ -141,6 +166,29 @@ test('returns no description when an exact match has none', async () => {
               industryIdentifiers: [
                 { type: 'ISBN_13', identifier: '9780441172719' },
               ],
+            },
+          },
+        ],
+      }),
+  );
+
+  assert.equal(resolution.state, 'confirmed_missing');
+  assert.equal(resolution.description, null);
+});
+
+test('Vogeleiland does not resolve an empty exact-ISBN description', async () => {
+  clearBookDescriptionCacheForTests();
+  const resolution = await resolveBookDescription(
+    { openLibraryWorkId: null, isbn13: '9789048854943' },
+    async () =>
+      jsonResponse({
+        items: [
+          {
+            volumeInfo: {
+              industryIdentifiers: [
+                { type: 'ISBN_13', identifier: '9789048854943' },
+              ],
+              description: '<p>&nbsp;</p>',
             },
           },
         ],

@@ -3,6 +3,7 @@ import {
   getOpenLibraryCoverIdUrl,
   getOpenLibraryCoverUrl,
   getOpenLibraryOlidCoverUrl,
+  hasOpenLibraryCoverIdentity,
   normalizeIsbn13,
   normalizeOpenLibraryId,
   uniqueCoverUrls,
@@ -194,11 +195,33 @@ function getStoredCoverCandidates(
     editions.map(toRankedEditionRow),
     context,
   ).map((edition) => edition.row);
+  const editionOpenLibraryIds = preferredEditions.map((edition) =>
+    readOpenLibraryId(
+      edition,
+      OPEN_LIBRARY_EDITION_ID_COLUMNS,
+      'edition',
+    ),
+  );
+  const storedCoverIds = [
+    ...preferredEditions.flatMap(readCoverIds),
+    ...readCoverIds(work),
+  ];
+  const mayUseOpenLibraryIsbnCandidate = hasOpenLibraryCoverIdentity({
+    workId: readOpenLibraryId(
+      work,
+      OPEN_LIBRARY_WORK_ID_COLUMNS,
+      'work',
+    ),
+    editionIds: editionOpenLibraryIds,
+    coverIds: storedCoverIds,
+  });
 
   return uniqueCoverUrls([
-    ...preferredEditions.map((edition) =>
-      getOpenLibraryCoverUrl(readIsbn13(edition)),
-    ),
+    ...(mayUseOpenLibraryIsbnCandidate
+      ? preferredEditions.map((edition) =>
+          getOpenLibraryCoverUrl(readIsbn13(edition)),
+        )
+      : []),
     ...preferredEditions.map((edition) =>
       getOpenLibraryOlidCoverUrl(
         readOpenLibraryId(
@@ -208,10 +231,7 @@ function getStoredCoverCandidates(
         ),
       ),
     ),
-    ...preferredEditions.flatMap((edition) =>
-      readCoverIds(edition).map(getOpenLibraryCoverIdUrl),
-    ),
-    ...readCoverIds(work).map(getOpenLibraryCoverIdUrl),
+    ...storedCoverIds.map(getOpenLibraryCoverIdUrl),
   ]);
 }
 

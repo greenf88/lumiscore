@@ -1,3 +1,5 @@
+import type { VerifiedBookDescription } from '@/app/data/books';
+
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
   amp: '&',
   apos: "'",
@@ -60,6 +62,31 @@ export function normalizeBookDescription(value: unknown): string | null {
     .filter(Boolean);
 
   return paragraphs.length > 0 ? paragraphs.join('\n\n') : null;
+}
+
+export function normalizeVerifiedBookDescription(
+  value: unknown,
+): VerifiedBookDescription | null {
+  if (!value || typeof value !== 'object') return null;
+
+  const candidate = value as Partial<VerifiedBookDescription>;
+  const text = normalizeBookDescription(candidate.text);
+  const source = candidate.source;
+  const sourceKey =
+    typeof candidate.sourceKey === 'string' ? candidate.sourceKey.trim() : '';
+  const verifiedAt =
+    typeof candidate.verifiedAt === 'string' ? candidate.verifiedAt.trim() : '';
+
+  if (
+    !text ||
+    (source !== 'open_library' && source !== 'google_books') ||
+    !sourceKey ||
+    !verifiedAt
+  ) {
+    return null;
+  }
+
+  return { text, source, sourceKey, verifiedAt };
 }
 
 export function splitBookDescriptionParagraphs(

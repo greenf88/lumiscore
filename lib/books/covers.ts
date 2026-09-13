@@ -52,6 +52,29 @@ export function getOpenLibraryCoverIdUrl(
     : null;
 }
 
+export function hasOpenLibraryCoverIdentity({
+  workId,
+  editionIds = [],
+  coverIds = [],
+}: {
+  workId?: string | null;
+  editionIds?: readonly (string | null | undefined)[];
+  coverIds?: readonly (string | number | null | undefined)[];
+}): boolean {
+  return Boolean(
+    normalizeOpenLibraryId(workId, 'work') ||
+      editionIds.some((id) => normalizeOpenLibraryId(id, 'edition')) ||
+      coverIds.some((id) => getOpenLibraryCoverIdUrl(id)),
+  );
+}
+
+export function isUsableCoverImageDimensions(
+  naturalWidth: number,
+  naturalHeight: number,
+): boolean {
+  return naturalWidth > 1 && naturalHeight > 1;
+}
+
 export function uniqueCoverUrls(
   urls: Array<string | null | undefined>,
 ): string[] {

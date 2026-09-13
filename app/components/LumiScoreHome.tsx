@@ -6,6 +6,7 @@ import type { Book } from '../data/books';
 import {
   getOpenLibraryCoverUrl,
   getOpenLibraryCoverVariantUrl,
+  isUsableCoverImageDimensions,
 } from '@/lib/books/covers';
 import { getBookHref } from '@/lib/books/book-navigation';
 import {
@@ -84,7 +85,7 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
 export const BookCover = memo(function BookCover({ book, small = false, label }: { book: Book; small?: boolean; label?: string }) {
   const initialCoverUrls = useMemo(
     () =>
-      book.coverUrls?.length
+      book.coverUrls !== undefined
         ? book.coverUrls
         : [getOpenLibraryCoverUrl(book.isbn13)].filter(
             (url): url is string => url !== null,
@@ -93,6 +94,7 @@ export const BookCover = memo(function BookCover({ book, small = false, label }:
   );
   const [coverUrls, setCoverUrls] = useState(initialCoverUrls);
   const [coverIndex, setCoverIndex] = useState(0);
+  const [coverLoaded, setCoverLoaded] = useState(false);
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
   const displayedCoverUrl = coverUrl
@@ -131,15 +133,30 @@ export const BookCover = memo(function BookCover({ book, small = false, label }:
       {displayedCoverUrl && (
         <Image
           key={displayedCoverUrl}
-          className="book-cover-image"
+          className={`book-cover-image${coverLoaded ? ' is-loaded' : ''}`}
           src={displayedCoverUrl}
           alt=""
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading="lazy"
           unoptimized
+          onLoad={(event) => {
+            if (
+              !isUsableCoverImageDimensions(
+                event.currentTarget.naturalWidth,
+                event.currentTarget.naturalHeight,
+              )
+            ) {
+              requestResolvedCovers();
+              setCoverLoaded(false);
+              setCoverIndex((index) => index + 1);
+              return;
+            }
+            setCoverLoaded(true);
+          }}
           onError={() => {
             requestResolvedCovers();
+            setCoverLoaded(false);
             setCoverIndex((index) => index + 1);
           }}
         />

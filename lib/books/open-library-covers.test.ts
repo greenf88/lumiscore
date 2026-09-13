@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { getOpenLibraryCoverVariantUrl } from './covers.ts';
+import {
+  getOpenLibraryCoverVariantUrl,
+  hasOpenLibraryCoverIdentity,
+  isUsableCoverImageDimensions,
+} from './covers.ts';
 import { resolveBookCoverCandidates } from './cover-resolution.ts';
 import {
   clearGoogleBooksCoverCacheForTests,
@@ -29,6 +33,27 @@ test('uses a smaller Open Library image variant without rewriting other hosts', 
     getOpenLibraryCoverVariantUrl('https://example.com/cover-L.jpg', 'M'),
     'https://example.com/cover-L.jpg',
   );
+});
+
+test('Vogeleiland does not treat a bare ISBN as a verified Open Library cover', () => {
+  assert.equal(
+    hasOpenLibraryCoverIdentity({
+      workId: null,
+      editionIds: [null],
+      coverIds: [],
+    }),
+    false,
+  );
+  assert.equal(
+    hasOpenLibraryCoverIdentity({ workId: 'OL893415W' }),
+    true,
+  );
+});
+
+test('only reveals successfully decoded, non-placeholder cover images', () => {
+  assert.equal(isUsableCoverImageDimensions(0, 0), false);
+  assert.equal(isUsableCoverImageDimensions(1, 1), false);
+  assert.equal(isUsableCoverImageDimensions(640, 960), true);
 });
 
 test('continues through same-work edition pages before using search fallback', async () => {

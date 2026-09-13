@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import type { VerifiedBookDescription } from '../data/books';
-import { splitBookDescriptionParagraphs } from '@/lib/books/description-text';
+import {
+  normalizeVerifiedBookDescription,
+  splitBookDescriptionParagraphs,
+} from '@/lib/books/description-text';
 
 type LumiScoreBookDescriptionProps = {
   workId: string;
@@ -25,7 +28,7 @@ export function LumiScoreBookDescription({
         const payload = (await response.json()) as {
           description?: VerifiedBookDescription | null;
         };
-        return payload.description ?? null;
+        return normalizeVerifiedBookDescription(payload.description);
       })
       .then((value) => {
         if (!controller.signal.aborted) setDescription(value);
@@ -39,6 +42,7 @@ export function LumiScoreBookDescription({
   if (!description) return null;
 
   const paragraphs = splitBookDescriptionParagraphs(description.text);
+  if (paragraphs.length === 0) return null;
   const isLong =
     paragraphs.length > 2 &&
     (description.text.length > 500 || paragraphs.length > 4);
