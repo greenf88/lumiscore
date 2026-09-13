@@ -7,6 +7,13 @@ export type VerifiedBookCoverAsset = {
   verified: true;
 };
 
+export type VerifiedBookDescription = {
+  text: string;
+  source: 'open_library' | 'google_books';
+  sourceKey: string;
+  verifiedAt: string;
+};
+
 export type Book = {
   id: string;
   source: 'demo' | 'supabase';

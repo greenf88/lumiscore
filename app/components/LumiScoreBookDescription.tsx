@@ -1,0 +1,70 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import type { VerifiedBookDescription } from '../data/books';
+import { splitBookDescriptionParagraphs } from '@/lib/books/description-text';
+
+type LumiScoreBookDescriptionProps = {
+  workId: string;
+};
+
+export function LumiScoreBookDescription({
+  workId,
+}: LumiScoreBookDescriptionProps) {
+  const [description, setDescription] =
+    useState<VerifiedBookDescription | null>(null);
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(`/api/books/${workId}/description`, {
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        const payload = (await response.json()) as {
+          description?: VerifiedBookDescription | null;
+        };
+        return payload.description ?? null;
+      })
+      .then((value) => {
+        if (!controller.signal.aborted) setDescription(value);
+      })
+      .catch(() => {
+        // A synopsis is optional; keep the section absent on request failure.
+      });
+    return () => controller.abort();
+  }, [workId]);
+
+  if (!description) return null;
+
+  const paragraphs = splitBookDescriptionParagraphs(description.text);
+  const isLong =
+    paragraphs.length > 2 &&
+    (description.text.length > 500 || paragraphs.length > 4);
+  const visibleParagraphs = expanded
+    ? paragraphs
+    : paragraphs.slice(0, isLong ? 2 : paragraphs.length);
+
+  return (
+    <section className="book-description" aria-labelledby="book-description-heading">
+      <h2 id="book-description-heading">About this book</h2>
+      <div id="book-description-content">
+        {visibleParagraphs.map((paragraph, index) => (
+          <p key={`${index}-${paragraph.slice(0, 32)}`}>{paragraph}</p>
+        ))}
+      </div>
+      {isLong && (
+        <button
+          type="button"
+          className="description-toggle"
+          aria-controls="book-description-content"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((current) => !current)}
+        >
+          {expanded ? 'Show less' : 'Read more'}
+        </button>
+      )}
+    </section>
+  );
+}

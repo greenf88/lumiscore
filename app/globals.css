@@ -249,6 +249,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .detail-cover-wrap { position: relative; padding: 24px; background: color-mix(in srgb, var(--surface) 88%, transparent); box-shadow: var(--panel-shadow); }
 .detail-cover-wrap .book-cover { width: 100%; }
 .detail-back-cover img { object-fit: cover; }
+.book-description { margin-top: 40px; max-width: 68ch; border-top: 1px solid var(--line); padding-top: 30px; }
+.book-description h2 { margin: 0 0 18px; font-family: var(--serif); font-size: 28px; font-weight: 400; letter-spacing: -.025em; }
+.book-description p { margin: 0 0 16px; color: var(--text); font-family: var(--serif); font-size: 17px; line-height: 1.7; overflow-wrap: anywhere; }
+.book-description p:last-child { margin-bottom: 0; }
+.description-toggle { min-height: 44px; margin-top: 10px; border: 0; border-bottom: 1px solid currentColor; padding: 8px 0; background: transparent; color: var(--accent); font: 800 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.description-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .detail-score-badge { right: 12px; bottom: 12px; }
 .detail-copy { min-width: 0; }
 .detail-back-link { display: block; width: fit-content; margin-bottom: 36px; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
@@ -400,6 +406,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .book-detail.has-back-cover { width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; }
   .detail-cover-gallery, .has-back-cover .detail-cover-gallery { width: min(78vw, 290px); margin-inline: auto; grid-template-columns: 1fr; }
   .detail-cover-wrap { width: 100%; margin-inline: auto; padding: 20px; }
+  .book-description { margin-top: 32px; max-width: none; }
+  .book-description h2 { font-size: 26px; }
+  .book-description p { font-size: 16px; line-height: 1.65; }
   .detail-sign-in, .detail-back-link { display: inline-flex; min-height: 44px; align-items: center; }
   .detail-back-link { margin-bottom: 28px; }
   .detail-copy h1 { font-size: clamp(42px, 14vw, 60px); }

@@ -14,6 +14,7 @@ import {
   type BookRatingState,
 } from '@/lib/ratings/model';
 import { BookCover, ThemeToggle } from './LumiScoreHome';
+import { LumiScoreBookDescription } from './LumiScoreBookDescription';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 
 type LumiScoreBookDetailProps = {
@@ -171,6 +172,8 @@ export function LumiScoreBookDetail({
               <p>Rate books to unlock your match</p>
             </section>
           </div>
+
+          {book.workId && <LumiScoreBookDescription workId={book.workId} />}
 
           <section className="rating-section" aria-labelledby="rate-book-heading">
             <div>
