@@ -71,7 +71,10 @@ async function resolveWithDurableCache(
       : null,
   ].filter((source): source is NonNullable<typeof source> => Boolean(source));
   const stored = lumiScoreWorkId
-    ? await loadStoredCoverResolutions(lumiScoreWorkId)
+    ? await loadStoredCoverResolutions(
+        lumiScoreWorkId,
+        expectedSources.map(({ source }) => source),
+      )
     : { available: false, entries: [] };
   const relevantStoredEntries = stored.entries.filter((entry) =>
     expectedSources.some(

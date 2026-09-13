@@ -20,7 +20,55 @@ export type StoredCoverResolution = {
 const SUCCESS_FRESH_MS = 90 * 24 * 60 * 60 * 1_000;
 const CONFIRMED_MISSING_FRESH_MS = 24 * 60 * 60 * 1_000;
 const TEMPORARY_FAILURE_RETRY_MS = 5 * 60 * 1_000;
+const COVER_CACHE_TABLE = 'work_cover_resolutions';
 let client: SupabaseClient | null | undefined;
+
+function logCoverCacheReadDiagnostic(
+  level: 'info' | 'error',
+  details: {
+    event: 'client' | 'query';
+    privilegedClientCreated: boolean;
+    querySucceeded?: boolean;
+    errorCode?: string | null;
+    status?: number | null;
+    workId: string;
+    requestedSources: readonly CoverSource[];
+  },
+): void {
+  const payload = JSON.stringify({
+    level,
+    message: `cover_cache_read_${details.event}`,
+    table: COVER_CACHE_TABLE,
+    work_id: details.workId,
+    requested_source: details.requestedSources.join(','),
+    privileged_client_created: details.privilegedClientCreated,
+    ...(details.querySucceeded === undefined
+      ? {}
+      : { query_succeeded: details.querySucceeded }),
+    ...(details.errorCode === undefined
+      ? {}
+      : { error_code: details.errorCode }),
+    ...(details.status === undefined ? {} : { status: details.status }),
+  });
+
+  if (level === 'error') {
+    console.error(payload);
+  } else {
+    console.info(payload);
+  }
+}
+
+function getDiagnosticErrorCode(error: unknown): string | null {
+  if (
+    typeof error !== 'object' ||
+    error === null ||
+    !('code' in error) ||
+    typeof error.code !== 'string'
+  ) {
+    return null;
+  }
+  return error.code;
+}
 
 function getCoverCacheClient(): SupabaseClient | null {
   if (client !== undefined) return client;
@@ -122,16 +170,62 @@ export function mergeStoredCoverResolution(
 
 export async function loadStoredCoverResolutions(
   workId: string,
+  requestedSources: readonly CoverSource[] = [
+    'open_library',
+    'google_books',
+  ],
 ): Promise<{ available: boolean; entries: StoredCoverResolution[] }> {
-  const coverCacheClient = getCoverCacheClient();
+  let coverCacheClient: SupabaseClient | null;
+  try {
+    coverCacheClient = getCoverCacheClient();
+  } catch (error) {
+    logCoverCacheReadDiagnostic('error', {
+      event: 'client',
+      privilegedClientCreated: false,
+      errorCode: getDiagnosticErrorCode(error),
+      workId,
+      requestedSources,
+    });
+    throw error;
+  }
+  logCoverCacheReadDiagnostic(coverCacheClient ? 'info' : 'error', {
+    event: 'client',
+    privilegedClientCreated: Boolean(coverCacheClient),
+    workId,
+    requestedSources,
+  });
   if (!coverCacheClient) return { available: false, entries: [] };
 
-  const { data, error } = await coverCacheClient
-    .from('work_cover_resolutions')
-    .select(
-      'work_id,source,cover_url,source_key,state,verified_at,checked_at,retry_after',
-    )
-    .eq('work_id', workId);
+  let response;
+  try {
+    response = await coverCacheClient
+      .from(COVER_CACHE_TABLE)
+      .select(
+        'work_id,source,cover_url,source_key,state,verified_at,checked_at,retry_after',
+      )
+      .eq('work_id', workId);
+  } catch (error) {
+    logCoverCacheReadDiagnostic('error', {
+      event: 'query',
+      privilegedClientCreated: true,
+      querySucceeded: false,
+      errorCode: getDiagnosticErrorCode(error),
+      status: null,
+      workId,
+      requestedSources,
+    });
+    throw error;
+  }
+  const { data, error, status } = response;
+  logCoverCacheReadDiagnostic(error ? 'error' : 'info', {
+    event: 'query',
+    privilegedClientCreated: true,
+    querySucceeded: !error,
+    errorCode: error?.code ?? null,
+    status,
+    workId,
+    requestedSources,
+  });
   if (error) return { available: false, entries: [] };
 
   return {
