@@ -237,7 +237,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
             ? `Your Match ${recommendation.matchScore}%`
             : recommendation.matchLabel
           : ratingStatus}</span>
-        {recommendation && <span className="recommendation-reason">{recommendation.explanation}</span>}
+        {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
       </span>
       <span className="mini-score"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
     </>

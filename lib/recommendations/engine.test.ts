@@ -5,6 +5,7 @@ import type { Book } from '../../app/data/books.ts';
 import { buildTasteProfile } from '../taste-test/profile.ts';
 import { tasteVector } from '../taste-test/traits.ts';
 import { calculateMatchConfidence, calculateQualityPrior, getMatchPresentation, recommendBooks, type RecommendationCandidate } from './engine.ts';
+import { getTopTraitOverlaps } from './explanations.ts';
 
 function candidate(workId: string, title: string, author: string, traits: Parameters<typeof tasteVector>[0], score: number | null = null, ratingsCount = 0): RecommendationCandidate {
   const book: Book = { id: `work-${workId}`, source: 'supabase', workId, title, author, score, ratingsCount, match: null, cover: 'orbit' };
@@ -139,13 +140,58 @@ test('diversity reranking avoids filling the first results with one author', () 
   assert.equal(new Set(results.map(({ book }) => book.author)).size, 2);
 });
 
-test('explanations name traits that genuinely overlap', () => {
+test('explanations contain only meaningful traits that genuinely overlap', () => {
+  const profile = {
+    ...duneProfile,
+    vector: tasteVector({
+      science_fiction: 1,
+      worldbuilding: .8,
+      literary: .9,
+    }),
+  };
+  const traits = tasteVector({
+    science_fiction: 1,
+    worldbuilding: .8,
+    romance: 1,
+  });
   const [result] = recommendBooks({
-    candidates: [candidate('1', 'Space', 'A', { science_fiction: 1, worldbuilding: 1 })],
+    candidates: [candidate('1', 'Space', 'A', traits)],
+    profile,
+    ratedWorkIds: new Set(),
+  });
+  const overlaps = getTopTraitOverlaps(profile.vector, traits);
+  assert.deepEqual(overlaps.map(({ trait }) => trait), [
+    'science_fiction',
+    'worldbuilding',
+  ]);
+  assert.match(result.explanation, /science fiction/);
+  assert.match(result.explanation, /immersive worlds/);
+  assert.doesNotMatch(result.explanation, /relationship-driven|literary/);
+});
+
+test('recommendations fabricate no explanation when trustworthy overlap is absent', () => {
+  const [result] = recommendBooks({
+    candidates: [candidate('2', 'Romance', 'B', { romance: 1 })],
     profile: duneProfile,
     ratedWorkIds: new Set(),
   });
-  assert.match(result.explanation, /science fiction|immersive worlds/);
+
+  assert.equal(result.personalMatch, 0);
+  assert.equal(result.explanation, '');
+});
+
+test('insufficient candidate metadata suppresses explanations', () => {
+  const result = recommendBooks({
+    candidates: [{
+      ...candidate('3', 'Thin evidence', 'C', { science_fiction: 1 }),
+      metadataConfidence: .59,
+      coverageLevel: 'partial',
+    }],
+    profile: duneProfile,
+    ratedWorkIds: new Set(),
+  })[0];
+
+  assert.equal(result.explanation, '');
 });
 
 test('Taste Test anchor identity has no ranking bonus', async () => {

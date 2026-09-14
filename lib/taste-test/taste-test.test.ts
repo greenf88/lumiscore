@@ -8,7 +8,13 @@ import {
   isTasteTestChoice,
 } from './config.ts';
 import { parseGuestTasteTestAnswers, serializeGuestTasteTestAnswers } from './guest-storage.ts';
-import { buildTasteProfile, calculateUserEvidenceConfidence, getTasteEvidenceBlend, ratingPreferenceWeight } from './profile.ts';
+import {
+  buildTasteProfile,
+  calculateUserEvidenceConfidence,
+  getTasteEvidenceBlend,
+  getTasteProfileConfidenceCopy,
+  ratingPreferenceWeight,
+} from './profile.ts';
 import { emptyTasteVector, tasteVector } from './traits.ts';
 
 test('taste_test_v1 contains exactly ten valid catalog pairs', () => {
@@ -87,6 +93,21 @@ test('user evidence confidence has explicit low, medium and high gates', () => {
   assert.equal(calculateUserEvidenceConfidence(0, 0, 10), 'HIGH');
 });
 
+test('user evidence confidence has friendly product copy without changing its internal value', () => {
+  assert.deepEqual(getTasteProfileConfidenceCopy('LOW'), {
+    label: 'Early profile',
+    description: "We're still learning your taste.",
+  });
+  assert.deepEqual(getTasteProfileConfidenceCopy('MEDIUM'), {
+    label: 'Good profile',
+    description: "We've got a good first read on your taste.",
+  });
+  assert.deepEqual(getTasteProfileConfidenceCopy('HIGH'), {
+    label: 'Strong profile',
+    description: 'We know your reading taste well.',
+  });
+});
+
 test('authenticated persistence uses the current Supabase user and own-row RLS', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
   const migration = await readFile(new URL('../../supabase/migrations/20260913150000_taste_test_responses.sql', import.meta.url), 'utf8');
@@ -99,9 +120,12 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
 
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {
   const home = await readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8');
+  const tasteTest = await readFile(new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url), 'utf8');
   assert.match(home, /href="\/taste-test">Taste Test/);
   assert.match(home, /Improve your recommendations/);
   assert.match(home, /Take the 2-minute Taste Test/);
   assert.match(home, /recommendation\.matchLabel/);
   assert.doesNotMatch(home, /matchScore === null\s*\?\s*'Early match'/);
+  assert.doesNotMatch(tasteTest, /Confidence:\s*\{profile\.confidence\}/);
+  assert.match(tasteTest, /getTasteProfileConfidenceCopy\(profile\.confidence\)/);
 });

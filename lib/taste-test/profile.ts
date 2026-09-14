@@ -9,6 +9,35 @@ export type TasteProfile = {
   ratingCount: number; meaningfulRatingCount: number; confidence: 'LOW' | 'MEDIUM' | 'HIGH'; summary: string;
 };
 
+export type TasteProfileConfidenceCopy = {
+  label: string;
+  description: string;
+};
+
+const TASTE_PROFILE_CONFIDENCE_COPY: Record<
+  TasteProfile['confidence'],
+  TasteProfileConfidenceCopy
+> = {
+  LOW: {
+    label: 'Early profile',
+    description: "We're still learning your taste.",
+  },
+  MEDIUM: {
+    label: 'Good profile',
+    description: "We've got a good first read on your taste.",
+  },
+  HIGH: {
+    label: 'Strong profile',
+    description: 'We know your reading taste well.',
+  },
+};
+
+export function getTasteProfileConfidenceCopy(
+  confidence: TasteProfile['confidence'],
+): TasteProfileConfidenceCopy {
+  return TASTE_PROFILE_CONFIDENCE_COPY[confidence];
+}
+
 export function getTasteEvidenceBlend(ratingCount: number): TasteEvidenceBlend {
   if (ratingCount === 0) return { tasteTest: 1, ratings: 0 };
   if (ratingCount <= 4) return { tasteTest: .7, ratings: .3 };

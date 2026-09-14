@@ -12,7 +12,10 @@ import {
   serializeGuestTasteTestAnswers,
   TASTE_TEST_GUEST_STORAGE_KEY,
 } from '@/lib/taste-test/guest-storage';
-import { buildTasteProfile } from '@/lib/taste-test/profile';
+import {
+  buildTasteProfile,
+  getTasteProfileConfidenceCopy,
+} from '@/lib/taste-test/profile';
 import { BookCover, Footer, Header } from './LumiScoreHome';
 
 type ServerState = {
@@ -45,6 +48,7 @@ export function LumiScoreTasteTest({ books }: { books: Book[] }) {
   const rightBook = booksById.get(question.rightWorkId);
   const currentChoice = answers[question.key];
   const profile = useMemo(() => buildTasteProfile(answers, []), [answers]);
+  const confidenceCopy = getTasteProfileConfidenceCopy(profile.confidence);
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -181,7 +185,10 @@ export function LumiScoreTasteTest({ books }: { books: Book[] }) {
             <span className="eyebrow">YOUR READING TASTE</span>
             <h1 id="taste-test-title">Your reading taste</h1>
             <p className="taste-result-summary">{profile.summary}</p>
-            <p className="taste-result-confidence">Confidence: {profile.confidence}</p>
+            <p className="taste-confidence">
+              <strong>{confidenceCopy.label}</strong>
+              <span>{confidenceCopy.description}</span>
+            </p>
             <p className="taste-save-status" role="status" aria-live="polite">
               {saveStatus === 'saving' ? 'Saving your Taste Test…' : saveStatus === 'saved' ? 'Saved to your LumiScore account.' : saveStatus === 'error' ? 'Saved on this device, but account sync is temporarily unavailable.' : !authenticated ? 'Saved on this device.' : ''}
             </p>

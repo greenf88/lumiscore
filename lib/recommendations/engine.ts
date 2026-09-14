@@ -1,6 +1,7 @@
 import type { Book } from '../../app/data/books.ts';
-import { strongestPositiveTraits, type TasteProfile } from '../taste-test/profile.ts';
-import { TRAIT_LABELS, cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts';
+import type { TasteProfile } from '../taste-test/profile.ts';
+import { cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts';
+import { buildRecommendationExplanation } from './explanations.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
@@ -38,13 +39,6 @@ function deterministicExploration(workId: string): number {
   let hash = 2166136261;
   for (const character of workId) { hash ^= character.charCodeAt(0); hash = Math.imul(hash, 16777619); }
   return (hash >>> 0) / 4294967295;
-}
-
-function explainMatch(profile: TasteVector, candidate: TasteVector): string {
-  const labels = strongestPositiveTraits(profile, candidate).map((trait) => TRAIT_LABELS[trait]);
-  if (labels.length === 0) return 'Adds a different direction to your recommendations.';
-  return labels.length === 1 ? `Matches your preference for ${labels[0]}.`
-    : `Matches your preference for ${labels[0]} and ${labels[1]}.`;
 }
 
 export function calculateMatchConfidence(input: {
@@ -127,7 +121,13 @@ export function recommendBooks(input: { candidates: readonly RecommendationCandi
         ...matchPresentation,
         coverageLevel,
         metadataConfidence,
-        explanation: explainMatch(input.profile.vector, traits),
+        explanation: buildRecommendationExplanation({
+          profile: input.profile.vector,
+          candidate: traits,
+          workId: book.workId!,
+          coverageLevel,
+          metadataConfidence,
+        }),
       };
     });
   const selected: ScoredCandidate[] = [];
