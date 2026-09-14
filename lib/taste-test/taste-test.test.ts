@@ -5,6 +5,7 @@ import {
   TASTE_TEST_ANCHORS,
   TASTE_TEST_QUESTIONS,
   TASTE_TEST_VERSION,
+  TASTE_TEST_WORK_IDS,
   isTasteTestChoice,
 } from './config.ts';
 import { parseGuestTasteTestAnswers, serializeGuestTasteTestAnswers } from './guest-storage.ts';
@@ -28,6 +29,18 @@ test('taste_test_v1 contains exactly ten valid catalog pairs', () => {
     assert.ok(TASTE_TEST_ANCHORS[question.rightWorkId]);
     assert.notEqual(question.leftWorkId, question.rightWorkId);
   }
+});
+
+test('recommendation exclusions are derived from both sides of every Taste Test question', () => {
+  const expectedWorkIds = new Set(
+    TASTE_TEST_QUESTIONS.flatMap(({ leftWorkId, rightWorkId }) => [
+      leftWorkId,
+      rightWorkId,
+    ]),
+  );
+
+  assert.equal(expectedWorkIds.size, 20);
+  assert.deepEqual(new Set(TASTE_TEST_WORK_IDS), expectedWorkIds);
 });
 
 test('only left, right and neither are valid choices', () => {
@@ -118,6 +131,12 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
   assert.match(persistence, /user_id:\s*user\.id/);
   assert.match(migration, /using \(\(select auth\.uid\(\)\) = user_id\)/);
   assert.match(migration, /with check \(\(select auth\.uid\(\)\) = user_id\)/);
+});
+
+test('homepage recommendations pass Taste Test works as explicit candidate exclusions', async () => {
+  const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
+
+  assert.match(persistence, /excludedWorkIds:\s*new Set\(TASTE_TEST_WORK_IDS\)/);
 });
 
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {

@@ -97,10 +97,18 @@ type ScoredCandidate = RankedRecommendation & {
   traits: TasteVector;
 };
 
-export function recommendBooks(input: { candidates: readonly RecommendationCandidate[]; profile: TasteProfile; ratedWorkIds: ReadonlySet<string>; limit?: number }): RankedRecommendation[] {
+export function recommendBooks(input: {
+  candidates: readonly RecommendationCandidate[];
+  profile: TasteProfile;
+  ratedWorkIds: ReadonlySet<string>;
+  excludedWorkIds?: ReadonlySet<string>;
+  limit?: number;
+}): RankedRecommendation[] {
   const limit = Math.max(1, Math.trunc(input.limit ?? 10));
   const remaining: ScoredCandidate[] = input.candidates
-    .filter(({ book }) => Boolean(book.workId) && !input.ratedWorkIds.has(book.workId!))
+    .filter(({ book }) => Boolean(book.workId)
+      && !input.ratedWorkIds.has(book.workId!)
+      && !input.excludedWorkIds?.has(book.workId!))
     .map(({ book, traits, metadataConfidence, coverageLevel, seriesKey }) => {
       const personalSimilarity = Math.max(0, cosineTasteSimilarity(input.profile.vector, traits));
       const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);

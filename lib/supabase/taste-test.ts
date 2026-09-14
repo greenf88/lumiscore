@@ -10,6 +10,7 @@ import {
   TASTE_TEST_ANCHORS,
   TASTE_TEST_QUESTIONS,
   TASTE_TEST_VERSION,
+  TASTE_TEST_WORK_IDS,
   type TasteTestAnswers,
   type TasteTestChoice,
   type TasteTestQuestionKey,
@@ -191,7 +192,13 @@ export async function loadHomepagePersonalization(): Promise<HomepagePersonaliza
     const profile = buildTasteProfile(answers, ratingEvidence);
     const hasEvidence = profile.selectedCount > 0 || profile.meaningfulRatingCount > 0;
     const recommendations = hasEvidence
-      ? recommendBooks({ candidates: catalog.candidates, profile, ratedWorkIds: new Set(ratedIds), limit: 10 })
+      ? recommendBooks({
+        candidates: catalog.candidates,
+        profile,
+        ratedWorkIds: new Set(ratedIds),
+        excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
+        limit: 10,
+      })
       : [];
     const recommendationBooks = recommendations.length
       ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) => book.workId ? [book.workId] : []))

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import type { Book } from '../../app/data/books.ts';
+import { TASTE_TEST_WORK_IDS } from '../taste-test/config.ts';
 import { buildTasteProfile } from '../taste-test/profile.ts';
 import { tasteVector } from '../taste-test/traits.ts';
 import { calculateMatchConfidence, calculateQualityPrior, getMatchPresentation, recommendBooks, type RecommendationCandidate } from './engine.ts';
@@ -17,6 +18,103 @@ const duneProfile = buildTasteProfile({ 'fantasy-or-science-fiction': 'right' },
 test('already-rated books are excluded', () => {
   const results = recommendBooks({ candidates: [candidate('8', 'Dune', 'Frank Herbert', { science_fiction: 1 })], profile: duneProfile, ratedWorkIds: new Set(['8']) });
   assert.deepEqual(results, []);
+});
+
+test('a Taste Test anchor is excluded even when it has the highest raw similarity', () => {
+  const anchor = candidate('102', 'The Hunger Games', 'Suzanne Collins', {
+    science_fiction: 1,
+    speculative: 1,
+    fast_paced: 1,
+  });
+  const remaining = candidate('9001', 'A Different Future', 'Other Author', {
+    science_fiction: .5,
+    romance: 1,
+  });
+  const baseline = recommendBooks({
+    candidates: [anchor, remaining],
+    profile: duneProfile,
+    ratedWorkIds: new Set(),
+  });
+  const filtered = recommendBooks({
+    candidates: [anchor, remaining],
+    profile: duneProfile,
+    ratedWorkIds: new Set(),
+    excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
+  });
+
+  assert.equal(baseline[0].book.workId, '102');
+  assert.ok(baseline[0].personalMatch > baseline[1].personalMatch);
+  assert.deepEqual(filtered.map(({ book }) => book.workId), ['9001']);
+});
+
+test('both selected and unselected Taste Test choices are excluded', () => {
+  const profile = buildTasteProfile({ 'fantasy-or-science-fiction': 'left' }, []);
+  const results = recommendBooks({
+    candidates: [
+      candidate('143', 'Eragon', 'Christopher Paolini', { fantasy: 1 }),
+      candidate('8', 'Dune', 'Frank Herbert', { science_fiction: 1 }),
+      candidate('9002', 'Outside the Test', 'Other Author', { fantasy: .8 }),
+    ],
+    profile,
+    ratedWorkIds: new Set(),
+    excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
+  });
+
+  assert.deepEqual(results.map(({ book }) => book.workId), ['9002']);
+});
+
+test('answering neither does not make either Taste Test choice recommendable', () => {
+  const profile = buildTasteProfile({ 'fantasy-or-science-fiction': 'neither' }, []);
+  const results = recommendBooks({
+    candidates: [
+      candidate('143', 'Eragon', 'Christopher Paolini', { fantasy: 1 }),
+      candidate('8', 'Dune', 'Frank Herbert', { science_fiction: 1 }),
+      candidate('9003', 'Outside the Test', 'Other Author', { literary: 1 }),
+    ],
+    profile,
+    ratedWorkIds: new Set(),
+    excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
+  });
+
+  assert.deepEqual(results.map(({ book }) => book.workId), ['9003']);
+});
+
+test('Taste Test exclusions leave non-anchor scoring and ranking unchanged', () => {
+  const candidates = [
+    candidate('9010', 'First', 'A', { science_fiction: 1, worldbuilding: 1 }, 8, 20),
+    candidate('9011', 'Second', 'B', { science_fiction: .8, idea_driven: 1 }, 7, 10),
+    candidate('9012', 'Third', 'C', { romance: 1 }, 9, 30),
+  ];
+  const input = { candidates, profile: duneProfile, ratedWorkIds: new Set<string>(), limit: 3 };
+
+  assert.deepEqual(
+    recommendBooks(input),
+    recommendBooks({ ...input, excludedWorkIds: new Set(TASTE_TEST_WORK_IDS) }),
+  );
+});
+
+test('recommendation limit is filled after Taste Test works are excluded', () => {
+  const tasteTestWorkIds = new Set<string>(TASTE_TEST_WORK_IDS);
+  const remaining = Array.from({ length: 12 }, (_, index) => candidate(
+    String(9100 + index),
+    `Remaining ${index + 1}`,
+    `Author ${index + 1}`,
+    { science_fiction: 1, worldbuilding: 1 - index / 20 },
+  ));
+  const results = recommendBooks({
+    candidates: [
+      candidate('1', 'Project Hail Mary', 'Andy Weir', { science_fiction: 1 }),
+      candidate('102', 'The Hunger Games', 'Suzanne Collins', { science_fiction: 1 }),
+      ...remaining,
+    ],
+    profile: duneProfile,
+    ratedWorkIds: new Set(),
+    excludedWorkIds: tasteTestWorkIds,
+    limit: 10,
+  });
+
+  assert.equal(results.length, 10);
+  assert.ok(results.every(({ book }) => !tasteTestWorkIds.has(book.workId!)));
 });
 
 test('a stronger profile match ranks above a weaker match', () => {
