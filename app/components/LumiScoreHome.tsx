@@ -15,6 +15,8 @@ import {
   normalizeCatalogSearchQuery,
 } from '@/lib/books/catalog-search';
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
+import type { PersonalizedRecommendation } from '@/lib/recommendations/engine';
+import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 
 const resolvedCoverCache = new Map<
@@ -165,10 +167,6 @@ export const BookCover = memo(function BookCover({ book, small = false, label }:
   );
 });
 
-function getDemoMatch(book: Book): number | null {
-  return book.source === 'demo' ? book.match : null;
-}
-
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   const inputId = useId();
 
@@ -202,6 +200,7 @@ export function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle:
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label="Main navigation">
         <a href="/#discover">Discover</a>
+        <a className="taste-test-nav-link" href="/taste-test">Taste Test</a>
         <span className="nav-unavailable" aria-disabled="true" title="Reading lists are coming soon">My lists</span>
         <button className="mobile-search-button" type="button" aria-label="Open search" aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
@@ -212,9 +211,8 @@ export function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle:
   );
 }
 
-const RecommendationRow = memo(function RecommendationRow({ book }: { book: Book }) {
+const RecommendationRow = memo(function RecommendationRow({ book, recommendation }: { book: Book; recommendation?: PersonalizedRecommendation }) {
   const score = book.score;
-  const match = getDemoMatch(book);
   const ratingDisplay = formatPublicRatingDisplay(
     score,
     book.ratingsCount ?? 0,
@@ -230,7 +228,12 @@ const RecommendationRow = memo(function RecommendationRow({ book }: { book: Book
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
         <span>{book.author}</span>
-        <span className="match-line"><i /> {match === null ? ratingStatus : `${match}% match`}</span>
+        <span className="match-line"><i /> {recommendation
+          ? recommendation.matchScore !== null
+            ? `Your Match ${recommendation.matchScore}%`
+            : recommendation.matchLabel
+          : ratingStatus}</span>
+        {recommendation && <span className="recommendation-reason">{recommendation.explanation}</span>}
       </span>
       <span className="mini-score"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
     </>
@@ -243,23 +246,37 @@ const RecommendationRow = memo(function RecommendationRow({ book }: { book: Book
   );
 });
 
-const RecommendationPanel = memo(function RecommendationPanel({ books }: { books: Book[] }) {
-  const recommendations = [books[1], books[2], books[5]].filter(
-    (book): book is Book => Boolean(book),
-  );
+const RecommendationPanel = memo(function RecommendationPanel({ books, personalization }: { books: Book[]; personalization: HomepagePersonalization }) {
+  const personalized = personalization.hasEvidence
+    ? personalization.recommendations.slice(0, 3)
+    : [];
+  const curated = [books[1], books[2], books[5]].filter((book): book is Book => Boolean(book));
+  const showTasteTestCta = personalization.authenticated &&
+    personalization.ratingCount < 10 &&
+    personalization.tasteTestAnsweredCount < 10;
   return (
     <aside className="recommendation-panel" aria-labelledby="up-next-title">
       <div className="panel-heading">
-        <div><span className="eyebrow">CURATED FOR YOUR TASTE</span><h2 id="up-next-title">Up next for you</h2></div>
+        <div><span className="eyebrow">{personalized.length ? 'CURATED FOR YOUR TASTE' : 'READER DISCOVERIES'}</span><h2 id="up-next-title">{personalized.length ? 'Up next for you' : 'Popular with readers'}</h2></div>
         <button type="button" aria-label="More recommendations are not available yet" title="More recommendations are coming soon" disabled>↻</button>
       </div>
-      <div className="recommendation-list">{recommendations.map((book) => <RecommendationRow key={book.id} book={book} />)}</div>
-      <a className="view-all" href="#discover">View all recommendations <span>→</span></a>
+      {showTasteTestCta && (
+        <a className="taste-test-cta" href="/taste-test">
+          <strong>Improve your recommendations</strong>
+          <span>Take the 2-minute Taste Test</span>
+        </a>
+      )}
+      <div className="recommendation-list">
+        {personalized.length
+          ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
+          : curated.map((book) => <RecommendationRow key={book.id} book={book} />)}
+      </div>
+      <a className="view-all" href="#discover">Browse all books <span>→</span></a>
     </aside>
   );
 });
 
-const Hero = memo(function Hero({ books, catalogStats }: { books: Book[]; catalogStats: CatalogStats }) {
+const Hero = memo(function Hero({ books, catalogStats, personalization }: { books: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
   return (
     <section className="hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
@@ -281,7 +298,7 @@ const Hero = memo(function Hero({ books, catalogStats }: { books: Book[]; catalo
             <div><dt>{catalogStats.categories}</dt><dd>Categories</dd></div>
           </dl>
         </div>
-        <RecommendationPanel books={books} />
+        <RecommendationPanel books={books} personalization={personalization} />
       </div>
     </section>
   );
@@ -300,7 +317,6 @@ function formatCardRatingCount(book: Book): string {
 
 export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
   const score = book.score;
-  const match = getDemoMatch(book);
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0);
   const hasRatings = ratingDisplay.score !== '—';
   const href = getBookHref(book);
@@ -316,7 +332,6 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
         <p>{book.author}</p>
         <div className="book-meta">
           <span>{hasRatings ? formatCardRatingCount(book) : 'Not rated yet'}</span>
-          {match !== null && <span className="book-match"><i /> {match}% match</span>}
         </div>
       </div>
     </>
@@ -412,7 +427,7 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number; categories: number };
 
-export function LumiScoreHome({ initialBooks, catalogStats }: { initialBooks: Book[]; catalogStats: CatalogStats }) {
+export function LumiScoreHome({ initialBooks, catalogStats, personalization }: { initialBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -515,7 +530,7 @@ export function LumiScoreHome({ initialBooks, catalogStats }: { initialBooks: Bo
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} />
-      <Hero books={catalogBooks} catalogStats={catalogStats} />
+      <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} />
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />

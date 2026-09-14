@@ -114,6 +114,7 @@ export function LumiScoreBookDetail({
       <header className="detail-header">
         <LumiScoreWordmark />
         <div className="detail-header-actions">
+          <a className="detail-taste-test-link" href="/taste-test">Taste Test</a>
           {ratingState.authenticated ? (
             <form className="detail-account" action="/auth/sign-out" method="post">
               <input type="hidden" name="next" value={detailPath} />

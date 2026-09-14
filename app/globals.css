@@ -81,6 +81,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .main-nav { justify-self: end; display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 13px; font-weight: 600; }
 .main-nav > a { transition: color 160ms ease; }
 .main-nav > a:hover { color: var(--text); }
+.main-nav > .taste-test-nav-link { color: var(--gold); }
 .nav-unavailable { cursor: default; opacity: .5; }
 .avatar { width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--text); font-size: 10px; font-weight: 700; cursor: pointer; }
 .avatar:disabled { cursor: default; opacity: .55; }
@@ -241,6 +242,47 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .detail-account { display: flex; align-items: center; gap: 11px; }
 .detail-account span { max-width: 190px; overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 .detail-account button { padding: 0; border: 0; background: transparent; cursor: pointer; }
+.detail-taste-test-link { display: inline-flex; min-height: 44px; align-items: center; color: var(--text); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.detail-taste-test-link:hover { color: var(--teal); }
+
+.taste-test-cta { display: grid; gap: 4px; margin: 14px 18px 0; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--gold) 58%, var(--border)); background: color-mix(in srgb, var(--gold) 8%, transparent); }
+.taste-test-cta strong { color: var(--text); font-family: var(--serif); font-size: 15px; font-weight: 600; }
+.taste-test-cta span { color: var(--gold); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.recommendation-reason { margin-top: 3px; color: var(--muted); font-size: 8px; line-height: 1.35; }
+
+.taste-test-shell { min-height: 100vh; }
+.taste-test-page, .taste-test-unavailable { width: min(1080px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; padding: clamp(52px, 8vw, 92px) 0 80px; }
+.taste-test-heading { max-width: 760px; margin: 0 auto 38px; text-align: center; }
+.taste-test-heading h1, .taste-test-unavailable h1 { margin: 18px 0 13px; font-family: var(--serif); font-size: clamp(42px, 6vw, 68px); font-weight: 400; line-height: 1; letter-spacing: -.045em; }
+.taste-test-heading p, .taste-test-unavailable p { margin: 0; color: var(--muted); font-family: var(--serif); font-size: 17px; line-height: 1.55; }
+.taste-progress { height: 3px; margin-top: 27px; overflow: hidden; background: var(--border); }
+.taste-progress span { display: block; height: 100%; background: var(--gold); transition: width 180ms ease; }
+.taste-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin: 0; border: 0; padding: 0; }
+.taste-book-option { min-width: 0; min-height: 430px; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 25px; border: 1px solid var(--border); border-radius: 4px; background: color-mix(in srgb, var(--surface) 75%, transparent); color: var(--text); cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease; }
+.taste-book-option:hover { border-color: var(--teal); transform: translateY(-3px); }
+.taste-book-option:focus-visible, .taste-neither:focus-visible, .taste-controls button:focus-visible, .taste-result-actions button:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+.taste-book-option.is-selected { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); box-shadow: 0 0 0 1px var(--gold); }
+.taste-book-option .book-cover { width: min(190px, 100%); }
+.taste-book-copy { display: grid; gap: 6px; min-width: 0; text-align: center; }
+.taste-book-copy strong { overflow-wrap: anywhere; font-family: var(--serif); font-size: 23px; font-weight: 500; line-height: 1.1; }
+.taste-book-copy span { color: var(--muted); font-size: 11px; }
+.taste-choice-mark { min-height: 20px; color: var(--gold); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.taste-neither { grid-column: 1 / -1; min-height: 48px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .06em; cursor: pointer; text-transform: uppercase; }
+.taste-neither[aria-pressed='true'] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--gold); }
+.taste-controls { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 28px; }
+.taste-controls button, .taste-result-actions button { min-height: 44px; border: 1px solid var(--border); border-radius: 3px; padding: 0 18px; background: transparent; color: var(--text); font-size: 10px; font-weight: 800; letter-spacing: .06em; cursor: pointer; text-transform: uppercase; }
+.taste-controls button:disabled { cursor: default; opacity: .38; }
+.taste-controls .taste-next { border-color: var(--teal); background: var(--teal); color: #041118; }
+.taste-save-status { min-height: 18px; margin: 18px 0 0; color: var(--muted); font-size: 10px; text-align: center; }
+.taste-results { max-width: 760px; margin: 0 auto; padding: clamp(32px, 6vw, 66px); border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 78%, transparent); box-shadow: var(--panel-shadow); text-align: center; }
+.taste-results h1 { margin: 18px 0 16px; font-family: var(--serif); font-size: clamp(46px, 7vw, 72px); font-weight: 400; letter-spacing: -.045em; }
+.taste-results > p:not(.taste-save-status) { margin: 0 auto; color: var(--text); font-family: var(--serif); font-size: clamp(20px, 3vw, 28px); line-height: 1.45; }
+.taste-confidence { display: flex; justify-content: center; gap: 8px; margin: 21px 0 0; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.taste-confidence strong { color: var(--gold); }
+.taste-result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+.taste-result-actions .primary-cta { min-height: 44px; }
+.taste-test-unavailable { max-width: 720px; text-align: center; }
+.taste-test-unavailable .primary-cta { margin: 28px auto 0; }
 .book-detail { width: min(1120px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; display: grid; grid-template-columns: minmax(250px, 360px) minmax(0, 1fr); align-items: start; gap: clamp(48px, 8vw, 110px); padding: 64px 0 80px; }
 .book-detail.has-back-cover { width: min(1280px, calc(100% - 48px)); grid-template-columns: minmax(440px, 540px) minmax(0, 1fr); gap: clamp(42px, 6vw, 82px); }
 .detail-cover-gallery { min-width: 0; display: grid; grid-template-columns: 1fr; gap: 18px; }
@@ -314,7 +356,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 
 @media (max-width: 1040px) {
   .site-header { grid-template-columns: auto 1fr auto; padding-inline: 24px; }
-  .main-nav > a, .main-nav > .nav-unavailable { display: none; }
+  .main-nav > a:not(.taste-test-nav-link), .main-nav > .nav-unavailable { display: none; }
   .hero-inner { grid-template-columns: 1fr 390px; gap: 38px; padding-inline: 0; }
   .hero-copy h1 { font-size: clamp(54px, 7vw, 74px); }
   .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
@@ -356,7 +398,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .logo-mark { width: 25px; height: 25px; }
   .main-nav { gap: 10px; }
   .theme-sun, .theme-moon { display: none; }
-  .avatar { width: 32px; height: 32px; }
+  .avatar { display: none; }
   .mobile-search-button, .avatar { width: 40px; height: 40px; }
   .hero-inner { width: calc(100% - 32px); padding: 54px 0 56px; gap: 32px; }
   .hero-copy { padding-right: 0; }
@@ -402,6 +444,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .detail-header .theme-toggle-labeled { padding: 8px; }
   .detail-header .toggle-label { display: none; }
   .detail-header-actions { gap: 10px; }
+  .detail-taste-test-link { font-size: 9px; }
   .detail-account span { display: none; }
   .book-detail { min-height: auto; width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; padding: 42px 0 64px; }
   .book-detail.has-back-cover { width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; }
@@ -422,6 +465,20 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .auth-card { padding-block: 52px 70px; }
   .auth-form { padding: 20px; }
   .footer-nav a { display: inline-flex; min-height: 44px; align-items: center; }
+  .taste-test-page, .taste-test-unavailable { width: calc(100% - 28px); min-height: auto; padding: 40px 0 58px; }
+  .taste-test-heading { margin-bottom: 27px; }
+  .taste-test-heading h1 { font-size: clamp(39px, 12vw, 54px); }
+  .taste-test-heading p { font-size: 16px; }
+  .taste-pair { gap: 10px; }
+  .taste-book-option { min-height: 330px; gap: 13px; padding: 13px 10px 16px; }
+  .taste-book-option .book-cover { width: min(38vw, 155px); }
+  .taste-book-copy strong { font-size: clamp(16px, 5vw, 21px); }
+  .taste-book-copy span { font-size: 10px; }
+  .taste-controls { gap: 10px; }
+  .taste-controls button { flex: 1; padding-inline: 10px; }
+  .taste-results { padding: 32px 20px; }
+  .taste-result-actions { display: grid; }
+  .taste-result-actions > * { width: 100%; }
 }
 
 @media (max-width: 360px) {

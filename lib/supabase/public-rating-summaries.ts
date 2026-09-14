@@ -20,3 +20,25 @@ export async function loadPublicRatingSummaries(
 
   return ratingSummaryMap((data ?? []) as PublicRatingSummaryRow[]);
 }
+
+export async function loadPublicRatingSummariesBatched(
+  supabase: SupabaseClient,
+  workIds: readonly string[],
+): Promise<Map<string, PublicRatingSummary>> {
+  const normalized = [...new Set(
+    workIds
+      .map(Number)
+      .filter((workId) => Number.isSafeInteger(workId) && workId > 0),
+  )];
+  const batches = Array.from(
+    { length: Math.ceil(normalized.length / 100) },
+    (_, index) => normalized.slice(index * 100, (index + 1) * 100),
+  );
+  const batchResults = await Promise.all(
+    batches.map((batch) => loadPublicRatingSummaries(
+      supabase,
+      batch.map(String),
+    )),
+  );
+  return new Map(batchResults.flatMap((summaries) => [...summaries.entries()]));
+}

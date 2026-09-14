@@ -385,6 +385,32 @@ export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
   return (await loadHomepageCatalog(limit)).books;
 }
 
+export async function loadCatalogBooksByIds(
+  workIds: readonly string[],
+): Promise<Book[]> {
+  const ids = [...new Set(
+    workIds
+      .map(Number)
+      .filter((id) => Number.isSafeInteger(id) && id > 0),
+  )];
+  if (ids.length === 0) return [];
+
+  const result = await supabase
+    .from('works')
+    .select(HOMEPAGE_CATALOG_SELECT)
+    .in('id', ids);
+  if (result.error) throw result.error;
+
+  const catalogBooks = asRows(result.data)
+    .map((work, index) => mapCatalogBook(work, [], [], index))
+    .filter((book): book is Book => book !== null);
+  const summaries = await loadPublicRatingSummaries(
+    supabase,
+    catalogBooks.flatMap((book) => (book.workId ? [book.workId] : [])),
+  );
+  return applyRatingSummaries(catalogBooks, summaries);
+}
+
 export async function loadHomepageCatalog(limit = 18): Promise<{
   books: Book[];
   total: number;

@@ -4,6 +4,7 @@ import {
   logServerEnvironmentPresence,
   readServerEnvironment,
 } from '@/lib/server-environment';
+import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
@@ -26,7 +27,20 @@ async function loadHomepageBooks() {
 }
 
 export default async function Home() {
-  const catalog = await loadHomepageBooks();
+  const [catalog, personalization] = await Promise.all([
+    loadHomepageBooks(),
+    import('@/lib/supabase/taste-test')
+      .then(({ loadHomepagePersonalization }) =>
+        loadHomepagePersonalization(),
+      )
+      .catch((): HomepagePersonalization => ({
+        authenticated: false,
+        ratingCount: 0,
+        tasteTestAnsweredCount: 0,
+        hasEvidence: false,
+        recommendations: [],
+      })),
+  ]);
 
   return (
     <LumiScoreHome
@@ -35,6 +49,7 @@ export default async function Home() {
         books: catalog.total,
         categories: CATALOG_CATEGORY_COUNT,
       }}
+      personalization={personalization}
     />
   );
 }

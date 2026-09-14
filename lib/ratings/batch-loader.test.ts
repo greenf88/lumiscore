@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { loadPublicRatingSummaries } from '../supabase/public-rating-summaries.ts';
+import { loadPublicRatingSummaries, loadPublicRatingSummariesBatched } from '../supabase/public-rating-summaries.ts';
 
 test('loads every displayed work through one aggregate RPC call', async () => {
   const calls: Array<{ name: string; args: unknown }> = [];
@@ -28,6 +28,29 @@ test('loads every displayed work through one aggregate RPC call', async () => {
   ]);
   assert.deepEqual(summaries.get('8'), { lumiscore: 8, ratingCount: 1 });
   assert.deepEqual(summaries.get('1265'), { lumiscore: null, ratingCount: 0 });
+});
+
+test('loads a recommendation catalog in bounded batches instead of per-card queries', async () => {
+  const calls: number[][] = [];
+  const client = {
+    rpc: async (_name: string, args: { target_work_ids: number[] }) => {
+      calls.push(args.target_work_ids);
+      return {
+        data: args.target_work_ids.map((workId) => ({
+          work_id: workId,
+          lumiscore: null,
+          rating_count: 0,
+        })),
+        error: null,
+      };
+    },
+  } as never;
+  const ids = Array.from({ length: 205 }, (_, index) => String(index + 1));
+
+  const summaries = await loadPublicRatingSummariesBatched(client, ids);
+
+  assert.deepEqual(calls.map((batch) => batch.length), [100, 100, 5]);
+  assert.equal(summaries.size, 205);
 });
 
 test('keeps cards unrated when the public aggregate is unavailable', async () => {
