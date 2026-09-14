@@ -1,13 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import {
-  getOpenLibraryCoverUrl,
   getOpenLibraryCoverVariantUrl,
   isUsableCoverImageDimensions,
 } from '@/lib/books/covers';
+import {
+  getBookCoverIdentity,
+  getInitialBookCoverUrls,
+} from '@/lib/books/book-cover-state';
 import { getBookHref } from '@/lib/books/book-navigation';
 import {
   CATALOG_SEARCH_DEBOUNCE_MS,
@@ -84,17 +87,12 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
   return request;
 }
 
-export const BookCover = memo(function BookCover({ book, small = false, label }: { book: Book; small?: boolean; label?: string }) {
-  const initialCoverUrls = useMemo(
-    () =>
-      book.coverUrls !== undefined
-        ? book.coverUrls
-        : [getOpenLibraryCoverUrl(book.isbn13)].filter(
-            (url): url is string => url !== null,
-          ),
-    [book.coverUrls, book.isbn13],
+type BookCoverProps = { book: Book; small?: boolean; label?: string };
+
+function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
+  const [coverUrls, setCoverUrls] = useState(() =>
+    getInitialBookCoverUrls(book),
   );
-  const [coverUrls, setCoverUrls] = useState(initialCoverUrls);
   const [coverIndex, setCoverIndex] = useState(0);
   const [coverLoaded, setCoverLoaded] = useState(false);
   const resolvedRequested = useRef(false);
@@ -165,6 +163,12 @@ export const BookCover = memo(function BookCover({ book, small = false, label }:
       )}
     </div>
   );
+}
+
+export const BookCover = memo(function BookCover(props: BookCoverProps) {
+  const coverIdentity = getBookCoverIdentity(props.book);
+
+  return <BookCoverForIdentity key={coverIdentity} {...props} />;
 });
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {

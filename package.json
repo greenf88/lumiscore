@@ -12,7 +12,7 @@
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "test:importer-matching": "node --experimental-strip-types --test scripts/open-library-matching.test.ts",
-    "test:cover-resolution": "node --experimental-strip-types --test lib/books/open-library-covers.test.ts",
+    "test:cover-resolution": "node --experimental-strip-types --test lib/books/open-library-covers.test.ts lib/books/book-cover-state.test.ts",
     "test:edition-ranking": "node --experimental-strip-types --test lib/books/edition-ranking.test.ts",
     "test:catalog-search": "node --experimental-strip-types --test lib/books/catalog-search.test.ts",
     "test:book-detail": "node --experimental-strip-types --test lib/books/book-detail.test.ts",
