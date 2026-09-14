@@ -407,7 +407,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
   return (
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
       <div className="section-heading">
-        <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{searchActive ? 'Search results' : 'Featured today'}</h2></div>
+        <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{searchActive ? 'Search results' : 'Highest rated'}</h2></div>
         <div className="section-tools">
           <span aria-live="polite">{isLoading ? 'Searching…' : `${displayedBooks.length} ${displayedBooks.length === 1 ? 'book' : 'books'}`}</span>
           {searchActive && displayedBooks.length > 0 ? (

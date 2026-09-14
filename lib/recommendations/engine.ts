@@ -59,6 +59,15 @@ export function calculateMatchConfidence(input: {
   return 'low';
 }
 
+export function calculateDisplayedMatchScore(input: {
+  personalSimilarity: number;
+  userConfidence: TasteProfile['confidence'];
+}): number {
+  const similarity = Math.max(0, Math.min(1, input.personalSimilarity));
+  const ceiling = input.userConfidence === 'HIGH' ? 96 : 94;
+  return Math.round(Math.min(ceiling, Math.sqrt(similarity) * ceiling));
+}
+
 export function getMatchPresentation(input: {
   personalSimilarity: number;
   candidateCoverage: WorkTraitCoverageLevel;
@@ -78,7 +87,10 @@ export function getMatchPresentation(input: {
     input.userConfidence !== 'LOW'
   ) {
     return {
-      matchScore: Math.round(Math.max(0, Math.min(1, input.personalSimilarity)) * 100),
+      matchScore: calculateDisplayedMatchScore({
+        personalSimilarity: input.personalSimilarity,
+        userConfidence: input.userConfidence,
+      }),
       matchLabel: null,
       matchConfidence,
     };
@@ -149,15 +161,23 @@ export function recommendBooks(input: {
     remaining.sort((left, right) => adjusted(right) - adjusted(left) || Number(left.book.workId) - Number(right.book.workId));
     selected.push(remaining.shift()!);
   }
-  return selected.map((candidate) => ({
-    book: candidate.book,
-    matchScore: candidate.matchScore,
-    matchLabel: candidate.matchLabel,
-    matchConfidence: candidate.matchConfidence,
-    explanation: candidate.explanation,
-    coverageLevel: candidate.coverageLevel,
-    metadataConfidence: candidate.metadataConfidence,
-    personalMatch: candidate.personalMatch,
-    rankingScore: candidate.rankingScore,
-  }));
+  let previousDisplayedMatch = 100;
+  return selected.map((candidate) => {
+    const matchScore = candidate.matchScore === null
+      ? null
+      : Math.min(previousDisplayedMatch, candidate.matchScore);
+    if (matchScore !== null) previousDisplayedMatch = matchScore;
+
+    return {
+      book: candidate.book,
+      matchScore,
+      matchLabel: candidate.matchLabel,
+      matchConfidence: candidate.matchConfidence,
+      explanation: candidate.explanation,
+      coverageLevel: candidate.coverageLevel,
+      metadataConfidence: candidate.metadataConfidence,
+      personalMatch: candidate.personalMatch,
+      rankingScore: candidate.rankingScore,
+    };
+  });
 }

@@ -151,6 +151,18 @@ test('Taste Test stays in navigation and low-evidence users get a CTA', async ()
   assert.match(tasteTest, /getTasteProfileConfidenceCopy\(profile\.confidence\)/);
 });
 
+test('Taste Test result shows one reading-taste heading with non-repeating eyebrow copy', async () => {
+  const tasteTest = await readFile(
+    new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.equal(tasteTest.match(/>Your reading taste<\/h1>/g)?.length, 1);
+  assert.match(tasteTest, />TASTE PROFILE<\/span>/);
+  assert.doesNotMatch(tasteTest, />YOUR READING TASTE<\/span>/);
+  assert.match(tasteTest, /className="taste-results"/);
+});
+
 test('guest Taste Test answers still migrate after authentication', async () => {
   const tasteTest = await readFile(
     new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url),

@@ -188,8 +188,8 @@ export function LumiScoreTasteTest({
             </div>
           </>
         ) : (
-          <div className="taste-result">
-            <span className="eyebrow">YOUR READING TASTE</span>
+          <div className="taste-results">
+            <span className="eyebrow">TASTE PROFILE</span>
             <h1 id="taste-test-title">Your reading taste</h1>
             <p className="taste-result-summary">{profile.summary}</p>
             <p className="taste-confidence">

@@ -5,7 +5,14 @@ import type { Book } from '../../app/data/books.ts';
 import { TASTE_TEST_WORK_IDS } from '../taste-test/config.ts';
 import { buildTasteProfile } from '../taste-test/profile.ts';
 import { tasteVector } from '../taste-test/traits.ts';
-import { calculateMatchConfidence, calculateQualityPrior, getMatchPresentation, recommendBooks, type RecommendationCandidate } from './engine.ts';
+import {
+  calculateDisplayedMatchScore,
+  calculateMatchConfidence,
+  calculateQualityPrior,
+  getMatchPresentation,
+  recommendBooks,
+  type RecommendationCandidate,
+} from './engine.ts';
 import { getTopTraitOverlaps } from './explanations.ts';
 
 function candidate(workId: string, title: string, author: string, traits: Parameters<typeof tasteVector>[0], score: number | null = null, ratingsCount = 0): RecommendationCandidate {
@@ -182,13 +189,37 @@ test('candidate and user evidence both influence match confidence', () => {
 test('only rich metadata plus sufficient user evidence receives an exact percentage', () => {
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: .84, candidateCoverage: 'rich', metadataConfidence: .9, userConfidence: 'MEDIUM',
-  }), { matchScore: 84, matchLabel: null, matchConfidence: 'medium' });
+  }), { matchScore: 86, matchLabel: null, matchConfidence: 'medium' });
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: .84, candidateCoverage: 'rich', metadataConfidence: .9, userConfidence: 'LOW',
   }), { matchScore: null, matchLabel: 'Strong match', matchConfidence: 'low' });
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: .84, candidateCoverage: 'partial', metadataConfidence: .7, userConfidence: 'HIGH',
   }), { matchScore: null, matchLabel: 'Strong match', matchConfidence: 'medium' });
+});
+
+test('display calibration lifts credible midrange matches without reaching 100', () => {
+  const mediumTopThree = [.55, .53, .51].map((personalSimilarity) =>
+    calculateDisplayedMatchScore({
+      personalSimilarity,
+      userConfidence: 'MEDIUM',
+    }));
+
+  assert.deepEqual(mediumTopThree, [70, 68, 67]);
+  assert.ok(mediumTopThree.every((score, index) =>
+    index === 0 || mediumTopThree[index - 1] >= score));
+  assert.equal(calculateDisplayedMatchScore({
+    personalSimilarity: .55,
+    userConfidence: 'HIGH',
+  }), 71);
+  assert.equal(calculateDisplayedMatchScore({
+    personalSimilarity: 1,
+    userConfidence: 'HIGH',
+  }), 96);
+  assert.equal(calculateDisplayedMatchScore({
+    personalSimilarity: 0,
+    userConfidence: 'HIGH',
+  }), 0);
 });
 
 test('partial metadata uses deterministic qualitative match thresholds', () => {
@@ -220,8 +251,38 @@ test('quality and exploration affect ranking but never inflate personal match', 
   });
   assert.equal(first.matchScore, second.matchScore);
   assert.notEqual(first.rankingScore, second.rankingScore);
-  assert.equal(first.matchScore, Math.round(first.personalMatch * 100));
+  assert.equal(first.matchScore, calculateDisplayedMatchScore({
+    personalSimilarity: first.personalMatch,
+    userConfidence: 'MEDIUM',
+  }));
   assert.notEqual(first.rankingScore, first.personalMatch);
+});
+
+test('displayed exact percentages remain monotonic after final ranking', () => {
+  const profile = {
+    ...duneProfile,
+    vector: tasteVector({ science_fiction: 1 }),
+    confidence: 'HIGH' as const,
+  };
+  const results = recommendBooks({
+    candidates: [
+      candidate('9300', 'Quality-supported match', 'A', {
+        science_fiction: .9,
+        romance: .4359,
+      }, 10, 100),
+      candidate('9301', 'Slightly closer match', 'B', {
+        science_fiction: .95,
+        romance: .3122,
+      }, 1, 100),
+    ],
+    profile,
+    ratedWorkIds: new Set(),
+    limit: 2,
+  });
+
+  assert.equal(results[0].book.workId, '9300');
+  assert.ok(results[0].personalMatch < results[1].personalMatch);
+  assert.ok(results[0].matchScore! >= results[1].matchScore!);
 });
 
 test('diversity reranking avoids filling the first results with one author', () => {

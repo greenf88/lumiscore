@@ -19,8 +19,8 @@ async function loadHomepageBooks() {
   }
 
   try {
-    const { loadHomepageCatalog } = await import('@/lib/supabase/books');
-    return await loadHomepageCatalog(18);
+    const { loadHighestRatedCatalog } = await import('@/lib/supabase/books');
+    return await loadHighestRatedCatalog(18);
   } catch {
     return { books, total: books.length };
   }
