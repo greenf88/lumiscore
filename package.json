@@ -17,7 +17,7 @@
     "test:catalog-search": "node --experimental-strip-types --test lib/books/catalog-search.test.ts",
     "test:book-detail": "node --experimental-strip-types --test lib/books/book-detail.test.ts",
     "test:descriptions": "node --experimental-strip-types --test lib/books/description-resolution.test.ts",
-    "test:ratings": "node --experimental-strip-types --test lib/ratings/*.test.ts lib/auth/request.test.ts",
+    "test:ratings": "node --experimental-strip-types --test lib/ratings/*.test.ts lib/auth/*.test.ts",
     "test:recommendations": "node --experimental-strip-types --test lib/recommendations/*.test.ts lib/taste-test/*.test.ts",
     "enrich:taste-traits": "node --env-file=.env.local --experimental-strip-types scripts/enrich-taste-traits.ts",
     "audit:open-library-covers": "node --env-file=.env.local --experimental-strip-types scripts/audit-open-library-covers.ts",

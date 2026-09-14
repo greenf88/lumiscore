@@ -27,7 +27,7 @@ async function loadHomepageBooks() {
 }
 
 export default async function Home() {
-  const [catalog, personalization] = await Promise.all([
+  const [catalog, personalization, authState] = await Promise.all([
     loadHomepageBooks(),
     import('@/lib/supabase/taste-test')
       .then(({ loadHomepagePersonalization }) =>
@@ -40,6 +40,9 @@ export default async function Home() {
         hasEvidence: false,
         recommendations: [],
       })),
+    import('@/lib/supabase/auth')
+      .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+      .catch(() => ({ authenticated: false })),
   ]);
 
   return (
@@ -50,6 +53,7 @@ export default async function Home() {
         categories: CATALOG_CATEGORY_COUNT,
       }}
       personalization={personalization}
+      authState={authState}
     />
   );
 }

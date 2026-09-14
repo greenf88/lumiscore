@@ -4,6 +4,10 @@ import Image from 'next/image';
 import { memo, useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import {
+  getHeaderAuthPresentation,
+  type HeaderAuthState,
+} from '@/lib/auth/header';
+import {
   getOpenLibraryCoverVariantUrl,
   isUsableCoverImageDimensions,
 } from '@/lib/books/covers';
@@ -195,8 +199,21 @@ export function ThemeToggle({ onToggle, labeled = false }: { onToggle: () => voi
   );
 }
 
-export function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle: () => void; query: string; onQueryChange: (value: string) => void }) {
+export function Header({
+  onThemeToggle,
+  query,
+  onQueryChange,
+  authState,
+  returnTo,
+}: {
+  onThemeToggle: () => void;
+  query: string;
+  onQueryChange: (value: string) => void;
+  authState: HeaderAuthState;
+  returnTo: string;
+}) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const auth = getHeaderAuthPresentation(authState, returnTo);
 
   return (
     <header className="site-header">
@@ -208,7 +225,23 @@ export function Header({ onThemeToggle, query, onQueryChange }: { onThemeToggle:
         <span className="nav-unavailable" aria-disabled="true" title="Reading lists are coming soon">My lists</span>
         <button className="mobile-search-button" type="button" aria-label="Open search" aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
-        <button className="avatar" type="button" aria-label="Reader profile is not available yet" title="Reader profile is coming soon" disabled>RG</button>
+        {auth.authenticated ? (
+          <details className="header-account">
+            <summary aria-label="Open account menu">
+              <span className="header-account-avatar" aria-hidden="true">A</span>
+              <span className="header-account-label">Account</span>
+            </summary>
+            <div className="header-account-panel">
+              <span>Signed in</span>
+              <form action="/auth/sign-out" method="post">
+                <input type="hidden" name="next" value={auth.returnTo} />
+                <button type="submit">Sign out</button>
+              </form>
+            </div>
+          </details>
+        ) : (
+          <a className="header-sign-in" href={auth.signInHref}>Sign in</a>
+        )}
       </nav>
       {mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
     </header>
@@ -431,7 +464,7 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number; categories: number };
 
-export function LumiScoreHome({ initialBooks, catalogStats, personalization }: { initialBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
+export function LumiScoreHome({ initialBooks, catalogStats, personalization, authState }: { initialBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -533,7 +566,7 @@ export function LumiScoreHome({ initialBooks, catalogStats, personalization }: {
 
   return (
     <main className="site-shell">
-      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} />
+      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} />
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />

@@ -11,12 +11,18 @@ export const metadata: Metadata = {
 };
 
 export default async function TasteTestPage() {
-  let books: Book[] = [];
-  try {
-    const { loadCatalogBooksByIds } = await import('@/lib/supabase/books');
-    books = await loadCatalogBooksByIds(TASTE_TEST_WORK_IDS);
-  } catch (error) {
-    console.error('Taste Test catalog load failed.', error);
-  }
-  return <LumiScoreTasteTest books={books} />;
+  const [books, initialAuthState] = await Promise.all([
+    import('@/lib/supabase/books')
+      .then(({ loadCatalogBooksByIds }) =>
+        loadCatalogBooksByIds(TASTE_TEST_WORK_IDS),
+      )
+      .catch((error): Book[] => {
+        console.error('Taste Test catalog load failed.', error);
+        return [];
+      }),
+    import('@/lib/supabase/auth')
+      .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+      .catch(() => ({ authenticated: false })),
+  ]);
+  return <LumiScoreTasteTest books={books} initialAuthState={initialAuthState} />;
 }

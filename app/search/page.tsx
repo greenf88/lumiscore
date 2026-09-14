@@ -33,6 +33,9 @@ export async function generateMetadata({
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = await readQuery(searchParams);
+  const authStatePromise = import('@/lib/supabase/auth')
+    .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+    .catch(() => ({ authenticated: false }));
   let results: Book[] = [];
   let searchFailed = false;
 
@@ -46,11 +49,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     }
   }
 
+  const authState = await authStatePromise;
+
   return (
     <LumiScoreSearchPage
       initialQuery={query}
       results={results}
       searchFailed={searchFailed}
+      authState={authState}
     />
   );
 }

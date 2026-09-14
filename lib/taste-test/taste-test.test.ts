@@ -110,8 +110,10 @@ test('user evidence confidence has friendly product copy without changing its in
 
 test('authenticated persistence uses the current Supabase user and own-row RLS', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
+  const auth = await readFile(new URL('../supabase/auth.ts', import.meta.url), 'utf8');
   const migration = await readFile(new URL('../../supabase/migrations/20260913150000_taste_test_responses.sql', import.meta.url), 'utf8');
-  assert.match(persistence, /auth\.getUser\(\)/);
+  assert.match(persistence, /getVerifiedServerUser\(\)/);
+  assert.match(auth, /client\.auth\.getUser\(\)/);
   assert.match(persistence, /from\('taste_test_responses'\)\.upsert/);
   assert.match(persistence, /user_id:\s*user\.id/);
   assert.match(migration, /using \(\(select auth\.uid\(\)\) = user_id\)/);
@@ -128,4 +130,25 @@ test('Taste Test stays in navigation and low-evidence users get a CTA', async ()
   assert.doesNotMatch(home, /matchScore === null\s*\?\s*'Early match'/);
   assert.doesNotMatch(tasteTest, /Confidence:\s*\{profile\.confidence\}/);
   assert.match(tasteTest, /getTasteProfileConfidenceCopy\(profile\.confidence\)/);
+});
+
+test('guest Taste Test answers still migrate after authentication', async () => {
+  const tasteTest = await readFile(
+    new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(
+    tasteTest,
+    /const merged = state\.authenticated \? \{ \.\.\.state\.answers, \.\.\.guestAnswers \} : guestAnswers;/,
+  );
+  assert.match(
+    tasteTest,
+    /state\.authenticated && state\.persistenceAvailable && Object\.keys\(guestAnswers\)\.length > 0/,
+  );
+  assert.match(tasteTest, /method: 'PUT'/);
+  assert.match(
+    tasteTest,
+    /localStorage\.removeItem\(TASTE_TEST_GUEST_STORAGE_KEY\)/,
+  );
 });

@@ -2,18 +2,21 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { Book } from '../data/books';
+import type { HeaderAuthState } from '@/lib/auth/header';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 
 type LumiScoreSearchPageProps = {
   initialQuery: string;
   results: Book[];
   searchFailed: boolean;
+  authState: HeaderAuthState;
 };
 
 export function LumiScoreSearchPage({
   initialQuery,
   results,
   searchFailed,
+  authState,
 }: LumiScoreSearchPageProps) {
   const [query, setQuery] = useState(initialQuery);
   const [wanted, setWanted] = useState<Set<string>>(new Set());
@@ -58,6 +61,8 @@ export function LumiScoreSearchPage({
         onThemeToggle={toggleTheme}
         query={query}
         onQueryChange={setQuery}
+        authState={authState}
+        returnTo={initialQuery ? `/search?q=${encodeURIComponent(initialQuery)}` : '/search'}
       />
       <section
         className="featured-section search-results-section"

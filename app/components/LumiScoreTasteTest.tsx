@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Book } from '../data/books';
+import type { HeaderAuthState } from '@/lib/auth/header';
 import {
   TASTE_TEST_QUESTIONS,
   type TasteTestAnswers,
@@ -32,7 +33,13 @@ function answerPayload(answers: TasteTestAnswers) {
   });
 }
 
-export function LumiScoreTasteTest({ books }: { books: Book[] }) {
+export function LumiScoreTasteTest({
+  books,
+  initialAuthState,
+}: {
+  books: Book[];
+  initialAuthState: HeaderAuthState;
+}) {
   const booksById = useMemo(
     () => new Map(books.flatMap((book) => book.workId ? [[book.workId, book] as const] : [])),
     [books],
@@ -41,7 +48,7 @@ export function LumiScoreTasteTest({ books }: { books: Book[] }) {
   const [answers, setAnswers] = useState<TasteTestAnswers>({});
   const [showResults, setShowResults] = useState(false);
   const [query, setQuery] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(initialAuthState.authenticated);
   const [saveStatus, setSaveStatus] = useState<'loading' | 'idle' | 'saving' | 'saved' | 'local' | 'error'>('loading');
   const question = TASTE_TEST_QUESTIONS[questionIndex];
   const leftBook = booksById.get(question.leftWorkId);
@@ -132,7 +139,7 @@ export function LumiScoreTasteTest({ books }: { books: Book[] }) {
   if (!leftBook || !rightBook) {
     return (
       <main className="site-shell taste-test-shell">
-        <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} />
+        <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} authState={{ authenticated }} returnTo="/taste-test" />
         <section className="taste-test-unavailable" role="status">
           <span className="eyebrow">TASTE TEST</span>
           <h1>The Taste Test is temporarily unavailable.</h1>
@@ -145,7 +152,7 @@ export function LumiScoreTasteTest({ books }: { books: Book[] }) {
 
   return (
     <main className="site-shell taste-test-shell">
-      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} />
+      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} authState={{ authenticated }} returnTo="/taste-test" />
       <section className="taste-test-page" aria-labelledby="taste-test-title">
         {!showResults ? (
           <>

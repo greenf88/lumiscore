@@ -1,4 +1,3 @@
-import type { User } from '@supabase/supabase-js';
 import type { Book } from '../../app/data/books.ts';
 import type { PersonalizedRecommendation, RecommendationCandidate } from '../recommendations/engine.ts';
 import { recommendBooks } from '../recommendations/engine.ts';
@@ -18,9 +17,10 @@ import {
 import { buildTasteProfile, type RatingEvidence } from '../taste-test/profile.ts';
 import { emptyTasteVector } from '../taste-test/traits.ts';
 import { applyRatingSummaries } from '../ratings/card-summaries.ts';
+import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
 import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
-import { createServerSupabaseClient } from './server.ts';
+import type { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 
 type ResponseRow = { question_key: string; choice: string };
@@ -67,15 +67,6 @@ function rowsToAnswers(rows: readonly ResponseRow[]): TasteTestAnswers {
     answers[question.key] = row.choice as TasteTestChoice;
   }
   return answers;
-}
-
-async function getVerifiedUser(): Promise<{
-  client: Awaited<ReturnType<typeof createServerSupabaseClient>>;
-  user: User | null;
-}> {
-  const client = await createServerSupabaseClient();
-  const { data, error } = await client.auth.getUser();
-  return { client, user: error ? null : data.user };
 }
 
 async function loadRecommendationCatalog(
@@ -138,7 +129,7 @@ async function loadRecommendationCatalog(
 }
 
 export async function loadTasteTestServerState(): Promise<TasteTestServerState> {
-  const { client, user } = await getVerifiedUser();
+  const { client, user } = await getVerifiedServerUser();
   if (!user) return { authenticated: false, answers: {}, ratingCount: 0, persistenceAvailable: true };
 
   const [responses, ratings] = await Promise.all([
@@ -157,7 +148,7 @@ export async function loadTasteTestServerState(): Promise<TasteTestServerState> 
 export async function saveTasteTestAnswers(
   answers: ReadonlyArray<{ questionKey: TasteTestQuestionKey; choice: TasteTestChoice }>,
 ): Promise<TasteTestServerState | null> {
-  const { client, user } = await getVerifiedUser();
+  const { client, user } = await getVerifiedServerUser();
   if (!user) return null;
   const now = new Date().toISOString();
   const { error } = await client.from('taste_test_responses').upsert(
@@ -176,7 +167,7 @@ export async function saveTasteTestAnswers(
 
 export async function loadHomepagePersonalization(): Promise<HomepagePersonalization> {
   try {
-    const { client, user } = await getVerifiedUser();
+    const { client, user } = await getVerifiedServerUser();
     if (!user) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
     const [responsesResult, ratingsResult, catalog] = await Promise.all([
