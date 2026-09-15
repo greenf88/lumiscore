@@ -6,6 +6,7 @@ import {
   normalizeVerifiedBookDescription,
   splitBookDescriptionParagraphs,
 } from '@/lib/books/description-text';
+import { useLumiScoreLocale } from './LumiScoreLocale';
 
 type LumiScoreBookDescriptionProps = {
   workId: string;
@@ -14,6 +15,7 @@ type LumiScoreBookDescriptionProps = {
 export function LumiScoreBookDescription({
   workId,
 }: LumiScoreBookDescriptionProps) {
+  const { t } = useLumiScoreLocale();
   const [description, setDescription] =
     useState<VerifiedBookDescription | null>(null);
   const [expanded, setExpanded] = useState(false);
@@ -52,7 +54,7 @@ export function LumiScoreBookDescription({
 
   return (
     <section className="book-description" aria-labelledby="book-description-heading">
-      <h2 id="book-description-heading">About this book</h2>
+      <h2 id="book-description-heading">{t('description.about')}</h2>
       <div id="book-description-content">
         {visibleParagraphs.map((paragraph, index) => (
           <p key={`${index}-${paragraph.slice(0, 32)}`}>{paragraph}</p>
@@ -66,7 +68,7 @@ export function LumiScoreBookDescription({
           aria-expanded={expanded}
           onClick={() => setExpanded((current) => !current)}
         >
-          {expanded ? 'Show less' : 'Read more'}
+          {expanded ? t('description.showLess') : t('description.readMore')}
         </button>
       )}
     </section>

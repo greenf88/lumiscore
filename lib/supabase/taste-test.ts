@@ -23,6 +23,7 @@ import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
 import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
 import type { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
+import type { Locale } from '../i18n/config.ts';
 
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
@@ -166,7 +167,7 @@ export async function saveTasteTestAnswers(
   return loadTasteTestServerState();
 }
 
-export async function loadHomepagePersonalization(): Promise<HomepagePersonalization> {
+export async function loadHomepagePersonalization(locale: Locale = 'en'): Promise<HomepagePersonalization> {
   try {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
@@ -197,6 +198,7 @@ export async function loadHomepagePersonalization(): Promise<HomepagePersonaliza
         profile,
         ratedWorkIds: new Set(ratedIds),
         excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
+        locale,
         limit: 10,
       })
       : [];

@@ -1,14 +1,16 @@
 import type { Book } from '@/app/data/books';
 import { normalizeIsbn13 } from './covers.ts';
+import type { Locale } from '../i18n/config.ts';
+import { translate } from '../i18n/translations.ts';
 
 export function isCatalogWorkId(value: string): boolean {
   return /^[1-9]\d*$/.test(value);
 }
 
-export function getCatalogSourceLabel(book: Book): string {
+export function getCatalogSourceLabel(book: Book, locale: Locale = 'en'): string {
   return book.sourceType === 'lumiscore_native' || !book.openLibraryWorkId
-    ? 'LumiScore catalog'
-    : 'Open Library catalog';
+    ? translate(locale, 'detail.lumiscoreCatalog')
+    : translate(locale, 'detail.openLibraryCatalog');
 }
 
 export function getBookMetadataDescription(book: Book): string {

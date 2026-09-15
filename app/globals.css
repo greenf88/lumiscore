@@ -92,6 +92,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .header-account-panel { position: absolute; z-index: 30; top: calc(100% + 8px); right: 0; width: 170px; padding: 14px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-raised); box-shadow: var(--panel-shadow); }
 .header-account-panel > span { display: block; margin-bottom: 10px; color: var(--muted); font-size: 10px; }
 .header-account-panel button { width: 100%; min-height: 44px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); cursor: pointer; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.language-switcher { display: inline-flex; flex: 0 0 auto; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
+.language-switcher button { min-width: 30px; min-height: 36px; border: 0; padding: 0 7px; background: transparent; color: var(--muted); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: .06em; }
+.language-switcher button + button { border-left: 1px solid var(--border); }
+.language-switcher button[aria-pressed='true'] { background: var(--surface); color: var(--gold); }
 .theme-toggle { display: inline-flex; gap: 5px; align-items: center; padding: 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
 .theme-sun, .theme-moon { font-size: 14px; line-height: 1; }
 .theme-track { position: relative; width: 34px; height: 18px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); }
@@ -364,6 +368,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 @media (max-width: 1040px) {
   .site-header { grid-template-columns: auto 1fr auto; padding-inline: 24px; }
   .main-nav > a:not(.taste-test-nav-link):not(.header-sign-in), .main-nav > .nav-unavailable { display: none; }
+  .language-switcher button { min-height: 44px; }
   .hero-inner { grid-template-columns: 1fr 390px; gap: 38px; padding-inline: 0; }
   .hero-copy h1 { font-size: clamp(54px, 7vw, 74px); }
   .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
@@ -402,8 +407,11 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 @media (max-width: 560px) {
   .site-header { gap: 8px; padding-inline: 17px; }
   .wordmark { min-height: 44px; font-size: 19px; }
+  .site-header .wordmark > span:last-child { display: none; }
   .logo-mark { width: 25px; height: 25px; }
-  .main-nav { min-width: 0; gap: 6px; }
+  .main-nav { min-width: 0; gap: 4px; }
+  .main-nav > .taste-test-nav-link, .header-sign-in { font-size: 9px; }
+  .site-header .language-switcher button { min-width: 26px; padding-inline: 4px; }
   .theme-sun, .theme-moon { display: none; }
   .header-account-label { display: none; }
   .header-account summary, .mobile-search-button { width: 40px; height: 44px; justify-content: center; }
@@ -451,6 +459,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .detail-header .theme-toggle-labeled { padding: 8px; }
   .detail-header .toggle-label { display: none; }
   .detail-header-actions { gap: 10px; }
+  .detail-header .language-switcher button { min-height: 44px; }
   .detail-taste-test-link { font-size: 9px; }
   .detail-account span { display: none; }
   .book-detail { min-height: auto; width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; padding: 42px 0 64px; }

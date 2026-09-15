@@ -3,6 +3,7 @@ import type { TasteProfile } from '../taste-test/profile.ts';
 import { cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts';
 import { buildRecommendationExplanation } from './explanations.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
+import type { Locale } from '../i18n/config.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
 export type MatchLabel = 'Strong match' | 'Good match' | 'Possible match' | 'Early match';
@@ -115,6 +116,7 @@ export function recommendBooks(input: {
   ratedWorkIds: ReadonlySet<string>;
   excludedWorkIds?: ReadonlySet<string>;
   limit?: number;
+  locale?: Locale;
 }): RankedRecommendation[] {
   const limit = Math.max(1, Math.trunc(input.limit ?? 10));
   const remaining: ScoredCandidate[] = input.candidates
@@ -147,6 +149,7 @@ export function recommendBooks(input: {
           workId: book.workId!,
           coverageLevel,
           metadataConfidence,
+          locale: input.locale,
         }),
       };
     });

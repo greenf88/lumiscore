@@ -1,3 +1,5 @@
+import type { Locale } from '../i18n/config.ts';
+
 export const TASTE_TRAITS = [
   'fantasy', 'science_fiction', 'speculative', 'literary', 'romance',
   'thriller_mystery', 'nonfiction', 'classic', 'contemporary', 'dark',
@@ -18,6 +20,21 @@ export const TRAIT_LABELS: Record<TasteTrait, string> = {
   character_driven: 'character-focused stories', idea_driven: 'thought-provoking ideas',
   accessible: 'accessible storytelling', complex: 'complex narratives',
 };
+
+export const DUTCH_TRAIT_LABELS: Record<TasteTrait, string> = {
+  fantasy: 'fantasy', science_fiction: 'sciencefiction', speculative: 'speculatieve ideeën',
+  literary: 'literaire stijl', romance: 'verhalen over relaties',
+  thriller_mystery: 'spannende verhalen', nonfiction: 'non-fictie',
+  classic: 'klassieke literatuur', contemporary: 'hedendaagse verhalen',
+  dark: 'donkere verhalen', uplifting: 'hoopvolle verhalen', fast_paced: 'verhalen met tempo',
+  slow_burn: 'verhalen die rustig opbouwen', worldbuilding: 'meeslepende werelden',
+  character_driven: 'karaktergedreven verhalen', idea_driven: 'verhalen die tot nadenken stemmen',
+  accessible: 'toegankelijke vertelstijl', complex: 'complexe verhalen',
+};
+
+export function getTraitLabel(locale: Locale, trait: TasteTrait): string {
+  return locale === 'nl' ? DUTCH_TRAIT_LABELS[trait] : TRAIT_LABELS[trait];
+}
 
 export function emptyTasteVector(): TasteVector {
   return Object.fromEntries(TASTE_TRAITS.map((trait) => [trait, 0])) as TasteVector;

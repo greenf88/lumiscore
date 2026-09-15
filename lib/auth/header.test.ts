@@ -34,11 +34,12 @@ test('shared header renders accessible logged-out and logged-in controls', async
     'utf8',
   );
 
-  assert.match(source, /className="header-sign-in"[^>]+>Sign in<\/a>/);
+  assert.match(source, /className="header-sign-in"[^>]+>\{t\('header\.signIn'\)\}<\/a>/);
   assert.match(source, /<details className="header-account">/);
-  assert.match(source, /<summary aria-label="Open account menu">/);
+  assert.match(source, /<summary aria-label=\{t\('header\.openAccount'\)\}>/);
   assert.match(source, /action="\/auth\/sign-out" method="post"/);
-  assert.match(source, /<button type="submit">Sign out<\/button>/);
+  assert.match(source, /<button type="submit">\{t\('header\.signOut'\)\}<\/button>/);
+  assert.match(source, /<LanguageSwitcher \/>/);
   assert.doesNotMatch(source, /className="avatar"[^>]+disabled/);
 });
 

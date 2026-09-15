@@ -1,5 +1,8 @@
 import { TASTE_TEST_ANCHORS, TASTE_TEST_QUESTIONS, type TasteTestAnswers } from './config.ts';
-import { TRAIT_LABELS, TASTE_TRAITS, emptyTasteVector, normalizeTasteVector, tasteVector, type TasteTrait, type TasteVector } from './traits.ts';
+import type { Locale } from '../i18n/config.ts';
+import { formatLocalizedList } from '../i18n/format.ts';
+import { translate } from '../i18n/translations.ts';
+import { TASTE_TRAITS, emptyTasteVector, getTraitLabel, normalizeTasteVector, tasteVector, type TasteTrait, type TasteVector } from './traits.ts';
 
 export type RatingEvidence = { rating: number; traits: TasteVector; workId: string };
 export type TasteEvidenceBlend = { tasteTest: number; ratings: number };
@@ -14,28 +17,15 @@ export type TasteProfileConfidenceCopy = {
   description: string;
 };
 
-const TASTE_PROFILE_CONFIDENCE_COPY: Record<
-  TasteProfile['confidence'],
-  TasteProfileConfidenceCopy
-> = {
-  LOW: {
-    label: 'Early profile',
-    description: "We're still learning your taste.",
-  },
-  MEDIUM: {
-    label: 'Good profile',
-    description: "We've got a good first read on your taste.",
-  },
-  HIGH: {
-    label: 'Strong profile',
-    description: 'We know your reading taste well.',
-  },
-};
-
 export function getTasteProfileConfidenceCopy(
   confidence: TasteProfile['confidence'],
+  locale: Locale = 'en',
 ): TasteProfileConfidenceCopy {
-  return TASTE_PROFILE_CONFIDENCE_COPY[confidence];
+  const level = confidence.toLowerCase() as 'low' | 'medium' | 'high';
+  return {
+    label: translate(locale, `taste.confidence.${level}.label`),
+    description: translate(locale, `taste.confidence.${level}.description`),
+  };
 }
 
 export function getTasteEvidenceBlend(ratingCount: number): TasteEvidenceBlend {
@@ -79,12 +69,13 @@ function calculateRatingsVector(ratings: readonly RatingEvidence[]) {
 
 function hasEvidence(vector: TasteVector) { return TASTE_TRAITS.some((trait) => vector[trait] !== 0); }
 
-function summarizeTaste(vector: TasteVector): string {
+function summarizeTaste(vector: TasteVector, locale: Locale): string {
   const labels = TASTE_TRAITS.filter((trait) => vector[trait] > 0)
-    .sort((left, right) => vector[right] - vector[left]).slice(0, 3).map((trait) => TRAIT_LABELS[trait]);
-  if (labels.length === 0) return 'Your choices leave room to explore across different kinds of books.';
-  const list = labels.length === 1 ? labels[0] : `${labels.slice(0, -1).join(', ')} and ${labels.at(-1)}`;
-  return `You gravitate toward ${list}.`;
+    .sort((left, right) => vector[right] - vector[left]).slice(0, 3).map((trait) => getTraitLabel(locale, trait));
+  if (labels.length === 0) return translate(locale, 'taste.emptySummary');
+  return translate(locale, 'taste.summary', {
+    traits: formatLocalizedList(locale, labels),
+  });
 }
 
 export function calculateUserEvidenceConfidence(
@@ -104,7 +95,11 @@ export function calculateUserEvidenceConfidence(
   return 'LOW';
 }
 
-export function buildTasteProfile(answers: TasteTestAnswers, ratings: readonly RatingEvidence[]): TasteProfile {
+export function buildTasteProfile(
+  answers: TasteTestAnswers,
+  ratings: readonly RatingEvidence[],
+  locale: Locale = 'en',
+): TasteProfile {
   const tasteTest = calculateTasteTestVector(answers);
   const ratingEvidence = calculateRatingsVector(ratings);
   const configuredBlend = getTasteEvidenceBlend(ratings.length);
@@ -120,7 +115,7 @@ export function buildTasteProfile(answers: TasteTestAnswers, ratings: readonly R
     answeredCount: tasteTest.answeredCount, selectedCount: tasteTest.selectedCount,
     ratingCount: ratings.length, meaningfulRatingCount: ratingEvidence.meaningfulRatingCount,
     confidence: calculateUserEvidenceConfidence(tasteTest.answeredCount, tasteTest.selectedCount, ratingEvidence.meaningfulRatingCount),
-    summary: summarizeTaste(vector),
+    summary: summarizeTaste(vector, locale),
   };
 }
 

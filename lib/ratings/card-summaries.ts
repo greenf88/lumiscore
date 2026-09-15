@@ -1,5 +1,7 @@
 import type { Book } from '@/app/data/books';
 import { formatRatingCount } from './model.ts';
+import type { Locale } from '../i18n/config.ts';
+import { translate } from '../i18n/translations.ts';
 
 export type PublicRatingSummaryRow = {
   work_id?: number | string | null;
@@ -15,14 +17,15 @@ export type PublicRatingSummary = {
 export function formatPublicRatingDisplay(
   lumiscore: number | null,
   ratingCount: number,
+  locale: Locale = 'en',
 ): { score: string; count: string } {
   if (lumiscore === null || ratingCount < 1) {
-    return { score: '—', count: 'Not rated yet' };
+    return { score: '—', count: translate(locale, 'common.notRated') };
   }
 
   return {
     score: lumiscore.toFixed(1),
-    count: formatRatingCount(ratingCount),
+    count: formatRatingCount(ratingCount, locale),
   };
 }
 

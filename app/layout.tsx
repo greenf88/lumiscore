@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
+import { resolveRequestLocale } from '@/lib/i18n/server';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -31,15 +33,24 @@ const themeScript = `
   } catch (_) {}
 `;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { locale, hasPersistedChoice } = await resolveRequestLocale();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <LumiScoreLocaleProvider
+          initialLocale={locale}
+          hasPersistedChoice={hasPersistedChoice}
+        >
+          {children}
+        </LumiScoreLocaleProvider>
+      </body>
     </html>
   );
 }

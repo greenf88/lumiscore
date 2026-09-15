@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { LumiScoreLogin } from '@/app/components/LumiScoreLogin';
 import { getSafeNextPath } from '@/lib/auth/request';
+import { resolveRequestLocale } from '@/lib/i18n/server';
+import { translate, type TranslationKey } from '@/lib/i18n/translations';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,14 +19,17 @@ type LoginPageProps = {
   }>;
 };
 
-const errorMessages: Record<string, string> = {
-  invalid_credentials: 'The email or password was not accepted.',
-  signup_failed: 'Your account could not be created. Check your details and try again.',
-  confirmation_failed: 'That confirmation link is invalid or has expired.',
+const errorMessages: Record<string, TranslationKey> = {
+  invalid_credentials: 'auth.invalidCredentials',
+  signup_failed: 'auth.signupFailed',
+  confirmation_failed: 'auth.confirmationFailed',
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const params = await searchParams;
+  const [params, { locale }] = await Promise.all([
+    searchParams,
+    resolveRequestLocale(),
+  ]);
   const errorKey = Array.isArray(params.error) ? params.error[0] : params.error;
   const messageKey = Array.isArray(params.message)
     ? params.message[0]
@@ -34,10 +39,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <LumiScoreLogin
       next={getSafeNextPath(requestedNext)}
-      error={errorKey ? errorMessages[errorKey] ?? 'Authentication failed.' : null}
+      error={errorKey ? translate(locale, errorMessages[errorKey] ?? 'auth.failed') : null}
       message={
         messageKey === 'check_email'
-          ? 'Check your email to confirm your account, then return to LumiScore.'
+          ? translate(locale, 'auth.checkEmail')
           : null
       }
     />

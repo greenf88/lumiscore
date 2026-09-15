@@ -5,6 +5,7 @@ import {
   readServerEnvironment,
 } from '@/lib/server-environment';
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
+import { resolveRequestLocale } from '@/lib/i18n/server';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
@@ -27,11 +28,12 @@ async function loadHomepageBooks() {
 }
 
 export default async function Home() {
+  const { locale } = await resolveRequestLocale();
   const [catalog, personalization, authState] = await Promise.all([
     loadHomepageBooks(),
     import('@/lib/supabase/taste-test')
       .then(({ loadHomepagePersonalization }) =>
-        loadHomepagePersonalization(),
+        loadHomepagePersonalization(locale),
       )
       .catch((): HomepagePersonalization => ({
         authenticated: false,

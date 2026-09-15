@@ -1,8 +1,11 @@
 import {
   TASTE_TRAITS,
+  getTraitLabel,
   type TasteTrait,
   type TasteVector,
 } from '../taste-test/traits.ts';
+import type { Locale } from '../i18n/config.ts';
+import { formatLocalizedList } from '../i18n/format.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
 
 export type TraitOverlap = {
@@ -12,43 +15,32 @@ export type TraitOverlap = {
 };
 
 const MIN_EXPLANATION_CONTRIBUTION = 0.02;
-const EXPLANATION_TRAIT_LABELS: Record<TasteTrait, string> = {
-  fantasy: 'fantasy',
-  science_fiction: 'science fiction',
-  speculative: 'speculative ideas',
-  literary: 'literary writing',
-  romance: 'relationship-driven stories',
-  thriller_mystery: 'suspenseful stories',
-  nonfiction: 'nonfiction',
-  classic: 'classic literature',
-  contemporary: 'contemporary stories',
-  dark: 'darker stories',
-  uplifting: 'hopeful stories',
-  fast_paced: 'fast-paced plots',
-  slow_burn: 'slow-burn storytelling',
-  worldbuilding: 'immersive worlds',
-  character_driven: 'character-focused stories',
-  idea_driven: 'thought-provoking ideas',
-  accessible: 'accessible storytelling',
-  complex: 'complex narratives',
+const EXPLANATION_TEMPLATES: Record<Locale, ReadonlyArray<(traits: string) => string>> = {
+  en: [
+    (traits) => `Because you like ${traits}.`,
+    (traits) => `Matches your preference for ${traits}.`,
+    (traits) => `Chosen for your interest in ${traits}.`,
+    (traits) => `Connects with your taste in ${traits}.`,
+  ],
+  nl: [
+    (traits) => `Omdat je houdt van ${traits}.`,
+    (traits) => `Past bij jouw voorkeur voor ${traits}.`,
+    (traits) => `Gekozen vanwege jouw interesse in ${traits}.`,
+    (traits) => `Sluit aan bij jouw smaak voor ${traits}.`,
+  ],
 };
-const EXPLANATION_TEMPLATES = [
-  (traits: string) => `Because you like ${traits}.`,
-  (traits: string) => `Matches your preference for ${traits}.`,
-  (traits: string) => `Chosen for your interest in ${traits}.`,
-  (traits: string) => `Connects with your taste in ${traits}.`,
-] as const;
 
 export function getTopTraitOverlaps(
   profile: TasteVector,
   candidate: TasteVector,
   limit = 3,
+  locale: Locale = 'en',
 ): TraitOverlap[] {
   const safeLimit = Math.max(0, Math.trunc(limit));
   return TASTE_TRAITS.flatMap((trait) => {
     const contribution = profile[trait] * candidate[trait];
     return contribution > 0
-      ? [{ trait, label: EXPLANATION_TRAIT_LABELS[trait], contribution }]
+      ? [{ trait, label: getTraitLabel(locale, trait), contribution }]
       : [];
   })
     .sort((left, right) =>
@@ -58,18 +50,12 @@ export function getTopTraitOverlaps(
     .slice(0, safeLimit);
 }
 
-function formatTraitList(labels: readonly string[]): string {
-  if (labels.length === 1) return labels[0];
-  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
-  return `${labels.slice(0, -1).join(', ')}, and ${labels.at(-1)}`;
-}
-
 function deterministicTemplateIndex(workId: string): number {
   let hash = 0;
   for (const character of workId) {
     hash = (Math.imul(hash, 31) + character.charCodeAt(0)) | 0;
   }
-  return Math.abs(hash) % EXPLANATION_TEMPLATES.length;
+  return Math.abs(hash) % EXPLANATION_TEMPLATES.en.length;
 }
 
 export function buildRecommendationExplanation(input: {
@@ -78,17 +64,19 @@ export function buildRecommendationExplanation(input: {
   workId: string;
   coverageLevel: WorkTraitCoverageLevel;
   metadataConfidence: number;
+  locale?: Locale;
 }): string {
   if (
     (input.coverageLevel !== 'rich' && input.coverageLevel !== 'partial') ||
     input.metadataConfidence < 0.6
   ) return '';
 
-  const overlaps = getTopTraitOverlaps(input.profile, input.candidate).filter(
+  const locale = input.locale ?? 'en';
+  const overlaps = getTopTraitOverlaps(input.profile, input.candidate, 3, locale).filter(
     ({ contribution }) => contribution >= MIN_EXPLANATION_CONTRIBUTION,
   );
   if (overlaps.length === 0) return '';
 
-  const traits = formatTraitList(overlaps.map(({ label }) => label));
-  return EXPLANATION_TEMPLATES[deterministicTemplateIndex(input.workId)](traits);
+  const traits = formatLocalizedList(locale, overlaps.map(({ label }) => label));
+  return EXPLANATION_TEMPLATES[locale][deterministicTemplateIndex(input.workId)](traits);
 }

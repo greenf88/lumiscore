@@ -1,3 +1,6 @@
+import type { Locale } from '../i18n/config.ts';
+import { formatLocalizedCount } from '../i18n/format.ts';
+
 export const MIN_RATING = 1;
 export const MAX_RATING = 10;
 
@@ -38,6 +41,6 @@ export function calculateRatingSummary(ratings: readonly number[]): {
   };
 }
 
-export function formatRatingCount(count: number): string {
-  return `${count.toLocaleString('en-US')} ${count === 1 ? 'rating' : 'ratings'}`;
+export function formatRatingCount(count: number, locale: Locale = 'en'): string {
+  return formatLocalizedCount(locale, count, 'common.rating', 'common.ratings');
 }

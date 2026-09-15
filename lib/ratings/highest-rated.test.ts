@@ -49,7 +49,7 @@ test('homepage uses the global aggregate ranking and Highest rated label', async
   ]);
 
   assert.match(page, /loadHighestRatedCatalog\(18\)/);
-  assert.match(home, /'Highest rated'/);
+  assert.match(home, /t\('home\.highestRated'\)/);
   assert.doesNotMatch(home, /Featured today/);
   assert.match(catalog, /loadPublicRatingSummariesBatched/);
   assert.match(catalog, /rankHighestRatedWorks/);

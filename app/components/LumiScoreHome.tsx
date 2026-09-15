@@ -24,6 +24,10 @@ import {
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import type { PersonalizedRecommendation } from '@/lib/recommendations/engine';
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
+import type { Locale } from '@/lib/i18n/config';
+import { formatLocalizedCount } from '@/lib/i18n/format';
+import { translate } from '@/lib/i18n/translations';
+import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 
 const resolvedCoverCache = new Map<
@@ -94,6 +98,7 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
 type BookCoverProps = { book: Book; small?: boolean; label?: string };
 
 function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
+  const { t } = useLumiScoreLocale();
   const [coverUrls, setCoverUrls] = useState(() =>
     getInitialBookCoverUrls(book),
   );
@@ -130,7 +135,7 @@ function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
       aria-label={label}
       aria-hidden={label ? undefined : true}
     >
-      <span className="cover-kicker">Lumi edition</span>
+      <span className="cover-kicker">{t('common.lumiEdition')}</span>
       <span className="cover-title">{book.title}</span>
       <span className="cover-mark">✦</span>
       <span className="cover-author">{book.author}</span>
@@ -177,21 +182,23 @@ export const BookCover = memo(function BookCover(props: BookCoverProps) {
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   const inputId = useId();
+  const { t } = useLumiScoreLocale();
 
   return (
     <form className={`search-bar${mobile ? ' search-bar-mobile' : ''}`} action="/search" method="get" role="search">
-      <label className="sr-only" htmlFor={inputId}>Search books or authors</label>
+      <label className="sr-only" htmlFor={inputId}>{t('header.search')}</label>
       <span className="search-icon" aria-hidden="true" />
-      <input id={inputId} name="q" value={query} onChange={(event) => onChange(event.target.value)} placeholder="Search books or authors" />
+      <input id={inputId} name="q" value={query} onChange={(event) => onChange(event.target.value)} placeholder={t('header.search')} />
       {!mobile && <kbd>⌘ K</kbd>}
     </form>
   );
 }
 
 export function ThemeToggle({ onToggle, labeled = false }: { onToggle: () => void; labeled?: boolean }) {
+  const { t } = useLumiScoreLocale();
   return (
-    <button className={`theme-toggle${labeled ? ' theme-toggle-labeled' : ''}`} type="button" onClick={onToggle} aria-label="Toggle Ink and Paper theme">
-      {labeled && <><span className="toggle-label toggle-label-ink">Ink</span><span className="toggle-label toggle-label-paper">Paper</span></>}
+    <button className={`theme-toggle${labeled ? ' theme-toggle-labeled' : ''}`} type="button" onClick={onToggle} aria-label={t('theme.toggle')}>
+      {labeled && <><span className="toggle-label toggle-label-ink">{t('theme.ink')}</span><span className="toggle-label toggle-label-paper">{t('theme.paper')}</span></>}
       <span className="theme-sun" aria-hidden="true">☼</span>
       <span className="theme-track"><span className="theme-thumb" /></span>
       <span className="theme-moon" aria-hidden="true">☾</span>
@@ -214,33 +221,35 @@ export function Header({
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const auth = getHeaderAuthPresentation(authState, returnTo);
+  const { t } = useLumiScoreLocale();
 
   return (
     <header className="site-header">
       <LumiScoreWordmark />
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
-      <nav className="main-nav" aria-label="Main navigation">
-        <a href="/#discover">Discover</a>
-        <a className="taste-test-nav-link" href="/taste-test">Taste Test</a>
-        <span className="nav-unavailable" aria-disabled="true" title="Reading lists are coming soon">My lists</span>
-        <button className="mobile-search-button" type="button" aria-label="Open search" aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
+      <nav className="main-nav" aria-label={t('header.mainNavigation')}>
+        <a href="/#discover">{t('header.discover')}</a>
+        <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
+        <span className="nav-unavailable" aria-disabled="true" title={t('header.listsUnavailable')}>{t('header.myLists')}</span>
+        <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
+        <LanguageSwitcher />
         {auth.authenticated ? (
           <details className="header-account">
-            <summary aria-label="Open account menu">
+            <summary aria-label={t('header.openAccount')}>
               <span className="header-account-avatar" aria-hidden="true">A</span>
-              <span className="header-account-label">Account</span>
+              <span className="header-account-label">{t('header.account')}</span>
             </summary>
             <div className="header-account-panel">
-              <span>Signed in</span>
+              <span>{t('header.signedIn')}</span>
               <form action="/auth/sign-out" method="post">
                 <input type="hidden" name="next" value={auth.returnTo} />
-                <button type="submit">Sign out</button>
+                <button type="submit">{t('header.signOut')}</button>
               </form>
             </div>
           </details>
         ) : (
-          <a className="header-sign-in" href={auth.signInHref}>Sign in</a>
+          <a className="header-sign-in" href={auth.signInHref}>{t('header.signIn')}</a>
         )}
       </nav>
       {mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
@@ -249,14 +258,16 @@ export function Header({
 }
 
 const RecommendationRow = memo(function RecommendationRow({ book, recommendation }: { book: Book; recommendation?: PersonalizedRecommendation }) {
+  const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(
     score,
     book.ratingsCount ?? 0,
+    locale,
   );
   const ratingStatus =
     book.source === 'demo' && score !== null && (book.ratingsCount ?? 0) > 0
-      ? formatCardRatingCount(book)
+      ? formatCardRatingCount(book, locale)
       : ratingDisplay.count;
   const href = getBookHref(book);
   const content = (
@@ -267,8 +278,16 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
         <span>{book.author}</span>
         <span className="match-line"><i /> {recommendation
           ? recommendation.matchScore !== null
-            ? `Your Match ${recommendation.matchScore}%`
-            : recommendation.matchLabel
+            ? `${t('home.yourMatch')} ${recommendation.matchScore}%`
+            : recommendation.matchLabel === 'Strong match'
+              ? t('match.strong')
+              : recommendation.matchLabel === 'Good match'
+                ? t('match.good')
+                : recommendation.matchLabel === 'Possible match'
+                  ? t('match.possible')
+                  : recommendation.matchLabel === 'Early match'
+                    ? t('match.early')
+                    : ''
           : ratingStatus}</span>
         {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
       </span>
@@ -284,6 +303,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
 });
 
 const RecommendationPanel = memo(function RecommendationPanel({ books, personalization }: { books: Book[]; personalization: HomepagePersonalization }) {
+  const { t } = useLumiScoreLocale();
   const personalized = personalization.hasEvidence
     ? personalization.recommendations.slice(0, 3)
     : [];
@@ -294,13 +314,13 @@ const RecommendationPanel = memo(function RecommendationPanel({ books, personali
   return (
     <aside className="recommendation-panel" aria-labelledby="up-next-title">
       <div className="panel-heading">
-        <div><span className="eyebrow">{personalized.length ? 'CURATED FOR YOUR TASTE' : 'READER DISCOVERIES'}</span><h2 id="up-next-title">{personalized.length ? 'Up next for you' : 'Popular with readers'}</h2></div>
-        <button type="button" aria-label="More recommendations are not available yet" title="More recommendations are coming soon" disabled>↻</button>
+        <div><span className="eyebrow">{personalized.length ? t('home.recommendationsCurated') : t('home.readerDiscoveries')}</span><h2 id="up-next-title">{personalized.length ? t('home.upNext') : t('home.popular')}</h2></div>
+        <button type="button" aria-label={t('home.moreUnavailable')} title={t('home.moreComing')} disabled>↻</button>
       </div>
       {showTasteTestCta && (
         <a className="taste-test-cta" href="/taste-test">
-          <strong>Improve your recommendations</strong>
-          <span>Take the 2-minute Taste Test</span>
+          <strong>{t('home.improveRecommendations')}</strong>
+          <span>{t('home.takeTasteTest')}</span>
         </a>
       )}
       <div className="recommendation-list">
@@ -308,31 +328,32 @@ const RecommendationPanel = memo(function RecommendationPanel({ books, personali
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : curated.map((book) => <RecommendationRow key={book.id} book={book} />)}
       </div>
-      <a className="view-all" href="#discover">Browse all books <span>→</span></a>
+      <a className="view-all" href="#discover">{t('home.browseAll')} <span>→</span></a>
     </aside>
   );
 });
 
 const Hero = memo(function Hero({ books, catalogStats, personalization }: { books: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
+  const { locale, t } = useLumiScoreLocale();
   return (
     <section className="hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
       <div className="hero-wash" aria-hidden="true" />
       <div className="hero-inner">
         <div className="hero-copy">
-          <span className="eyebrow hero-eyebrow"><i /> YOUR NEXT FIVE-STAR READ</span>
-          <h1>Find your next<br /><em>great read</em></h1>
-          <p className="hero-primary">Smart recommendations. Real reader matches.</p>
-          <p className="hero-paper-copy">LumiScore analyzes millions of reader ratings to help you discover books you&apos;ll truly love.</p>
-          <a className="primary-cta" href="#discover">Find your next book <span>→</span></a>
+          <span className="eyebrow hero-eyebrow"><i /> {t('home.nextFiveStar')}</span>
+          <h1>{t('home.heroStart')}<br /><em>{t('home.heroEmphasis')}</em></h1>
+          <p className="hero-primary">{t('home.heroPrimary')}</p>
+          <p className="hero-paper-copy">{t('home.heroCopy')}</p>
+          <a className="primary-cta" href="#discover">{t('home.findNext')} <span>→</span></a>
           <div className="paper-features">
-            <div><i>✦</i><span><strong>Smart recommendations</strong><small>Personalized for you</small></span></div>
-            <div><i>✓</i><span><strong>Trusted by readers</strong><small>Real ratings. Real matches.</small></span></div>
+            <div><i>✦</i><span><strong>{t('home.smartRecommendations')}</strong><small>{t('home.personalizedForYou')}</small></span></div>
+            <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
           </div>
-          <a className="learn-link" href="#how-it-works">New here? Learn how LumiScore works <span>→</span></a>
+          <a className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></a>
           <dl className="hero-stats">
-            <div><dt>{catalogStats.books.toLocaleString('en-US')}</dt><dd>Curated books</dd></div>
-            <div><dt>{catalogStats.categories}</dt><dd>Categories</dd></div>
+            <div><dt>{catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
+            <div><dt>{catalogStats.categories}</dt><dd>{t('home.categories')}</dd></div>
           </dl>
         </div>
         <RecommendationPanel books={books} personalization={personalization} />
@@ -341,20 +362,24 @@ const Hero = memo(function Hero({ books, catalogStats, personalization }: { book
   );
 });
 
-function formatRatings(count: number) {
-  return count >= 1000 ? `${Math.round(count / 1000)}k ratings` : `${count} ratings`;
+function formatRatings(count: number, locale: Locale) {
+  if (count < 1000) {
+    return formatLocalizedCount(locale, count, 'common.rating', 'common.ratings');
+  }
+  return `${Math.round(count / 1000)}k ${translate(locale, 'common.ratings')}`;
 }
 
-function formatCardRatingCount(book: Book): string {
+function formatCardRatingCount(book: Book, locale: Locale): string {
   const count = book.ratingsCount ?? 0;
   return book.source === 'demo'
-    ? formatRatings(count)
-    : formatPublicRatingDisplay(book.score, count).count;
+    ? formatRatings(count, locale)
+    : formatPublicRatingDisplay(book.score, count, locale).count;
 }
 
 export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
+  const { locale, t } = useLumiScoreLocale();
   const score = book.score;
-  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0);
+  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
   const hasRatings = ratingDisplay.score !== '—';
   const href = getBookHref(book);
   const bookContent = (
@@ -364,11 +389,11 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
         <BookCover book={book} />
       </div>
       <div className="book-card-body">
-        <span className="book-genre">{book.genre ?? (book.firstPublishYear ? `First published ${book.firstPublishYear}` : 'Publication year unavailable')}</span>
+        <span className="book-genre">{book.genre ?? (book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable'))}</span>
         <h3>{book.title}</h3>
         <p>{book.author}</p>
         <div className="book-meta">
-          <span>{hasRatings ? formatCardRatingCount(book) : 'Not rated yet'}</span>
+          <span>{hasRatings ? formatCardRatingCount(book, locale) : t('common.notRated')}</span>
         </div>
       </div>
     </>
@@ -382,14 +407,14 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
         <a
           className="book-card-main-link"
           href={href}
-          aria-label={`View ${book.title} by ${book.author}`}
+          aria-label={t('home.viewBook', { title: book.title, author: book.author })}
         >
           {bookContent}
         </a>
       ) : bookContent}
       <div className="book-card-action">
         <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book.id)} aria-pressed={wanted}>
-          <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{wanted ? 'Want to read' : 'Want to read'}
+          <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{t('home.wantToRead')}
         </button>
       </div>
     </article>
@@ -399,6 +424,7 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
 type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
 
 function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (id: string) => void }) {
+  const { locale, t } = useLumiScoreLocale();
   const searchActive = isCatalogSearchQuery(query);
   const displayedBooks = searchActive ? searchResults : books;
   const isLoading = searchActive && searchStatus === 'loading';
@@ -407,39 +433,39 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
   return (
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
       <div className="section-heading">
-        <div><span className="eyebrow">CHOSEN BY READERS</span><h2 id="featured-title">{searchActive ? 'Search results' : 'Highest rated'}</h2></div>
+        <div><span className="eyebrow">{t('home.chosenByReaders')}</span><h2 id="featured-title">{searchActive ? t('home.searchResults') : t('home.highestRated')}</h2></div>
         <div className="section-tools">
-          <span aria-live="polite">{isLoading ? 'Searching…' : `${displayedBooks.length} ${displayedBooks.length === 1 ? 'book' : 'books'}`}</span>
+          <span aria-live="polite">{isLoading ? t('home.searching') : `${displayedBooks.length.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(displayedBooks.length === 1 ? 'common.book' : 'common.books')}`}</span>
           {searchActive && displayedBooks.length > 0 ? (
-            <a href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>View all results <b aria-hidden="true">→</b></a>
+            <a href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>{t('home.viewAllResults')} <b aria-hidden="true">→</b></a>
           ) : (
-            <span className="section-note">Search for the full catalog</span>
+            <span className="section-note">{t('home.searchFullCatalog')}</span>
           )}
         </div>
       </div>
       {hasError ? (
-        <div className="empty-results" role="status"><span>⌕</span><h3>Search unavailable</h3><p>Please try again in a moment.</p></div>
+        <div className="empty-results" role="status"><span>⌕</span><h3>{t('home.searchUnavailable')}</h3><p>{t('home.tryAgain')}</p></div>
       ) : isLoading && displayedBooks.length === 0 ? (
-        <div className="search-loading" role="status">Searching the LumiScore catalog…</div>
+        <div className="search-loading" role="status">{t('home.searchingCatalog')}</div>
       ) : displayedBooks.length > 0 ? (
         <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />)}</div>
       ) : (
-        <div className="empty-results"><span>⌕</span><h3>No books found</h3><p>Try another title or author.</p></div>
+        <div className="empty-results"><span>⌕</span><h3>{t('home.noBooks')}</h3><p>{t('home.tryAnother')}</p></div>
       )}
     </section>
   );
 }
 
-const values = [
-  { icon: '✦', title: 'Personalized picks', copy: 'Made for your reading taste' },
-  { icon: '◎', title: 'Real reader matches', copy: 'Taste-based, not sponsored' },
-  { icon: '8.7', title: 'Trusted scores', copy: 'Millions of ratings distilled' },
-  { icon: '✓', title: 'Track & discover', copy: 'One library, always with you' },
-];
-
 const ValueStrip = memo(function ValueStrip() {
+  const { t } = useLumiScoreLocale();
+  const values = [
+    { icon: '✦', title: t('home.personalizedPicks'), copy: t('home.madeForTaste') },
+    { icon: '◎', title: t('home.readerMatches'), copy: t('home.notSponsored') },
+    { icon: '8.7', title: t('home.trustedScores'), copy: t('home.ratingsDistilled') },
+    { icon: '✓', title: t('home.trackDiscover'), copy: t('home.libraryWithYou') },
+  ];
   return (
-    <section className="value-strip" id="how-it-works" aria-label="Why LumiScore">
+    <section className="value-strip" id="how-it-works" aria-label={t('home.why')}>
       <div className="value-inner">{values.map((value) => (
         <div className="value-item" key={value.title}><span className="value-icon">{value.icon}</span><span><strong>{value.title}</strong><small>{value.copy}</small></span></div>
       ))}</div>
@@ -448,16 +474,17 @@ const ValueStrip = memo(function ValueStrip() {
 });
 
 export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
+  const { t } = useLumiScoreLocale();
   return (
     <footer className="site-footer">
       <div className="footer-brand">
         <LumiScoreWordmark />
-        <p>Your next great read is closer than you think.</p>
+        <p>{t('footer.tagline')}</p>
         <a className="domain-link" href="/">lumisco.re</a>
       </div>
-      <nav className="footer-nav" aria-label="Footer navigation"><span aria-disabled="true" title="About page coming soon">About</span><a href="/#how-it-works">How it works</a><span aria-disabled="true" title="Publisher information coming soon">For publishers</span><span aria-disabled="true" title="Help center coming soon">Help</span></nav>
-      <div className="footer-theme"><span>Reading mode</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
-      <div className="footer-bottom"><span>© 2026 LumiScore</span><span>Made for readers everywhere.</span></div>
+      <nav className="footer-nav" aria-label={t('footer.navigation')}><span aria-disabled="true" title={t('footer.aboutComing')}>{t('footer.about')}</span><a href="/#how-it-works">{t('footer.howItWorks')}</a><span aria-disabled="true" title={t('footer.publishersComing')}>{t('footer.publishers')}</span><span aria-disabled="true" title={t('footer.helpComing')}>{t('footer.help')}</span></nav>
+      <div className="footer-theme"><span>{t('footer.readingMode')}</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
+      <div className="footer-bottom"><span>© 2026 LumiScore</span><span>{t('footer.madeForReaders')}</span></div>
     </footer>
   );
 }

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { BookCard, Footer, Header } from './LumiScoreHome';
+import { useLumiScoreLocale } from './LumiScoreLocale';
 
 type LumiScoreSearchPageProps = {
   initialQuery: string;
@@ -18,6 +19,7 @@ export function LumiScoreSearchPage({
   searchFailed,
   authState,
 }: LumiScoreSearchPageProps) {
+  const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
   const [wanted, setWanted] = useState<Set<string>>(new Set());
 
@@ -70,16 +72,16 @@ export function LumiScoreSearchPage({
       >
         <div className="section-heading search-results-heading">
           <div>
-            <span className="eyebrow">FULL CATALOG</span>
+            <span className="eyebrow">{t('search.fullCatalog')}</span>
             <h1 id="search-results-title">
-              {hasQuery ? `Results for “${initialQuery}”` : 'Search books'}
+              {hasQuery ? t('search.resultsFor', { query: initialQuery }) : t('search.title')}
             </h1>
           </div>
           <div className="section-tools">
             <span>
               {hasQuery
-                ? `${results.length} ${results.length === 1 ? 'book' : 'books'}`
-                : 'Enter a title or author'}
+                ? `${results.length.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(results.length === 1 ? 'common.book' : 'common.books')}`
+                : t('search.enterTitle')}
             </span>
           </div>
         </div>
@@ -87,14 +89,14 @@ export function LumiScoreSearchPage({
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>
-            <h2>Search unavailable</h2>
-            <p>Please try again in a moment.</p>
+            <h2>{t('home.searchUnavailable')}</h2>
+            <p>{t('home.tryAgain')}</p>
           </div>
         ) : !hasQuery ? (
           <div className="empty-results">
             <span>⌕</span>
-            <h2>Find a book</h2>
-            <p>Search by title or author using the field above.</p>
+            <h2>{t('search.findBook')}</h2>
+            <p>{t('search.instructions')}</p>
           </div>
         ) : results.length > 0 ? (
           <div className="book-grid">
@@ -110,8 +112,8 @@ export function LumiScoreSearchPage({
         ) : (
           <div className="empty-results">
             <span>⌕</span>
-            <h2>No books found</h2>
-            <p>Try another title or author.</p>
+            <h2>{t('home.noBooks')}</h2>
+            <p>{t('home.tryAnother')}</p>
           </div>
         )}
       </section>

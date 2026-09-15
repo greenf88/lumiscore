@@ -18,6 +18,7 @@ import {
   getTasteProfileConfidenceCopy,
 } from '@/lib/taste-test/profile';
 import { BookCover, Footer, Header } from './LumiScoreHome';
+import { useLumiScoreLocale } from './LumiScoreLocale';
 
 type ServerState = {
   authenticated: boolean;
@@ -40,6 +41,7 @@ export function LumiScoreTasteTest({
   books: Book[];
   initialAuthState: HeaderAuthState;
 }) {
+  const { locale, t } = useLumiScoreLocale();
   const booksById = useMemo(
     () => new Map(books.flatMap((book) => book.workId ? [[book.workId, book] as const] : [])),
     [books],
@@ -54,8 +56,8 @@ export function LumiScoreTasteTest({
   const leftBook = booksById.get(question.leftWorkId);
   const rightBook = booksById.get(question.rightWorkId);
   const currentChoice = answers[question.key];
-  const profile = useMemo(() => buildTasteProfile(answers, []), [answers]);
-  const confidenceCopy = getTasteProfileConfidenceCopy(profile.confidence);
+  const profile = useMemo(() => buildTasteProfile(answers, [], locale), [answers, locale]);
+  const confidenceCopy = getTasteProfileConfidenceCopy(profile.confidence, locale);
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -141,10 +143,10 @@ export function LumiScoreTasteTest({
       <main className="site-shell taste-test-shell">
         <Header onThemeToggle={toggleTheme} query={query} onQueryChange={setQuery} authState={{ authenticated }} returnTo="/taste-test" />
         <section className="taste-test-unavailable" role="status">
-          <span className="eyebrow">TASTE TEST</span>
-          <h1>The Taste Test is temporarily unavailable.</h1>
-          <p>One or more catalog books could not be loaded. Please try again shortly.</p>
-          <a className="primary-cta" href="/">Back to books <span>→</span></a>
+          <span className="eyebrow">{t('taste.eyebrow')}</span>
+          <h1>{t('taste.unavailable')}</h1>
+          <p>{t('taste.booksUnavailable')}</p>
+          <a className="primary-cta" href="/">{t('taste.backToBooks')} <span>→</span></a>
         </section>
       </main>
     );
@@ -157,52 +159,52 @@ export function LumiScoreTasteTest({
         {!showResults ? (
           <>
             <div className="taste-test-heading">
-              <span className="eyebrow">TASTE TEST · {questionIndex + 1} / {TASTE_TEST_QUESTIONS.length}</span>
-              <h1 id="taste-test-title">Which would you rather read?</h1>
-              <p>You do not need to have read either book. Choose on instinct.</p>
-              <div className="taste-progress" role="progressbar" aria-valuemin={1} aria-valuemax={10} aria-valuenow={questionIndex + 1} aria-label={`Question ${questionIndex + 1} of 10`}>
+              <span className="eyebrow">{t('taste.eyebrow')} · {questionIndex + 1} / {TASTE_TEST_QUESTIONS.length}</span>
+              <h1 id="taste-test-title">{t('taste.question')}</h1>
+              <p>{t('taste.instructions')}</p>
+              <div className="taste-progress" role="progressbar" aria-valuemin={1} aria-valuemax={10} aria-valuenow={questionIndex + 1} aria-label={t('taste.questionProgress', { current: questionIndex + 1, total: TASTE_TEST_QUESTIONS.length })}>
                 <span style={{ width: `${((questionIndex + 1) / 10) * 100}%` }} />
               </div>
             </div>
             <fieldset className="taste-pair">
-              <legend className="sr-only">Which would you rather read?</legend>
+              <legend className="sr-only">{t('taste.question')}</legend>
               {([
                 ['left', leftBook],
                 ['right', rightBook],
               ] as const).map(([choice, book]) => (
                 <button key={choice} className={`taste-book-option${currentChoice === choice ? ' is-selected' : ''}`} type="button" aria-pressed={currentChoice === choice} onClick={() => choose(choice)}>
-                  <BookCover book={book} label={`Cover of ${book.title}`} />
+                  <BookCover book={book} label={t('taste.coverOf', { title: book.title })} />
                   <span className="taste-book-copy"><strong>{book.title}</strong><span>{book.author}</span></span>
-                  <span className="taste-choice-mark" aria-hidden="true">{currentChoice === choice ? '✓ Selected' : 'Choose'}</span>
+                  <span className="taste-choice-mark" aria-hidden="true">{currentChoice === choice ? `✓ ${t('taste.selected')}` : t('taste.choose')}</span>
                 </button>
               ))}
-              <button className={`taste-neither${currentChoice === 'neither' ? ' is-selected' : ''}`} type="button" aria-pressed={currentChoice === 'neither'} onClick={() => choose('neither')}>Neither / not sure</button>
+              <button className={`taste-neither${currentChoice === 'neither' ? ' is-selected' : ''}`} type="button" aria-pressed={currentChoice === 'neither'} onClick={() => choose('neither')}>{t('taste.neither')}</button>
             </fieldset>
             <div className="taste-controls">
-              <button type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>← Previous</button>
+              <button type="button" onClick={() => setQuestionIndex((index) => Math.max(0, index - 1))} disabled={questionIndex === 0}>← {t('taste.previous')}</button>
               {questionIndex < 9 ? (
-                <button className="taste-next" type="button" disabled={!currentChoice} onClick={() => setQuestionIndex((index) => Math.min(9, index + 1))}>Next →</button>
+                <button className="taste-next" type="button" disabled={!currentChoice} onClick={() => setQuestionIndex((index) => Math.min(9, index + 1))}>{t('taste.next')} →</button>
               ) : (
-                <button className="taste-next" type="button" disabled={!currentChoice || profile.answeredCount !== 10} onClick={() => void finish()}>See my reading taste →</button>
+                <button className="taste-next" type="button" disabled={!currentChoice || profile.answeredCount !== 10} onClick={() => void finish()}>{t('taste.seeTaste')} →</button>
               )}
             </div>
           </>
         ) : (
           <div className="taste-results">
-            <span className="eyebrow">TASTE PROFILE</span>
-            <h1 id="taste-test-title">Your reading taste</h1>
+            <span className="eyebrow">{t('taste.profile')}</span>
+            <h1 id="taste-test-title">{t('taste.readingTaste')}</h1>
             <p className="taste-result-summary">{profile.summary}</p>
             <p className="taste-confidence">
               <strong>{confidenceCopy.label}</strong>
               <span>{confidenceCopy.description}</span>
             </p>
             <p className="taste-save-status" role="status" aria-live="polite">
-              {saveStatus === 'saving' ? 'Saving your Taste Test…' : saveStatus === 'saved' ? 'Saved to your LumiScore account.' : saveStatus === 'error' ? 'Saved on this device, but account sync is temporarily unavailable.' : !authenticated ? 'Saved on this device.' : ''}
+              {saveStatus === 'saving' ? t('taste.saving') : saveStatus === 'saved' ? t('taste.savedAccount') : saveStatus === 'error' ? t('taste.savedLocalSyncError') : !authenticated ? t('taste.savedLocal') : ''}
             </p>
             <div className="taste-result-actions">
-              <a className="primary-cta" href="/">See your recommendations <span>→</span></a>
-              {!authenticated && <a className="taste-sign-in" href="/login?next=%2Ftaste-test">Sign in to save your profile</a>}
-              <button type="button" onClick={() => { setQuestionIndex(0); setShowResults(false); }}>Take the test again</button>
+              <a className="primary-cta" href="/">{t('taste.seeRecommendations')} <span>→</span></a>
+              {!authenticated && <a className="taste-sign-in" href="/login?next=%2Ftaste-test">{t('taste.signInToSave')}</a>}
+              <button type="button" onClick={() => { setQuestionIndex(0); setShowResults(false); }}>{t('taste.again')}</button>
             </div>
           </div>
         )}

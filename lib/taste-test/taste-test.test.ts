@@ -142,13 +142,13 @@ test('homepage recommendations pass Taste Test works as explicit candidate exclu
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {
   const home = await readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8');
   const tasteTest = await readFile(new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url), 'utf8');
-  assert.match(home, /href="\/taste-test">Taste Test/);
-  assert.match(home, /Improve your recommendations/);
-  assert.match(home, /Take the 2-minute Taste Test/);
+  assert.match(home, /href="\/taste-test">\{t\('header\.tasteTest'\)\}/);
+  assert.match(home, /t\('home\.improveRecommendations'\)/);
+  assert.match(home, /t\('home\.takeTasteTest'\)/);
   assert.match(home, /recommendation\.matchLabel/);
   assert.doesNotMatch(home, /matchScore === null\s*\?\s*'Early match'/);
   assert.doesNotMatch(tasteTest, /Confidence:\s*\{profile\.confidence\}/);
-  assert.match(tasteTest, /getTasteProfileConfidenceCopy\(profile\.confidence\)/);
+  assert.match(tasteTest, /getTasteProfileConfidenceCopy\(profile\.confidence, locale\)/);
 });
 
 test('Taste Test result shows one reading-taste heading with non-repeating eyebrow copy', async () => {
@@ -157,8 +157,8 @@ test('Taste Test result shows one reading-taste heading with non-repeating eyebr
     'utf8',
   );
 
-  assert.equal(tasteTest.match(/>Your reading taste<\/h1>/g)?.length, 1);
-  assert.match(tasteTest, />TASTE PROFILE<\/span>/);
+  assert.equal(tasteTest.match(/>\{t\('taste\.readingTaste'\)\}<\/h1>/g)?.length, 1);
+  assert.match(tasteTest, />\{t\('taste\.profile'\)\}<\/span>/);
   assert.doesNotMatch(tasteTest, />YOUR READING TASTE<\/span>/);
   assert.match(tasteTest, /className="taste-results"/);
 });
