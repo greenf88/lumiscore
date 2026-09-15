@@ -6,6 +6,7 @@ import {
 } from '@/lib/server-environment';
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 import { resolveRequestLocale } from '@/lib/i18n/server';
+import { selectDutchDiscoveryBooks } from '@/lib/books/dutch-discovery';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
@@ -27,10 +28,21 @@ async function loadHomepageBooks() {
   }
 }
 
+async function loadDutchHomepageCandidates(locale: 'en' | 'nl') {
+  if (locale !== 'nl') return [];
+  try {
+    const { loadDutchDiscoveryCatalogCandidates } = await import('@/lib/supabase/books');
+    return await loadDutchDiscoveryCatalogCandidates();
+  } catch {
+    return [];
+  }
+}
+
 export default async function Home() {
   const { locale } = await resolveRequestLocale();
-  const [catalog, personalization, authState] = await Promise.all([
+  const [catalog, dutchCandidates, personalization, authState] = await Promise.all([
     loadHomepageBooks(),
+    loadDutchHomepageCandidates(locale),
     import('@/lib/supabase/taste-test')
       .then(({ loadHomepagePersonalization }) =>
         loadHomepagePersonalization(locale),
@@ -46,6 +58,14 @@ export default async function Home() {
       .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),
   ]);
+  const highestRatedWorkIds = new Set(
+    catalog.books.flatMap((book) => book.workId ? [book.workId] : []),
+  );
+  const dutchDiscoveryBooks = selectDutchDiscoveryBooks(
+    dutchCandidates,
+    highestRatedWorkIds,
+    6,
+  );
 
   return (
     <LumiScoreHome
@@ -56,6 +76,7 @@ export default async function Home() {
       }}
       personalization={personalization}
       authState={authState}
+      dutchDiscoveryBooks={dutchDiscoveryBooks}
     />
   );
 }

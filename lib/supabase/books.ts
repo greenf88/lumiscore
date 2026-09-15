@@ -16,6 +16,11 @@ import {
   type EditionRankingContext,
 } from '@/lib/books/edition-ranking';
 import {
+  DUTCH_LANGUAGE_DATABASE_CODES,
+  isDutchLanguageBook,
+  REVIEWED_DUTCH_LANGUAGE_ISBN13,
+} from '@/lib/books/language';
+import {
   applyRatingSummaries,
   type PublicRatingSummary,
 } from '@/lib/ratings/card-summaries';
@@ -442,6 +447,31 @@ export async function loadHomepageCatalog(limit = 18): Promise<{
     books: applyRatingSummaries(catalogBooks, summaries),
     total: total ?? catalogBooks.length,
   };
+}
+
+export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
+  const [structuredLanguageEditions, reviewedSeedEditions] = await Promise.all([
+    supabase
+      .from('editions')
+      .select('work_id')
+      .in('language', [...DUTCH_LANGUAGE_DATABASE_CODES]),
+    supabase
+      .from('editions')
+      .select('work_id')
+      .in('isbn_13', [...REVIEWED_DUTCH_LANGUAGE_ISBN13]),
+  ]);
+  if (structuredLanguageEditions.error) throw structuredLanguageEditions.error;
+  if (reviewedSeedEditions.error) throw reviewedSeedEditions.error;
+
+  const workIds = [...new Set([
+    ...(structuredLanguageEditions.data ?? []),
+    ...(reviewedSeedEditions.data ?? []),
+  ].flatMap((row) => {
+    const workId = String(row.work_id ?? '').trim();
+    return workId ? [workId] : [];
+  }))];
+  const books = await loadCatalogBooksByIds(workIds);
+  return books.filter(isDutchLanguageBook);
 }
 
 export async function loadHighestRatedCatalog(limit = 18): Promise<{

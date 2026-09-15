@@ -29,6 +29,7 @@ import { formatLocalizedCount } from '@/lib/i18n/format';
 import { translate } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
+import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
 
 const resolvedCoverCache = new Map<
   string,
@@ -456,6 +457,28 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
   );
 }
 
+function DutchDiscoveryBooks({ books, wanted, onToggle }: { books: Book[]; wanted: Set<string>; onToggle: (id: string) => void }) {
+  const { locale, t } = useLumiScoreLocale();
+  if (!shouldShowDutchDiscovery(locale, books.length)) return null;
+
+  return (
+    <section className="featured-section dutch-discovery-section" aria-labelledby="dutch-discovery-title">
+      <div className="section-heading">
+        <div>
+          <span className="eyebrow">{t('home.dutchDiscoveryEyebrow')}</span>
+          <h2 id="dutch-discovery-title">{t('home.dutchDiscoveryHeading')}</h2>
+          <p className="section-intro">{t('home.dutchDiscoveryCopy')}</p>
+        </div>
+      </div>
+      <div className="book-grid">
+        {books.map((book) => (
+          <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 const ValueStrip = memo(function ValueStrip() {
   const { t } = useLumiScoreLocale();
   const values = [
@@ -491,7 +514,7 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number; categories: number };
 
-export function LumiScoreHome({ initialBooks, catalogStats, personalization, authState }: { initialBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState }) {
+export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -596,6 +619,7 @@ export function LumiScoreHome({ initialBooks, catalogStats, personalization, aut
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} />
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} />
+      <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />
     </main>

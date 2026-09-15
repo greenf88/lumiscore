@@ -41,6 +41,15 @@ test('highest-rated selection supports a modest future rating threshold', () => 
   );
 });
 
+test('highest-rated ordering has no locale input or Dutch-language preference', () => {
+  const dutchTitle: HighestRatedWork = { workId: '11', title: 'Nederlands', score: 8, ratingCount: 2 };
+  const englishTitle: HighestRatedWork = { workId: '12', title: 'English', score: 9, ratingCount: 2 };
+  assert.deepEqual(
+    rankHighestRatedWorks([dutchTitle, englishTitle], 2).map(({ workId }) => workId),
+    ['12', '11'],
+  );
+});
+
 test('homepage uses the global aggregate ranking and Highest rated label', async () => {
   const [page, home, catalog] = await Promise.all([
     readFile(new URL('../../app/page.tsx', import.meta.url), 'utf8'),

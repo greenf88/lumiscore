@@ -4,6 +4,11 @@ import { cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts
 import { buildRecommendationExplanation } from './explanations.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
+import {
+  canDutchBookOvertake,
+  DUTCH_PREFERENCE_MAX_RANKING_GAP,
+  type BookLanguagePreference,
+} from './language-preference.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
 export type MatchLabel = 'Strong match' | 'Good match' | 'Possible match' | 'Early match';
@@ -117,6 +122,7 @@ export function recommendBooks(input: {
   excludedWorkIds?: ReadonlySet<string>;
   limit?: number;
   locale?: Locale;
+  languagePreference?: BookLanguagePreference | null;
 }): RankedRecommendation[] {
   const limit = Math.max(1, Math.trunc(input.limit ?? 10));
   const remaining: ScoredCandidate[] = input.candidates
@@ -162,6 +168,34 @@ export function recommendBooks(input: {
       return candidate.rankingScore - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1) - closest * .06;
     };
     remaining.sort((left, right) => adjusted(right) - adjusted(left) || Number(left.book.workId) - Number(right.book.workId));
+    if (input.languagePreference) {
+      for (let index = 1; index < remaining.length; index += 1) {
+        let currentIndex = index;
+        while (currentIndex > 0) {
+          const dutchCandidate = remaining[currentIndex];
+          const otherCandidate = remaining[currentIndex - 1];
+          const dutchAdjustedScore = adjusted(dutchCandidate);
+          const otherAdjustedScore = adjusted(otherCandidate);
+          const strength = Math.max(0, Math.min(1, input.languagePreference.strength));
+          if (
+            otherAdjustedScore - dutchAdjustedScore >
+              DUTCH_PREFERENCE_MAX_RANKING_GAP * strength ||
+            !canDutchBookOvertake({
+              dutchBook: dutchCandidate.book,
+              otherBook: otherCandidate.book,
+              dutchPersonalSimilarity: dutchCandidate.personalMatch,
+              otherPersonalSimilarity: otherCandidate.personalMatch,
+              dutchRankingScore: dutchCandidate.rankingScore,
+              otherRankingScore: otherCandidate.rankingScore,
+              preference: input.languagePreference,
+            })
+          ) break;
+          remaining[currentIndex - 1] = dutchCandidate;
+          remaining[currentIndex] = otherCandidate;
+          currentIndex -= 1;
+        }
+      }
+    }
     selected.push(remaining.shift()!);
   }
   let previousDisplayedMatch = 100;

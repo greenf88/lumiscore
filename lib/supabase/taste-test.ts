@@ -24,6 +24,7 @@ import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
 import type { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
+import { resolveLocaleBookLanguagePreference } from '../recommendations/language-preference.ts';
 
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
@@ -44,6 +45,7 @@ const RECOMMENDATION_CATALOG_SELECT = [
   'author_id',
   'cover_id',
   'authors(id,name)',
+  'editions(id,open_library_edition_id,isbn_13,language)',
 ].join(',');
 
 export type TasteTestServerState = {
@@ -199,6 +201,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         ratedWorkIds: new Set(ratedIds),
         excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
         locale,
+        languagePreference: resolveLocaleBookLanguagePreference(locale, profile),
         limit: 10,
       })
       : [];
