@@ -9,6 +9,11 @@ import {
   DUTCH_PREFERENCE_MAX_RANKING_GAP,
   type BookLanguagePreference,
 } from './language-preference.ts';
+import {
+  applyCollaborativeBoost,
+  type CollaborativeSignal,
+} from './collaborative.ts';
+import { translate } from '../i18n/translations.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
 export type MatchLabel = 'Strong match' | 'Good match' | 'Possible match' | 'Early match';
@@ -27,10 +32,14 @@ export type PersonalizedRecommendation = {
   explanation: string;
   coverageLevel: WorkTraitCoverageLevel;
   metadataConfidence: number;
+  collaborativeExplanation: string;
 };
 export type RankedRecommendation = PersonalizedRecommendation & {
   personalMatch: number;
   rankingScore: number;
+  collaborativeScore: number | null;
+  collaborativeWeight: number;
+  finalRankingScore: number;
 };
 const QUALITY_NEUTRAL_SCORE = 5.5;
 const QUALITY_PRIOR_RATINGS = 5;
@@ -113,6 +122,7 @@ type ScoredCandidate = RankedRecommendation & {
   author: string;
   seriesKey?: string;
   traits: TasteVector;
+  collaborativeSignal: CollaborativeSignal | null;
 };
 
 export function recommendBooks(input: {
@@ -123,6 +133,7 @@ export function recommendBooks(input: {
   limit?: number;
   locale?: Locale;
   languagePreference?: BookLanguagePreference | null;
+  collaborativeSignals?: ReadonlyMap<string, CollaborativeSignal>;
 }): RankedRecommendation[] {
   const limit = Math.max(1, Math.trunc(input.limit ?? 10));
   const remaining: ScoredCandidate[] = input.candidates
@@ -133,6 +144,8 @@ export function recommendBooks(input: {
       const personalSimilarity = Math.max(0, cosineTasteSimilarity(input.profile.vector, traits));
       const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);
       const rankingScore = .8 * personalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!);
+      const collaborativeSignal = input.collaborativeSignals?.get(book.workId!) ?? null;
+      const finalRankingScore = applyCollaborativeBoost(rankingScore, collaborativeSignal);
       const matchPresentation = getMatchPresentation({
         personalSimilarity,
         candidateCoverage: coverageLevel,
@@ -146,6 +159,10 @@ export function recommendBooks(input: {
         author: book.author,
         personalMatch: personalSimilarity,
         rankingScore,
+        collaborativeSignal,
+        collaborativeScore: collaborativeSignal?.score ?? null,
+        collaborativeWeight: collaborativeSignal?.weight ?? 0,
+        finalRankingScore,
         ...matchPresentation,
         coverageLevel,
         metadataConfidence,
@@ -157,6 +174,9 @@ export function recommendBooks(input: {
           metadataConfidence,
           locale: input.locale,
         }),
+        collaborativeExplanation: collaborativeSignal
+          ? translate(input.locale ?? 'en', 'recommendation.collaborative')
+          : '',
       };
     });
   const selected: ScoredCandidate[] = [];
@@ -165,7 +185,8 @@ export function recommendBooks(input: {
       const sameAuthor = selected.filter(({ author }) => author === candidate.author).length;
       const sameSeries = candidate.seriesKey ? selected.filter(({ seriesKey }) => seriesKey === candidate.seriesKey).length : 0;
       const closest = selected.reduce((maximum, existing) => Math.max(maximum, Math.max(0, cosineTasteSimilarity(existing.traits, candidate.traits))), 0);
-      return candidate.rankingScore - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1) - closest * .06;
+      const diversifiedBase = candidate.rankingScore - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1) - closest * .06;
+      return applyCollaborativeBoost(diversifiedBase, candidate.collaborativeSignal);
     };
     remaining.sort((left, right) => adjusted(right) - adjusted(left) || Number(left.book.workId) - Number(right.book.workId));
     if (input.languagePreference) {
@@ -185,8 +206,8 @@ export function recommendBooks(input: {
               otherBook: otherCandidate.book,
               dutchPersonalSimilarity: dutchCandidate.personalMatch,
               otherPersonalSimilarity: otherCandidate.personalMatch,
-              dutchRankingScore: dutchCandidate.rankingScore,
-              otherRankingScore: otherCandidate.rankingScore,
+              dutchRankingScore: dutchCandidate.finalRankingScore,
+              otherRankingScore: otherCandidate.finalRankingScore,
               preference: input.languagePreference,
             })
           ) break;
@@ -213,8 +234,12 @@ export function recommendBooks(input: {
       explanation: candidate.explanation,
       coverageLevel: candidate.coverageLevel,
       metadataConfidence: candidate.metadataConfidence,
+      collaborativeExplanation: candidate.collaborativeExplanation,
       personalMatch: candidate.personalMatch,
       rankingScore: candidate.rankingScore,
+      collaborativeScore: candidate.collaborativeScore,
+      collaborativeWeight: candidate.collaborativeWeight,
+      finalRankingScore: candidate.finalRankingScore,
     };
   });
 }

@@ -291,6 +291,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
                     : ''
           : ratingStatus}</span>
         {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
+        {recommendation?.collaborativeExplanation && <span className="recommendation-reason recommendation-collaborative-reason">{recommendation.collaborativeExplanation}</span>}
       </span>
       <span className="mini-score"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
     </>

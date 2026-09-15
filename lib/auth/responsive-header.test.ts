@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+
+test('shared header prevents wrapping and preserves compact mobile controls', async () => {
+  const css = await readFile(new URL('../../app/globals.css', import.meta.url), 'utf8');
+  assert.match(css, /\.main-nav \{[^}]*white-space: nowrap/);
+  assert.match(css, /\.main-nav > a \{[^}]*min-height: 44px[^}]*white-space: nowrap/);
+  assert.match(css, /@media \(max-width: 1040px\)[\s\S]*?a:not\(\.taste-test-nav-link\):not\(\.header-sign-in\)/);
+  assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.taste-test-nav-link::before/);
+  assert.match(css, /\.site-header \.language-switcher button \{ min-width: 24px;/);
+});

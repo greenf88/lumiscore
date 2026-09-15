@@ -25,6 +25,7 @@ import type { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
 import { resolveLocaleBookLanguagePreference } from '../recommendations/language-preference.ts';
+import { loadCollaborativeRecommendationSignals } from './collaborative.ts';
 
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
@@ -174,11 +175,12 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
     const { client, user } = await getVerifiedServerUser();
     if (!user) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
-    const [responsesResult, ratingsResult, catalog] = await Promise.all([
+    const [responsesResult, ratingsResult, catalog, collaborativeSignals] = await Promise.all([
       client.from('taste_test_responses').select('question_key,choice')
         .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id),
       client.from('ratings').select('work_id,rating').eq('user_id', user.id),
       loadRecommendationCatalog(client),
+      loadCollaborativeRecommendationSignals(client),
     ]);
     const answers = responsesResult.error ? {} : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]);
     const ratings = ratingsResult.error ? [] : (ratingsResult.data ?? []) as RatingRow[];
@@ -202,6 +204,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
         locale,
         languagePreference: resolveLocaleBookLanguagePreference(locale, profile),
+        collaborativeSignals,
         limit: 10,
       })
       : [];
@@ -225,6 +228,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
           explanation: recommendation.explanation,
           coverageLevel: recommendation.coverageLevel,
           metadataConfidence: recommendation.metadataConfidence,
+          collaborativeExplanation: recommendation.collaborativeExplanation,
         };
         return {
           ...publicRecommendation,

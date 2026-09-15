@@ -84,6 +84,7 @@ const en = {
   'auth.confirmationFailed': 'That confirmation link is invalid or has expired.', 'auth.failed': 'Authentication failed.',
   'auth.checkEmail': 'Check your email to confirm your account, then return to LumiScore.',
   'match.strong': 'Strong match', 'match.good': 'Good match', 'match.possible': 'Possible match', 'match.early': 'Early match',
+  'recommendation.collaborative': 'Readers with similar taste also rate this book highly.',
   'notFound.eyebrow': 'BOOK NOT FOUND', 'notFound.heading': "This book isn't in the catalog.",
   'notFound.copy': 'The link may be incorrect, or the book may no longer be available.', 'notFound.browse': 'Browse the catalog',
 } as const;
@@ -108,7 +109,7 @@ const nl: TranslationDictionary = {
   'home.moreUnavailable': 'Meer aanbevelingen zijn nog niet beschikbaar', 'home.moreComing': 'Meer aanbevelingen komen binnenkort',
   'home.improveRecommendations': 'Verbeter je aanbevelingen', 'home.takeTasteTest': 'Doe de Smaaktest van 2 minuten',
   'home.browseAll': 'Bekijk alle boeken', 'home.nextFiveStar': 'JOUW VOLGENDE VIJFSTERRENBOEK',
-  'home.heroStart': 'Vind je volgende', 'home.heroEmphasis': 'geweldige boek',
+  'home.heroStart': 'Vind je volgende', 'home.heroEmphasis': 'boek',
   'home.heroPrimary': 'Slimme aanbevelingen. Echte matches van lezers.',
   'home.heroCopy': 'LumiScore analyseert miljoenen lezersbeoordelingen om boeken te vinden waar je echt van zult houden.',
   'home.findNext': 'Vind je volgende boek', 'home.smartRecommendations': 'Slimme aanbevelingen',
@@ -175,6 +176,7 @@ const nl: TranslationDictionary = {
   'auth.confirmationFailed': 'Deze bevestigingslink is ongeldig of verlopen.', 'auth.failed': 'Inloggen mislukt.',
   'auth.checkEmail': 'Controleer je e-mail om je account te bevestigen en keer daarna terug naar LumiScore.',
   'match.strong': 'Sterke match', 'match.good': 'Goede match', 'match.possible': 'Mogelijke match', 'match.early': 'Eerste match',
+  'recommendation.collaborative': 'Lezers met een vergelijkbare smaak waarderen dit boek ook hoog.',
   'notFound.eyebrow': 'BOEK NIET GEVONDEN', 'notFound.heading': 'Dit boek staat niet in de catalogus.',
   'notFound.copy': 'De link klopt mogelijk niet of het boek is niet meer beschikbaar.', 'notFound.browse': 'Bekijk de catalogus',
 };

@@ -194,10 +194,10 @@ export function LumiScoreTasteTest({
             <span className="eyebrow">{t('taste.profile')}</span>
             <h1 id="taste-test-title">{t('taste.readingTaste')}</h1>
             <p className="taste-result-summary">{profile.summary}</p>
-            <p className="taste-confidence">
+            <div className="taste-confidence">
               <strong>{confidenceCopy.label}</strong>
               <span>{confidenceCopy.description}</span>
-            </p>
+            </div>
             <p className="taste-save-status" role="status" aria-live="polite">
               {saveStatus === 'saving' ? t('taste.saving') : saveStatus === 'saved' ? t('taste.savedAccount') : saveStatus === 'error' ? t('taste.savedLocalSyncError') : !authenticated ? t('taste.savedLocal') : ''}
             </p>
