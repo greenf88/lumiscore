@@ -45,6 +45,7 @@ export default defineConfig(async ({ mode }) => {
   const publicSupabasePublishableKey = environmentValue(
     'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
   );
+  const publicSiteOrigin = environmentValue('NEXT_PUBLIC_SITE_ORIGIN');
   const vercelEnvironmentPresence = {
     NEXT_PUBLIC_SUPABASE_URL_configured: Boolean(publicSupabaseUrl),
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY_configured: Boolean(
@@ -81,6 +82,7 @@ export default defineConfig(async ({ mode }) => {
     vars: {
       NEXT_PUBLIC_SUPABASE_URL: publicSupabaseUrl,
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publicSupabasePublishableKey,
+      NEXT_PUBLIC_SITE_ORIGIN: publicSiteOrigin,
       SUPABASE_SECRET_KEY: environmentValue('SUPABASE_SECRET_KEY'),
       GOOGLE_BOOKS_API_KEY: environmentValue('GOOGLE_BOOKS_API_KEY'),
     },
@@ -104,6 +106,7 @@ export default defineConfig(async ({ mode }) => {
       'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
         publicSupabasePublishableKey,
       ),
+      'process.env.NEXT_PUBLIC_SITE_ORIGIN': JSON.stringify(publicSiteOrigin),
     },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox

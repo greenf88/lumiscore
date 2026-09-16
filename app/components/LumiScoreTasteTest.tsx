@@ -9,6 +9,7 @@ import {
   type TasteTestChoice,
 } from '@/lib/taste-test/config';
 import {
+  getGuestTasteTestProgress,
   parseGuestTasteTestAnswers,
   serializeGuestTasteTestAnswers,
   TASTE_TEST_GUEST_STORAGE_KEY,
@@ -90,6 +91,12 @@ export function LumiScoreTasteTest({
   useEffect(() => {
     const guestAnswers = parseGuestTasteTestAnswers(localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY));
     let cancelled = false;
+    const restore = (restoredAnswers: TasteTestAnswers) => {
+      const progress = getGuestTasteTestProgress(restoredAnswers);
+      setAnswers(restoredAnswers);
+      setQuestionIndex(progress.nextQuestionIndex);
+      setShowResults(progress.complete);
+    };
     void fetch('/api/taste-test', { cache: 'no-store' })
       .then(async (response) => {
         if (!response.ok) throw new Error('Taste Test state unavailable.');
@@ -97,7 +104,7 @@ export function LumiScoreTasteTest({
         if (cancelled) return;
         setAuthenticated(state.authenticated);
         const merged = state.authenticated ? { ...state.answers, ...guestAnswers } : guestAnswers;
-        setAnswers(merged);
+        restore(merged);
         setSaveStatus(state.authenticated ? 'idle' : 'local');
         if (state.authenticated && state.persistenceAvailable && Object.keys(guestAnswers).length > 0) {
           const response = await fetch('/api/taste-test', {
@@ -113,7 +120,7 @@ export function LumiScoreTasteTest({
       })
       .catch(() => {
         if (cancelled) return;
-        setAnswers(guestAnswers);
+        restore(guestAnswers);
         setSaveStatus('local');
       });
     return () => { cancelled = true; };

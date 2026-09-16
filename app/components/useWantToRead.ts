@@ -3,13 +3,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import { isReadingStatus, type ReadingStatus } from '@/lib/collections/model';
+import {
+  getGuestWantedStorageId,
+  normalizeGuestWantedIds,
+  toggleGuestWantedId,
+} from '@/lib/collections/guest-want-to-read';
 
 const STORAGE_KEY = 'lumiscore-wanted';
 
 function readGuestWanted(): string[] {
   try {
     const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as unknown;
-    return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+    return normalizeGuestWantedIds(value);
   } catch {
     return [];
   }
@@ -43,18 +48,29 @@ export async function migrateGuestWantToReadFromLocal(
 export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   const [wanted, setWanted] = useState<Set<string>>(new Set());
   const [statuses, setStatuses] = useState<Map<string, ReadingStatus>>(new Map());
+  const wantedRef = useRef<Set<string>>(new Set());
   const migrated = useRef(false);
   const workIds = books.flatMap((book) => book.workId ? [book.workId] : []);
   const workIdKey = [...new Set(workIds)].sort((a, b) => Number(a) - Number(b)).join(',');
 
   useEffect(() => {
-    if (!authenticated) {
-      const frame = requestAnimationFrame(() => {
-        setWanted(new Set(readGuestWanted()));
-        setStatuses(new Map());
-      });
-      return () => cancelAnimationFrame(frame);
-    }
+    if (authenticated) return;
+    const restore = () => {
+      const restored = new Set(readGuestWanted());
+      wantedRef.current = restored;
+      setWanted(restored);
+      setStatuses(new Map());
+    };
+    restore();
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === STORAGE_KEY) restore();
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [authenticated]);
+
+  useEffect(() => {
+    if (!authenticated) return;
 
     const controller = new AbortController();
     const load = async () => {
@@ -82,9 +98,11 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
         const next = new Set(current);
         for (const book of books) {
           if (!book.workId) continue;
-          if (payload.statuses?.[book.workId] === 'want_to_read') next.add(book.id);
-          else next.delete(book.id);
+          const storageId = getGuestWantedStorageId(book);
+          if (payload.statuses?.[book.workId] === 'want_to_read') next.add(storageId);
+          else next.delete(storageId);
         }
+        wantedRef.current = next;
         return next;
       });
     };
@@ -96,15 +114,14 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
     const existingStatus = book.workId ? statuses.get(book.workId) : null;
     if (authenticated && existingStatus && existingStatus !== 'want_to_read') return;
 
-    const wasWanted = wanted.has(book.id);
-    setWanted((current) => {
-      const next = new Set(current);
-      if (wasWanted) next.delete(book.id); else next.add(book.id);
-      if (!authenticated || !book.workId) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
-      }
-      return next;
-    });
+    const storageId = getGuestWantedStorageId(book);
+    const wasWanted = wantedRef.current.has(storageId);
+    const nextWanted = toggleGuestWantedId(wantedRef.current, storageId);
+    wantedRef.current = nextWanted;
+    setWanted(nextWanted);
+    if (!authenticated || !book.workId) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...nextWanted]));
+    }
 
     if (authenticated && book.workId) {
       setStatuses((current) => {
@@ -128,12 +145,13 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
         });
         setWanted((current) => {
           const next = new Set(current);
-          if (wasWanted) next.add(book.id); else next.delete(book.id);
+          if (wasWanted) next.add(storageId); else next.delete(storageId);
+          wantedRef.current = next;
           return next;
         });
       });
     }
-  }, [authenticated, statuses, wanted]);
+  }, [authenticated, statuses]);
 
   return { wanted, statuses, toggleWanted };
 }

@@ -27,10 +27,11 @@ import { applyRatingSummaries } from '../ratings/card-summaries.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
 import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
-import type { createServerSupabaseClient } from './server.ts';
+import { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
 import { resolveLocaleBookLanguagePreference } from '../recommendations/language-preference.ts';
+import { recommendGuestBooks } from '../recommendations/guest.ts';
 import { loadCollaborativeRecommendationSignals } from './collaborative.ts';
 import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
 
@@ -43,6 +44,11 @@ type RecommendationCatalog = {
 };
 
 const RECOMMENDATION_CATALOG_PAGE_SIZE = 1000;
+const GUEST_RECOMMENDATION_CATALOG_TTL_MS = 5 * 60 * 1_000;
+let guestRecommendationCatalogCache: {
+  expiresAt: number;
+  result: Promise<RecommendationCatalog>;
+} | null = null;
 const RECOMMENDATION_CATALOG_SELECT = [
   'id',
   'title',
@@ -151,6 +157,53 @@ async function loadRecommendationCatalog(
     }];
   });
   return { candidates, traitsById };
+}
+
+function loadGuestRecommendationCatalog(
+  client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+): Promise<RecommendationCatalog> {
+  if (
+    guestRecommendationCatalogCache &&
+    guestRecommendationCatalogCache.expiresAt > Date.now()
+  ) {
+    return guestRecommendationCatalogCache.result;
+  }
+
+  const result = loadRecommendationCatalog(client).catch((error: unknown) => {
+    guestRecommendationCatalogCache = null;
+    throw error;
+  });
+  guestRecommendationCatalogCache = {
+    expiresAt: Date.now() + GUEST_RECOMMENDATION_CATALOG_TTL_MS,
+    result,
+  };
+  return result;
+}
+
+async function hydratePublicRecommendations(
+  recommendations: readonly PersonalizedRecommendation[],
+): Promise<PersonalizedRecommendation[]> {
+  const recommendationBooks = recommendations.length
+    ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) =>
+        book.workId ? [book.workId] : []))
+    : [];
+  const recommendationBooksById = new Map(
+    recommendationBooks.flatMap((book): Array<[string, Book]> =>
+      book.workId ? [[book.workId, book]] : []),
+  );
+
+  return recommendations.map((recommendation) => ({
+    book: recommendation.book.workId
+      ? recommendationBooksById.get(recommendation.book.workId) ?? recommendation.book
+      : recommendation.book,
+    matchScore: recommendation.matchScore,
+    matchLabel: recommendation.matchLabel,
+    matchConfidence: recommendation.matchConfidence,
+    explanation: recommendation.explanation,
+    coverageLevel: recommendation.coverageLevel,
+    metadataConfidence: recommendation.metadataConfidence,
+    collaborativeExplanation: recommendation.collaborativeExplanation,
+  }));
 }
 
 export async function loadTasteTestServerState(): Promise<TasteTestServerState> {
@@ -308,37 +361,37 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         limit: 10,
       })
       : [];
-    const recommendationBooks = recommendations.length
-      ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) => book.workId ? [book.workId] : []))
-      : [];
-    const recommendationBooksById = new Map(
-      recommendationBooks.flatMap((book): Array<[string, Book]> => book.workId ? [[book.workId, book]] : []),
-    );
     return {
       authenticated: true,
       ratingCount: ratings.length,
       tasteTestAnsweredCount: profile.answeredCount,
       hasEvidence,
-      recommendations: recommendations.map((recommendation) => {
-        const publicRecommendation: PersonalizedRecommendation = {
-          book: recommendation.book,
-          matchScore: recommendation.matchScore,
-          matchLabel: recommendation.matchLabel,
-          matchConfidence: recommendation.matchConfidence,
-          explanation: recommendation.explanation,
-          coverageLevel: recommendation.coverageLevel,
-          metadataConfidence: recommendation.metadataConfidence,
-          collaborativeExplanation: recommendation.collaborativeExplanation,
-        };
-        return {
-          ...publicRecommendation,
-          book: recommendation.book.workId
-            ? recommendationBooksById.get(recommendation.book.workId) ?? recommendation.book
-            : recommendation.book,
-        };
-      }),
+      recommendations: await hydratePublicRecommendations(recommendations),
     };
   } catch {
     return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
   }
+}
+
+export async function loadGuestHomepagePersonalization(
+  answers: TasteTestAnswers,
+  locale: Locale = 'en',
+): Promise<HomepagePersonalization> {
+  const client = await createServerSupabaseClient();
+  const catalog = await loadGuestRecommendationCatalog(client);
+  const { profile, recommendations } = recommendGuestBooks({
+    answers,
+    candidates: catalog.candidates,
+    locale,
+    limit: 10,
+  });
+  const hasEvidence = profile.selectedCount > 0;
+
+  return {
+    authenticated: false,
+    ratingCount: 0,
+    tasteTestAnsweredCount: profile.answeredCount,
+    hasEvidence,
+    recommendations: await hydratePublicRecommendations(recommendations),
+  };
 }

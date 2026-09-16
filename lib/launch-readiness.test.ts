@@ -13,14 +13,17 @@ test('production catalog failures never fall back to demo ratings', async () => 
 test('minimum launch SEO assets and direct Vinext metadata are present', async () => {
   const [metadata, robots, sitemap, detail] = await Promise.all([
     readFile(new URL('../app/components/LumiScoreMetadata.tsx', import.meta.url), 'utf8'),
-    readFile(new URL('../public/robots.txt', import.meta.url), 'utf8'),
+    readFile(new URL('../app/robots.txt/route.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/sitemap.xml/route.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/book/[workId]/page.tsx', import.meta.url), 'utf8'),
   ]);
 
   assert.match(metadata, /<meta property="og:title"/);
   assert.match(metadata, /<link rel="canonical"/);
-  assert.match(robots, /Sitemap: https:\/\/lumiscore-gamma\.vercel\.app\/sitemap\.xml/);
-  assert.match(sitemap, /s-maxage=86400/);
+  assert.match(metadata, /LUMISCORE_SITE_ORIGIN/);
+  assert.match(robots, /LUMISCORE_SITE_ORIGIN/);
+  assert.match(sitemap, /from\('collections'\)/);
+  assert.match(sitemap, /s-maxage=3600/);
+  assert.doesNotMatch(sitemap, /REVIEWED_COLLECTION_SEEDS/);
   assert.match(detail, /\$\{book\.title\} by \$\{book\.author\} \| LumiScore/);
 });

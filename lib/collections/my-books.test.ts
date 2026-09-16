@@ -113,7 +113,7 @@ test('book-detail back navigation remains a plain, stronger accessible link', ()
 });
 
 test('responsive header swaps crowded links for a compact navigation menu', () => {
-  assert.match(styles, /@media \(max-width: 1040px\)[\s\S]*\.mobile-navigation \{ display: block; \}/);
+  assert.match(styles, /@media \(max-width: 1040px\)[\s\S]*\.mobile-navigation \{ position: static; display: block; \}/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.main-nav > \.taste-test-nav-link \{ display: none; \}/);
   assert.match(styles, /\.mobile-navigation summary \{[^}]*min-height: 44px/);
 });

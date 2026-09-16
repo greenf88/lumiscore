@@ -1,5 +1,9 @@
-export const LUMISCORE_PRODUCTION_ORIGIN =
-  'https://lumiscore-gamma.vercel.app';
+import {
+  absoluteLumiScoreUrl,
+  LUMISCORE_SITE_ORIGIN,
+} from '@/lib/seo/site-origin';
+
+export const LUMISCORE_PRODUCTION_ORIGIN = LUMISCORE_SITE_ORIGIN;
 export const LUMISCORE_DEFAULT_DESCRIPTION =
   'Smart book recommendations, trusted reader ratings, and matches made for your taste.';
 export const LUMISCORE_DEFAULT_IMAGE = '/og.png';
@@ -14,7 +18,7 @@ type LumiScoreMetadataProps = {
 };
 
 function absoluteUrl(value: string): string {
-  return new URL(value, LUMISCORE_PRODUCTION_ORIGIN).toString();
+  return absoluteLumiScoreUrl(value);
 }
 
 /**

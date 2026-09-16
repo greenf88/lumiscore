@@ -1,6 +1,7 @@
 export type LumiScoreServerEnvironmentName =
   | 'NEXT_PUBLIC_SUPABASE_URL'
   | 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'
+  | 'NEXT_PUBLIC_SITE_ORIGIN'
   | 'SUPABASE_SECRET_KEY'
   | 'SUPABASE_SERVICE_ROLE_KEY'
   | 'GOOGLE_BOOKS_API_KEY';
@@ -22,6 +23,8 @@ export function readServerEnvironment(
       ? process.env.NEXT_PUBLIC_SUPABASE_URL
       : name === 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'
         ? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+        : name === 'NEXT_PUBLIC_SITE_ORIGIN'
+          ? process.env.NEXT_PUBLIC_SITE_ORIGIN
         : name === 'SUPABASE_SECRET_KEY'
           ? process.env.SUPABASE_SECRET_KEY
           : name === 'SUPABASE_SERVICE_ROLE_KEY'

@@ -33,6 +33,11 @@ import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import { useWantToRead } from './useWantToRead';
 import type { ReadingStatus } from '@/lib/collections/model';
+import {
+  getGuestTasteTestProgress,
+  parseGuestTasteTestAnswers,
+  TASTE_TEST_GUEST_STORAGE_KEY,
+} from '@/lib/taste-test/guest-storage';
 
 const resolvedCoverCache = new Map<
   string,
@@ -565,15 +570,48 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 type CatalogStats = { books: number | null; categories: number };
 
 export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState, catalogUnavailable, seriesContinuation }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState; catalogUnavailable: boolean; seriesContinuation: HomepageSeriesContinuation | null }) {
+  const { locale } = useLumiScoreLocale();
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
   const [searchStatus, setSearchStatus] = useState<SearchStatus>('idle');
+  const [guestPersonalization, setGuestPersonalization] = useState<HomepagePersonalization | null>(null);
   const trackedBooks = useMemo(
     () => [...catalogBooks, ...dutchDiscoveryBooks, ...searchResults],
     [catalogBooks, dutchDiscoveryBooks, searchResults],
   );
   const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, trackedBooks);
+
+  useEffect(() => {
+    if (authState.authenticated) return;
+
+    const answers = parseGuestTasteTestAnswers(
+      localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY),
+    );
+    if (!getGuestTasteTestProgress(answers).complete) return;
+
+    const controller = new AbortController();
+    void fetch('/api/recommendations/guest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers, locale }),
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Guest recommendations unavailable.');
+        return response.json() as Promise<HomepagePersonalization>;
+      })
+      .then(setGuestPersonalization)
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        setGuestPersonalization(null);
+      });
+    return () => controller.abort();
+  }, [authState.authenticated, locale]);
+
+  const visiblePersonalization = authState.authenticated
+    ? personalization
+    : guestPersonalization ?? personalization;
 
   const updateQuery = useCallback((value: string) => {
     setQuery(value);
@@ -653,7 +691,7 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
-      <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} catalogUnavailable={catalogUnavailable} />
+      <Hero books={catalogBooks} catalogStats={catalogStats} personalization={visiblePersonalization} catalogUnavailable={catalogUnavailable} />
       {seriesContinuation && <ContinueSeries continuation={seriesContinuation} />}
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
       <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
