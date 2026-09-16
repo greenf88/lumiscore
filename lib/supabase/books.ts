@@ -9,12 +9,14 @@ import {
   uniqueCoverUrls,
 } from '@/lib/books/covers';
 import {
+  getPreferredEditionLanguages,
   getWorkFirstPublishYear,
   rankEditionsForCover,
   selectRepresentativeEdition,
   type EditionCandidate,
   type EditionRankingContext,
 } from '@/lib/books/edition-ranking';
+import type { Locale } from '@/lib/i18n/config';
 import {
   DUTCH_LANGUAGE_DATABASE_CODES,
   isDutchLanguageBook,
@@ -184,17 +186,16 @@ function toRankedEditionRow(edition: DatabaseRow): RankedEditionRow {
 function getEditionRankingContext(
   work: DatabaseRow,
   title: string,
+  locale: Locale = 'en',
 ): EditionRankingContext {
+  const sourceType = readString(work, ['source_type']);
   return {
     workTitle: title,
     workType: readString(work, ['work_type']),
     firstPublishYear: getWorkFirstPublishYear(
       readNumber(work, ['first_publish_year', 'first_published_year']),
     ),
-    preferredLanguages:
-      readString(work, ['source_type']) === 'lumiscore_native'
-        ? ['nld']
-        : ['eng'],
+    preferredLanguages: getPreferredEditionLanguages(locale, sourceType),
   };
 }
 
@@ -327,6 +328,7 @@ function mapCatalogBook(
   authors: DatabaseRow[],
   editions: DatabaseRow[],
   index: number,
+  locale: Locale = 'en',
 ): Book | null {
   const workId = getWorkId(work);
   const title = readString(work, ['title', 'name']);
@@ -334,7 +336,7 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const editionRankingContext = getEditionRankingContext(work, title);
+  const editionRankingContext = getEditionRankingContext(work, title, locale);
   const edition =
     selectRepresentativeEdition(
       relatedEditions.map(toRankedEditionRow),
@@ -540,7 +542,10 @@ export async function loadHighestRatedCatalog(limit = 18): Promise<{
   };
 }
 
-export async function loadCatalogBook(workId: string): Promise<Book | null> {
+export async function loadCatalogBook(
+  workId: string,
+  locale: Locale = 'en',
+): Promise<Book | null> {
   const result = await supabase
     .from('works')
     .select(BOOK_DETAIL_SELECT)
@@ -549,5 +554,5 @@ export async function loadCatalogBook(workId: string): Promise<Book | null> {
 
   if (result.error) throw result.error;
   const work = asRow(result.data);
-  return work ? mapCatalogBook(work, [], [], 0) : null;
+  return work ? mapCatalogBook(work, [], [], 0, locale) : null;
 }

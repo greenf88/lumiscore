@@ -1,5 +1,8 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { selectRepresentativeEdition } from '../lib/books/edition-ranking.ts';
+import {
+  normalizeEditionLanguage,
+  selectRepresentativeEdition,
+} from '../lib/books/edition-ranking.ts';
 import {
   completePinnedWorkMetadata,
   getWorkDisplayTitle,
@@ -9,7 +12,11 @@ import {
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
 import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
-import { SEED_BOOKS, type SeedBook } from './open-library-seeds.ts';
+import {
+  REVIEWED_SERIES_SEED_BOOKS,
+  SEED_BOOKS,
+  type SeedBook,
+} from './open-library-seeds.ts';
 import { NETHERLANDS_SEEDS } from './open-library-seeds-nl.ts';
 import {
   assertNativeSeedIsSafe,
@@ -64,6 +71,7 @@ type DatabaseColumns = {
     openLibraryId: string;
     title: string;
     workId: string;
+    isbn10: string | null;
     isbn13: string;
     publishDate: string | null;
     publisher: string | null;
@@ -308,21 +316,43 @@ async function loadOpenLibraryBook(seed: SeedBook) {
   if (!workId || !work.title || !work.first_publish_year) {
     throw new Error(`Open Library returned incomplete work data for “${seed.title}”.`);
   }
+  const workTitle = work.title;
 
   const editionResult = await fetchOpenLibraryJson<{
     entries?: OpenLibraryEdition[];
   }>(`/works/${workId}/editions.json?limit=500`);
-  const edition = selectRepresentativeEdition(
-    (editionResult.entries ?? []).map(toRankedOpenLibraryEdition),
-    {
-      workTitle: work.title,
-      firstPublishYear: work.first_publish_year,
-      preferredLanguages: seed.preferredEditionLanguages ?? ['eng'],
-    },
+  const rankedEditions = (editionResult.entries ?? []).map(
+    toRankedOpenLibraryEdition,
   );
-  const editionId = normalizeOpenLibraryId(edition?.key);
+  const requestedLanguages = seed.editionLanguagesToImport ?? [];
+  const localizedEditions = requestedLanguages.flatMap((language) => {
+    const candidates = rankedEditions.filter((edition) =>
+      edition.languageCodes.some((code) =>
+        normalizeEditionLanguage(code) === normalizeEditionLanguage(language),
+      ),
+    );
+    const selected = selectRepresentativeEdition(candidates, {
+      workTitle,
+      firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
+      preferredLanguages: [language],
+    });
+    return selected ? [selected] : [];
+  });
+  const primaryEdition = selectRepresentativeEdition(rankedEditions, {
+    workTitle,
+    firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
+    preferredLanguages: seed.preferredEditionLanguages ?? ['eng'],
+  });
+  const editions = [...new Map(
+    [primaryEdition, ...localizedEditions]
+      .filter((edition): edition is RankedOpenLibraryEdition => Boolean(edition))
+      .flatMap((edition) => {
+        const editionId = normalizeOpenLibraryId(edition.key);
+        return editionId ? [[editionId, edition] as const] : [];
+      }),
+  ).entries()].map(([editionId, edition]) => ({ editionId, edition }));
 
-  if (!edition || !editionId) {
+  if (editions.length === 0) {
     throw new Error(`Open Library returned no suitable edition for “${seed.title}”.`);
   }
 
@@ -330,20 +360,21 @@ async function loadOpenLibraryBook(seed: SeedBook) {
     author,
     work: {
       id: workId,
-      openLibraryTitle: work.title,
+      openLibraryTitle: workTitle,
       title: getWorkDisplayTitle(seed, work),
-      firstPublishYear: work.first_publish_year,
+      firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
     },
-    edition: {
+    editions: editions.map(({ editionId, edition }) => ({
       id: editionId,
-      title: edition.title ?? work.title,
+      title: edition.title ?? workTitle,
+      isbn10: edition.isbn_10?.find((isbn) => /^\d{9}[\dX]$/i.test(isbn.replace(/[\s-]/g, '')))?.replace(/[\s-]/g, '') ?? null,
       isbn13: edition.isbn_13
         ?.map(normalizeIsbn13)
         .find((isbn): isbn is string => isbn !== null) ?? null,
       publishDate: edition.publish_date ?? null,
       publisher: edition.publishers?.[0] ?? null,
       language: edition.languages?.[0]?.key?.split('/').filter(Boolean).at(-1) ?? null,
-    },
+    })),
   };
 }
 
@@ -412,6 +443,7 @@ async function resolveDatabaseColumns(): Promise<DatabaseColumns> {
       ]))!,
       title: (await resolveColumn('editions', 'title', ['title', 'name']))!,
       workId: (await resolveColumn('editions', 'work relation', ['work_id']))!,
+      isbn10: await resolveColumn('editions', 'ISBN-10', ['isbn_10', 'isbn10'], false),
       isbn13: (await resolveColumn('editions', 'ISBN-13', [
         'isbn13',
         'isbn_13',
@@ -573,44 +605,47 @@ async function importBook(
     ],
   });
 
-  const editionPayload: Row = {
-    [columns.editions.openLibraryId]: book.edition.id,
-    [columns.editions.title]: book.edition.title,
-    [columns.editions.workId]: work.id,
-    [columns.editions.isbn13]: book.edition.isbn13,
-  };
-  if (columns.editions.publishDate && book.edition.publishDate) {
-    editionPayload[columns.editions.publishDate] = book.edition.publishDate;
-  }
-  if (columns.editions.publisher && book.edition.publisher) {
-    editionPayload[columns.editions.publisher] = book.edition.publisher;
-  }
-  if (columns.editions.language && book.edition.language) {
-    editionPayload[columns.editions.language] = book.edition.language;
-  }
+  let createdEditions = 0;
+  for (const edition of book.editions) {
+    const editionPayload: Row = {
+      [columns.editions.openLibraryId]: edition.id,
+      [columns.editions.title]: edition.title,
+      [columns.editions.workId]: work.id,
+      [columns.editions.isbn13]: edition.isbn13,
+    };
+    if (columns.editions.isbn10 && edition.isbn10) {
+      editionPayload[columns.editions.isbn10] = edition.isbn10;
+    }
+    if (columns.editions.publishDate && edition.publishDate) {
+      editionPayload[columns.editions.publishDate] = edition.publishDate;
+    }
+    if (columns.editions.publisher && edition.publisher) {
+      editionPayload[columns.editions.publisher] = edition.publisher;
+    }
+    if (columns.editions.language && edition.language) {
+      editionPayload[columns.editions.language] = edition.language;
+    }
 
-  const editionFallbacks: Row[] = [];
-  if (book.edition.isbn13) {
+    const editionFallbacks: Row[] = [];
+    if (edition.isbn13) {
+      editionFallbacks.push({ [columns.editions.isbn13]: edition.isbn13 });
+    }
     editionFallbacks.push({
-      [columns.editions.isbn13]: book.edition.isbn13,
+      [columns.editions.workId]: work.id,
+      [columns.editions.openLibraryId]: edition.id,
     });
+    const savedEdition = await saveWithoutDuplicates({
+      table: 'editions',
+      idColumn: columns.editions.id,
+      openLibraryIdColumn: columns.editions.openLibraryId,
+      openLibraryId: edition.id,
+      payload: editionPayload,
+      fallbackFilters: editionFallbacks,
+    });
+    if (savedEdition.created) createdEditions += 1;
   }
-  editionFallbacks.push({
-    [columns.editions.workId]: work.id,
-    [columns.editions.title]: book.edition.title,
-  });
-  editionFallbacks.push({ [columns.editions.workId]: work.id });
-  const edition = await saveWithoutDuplicates({
-    table: 'editions',
-    idColumn: columns.editions.id,
-    openLibraryIdColumn: columns.editions.openLibraryId,
-    openLibraryId: book.edition.id,
-    payload: editionPayload,
-    fallbackFilters: editionFallbacks,
-  });
 
-  const actions = [author.created, work.created, edition.created].filter(Boolean)
-    .length;
+  const actions = Number(author.created) + Number(work.created) + createdEditions;
   return `${book.work.title} — ${book.author.name} (${actions} new row${actions === 1 ? '' : 's'})`;
 }
 
@@ -738,13 +773,17 @@ async function main(): Promise<void> {
     argument.startsWith('--scope='),
   );
   const scope = scopeArgument?.slice('--scope='.length) ?? 'all';
-  if (scope !== 'all' && scope !== 'netherlands') {
+  if (scope !== 'all' && scope !== 'netherlands' && scope !== 'series') {
     throw new Error(
-      `Unsupported import scope “${scope}”. Use “all” or “netherlands”.`,
+      `Unsupported import scope “${scope}”. Use “all”, “netherlands” or “series”.`,
     );
   }
 
-  const scopedSeeds = scope === 'netherlands' ? NETHERLANDS_SEEDS : SEED_BOOKS;
+  const scopedSeeds = scope === 'netherlands'
+    ? NETHERLANDS_SEEDS
+    : scope === 'series'
+      ? REVIEWED_SERIES_SEED_BOOKS
+      : SEED_BOOKS;
   const plan = createOpenLibraryImportPlan(scopedSeeds);
   if (plan.invalidUnpinnedSeeds.length > 0) {
     throw new Error(
@@ -754,7 +793,8 @@ async function main(): Promise<void> {
     );
   }
 
-  const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true';
+  const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true' ||
+    process.argv.includes('--dry-run');
   const requestedWorkIds = new Set(
     (process.env.OPEN_LIBRARY_IMPORT_WORK_IDS ?? '')
       .split(',')
@@ -791,7 +831,7 @@ async function main(): Promise<void> {
       if (dryRun) {
         const book = await loadOpenLibraryBook(seed);
         console.log(
-          `[OPEN LIBRARY] [${index + 1}/${seeds.length}] Verified ${book.work.title} — ${book.author.name}`,
+          `[OPEN LIBRARY] [${index + 1}/${seeds.length}] Verified ${book.work.title} — ${book.author.name}; editions: ${book.editions.map((edition) => edition.language ?? 'und').join(', ')}`,
         );
       } else {
         const result = await importBook(seed, columns);

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { REVIEWED_COLLECTION_SEEDS } from '../lib/collections/seed-data.ts';
+import { REVIEWED_SERIES_CATALOG_PLANS } from '../lib/collections/series-catalog-plan.ts';
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -68,13 +69,24 @@ if (!live.error) {
   console.log(`\nLive table check: unavailable (${live.error.code ?? 'unknown'}); expected before migration is applied.`);
 }
 
-console.log('\nReviewed candidate gaps (not seeded as ordered series):');
-for (const gap of [
-  'Harry Potter — present: 93 (book 1), 168 (book 3); missing books 2 and 4–7',
-  'The Hunger Games — present: 102 (book 1), 183 (book 3), 194 and 278 (prequels); missing Catching Fire',
-  'The Expanse — present: 164 (book 9); missing books 1–8',
-  'Millennium — present: 48 (book 1), 567 (book 2); missing book 3',
-  'Percy Jackson and the Olympians — present: 134 (book 1); missing books 2–5',
-  'The Witcher — present: 165 (Blood of Elves); other main installments missing',
-  'Bridgerton — no confidently matched works in the current catalog',
-]) console.log(`  ${gap}`);
+console.log('\nReviewed target series live memberships:');
+if (live.error) {
+  console.log('  unavailable because the live Collections query failed');
+} else {
+  for (const series of REVIEWED_SERIES_CATALOG_PLANS) {
+    const collection = live.data?.find((row) => row.slug === series.slug);
+    const memberships = Array.isArray(collection?.collection_books)
+      ? collection.collection_books
+      : [];
+    const actualSequence = memberships
+      .map((membership) => Number(membership.sequence_number))
+      .sort((left, right) => left - right);
+    const expectedSequence = series.books.map(({ sequenceNumber }) => sequenceNumber);
+    const sequenceComplete = actualSequence.length === expectedSequence.length &&
+      actualSequence.every((value, index) => value === expectedSequence[index]);
+
+    console.log(
+      `  ${series.name}: ${memberships.length}/${series.books.length}; sequence ${sequenceComplete ? 'complete' : 'incomplete'}`,
+    );
+  }
+}

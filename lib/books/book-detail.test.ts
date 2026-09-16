@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import type { Book } from '@/app/data/books';
 import {
@@ -105,4 +106,31 @@ test('keeps verified back-cover media separate and tied to the edition ISBN', ()
     ),
     null,
   );
+});
+
+test('book detail loads shared Taste Test personalization instead of requiring ratings', async () => {
+  const [page, component, loader] = await Promise.all([
+    readFile(new URL('../../app/book/[workId]/page.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8'),
+  ]);
+
+  assert.match(page, /loadBookDetailPersonalization\(workId, locale\)/);
+  assert.match(component, /parseGuestTasteTestAnswers/);
+  assert.match(component, /calculatePersonalMatch/);
+  assert.doesNotMatch(component, /detail-match-panel[\s\S]{0,180}<strong>—<\/strong>/);
+  assert.match(loader, /buildTasteProfile\(answers, ratingEvidence, locale\)/);
+  assert.match(loader, /profile\.selectedCount > 0 \|\| profile\.meaningfulRatingCount > 0/);
+});
+
+test('book detail keeps separate unlock and insufficient-metadata states', async () => {
+  const [component, translations] = await Promise.all([
+    readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../i18n/translations.ts', import.meta.url), 'utf8'),
+  ]);
+
+  assert.match(component, /detail\.unlockMatch/);
+  assert.match(component, /detail\.matchNeedsBookMetadata/);
+  assert.match(translations, /Take the Taste Test or rate books to see your match/);
+  assert.match(translations, /Doe de Smaaktest of beoordeel boeken om jouw match te zien/);
 });

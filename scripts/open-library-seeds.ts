@@ -1,6 +1,7 @@
 import type { BookMatchSeed } from './open-library-matching.ts';
 import { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
 import { NETHERLANDS_SEEDS } from './open-library-seeds-nl.ts';
+import { REVIEWED_SERIES_BOOKS } from '../lib/collections/series-catalog-plan.ts';
 
 export { EXPANDED_SEED_BOOKS } from './open-library-seeds-expanded.ts';
 
@@ -20,6 +21,7 @@ export type SeedBook = BookMatchSeed & {
   author: string;
   category: SeedCategory;
   preferredEditionLanguages?: readonly string[];
+  editionLanguagesToImport?: readonly string[];
 };
 
 export const ORIGINAL_SEED_BOOKS: readonly SeedBook[] = [
@@ -166,10 +168,36 @@ export const PRE_NETHERLANDS_SEED_BOOKS: readonly SeedBook[] = [
 
 // Keep manual-review entries visible in the catalog, but the importer has a
 // strict preflight and cannot process them until they receive a Work ID.
+export const REVIEWED_SERIES_SEED_BOOKS: readonly SeedBook[] =
+  REVIEWED_SERIES_BOOKS.map((entry) => ({
+    title: entry.sourceTitle ?? entry.title,
+    alternateTitles: [
+      ...(entry.alternateTitles ?? []),
+      ...(entry.sourceTitle && entry.sourceTitle !== entry.title
+        ? [entry.title]
+        : []),
+    ],
+    preferredDisplayTitle: entry.title,
+    expectedOpenLibraryWorkId: entry.openLibraryWorkId,
+    author: entry.author,
+    firstPublishYear: entry.firstPublishYear,
+    category: entry.category,
+    preferredEditionLanguages: entry.preferredEditionLanguages,
+    editionLanguagesToImport: entry.editionLanguagesToImport,
+  }));
+
+const reviewedSeriesWorkIds = new Set(
+  REVIEWED_SERIES_SEED_BOOKS.map((seed) => seed.expectedOpenLibraryWorkId),
+);
+
+// Reviewed series seeds replace older single-book entries for the same exact
+// Open Library work. This keeps one pinned identity while adding edition and
+// collection metadata needed by the conservative series batch.
 export const SEED_BOOKS: readonly SeedBook[] = [
   ...PRE_NETHERLANDS_SEED_BOOKS,
   ...NETHERLANDS_SEEDS,
-];
+].filter((seed) => !reviewedSeriesWorkIds.has(seed.expectedOpenLibraryWorkId))
+  .concat(REVIEWED_SERIES_SEED_BOOKS);
 
 export const MANUAL_VERIFICATION_TITLES = [
   'The Lord of the Rings',

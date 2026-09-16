@@ -6,6 +6,7 @@ import { TASTE_TEST_WORK_IDS } from '../taste-test/config.ts';
 import { buildTasteProfile } from '../taste-test/profile.ts';
 import { tasteVector } from '../taste-test/traits.ts';
 import {
+  calculatePersonalMatch,
   calculateDisplayedMatchScore,
   calculateMatchConfidence,
   calculateQualityPrior,
@@ -376,4 +377,86 @@ test('Taste Test anchor identity has no ranking bonus', async () => {
   assert.equal(withoutSeries.rankingScore, withSeries.rankingScore);
   const engineSource = await readFile(new URL('./engine.ts', import.meta.url), 'utf8');
   assert.doesNotMatch(engineSource, /TASTE_TEST_ANCHORS|anchorWorkIds/);
+});
+
+test('Taste Test-only evidence produces the same detail match as recommendation presentation', () => {
+  const profile = buildTasteProfile({
+    'fantasy-or-science-fiction': 'right',
+    'worldbuilding-or-literary-realism': 'left',
+    'speculative-action-or-uplifting-fable': 'left',
+    'idea-driven-or-character-driven': 'left',
+    'classic-mystery-or-modern-speculative': 'right',
+  }, []);
+  const detailCandidate = candidate('9901', 'Verified science fiction', 'A', {
+    science_fiction: 1,
+    speculative: .8,
+    worldbuilding: .9,
+    idea_driven: .8,
+  });
+  const detail = calculatePersonalMatch({
+    profile,
+    candidate: detailCandidate,
+    workId: '9901',
+    locale: 'en',
+  });
+  const recommendation = recommendBooks({
+    candidates: [detailCandidate],
+    profile,
+    ratedWorkIds: new Set(),
+    locale: 'en',
+  })[0];
+
+  assert.equal(profile.ratingCount, 0);
+  assert.equal(profile.confidence, 'MEDIUM');
+  assert.deepEqual(
+    {
+      matchScore: detail.matchScore,
+      matchLabel: detail.matchLabel,
+      matchConfidence: detail.matchConfidence,
+      explanation: detail.explanation,
+    },
+    {
+      matchScore: recommendation.matchScore,
+      matchLabel: recommendation.matchLabel,
+      matchConfidence: recommendation.matchConfidence,
+      explanation: recommendation.explanation,
+    },
+  );
+});
+
+test('detail match explanation is localized and grounded in real overlap', () => {
+  const profile = buildTasteProfile({
+    'fantasy-or-science-fiction': 'right',
+    'worldbuilding-or-literary-realism': 'left',
+    'speculative-action-or-uplifting-fable': 'left',
+    'idea-driven-or-character-driven': 'left',
+    'classic-mystery-or-modern-speculative': 'right',
+  }, []);
+  const detailCandidate = candidate('9902', 'Werelden', 'A', {
+    science_fiction: 1,
+    worldbuilding: 1,
+  });
+  const english = calculatePersonalMatch({ profile, candidate: detailCandidate, workId: '9902', locale: 'en' });
+  const dutch = calculatePersonalMatch({ profile, candidate: detailCandidate, workId: '9902', locale: 'nl' });
+
+  assert.match(english.explanation, /science fiction|immersive worlds/);
+  assert.match(dutch.explanation, /sciencefiction|meeslepende werelden/);
+  assert.doesNotMatch(dutch.explanation, /romantiek|non-fictie/);
+});
+
+test('insufficient book metadata never fabricates a detail match', () => {
+  const result = calculatePersonalMatch({
+    profile: duneProfile,
+    candidate: {
+      traits: tasteVector({}),
+      metadataConfidence: 0,
+      coverageLevel: 'none',
+    },
+    workId: '9903',
+    locale: 'en',
+  });
+
+  assert.equal(result.matchScore, null);
+  assert.equal(result.matchLabel, null);
+  assert.equal(result.explanation, '');
 });

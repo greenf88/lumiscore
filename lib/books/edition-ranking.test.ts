@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  getPreferredEditionLanguages,
   getWorkFirstPublishYear,
   selectCoverEdition,
   selectRepresentativeEdition,
@@ -136,4 +137,36 @@ test('cover source may differ from the representative edition', () => {
     selectCoverEdition([hardcover, paperbackWithCover], context)?.id,
     'cover',
   );
+});
+
+test('NL locale prefers a verified Dutch edition over English and Portuguese editions', () => {
+  const editions: EditionCandidate[] = [
+    { id: 'por', title: 'Harry Potter e a Pedra Filosofal', physicalFormat: 'paperback', languageCodes: ['por'], isbn13: '9780000000011', coverIds: [11] },
+    { id: 'eng', title: "Harry Potter and the Philosopher's Stone", physicalFormat: 'hardcover', languageCodes: ['eng'], isbn13: '9780000000012', coverIds: [12] },
+    { id: 'nld', title: 'Harry Potter en de Steen der Wijzen', physicalFormat: 'paperback', languageCodes: ['nld'], isbn13: '9780000000013', coverIds: [13] },
+  ];
+  const localeContext = {
+    workTitle: "Harry Potter and the Philosopher's Stone",
+    preferredLanguages: getPreferredEditionLanguages('nl'),
+  };
+
+  assert.equal(selectRepresentativeEdition(editions, localeContext)?.id, 'nld');
+  assert.equal(selectCoverEdition(editions, localeContext)?.id, 'nld');
+});
+
+test('EN locale prefers English and never lets Portuguese beat it', () => {
+  const editions: EditionCandidate[] = [
+    { id: 'por', title: 'Harry Potter e a Pedra Filosofal', physicalFormat: 'hardcover', languageCodes: ['por'], isbn13: '9780000000021' },
+    { id: 'eng', title: "Harry Potter and the Philosopher's Stone", physicalFormat: 'paperback', languageCodes: ['eng'], isbn13: '9780000000022' },
+  ];
+
+  assert.equal(selectRepresentativeEdition(editions, {
+    workTitle: "Harry Potter and the Philosopher's Stone",
+    preferredLanguages: getPreferredEditionLanguages('en'),
+  })?.id, 'eng');
+});
+
+test('native works retain Dutch-first edition preference', () => {
+  assert.deepEqual(getPreferredEditionLanguages('en', 'lumiscore_native'), ['nld', 'eng']);
+  assert.deepEqual(getPreferredEditionLanguages('nl', 'lumiscore_native'), ['nld', 'eng']);
 });

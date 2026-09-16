@@ -334,7 +334,7 @@ test('pins all 32 manually verified titles to their requested Open Library works
   );
 });
 
-test('preserves the existing 1000-book catalog while adding the Netherlands collection', () => {
+test('preserves the existing catalog while adding the reviewed series batch', () => {
   assert.equal(ORIGINAL_SEED_BOOKS.length, 100);
   assert.equal(ADDITIONAL_SEED_BOOKS.length, 15);
   assert.equal(LEGACY_SEED_BOOKS.length, 115);
@@ -343,7 +343,7 @@ test('preserves the existing 1000-book catalog while adding the Netherlands coll
   assert.equal(NETHERLANDS_CORE_SEEDS.length, 250);
   assert.equal(SUZANNE_VERMEER_SEEDS.length, 53);
   assert.equal(NETHERLANDS_SEEDS.length, 303);
-  assert.equal(SEED_BOOKS.length, 1303);
+  assert.equal(SEED_BOOKS.length, 1337);
 
   const identities = SEED_BOOKS.map(seedIdentity);
   assert.equal(new Set(identities).size, SEED_BOOKS.length);
@@ -455,7 +455,7 @@ test('gives every seed an author and first-publication-year hint', () => {
 test('has no duplicate title and author combinations', () => {
   const identities = SEED_BOOKS.map(seedIdentity);
 
-  assert.equal(new Set(identities).size, 1303);
+  assert.equal(new Set(identities).size, SEED_BOOKS.length);
 });
 
 test('pins every pre-existing seed and explicitly classifies every Netherlands seed', () => {
@@ -466,8 +466,8 @@ test('pins every pre-existing seed and explicitly classifies every Netherlands s
     seed.expectedOpenLibraryWorkId!.toUpperCase(),
   );
 
-  assert.equal(pinnedSeeds.length, 1254);
-  assert.equal(new Set(pinnedWorkIds).size, 1254);
+  assert.equal(pinnedSeeds.length, 1288);
+  assert.equal(new Set(pinnedWorkIds).size, pinnedSeeds.length);
   assert.ok(pinnedWorkIds.every((workId) => /^OL\d+W$/.test(workId)));
 
   const unpinnedSeeds = NETHERLANDS_SEEDS.filter(
@@ -772,7 +772,11 @@ test('does not seed derivative or guide titles', () => {
 });
 
 test('tracks only configured seeds as manual-verification candidates', () => {
-  const configuredTitles = new Set(SEED_BOOKS.map((seed) => seed.title));
+  const configuredTitles = new Set(SEED_BOOKS.flatMap((seed) => [
+    seed.title,
+    seed.preferredDisplayTitle,
+    ...(seed.alternateTitles ?? []),
+  ].filter((title): title is string => Boolean(title))));
 
   for (const title of MANUAL_VERIFICATION_TITLES) {
     assert.ok(configuredTitles.has(title));

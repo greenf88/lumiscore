@@ -86,6 +86,14 @@ export function normalizeEditionLanguage(value: string): string {
   return normalized;
 }
 
+export function getPreferredEditionLanguages(
+  locale: 'en' | 'nl',
+  sourceType?: string | null,
+): readonly string[] {
+  if (sourceType === 'lumiscore_native') return ['nld', 'eng'];
+  return locale === 'nl' ? ['nld', 'eng'] : ['eng'];
+}
+
 function editionText(edition: EditionCandidate): string {
   return [
     edition.title,
@@ -152,7 +160,15 @@ function languageScore(
   if (languages.length === 0) return 0;
 
   const preferred = preferredLanguages.map(normalizeEditionLanguage);
-  return languages.some((language) => preferred.includes(language)) ? 100 : -100;
+  const firstPreferredIndex = preferred.findIndex((preferredLanguage) =>
+    languages.includes(preferredLanguage),
+  );
+  if (firstPreferredIndex < 0) return -400;
+
+  // Language preference is ordered. For a Dutch UI an nld edition must beat
+  // an otherwise equivalent eng edition; listing both may not flatten them
+  // into the same score.
+  return 600 - firstPreferredIndex * 500;
 }
 
 function titleScore(edition: EditionCandidate, workTitle: string): number {

@@ -1,6 +1,10 @@
 import type { Book } from '../../app/data/books.ts';
-import type { PersonalizedRecommendation, RecommendationCandidate } from '../recommendations/engine.ts';
-import { recommendBooks } from '../recommendations/engine.ts';
+import type {
+  PersonalMatchResult,
+  PersonalizedRecommendation,
+  RecommendationCandidate,
+} from '../recommendations/engine.ts';
+import { calculatePersonalMatch, recommendBooks } from '../recommendations/engine.ts';
 import { getReviewedWorkTraitCorrection } from '../recommendations/reviewed-work-trait-corrections.ts';
 import {
   buildEffectiveWorkTraitVector,
@@ -17,6 +21,8 @@ import {
 } from '../taste-test/config.ts';
 import { buildTasteProfile, type RatingEvidence } from '../taste-test/profile.ts';
 import { emptyTasteVector } from '../taste-test/traits.ts';
+import type { TasteVector } from '../taste-test/traits.ts';
+import type { WorkTraitCoverageLevel } from '../recommendations/work-trait-evidence.ts';
 import { applyRatingSummaries } from '../ratings/card-summaries.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
@@ -63,6 +69,19 @@ export type HomepagePersonalization = {
   tasteTestAnsweredCount: number;
   hasEvidence: boolean;
   recommendations: PersonalizedRecommendation[];
+};
+
+export type BookDetailMatchCandidate = {
+  traits: TasteVector;
+  metadataConfidence: number;
+  coverageLevel: WorkTraitCoverageLevel;
+};
+
+export type BookDetailPersonalization = {
+  authenticated: boolean;
+  hasEvidence: boolean;
+  candidate: BookDetailMatchCandidate | null;
+  match: PersonalMatchResult | null;
 };
 
 function rowsToAnswers(rows: readonly ResponseRow[]): TasteTestAnswers {
@@ -169,6 +188,85 @@ export async function saveTasteTestAnswers(
   );
   if (error) throw error;
   return loadTasteTestServerState();
+}
+
+export async function loadBookDetailPersonalization(
+  workId: string,
+  locale: Locale = 'en',
+): Promise<BookDetailPersonalization> {
+  const numericWorkId = Number(workId);
+  if (!Number.isSafeInteger(numericWorkId) || numericWorkId < 1) {
+    return {
+      authenticated: false,
+      hasEvidence: false,
+      candidate: null,
+      match: null,
+    };
+  }
+
+  const { client, user } = await getVerifiedServerUser();
+  const [candidateEvidence, responsesResult, ratingsResult] = await Promise.all([
+    loadWorkTraitEvidenceBatched(client, [workId]),
+    user
+      ? client.from('taste_test_responses').select('question_key,choice')
+        .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id)
+      : Promise.resolve({ data: [], error: null }),
+    user
+      ? client.from('ratings').select('work_id,rating').eq('user_id', user.id)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
+  const effectiveCandidate = buildEffectiveWorkTraitVector(
+    candidateEvidence.get(workId) ?? [],
+    getReviewedWorkTraitCorrection(workId),
+  );
+  const candidate: BookDetailMatchCandidate = {
+    traits: effectiveCandidate.traits,
+    metadataConfidence: effectiveCandidate.metadataConfidence,
+    coverageLevel: effectiveCandidate.coverageLevel,
+  };
+
+  if (!user) {
+    return {
+      authenticated: false,
+      hasEvidence: false,
+      candidate,
+      match: null,
+    };
+  }
+
+  const answers = responsesResult.error
+    ? {}
+    : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]);
+  const ratings = ratingsResult.error
+    ? []
+    : (ratingsResult.data ?? []) as RatingRow[];
+  const ratedWorkIds = ratings.map(({ work_id }) => String(work_id));
+  const ratingEvidenceRows = ratedWorkIds.length
+    ? await loadWorkTraitEvidenceBatched(client, ratedWorkIds)
+    : new Map<string, never[]>();
+  const ratingEvidence: RatingEvidence[] = ratings.map((rating) => {
+    const ratingWorkId = String(rating.work_id);
+    const effective = buildEffectiveWorkTraitVector(
+      ratingEvidenceRows.get(ratingWorkId) ?? [],
+      getReviewedWorkTraitCorrection(ratingWorkId),
+    );
+    return {
+      workId: ratingWorkId,
+      rating: rating.rating,
+      traits: effective.traits,
+    };
+  });
+  const profile = buildTasteProfile(answers, ratingEvidence, locale);
+  const hasEvidence = profile.selectedCount > 0 || profile.meaningfulRatingCount > 0;
+
+  return {
+    authenticated: true,
+    hasEvidence,
+    candidate,
+    match: hasEvidence
+      ? calculatePersonalMatch({ profile, candidate, workId, locale })
+      : null,
+  };
 }
 
 export async function loadHomepagePersonalization(locale: Locale = 'en'): Promise<HomepagePersonalization> {

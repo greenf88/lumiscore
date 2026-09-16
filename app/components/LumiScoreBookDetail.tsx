@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Book } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
 import {
@@ -17,12 +17,31 @@ import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import type { ReadingStatus } from '@/lib/collections/model';
 import type { BookCollectionContext } from '@/lib/supabase/collections';
+import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
+import {
+  calculatePersonalMatch,
+  type MatchLabel,
+  type PersonalMatchResult,
+} from '@/lib/recommendations/engine';
+import { buildTasteProfile } from '@/lib/taste-test/profile';
+import {
+  parseGuestTasteTestAnswers,
+  TASTE_TEST_GUEST_STORAGE_KEY,
+} from '@/lib/taste-test/guest-storage';
 
 type LumiScoreBookDetailProps = {
   book: Book;
   initialRatingState: BookRatingState;
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
+  personalization: BookDetailPersonalization;
+};
+
+const MATCH_LABEL_KEYS: Record<MatchLabel, 'match.strong' | 'match.good' | 'match.possible' | 'match.early'> = {
+  'Strong match': 'match.strong',
+  'Good match': 'match.good',
+  'Possible match': 'match.possible',
+  'Early match': 'match.early',
 };
 
 const ratingChoices = Array.from(
@@ -35,6 +54,7 @@ export function LumiScoreBookDetail({
   initialRatingState,
   initialReadingStatus,
   collectionContext,
+  personalization,
 }: LumiScoreBookDetailProps) {
   const { locale, t } = useLumiScoreLocale();
   const [ratingState, setRatingState] = useState(initialRatingState);
@@ -43,6 +63,11 @@ export function LumiScoreBookDetail({
   );
   const [pendingRating, setPendingRating] = useState<number | 'remove' | null>(null);
   const [ratingError, setRatingError] = useState<string | null>(null);
+  const [guestPersonalization, setGuestPersonalization] = useState<{
+    key: string;
+    hasEvidence: boolean;
+    match: PersonalMatchResult | null;
+  } | null>(null);
   const detailPath = `/book/${book.workId}`;
   const loginHref = `/login?next=${encodeURIComponent(detailPath)}`;
   const score =
@@ -50,6 +75,69 @@ export function LumiScoreBookDetail({
       ? ratingState.lumiscore.toFixed(1)
       : '—';
   const backCover = getVerifiedBackCover(book);
+  const isAuthenticated = ratingState.authenticated;
+  const guestPersonalizationKey = `${book.workId ?? book.id}:${locale}:${personalization.candidate ? 'candidate' : 'none'}`;
+  const currentGuestPersonalization = guestPersonalization?.key === guestPersonalizationKey
+    ? guestPersonalization
+    : null;
+  const hasTasteEvidence = isAuthenticated
+    ? personalization.hasEvidence
+    : currentGuestPersonalization?.hasEvidence ?? false;
+  const personalMatch = isAuthenticated
+    ? personalization.match
+    : currentGuestPersonalization?.match ?? null;
+  const matchValue = personalMatch?.matchScore !== null && personalMatch?.matchScore !== undefined
+    ? `${personalMatch.matchScore}%`
+    : personalMatch?.matchLabel
+      ? t(MATCH_LABEL_KEYS[personalMatch.matchLabel])
+      : '—';
+  const matchCopy = !hasTasteEvidence
+    ? t('detail.unlockMatch')
+    : !personalization.candidate || personalization.candidate.coverageLevel === 'none'
+      ? t('detail.matchNeedsBookMetadata')
+      : personalMatch?.explanation
+        ? personalMatch.explanation
+        : personalMatch?.matchLabel === 'Early match'
+          ? t('detail.matchEarlyCopy')
+          : t('detail.matchNoOverlap');
+
+  useEffect(() => {
+    const candidate = personalization.candidate;
+    if (isAuthenticated || !candidate) return;
+    let active = true;
+
+    queueMicrotask(() => {
+      if (!active) return;
+      const answers = parseGuestTasteTestAnswers(
+        localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY),
+      );
+      const profile = buildTasteProfile(answers, [], locale);
+      const hasEvidence = profile.selectedCount > 0;
+      setGuestPersonalization({
+        key: guestPersonalizationKey,
+        hasEvidence,
+        match: hasEvidence
+          ? calculatePersonalMatch({
+            profile,
+            candidate,
+            workId: book.workId ?? book.id,
+            locale,
+          })
+          : null,
+      });
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [
+    book.id,
+    book.workId,
+    guestPersonalizationKey,
+    isAuthenticated,
+    locale,
+    personalization.candidate,
+  ]);
 
   const toggleTheme = () => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -207,8 +295,8 @@ export function LumiScoreBookDetail({
             </section>
             <section className="detail-score-panel detail-match-panel" aria-labelledby="match-heading">
               <span id="match-heading">{t('detail.yourMatch')}</span>
-              <strong>—</strong>
-              <p>{t('detail.unlockMatch')}</p>
+              <strong>{matchValue}</strong>
+              <p>{matchCopy}</p>
             </section>
           </div>
 

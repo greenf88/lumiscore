@@ -7,6 +7,8 @@ import {
   getBookMetadataDescription,
   isCatalogWorkId,
 } from '@/lib/books/book-detail';
+import { resolveRequestLocale } from '@/lib/i18n/server';
+import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -14,18 +16,19 @@ type BookPageProps = {
 
 export const dynamic = 'force-dynamic';
 
-const getBook = cache(async (workId: string) => {
+const getBook = cache(async (workId: string, locale: 'en' | 'nl') => {
   if (!isCatalogWorkId(workId)) return null;
 
   const { loadCatalogBook } = await import('@/lib/supabase/books');
-  return loadCatalogBook(workId);
+  return loadCatalogBook(workId, locale);
 });
 
 export async function generateMetadata({
   params,
 }: BookPageProps): Promise<Metadata> {
   const { workId } = await params;
-  const book = await getBook(workId);
+  const { locale } = await resolveRequestLocale();
+  const book = await getBook(workId, locale);
 
   if (!book) {
     return {
@@ -58,6 +61,7 @@ export async function generateMetadata({
 
 export default async function BookPage({ params }: BookPageProps) {
   const { workId } = await params;
+  const { locale } = await resolveRequestLocale();
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
     ({ loadBookRatingState }) => loadBookRatingState(workId),
   );
@@ -67,11 +71,22 @@ export default async function BookPage({ params }: BookPageProps) {
   const collectionContextPromise = import('@/lib/supabase/collections')
     .then(({ loadBookCollectionContext }) => loadBookCollectionContext(workId))
     .catch(() => null);
-  const [book, initialRatingState, readingStatus, collectionContext] = await Promise.all([
-    getBook(workId),
+  const personalizationPromise = import('@/lib/supabase/taste-test')
+    .then(({ loadBookDetailPersonalization }) =>
+      loadBookDetailPersonalization(workId, locale),
+    )
+    .catch((): BookDetailPersonalization => ({
+      authenticated: false,
+      hasEvidence: false,
+      candidate: null,
+      match: null,
+    }));
+  const [book, initialRatingState, readingStatus, collectionContext, personalization] = await Promise.all([
+    getBook(workId, locale),
     ratingStatePromise,
     readingStatusPromise,
     collectionContextPromise,
+    personalizationPromise,
   ]);
   if (!book) notFound();
 
@@ -89,6 +104,7 @@ export default async function BookPage({ params }: BookPageProps) {
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}
+        personalization={personalization}
       />
     </>
   );

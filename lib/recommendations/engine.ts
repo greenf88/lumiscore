@@ -41,6 +41,17 @@ export type RankedRecommendation = PersonalizedRecommendation & {
   collaborativeWeight: number;
   finalRankingScore: number;
 };
+export type PersonalMatchResult = Pick<
+  PersonalizedRecommendation,
+  | 'matchScore'
+  | 'matchLabel'
+  | 'matchConfidence'
+  | 'explanation'
+  | 'coverageLevel'
+  | 'metadataConfidence'
+> & {
+  personalSimilarity: number;
+};
 const QUALITY_NEUTRAL_SCORE = 5.5;
 const QUALITY_PRIOR_RATINGS = 5;
 
@@ -121,6 +132,42 @@ export function getMatchPresentation(input: {
   return { matchScore: null, matchLabel, matchConfidence };
 }
 
+export function calculatePersonalMatch(input: {
+  profile: TasteProfile;
+  candidate: Pick<
+    RecommendationCandidate,
+    'traits' | 'metadataConfidence' | 'coverageLevel'
+  >;
+  workId: string;
+  locale?: Locale;
+}): PersonalMatchResult {
+  const personalSimilarity = Math.max(
+    0,
+    cosineTasteSimilarity(input.profile.vector, input.candidate.traits),
+  );
+  const presentation = getMatchPresentation({
+    personalSimilarity,
+    candidateCoverage: input.candidate.coverageLevel,
+    metadataConfidence: input.candidate.metadataConfidence,
+    userConfidence: input.profile.confidence,
+  });
+
+  return {
+    ...presentation,
+    personalSimilarity,
+    coverageLevel: input.candidate.coverageLevel,
+    metadataConfidence: input.candidate.metadataConfidence,
+    explanation: buildRecommendationExplanation({
+      profile: input.profile.vector,
+      candidate: input.candidate.traits,
+      workId: input.workId,
+      coverageLevel: input.candidate.coverageLevel,
+      metadataConfidence: input.candidate.metadataConfidence,
+      locale: input.locale,
+    }),
+  };
+}
+
 type ScoredCandidate = RankedRecommendation & {
   author: string;
   seriesKey?: string;
@@ -144,17 +191,17 @@ export function recommendBooks(input: {
       && !input.ratedWorkIds.has(book.workId!)
       && !input.excludedWorkIds?.has(book.workId!))
     .map(({ book, traits, metadataConfidence, coverageLevel, seriesKey }) => {
-      const personalSimilarity = Math.max(0, cosineTasteSimilarity(input.profile.vector, traits));
+      const personalMatch = calculatePersonalMatch({
+        profile: input.profile,
+        candidate: { traits, metadataConfidence, coverageLevel },
+        workId: book.workId!,
+        locale: input.locale,
+      });
+      const personalSimilarity = personalMatch.personalSimilarity;
       const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);
       const rankingScore = .8 * personalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!);
       const collaborativeSignal = input.collaborativeSignals?.get(book.workId!) ?? null;
       const finalRankingScore = applyCollaborativeBoost(rankingScore, collaborativeSignal);
-      const matchPresentation = getMatchPresentation({
-        personalSimilarity,
-        candidateCoverage: coverageLevel,
-        metadataConfidence,
-        userConfidence: input.profile.confidence,
-      });
       return {
         book,
         traits,
@@ -166,17 +213,12 @@ export function recommendBooks(input: {
         collaborativeScore: collaborativeSignal?.score ?? null,
         collaborativeWeight: collaborativeSignal?.weight ?? 0,
         finalRankingScore,
-        ...matchPresentation,
+        matchScore: personalMatch.matchScore,
+        matchLabel: personalMatch.matchLabel,
+        matchConfidence: personalMatch.matchConfidence,
         coverageLevel,
         metadataConfidence,
-        explanation: buildRecommendationExplanation({
-          profile: input.profile.vector,
-          candidate: traits,
-          workId: book.workId!,
-          coverageLevel,
-          metadataConfidence,
-          locale: input.locale,
-        }),
+        explanation: personalMatch.explanation,
         collaborativeExplanation: collaborativeSignal
           ? translate(input.locale ?? 'en', 'recommendation.collaborative')
           : '',
