@@ -142,6 +142,18 @@ test('language alone cannot promote a book with zero personal overlap', () => {
   );
 });
 
+test('Dutch preference cannot turn era-only overlap into a personal ranking signal', () => {
+  const candidates = [
+    { ...candidate('1010', 'English era', 1, 'eng'), coverageLevel: 'era_only' as const },
+    { ...candidate('1011', 'Dutch era', 1, 'nld'), coverageLevel: 'era_only' as const },
+  ];
+
+  assert.deepEqual(
+    ranked(candidates, 'nl').map(({ book }) => book.workId),
+    ranked(candidates, 'en').map(({ book }) => book.workId),
+  );
+});
+
 test('meaningful rating history conservatively fades the locale preference', () => {
   assert.deepEqual([0, 3, 6, 10].map(getLocaleLanguagePreferenceStrength), [1, .65, .35, .1]);
   const candidates = [

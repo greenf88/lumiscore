@@ -101,11 +101,11 @@ export function getMatchPresentation(input: {
   userConfidence: TasteProfile['confidence'];
 }): { matchScore: number | null; matchLabel: MatchLabel | null; matchConfidence: MatchConfidence } {
   const matchConfidence = calculateMatchConfidence(input);
-  if (input.candidateCoverage === 'none') {
+  if (
+    input.candidateCoverage === 'none' ||
+    input.candidateCoverage === 'era_only'
+  ) {
     return { matchScore: null, matchLabel: null, matchConfidence: 'low' };
-  }
-  if (input.candidateCoverage === 'era_only') {
-    return { matchScore: null, matchLabel: 'Early match', matchConfidence: 'low' };
   }
   if (input.personalSimilarity <= 0) {
     return { matchScore: null, matchLabel: null, matchConfidence };
@@ -172,6 +172,7 @@ type ScoredCandidate = RankedRecommendation & {
   author: string;
   seriesKey?: string;
   traits: TasteVector;
+  rankingPersonalSimilarity: number;
   collaborativeSignal: CollaborativeSignal | null;
 };
 
@@ -190,6 +191,7 @@ export function recommendBooks(input: {
     .filter(({ book }) => Boolean(book.workId)
       && !input.ratedWorkIds.has(book.workId!)
       && !input.excludedWorkIds?.has(book.workId!))
+    .filter(({ coverageLevel }) => coverageLevel !== 'none')
     .map(({ book, traits, metadataConfidence, coverageLevel, seriesKey }) => {
       const personalMatch = calculatePersonalMatch({
         profile: input.profile,
@@ -198,8 +200,11 @@ export function recommendBooks(input: {
         locale: input.locale,
       });
       const personalSimilarity = personalMatch.personalSimilarity;
+      const rankingPersonalSimilarity = coverageLevel === 'era_only'
+        ? 0
+        : personalSimilarity;
       const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);
-      const rankingScore = .8 * personalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!);
+      const rankingScore = .8 * rankingPersonalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!);
       const collaborativeSignal = input.collaborativeSignals?.get(book.workId!) ?? null;
       const finalRankingScore = applyCollaborativeBoost(rankingScore, collaborativeSignal);
       return {
@@ -208,6 +213,7 @@ export function recommendBooks(input: {
         seriesKey,
         author: book.author,
         personalMatch: personalSimilarity,
+        rankingPersonalSimilarity,
         rankingScore,
         collaborativeSignal,
         collaborativeScore: collaborativeSignal?.score ?? null,
@@ -249,8 +255,8 @@ export function recommendBooks(input: {
             !canDutchBookOvertake({
               dutchBook: dutchCandidate.book,
               otherBook: otherCandidate.book,
-              dutchPersonalSimilarity: dutchCandidate.personalMatch,
-              otherPersonalSimilarity: otherCandidate.personalMatch,
+              dutchPersonalSimilarity: dutchCandidate.rankingPersonalSimilarity,
+              otherPersonalSimilarity: otherCandidate.rankingPersonalSimilarity,
               dutchRankingScore: dutchCandidate.finalRankingScore,
               otherRankingScore: otherCandidate.finalRankingScore,
               preference: input.languagePreference,

@@ -163,19 +163,49 @@ test('recommendations and match percentages are deterministic', () => {
   assert.deepEqual(recommendBooks(input), recommendBooks(input));
 });
 
-test('era-only candidate has low match confidence and no precise score', () => {
+test('era-only overlap has no user-facing personal indicator', () => {
+  const classicProfile = {
+    ...duneProfile,
+    vector: tasteVector({ classic: 1 }),
+  };
   const result = recommendBooks({
     candidates: [{
       ...candidate('10', 'Old book', 'A', { classic: 1 }),
       metadataConfidence: .3,
       coverageLevel: 'era_only',
     }],
-    profile: duneProfile,
+    profile: classicProfile,
     ratedWorkIds: new Set(),
   })[0];
+  assert.equal(result.personalMatch, 1);
   assert.equal(result.matchConfidence, 'low');
   assert.equal(result.matchScore, null);
-  assert.equal(result.matchLabel, 'Early match');
+  assert.equal(result.matchLabel, null);
+});
+
+test('era-only metadata receives zero personal ranking contribution', () => {
+  const withOverlap = recommendBooks({
+    candidates: [{
+      ...candidate('9013', 'Era overlap', 'A', { classic: 1 }, 8, 20),
+      metadataConfidence: .3,
+      coverageLevel: 'era_only',
+    }],
+    profile: { ...duneProfile, vector: tasteVector({ classic: 1 }) },
+    ratedWorkIds: new Set(),
+  })[0];
+  const withoutOverlap = recommendBooks({
+    candidates: [{
+      ...candidate('9013', 'Era overlap', 'A', { classic: 1 }, 8, 20),
+      metadataConfidence: .3,
+      coverageLevel: 'era_only',
+    }],
+    profile: { ...duneProfile, vector: tasteVector({ romance: 1 }) },
+    ratedWorkIds: new Set(),
+  })[0];
+
+  assert.equal(withOverlap.personalMatch, 1);
+  assert.equal(withoutOverlap.personalMatch, 0);
+  assert.equal(withOverlap.rankingScore, withoutOverlap.rankingScore);
 });
 
 test('candidate and user evidence both influence match confidence', () => {
@@ -248,9 +278,23 @@ test('zero trait overlap never receives a fabricated match indicator', () => {
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: 0, candidateCoverage: 'partial', metadataConfidence: .7, userConfidence: 'MEDIUM',
   }), { matchScore: null, matchLabel: null, matchConfidence: 'medium' });
-  assert.equal(getMatchPresentation({
+  assert.deepEqual(getMatchPresentation({
     personalSimilarity: 0, candidateCoverage: 'era_only', metadataConfidence: .4, userConfidence: 'LOW',
-  }).matchLabel, 'Early match');
+  }), { matchScore: null, matchLabel: null, matchConfidence: 'low' });
+});
+
+test('none coverage remains excluded from recommendation candidates', () => {
+  const results = recommendBooks({
+    candidates: [{
+      ...candidate('9014', 'No metadata', 'A', { science_fiction: 1 }),
+      metadataConfidence: 0,
+      coverageLevel: 'none',
+    }],
+    profile: duneProfile,
+    ratedWorkIds: new Set(),
+  });
+
+  assert.deepEqual(results, []);
 });
 
 test('quality and exploration affect ranking but never inflate personal match', () => {

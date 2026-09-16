@@ -134,3 +134,14 @@ test('book detail keeps separate unlock and insufficient-metadata states', async
   assert.match(translations, /Take the Taste Test or rate books to see your match/);
   assert.match(translations, /Doe de Smaaktest of beoordeel boeken om jouw match te zien/);
 });
+
+test('book detail renders a dash when personalization has no visible match', async () => {
+  const component = await readFile(
+    new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(component, /const matchValue =[\s\S]*?: '—';/);
+  assert.match(component, /<span id="match-heading">\{t\('detail\.yourMatch'\)\}<\/span>/);
+  assert.match(component, /<strong>\{matchValue\}<\/strong>/);
+});
