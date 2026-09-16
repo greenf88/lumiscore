@@ -54,7 +54,7 @@ test('mobile header keeps a visible, keyboard-accessible Sign in path', async ()
     /a:not\(\.taste-test-nav-link\):not\(\.header-sign-in\)/,
   );
   assert.match(css, /\.header-sign-in \{ min-height: 44px;/);
-  assert.match(css, /\.header-account summary, \.mobile-search-button \{ width: 40px; height: 44px;/);
+  assert.match(css, /\.mobile-search-button \{ display: none; width: 44px; min-width: 44px; height: 44px;/);
 });
 
 test('header auth state is verified by the existing server Supabase client', async () => {

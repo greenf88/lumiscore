@@ -271,25 +271,26 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
       ? formatCardRatingCount(book, locale)
       : ratingDisplay.count;
   const href = getBookHref(book);
+  const matchText = recommendation
+    ? recommendation.matchScore !== null
+      ? `${t('home.yourMatch')} ${recommendation.matchScore}%`
+      : recommendation.matchLabel === 'Strong match'
+        ? t('match.strong')
+        : recommendation.matchLabel === 'Good match'
+          ? t('match.good')
+          : recommendation.matchLabel === 'Possible match'
+            ? t('match.possible')
+            : recommendation.matchLabel === 'Early match'
+              ? t('match.early')
+              : ''
+    : ratingStatus;
   const content = (
     <>
       <BookCover book={book} small />
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
         <span>{book.author}</span>
-        <span className="match-line"><i /> {recommendation
-          ? recommendation.matchScore !== null
-            ? `${t('home.yourMatch')} ${recommendation.matchScore}%`
-            : recommendation.matchLabel === 'Strong match'
-              ? t('match.strong')
-              : recommendation.matchLabel === 'Good match'
-                ? t('match.good')
-                : recommendation.matchLabel === 'Possible match'
-                  ? t('match.possible')
-                  : recommendation.matchLabel === 'Early match'
-                    ? t('match.early')
-                    : ''
-          : ratingStatus}</span>
+        {matchText && <span className="match-line"><i /> {matchText}</span>}
         {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
         {recommendation?.collaborativeExplanation && <span className="recommendation-reason recommendation-collaborative-reason">{recommendation.collaborativeExplanation}</span>}
       </span>
@@ -304,7 +305,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
   );
 });
 
-const RecommendationPanel = memo(function RecommendationPanel({ books, personalization }: { books: Book[]; personalization: HomepagePersonalization }) {
+const RecommendationPanel = memo(function RecommendationPanel({ books, personalization, catalogUnavailable }: { books: Book[]; personalization: HomepagePersonalization; catalogUnavailable: boolean }) {
   const { t } = useLumiScoreLocale();
   const personalized = personalization.hasEvidence
     ? personalization.recommendations.slice(0, 3)
@@ -326,16 +327,21 @@ const RecommendationPanel = memo(function RecommendationPanel({ books, personali
         </a>
       )}
       <div className="recommendation-list">
-        {personalized.length
+        {catalogUnavailable && personalized.length === 0 ? (
+          <div className="recommendation-empty" role="status">
+            <strong>{t('home.catalogUnavailable')}</strong>
+            <span>{t('home.tryAgain')}</span>
+          </div>
+        ) : personalized.length
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : curated.map((book) => <RecommendationRow key={book.id} book={book} />)}
       </div>
-      <a className="view-all" href="#discover">{t('home.browseAll')} <span>→</span></a>
+      {!catalogUnavailable && <a className="view-all" href="#discover">{t('home.browseAll')} <span>→</span></a>}
     </aside>
   );
 });
 
-const Hero = memo(function Hero({ books, catalogStats, personalization }: { books: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
+const Hero = memo(function Hero({ books, catalogStats, personalization, catalogUnavailable }: { books: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; catalogUnavailable: boolean }) {
   const { locale, t } = useLumiScoreLocale();
   return (
     <section className="hero" id="top">
@@ -354,11 +360,11 @@ const Hero = memo(function Hero({ books, catalogStats, personalization }: { book
           </div>
           <a className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></a>
           <dl className="hero-stats">
-            <div><dt>{catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
+            <div><dt>{catalogStats.books === null ? '—' : catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
             <div><dt>{catalogStats.categories}</dt><dd>{t('home.categories')}</dd></div>
           </dl>
         </div>
-        <RecommendationPanel books={books} personalization={personalization} />
+        <RecommendationPanel books={books} personalization={personalization} catalogUnavailable={catalogUnavailable} />
       </div>
     </section>
   );
@@ -425,7 +431,7 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
 
 type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
 
-function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (id: string) => void }) {
+function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle, catalogUnavailable }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (id: string) => void; catalogUnavailable: boolean }) {
   const { locale, t } = useLumiScoreLocale();
   const searchActive = isCatalogSearchQuery(query);
   const displayedBooks = searchActive ? searchResults : books;
@@ -445,7 +451,9 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
           )}
         </div>
       </div>
-      {hasError ? (
+      {!searchActive && catalogUnavailable ? (
+        <div className="empty-results" role="status"><span>⌕</span><h3>{t('home.catalogUnavailable')}</h3><p>{t('home.tryAgain')}</p></div>
+      ) : hasError ? (
         <div className="empty-results" role="status"><span>⌕</span><h3>{t('home.searchUnavailable')}</h3><p>{t('home.tryAgain')}</p></div>
       ) : isLoading && displayedBooks.length === 0 ? (
         <div className="search-loading" role="status">{t('home.searchingCatalog')}</div>
@@ -513,9 +521,9 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   );
 }
 
-type CatalogStats = { books: number; categories: number };
+type CatalogStats = { books: number | null; categories: number };
 
-export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState }) {
+export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState, catalogUnavailable }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState; catalogUnavailable: boolean }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -618,8 +626,8 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
-      <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} />
-      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} />
+      <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} catalogUnavailable={catalogUnavailable} />
+      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
       <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />

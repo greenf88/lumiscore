@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreSearchPage } from '@/app/components/LumiScoreSearchPage';
+import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
 import type { Book } from '@/app/data/books';
 import {
   CATALOG_SEARCH_PAGE_LIMIT,
@@ -50,13 +51,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   const authState = await authStatePromise;
+  const title = query ? `Search: ${query} — LumiScore` : 'Search books — LumiScore';
+  const description = query
+    ? `Search LumiScore for books and authors matching ${query}.`
+    : 'Search the full LumiScore book catalog by title or author.';
 
   return (
-    <LumiScoreSearchPage
-      initialQuery={query}
-      results={results}
-      searchFailed={searchFailed}
-      authState={authState}
-    />
+    <>
+      <LumiScoreMetadata title={title} description={description} noIndex />
+      <LumiScoreSearchPage
+        initialQuery={query}
+        results={results}
+        searchFailed={searchFailed}
+        authState={authState}
+      />
+    </>
   );
 }

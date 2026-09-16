@@ -240,6 +240,18 @@ test('none coverage receives no user-facing match label', () => {
   }), { matchScore: null, matchLabel: null, matchConfidence: 'low' });
 });
 
+test('zero trait overlap never receives a fabricated match indicator', () => {
+  assert.deepEqual(getMatchPresentation({
+    personalSimilarity: 0, candidateCoverage: 'rich', metadataConfidence: .9, userConfidence: 'HIGH',
+  }), { matchScore: null, matchLabel: null, matchConfidence: 'high' });
+  assert.deepEqual(getMatchPresentation({
+    personalSimilarity: 0, candidateCoverage: 'partial', metadataConfidence: .7, userConfidence: 'MEDIUM',
+  }), { matchScore: null, matchLabel: null, matchConfidence: 'medium' });
+  assert.equal(getMatchPresentation({
+    personalSimilarity: 0, candidateCoverage: 'era_only', metadataConfidence: .4, userConfidence: 'LOW',
+  }).matchLabel, 'Early match');
+});
+
 test('quality and exploration affect ranking but never inflate personal match', () => {
   const lowQuality = candidate('21', 'Low quality', 'A', { science_fiction: 1 }, 1, 100);
   const highQuality = candidate('22', 'High quality', 'B', { science_fiction: 1 }, 10, 100);

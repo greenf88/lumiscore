@@ -1,4 +1,5 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
+import { LumiScoreMetadata } from './components/LumiScoreMetadata';
 import { books } from './data/books';
 import {
   logServerEnvironmentPresence,
@@ -17,14 +18,20 @@ async function loadHomepageBooks() {
     !readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') ||
     !readServerEnvironment('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY')
   ) {
-    return { books, total: books.length };
+    return process.env.NODE_ENV === 'production'
+      ? { books: [], total: null, unavailable: true }
+      : { books, total: books.length, unavailable: false };
   }
 
   try {
     const { loadHighestRatedCatalog } = await import('@/lib/supabase/books');
-    return await loadHighestRatedCatalog(18);
-  } catch {
-    return { books, total: books.length };
+    const catalog = await loadHighestRatedCatalog(18);
+    return { ...catalog, unavailable: false };
+  } catch (error) {
+    console.error('Homepage catalog load failed.', error);
+    return process.env.NODE_ENV === 'production'
+      ? { books: [], total: null, unavailable: true }
+      : { books, total: books.length, unavailable: false };
   }
 }
 
@@ -68,15 +75,22 @@ export default async function Home() {
   );
 
   return (
-    <LumiScoreHome
-      initialBooks={catalog.books}
-      catalogStats={{
-        books: catalog.total,
-        categories: CATALOG_CATEGORY_COUNT,
-      }}
-      personalization={personalization}
-      authState={authState}
-      dutchDiscoveryBooks={dutchDiscoveryBooks}
-    />
+    <>
+      <LumiScoreMetadata
+        title="LumiScore — Find your next great read"
+        canonicalPath="/"
+      />
+      <LumiScoreHome
+        initialBooks={catalog.books}
+        catalogStats={{
+          books: catalog.total,
+          categories: CATALOG_CATEGORY_COUNT,
+        }}
+        personalization={personalization}
+        authState={authState}
+        dutchDiscoveryBooks={dutchDiscoveryBooks}
+        catalogUnavailable={catalog.unavailable}
+      />
+    </>
   );
 }

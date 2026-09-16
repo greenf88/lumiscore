@@ -96,6 +96,9 @@ export function getMatchPresentation(input: {
   if (input.candidateCoverage === 'era_only') {
     return { matchScore: null, matchLabel: 'Early match', matchConfidence: 'low' };
   }
+  if (input.personalSimilarity <= 0) {
+    return { matchScore: null, matchLabel: null, matchConfidence };
+  }
   if (
     input.candidateCoverage === 'rich' &&
     input.metadataConfidence >= .8 &&

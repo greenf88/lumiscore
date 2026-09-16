@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
+import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -33,13 +34,14 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${book.title} — LumiScore`;
+  const title = `${book.title} by ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book);
   const cover = book.coverUrls?.[0];
 
   return {
     title,
     description,
+    alternates: { canonical: `/book/${workId}` },
     openGraph: {
       title,
       description,
@@ -66,9 +68,18 @@ export default async function BookPage({ params }: BookPageProps) {
   if (!book) notFound();
 
   return (
-    <LumiScoreBookDetail
-      book={book}
-      initialRatingState={initialRatingState}
-    />
+    <>
+      <LumiScoreMetadata
+        title={`${book.title} by ${book.author} | LumiScore`}
+        description={getBookMetadataDescription(book)}
+        canonicalPath={`/book/${book.workId}`}
+        image={book.coverUrls?.[0] ?? null}
+        type="article"
+      />
+      <LumiScoreBookDetail
+        book={book}
+        initialRatingState={initialRatingState}
+      />
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreLogin } from '@/app/components/LumiScoreLogin';
+import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
 import { getSafeNextPath } from '@/lib/auth/request';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
@@ -37,14 +38,21 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const requestedNext = Array.isArray(params.next) ? params.next[0] : params.next;
 
   return (
-    <LumiScoreLogin
-      next={getSafeNextPath(requestedNext)}
-      error={errorKey ? translate(locale, errorMessages[errorKey] ?? 'auth.failed') : null}
-      message={
-        messageKey === 'check_email'
-          ? translate(locale, 'auth.checkEmail')
-          : null
-      }
-    />
+    <>
+      <LumiScoreMetadata
+        title="Sign in — LumiScore"
+        description="Sign in or create a LumiScore account to rate books."
+        noIndex
+      />
+      <LumiScoreLogin
+        next={getSafeNextPath(requestedNext)}
+        error={errorKey ? translate(locale, errorMessages[errorKey] ?? 'auth.failed') : null}
+        message={
+          messageKey === 'check_email'
+            ? translate(locale, 'auth.checkEmail')
+            : null
+        }
+      />
+    </>
   );
 }

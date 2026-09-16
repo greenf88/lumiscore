@@ -1,13 +1,17 @@
 import type { Metadata } from 'next';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
+import {
+  LUMISCORE_DEFAULT_DESCRIPTION,
+  LUMISCORE_PRODUCTION_ORIGIN,
+} from './components/LumiScoreMetadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lumisco.re'),
+  metadataBase: new URL(LUMISCORE_PRODUCTION_ORIGIN),
   title: 'LumiScore — Find your next great read',
-  description:
-    'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
+  description: LUMISCORE_DEFAULT_DESCRIPTION,
+  icons: { icon: '/favicon.svg' },
   openGraph: {
     title: 'LumiScore — Find your next great read',
     description: 'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
@@ -41,6 +45,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>

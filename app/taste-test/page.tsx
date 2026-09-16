@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreTasteTest } from '@/app/components/LumiScoreTasteTest';
+import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
 import type { Book } from '@/app/data/books';
 import { TASTE_TEST_WORK_IDS } from '@/lib/taste-test/config';
 
@@ -24,5 +25,14 @@ export default async function TasteTestPage() {
       .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),
   ]);
-  return <LumiScoreTasteTest books={books} initialAuthState={initialAuthState} />;
+  return (
+    <>
+      <LumiScoreMetadata
+        title="Taste Test — LumiScore"
+        description="Choose between ten pairs of books to shape your LumiScore reading taste."
+        canonicalPath="/taste-test"
+      />
+      <LumiScoreTasteTest books={books} initialAuthState={initialAuthState} />
+    </>
+  );
 }
