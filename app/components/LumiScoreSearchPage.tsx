@@ -22,7 +22,7 @@ export function LumiScoreSearchPage({
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
-  const { wanted, toggleWanted } = useWantToRead(authState.authenticated, results);
+  const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, results);
 
   const toggleTheme = useCallback(() => {
     const next =
@@ -83,6 +83,7 @@ export function LumiScoreSearchPage({
                 key={book.id}
                 book={book}
                 wanted={wanted.has(book.id)}
+                status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
               />
             ))}

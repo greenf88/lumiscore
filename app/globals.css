@@ -82,7 +82,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .main-nav > a { min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap; transition: color 160ms ease; }
 .main-nav > a:hover { color: var(--text); }
 .main-nav > .taste-test-nav-link { color: var(--gold); }
-.nav-unavailable { cursor: default; opacity: .5; white-space: nowrap; }
+.mobile-navigation { position: relative; display: none; color: var(--text); }
+.mobile-navigation summary { width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; list-style: none; font-size: 14px; letter-spacing: .08em; }
+.mobile-navigation summary::-webkit-details-marker { display: none; }
+.mobile-navigation-panel { position: absolute; z-index: 32; top: calc(100% + 8px); right: 0; width: 190px; display: grid; padding: 8px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-raised); box-shadow: var(--panel-shadow); }
+.mobile-navigation-panel a { min-height: 44px; display: flex; align-items: center; padding: 0 11px; border-radius: 3px; font-size: 11px; }
+.mobile-navigation-panel a:hover { background: var(--surface); color: var(--text); }
 .header-sign-in { min-height: 44px; display: inline-flex; align-items: center; color: var(--text); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .header-account { position: relative; color: var(--text); }
 .header-account summary { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; }
@@ -225,6 +230,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .book-match { display: inline-flex; align-items: center; gap: 4px; color: var(--teal); font-weight: 800; }
 .book-match i { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
 .book-card-action { position: relative; z-index: 1; padding: 0 17px 17px; pointer-events: none; }
+.card-reading-status { min-height: 42px; display: flex; align-items: center; color: var(--teal); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .want-button { width: 100%; min-height: 44px; margin-top: 9px; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; pointer-events: auto; transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
 .want-button span { display: inline-block; width: 16px; color: var(--teal); font-size: 14px; font-weight: 400; }
 .want-button:hover, .want-button.is-wanted { border-color: var(--teal); background: var(--teal-deep); color: #fff; }
@@ -330,6 +336,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .detail-score-badge { right: 12px; bottom: 12px; }
 .detail-copy { min-width: 0; }
 .detail-back-link { display: inline-flex; width: fit-content; min-height: 44px; align-items: center; margin-bottom: 36px; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.book-detail .detail-back-link { font-size: 16px; font-weight: 700; letter-spacing: .01em; text-transform: none; }
 .detail-copy > .eyebrow { display: flex; width: fit-content; }
 .detail-copy h1 { max-width: 700px; margin: 18px 0 12px; font-family: var(--serif); font-size: clamp(48px, 6vw, 82px); font-weight: 400; line-height: .98; letter-spacing: -.05em; }
 .detail-author { margin: 0; color: var(--muted); font-family: var(--serif); font-size: 21px; font-style: italic; }
@@ -387,6 +394,25 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .collection-book-copy strong { overflow-wrap: anywhere; font-family: var(--serif); font-size: 20px; font-weight: 400; }
 .collection-book-copy > span { overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 .collection-book-copy em { color: var(--gold); font-size: 10px; font-style: normal; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.my-books-page { width: min(1220px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; padding: 62px 0 84px; }
+.my-books-heading { max-width: 720px; }
+.my-books-heading h1 { margin: 15px 0 13px; font-family: var(--serif); font-size: clamp(48px, 7vw, 76px); font-weight: 400; line-height: 1; letter-spacing: -.05em; }
+.my-books-heading p { max-width: 62ch; margin: 0; color: var(--muted); font-family: var(--serif); font-size: 17px; line-height: 1.6; }
+.my-books-tabs { display: flex; gap: 7px; margin: 38px 0 30px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.my-books-tabs button { min-height: 44px; flex: 0 0 auto; padding: 0 15px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 750; white-space: nowrap; }
+.my-books-tabs button span { margin-left: 6px; color: var(--gold); }
+.my-books-tabs button[aria-selected='true'] { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 12%, var(--surface)); color: var(--text); }
+.my-books-panel { min-height: 280px; }
+.my-books-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.my-books-card { max-width: 290px; width: 100%; }
+.my-books-card-action { display: grid; gap: 10px; pointer-events: none; }
+.my-books-card-action .reading-status-control { pointer-events: auto; }
+.my-books-status { color: var(--teal); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.my-books-gate, .my-books-empty { max-width: 660px; margin-top: 42px; padding: clamp(24px, 5vw, 42px); border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 58%, transparent); }
+.my-books-gate h2, .my-books-empty h2 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(26px, 4vw, 38px); font-weight: 400; line-height: 1.1; }
+.my-books-gate p, .my-books-empty p { margin: 0 0 24px; color: var(--muted); font-family: var(--serif); font-size: 16px; line-height: 1.6; }
+.my-books-gate .primary-cta { margin-top: 10px; }
+.my-books-empty a { min-height: 44px; display: inline-flex; align-items: center; color: var(--teal); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .detail-information { margin-top: 34px; }
 .detail-information h2 { margin: 0 0 14px; font-family: var(--serif); font-size: 25px; font-weight: 400; }
 .detail-information dl { margin: 0; border-top: 1px solid var(--border); }
@@ -421,7 +447,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 
 @media (max-width: 1040px) {
   .site-header { grid-template-columns: auto 1fr auto; padding-inline: 24px; }
-  .main-nav > a:not(.taste-test-nav-link):not(.header-sign-in), .main-nav > .nav-unavailable { display: none; }
+  .main-nav > a:not(.taste-test-nav-link):not(.header-sign-in) { display: none; }
+  .mobile-navigation { display: block; }
   .language-switcher button { min-height: 44px; }
   .hero-inner { grid-template-columns: 1fr 390px; gap: 38px; padding-inline: 0; }
   .hero-copy h1 { font-size: clamp(54px, 7vw, 74px); }
@@ -465,7 +492,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .site-header .wordmark > span:last-child { display: none; }
   .logo-mark { width: 25px; height: 25px; }
   .main-nav { min-width: 0; gap: 4px; }
-  .main-nav > .taste-test-nav-link, .header-sign-in { font-size: 9px; }
+  .main-nav > .taste-test-nav-link { display: none; }
+  .header-sign-in { font-size: 9px; }
   .site-header .language-switcher button { min-width: 26px; padding-inline: 4px; }
   .theme-sun, .theme-moon { display: none; }
   .header-account-label { display: none; }
@@ -547,6 +575,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .collection-book-main .book-cover-small { width: 52px; height: 78px; }
   .collection-book-copy strong { font-size: 17px; }
   .reading-status-control.is-compact { width: 100%; min-width: 0; }
+  .my-books-page { width: calc(100% - 28px); min-height: auto; padding: 42px 0 64px; }
+  .my-books-heading h1 { font-size: clamp(42px, 14vw, 60px); }
+  .my-books-heading p { font-size: 16px; }
+  .my-books-tabs { margin: 28px 0 24px; }
+  .my-books-grid { max-width: 290px; grid-template-columns: 1fr; margin-inline: auto; }
+  .my-books-gate, .my-books-empty { margin-top: 30px; padding: 22px 18px; }
   .detail-information dl div { grid-template-columns: minmax(100px, .8fr) minmax(0, 1.2fr); }
   .auth-card { padding-block: 52px 70px; }
   .auth-form { padding: 20px; }

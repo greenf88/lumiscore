@@ -22,6 +22,7 @@
     "test:recommendations": "node --experimental-strip-types --test lib/recommendations/*.test.ts lib/taste-test/*.test.ts",
     "test:i18n": "node --experimental-strip-types --test lib/i18n/*.test.ts",
     "test:collections": "node --experimental-strip-types --test lib/collections/*.test.ts",
+    "test:my-books": "node --experimental-strip-types --test lib/collections/my-books.test.ts",
     "audit:collections": "node --env-file=.env.local --experimental-strip-types scripts/audit-collections.ts",
     "audit:recommendation-exclusions": "node --env-file=.env.local --experimental-strip-types scripts/audit-recommendation-exclusions.ts",
     "audit:dutch-language-discovery": "node --env-file=.env.local --experimental-strip-types scripts/audit-dutch-language-discovery.ts",

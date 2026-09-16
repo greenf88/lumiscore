@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Book } from '../data/books';
+import { isReadingStatus, type ReadingStatus } from '@/lib/collections/model';
 
 const STORAGE_KEY = 'lumiscore-wanted';
 
@@ -41,13 +42,17 @@ export async function migrateGuestWantToReadFromLocal(
 
 export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   const [wanted, setWanted] = useState<Set<string>>(new Set());
+  const [statuses, setStatuses] = useState<Map<string, ReadingStatus>>(new Map());
   const migrated = useRef(false);
   const workIds = books.flatMap((book) => book.workId ? [book.workId] : []);
   const workIdKey = [...new Set(workIds)].sort((a, b) => Number(a) - Number(b)).join(',');
 
   useEffect(() => {
     if (!authenticated) {
-      const frame = requestAnimationFrame(() => setWanted(new Set(readGuestWanted())));
+      const frame = requestAnimationFrame(() => {
+        setWanted(new Set(readGuestWanted()));
+        setStatuses(new Map());
+      });
       return () => cancelAnimationFrame(frame);
     }
 
@@ -63,6 +68,16 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
       });
       if (!response.ok) return;
       const payload = (await response.json()) as { statuses?: Record<string, string> };
+      setStatuses((current) => {
+        const next = new Map(current);
+        for (const book of books) {
+          if (!book.workId) continue;
+          const status = payload.statuses?.[book.workId];
+          if (isReadingStatus(status)) next.set(book.workId, status);
+          else next.delete(book.workId);
+        }
+        return next;
+      });
       setWanted((current) => {
         const next = new Set(current);
         for (const book of books) {
@@ -78,6 +93,9 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   }, [authenticated, workIdKey, books]);
 
   const toggleWanted = useCallback((book: Book) => {
+    const existingStatus = book.workId ? statuses.get(book.workId) : null;
+    if (authenticated && existingStatus && existingStatus !== 'want_to_read') return;
+
     const wasWanted = wanted.has(book.id);
     setWanted((current) => {
       const next = new Set(current);
@@ -89,6 +107,12 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
     });
 
     if (authenticated && book.workId) {
+      setStatuses((current) => {
+        const next = new Map(current);
+        if (wasWanted) next.delete(book.workId!);
+        else next.set(book.workId!, 'want_to_read');
+        return next;
+      });
       void fetch(`/api/books/${book.workId}/status`, {
         method: wasWanted ? 'DELETE' : 'PUT',
         headers: wasWanted ? undefined : { 'Content-Type': 'application/json' },
@@ -96,6 +120,12 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
       }).then((response) => {
         if (!response.ok) throw new Error('Status update failed.');
       }).catch(() => {
+        setStatuses((current) => {
+          const next = new Map(current);
+          if (wasWanted) next.set(book.workId!, 'want_to_read');
+          else next.delete(book.workId!);
+          return next;
+        });
         setWanted((current) => {
           const next = new Set(current);
           if (wasWanted) next.add(book.id); else next.delete(book.id);
@@ -103,7 +133,7 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
         });
       });
     }
-  }, [authenticated, wanted]);
+  }, [authenticated, statuses, wanted]);
 
-  return { wanted, toggleWanted };
+  return { wanted, statuses, toggleWanted };
 }

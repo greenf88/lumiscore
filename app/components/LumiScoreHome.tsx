@@ -32,6 +32,7 @@ import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import { useWantToRead } from './useWantToRead';
+import type { ReadingStatus } from '@/lib/collections/model';
 
 const resolvedCoverCache = new Map<
   string,
@@ -394,7 +395,13 @@ function formatCardRatingCount(book: Book, locale: Locale): string {
     : formatPublicRatingDisplay(book.score, count, locale).count;
 }
 
-export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (book: Book) => void }) {
+const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
+  reading: 'collection.reading',
+  read: 'collection.read',
+  dnf: 'collection.dnf',
+};
+
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void }) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
@@ -431,9 +438,13 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
         </a>
       ) : bookContent}
       <div className="book-card-action">
-        <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book)} aria-pressed={wanted}>
-          <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{t('home.wantToRead')}
-        </button>
+        {status && status !== 'want_to_read' ? (
+          <span className="card-reading-status">✓ {t(CARD_STATUS_KEYS[status])}</span>
+        ) : (
+          <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book)} aria-pressed={wanted}>
+            <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{t('home.wantToRead')}
+          </button>
+        )}
       </div>
     </article>
   );
@@ -441,7 +452,7 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
 
 type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
 
-function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle, catalogUnavailable }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (book: Book) => void; catalogUnavailable: boolean }) {
+function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, statuses, onToggle, catalogUnavailable }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; statuses: ReadonlyMap<string, ReadingStatus>; onToggle: (book: Book) => void; catalogUnavailable: boolean }) {
   const { locale, t } = useLumiScoreLocale();
   const searchActive = isCatalogSearchQuery(query);
   const displayedBooks = searchActive ? searchResults : books;
@@ -468,7 +479,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
       ) : isLoading && displayedBooks.length === 0 ? (
         <div className="search-loading" role="status">{t('home.searchingCatalog')}</div>
       ) : displayedBooks.length > 0 ? (
-        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />)}</div>
+        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} />)}</div>
       ) : (
         <div className="empty-results"><span>⌕</span><h3>{t('home.noBooks')}</h3><p>{t('home.tryAnother')}</p></div>
       )}
@@ -476,7 +487,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
   );
 }
 
-function DutchDiscoveryBooks({ books, wanted, onToggle }: { books: Book[]; wanted: Set<string>; onToggle: (book: Book) => void }) {
+function DutchDiscoveryBooks({ books, wanted, statuses, onToggle }: { books: Book[]; wanted: Set<string>; statuses: ReadonlyMap<string, ReadingStatus>; onToggle: (book: Book) => void }) {
   const { locale, t } = useLumiScoreLocale();
   if (!shouldShowDutchDiscovery(locale, books.length)) return null;
 
@@ -491,7 +502,7 @@ function DutchDiscoveryBooks({ books, wanted, onToggle }: { books: Book[]; wante
       </div>
       <div className="book-grid">
         {books.map((book) => (
-          <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} onToggle={onToggle} />
+          <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} />
         ))}
       </div>
     </section>
@@ -562,7 +573,7 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
     () => [...catalogBooks, ...dutchDiscoveryBooks, ...searchResults],
     [catalogBooks, dutchDiscoveryBooks, searchResults],
   );
-  const { wanted, toggleWanted } = useWantToRead(authState.authenticated, trackedBooks);
+  const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, trackedBooks);
 
   const updateQuery = useCallback((value: string) => {
     setQuery(value);
@@ -644,8 +655,8 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} catalogUnavailable={catalogUnavailable} />
       {seriesContinuation && <ContinueSeries continuation={seriesContinuation} />}
-      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
-      <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} onToggle={toggleWanted} />
+      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
+      <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />
     </main>
