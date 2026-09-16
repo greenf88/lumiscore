@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import {
   LUMISCORE_DEFAULT_DESCRIPTION,
@@ -9,20 +9,20 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(LUMISCORE_PRODUCTION_ORIGIN),
-  title: 'LumiScore — Find your next great read',
+  title: 'LumiScore â€” Find your next great read',
   description: LUMISCORE_DEFAULT_DESCRIPTION,
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/favicon.ico' },
   openGraph: {
-    title: 'LumiScore — Find your next great read',
+    title: 'LumiScore â€” Find your next great read',
     description: 'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
     url: '/',
     siteName: 'LumiScore',
     type: 'website',
-    images: [{ url: '/og.png', width: 1664, height: 936, alt: 'LumiScore — Find your next great read' }],
+    images: [{ url: '/og.png', width: 1664, height: 936, alt: 'LumiScore â€” Find your next great read' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LumiScore — Find your next great read',
+    title: 'LumiScore â€” Find your next great read',
     description: 'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
     images: ['/og.png'],
   },
@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
