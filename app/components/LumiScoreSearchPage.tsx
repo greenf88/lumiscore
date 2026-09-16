@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
+import { useWantToRead } from './useWantToRead';
 
 type LumiScoreSearchPageProps = {
   initialQuery: string;
@@ -21,20 +22,7 @@ export function LumiScoreSearchPage({
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
-  const [wanted, setWanted] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    let animationFrame = 0;
-    try {
-      const stored = JSON.parse(
-        localStorage.getItem('lumiscore-wanted') ?? '[]',
-      ) as string[];
-      animationFrame = requestAnimationFrame(() => setWanted(new Set(stored)));
-    } catch {
-      // This local preference is optional.
-    }
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
+  const { wanted, toggleWanted } = useWantToRead(authState.authenticated, results);
 
   const toggleTheme = useCallback(() => {
     const next =
@@ -43,16 +31,6 @@ export function LumiScoreSearchPage({
     document.documentElement.style.colorScheme =
       next === 'paper' ? 'light' : 'dark';
     localStorage.setItem('lumiscore-theme', next);
-  }, []);
-
-  const toggleWanted = useCallback((id: string) => {
-    setWanted((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      localStorage.setItem('lumiscore-wanted', JSON.stringify([...next]));
-      return next;
-    });
   }, []);
 
   const hasQuery = initialQuery.length >= 2;

@@ -3,10 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import type { Book } from '../data/books';
-import {
-  getCatalogSourceLabel,
-  getVerifiedBackCover,
-} from '@/lib/books/book-detail';
+import { getVerifiedBackCover } from '@/lib/books/book-detail';
 import {
   formatRatingCount,
   MAX_RATING,
@@ -16,11 +13,16 @@ import {
 import { BookCover, ThemeToggle } from './LumiScoreHome';
 import { LumiScoreBookDescription } from './LumiScoreBookDescription';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
+import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
+import type { ReadingStatus } from '@/lib/collections/model';
+import type { BookCollectionContext } from '@/lib/supabase/collections';
 
 type LumiScoreBookDetailProps = {
   book: Book;
   initialRatingState: BookRatingState;
+  initialReadingStatus: ReadingStatus | null;
+  collectionContext: BookCollectionContext | null;
 };
 
 const ratingChoices = Array.from(
@@ -31,9 +33,14 @@ const ratingChoices = Array.from(
 export function LumiScoreBookDetail({
   book,
   initialRatingState,
+  initialReadingStatus,
+  collectionContext,
 }: LumiScoreBookDetailProps) {
   const { locale, t } = useLumiScoreLocale();
   const [ratingState, setRatingState] = useState(initialRatingState);
+  const [readingStatus, setReadingStatus] = useState<ReadingStatus | null>(
+    initialReadingStatus,
+  );
   const [pendingRating, setPendingRating] = useState<number | 'remove' | null>(null);
   const [ratingError, setRatingError] = useState<string | null>(null);
   const detailPath = `/book/${book.workId}`;
@@ -73,6 +80,7 @@ export function LumiScoreBookDetail({
         throw new Error(payload.error ?? t('detail.ratingSaveError'));
       }
       setRatingState(payload.state);
+      setReadingStatus('read');
     } catch (error) {
       setRatingError(
         error instanceof Error ? error.message : t('detail.ratingSaveError'),
@@ -159,10 +167,37 @@ export function LumiScoreBookDetail({
         </div>
         <div className="detail-copy">
           <a className="detail-back-link" href="/">← {t('detail.backToBooks')}</a>
-          <span className="eyebrow">{getCatalogSourceLabel(book, locale)}</span>
           <h1>{book.title}</h1>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
+
+          {collectionContext && (
+            <section className="detail-collection" aria-label={t('collection.collection')}>
+              <a href={`/collection/${collectionContext.collection.slug}`}>
+                <strong>
+                  {t(
+                    collectionContext.collection.collectionType === 'series'
+                      ? 'collection.partOfSeries'
+                      : collectionContext.collection.collectionType === 'author_collection'
+                        ? 'collection.partOfAuthor'
+                        : 'collection.partOfUniverse',
+                    { name: collectionContext.collection.name },
+                  )}
+                  {collectionContext.collection.collectionType === 'series' && collectionContext.position !== null
+                    ? ` · ${t('collection.bookOf', { position: collectionContext.position, total: collectionContext.total })}`
+                    : ''}
+                </strong>
+                <span>
+                  {collectionContext.progress
+                    ? `${t('collection.readProgress', { read: collectionContext.progress.read, total: collectionContext.progress.total })} · `
+                    : ''}
+                  {t(collectionContext.collection.collectionType === 'series'
+                    ? 'collection.viewFullSeries'
+                    : 'collection.viewAllBooks')} →
+                </span>
+              </a>
+            </section>
+          )}
 
           <div className="detail-score-grid">
             <section className="detail-score-panel" aria-labelledby="lumiscore-heading">
@@ -178,6 +213,16 @@ export function LumiScoreBookDetail({
           </div>
 
           {book.workId && <LumiScoreBookDescription workId={book.workId} />}
+
+          {book.workId && (
+            <LumiScoreReadingStatus
+              workId={book.workId}
+              status={readingStatus}
+              authenticated={ratingState.authenticated}
+              returnTo={detailPath}
+              onStatusChange={setReadingStatus}
+            />
+          )}
 
           <section className="rating-section" aria-labelledby="rate-book-heading">
             <div>

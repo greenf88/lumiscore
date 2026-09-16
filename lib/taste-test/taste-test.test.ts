@@ -133,10 +133,11 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
   assert.match(migration, /with check \(\(select auth\.uid\(\)\) = user_id\)/);
 });
 
-test('homepage recommendations pass Taste Test works as explicit candidate exclusions', async () => {
+test('homepage recommendations exclude Taste Test anchors and books marked Read', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
 
-  assert.match(persistence, /excludedWorkIds:\s*new Set\(TASTE_TEST_WORK_IDS\)/);
+  assert.match(persistence, /loadReadWorkIdsForCurrentUser/);
+  assert.match(persistence, /excludedWorkIds:\s*new Set\(\[\.\.\.TASTE_TEST_WORK_IDS, \.\.\.readState\.workIds\]\)/);
 });
 
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {

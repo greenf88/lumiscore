@@ -1,5 +1,6 @@
 import { LUMISCORE_PRODUCTION_ORIGIN } from '@/app/components/LumiScoreMetadata';
 import { supabase } from '@/lib/supabase/client';
+import { REVIEWED_COLLECTION_SEEDS } from '@/lib/collections/seed-data';
 
 const PAGE_SIZE = 1_000;
 
@@ -37,6 +38,8 @@ export async function GET() {
     const entries = [
       sitemapEntry('/', '1.0'),
       sitemapEntry('/taste-test', '0.8'),
+      ...REVIEWED_COLLECTION_SEEDS.map(({ slug }) =>
+        sitemapEntry(`/collection/${slug}`, '0.6')),
       ...workIds.map((workId) => sitemapEntry(`/book/${workId}`, '0.7')),
     ].join('');
 

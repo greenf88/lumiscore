@@ -61,9 +61,17 @@ export default async function BookPage({ params }: BookPageProps) {
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
     ({ loadBookRatingState }) => loadBookRatingState(workId),
   );
-  const [book, initialRatingState] = await Promise.all([
+  const readingStatusPromise = import('@/lib/supabase/book-status')
+    .then(({ loadUserBookStatuses }) => loadUserBookStatuses([workId]))
+    .catch(() => ({ authenticated: false, statuses: new Map() }));
+  const collectionContextPromise = import('@/lib/supabase/collections')
+    .then(({ loadBookCollectionContext }) => loadBookCollectionContext(workId))
+    .catch(() => null);
+  const [book, initialRatingState, readingStatus, collectionContext] = await Promise.all([
     getBook(workId),
     ratingStatePromise,
+    readingStatusPromise,
+    collectionContextPromise,
   ]);
   if (!book) notFound();
 
@@ -79,6 +87,8 @@ export default async function BookPage({ params }: BookPageProps) {
       <LumiScoreBookDetail
         book={book}
         initialRatingState={initialRatingState}
+        initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
+        collectionContext={collectionContext}
       />
     </>
   );

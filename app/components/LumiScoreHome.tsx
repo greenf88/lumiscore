@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useId, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import {
   getHeaderAuthPresentation,
@@ -30,6 +30,8 @@ import { translate } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
+import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
+import { useWantToRead } from './useWantToRead';
 
 const resolvedCoverCache = new Map<
   string,
@@ -231,7 +233,15 @@ export function Header({
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
         <a href="/#discover">{t('header.discover')}</a>
         <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
-        <span className="nav-unavailable" aria-disabled="true" title={t('header.listsUnavailable')}>{t('header.myLists')}</span>
+        <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
+        <details className="mobile-navigation">
+          <summary aria-label={t('header.openNavigation')}><span aria-hidden="true">•••</span></summary>
+          <div className="mobile-navigation-panel">
+            <a href="/#discover">{t('header.discover')}</a>
+            <a href="/taste-test">{t('header.tasteTest')}</a>
+            <a href="/my-books">{t('header.myBooks')}</a>
+          </div>
+        </details>
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
         <LanguageSwitcher />
@@ -384,7 +394,7 @@ function formatCardRatingCount(book: Book, locale: Locale): string {
     : formatPublicRatingDisplay(book.score, count, locale).count;
 }
 
-export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (id: string) => void }) {
+export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { book: Book; wanted: boolean; onToggle: (book: Book) => void }) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
@@ -421,7 +431,7 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
         </a>
       ) : bookContent}
       <div className="book-card-action">
-        <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book.id)} aria-pressed={wanted}>
+        <button className={`want-button${wanted ? ' is-wanted' : ''}`} type="button" onClick={() => onToggle(book)} aria-pressed={wanted}>
           <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{t('home.wantToRead')}
         </button>
       </div>
@@ -431,7 +441,7 @@ export const BookCard = memo(function BookCard({ book, wanted, onToggle }: { boo
 
 type SearchStatus = 'idle' | 'loading' | 'success' | 'error';
 
-function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle, catalogUnavailable }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (id: string) => void; catalogUnavailable: boolean }) {
+function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onToggle, catalogUnavailable }: { books: Book[]; query: string; searchResults: Book[]; searchStatus: SearchStatus; wanted: Set<string>; onToggle: (book: Book) => void; catalogUnavailable: boolean }) {
   const { locale, t } = useLumiScoreLocale();
   const searchActive = isCatalogSearchQuery(query);
   const displayedBooks = searchActive ? searchResults : books;
@@ -466,7 +476,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, onTo
   );
 }
 
-function DutchDiscoveryBooks({ books, wanted, onToggle }: { books: Book[]; wanted: Set<string>; onToggle: (id: string) => void }) {
+function DutchDiscoveryBooks({ books, wanted, onToggle }: { books: Book[]; wanted: Set<string>; onToggle: (book: Book) => void }) {
   const { locale, t } = useLumiScoreLocale();
   if (!shouldShowDutchDiscovery(locale, books.length)) return null;
 
@@ -505,6 +515,26 @@ const ValueStrip = memo(function ValueStrip() {
   );
 });
 
+function ContinueSeries({ continuation }: { continuation: HomepageSeriesContinuation }) {
+  const { t } = useLumiScoreLocale();
+  const { collection, progress, nextBook } = continuation;
+  return (
+    <section className="continue-series" aria-labelledby="continue-series-title">
+      <div className="continue-series-copy">
+        <span className="eyebrow">{t('collection.continueEyebrow')}</span>
+        <h2 id="continue-series-title">{t('collection.continueHeading')}</h2>
+        <a href={`/collection/${collection.slug}`}>{collection.name}</a>
+        <p>{t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
+      </div>
+      <a className="continue-series-book" href={`/book/${nextBook.workId}`}>
+        <BookCover book={nextBook} small label={nextBook.title} />
+        <span><strong>{nextBook.title}</strong><small>{nextBook.author}</small></span>
+        <b>{t('collection.continueAction')} →</b>
+      </a>
+    </section>
+  );
+}
+
 export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   const { t } = useLumiScoreLocale();
   return (
@@ -523,12 +553,16 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number | null; categories: number };
 
-export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState, catalogUnavailable }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState; catalogUnavailable: boolean }) {
+export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState, catalogUnavailable, seriesContinuation }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState; catalogUnavailable: boolean; seriesContinuation: HomepageSeriesContinuation | null }) {
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
   const [searchStatus, setSearchStatus] = useState<SearchStatus>('idle');
-  const [wanted, setWanted] = useState<Set<string>>(new Set());
+  const trackedBooks = useMemo(
+    () => [...catalogBooks, ...dutchDiscoveryBooks, ...searchResults],
+    [catalogBooks, dutchDiscoveryBooks, searchResults],
+  );
+  const { wanted, toggleWanted } = useWantToRead(authState.authenticated, trackedBooks);
 
   const updateQuery = useCallback((value: string) => {
     setQuery(value);
@@ -588,15 +622,6 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
   }, [query]);
 
   useEffect(() => {
-    let animationFrame = 0;
-    try {
-      const stored = JSON.parse(localStorage.getItem('lumiscore-wanted') ?? '[]') as string[];
-      animationFrame = requestAnimationFrame(() => setWanted(new Set(stored)));
-    } catch { /* local preference is optional */ }
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
-
-  useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
@@ -614,19 +639,11 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
     localStorage.setItem('lumiscore-theme', next);
   }, []);
 
-  const toggleWanted = useCallback((id: string) => {
-    setWanted((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      localStorage.setItem('lumiscore-wanted', JSON.stringify([...next]));
-      return next;
-    });
-  }, []);
-
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={personalization} catalogUnavailable={catalogUnavailable} />
+      {seriesContinuation && <ContinueSeries continuation={seriesContinuation} />}
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
       <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} onToggle={toggleWanted} />
       <ValueStrip />
