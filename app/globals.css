@@ -487,6 +487,14 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .collection-book-row { grid-template-columns: minmax(0, 1fr) 180px; }
 }
 
+@media (max-width: 820px), (hover: none) and (pointer: coarse) {
+  .search-bar input,
+  .auth-form input:not([type='hidden']),
+  .reading-status-control select,
+  .reading-status-control.is-compact select,
+  textarea { font-size: 16px; }
+}
+
 @media (max-width: 560px) {
   .site-header { gap: 8px; padding-inline: 17px; }
   .wordmark { min-height: 44px; font-size: 19px; }
