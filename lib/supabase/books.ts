@@ -26,6 +26,10 @@ import {
   applyRatingSummaries,
   type PublicRatingSummary,
 } from '@/lib/ratings/card-summaries';
+import {
+  getVerifiedStoredCoverUrls,
+  loadStoredCoverResolutionsBatched,
+} from '@/lib/supabase/cover-resolutions';
 import { rankHighestRatedWorks } from '@/lib/ratings/highest-rated';
 import { supabase } from './client';
 import {
@@ -473,7 +477,26 @@ export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
     return workId ? [workId] : [];
   }))];
   const books = await loadCatalogBooksByIds(workIds);
-  return books.filter(isDutchLanguageBook);
+  const storedCovers = await loadStoredCoverResolutionsBatched(workIds);
+  const storedCoversByWorkId = new Map<string, typeof storedCovers.entries>();
+  for (const entry of storedCovers.entries) {
+    const entries = storedCoversByWorkId.get(entry.workId) ?? [];
+    entries.push(entry);
+    storedCoversByWorkId.set(entry.workId, entries);
+  }
+
+  return books
+    .filter(isDutchLanguageBook)
+    .map((book) => ({
+      ...book,
+      coverUrls: uniqueCoverUrls([
+        ...(book.coverUrls ?? []),
+        ...getVerifiedStoredCoverUrls(
+          storedCoversByWorkId.get(book.workId ?? '') ?? [],
+          book,
+        ),
+      ]),
+    }));
 }
 
 export async function loadHighestRatedCatalog(limit = 18): Promise<{

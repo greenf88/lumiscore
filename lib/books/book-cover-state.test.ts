@@ -4,6 +4,7 @@ import type { Book } from '../../app/data/books.ts';
 import {
   getBookCoverIdentity,
   getInitialBookCoverUrls,
+  hasUsableInitialBookCover,
 } from './book-cover-state.ts';
 
 function fixture(overrides: Partial<Book> = {}): Book {
@@ -71,5 +72,17 @@ test('each resolver identity field invalidates the cover state', () => {
   assert.notEqual(
     identity,
     getBookCoverIdentity({ ...book, isbn13: '9780000000002' }),
+  );
+});
+
+test('cover eligibility follows the existing initial candidate behavior', () => {
+  assert.equal(hasUsableInitialBookCover(fixture()), true);
+  assert.equal(
+    hasUsableInitialBookCover(fixture({ coverUrls: [], isbn13: '9780441172719' })),
+    false,
+  );
+  assert.equal(
+    hasUsableInitialBookCover(fixture({ coverUrls: undefined, isbn13: '9780441172719' })),
+    true,
   );
 });

@@ -16,10 +16,33 @@ import {
 } from './google-books-covers.ts';
 import { resolveOpenLibraryCoverCandidates } from './open-library-covers.ts';
 import {
+  getVerifiedStoredCoverUrls,
   mergeStoredCoverResolution,
   shouldRefreshStoredCover,
   type StoredCoverResolution,
 } from '../supabase/cover-resolutions.ts';
+
+test('uses only exact, previously verified stored cover resolutions', () => {
+  const entry = (overrides: Partial<StoredCoverResolution> = {}): StoredCoverResolution => ({
+    workId: '1300',
+    source: 'google_books',
+    sourceKey: '9789044933192',
+    state: 'resolved',
+    coverUrl: 'https://books.google.com/books/content?id=dwaalspoor',
+    verifiedAt: '2026-09-11T18:30:15.738Z',
+    checkedAt: '2026-09-11T18:30:15.738Z',
+    retryAfter: null,
+    ...overrides,
+  });
+
+  assert.deepEqual(
+    getVerifiedStoredCoverUrls(
+      [entry(), entry({ sourceKey: '9780000000000' }), entry({ verifiedAt: null })],
+      { isbn13: '9789044933192' },
+    ),
+    ['https://books.google.com/books/content?id=dwaalspoor'],
+  );
+});
 
 test('uses a smaller Open Library image variant without rewriting other hosts', () => {
   assert.equal(

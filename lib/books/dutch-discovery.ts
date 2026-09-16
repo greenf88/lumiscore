@@ -1,5 +1,6 @@
 import type { Book } from '../../app/data/books.ts';
 import type { Locale } from '../i18n/config.ts';
+import { hasUsableInitialBookCover } from './book-cover-state.ts';
 import { isDutchLanguageBook } from './language.ts';
 
 function hasRealRating(book: Book): boolean {
@@ -23,7 +24,8 @@ export function selectDutchDiscoveryBooks(
     .filter((book) =>
       Boolean(book.workId) &&
       !excludedWorkIds.has(book.workId!) &&
-      isDutchLanguageBook(book),
+      isDutchLanguageBook(book) &&
+      hasUsableInitialBookCover(book),
     )
     .toSorted((left, right) =>
       Number(hasRealRating(right)) - Number(hasRealRating(left)) ||

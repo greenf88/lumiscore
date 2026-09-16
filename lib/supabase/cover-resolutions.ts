@@ -5,6 +5,11 @@ import type {
   CoverSource,
   CoverSourceResolution,
 } from '../books/cover-resolution-result.ts';
+import {
+  normalizeIsbn13,
+  normalizeOpenLibraryId,
+  uniqueCoverUrls,
+} from '../books/covers.ts';
 
 export type StoredCoverResolution = {
   workId: string;
@@ -21,6 +26,8 @@ const SUCCESS_FRESH_MS = 90 * 24 * 60 * 60 * 1_000;
 const CONFIRMED_MISSING_FRESH_MS = 24 * 60 * 60 * 1_000;
 const TEMPORARY_FAILURE_RETRY_MS = 5 * 60 * 1_000;
 const COVER_CACHE_TABLE = 'work_cover_resolutions';
+const COVER_CACHE_SELECT =
+  'work_id,source,cover_url,source_key,state,verified_at,checked_at,retry_after';
 let client: SupabaseClient | null | undefined;
 
 function logCoverCacheReadDiagnostic(
@@ -200,9 +207,7 @@ export async function loadStoredCoverResolutions(
   try {
     response = await coverCacheClient
       .from(COVER_CACHE_TABLE)
-      .select(
-        'work_id,source,cover_url,source_key,state,verified_at,checked_at,retry_after',
-      )
+      .select(COVER_CACHE_SELECT)
       .eq('work_id', workId);
   } catch (error) {
     logCoverCacheReadDiagnostic('error', {
@@ -234,6 +239,60 @@ export async function loadStoredCoverResolutions(
       .map((row) => toStoredCoverResolution(row))
       .filter((row): row is StoredCoverResolution => Boolean(row)),
   };
+}
+
+export async function loadStoredCoverResolutionsBatched(
+  workIds: readonly string[],
+): Promise<{ available: boolean; entries: StoredCoverResolution[] }> {
+  const normalizedWorkIds = [...new Set(
+    workIds.map((workId) => workId.trim()).filter((workId) => /^\d+$/.test(workId)),
+  )];
+  if (normalizedWorkIds.length === 0) return { available: true, entries: [] };
+
+  const coverCacheClient = getCoverCacheClient();
+  if (!coverCacheClient) return { available: false, entries: [] };
+
+  const { data, error } = await coverCacheClient
+    .from(COVER_CACHE_TABLE)
+    .select(COVER_CACHE_SELECT)
+    .in('work_id', normalizedWorkIds);
+  if (error) return { available: false, entries: [] };
+
+  return {
+    available: true,
+    entries: (data ?? [])
+      .map((row) => toStoredCoverResolution(row))
+      .filter((row): row is StoredCoverResolution => Boolean(row)),
+  };
+}
+
+export function getVerifiedStoredCoverUrls(
+  entries: readonly StoredCoverResolution[],
+  lookup: {
+    openLibraryWorkId?: string | null;
+    isbn13?: string | null;
+  },
+): string[] {
+  const expectedOpenLibraryKey = normalizeOpenLibraryId(
+    lookup.openLibraryWorkId,
+    'work',
+  );
+  const expectedGoogleBooksKey = normalizeIsbn13(lookup.isbn13);
+
+  return uniqueCoverUrls(
+    [...entries]
+      .sort((left, right) =>
+        left.source === right.source ? 0 : left.source === 'open_library' ? -1 : 1,
+      )
+      .map((entry) => {
+        const expectedSourceKey = entry.source === 'open_library'
+          ? expectedOpenLibraryKey
+          : expectedGoogleBooksKey;
+        return entry.coverUrl && entry.verifiedAt && expectedSourceKey === entry.sourceKey
+          ? entry.coverUrl
+          : null;
+      }),
+  );
 }
 
 export async function saveStoredCoverResolutions(

@@ -22,6 +22,7 @@ function book(input: Partial<Book> & Pick<Book, 'workId' | 'title'>): Book {
     ratingsCount: 0,
     match: null,
     cover: 'orbit',
+    coverUrls: [],
     ...input,
   };
 }
@@ -56,10 +57,10 @@ test('runtime Dutch ISBN fallback stays aligned with reviewed native seed metada
 
 test('Dutch discovery is locale-gated, Dutch-only and deterministic', () => {
   const candidates = [
-    book({ workId: '3', title: 'Zulu', editionLanguage: 'nld' }),
-    book({ workId: '2', title: 'English', editionLanguage: 'eng', score: 10, ratingsCount: 20 }),
-    book({ workId: '1', title: 'Alfa', isbn13: '9789044933192', score: 8, ratingsCount: 2 }),
-    book({ workId: '4', title: 'Beta', editionLanguage: 'nld' }),
+    book({ workId: '3', title: 'Zulu', editionLanguage: 'nld', coverUrls: ['https://covers.example/zulu.jpg'] }),
+    book({ workId: '2', title: 'English', editionLanguage: 'eng', score: 10, ratingsCount: 20, coverUrls: ['https://covers.example/english.jpg'] }),
+    book({ workId: '1', title: 'Alfa', isbn13: '9789044933192', score: 8, ratingsCount: 2, coverUrls: ['https://covers.example/alfa.jpg'] }),
+    book({ workId: '4', title: 'Beta', editionLanguage: 'nld', coverUrls: ['https://covers.example/beta.jpg'] }),
   ];
   const first = selectDutchDiscoveryBooks(candidates, new Set(['4']), 6);
   const second = selectDutchDiscoveryBooks(candidates, new Set(['4']), 6);
@@ -69,4 +70,41 @@ test('Dutch discovery is locale-gated, Dutch-only and deterministic', () => {
   assert.ok(first.every(isDutchLanguageBook));
   assert.equal(shouldShowDutchDiscovery('nl', first.length), true);
   assert.equal(shouldShowDutchDiscovery('en', first.length), false);
+});
+
+test('Dutch discovery excludes coverless and placeholder-only books', () => {
+  const covered = book({
+    workId: '1',
+    title: 'Covered',
+    editionLanguage: 'nld',
+    coverUrls: ['https://covers.example/covered.jpg'],
+  });
+  const coverless = book({ workId: '2', title: 'Coverless', editionLanguage: 'nld' });
+  const placeholderOnly = book({
+    workId: '3',
+    title: 'Placeholder',
+    editionLanguage: 'nld',
+    isbn13: '9789044933192',
+    coverUrls: [],
+  });
+
+  assert.deepEqual(
+    selectDutchDiscoveryBooks([placeholderOnly, coverless, covered], new Set(), 6)
+      .map(({ workId }) => workId),
+    ['1'],
+  );
+});
+
+test('Dutch discovery returns fewer than six instead of filling with coverless books', () => {
+  const candidates = [
+    book({ workId: '1', title: 'B', editionLanguage: 'nld', coverUrls: ['https://covers.example/b.jpg'] }),
+    book({ workId: '2', title: 'A', editionLanguage: 'nld', coverUrls: ['https://covers.example/a.jpg'] }),
+    book({ workId: '3', title: 'Coverless', editionLanguage: 'nld' }),
+  ];
+
+  const first = selectDutchDiscoveryBooks(candidates, new Set(), 6);
+  const second = selectDutchDiscoveryBooks(candidates, new Set(), 6);
+  assert.deepEqual(first.map(({ workId }) => workId), ['2', '1']);
+  assert.deepEqual(first, second);
+  assert.equal(first.length, 2);
 });

@@ -50,6 +50,16 @@ test('highest-rated ordering has no locale input or Dutch-language preference', 
   );
 });
 
+test('highest-rated selection remains cover agnostic', () => {
+  const coverless = { workId: '20', title: 'Coverless', score: 9.5, ratingCount: 3, coverUrls: [] as string[] };
+  const covered = { workId: '21', title: 'Covered', score: 9, ratingCount: 3, coverUrls: ['https://covers.example/covered.jpg'] };
+
+  assert.deepEqual(
+    rankHighestRatedWorks([covered, coverless], 2).map(({ workId }) => workId),
+    ['20', '21'],
+  );
+});
+
 test('homepage uses the global aggregate ranking and Highest rated label', async () => {
   const [page, home, catalog] = await Promise.all([
     readFile(new URL('../../app/page.tsx', import.meta.url), 'utf8'),

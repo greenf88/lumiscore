@@ -29,3 +29,9 @@ export function getInitialBookCoverUrls(
   const openLibraryCoverUrl = getOpenLibraryCoverUrl(book.isbn13);
   return openLibraryCoverUrl ? [openLibraryCoverUrl] : [];
 }
+
+export function hasUsableInitialBookCover(
+  book: BookCoverInitialFields,
+): boolean {
+  return getInitialBookCoverUrls(book).length > 0;
+}
