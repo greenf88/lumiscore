@@ -93,8 +93,10 @@ export function LumiScoreBookDetail({
       : '—';
   const matchCopy = !hasTasteEvidence
     ? t('detail.unlockMatch')
-    : !personalization.candidate || personalization.candidate.coverageLevel === 'none'
-      ? t('detail.matchNeedsBookMetadata')
+    : !personalization.candidate ||
+        personalization.candidate.coverageLevel === 'none' ||
+        personalization.candidate.coverageLevel === 'era_only'
+      ? null
       : personalMatch?.explanation
         ? personalMatch.explanation
         : personalMatch?.matchLabel === 'Early match'
@@ -296,7 +298,7 @@ export function LumiScoreBookDetail({
             <section className="detail-score-panel detail-match-panel" aria-labelledby="match-heading">
               <span id="match-heading">{t('detail.yourMatch')}</span>
               <strong>{matchValue}</strong>
-              <p>{matchCopy}</p>
+              {matchCopy && <p>{matchCopy}</p>}
             </section>
           </div>
 

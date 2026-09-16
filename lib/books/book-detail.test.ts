@@ -123,25 +123,50 @@ test('book detail loads shared Taste Test personalization instead of requiring r
   assert.match(loader, /profile\.selectedCount > 0 \|\| profile\.meaningfulRatingCount > 0/);
 });
 
-test('book detail keeps separate unlock and insufficient-metadata states', async () => {
+test('book detail keeps unlock copy but suppresses insufficient-metadata copy', async () => {
   const [component, translations] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../i18n/translations.ts', import.meta.url), 'utf8'),
   ]);
 
   assert.match(component, /detail\.unlockMatch/);
-  assert.match(component, /detail\.matchNeedsBookMetadata/);
+  assert.doesNotMatch(component, /detail\.matchNeedsBookMetadata/);
   assert.match(translations, /Take the Taste Test or rate books to see your match/);
   assert.match(translations, /Doe de Smaaktest of beoordeel boeken om jouw match te zien/);
 });
 
-test('book detail renders a dash when personalization has no visible match', async () => {
+test('coverage NONE renders a dash without an explanatory paragraph', async () => {
   const component = await readFile(
     new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url),
     'utf8',
   );
 
   assert.match(component, /const matchValue =[\s\S]*?: '—';/);
+  assert.match(component, /candidate\.coverageLevel === 'none'[\s\S]*?\? null/);
   assert.match(component, /<span id="match-heading">\{t\('detail\.yourMatch'\)\}<\/span>/);
   assert.match(component, /<strong>\{matchValue\}<\/strong>/);
+  assert.match(component, /\{matchCopy && <p>\{matchCopy\}<\/p>\}/);
+  assert.doesNotMatch(component, /\n\s*<p>\{matchCopy\}<\/p>/);
+});
+
+test('ERA_ONLY renders a dash without explanatory copy', async () => {
+  const component = await readFile(
+    new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(component, /candidate\.coverageLevel === 'era_only'[\s\S]*?\? null/);
+  assert.match(component, /\{matchCopy && <p>\{matchCopy\}<\/p>\}/);
+});
+
+test('valid PARTIAL and RICH match content remains available', async () => {
+  const component = await readFile(
+    new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(component, /personalMatch\?\.explanation[\s\S]*?\? personalMatch\.explanation/);
+  assert.match(component, /detail\.matchNoOverlap/);
+  assert.match(component, /personalMatch\?\.matchScore[\s\S]*?`\$\{personalMatch\.matchScore\}%`/);
+  assert.match(component, /personalMatch\?\.matchLabel[\s\S]*?MATCH_LABEL_KEYS/);
 });
