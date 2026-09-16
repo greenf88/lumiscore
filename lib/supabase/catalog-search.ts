@@ -1,6 +1,7 @@
 import {
   CATALOG_SEARCH_MAX_LIMIT,
   CATALOG_SEARCH_LIMIT,
+  collectCatalogSearchAliases,
   normalizeCatalogSearchQuery,
   rankCatalogSearchResults,
   type CatalogSearchResult,
@@ -35,7 +36,7 @@ export async function searchCatalog(
   if (normalizedQuery.length < 2) return [];
 
   const pattern = `%${escapeIlikePattern(normalizedQuery)}%`;
-  const [titleResult, authorResult] = await Promise.all([
+  const [titleResult, authorResult, editionResult] = await Promise.all([
     supabase
       .from('works')
       .select(SEARCH_SELECT)
@@ -47,33 +48,62 @@ export async function searchCatalog(
       .select('id')
       .ilike('name', pattern)
       .limit(SEARCH_CANDIDATE_LIMIT),
+    supabase
+      .from('editions')
+      .select('work_id,title')
+      .ilike('title', pattern)
+      .limit(SEARCH_CANDIDATE_LIMIT),
   ]);
 
   if (titleResult.error) throw titleResult.error;
   if (authorResult.error) throw authorResult.error;
+  if (editionResult.error) throw editionResult.error;
 
   const authorIds = (authorResult.data ?? [])
     .map((author) => String(author.id ?? '').trim())
     .filter(Boolean);
 
-  const authorWorksResult = authorIds.length
-    ? await supabase
+  const editionAliases = (editionResult.data ?? []).flatMap((edition) => {
+    const workId = String(edition.work_id ?? '').trim();
+    const title = String(edition.title ?? '').trim();
+    return workId && title ? [{ workId, title }] : [];
+  });
+  const { workIds: aliasWorkIds, aliasesByWorkId } = collectCatalogSearchAliases(
+    normalizedQuery,
+    editionAliases,
+  );
+
+  const [authorWorksResult, aliasWorksResult] = await Promise.all([
+    authorIds.length
+      ? supabase
         .from('works')
         .select(SEARCH_SELECT)
         .in('author_id', authorIds)
         .order('title', { ascending: true })
         .limit(SEARCH_CANDIDATE_LIMIT)
-    : { data: [], error: null };
+      : Promise.resolve({ data: [], error: null }),
+    aliasWorkIds.length
+      ? supabase
+        .from('works')
+        .select(SEARCH_SELECT)
+        .in('id', aliasWorkIds.map(Number))
+        .order('title', { ascending: true })
+        .limit(SEARCH_CANDIDATE_LIMIT)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
 
   if (authorWorksResult.error) throw authorWorksResult.error;
+  if (aliasWorksResult.error) throw aliasWorksResult.error;
 
   const books = rankCatalogSearchResults(
     mapCatalogWorks([
       ...(titleResult.data ?? []),
       ...(authorWorksResult.data ?? []),
+      ...(aliasWorksResult.data ?? []),
     ]),
     normalizedQuery,
     Math.min(CATALOG_SEARCH_MAX_LIMIT, Math.max(1, Math.trunc(limit))),
+    aliasesByWorkId,
   );
   const summaries = await loadPublicRatingSummaries(
     supabase,

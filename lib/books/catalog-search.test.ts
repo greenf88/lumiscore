@@ -3,6 +3,7 @@ import test from 'node:test';
 import type { Book } from '@/app/data/books';
 import {
   CATALOG_SEARCH_PAGE_LIMIT,
+  collectCatalogSearchAliases,
   isCatalogSearchQuery,
   rankCatalogSearchResults,
 } from './catalog-search.ts';
@@ -32,6 +33,20 @@ const catalog = [
   fixture('3', 'Atomic Habits', 'James Clear'),
   fixture('4', 'Winterberg', 'Suzanne Vermeer', null),
   fixture('5', 'De Hongerspelen', 'Suzanne Collins'),
+];
+
+const productionAliasBooks = [
+  fixture('1907', 'The Secret of Secrets', 'Dan Brown', 'OL42542598W'),
+  fixture('1342', 'Je revenais des autres', 'Mélissa Da Costa', 'OL24343547W'),
+  fixture('1343', 'Always Remember', 'Charlie Mackesy', 'OL43541951W'),
+  fixture('124', 'Before the Coffee Gets Cold', '川口俊和', 'OL20019347W'),
+  fixture('1920', 'Heartstopper, Volume Five', 'Alice Oseman', 'OL28959223W'),
+];
+
+const productionEditionAliases = [
+  { workId: '1907', title: 'Het ultieme geheim' },
+  { workId: '1342', title: 'Waar de zon de sneeuw raakt' },
+  { workId: '1343', title: 'Onthoud dit altijd' },
 ];
 
 test('finds exact and partial titles case-insensitively', () => {
@@ -85,5 +100,72 @@ test('supports a dedicated results page with at least twenty ranked matches', ()
   assert.deepEqual(
     results.slice(0, 3).map((book) => book.title),
     ['Catalog title 01', 'Catalog title 02', 'Catalog title 03'],
+  );
+});
+
+test('the five reviewed production aliases resolve to their intended existing Works', () => {
+  const expectedWorkIds = new Map([
+    ['Het ultieme geheim', '1907'],
+    ['Waar de zon de sneeuw raakt', '1342'],
+    ['Onthoud dit altijd', '1343'],
+    ['コーヒーが冷めないうちに', '124'],
+    ['Heartstopper: Volume Five', '1920'],
+  ]);
+
+  for (const [query, expectedWorkId] of expectedWorkIds) {
+    const { aliasesByWorkId } = collectCatalogSearchAliases(
+      query,
+      productionEditionAliases,
+    );
+    const results = rankCatalogSearchResults(
+      productionAliasBooks,
+      query,
+      CATALOG_SEARCH_PAGE_LIMIT,
+      aliasesByWorkId,
+    );
+    assert.equal(results[0]?.workId, expectedWorkId, query);
+  }
+});
+
+test('canonical titles still resolve normally after alias indexing', () => {
+  for (const book of productionAliasBooks) {
+    assert.equal(rankCatalogSearchResults(productionAliasBooks, book.title)[0]?.workId, book.workId);
+  }
+});
+
+test('a Work matched through both its canonical title and an alias is returned once', () => {
+  const book = fixture('1920', 'Heartstopper: Volume Five', 'Alice Oseman', 'OL28959223W');
+  const { aliasesByWorkId } = collectCatalogSearchAliases(
+    'Heartstopper: Volume Five',
+    productionEditionAliases,
+  );
+  const results = rankCatalogSearchResults(
+    [book, book],
+    'Heartstopper: Volume Five',
+    CATALOG_SEARCH_PAGE_LIMIT,
+    aliasesByWorkId,
+  );
+
+  assert.deepEqual(results.map(({ workId }) => workId), ['1920']);
+});
+
+test('alias normalization handles punctuation, case, and Unicode without affecting unrelated fuzzy searches', () => {
+  const { aliasesByWorkId } = collectCatalogSearchAliases(
+    'HEARTSTOPPER VOLUME FIVE',
+    productionEditionAliases,
+  );
+  assert.equal(
+    rankCatalogSearchResults(
+      productionAliasBooks,
+      'HEARTSTOPPER VOLUME FIVE',
+      CATALOG_SEARCH_PAGE_LIMIT,
+      aliasesByWorkId,
+    )[0]?.workId,
+    '1920',
+  );
+
+  assert.deepEqual(
+    rankCatalogSearchResults(catalog, 'hob').map(({ workId }) => workId),
+    ['2'],
   );
 });
