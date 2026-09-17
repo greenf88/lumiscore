@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import type { Book } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
+import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import {
   formatRatingCount,
   MAX_RATING,
@@ -32,6 +33,7 @@ import {
   parseGuestTasteTestAnswers,
   TASTE_TEST_GUEST_STORAGE_KEY,
 } from '@/lib/taste-test/guest-storage';
+import { useWantToRead } from './useWantToRead';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -52,6 +54,24 @@ const ratingChoices = Array.from(
   { length: MAX_RATING - MIN_RATING + 1 },
   (_, index) => index + MIN_RATING,
 );
+
+function GuestWantToRead({ book }: { book: Book }) {
+  const { t } = useLumiScoreLocale();
+  const { wanted, toggleWanted } = useWantToRead(false, [book]);
+  const isWanted = wanted.has(getGuestWantedStorageId(book));
+
+  return (
+    <button
+      className={`want-button detail-want-button${isWanted ? ' is-wanted' : ''}`}
+      type="button"
+      aria-pressed={isWanted}
+      onClick={() => toggleWanted(book)}
+    >
+      <span aria-hidden="true">{isWanted ? '✓' : '+'}</span>
+      {t('home.wantToRead')}
+    </button>
+  );
+}
 
 export function LumiScoreBookDetail({
   book,
@@ -312,15 +332,17 @@ export function LumiScoreBookDetail({
 
           {book.workId && <LumiScoreBookDescription workId={book.workId} />}
 
-          {book.workId && (
+          {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus
               workId={book.workId}
               status={readingStatus}
-              authenticated={ratingState.authenticated}
+              authenticated
               returnTo={detailPath}
               onStatusChange={setReadingStatus}
             />
-          )}
+          ) : (
+            <GuestWantToRead book={book} />
+          ))}
 
           <section className="rating-section" aria-labelledby="rate-book-heading">
             <div>

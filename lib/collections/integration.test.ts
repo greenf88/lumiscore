@@ -27,7 +27,7 @@ test('guest Want to Read values migrate without overwriting existing account sta
   const hook = read('../../app/components/useWantToRead.ts');
   assert.match(hook, /method: 'POST'/);
   assert.match(status, /existingIds/);
-  assert.match(status, /missing = ids\.filter/);
+  assert.match(status, /missing = catalogIds\.filter/);
   assert.match(status, /status: 'want_to_read' as const/);
 });
 

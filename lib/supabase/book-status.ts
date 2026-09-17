@@ -103,14 +103,23 @@ export async function migrateGuestWantToRead(
   const ids = normalizeWorkIds(workIds);
   if (ids.length === 0) return new Map();
 
+  const { data: existingWorks, error: worksError } = await client
+    .from('works')
+    .select('id')
+    .in('id', ids);
+  if (worksError) throw worksError;
+  const validIds = new Set((existingWorks ?? []).map((row) => Number(row.id)));
+  const catalogIds = ids.filter((workId) => validIds.has(workId));
+  if (catalogIds.length === 0) return new Map();
+
   const { data: existing, error: readError } = await client
     .from('user_book_status')
     .select('work_id,status')
     .eq('user_id', user.id)
-    .in('work_id', ids);
+    .in('work_id', catalogIds);
   if (readError) throw readError;
   const existingIds = new Set((existing ?? []).map((row) => Number(row.work_id)));
-  const missing = ids.filter((workId) => !existingIds.has(workId));
+  const missing = catalogIds.filter((workId) => !existingIds.has(workId));
   if (missing.length > 0) {
     const { error } = await client.from('user_book_status').insert(
       missing.map((workId) => ({
@@ -122,7 +131,7 @@ export async function migrateGuestWantToRead(
     if (error) throw error;
   }
 
-  return (await loadUserBookStatuses(ids.map(String))).statuses;
+  return (await loadUserBookStatuses(catalogIds.map(String))).statuses;
 }
 
 export async function loadMyBooksPageData(): Promise<MyBooksPageData> {

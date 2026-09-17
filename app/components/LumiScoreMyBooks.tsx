@@ -1,8 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Book } from '@/app/data/books';
+import {
+  GUEST_WANTED_STORAGE_KEY,
+  getGuestWantedWorkIds,
+} from '@/lib/collections/guest-want-to-read';
 import {
   countMyBooksByStatus,
+  createGuestWantToReadItems,
   filterMyBooks,
   MY_BOOKS_STATUSES,
   type MyBooksItem,
@@ -13,7 +19,11 @@ import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { BookCover, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
-import { migrateGuestWantToReadFromLocal } from './useWantToRead';
+import {
+  migrateGuestWantToReadFromLocal,
+  readGuestWantedFromLocalStorage,
+  useWantToRead,
+} from './useWantToRead';
 
 const STATUS_KEYS: Record<ReadingStatus, 'myBooks.wantToRead' | 'myBooks.reading' | 'myBooks.read' | 'myBooks.dnf'> = {
   want_to_read: 'myBooks.wantToRead',
@@ -31,10 +41,14 @@ const EMPTY_KEYS: Record<ReadingStatus, 'myBooks.emptyWantToRead' | 'myBooks.emp
 
 function MyBooksCard({
   item,
+  authenticated,
   onStatusChange,
+  onGuestRemove,
 }: {
   item: MyBooksItem;
+  authenticated: boolean;
   onStatusChange: (status: ReadingStatus | null) => void;
+  onGuestRemove?: () => void;
 }) {
   const { locale, t } = useLumiScoreLocale();
   const { book, status } = item;
@@ -46,7 +60,7 @@ function MyBooksCard({
       <a className="book-card-main-link" href={`/book/${book.workId}`} aria-label={t('home.viewBook', { title: book.title, author: book.author })}>
         <div className="card-cover-wrap">
           <span className="score-badge"><strong>{rating.score}</strong><small>LumiScore</small></span>
-          <BookCover book={book} />
+          <BookCover book={book} resolveMissing={authenticated} />
         </div>
         <div className="book-card-body">
           <span className="book-genre">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</span>
@@ -57,16 +71,130 @@ function MyBooksCard({
       </a>
       <div className="book-card-action my-books-card-action">
         <span className="my-books-status" aria-label={t('myBooks.currentStatus', { status: statusLabel })}>{statusLabel}</span>
-        <LumiScoreReadingStatus
-          workId={book.workId!}
-          status={status}
-          authenticated
-          returnTo="/my-books"
-          compact
-          onStatusChange={onStatusChange}
-        />
+        {authenticated ? (
+          <LumiScoreReadingStatus
+            workId={book.workId!}
+            status={status}
+            authenticated
+            returnTo="/my-books"
+            compact
+            onStatusChange={onStatusChange}
+          />
+        ) : (
+          <button
+            className="my-books-remove"
+            type="button"
+            aria-label={t('myBooks.removeLabel', { title: book.title })}
+            onClick={onGuestRemove}
+          >
+            {t('myBooks.remove')}
+          </button>
+        )}
       </div>
     </article>
+  );
+}
+
+type GuestMyBooksState = {
+  available: boolean;
+  items: MyBooksItem[];
+  loading: boolean;
+};
+
+function GuestMyBooks() {
+  const { t } = useLumiScoreLocale();
+  const [state, setState] = useState<GuestMyBooksState>({
+    available: true,
+    items: [],
+    loading: true,
+  });
+  const books = useMemo(() => state.items.map((item) => item.book), [state.items]);
+  const { toggleWanted } = useWantToRead(false, books);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+
+    const load = async () => {
+      const workIds = getGuestWantedWorkIds(readGuestWantedFromLocalStorage());
+      if (workIds.length === 0) {
+        if (active) setState({ available: true, items: [], loading: false });
+        return;
+      }
+
+      if (active) setState((current) => ({ ...current, loading: true }));
+      try {
+        const response = await fetch(
+          `/api/catalog/books?workIds=${encodeURIComponent(workIds.join(','))}`,
+          { signal: controller.signal },
+        );
+        if (!response.ok) throw new Error('Guest books could not be loaded.');
+        const payload = (await response.json()) as { books?: Book[] };
+        if (!active) return;
+        setState({
+          available: true,
+          items: createGuestWantToReadItems(payload.books ?? [], workIds),
+          loading: false,
+        });
+      } catch (error) {
+        if (!active || (error instanceof DOMException && error.name === 'AbortError')) return;
+        setState({ available: false, items: [], loading: false });
+      }
+    };
+
+    void load();
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === GUEST_WANTED_STORAGE_KEY) void load();
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      active = false;
+      controller.abort();
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
+
+  const removeBook = (book: Book) => {
+    toggleWanted(book);
+    setState((current) => ({
+      ...current,
+      items: current.items.filter((item) => item.book.workId !== book.workId),
+    }));
+  };
+
+  return (
+    <>
+      <aside className="my-books-guest-cta">
+        <p>{t('myBooks.guestSignInCopy')}</p>
+        <a href="/login?next=%2Fmy-books">{t('myBooks.signIn')} <span>→</span></a>
+      </aside>
+      {state.loading ? (
+        <div className="my-books-loading" role="status">{t('myBooks.loading')}</div>
+      ) : !state.available ? (
+        <div className="my-books-empty" role="status">
+          <h2>{t('myBooks.unavailable')}</h2>
+          <p>{t('myBooks.unavailableCopy')}</p>
+        </div>
+      ) : state.items.length > 0 ? (
+        <div className="book-grid my-books-grid guest-my-books-grid">
+          {state.items.map((item) => (
+            <MyBooksCard
+              key={item.book.workId}
+              item={item}
+              authenticated={false}
+              onStatusChange={() => undefined}
+              onGuestRemove={() => removeBook(item.book)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="my-books-empty">
+          <h2>{t('myBooks.emptyWantToRead')}</h2>
+          <p>{t('myBooks.emptyWantToReadCopy')}</p>
+          <a href="/#discover">{t('myBooks.discover')} →</a>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -120,15 +248,11 @@ export function LumiScoreMyBooks({ data }: { data: MyBooksPageData }) {
         <div className="my-books-heading">
           <span className="eyebrow">{t('myBooks.eyebrow')}</span>
           <h1>{t('myBooks.heading')}</h1>
-          <p>{t('myBooks.copy')}</p>
+          <p>{t(data.authenticated ? 'myBooks.copy' : 'myBooks.guestCopy')}</p>
         </div>
 
         {!data.authenticated ? (
-          <div className="my-books-gate">
-            <h2>{t('myBooks.signInHeading')}</h2>
-            <p>{t('myBooks.signInCopy')}</p>
-            <a className="primary-cta" href="/login?next=%2Fmy-books">{t('myBooks.signIn')} <span>→</span></a>
-          </div>
+          <GuestMyBooks />
         ) : !data.available ? (
           <div className="my-books-empty" role="status">
             <h2>{t('myBooks.unavailable')}</h2>
@@ -163,6 +287,7 @@ export function LumiScoreMyBooks({ data }: { data: MyBooksPageData }) {
                     <MyBooksCard
                       key={item.book.workId}
                       item={item}
+                      authenticated
                       onStatusChange={(status) => updateItemStatus(item.book.workId!, status)}
                     />
                   ))}

@@ -4,34 +4,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Book } from '../data/books';
 import { isReadingStatus, type ReadingStatus } from '@/lib/collections/model';
 import {
+  GUEST_WANTED_STORAGE_KEY,
+  getGuestWantedWorkIds,
   getGuestWantedStorageId,
-  normalizeGuestWantedIds,
+  parseGuestWantedIds,
   toggleGuestWantedId,
 } from '@/lib/collections/guest-want-to-read';
 
-const STORAGE_KEY = 'lumiscore-wanted';
-
-function readGuestWanted(): string[] {
-  try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as unknown;
-    return normalizeGuestWantedIds(value);
-  } catch {
-    return [];
-  }
-}
-
-function workIdFromStoredId(value: string): string | null {
-  const match = /^work-(\d+)$/.exec(value);
-  return match?.[1] ?? null;
+export function readGuestWantedFromLocalStorage(): string[] {
+  return parseGuestWantedIds(localStorage.getItem(GUEST_WANTED_STORAGE_KEY));
 }
 
 export async function migrateGuestWantToReadFromLocal(
   signal?: AbortSignal,
 ): Promise<boolean> {
-  const guestIds = readGuestWanted().flatMap((id) => {
-    const workId = workIdFromStoredId(id);
-    return workId ? [workId] : [];
-  });
+  const guestIds = getGuestWantedWorkIds(readGuestWantedFromLocalStorage());
   if (guestIds.length === 0) return false;
 
   const migration = await fetch('/api/book-status', {
@@ -41,7 +28,7 @@ export async function migrateGuestWantToReadFromLocal(
     signal,
   });
   if (!migration.ok) return false;
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(GUEST_WANTED_STORAGE_KEY);
   return true;
 }
 
@@ -56,14 +43,14 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   useEffect(() => {
     if (authenticated) return;
     const restore = () => {
-      const restored = new Set(readGuestWanted());
+      const restored = new Set(readGuestWantedFromLocalStorage());
       wantedRef.current = restored;
       setWanted(restored);
       setStatuses(new Map());
     };
     restore();
     const handleStorage = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY) restore();
+      if (event.key === GUEST_WANTED_STORAGE_KEY) restore();
     };
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
@@ -120,7 +107,7 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
     wantedRef.current = nextWanted;
     setWanted(nextWanted);
     if (!authenticated || !book.workId) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...nextWanted]));
+      localStorage.setItem(GUEST_WANTED_STORAGE_KEY, JSON.stringify([...nextWanted]));
     }
 
     if (authenticated && book.workId) {

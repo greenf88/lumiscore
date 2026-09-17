@@ -33,3 +33,19 @@ export function countMyBooksByStatus(
   for (const item of items) counts[item.status] += 1;
   return counts;
 }
+
+export function createGuestWantToReadItems(
+  books: readonly Book[],
+  orderedWorkIds: readonly string[],
+): MyBooksItem[] {
+  const booksByWorkId = new Map(books.flatMap((book) =>
+    book.workId ? [[book.workId, book] as const] : [],
+  ));
+
+  return [...new Set(orderedWorkIds)].flatMap((workId) => {
+    const book = booksByWorkId.get(workId);
+    return book
+      ? [{ book, status: 'want_to_read' as const, updatedAt: null }]
+      : [];
+  });
+}

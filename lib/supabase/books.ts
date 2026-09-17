@@ -430,6 +430,30 @@ export async function loadCatalogBooksByIds(
   return applyRatingSummaries(catalogBooks, summaries);
 }
 
+export async function loadCatalogBooksByIdsWithStoredCovers(
+  workIds: readonly string[],
+): Promise<Book[]> {
+  const books = await loadCatalogBooksByIds(workIds);
+  const storedCovers = await loadStoredCoverResolutionsBatched(workIds);
+  const storedCoversByWorkId = new Map<string, typeof storedCovers.entries>();
+  for (const entry of storedCovers.entries) {
+    const entries = storedCoversByWorkId.get(entry.workId) ?? [];
+    entries.push(entry);
+    storedCoversByWorkId.set(entry.workId, entries);
+  }
+
+  return books.map((book) => ({
+    ...book,
+    coverUrls: uniqueCoverUrls([
+      ...(book.coverUrls ?? []),
+      ...getVerifiedStoredCoverUrls(
+        storedCoversByWorkId.get(book.workId ?? '') ?? [],
+        book,
+      ),
+    ]),
+  }));
+}
+
 export async function loadHomepageCatalog(limit = 18): Promise<{
   books: Book[];
   total: number;

@@ -104,9 +104,19 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
   return request;
 }
 
-type BookCoverProps = { book: Book; small?: boolean; label?: string };
+type BookCoverProps = {
+  book: Book;
+  small?: boolean;
+  label?: string;
+  resolveMissing?: boolean;
+};
 
-function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
+function BookCoverForIdentity({
+  book,
+  small = false,
+  label,
+  resolveMissing = true,
+}: BookCoverProps) {
   const { t } = useLumiScoreLocale();
   const [coverUrls, setCoverUrls] = useState(() =>
     getInitialBookCoverUrls(book),
@@ -121,6 +131,7 @@ function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
 
   const requestResolvedCovers = useCallback(() => {
     if (
+      !resolveMissing ||
       resolvedRequested.current ||
       (!book.openLibraryWorkId && !book.isbn13)
     ) return;
@@ -131,7 +142,7 @@ function BookCoverForIdentity({ book, small = false, label }: BookCoverProps) {
         ...new Set([...currentUrls, ...resolvedUrls]),
       ]);
     });
-  }, [book]);
+  }, [book, resolveMissing]);
 
   useEffect(() => {
     if (!coverUrl) requestResolvedCovers();
