@@ -5,7 +5,7 @@ import { buildPublicSitemapPaths } from './sitemap.ts';
 test('sitemap paths include all current public books and collections without duplicates', () => {
   assert.deepEqual(
     buildPublicSitemapPaths(['8', '1300', '8'], ['dune', 'harry-potter', 'dune']),
-    ['/', '/taste-test', '/collection/dune', '/collection/harry-potter', '/book/8', '/book/1300'],
+    ['/', '/browse', '/collections', '/taste-test', '/collection/dune', '/collection/harry-potter', '/book/8', '/book/1300'],
   );
 });
 

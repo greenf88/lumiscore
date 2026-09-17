@@ -29,8 +29,18 @@ import {
 import {
   getVerifiedStoredCoverUrls,
   loadStoredCoverResolutionsBatched,
+  type StoredCoverResolution,
 } from '@/lib/supabase/cover-resolutions';
 import { rankHighestRatedWorks } from '@/lib/ratings/highest-rated';
+import {
+  CATALOG_BROWSE_PAGE_SIZE,
+  clampCatalogBrowsePage,
+  getCatalogBrowseOrder,
+  getCatalogBrowsePageCount,
+  getCatalogBrowseRange,
+  normalizeCatalogBrowsePage,
+  type CatalogBrowseSort,
+} from '@/lib/books/catalog-browse';
 import { supabase } from './client';
 import {
   loadPublicRatingSummaries,
@@ -432,11 +442,21 @@ export async function loadCatalogBooksByIds(
 
 export async function loadCatalogBooksByIdsWithStoredCovers(
   workIds: readonly string[],
+  prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
 ): Promise<Book[]> {
-  const books = await loadCatalogBooksByIds(workIds);
-  const storedCovers = await loadStoredCoverResolutionsBatched(workIds);
-  const storedCoversByWorkId = new Map<string, typeof storedCovers.entries>();
-  for (const entry of storedCovers.entries) {
+  const [books, storedCovers] = await Promise.all([
+    loadCatalogBooksByIds(workIds, prefetchedSummaries),
+    loadStoredCoverResolutionsBatched(workIds),
+  ]);
+  return applyStoredCoverResolutions(books, storedCovers.entries);
+}
+
+function applyStoredCoverResolutions(
+  books: readonly Book[],
+  entries: readonly StoredCoverResolution[],
+): Book[] {
+  const storedCoversByWorkId = new Map<string, StoredCoverResolution[]>();
+  for (const entry of entries) {
     const entries = storedCoversByWorkId.get(entry.workId) ?? [];
     entries.push(entry);
     storedCoversByWorkId.set(entry.workId, entries);
@@ -452,6 +472,79 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
       ),
     ]),
   }));
+}
+
+export type CatalogBrowsePage = {
+  books: Book[];
+  total: number;
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  sort: CatalogBrowseSort;
+};
+
+async function queryCatalogBrowseRows(
+  page: number,
+  sort: CatalogBrowseSort,
+) {
+  const { from, to } = getCatalogBrowseRange(page, CATALOG_BROWSE_PAGE_SIZE);
+  let query = supabase
+    .from('works')
+    .select(HOMEPAGE_CATALOG_SELECT, { count: 'exact' });
+
+  for (const order of getCatalogBrowseOrder(sort)) {
+    query = query.order(order.column, {
+      ascending: order.ascending,
+      ...(order.nullsFirst === undefined
+        ? {}
+        : { nullsFirst: order.nullsFirst }),
+    });
+  }
+
+  return query.range(from, to);
+}
+
+export async function loadCatalogBrowsePage(
+  requestedPage: number,
+  sort: CatalogBrowseSort,
+  locale: Locale = 'en',
+): Promise<CatalogBrowsePage> {
+  const normalizedPage = normalizeCatalogBrowsePage(requestedPage);
+  let result = await queryCatalogBrowseRows(normalizedPage, sort);
+  if (result.error) throw result.error;
+
+  const total = result.count ?? result.data?.length ?? 0;
+  const page = clampCatalogBrowsePage(
+    normalizedPage,
+    total,
+    CATALOG_BROWSE_PAGE_SIZE,
+  );
+  if (page !== normalizedPage) {
+    result = await queryCatalogBrowseRows(page, sort);
+    if (result.error) throw result.error;
+  }
+
+  const catalogBooks = asRows(result.data)
+    .map((work, index) => mapCatalogBook(work, [], [], index, locale))
+    .filter((book): book is Book => book !== null);
+  const workIds = catalogBooks.flatMap((book) =>
+    book.workId ? [book.workId] : []);
+  const [summaries, storedCovers] = await Promise.all([
+    loadPublicRatingSummaries(supabase, workIds),
+    loadStoredCoverResolutionsBatched(workIds),
+  ]);
+
+  return {
+    books: applyStoredCoverResolutions(
+      applyRatingSummaries(catalogBooks, summaries),
+      storedCovers.entries,
+    ),
+    total,
+    page,
+    pageSize: CATALOG_BROWSE_PAGE_SIZE,
+    pageCount: getCatalogBrowsePageCount(total, CATALOG_BROWSE_PAGE_SIZE),
+    sort,
+  };
 }
 
 export async function loadHomepageCatalog(limit = 18): Promise<{

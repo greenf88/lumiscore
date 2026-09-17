@@ -11,9 +11,18 @@ import {
   type SeriesProgress,
 } from '../collections/model.ts';
 import { getReviewedSeriesMetadata } from '../collections/reviewed-series-metadata.ts';
+import {
+  buildCollectionDirectoryBaseItems,
+  type CollectionDirectoryBaseItem,
+  type CollectionDirectoryMembership,
+} from '../collections/directory.ts';
 import { getVerifiedServerUser } from './auth.ts';
-import { loadCatalogBooksByIds } from './books.ts';
+import {
+  loadCatalogBooksByIds,
+  loadCatalogBooksByIdsWithStoredCovers,
+} from './books.ts';
 import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
+import { supabase } from './client.ts';
 
 type CollectionRow = {
   id: number | string;
@@ -53,6 +62,18 @@ export type HomepageSeriesContinuation = {
   collection: CollectionSummary;
   progress: SeriesProgress;
   nextBook: Book;
+};
+
+export type CollectionDirectoryItem = Omit<
+  CollectionDirectoryBaseItem,
+  'representativeWorkIds'
+> & {
+  representativeBooks: Book[];
+};
+
+export type CollectionsDirectoryData = {
+  collections: CollectionDirectoryItem[];
+  total: number;
 };
 
 function asNumber(value: unknown): number | null {
@@ -110,6 +131,59 @@ function sortCollectionBooks(
       (right.publicationOrder ?? Number.MAX_SAFE_INTEGER) ||
       left.book.title.localeCompare(right.book.title, 'en', { sensitivity: 'base' });
   });
+}
+
+export async function loadCollectionsDirectory(): Promise<CollectionsDirectoryData> {
+  const [collectionsResult, membershipsResult] = await Promise.all([
+    supabase
+      .from('collections')
+      .select('id,slug,name,collection_type,description,expected_main_series_total')
+      .order('name', { ascending: true }),
+    supabase
+      .from('collection_books')
+      .select('collection_id,work_id,sequence_number,publication_order')
+      .order('collection_id', { ascending: true }),
+  ]);
+  if (collectionsResult.error) throw collectionsResult.error;
+  if (membershipsResult.error) throw membershipsResult.error;
+
+  const collections = ((collectionsResult.data ?? []) as CollectionRow[])
+    .map(mapCollection);
+  const memberships = (membershipsResult.data ?? []).map(
+    (row): CollectionDirectoryMembership => ({
+      collectionId: String(row.collection_id),
+      workId: String(row.work_id),
+      sequenceNumber: row.sequence_number === null
+        ? null
+        : asNumber(row.sequence_number),
+      publicationOrder: row.publication_order === null
+        ? null
+        : asNumber(row.publication_order),
+    }),
+  );
+  const baseItems = buildCollectionDirectoryBaseItems(collections, memberships);
+  const representativeWorkIds = [
+    ...new Set(baseItems.flatMap((item) => item.representativeWorkIds)),
+  ];
+  const representativeBooks = await loadCatalogBooksByIdsWithStoredCovers(
+    representativeWorkIds,
+    new Map(),
+  );
+  const booksByWorkId = new Map(
+    representativeBooks.flatMap((book): Array<[string, Book]> =>
+      book.workId ? [[book.workId, book]] : []),
+  );
+
+  return {
+    collections: baseItems.map(({ representativeWorkIds: workIds, ...item }) => ({
+      ...item,
+      representativeBooks: workIds.flatMap((workId) => {
+        const book = booksByWorkId.get(workId);
+        return book ? [book] : [];
+      }),
+    })),
+    total: baseItems.length,
+  };
 }
 
 export async function loadCollectionPageData(slug: string): Promise<CollectionPageData | null> {

@@ -4,6 +4,8 @@ export function buildPublicSitemapPaths(
 ): string[] {
   return [...new Set([
     '/',
+    '/browse',
+    '/collections',
     '/taste-test',
     ...collectionSlugs
       .map((slug) => slug.trim())

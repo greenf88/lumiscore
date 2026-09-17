@@ -75,6 +75,9 @@ export function LumiScoreSearchPage({
             <span>⌕</span>
             <h2>{t('search.findBook')}</h2>
             <p>{t('search.instructions')}</p>
+            <a className="empty-results-action" href="/browse">
+              {t('search.browseAll')} <span aria-hidden="true">→</span>
+            </a>
           </div>
         ) : results.length > 0 ? (
           <div className="book-grid">

@@ -248,13 +248,14 @@ export function Header({
       <LumiScoreWordmark />
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
-        <a href="/#discover">{t('header.discover')}</a>
+        <a href="/browse">{t('header.browse')}</a>
         <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
         <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
         <details className="mobile-navigation">
           <summary aria-label={t('header.openNavigation')}><span aria-hidden="true">•••</span></summary>
           <div className="mobile-navigation-panel">
-            <a href="/#discover">{t('header.discover')}</a>
+            <a href="/browse">{t('browse.books')}</a>
+            <a href="/collections">{t('browse.collections')}</a>
             <a href="/taste-test">{t('header.tasteTest')}</a>
             <a href="/my-books">{t('header.myBooks')}</a>
           </div>
@@ -363,7 +364,7 @@ const RecommendationPanel = memo(function RecommendationPanel({ books, personali
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : curated.map((book) => <RecommendationRow key={book.id} book={book} />)}
       </div>
-      {!catalogUnavailable && <a className="view-all" href="#discover">{t('home.browseAll')} <span>→</span></a>}
+      {!catalogUnavailable && <a className="view-all" href="/browse">{t('home.browseAll')} <span>→</span></a>}
     </aside>
   );
 });
@@ -417,7 +418,7 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
   dnf: 'collection.dnf',
 };
 
-export const BookCard = memo(function BookCard({ book, wanted, status, onToggle }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void }) {
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void; resolveMissingCover?: boolean }) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
@@ -427,7 +428,7 @@ export const BookCard = memo(function BookCard({ book, wanted, status, onToggle 
     <>
       <div className="card-cover-wrap">
         <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
-        <BookCover book={book} />
+        <BookCover book={book} resolveMissing={resolveMissingCover} />
       </div>
       <div className="book-card-body">
         <span className="book-genre">{book.genre ?? (book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable'))}</span>
@@ -484,7 +485,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
           {searchActive && displayedBooks.length > 0 ? (
             <a href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>{t('home.viewAllResults')} <b aria-hidden="true">→</b></a>
           ) : (
-            <span className="section-note">{t('home.searchFullCatalog')}</span>
+            <a href="/browse">{t('home.browseAll')} <b aria-hidden="true">→</b></a>
           )}
         </div>
       </div>
@@ -554,6 +555,7 @@ function ContinueSeries({ continuation }: { continuation: HomepageSeriesContinua
         <p>{progress.total === null
           ? t('collection.readCount', { read: progress.read })
           : t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
+        <a className="continue-series-directory-link" href="/collections">{t('collections.browseAll')} →</a>
       </div>
       <a className="continue-series-book" href={`/book/${nextBook.workId}`}>
         <BookCover book={nextBook} small label={nextBook.title} />
