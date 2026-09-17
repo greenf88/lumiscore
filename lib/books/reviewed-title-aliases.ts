@@ -23,4 +23,12 @@ export const REVIEWED_WORK_TITLE_ALIASES = [
       'The reviewed search wording uses a colon and a spelled-out volume number; the verified production edition stores “Heartstopper, Volume 5”.',
     reviewedAt: '2026-09-16',
   },
+  {
+    workId: '2193',
+    openLibraryWorkId: 'OL36475397W',
+    aliases: ['Theo in Golden'],
+    reason:
+      'The reviewed Dutch-market search phrase uses “in”, while the verified production Work keeps the canonical title “Theo of Golden”.',
+    reviewedAt: '2026-09-17',
+  },
 ] as const satisfies readonly ReviewedWorkTitleAlias[];

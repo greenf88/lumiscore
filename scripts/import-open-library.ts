@@ -1,4 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import {
   normalizeEditionLanguage,
   selectRepresentativeEdition,
@@ -25,6 +27,13 @@ import {
   normalizeNativeIsbn13,
 } from './lumiscore-native-import.ts';
 import type { NativeSeedMetadata } from './lumiscore-native-seeds-nl.ts';
+import type { CatalogExpansionPlan } from './catalog-expansion-types.ts';
+import { getReviewedWorkPublicationYear } from '../lib/catalog/reviewed-work-publication-year-corrections.ts';
+import {
+  decideOpenLibraryAuthorIdentity,
+  normalizeOpenLibraryAuthorId,
+  type StoredOpenLibraryAuthor,
+} from '../lib/catalog/open-library-author-identity.ts';
 
 type Row = Record<string, unknown>;
 
@@ -312,8 +321,9 @@ async function loadOpenLibraryBook(seed: SeedBook) {
   );
   const workId = normalizeOpenLibraryId(work.key);
   const author = selectAuthor(seed, work);
+  const firstPublishYear = seed.firstPublishYear ?? work.first_publish_year;
 
-  if (!workId || !work.title || !work.first_publish_year) {
+  if (!workId || !work.title || !firstPublishYear) {
     throw new Error(`Open Library returned incomplete work data for “${seed.title}”.`);
   }
   const workTitle = work.title;
@@ -333,14 +343,14 @@ async function loadOpenLibraryBook(seed: SeedBook) {
     );
     const selected = selectRepresentativeEdition(candidates, {
       workTitle,
-      firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
+      firstPublishYear,
       preferredLanguages: [language],
     });
     return selected ? [selected] : [];
   });
   const primaryEdition = selectRepresentativeEdition(rankedEditions, {
     workTitle,
-    firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
+    firstPublishYear,
     preferredLanguages: seed.preferredEditionLanguages ?? ['eng'],
   });
   const editions = [...new Map(
@@ -362,7 +372,7 @@ async function loadOpenLibraryBook(seed: SeedBook) {
       id: workId,
       openLibraryTitle: workTitle,
       title: getWorkDisplayTitle(seed, work),
-      firstPublishYear: seed.firstPublishYear ?? work.first_publish_year,
+      firstPublishYear,
     },
     editions: editions.map(({ editionId, edition }) => ({
       id: editionId,
@@ -475,10 +485,11 @@ async function findExistingRow(
   table: string,
   idColumn: string,
   filters: Row,
+  additionalColumns: readonly string[] = [],
 ): Promise<Row | null> {
   const { data, error } = await client
     .from(table)
-    .select(idColumn)
+    .select([idColumn, ...additionalColumns].join(','))
     .match(filters)
     .limit(1)
     .maybeSingle();
@@ -494,6 +505,7 @@ async function saveWithoutDuplicates(options: {
   openLibraryId: string;
   payload: Row;
   fallbackFilters: Row[];
+  preserveExistingColumns?: string[];
 }): Promise<{ id: string; created: boolean }> {
   const {
     table,
@@ -502,6 +514,7 @@ async function saveWithoutDuplicates(options: {
     openLibraryId,
     payload,
     fallbackFilters,
+    preserveExistingColumns = [],
   } = options;
   const idVariants = [
     openLibraryId,
@@ -511,7 +524,7 @@ async function saveWithoutDuplicates(options: {
   ];
   const { data: byOpenLibraryId, error: lookupError } = await supabase
     .from(table)
-    .select(idColumn)
+    .select([idColumn, ...preserveExistingColumns].join(','))
     .in(openLibraryIdColumn, idVariants)
     .limit(1)
     .maybeSingle();
@@ -521,13 +534,24 @@ async function saveWithoutDuplicates(options: {
   let existing = byOpenLibraryId as Row | null;
   for (const filters of fallbackFilters) {
     if (existing) break;
-    existing = await findExistingRow(supabase, table, idColumn, filters);
+    existing = await findExistingRow(
+      supabase,
+      table,
+      idColumn,
+      filters,
+      preserveExistingColumns,
+    );
   }
 
   if (existing) {
+    const updatePayload = { ...payload };
+    for (const column of preserveExistingColumns) delete updatePayload[column];
+    if (Object.keys(updatePayload).length === 0) {
+      return { id: String(existing[idColumn]), created: false };
+    }
     const { data, error } = await supabase
       .from(table)
-      .update(payload)
+      .update(updatePayload)
       .eq(idColumn, existing[idColumn])
       .select(idColumn)
       .single();
@@ -544,10 +568,122 @@ async function saveWithoutDuplicates(options: {
   return { id: String((data as unknown as Row)[idColumn]), created: true };
 }
 
+type AuthorIdentityConflict = {
+  authorId: string;
+  authorName: string;
+  storedOpenLibraryId: string;
+  incomingOpenLibraryId: string;
+};
+
+async function saveAuthorWithoutIdentityOverwrite(options: {
+  columns: DatabaseColumns['authors'];
+  incomingOpenLibraryId: string;
+  incomingName: string;
+  fallbackNames: readonly string[];
+}): Promise<{
+  id: string;
+  created: boolean;
+  enriched: boolean;
+  identityConflict: AuthorIdentityConflict | null;
+}> {
+  const { columns, incomingOpenLibraryId, incomingName } = options;
+  const selectedColumns = [columns.id, columns.openLibraryId, columns.name].join(',');
+  const normalizedIncomingId = normalizeOpenLibraryAuthorId(incomingOpenLibraryId);
+  if (!normalizedIncomingId) throw new Error(`Invalid Open Library Author ID: ${incomingOpenLibraryId}`);
+  const idVariants = [normalizedIncomingId, `/authors/${normalizedIncomingId}`];
+  const { data: identityData, error: identityError } = await supabase
+    .from('authors')
+    .select(selectedColumns)
+    .in(columns.openLibraryId, idVariants)
+    .limit(1)
+    .maybeSingle();
+  if (identityError) throw identityError;
+
+  let nameRow: Row | null = null;
+  if (!identityData) {
+    for (const name of [...new Set(options.fallbackNames.map((value) => value.trim()).filter(Boolean))]) {
+      nameRow = await findExistingRow(
+        supabase,
+        'authors',
+        columns.id,
+        { [columns.name]: name },
+        [columns.openLibraryId, columns.name],
+      );
+      if (nameRow) break;
+    }
+  }
+
+  const toStoredAuthor = (row: Row | null): StoredOpenLibraryAuthor | null => row
+    ? {
+        id: String(row[columns.id]),
+        name: String(row[columns.name] ?? ''),
+        openLibraryId: typeof row[columns.openLibraryId] === 'string'
+          ? String(row[columns.openLibraryId])
+          : null,
+      }
+    : null;
+  const decision = decideOpenLibraryAuthorIdentity({
+    incomingOpenLibraryId: normalizedIncomingId,
+    existingByIncomingId: toStoredAuthor(identityData as Row | null),
+    existingByName: toStoredAuthor(nameRow),
+  });
+
+  if (decision.action === 'create') {
+    const authorPayload: Row = {
+      [columns.openLibraryId]: normalizedIncomingId,
+      [columns.name]: incomingName,
+    };
+    const { data, error } = await supabase
+      .from('authors')
+      .insert(authorPayload)
+      .select(columns.id)
+      .single();
+    if (error) throw error;
+    return {
+      id: String((data as unknown as Row)[columns.id]),
+      created: true,
+      enriched: false,
+      identityConflict: null,
+    };
+  }
+
+  if (decision.action === 'enrich') {
+    const identityPayload: Row = {
+      [columns.openLibraryId]: normalizedIncomingId,
+    };
+    const { error } = await supabase
+      .from('authors')
+      .update(identityPayload)
+      .eq(columns.id, decision.author.id);
+    if (error) throw error;
+    return {
+      id: decision.author.id,
+      created: false,
+      enriched: true,
+      identityConflict: null,
+    };
+  }
+
+  const identityConflict = decision.action === 'preserve_conflict'
+    ? {
+        authorId: decision.author.id,
+        authorName: decision.author.name || incomingName,
+        storedOpenLibraryId: decision.conflict.storedOpenLibraryId,
+        incomingOpenLibraryId: decision.conflict.incomingOpenLibraryId,
+      }
+    : null;
+  return {
+    id: decision.author.id,
+    created: false,
+    enriched: false,
+    identityConflict,
+  };
+}
+
 async function importBook(
   seed: SeedBook,
   columns: DatabaseColumns,
-): Promise<string> {
+): Promise<{ summary: string; authorIdentityConflict: AuthorIdentityConflict | null }> {
   const book = await loadOpenLibraryBook(seed);
   const legacyAuthor = await findExistingRow(
     supabase,
@@ -555,17 +691,11 @@ async function importBook(
     columns.authors.id,
     { [columns.authors.name]: seed.author },
   );
-  const authorPayload: Row = {
-    [columns.authors.openLibraryId]: book.author.id,
-    [columns.authors.name]: book.author.name,
-  };
-  const author = await saveWithoutDuplicates({
-    table: 'authors',
-    idColumn: columns.authors.id,
-    openLibraryIdColumn: columns.authors.openLibraryId,
-    openLibraryId: book.author.id,
-    payload: authorPayload,
-    fallbackFilters: [{ [columns.authors.name]: book.author.name }],
+  const author = await saveAuthorWithoutIdentityOverwrite({
+    columns: columns.authors,
+    incomingOpenLibraryId: book.author.id,
+    incomingName: book.author.name,
+    fallbackNames: [book.author.name, seed.author ?? ''],
   });
 
   const workPayload: Row = {
@@ -603,6 +733,7 @@ async function importBook(
           ]
         : []),
     ],
+    preserveExistingColumns: [columns.works.authorId],
   });
 
   let createdEditions = 0;
@@ -646,7 +777,10 @@ async function importBook(
   }
 
   const actions = Number(author.created) + Number(work.created) + createdEditions;
-  return `${book.work.title} — ${book.author.name} (${actions} new row${actions === 1 ? '' : 's'})`;
+  return {
+    summary: `${book.work.title} — ${book.author.name} (${actions} new row${actions === 1 ? '' : 's'}${author.enriched ? ', author identity enriched' : ''})`,
+    authorIdentityConflict: author.identityConflict,
+  };
 }
 
 type NativeSeed = SeedBook & { nativeMetadata: NativeSeedMetadata };
@@ -773,13 +907,63 @@ async function main(): Promise<void> {
     argument.startsWith('--scope='),
   );
   const scope = scopeArgument?.slice('--scope='.length) ?? 'all';
-  if (scope !== 'all' && scope !== 'netherlands' && scope !== 'series') {
+  const catalogExpansionBatchArgument = process.argv.find((argument) =>
+    argument.startsWith('--batch='),
+  );
+  const catalogExpansionBatch = catalogExpansionBatchArgument?.slice('--batch='.length) ?? 'A';
+  if (!['A', 'B', 'B2'].includes(catalogExpansionBatch)) {
+    throw new Error('Unsupported catalog-expansion batch. Use --batch=A, --batch=B or --batch=B2.');
+  }
+  if (scope !== 'all' && scope !== 'netherlands' && scope !== 'series' && scope !== 'catalog-expansion') {
     throw new Error(
-      `Unsupported import scope “${scope}”. Use “all”, “netherlands” or “series”.`,
+      `Unsupported import scope “${scope}”. Use “all”, “netherlands”, “series” or “catalog-expansion”.`,
     );
   }
 
-  const scopedSeeds = scope === 'netherlands'
+  const catalogExpansionPlan = scope === 'catalog-expansion'
+    ? JSON.parse(await readFile(join(
+        process.cwd(),
+        'catalog',
+        catalogExpansionBatch === 'B2'
+          ? 'catalog-expansion-batch-b2-plan.json'
+          : catalogExpansionBatch === 'B'
+          ? 'catalog-expansion-batch-b-plan.json'
+          : 'catalog-expansion-plan.json',
+      ), 'utf8')) as CatalogExpansionPlan
+    : null;
+  const expectedCatalogExpansionPlanVersion = catalogExpansionBatch === 'B2'
+    ? 'catalog_expansion_batch_b2_v1'
+    : catalogExpansionBatch === 'B' ? 'catalog_expansion_batch_b_v1' : 'catalog_expansion_batch_a_xl_v2';
+  if (catalogExpansionPlan && catalogExpansionPlan.version !== expectedCatalogExpansionPlanVersion) {
+    throw new Error(`Unsupported catalog expansion plan version: ${catalogExpansionPlan.version}`);
+  }
+  const catalogCategory = (categories: readonly string[]): SeedBook['category'] => {
+    if (categories.some((category) => ['Fantasy', 'Science Fiction', 'Horror'].includes(category))) return 'fantasy-science-fiction';
+    if (categories.includes('Thriller & Mystery')) return 'thriller-crime';
+    if (categories.includes('Romance')) return 'romance';
+    if (categories.some((category) => ['Non-fiction', 'Biography & Memoir', 'Psychology & Self-development', 'Business & Economics', 'History', 'Science & Nature'].includes(category))) return 'non-fiction';
+    if (categories.some((category) => ['Young Adult', 'Children'].includes(category))) return 'young-adult-children';
+    if (categories.includes('Classics')) return 'classics';
+    return 'contemporary-general-fiction';
+  };
+  const catalogExpansionCandidates = catalogExpansionPlan
+    ? catalogExpansionPlan.batches[catalogExpansionBatch as 'A' | 'B' | 'B2']
+    : [];
+  const catalogExpansionSeeds: SeedBook[] = catalogExpansionCandidates.map((candidate) => ({
+    title: candidate.canonicalTitle,
+    author: candidate.author,
+    firstPublishYear: getReviewedWorkPublicationYear(candidate.openLibraryWorkId)
+      ?? candidate.firstPublishYear
+      ?? undefined,
+    expectedOpenLibraryWorkId: candidate.openLibraryWorkId!,
+    category: catalogCategory(candidate.categories),
+    preferredEditionLanguages: candidate.preferredDutchEdition ? ['nld', 'eng'] : ['eng'],
+    editionLanguagesToImport: candidate.preferredDutchEdition ? ['nld', 'eng'] : ['eng'],
+  }));
+
+  const scopedSeeds = scope === 'catalog-expansion'
+    ? catalogExpansionSeeds
+    : scope === 'netherlands'
     ? NETHERLANDS_SEEDS
     : scope === 'series'
       ? REVIEWED_SERIES_SEED_BOOKS
@@ -795,6 +979,90 @@ async function main(): Promise<void> {
 
   const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true' ||
     process.argv.includes('--dry-run');
+  if (scope === 'catalog-expansion' && (catalogExpansionBatch === 'B' || catalogExpansionBatch === 'B2') && !dryRun) {
+    const expectedConfirmation = catalogExpansionBatch === 'B2' ? 'batch-b2-approved' : 'batch-b-approved';
+    const confirmed = process.argv.includes('--write')
+      && process.argv.includes(`--confirm=${expectedConfirmation}`);
+    if (!confirmed) {
+      throw new Error(`Batch ${catalogExpansionBatch} writes require --write --confirm=${expectedConfirmation}.`);
+    }
+  }
+  if (scope === 'catalog-expansion' && dryRun) {
+    const candidates = catalogExpansionCandidates;
+    const seenWorkIds = new Set<string>();
+    const seenIsbns = new Set<string>();
+    for (const candidate of candidates) {
+      if (candidate.confidence !== 'HIGH') throw new Error(`${candidate.canonicalTitle}: non-HIGH candidate in write batch.`);
+      if (!candidate.openLibraryWorkId || seenWorkIds.has(candidate.openLibraryWorkId)) throw new Error(`${candidate.canonicalTitle}: duplicate or missing Work ID.`);
+      if (!candidate.isbn13 || seenIsbns.has(candidate.isbn13)) throw new Error(`${candidate.canonicalTitle}: duplicate or missing ISBN-13.`);
+      if (!candidate.preferredDutchEdition && !candidate.preferredEnglishEdition && !candidate.representativeFallbackEdition) throw new Error(`${candidate.canonicalTitle}: no verified edition.`);
+      seenWorkIds.add(candidate.openLibraryWorkId);
+      seenIsbns.add(candidate.isbn13);
+    }
+    const existingWorks: Row[] = [];
+    const existingEditions: Row[] = [];
+    const ids = [...seenWorkIds];
+    const isbns = [...seenIsbns];
+    for (let index = 0; index < ids.length; index += 100) {
+      const { data, error } = await supabase.from('works').select('id,open_library_id').in('open_library_id', ids.slice(index, index + 100));
+      if (error) throw error;
+      existingWorks.push(...((data ?? []) as Row[]));
+    }
+    for (let index = 0; index < isbns.length; index += 100) {
+      const { data, error } = await supabase.from('editions').select('id,work_id,isbn_13').in('isbn_13', isbns.slice(index, index + 100));
+      if (error) throw error;
+      existingEditions.push(...((data ?? []) as Row[]));
+    }
+    const workIdByOpenLibraryId = new Map(existingWorks.flatMap((row) => {
+      const openLibraryId = typeof row.open_library_id === 'string'
+        ? row.open_library_id.replace(/^\/works\//, '').toUpperCase()
+        : null;
+      const workId = typeof row.id === 'number' ? row.id : Number(row.id);
+      return openLibraryId && Number.isInteger(workId)
+        ? [[openLibraryId, workId] as const]
+        : [];
+    }));
+    const candidateByIsbn = new Map(candidates.map((candidate) => [candidate.isbn13!, candidate]));
+    const identityConflicts = existingEditions.flatMap((row) => {
+      const isbn13 = typeof row.isbn_13 === 'string' ? row.isbn_13.replace(/[^0-9]/g, '') : '';
+      const candidate = candidateByIsbn.get(isbn13);
+      if (!candidate?.openLibraryWorkId) return [];
+      const expectedWorkId = workIdByOpenLibraryId.get(candidate.openLibraryWorkId.toUpperCase());
+      const editionWorkId = typeof row.work_id === 'number' ? row.work_id : Number(row.work_id);
+      return expectedWorkId === editionWorkId
+        ? []
+        : [`${isbn13}: expected ${expectedWorkId ?? 'missing work'}, found ${editionWorkId}`];
+    });
+    if (identityConflicts.length > 0) {
+      throw new Error(`Live ISBN identity conflicts: ${identityConflicts.join('; ')}`);
+    }
+    const alreadyPresent = candidates.filter((candidate) =>
+      workIdByOpenLibraryId.has(candidate.openLibraryWorkId!.toUpperCase()),
+    ).length;
+    const netNewWorks = candidates.length - alreadyPresent;
+    if (alreadyPresent > 0 && netNewWorks > 0) {
+      throw new Error(`Partial import state detected: ${alreadyPresent} present and ${netNewWorks} missing.`);
+    }
+    console.log(JSON.stringify({
+      mode: 'CATALOG_EXPANSION_DRY_RUN',
+      batch: catalogExpansionBatch,
+      candidates: candidates.length,
+      alreadyPresent,
+      netNewWorks,
+      matchingPlannedIsbns: existingEditions.length,
+      duplicateOpenLibraryWorkIds: 0,
+      duplicateIsbn13: 0,
+      invalidAuthors: candidates.filter((candidate) => !candidate.author.trim()).length,
+      invalidWorkEditionRelationships: candidates.filter((candidate) => !candidate.isbn13).length,
+      ratingsTouched: 0,
+      userStatusesTouched: 0,
+      collectionsTouched: 0,
+      rejectedCandidatesWritten: 0,
+      productionWrites: 0,
+    }, null, 2));
+    console.log(`Done. Batch ${catalogExpansionBatch} passed the live metadata/import idempotency preflight. No Supabase writes were performed.`);
+    return;
+  }
   const requestedWorkIds = new Set(
     (process.env.OPEN_LIBRARY_IMPORT_WORK_IDS ?? '')
       .split(',')
@@ -824,6 +1092,7 @@ async function main(): Promise<void> {
   console.log('Checking the existing Supabase schema…');
   const columns = await resolveDatabaseColumns();
   const failures: string[] = [];
+  const authorIdentityConflicts: AuthorIdentityConflict[] = [];
   let processed = 0;
 
   for (const [index, seed] of seeds.entries()) {
@@ -835,7 +1104,16 @@ async function main(): Promise<void> {
         );
       } else {
         const result = await importBook(seed, columns);
-        console.log(`[OPEN LIBRARY] [${index + 1}/${seeds.length}] Imported ${result}`);
+        if (result.authorIdentityConflict) {
+          authorIdentityConflicts.push(result.authorIdentityConflict);
+          console.warn(
+            `[AUTHOR IDENTITY CONFLICT] ${result.authorIdentityConflict.authorName} `
+            + `(LumiScore author ${result.authorIdentityConflict.authorId}): preserved `
+            + `${result.authorIdentityConflict.storedOpenLibraryId}; incoming `
+            + `${result.authorIdentityConflict.incomingOpenLibraryId} requires review.`,
+          );
+        }
+        console.log(`[OPEN LIBRARY] [${index + 1}/${seeds.length}] Imported ${result.summary}`);
       }
       processed += 1;
     } catch (error) {
@@ -873,7 +1151,7 @@ async function main(): Promise<void> {
     : 0;
   const rejected = requestedWorkIds.size === 0 ? plan.rejectedSeeds.length : 0;
   console.log(
-    `Summary: ${processed} Open Library processed, ${nativeProcessed} LumiScore native processed, ${skipped} skipped for review, ${rejected} rejected, ${failures.length} failed.`,
+    `Summary: ${processed} Open Library processed, ${nativeProcessed} LumiScore native processed, ${skipped} skipped for review, ${rejected} rejected, ${failures.length} failed, ${authorIdentityConflicts.length} author identity conflict${authorIdentityConflicts.length === 1 ? '' : 's'} preserved for review.`,
   );
 
   if (failures.length > 0) {

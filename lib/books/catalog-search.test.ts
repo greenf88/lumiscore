@@ -41,6 +41,7 @@ const productionAliasBooks = [
   fixture('1343', 'Always Remember', 'Charlie Mackesy', 'OL43541951W'),
   fixture('124', 'Before the Coffee Gets Cold', '川口俊和', 'OL20019347W'),
   fixture('1920', 'Heartstopper, Volume Five', 'Alice Oseman', 'OL28959223W'),
+  fixture('2193', 'Theo of Golden', 'Allen Levi', 'OL36475397W'),
 ];
 
 const productionEditionAliases = [
@@ -103,13 +104,14 @@ test('supports a dedicated results page with at least twenty ranked matches', ()
   );
 });
 
-test('the five reviewed production aliases resolve to their intended existing Works', () => {
+test('the reviewed production aliases resolve to their intended existing Works', () => {
   const expectedWorkIds = new Map([
     ['Het ultieme geheim', '1907'],
     ['Waar de zon de sneeuw raakt', '1342'],
     ['Onthoud dit altijd', '1343'],
     ['コーヒーが冷めないうちに', '124'],
     ['Heartstopper: Volume Five', '1920'],
+    ['Theo in Golden', '2193'],
   ]);
 
   for (const [query, expectedWorkId] of expectedWorkIds) {
@@ -147,6 +149,24 @@ test('a Work matched through both its canonical title and an alias is returned o
   );
 
   assert.deepEqual(results.map(({ workId }) => workId), ['1920']);
+});
+
+test('Theo canonical and reviewed alternate wording resolve once to the same Work', () => {
+  const theo = fixture('2193', 'Theo of Golden', 'Allen Levi', 'OL36475397W');
+  const canonical = rankCatalogSearchResults([theo, theo], 'Theo of Golden');
+  const { aliasesByWorkId } = collectCatalogSearchAliases(
+    'Theo in Golden',
+    productionEditionAliases,
+  );
+  const alias = rankCatalogSearchResults(
+    [theo, theo],
+    'Theo in Golden',
+    CATALOG_SEARCH_PAGE_LIMIT,
+    aliasesByWorkId,
+  );
+
+  assert.deepEqual(canonical.map(({ workId }) => workId), ['2193']);
+  assert.deepEqual(alias.map(({ workId }) => workId), ['2193']);
 });
 
 test('alias normalization handles punctuation, case, and Unicode without affecting unrelated fuzzy searches', () => {
