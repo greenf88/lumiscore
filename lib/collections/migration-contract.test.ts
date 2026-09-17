@@ -9,6 +9,13 @@ const migration = readFileSync(
   ),
   'utf8',
 ).toLowerCase();
+const expectedTotalMigration = readFileSync(
+  new URL(
+    '../../supabase/migrations/20260917180127_add_collection_expected_main_series_total.sql',
+    import.meta.url,
+  ),
+  'utf8',
+).toLowerCase();
 
 test('collection schema rejects invalid types and duplicate membership', () => {
   assert.match(migration, /collection_type in \('series', 'universe', 'author_collection'\)/);
@@ -44,3 +51,14 @@ test('a rating safely implies read without coupling rating deletion to status', 
   assert.doesNotMatch(migration, /after delete[\s\S]*sync_rating_to_read_status/);
 });
 
+test('reviewed series totals are nullable, positive, and do not store completion', () => {
+  assert.match(expectedTotalMigration, /add column expected_main_series_total integer/);
+  assert.match(expectedTotalMigration, /expected_main_series_total is null/);
+  assert.match(expectedTotalMigration, /expected_main_series_total > 0/);
+  assert.match(expectedTotalMigration, /collection_type = 'series'/);
+  assert.doesNotMatch(expectedTotalMigration, /add column (?:is_)?complete/);
+  assert.equal(
+    (expectedTotalMigration.match(/\('[^']+', '[^']+', \d+\)/g) ?? []).length,
+    43,
+  );
+});

@@ -12,6 +12,7 @@ export type CollectionSummary = {
   name: string;
   collectionType: CollectionType;
   description: string | null;
+  expectedMainSeriesTotal: number | null;
 };
 
 export type CollectionBook = {
@@ -24,14 +25,16 @@ export type CollectionBook = {
 
 export type CollectionProgress = {
   read: number;
-  total: number;
-  percentage: number;
+  cataloguedTotal: number;
+  total: number | null;
+  percentage: number | null;
 };
 
 export type SeriesProgress = CollectionProgress & {
   sequenceComplete: boolean;
   contiguousRead: number;
   nextBook: CollectionBook | null;
+  catalogComplete: boolean;
   complete: boolean;
 };
 
@@ -47,9 +50,32 @@ export function calculateCollectionProgress(
   const total = books.length;
   return {
     read,
+    cataloguedTotal: total,
     total,
     percentage: total === 0 ? 0 : Math.round((read / total) * 100),
   };
+}
+
+function safeExpectedSeriesTotal(
+  books: readonly CollectionBook[],
+  expectedMainSeriesTotal: number | null,
+): number | null {
+  if (
+    expectedMainSeriesTotal === null ||
+    !Number.isInteger(expectedMainSeriesTotal) ||
+    expectedMainSeriesTotal <= 0
+  ) {
+    return null;
+  }
+
+  if (books.length > expectedMainSeriesTotal) return null;
+
+  const numbered = books
+    .map(({ sequenceNumber }) => sequenceNumber)
+    .filter((position): position is number => position !== null);
+  return numbered.some((position) => position > expectedMainSeriesTotal)
+    ? null
+    : expectedMainSeriesTotal;
 }
 
 function orderedSeriesBooks(books: readonly CollectionBook[]): CollectionBook[] | null {
@@ -69,8 +95,15 @@ function orderedSeriesBooks(books: readonly CollectionBook[]): CollectionBook[] 
 export function calculateSeriesProgress(
   books: readonly CollectionBook[],
   statuses: ReadonlyMap<string, ReadingStatus>,
+  expectedMainSeriesTotal: number | null = null,
 ): SeriesProgress {
-  const progress = calculateCollectionProgress(books, statuses);
+  const collectionProgress = calculateCollectionProgress(books, statuses);
+  const total = safeExpectedSeriesTotal(books, expectedMainSeriesTotal);
+  const progress: CollectionProgress = {
+    ...collectionProgress,
+    total,
+    percentage: total === null ? null : Math.round((collectionProgress.read / total) * 100),
+  };
   const ordered = orderedSeriesBooks(books);
   if (!ordered) {
     return {
@@ -78,6 +111,7 @@ export function calculateSeriesProgress(
       sequenceComplete: false,
       contiguousRead: 0,
       nextBook: null,
+      catalogComplete: false,
       complete: false,
     };
   }
@@ -90,12 +124,17 @@ export function calculateSeriesProgress(
     contiguousRead += 1;
   }
 
+  const catalogComplete = total !== null &&
+    ordered.length === total &&
+    ordered.every(({ sequenceNumber }, index) => sequenceNumber === index + 1);
+
   return {
     ...progress,
     sequenceComplete: true,
     contiguousRead,
     nextBook: contiguousRead < ordered.length ? ordered[contiguousRead] : null,
-    complete: progress.read === progress.total,
+    catalogComplete,
+    complete: catalogComplete && progress.read === total,
   };
 }
 
@@ -140,10 +179,9 @@ export function selectSeriesContinuation<T extends {
       progress.nextBook !== null)
     .sort((left, right) =>
       right.progress.contiguousRead - left.progress.contiguousRead ||
-      right.progress.percentage - left.progress.percentage ||
+      (right.progress.percentage ?? -1) - (left.progress.percentage ?? -1) ||
       left.collection.name.localeCompare(right.collection.name, 'en', {
         sensitivity: 'base',
       }))
     [0] ?? null;
 }
-

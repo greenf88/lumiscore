@@ -36,6 +36,20 @@ test('book detail uses real collection membership and a plain collection link', 
   assert.match(detail, /collectionContext\.position/);
   assert.match(detail, /href={`\/collection\/\$\{collectionContext\.collection\.slug\}`}/);
   assert.match(detail, /initialReadingStatus/);
+  assert.match(detail, /canShowSeriesDenominator/);
+  assert.match(detail, /collection\.bookPosition/);
+  assert.match(detail, /canShowProgressDenominator/);
+});
+
+test('collection pages use reviewed totals and denominator-free fallback copy', () => {
+  const page = read('../../app/components/LumiScoreCollectionPage.tsx');
+  assert.match(collections, /getReviewedSeriesMetadata/);
+  assert.match(collections, /expected_main_series_total/);
+  assert.match(collections, /collection\.expectedMainSeriesTotal/);
+  assert.match(page, /calculateSeriesProgress\(books, statusMap, collection\.expectedMainSeriesTotal\)/);
+  assert.match(page, /collection\.bookPosition/);
+  assert.match(page, /collection\.readCount/);
+  assert.doesNotMatch(page, /collection\.bookOf'[\s\S]{0,100}books\.length/);
 });
 
 test('homepage continuation is derived from ordered series progress and hidden without a result', () => {

@@ -17,6 +17,10 @@ import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import type { ReadingStatus } from '@/lib/collections/model';
 import type { BookCollectionContext } from '@/lib/supabase/collections';
+import {
+  canShowProgressDenominator,
+  canShowSeriesDenominator,
+} from '@/lib/collections/presentation';
 import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
 import {
   calculatePersonalMatch,
@@ -274,12 +278,16 @@ export function LumiScoreBookDetail({
                     { name: collectionContext.collection.name },
                   )}
                   {collectionContext.collection.collectionType === 'series' && collectionContext.position !== null
-                    ? ` · ${t('collection.bookOf', { position: collectionContext.position, total: collectionContext.total })}`
+                    ? ` · ${canShowSeriesDenominator(collectionContext.position, collectionContext.total)
+                      ? t('collection.bookOf', { position: collectionContext.position, total: collectionContext.total })
+                      : t('collection.bookPosition', { position: collectionContext.position })}`
                     : ''}
                 </strong>
                 <span>
                   {collectionContext.progress
-                    ? `${t('collection.readProgress', { read: collectionContext.progress.read, total: collectionContext.progress.total })} · `
+                    ? `${canShowProgressDenominator(collectionContext.progress.total)
+                      ? t('collection.readProgress', { read: collectionContext.progress.read, total: collectionContext.progress.total })
+                      : t('collection.readCount', { read: collectionContext.progress.read })} · `
                     : ''}
                   {t(collectionContext.collection.collectionType === 'series'
                     ? 'collection.viewFullSeries'

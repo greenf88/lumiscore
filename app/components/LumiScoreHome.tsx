@@ -540,7 +540,9 @@ function ContinueSeries({ continuation }: { continuation: HomepageSeriesContinua
         <span className="eyebrow">{t('collection.continueEyebrow')}</span>
         <h2 id="continue-series-title">{t('collection.continueHeading')}</h2>
         <a href={`/collection/${collection.slug}`}>{collection.name}</a>
-        <p>{t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
+        <p>{progress.total === null
+          ? t('collection.readCount', { read: progress.read })
+          : t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
       </div>
       <a className="continue-series-book" href={`/book/${nextBook.workId}`}>
         <BookCover book={nextBook} small label={nextBook.title} />

@@ -10,6 +10,7 @@ import {
   type ReadingStatus,
   type SeriesProgress,
 } from '../collections/model.ts';
+import { getReviewedSeriesMetadata } from '../collections/reviewed-series-metadata.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds } from './books.ts';
 import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
@@ -20,6 +21,7 @@ type CollectionRow = {
   name: string;
   collection_type: CollectionSummary['collectionType'];
   description: string | null;
+  expected_main_series_total: number | string | null;
 };
 type MembershipRow = {
   collection_id: number | string;
@@ -43,7 +45,7 @@ export type CollectionPageData = {
 export type BookCollectionContext = {
   collection: CollectionSummary;
   position: number | null;
-  total: number;
+  total: number | null;
   progress: CollectionProgress | null;
 };
 
@@ -59,12 +61,19 @@ function asNumber(value: unknown): number | null {
 }
 
 function mapCollection(row: CollectionRow): CollectionSummary {
+  const reviewedSeries = row.collection_type === 'series'
+    ? getReviewedSeriesMetadata(row.slug)
+    : null;
+  const storedExpectedTotal = row.expected_main_series_total === null
+    ? null
+    : asNumber(row.expected_main_series_total);
   return {
     id: String(row.id),
     slug: row.slug,
     name: row.name,
     collectionType: row.collection_type,
     description: row.description,
+    expectedMainSeriesTotal: storedExpectedTotal ?? reviewedSeries?.expectedMainSeriesTotal ?? null,
   };
 }
 
@@ -107,7 +116,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   const { client, user } = await getVerifiedServerUser();
   const collectionResult = await client
     .from('collections')
-    .select('id,slug,name,collection_type,description')
+    .select('id,slug,name,collection_type,description,expected_main_series_total')
     .eq('slug', slug)
     .maybeSingle();
   if (collectionResult.error) throw collectionResult.error;
@@ -138,7 +147,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   const statuses = statusRecord((statusesResult.data ?? []) as StatusRow[]);
   const statusMap = new Map(Object.entries(statuses));
   const progress = collection.collectionType === 'series'
-    ? calculateSeriesProgress(books, statusMap)
+    ? calculateSeriesProgress(books, statusMap, collection.expectedMainSeriesTotal)
     : calculateCollectionProgress(books, statusMap);
   const highlighted = collection.collectionType === 'author_collection'
     ? selectHighestRatedUnread(books, statusMap)
@@ -160,7 +169,7 @@ export async function loadBookCollectionContext(
   const { client, user } = await getVerifiedServerUser();
   const membershipResult = await client
     .from('collection_books')
-    .select('collection_id,work_id,sequence_number,publication_order,subgroup,collections(id,slug,name,collection_type,description)')
+    .select('collection_id,work_id,sequence_number,publication_order,subgroup,collections(id,slug,name,collection_type,description,expected_main_series_total)')
     .eq('work_id', Number(workId));
   if (membershipResult.error) throw membershipResult.error;
   const memberships = (membershipResult.data ?? []) as unknown as MembershipRow[];
@@ -185,6 +194,18 @@ export async function loadBookCollectionContext(
     .eq('collection_id', collection.id);
   if (allMembershipsResult.error) throw allMembershipsResult.error;
   const allMemberships = (allMembershipsResult.data ?? []) as MembershipRow[];
+  const contextBooks = allMemberships.map((row) => mapMembership(
+    row,
+    placeholderBook(String(row.work_id)),
+  ));
+  const emptyStatusMap = new Map<string, ReadingStatus>();
+  const denominatorProgress = collection.collectionType === 'series'
+    ? calculateSeriesProgress(
+      contextBooks,
+      emptyStatusMap,
+      collection.expectedMainSeriesTotal,
+    )
+    : calculateCollectionProgress(contextBooks, emptyStatusMap);
   let progress: CollectionProgress | null = null;
   if (user && allMemberships.length > 0) {
     const statusResult = await client
@@ -193,20 +214,23 @@ export async function loadBookCollectionContext(
       .eq('user_id', user.id)
       .in('work_id', allMemberships.map((row) => Number(row.work_id)));
     if (statusResult.error) throw statusResult.error;
-    const read = (statusResult.data ?? []).filter((row) => row.status === 'read').length;
-    progress = {
-      read,
-      total: allMemberships.length,
-      percentage: allMemberships.length === 0
-        ? 0
-        : Math.round((read / allMemberships.length) * 100),
-    };
+    const statusMap = new Map(
+      ((statusResult.data ?? []) as StatusRow[])
+        .map((row) => [String(row.work_id), row.status] as const),
+    );
+    progress = collection.collectionType === 'series'
+      ? calculateSeriesProgress(
+        contextBooks,
+        statusMap,
+        collection.expectedMainSeriesTotal,
+      )
+      : calculateCollectionProgress(contextBooks, statusMap);
   }
 
   return {
     collection,
     position: primary.sequence_number === null ? null : asNumber(primary.sequence_number),
-    total: allMemberships.length,
+    total: denominatorProgress.total,
     progress,
   };
 }
@@ -238,7 +262,7 @@ export async function loadHomepageSeriesContinuation(): Promise<HomepageSeriesCo
 
   const touchedMemberships = await client
     .from('collection_books')
-    .select('collection_id,work_id,sequence_number,collections(id,slug,name,collection_type,description)')
+    .select('collection_id,work_id,sequence_number,collections(id,slug,name,collection_type,description,expected_main_series_total)')
     .in('work_id', readRows.map((row) => Number(row.work_id)));
   if (touchedMemberships.error) throw touchedMemberships.error;
   const touched = (touchedMemberships.data ?? []) as unknown as MembershipRow[];
@@ -263,7 +287,14 @@ export async function loadHomepageSeriesContinuation(): Promise<HomepageSeriesCo
     const books = allMemberships
       .filter((row) => String(row.collection_id) === collectionId)
       .map((row) => mapMembership(row, placeholderBook(String(row.work_id))));
-    return { collection, progress: calculateSeriesProgress(books, statusMap) };
+    return {
+      collection,
+      progress: calculateSeriesProgress(
+        books,
+        statusMap,
+        collection.expectedMainSeriesTotal,
+      ),
+    };
   });
   const selected = selectSeriesContinuation(candidates);
   if (!selected?.progress.nextBook) return null;
