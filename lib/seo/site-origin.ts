@@ -1,6 +1,6 @@
 import { readServerEnvironment } from '../server-environment.ts';
 
-export const LUMISCORE_FALLBACK_ORIGIN = 'https://lumiscore-gamma.vercel.app';
+export const LUMISCORE_FALLBACK_ORIGIN = 'https://lumisco.re';
 
 export function resolveLumiScoreSiteOrigin(value: string | null | undefined): string {
   if (!value?.trim()) return LUMISCORE_FALLBACK_ORIGIN;

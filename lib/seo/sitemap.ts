@@ -7,6 +7,10 @@ export function buildPublicSitemapPaths(
     '/browse',
     '/collections',
     '/taste-test',
+    '/over-ons',
+    '/zo-werkt-het',
+    '/voor-uitgevers',
+    '/contact',
     ...collectionSlugs
       .map((slug) => slug.trim())
       .filter(Boolean)

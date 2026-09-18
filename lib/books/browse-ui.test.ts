@@ -1,7 +1,34 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import type { Book } from '../../app/data/books.ts';
+import {
+  calculateSeriesProgress,
+  type CollectionBook,
+  type ReadingStatus,
+} from '../collections/model.ts';
 import { translate } from '../i18n/translations.ts';
+
+function seriesBook(position: number): CollectionBook {
+  return {
+    workId: String(position),
+    sequenceNumber: position,
+    publicationOrder: position,
+    subgroup: null,
+    book: {
+      id: `work-${position}`,
+      source: 'supabase',
+      workId: String(position),
+      title: `Book ${position}`,
+      author: 'Author',
+      firstPublishYear: 2000 + position,
+      score: null,
+      ratingsCount: 0,
+      match: null,
+      cover: 'orbit',
+    } satisfies Book,
+  };
+}
 
 test('public browse route loads catalog books without requiring a search query or login', async () => {
   const page = await readFile(
@@ -47,7 +74,7 @@ test('new browse and collection UI copy is complete in English and Dutch', () =>
   assert.doesNotMatch(translate('nl', 'collections.copy'), /compleet|incompleet/i);
 });
 
-test('collection discovery and detail expose counts without completeness copy', async () => {
+test('collection discovery and detail expose catalog counts without completeness marketing', async () => {
   const [directorySource, detailSource] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreCollectionsPage.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreCollectionPage.tsx', import.meta.url), 'utf8'),
@@ -58,5 +85,44 @@ test('collection discovery and detail expose counts without completeness copy', 
   assert.doesNotMatch(directorySource, /collections\.(?:completeCount|coverageCount)/);
   assert.match(detailSource, /className="collection-book-count"/);
   assert.match(detailSource, /books\.length/);
-  assert.doesNotMatch(detailSource, /collection\.seriesComplete|collection-complete/);
+});
+
+test('completed-series state requires a genuinely complete reviewed series', () => {
+  const books = [seriesBook(1), seriesBook(2), seriesBook(3)];
+  const completeStatuses = new Map<string, ReadingStatus>([
+    ['1', 'read'],
+    ['2', 'read'],
+    ['3', 'read'],
+  ]);
+  const incompleteStatuses = new Map<string, ReadingStatus>([
+    ['1', 'read'],
+    ['2', 'reading'],
+    ['3', 'want_to_read'],
+  ]);
+
+  assert.equal(calculateSeriesProgress(books, completeStatuses, 3).complete, true);
+  assert.equal(calculateSeriesProgress(books, incompleteStatuses, 3).complete, false);
+  assert.equal(calculateSeriesProgress(books.slice(0, 2), completeStatuses, 3).complete, false);
+});
+
+test('collection detail renders translated completion only inside authenticated complete state', async () => {
+  const detailSource = await readFile(
+    new URL('../../app/components/LumiScoreCollectionPage.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(
+    detailSource,
+    /\{authenticated \? \([\s\S]*?\{seriesProgress\?\.complete \? \([\s\S]*?<p className="collection-complete">\{t\('collection\.seriesComplete'\)\}<\/p>[\s\S]*?\) : actionBook \? \(/,
+  );
+  assert.match(
+    detailSource,
+    /\) : \([\s\S]*?className="status-sign-in collection-sign-in"[\s\S]*?collection\.signInTrack/,
+  );
+  assert.equal(
+    detailSource.match(/className="collection-complete"/g)?.length,
+    1,
+  );
+  assert.equal(translate('en', 'collection.seriesComplete'), 'Series complete');
+  assert.equal(translate('nl', 'collection.seriesComplete'), 'Reeks voltooid');
 });

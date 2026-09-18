@@ -5,8 +5,9 @@ import {
   resolveLumiScoreSiteOrigin,
 } from './site-origin.ts';
 
-test('uses the working Vercel host until a public origin is configured', () => {
+test('uses the public custom domain when no origin is configured', () => {
   assert.equal(resolveLumiScoreSiteOrigin(undefined), LUMISCORE_FALLBACK_ORIGIN);
+  assert.equal(LUMISCORE_FALLBACK_ORIGIN, 'https://lumisco.re');
 });
 
 test('normalizes a future configured apex origin with one setting', () => {

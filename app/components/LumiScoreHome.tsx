@@ -258,6 +258,11 @@ export function Header({
             <a href="/collections">{t('browse.collections')}</a>
             <a href="/taste-test">{t('header.tasteTest')}</a>
             <a href="/my-books">{t('header.myBooks')}</a>
+            <span className="mobile-navigation-divider" aria-hidden="true" />
+            <a href="/over-ons">{t('footer.about')}</a>
+            <a href="/zo-werkt-het">{t('footer.howItWorks')}</a>
+            <a href="/voor-uitgevers">{t('footer.publishers')}</a>
+            <a href="/contact">{t('footer.contact')}</a>
           </div>
         </details>
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
@@ -588,7 +593,12 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
         <p>{t('footer.tagline')}</p>
         <a className="domain-link" href="/">lumisco.re</a>
       </div>
-      <nav className="footer-nav" aria-label={t('footer.navigation')}><span aria-disabled="true" title={t('footer.aboutComing')}>{t('footer.about')}</span><a href="/#how-it-works">{t('footer.howItWorks')}</a><span aria-disabled="true" title={t('footer.publishersComing')}>{t('footer.publishers')}</span><span aria-disabled="true" title={t('footer.helpComing')}>{t('footer.help')}</span></nav>
+      <nav className="footer-nav" aria-label={t('footer.navigation')}>
+        <a href="/over-ons">{t('footer.about')}</a>
+        <a href="/zo-werkt-het">{t('footer.howItWorks')}</a>
+        <a href="/voor-uitgevers">{t('footer.publishers')}</a>
+        <a href="/contact">{t('footer.contact')}</a>
+      </nav>
       <div className="footer-theme"><span>{t('footer.readingMode')}</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
       <div className="footer-bottom"><span>© 2026 LumiScore</span><span>{t('footer.madeForReaders')}</span></div>
     </footer>
