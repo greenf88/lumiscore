@@ -6,6 +6,7 @@ export type BookMatchSeed = {
   preferredDisplayTitle?: string;
   expectedOpenLibraryWorkId?: string;
   expectedOpenLibraryAuthorId?: string;
+  expectedIsbn13?: string;
 };
 
 export type OpenLibrarySearchDocument = {
@@ -76,19 +77,16 @@ export function completePinnedWorkMetadata(
 
   const authorId = seed.expectedOpenLibraryAuthorId.toUpperCase();
   if (!/^OL\d+A$/.test(authorId)) return document;
-  const hasCompleteAuthorMetadata = Boolean(
-    document.author_key?.length && document.author_name?.length,
-  );
-
   return {
     ...document,
     title: document.title?.trim() || seed.title,
-    author_key: hasCompleteAuthorMetadata
-      ? document.author_key
-      : [authorId],
-    author_name: hasCompleteAuthorMetadata
-      ? document.author_name
-      : [seed.author ?? ''],
+    // This is an explicit reviewed override tied to an exact pinned Work.
+    // Open Library occasionally credits a legal name while the series is
+    // published under a pen name (for example Robert Galbraith). In that case
+    // retaining the otherwise complete source metadata would create the wrong
+    // LumiScore author relationship.
+    author_key: [authorId],
+    author_name: [seed.author ?? ''],
     first_publish_year:
       document.first_publish_year ?? seed.firstPublishYear,
   };

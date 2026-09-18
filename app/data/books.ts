@@ -12,6 +12,13 @@ export type VerifiedBookDescription = {
   source: 'open_library' | 'google_books';
   sourceKey: string;
   verifiedAt: string;
+  language?: 'en' | 'nl' | null;
+};
+
+export type BookDescriptionEditionCandidate = {
+  openLibraryEditionId: string | null;
+  isbn13: string | null;
+  editionLanguage: string | null;
 };
 
 export type Book = {
@@ -36,6 +43,7 @@ export type Book = {
   editionLanguage?: string | null;
   coverUrls?: string[];
   backCover?: VerifiedBookCoverAsset | null;
+  descriptionCandidates?: BookDescriptionEditionCandidate[];
   genre?: string;
 };
 

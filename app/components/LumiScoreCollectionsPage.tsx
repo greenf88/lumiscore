@@ -6,7 +6,6 @@ import { hasUsableInitialBookCover } from '@/lib/books/book-cover-state';
 import {
   COLLECTION_DIRECTORY_FILTERS,
   filterCollectionDirectoryItems,
-  getCollectionDirectoryCoverage,
   getCollectionDirectoryHref,
   getCollectionHref,
   type CollectionDirectoryFilter,
@@ -39,20 +38,12 @@ function CollectionDirectoryCard({ item }: { item: CollectionDirectoryItem }) {
   const covers = item.representativeBooks
     .filter(hasUsableInitialBookCover)
     .slice(0, 3);
-  const coverage = getCollectionDirectoryCoverage(item);
-  const coverageLabel = coverage.kind === 'count'
-    ? t(
-        coverage.count === 1
-          ? 'collections.oneBook'
-          : 'collections.bookCount',
-        { count: coverage.count },
-      )
-    : coverage.kind === 'complete'
-      ? t('collections.completeCount', { count: coverage.total })
-      : t('collections.coverageCount', {
-          count: coverage.count,
-          total: coverage.total,
-        });
+  const countLabel = t(
+    item.cataloguedBookCount === 1
+      ? 'collections.oneBook'
+      : 'collections.bookCount',
+    { count: item.cataloguedBookCount },
+  );
 
   return (
     <article className="collection-directory-card">
@@ -64,7 +55,7 @@ function CollectionDirectoryCard({ item }: { item: CollectionDirectoryItem }) {
         </div>
         <span className="eyebrow">{t(TYPE_LABELS[collection.collectionType])}</span>
         <h2>{collection.name}</h2>
-        <p>{coverageLabel}</p>
+        <p>{countLabel}</p>
         {collection.collectionType !== 'series' && (
           <small>{t('collection.noOfficialOrder')}</small>
         )}

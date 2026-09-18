@@ -41,12 +41,22 @@ test('new browse and collection UI copy is complete in English and Dutch', () =>
   assert.equal(translate('nl', 'header.browse'), 'Ontdekken');
   assert.equal(translate('en', 'browse.collections'), 'Collections');
   assert.equal(translate('nl', 'browse.collections'), 'Collecties');
-  assert.equal(
-    translate('en', 'collections.coverageCount', { count: 5, total: 6 }),
-    '5 of 6 books',
-  );
-  assert.equal(
-    translate('nl', 'collections.coverageCount', { count: 5, total: 6 }),
-    '5 van 6 boeken',
-  );
+  assert.equal(translate('en', 'collections.bookCount', { count: 5 }), '5 books');
+  assert.equal(translate('nl', 'collections.bookCount', { count: 5 }), '5 boeken');
+  assert.doesNotMatch(translate('en', 'collections.copy'), /complete|incomplete/i);
+  assert.doesNotMatch(translate('nl', 'collections.copy'), /compleet|incompleet/i);
+});
+
+test('collection discovery and detail expose counts without completeness copy', async () => {
+  const [directorySource, detailSource] = await Promise.all([
+    readFile(new URL('../../app/components/LumiScoreCollectionsPage.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/LumiScoreCollectionPage.tsx', import.meta.url), 'utf8'),
+  ]);
+
+  assert.match(directorySource, /item\.cataloguedBookCount/);
+  assert.match(directorySource, /'collections\.bookCount'/);
+  assert.doesNotMatch(directorySource, /collections\.(?:completeCount|coverageCount)/);
+  assert.match(detailSource, /className="collection-book-count"/);
+  assert.match(detailSource, /books\.length/);
+  assert.doesNotMatch(detailSource, /collection\.seriesComplete|collection-complete/);
 });

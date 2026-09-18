@@ -76,6 +76,9 @@ export function normalizeVerifiedBookDescription(
     typeof candidate.sourceKey === 'string' ? candidate.sourceKey.trim() : '';
   const verifiedAt =
     typeof candidate.verifiedAt === 'string' ? candidate.verifiedAt.trim() : '';
+  const language = candidate.language === 'en' || candidate.language === 'nl'
+    ? candidate.language
+    : null;
 
   if (
     !text ||
@@ -86,7 +89,7 @@ export function normalizeVerifiedBookDescription(
     return null;
   }
 
-  return { text, source, sourceKey, verifiedAt };
+  return { text, source, sourceKey, verifiedAt, language };
 }
 
 export function splitBookDescriptionParagraphs(

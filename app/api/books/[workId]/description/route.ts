@@ -1,14 +1,17 @@
 import { isCatalogWorkId } from '@/lib/books/book-detail';
 import { resolveBookDescription } from '@/lib/books/description-resolution';
 import { normalizeVerifiedBookDescription } from '@/lib/books/description-text';
+import { isLocale } from '@/lib/i18n/config';
 import { loadCatalogBook } from '@/lib/supabase/books';
 
 type DescriptionRouteProps = {
   params: Promise<{ workId: string }>;
 };
 
-export async function GET(_: Request, { params }: DescriptionRouteProps) {
+export async function GET(request: Request, { params }: DescriptionRouteProps) {
   const { workId } = await params;
+  const requestedLocale = new URL(request.url).searchParams.get('locale');
+  const locale = isLocale(requestedLocale) ? requestedLocale : 'en';
   if (!isCatalogWorkId(workId)) {
     return Response.json(
       { description: null, state: 'confirmed_missing' },
@@ -16,7 +19,7 @@ export async function GET(_: Request, { params }: DescriptionRouteProps) {
     );
   }
 
-  const book = await loadCatalogBook(workId);
+  const book = await loadCatalogBook(workId, locale);
   if (!book) {
     return Response.json(
       { description: null, state: 'confirmed_missing' },
@@ -26,7 +29,11 @@ export async function GET(_: Request, { params }: DescriptionRouteProps) {
 
   const resolution = await resolveBookDescription({
     openLibraryWorkId: book.openLibraryWorkId,
+    openLibraryEditionId: book.openLibraryEditionId,
     isbn13: book.isbn13,
+    editionLanguage: book.editionLanguage,
+    editionCandidates: book.descriptionCandidates,
+    locale,
   });
   const description = normalizeVerifiedBookDescription(
     resolution.description,

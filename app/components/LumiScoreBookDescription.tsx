@@ -15,13 +15,16 @@ type LumiScoreBookDescriptionProps = {
 export function LumiScoreBookDescription({
   workId,
 }: LumiScoreBookDescriptionProps) {
-  const { t } = useLumiScoreLocale();
-  const [description, setDescription] =
-    useState<VerifiedBookDescription | null>(null);
-  const [expanded, setExpanded] = useState(false);
+  const { locale, t } = useLumiScoreLocale();
+  const requestKey = `${workId}:${locale}`;
+  const [resolved, setResolved] = useState<{
+    key: string;
+    description: VerifiedBookDescription | null;
+  } | null>(null);
+  const [expansion, setExpansion] = useState<{ key: string; expanded: boolean } | null>(null);
   useEffect(() => {
     const controller = new AbortController();
-    void fetch(`/api/books/${workId}/description`, {
+    void fetch(`/api/books/${workId}/description?locale=${encodeURIComponent(locale)}`, {
       headers: { Accept: 'application/json' },
       signal: controller.signal,
     })
@@ -33,13 +36,18 @@ export function LumiScoreBookDescription({
         return normalizeVerifiedBookDescription(payload.description);
       })
       .then((value) => {
-        if (!controller.signal.aborted) setDescription(value);
+        if (!controller.signal.aborted) {
+          setResolved({ key: requestKey, description: value });
+        }
       })
       .catch(() => {
         // A synopsis is optional; keep the section absent on request failure.
       });
     return () => controller.abort();
-  }, [workId]);
+  }, [locale, requestKey, workId]);
+
+  const description = resolved?.key === requestKey ? resolved.description : null;
+  const expanded = expansion?.key === requestKey && expansion.expanded;
 
   if (!description) return null;
 
@@ -66,7 +74,7 @@ export function LumiScoreBookDescription({
           className="description-toggle"
           aria-controls="book-description-content"
           aria-expanded={expanded}
-          onClick={() => setExpanded((current) => !current)}
+          onClick={() => setExpansion({ key: requestKey, expanded: !expanded })}
         >
           {expanded ? t('description.showLess') : t('description.readMore')}
         </button>

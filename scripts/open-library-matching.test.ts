@@ -607,6 +607,28 @@ test('completes only explicitly verified pinned metadata overrides', () => {
   assert.equal(completePinnedWorkMetadata(seed, unrelated), unrelated);
 });
 
+test('an exact reviewed pinned author overrides conflicting source metadata', () => {
+  const completed = completePinnedWorkMetadata(
+    {
+      title: "The Cuckoo's Calling",
+      author: 'Robert Galbraith',
+      firstPublishYear: 2013,
+      expectedOpenLibraryWorkId: 'OL16806416W',
+      expectedOpenLibraryAuthorId: 'OL10720328A',
+    },
+    {
+      key: '/works/OL16806416W',
+      title: "The Cuckoo's Calling",
+      author_key: ['OL23919A'],
+      author_name: ['J. K. Rowling'],
+      first_publish_year: 2013,
+    },
+  );
+
+  assert.deepEqual(completed.author_key, ['OL10720328A']);
+  assert.deepEqual(completed.author_name, ['Robert Galbraith']);
+});
+
 test('configures verified author fallbacks for all 14 failed Dutch imports', () => {
   const expected = new Map([
     ['Bonuskind', 'OL26420829W'],

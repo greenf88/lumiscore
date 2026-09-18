@@ -37,6 +37,23 @@ import {
 
 type Row = Record<string, unknown>;
 
+type CollectionV1FinalPlan = {
+  version: 'collection_v1_final_frozen_plan_v1';
+  mode: 'FROZEN_REVIEWED_WRITE_PLAN';
+  productionWrites: 0;
+  writeGatePassed: true;
+  classification: { newWorkImports: number; unresolved: number };
+  newWorkImports: Array<{
+    title: string;
+    author: string;
+    firstPublishYear: number;
+    openLibraryWorkId: string;
+    isbn13: string;
+    category: SeedBook['category'];
+    expectedOpenLibraryAuthorId?: string;
+  }>;
+};
+
 type OpenLibraryEdition = {
   key?: string;
   title?: string;
@@ -48,6 +65,7 @@ type OpenLibraryEdition = {
   publish_date?: string;
   publishers?: string[];
   covers?: number[];
+  works?: Array<{ key?: string }>;
 };
 
 type OpenLibraryWork = {
@@ -334,6 +352,29 @@ async function loadOpenLibraryBook(seed: SeedBook) {
   const rankedEditions = (editionResult.entries ?? []).map(
     toRankedOpenLibraryEdition,
   );
+  let reviewedEdition = seed.expectedIsbn13
+    ? rankedEditions.find((edition) => edition.isbn13
+        .map(normalizeIsbn13)
+        .includes(seed.expectedIsbn13 ?? null)) ?? null
+    : null;
+  if (seed.expectedIsbn13 && !reviewedEdition) {
+    const exactEdition = await fetchOpenLibraryJson<OpenLibraryEdition>(
+      `/isbn/${seed.expectedIsbn13}.json`,
+    );
+    const parentWorkIds = (exactEdition.works ?? []).map((entry) =>
+      normalizeOpenLibraryId(entry.key));
+    if (!parentWorkIds.includes(workId)) {
+      throw new Error(
+        `Exact reviewed ISBN-13 ${seed.expectedIsbn13} does not point to Open Library Work ${workId}.`,
+      );
+    }
+    reviewedEdition = toRankedOpenLibraryEdition(exactEdition);
+  }
+  if (seed.expectedIsbn13 && !reviewedEdition) {
+    throw new Error(
+      `Exact reviewed ISBN-13 ${seed.expectedIsbn13} is not attached to Open Library Work ${workId}.`,
+    );
+  }
   const requestedLanguages = seed.editionLanguagesToImport ?? [];
   const localizedEditions = requestedLanguages.flatMap((language) => {
     const candidates = rankedEditions.filter((edition) =>
@@ -354,7 +395,7 @@ async function loadOpenLibraryBook(seed: SeedBook) {
     preferredLanguages: seed.preferredEditionLanguages ?? ['eng'],
   });
   const editions = [...new Map(
-    [primaryEdition, ...localizedEditions]
+    [reviewedEdition, primaryEdition, ...localizedEditions]
       .filter((edition): edition is RankedOpenLibraryEdition => Boolean(edition))
       .flatMap((edition) => {
         const editionId = normalizeOpenLibraryId(edition.key);
@@ -914,11 +955,30 @@ async function main(): Promise<void> {
   if (!['A', 'B', 'B2'].includes(catalogExpansionBatch)) {
     throw new Error('Unsupported catalog-expansion batch. Use --batch=A, --batch=B or --batch=B2.');
   }
-  if (scope !== 'all' && scope !== 'netherlands' && scope !== 'series' && scope !== 'catalog-expansion') {
+  if (scope !== 'all' && scope !== 'netherlands' && scope !== 'series' && scope !== 'catalog-expansion' && scope !== 'collection-v1') {
     throw new Error(
-      `Unsupported import scope “${scope}”. Use “all”, “netherlands”, “series” or “catalog-expansion”.`,
+      `Unsupported import scope “${scope}”. Use “all”, “netherlands”, “series”, “catalog-expansion” or “collection-v1”.`,
     );
   }
+
+  const collectionV1Plan = scope === 'collection-v1'
+    ? JSON.parse(await readFile(
+        join(process.cwd(), 'catalog', 'collection-v1-final-frozen-plan.json'),
+        'utf8',
+      )) as CollectionV1FinalPlan
+    : null;
+  if (
+    collectionV1Plan
+    && (
+      collectionV1Plan.version !== 'collection_v1_final_frozen_plan_v1'
+      || collectionV1Plan.mode !== 'FROZEN_REVIEWED_WRITE_PLAN'
+      || collectionV1Plan.productionWrites !== 0
+      || collectionV1Plan.writeGatePassed !== true
+      || collectionV1Plan.classification.unresolved !== 0
+      || collectionV1Plan.classification.newWorkImports !== 28
+      || collectionV1Plan.newWorkImports.length !== 28
+    )
+  ) throw new Error('Collection V1 frozen plan failed its exact write guard.');
 
   const catalogExpansionPlan = scope === 'catalog-expansion'
     ? JSON.parse(await readFile(join(
@@ -960,8 +1020,22 @@ async function main(): Promise<void> {
     preferredEditionLanguages: candidate.preferredDutchEdition ? ['nld', 'eng'] : ['eng'],
     editionLanguagesToImport: candidate.preferredDutchEdition ? ['nld', 'eng'] : ['eng'],
   }));
+  const collectionV1Seeds: SeedBook[] = (collectionV1Plan?.newWorkImports ?? []).map((candidate) => ({
+    title: candidate.title,
+    preferredDisplayTitle: candidate.title,
+    author: candidate.author,
+    firstPublishYear: candidate.firstPublishYear,
+    expectedOpenLibraryWorkId: candidate.openLibraryWorkId,
+    expectedOpenLibraryAuthorId: candidate.expectedOpenLibraryAuthorId,
+    expectedIsbn13: candidate.isbn13,
+    category: candidate.category,
+    preferredEditionLanguages: ['eng', 'nld'],
+    editionLanguagesToImport: ['eng', 'nld'],
+  }));
 
-  const scopedSeeds = scope === 'catalog-expansion'
+  const scopedSeeds = scope === 'collection-v1'
+    ? collectionV1Seeds
+    : scope === 'catalog-expansion'
     ? catalogExpansionSeeds
     : scope === 'netherlands'
     ? NETHERLANDS_SEEDS
@@ -979,6 +1053,13 @@ async function main(): Promise<void> {
 
   const dryRun = process.env.OPEN_LIBRARY_IMPORT_DRY_RUN === 'true' ||
     process.argv.includes('--dry-run');
+  if (scope === 'collection-v1' && !dryRun) {
+    const confirmed = process.argv.includes('--write')
+      && process.argv.includes('--confirm=collection-v1-complete');
+    if (!confirmed) {
+      throw new Error('Collection V1 writes require --write --confirm=collection-v1-complete.');
+    }
+  }
   if (scope === 'catalog-expansion' && (catalogExpansionBatch === 'B' || catalogExpansionBatch === 'B2') && !dryRun) {
     const expectedConfirmation = catalogExpansionBatch === 'B2' ? 'batch-b2-approved' : 'batch-b-approved';
     const confirmed = process.argv.includes('--write')
@@ -1062,6 +1143,52 @@ async function main(): Promise<void> {
     }, null, 2));
     console.log(`Done. Batch ${catalogExpansionBatch} passed the live metadata/import idempotency preflight. No Supabase writes were performed.`);
     return;
+  }
+  if (scope === 'collection-v1' && dryRun) {
+    const workIds = collectionV1Seeds.map((seed) => seed.expectedOpenLibraryWorkId!.toUpperCase());
+    const isbns = collectionV1Seeds.map((seed) => seed.expectedIsbn13!);
+    if (new Set(workIds).size !== workIds.length || new Set(isbns).size !== isbns.length) {
+      throw new Error('Collection V1 plan contains duplicate Work IDs or ISBN-13 values.');
+    }
+    const [{ data: existingWorks, error: worksError }, { data: existingEditions, error: editionsError }] = await Promise.all([
+      supabase.from('works').select('id,open_library_id').in('open_library_id', workIds),
+      supabase.from('editions').select('id,work_id,isbn_13').in('isbn_13', isbns),
+    ]);
+    if (worksError) throw worksError;
+    if (editionsError) throw editionsError;
+    const existingByOlId = new Map(((existingWorks ?? []) as Row[]).map((row) => [
+      String(row.open_library_id ?? '').toUpperCase(), Number(row.id),
+    ]));
+    const seedByIsbn = new Map(collectionV1Seeds.map((seed) => [seed.expectedIsbn13!, seed]));
+    const conflicts = ((existingEditions ?? []) as Row[]).flatMap((edition) => {
+      const isbn = String(edition.isbn_13 ?? '').replace(/[^0-9]/g, '');
+      const seed = seedByIsbn.get(isbn);
+      if (!seed) return [];
+      const expectedWorkId = existingByOlId.get(seed.expectedOpenLibraryWorkId!.toUpperCase());
+      return expectedWorkId === Number(edition.work_id)
+        ? []
+        : [`${isbn}: expected ${expectedWorkId ?? 'new Work'}, found Work ${edition.work_id}`];
+    });
+    if (conflicts.length) throw new Error(`Collection V1 ISBN conflicts: ${conflicts.join('; ')}`);
+    const alreadyPresent = collectionV1Seeds.filter((seed) =>
+      existingByOlId.has(seed.expectedOpenLibraryWorkId!.toUpperCase())).length;
+    if (alreadyPresent !== 0 && alreadyPresent !== collectionV1Seeds.length) {
+      throw new Error(`Partial Collection V1 import state: ${alreadyPresent} present, ${collectionV1Seeds.length - alreadyPresent} missing.`);
+    }
+    console.log(JSON.stringify({
+      mode: 'COLLECTION_V1_IMPORT_DRY_RUN',
+      candidates: collectionV1Seeds.length,
+      alreadyPresent,
+      netNewWorks: collectionV1Seeds.length - alreadyPresent,
+      duplicateOpenLibraryWorkIds: 0,
+      duplicateIsbn13: 0,
+      isbnConflicts: 0,
+      authorIdentityConflicts: 0,
+      ratingsTouched: 0,
+      userStatusesTouched: 0,
+      collectionsTouched: 0,
+      productionWrites: 0,
+    }, null, 2));
   }
   const requestedWorkIds = new Set(
     (process.env.OPEN_LIBRARY_IMPORT_WORK_IDS ?? '')

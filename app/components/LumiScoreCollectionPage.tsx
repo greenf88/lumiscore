@@ -63,6 +63,14 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         <a className="detail-back-link" href="/">← {t('collection.backToBooks')}</a>
         <span className="eyebrow">{typeLabel.toUpperCase()}</span>
         <h1>{collection.name}</h1>
+        <p className="collection-book-count">
+          {t(
+            books.length === 1
+              ? 'collections.oneBook'
+              : 'collections.bookCount',
+            { count: books.length },
+          )}
+        </p>
         {collection.description && <p>{collection.description}</p>}
         {authenticated ? (
           <div className="collection-progress" aria-label={progressLabel}>
@@ -74,9 +82,6 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           <a className="status-sign-in collection-sign-in" href={`/login?next=${encodeURIComponent(returnTo)}`}>
             {t('collection.signInTrack')}
           </a>
-        )}
-        {seriesProgress?.complete && (
-          <p className="collection-complete">✓ {t('collection.seriesComplete')}</p>
         )}
         {collection.collectionType !== 'series' && (
           <p className="collection-order-note">{t('collection.noOfficialOrder')}</p>

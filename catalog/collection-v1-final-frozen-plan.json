@@ -1,0 +1,1742 @@
+{
+  "version": "collection_v1_final_frozen_plan_v1",
+  "mode": "FROZEN_REVIEWED_WRITE_PLAN",
+  "generatedAt": "2026-09-18T06:44:07.568Z",
+  "sourceResearch": "catalog/collection-v1-identity-research.json",
+  "productionWrites": 0,
+  "writeGatePassed": true,
+  "scopeDecisions": {
+    "witcher": "Broad principal prose-book reading sequence in established reading/publication order; Crossroads of Ravens appended at position 9.",
+    "inheritanceGames": "Core four-book publisher sequence ending with The Brothers Hawthorne; Grandest Game books excluded."
+  },
+  "baseline": {
+    "works": {
+      "count": 2511,
+      "sha256": "c04ee103f074f8a8441690c34a96add4f78ed2bd7830b0eb52d9590fbe386300"
+    },
+    "authors": {
+      "count": 1227,
+      "sha256": "3061ff35f22e26e838dc8bf0c87378b26eb17b1364513c211da7d2e85458b838"
+    },
+    "editions": {
+      "count": 2747,
+      "sha256": "9fff67b1e20eee7733e95c9936ca711a779cbbef842774f7cbe51dd425e32daf"
+    },
+    "ratings": {
+      "count": 28,
+      "sha256": "fe307f8310fb2a9fd15ee787011756271f308dc7bc3c5f58a16d67b6eab59e9a"
+    },
+    "user_book_status": {
+      "count": 31,
+      "sha256": "6000b57ff6633bc58047d9824ce141fea7c488fbf251ea0032c74e8155f5af99"
+    },
+    "collections": {
+      "count": 59,
+      "sha256": "b29f21ba5a6a73b4c32334f396f9d9c70f24a91a5b91af9f27d8bbcf1c979279"
+    },
+    "collection_books": {
+      "count": 291,
+      "sha256": "8c9c6f4c79e558a84bc9f4b342c60579ff725f5b23e458f34d4744b75e24503c"
+    },
+    "work_trait_evidence": {
+      "count": 3942,
+      "sha256": "3d4e782b1fb48bfb7a3afd8c47446ced4c38901c108a687b52cc4e4afcd82fec"
+    }
+  },
+  "protectedBoundaries": {
+    "maxWorkId": 2514,
+    "maxAuthorId": 1227,
+    "maxEditionId": 2750
+  },
+  "classification": {
+    "reviewedIdentities": 31,
+    "high": 31,
+    "alreadyPresent": 3,
+    "unresolved": 0,
+    "rejected": 0,
+    "membershipOnly": 4,
+    "newWorkImports": 28,
+    "plannedMemberships": 32
+  },
+  "expectedAfter": {
+    "works": 2539,
+    "collections": 59,
+    "memberships": 323
+  },
+  "expectedTotalCorrections": [
+    {
+      "collectionSlug": "heartstopper",
+      "from": 5,
+      "to": 6,
+      "sourceUrl": "https://aliceoseman.com/graphic-novel/heartstopper-volume-six/"
+    },
+    {
+      "collectionSlug": "the-empyrean",
+      "from": 5,
+      "to": 3,
+      "sourceUrl": "https://rebeccayarros.com/empyrean"
+    },
+    {
+      "collectionSlug": "the-witcher",
+      "from": 8,
+      "to": 9,
+      "sourceUrl": "https://www.hachette.co.uk/titles/andrzej-sapkowski/crossroads-of-ravens/9781399633451/"
+    }
+  ],
+  "membershipOnly": [
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 1,
+      "title": "Heartstopper: Volume One",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL20354498W",
+      "actualProductionWorkId": 1524
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 2,
+      "title": "Heartstopper: Volume Two",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL20354499W",
+      "actualProductionWorkId": 512
+    },
+    {
+      "collectionSlug": "the-century-trilogy",
+      "sequenceNumber": 2,
+      "title": "Winter of the World",
+      "author": "Ken Follett",
+      "openLibraryWorkId": "OL16531911W",
+      "actualProductionWorkId": 2493
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 2,
+      "title": "The Great Hunt",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL7924135W",
+      "actualProductionWorkId": 281
+    }
+  ],
+  "newWorkImports": [
+    {
+      "collectionSlug": "a-court-of-thorns-and-roses",
+      "sequenceNumber": 2,
+      "title": "A Court of Mist and Fury",
+      "author": "Sarah J. Maas",
+      "firstPublishYear": 2016,
+      "openLibraryWorkId": "OL17860744W",
+      "isbn13": "9781635575583",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.bloomsbury.com/us/court-of-mist-and-fury-9781635575583/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "belladonna",
+      "sequenceNumber": 2,
+      "title": "Foxglove",
+      "author": "Adalyn Grace",
+      "firstPublishYear": 2023,
+      "openLibraryWorkId": "OL29327499W",
+      "isbn13": "9781399705158",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.hodder.co.uk/titles/adalyn-grace/foxglove/9781399705158/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "belladonna",
+      "sequenceNumber": 3,
+      "title": "Wisteria",
+      "author": "Adalyn Grace",
+      "firstPublishYear": 2024,
+      "openLibraryWorkId": "OL37618054W",
+      "isbn13": "9781399726085",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.hodder.co.uk/titles/adalyn-grace/wisteria/9781399726085/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "chestnut-springs",
+      "sequenceNumber": 2,
+      "title": "Heartless",
+      "author": "Elsie Silver",
+      "firstPublishYear": 2022,
+      "openLibraryWorkId": "OL34058365W",
+      "isbn13": "9780349437682",
+      "category": "romance",
+      "sourceUrl": "https://www.hachette.co.uk/titles/elsie-silver/heartless/9780349437682/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 1,
+      "title": "The Cuckoo's Calling",
+      "author": "Robert Galbraith",
+      "firstPublishYear": 2013,
+      "openLibraryWorkId": "OL16806416W",
+      "isbn13": "9780751549256",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.littlebrown.co.uk/titles/robert-galbraith/the-cuckoos-calling/9780751549256/",
+      "expectedOpenLibraryAuthorId": "OL10720328A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 2,
+      "title": "The Silkworm",
+      "author": "Robert Galbraith",
+      "firstPublishYear": 2014,
+      "openLibraryWorkId": "OL17324632W",
+      "isbn13": "9780751549263",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.littlebrown.co.uk/titles/robert-galbraith/the-silkworm/9780751549263/",
+      "expectedOpenLibraryAuthorId": "OL10720328A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 5,
+      "title": "Troubled Blood",
+      "author": "Robert Galbraith",
+      "firstPublishYear": 2020,
+      "openLibraryWorkId": "OL20839362W",
+      "isbn13": "9780751579956",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.littlebrown.co.uk/titles/robert-galbraith/troubled-blood/9780751579956/",
+      "expectedOpenLibraryAuthorId": "OL10720328A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 6,
+      "title": "The Ink Black Heart",
+      "author": "Robert Galbraith",
+      "firstPublishYear": 2022,
+      "openLibraryWorkId": "OL27411566W",
+      "isbn13": "9780751584202",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.littlebrown.co.uk/titles/robert-galbraith/the-ink-black-heart/9780751584202/",
+      "expectedOpenLibraryAuthorId": "OL10720328A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 7,
+      "title": "The Running Grave",
+      "author": "Robert Galbraith",
+      "firstPublishYear": 2023,
+      "openLibraryWorkId": "OL35721367W",
+      "isbn13": "9781408730942",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.littlebrown.co.uk/titles/robert-galbraith/the-running-grave/9781408730942/",
+      "expectedOpenLibraryAuthorId": "OL10720328A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 2,
+      "title": "The Likeness",
+      "author": "Tana French",
+      "firstPublishYear": 2008,
+      "openLibraryWorkId": "OL7989981W",
+      "isbn13": "9780143115625",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/300449/the-likeness-by-tana-french/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 4,
+      "title": "Broken Harbor",
+      "author": "Tana French",
+      "firstPublishYear": 2012,
+      "openLibraryWorkId": "OL16239870W",
+      "isbn13": "9780143123309",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/304338/broken-harbor-by-tana-french/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 5,
+      "title": "The Secret Place",
+      "author": "Tana French",
+      "firstPublishYear": 2014,
+      "openLibraryWorkId": "OL17371637W",
+      "isbn13": "9780143127512",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/312053/the-secret-place-by-tana-french/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 6,
+      "title": "The Trespasser",
+      "author": "Tana French",
+      "firstPublishYear": 2016,
+      "openLibraryWorkId": "OL17371638W",
+      "isbn13": "9780143110385",
+      "category": "thriller-crime",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/312055/the-trespasser-by-tana-french/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "earthsea",
+      "sequenceNumber": 4,
+      "title": "Tehanu",
+      "author": "Ursula K. Le Guin",
+      "firstPublishYear": 1990,
+      "openLibraryWorkId": "OL15056578W",
+      "isbn13": "9781442459960",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.simonandschuster.com/books/Tehanu/Ursula-K-Le-Guin/Earthsea-Cycle/9781442459960",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 3,
+      "title": "Heartstopper: Volume Three",
+      "author": "Alice Oseman",
+      "firstPublishYear": 2020,
+      "openLibraryWorkId": "OL20736929W",
+      "isbn13": "9781444952773",
+      "category": "young-adult-children",
+      "sourceUrl": "https://www.hachette.co.uk/titles/alice-oseman/heartstopper-volume-3/9781444952773/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 4,
+      "title": "Heartstopper: Volume Four",
+      "author": "Alice Oseman",
+      "firstPublishYear": 2021,
+      "openLibraryWorkId": "OL24476747W",
+      "isbn13": "9781444952797",
+      "category": "young-adult-children",
+      "sourceUrl": "https://www.hachette.co.uk/titles/alice-oseman/heartstopper-volume-4/9781444952797/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 6,
+      "title": "Heartstopper: Volume Six",
+      "author": "Alice Oseman",
+      "firstPublishYear": 2026,
+      "openLibraryWorkId": "OL45345337W",
+      "isbn13": "9781444974881",
+      "category": "young-adult-children",
+      "sourceUrl": "https://aliceoseman.com/graphic-novel/heartstopper-volume-six/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "kingsbridge",
+      "sequenceNumber": 5,
+      "title": "The Armour of Light",
+      "author": "Ken Follett",
+      "firstPublishYear": 2023,
+      "openLibraryWorkId": "OL34334996W",
+      "isbn13": "9781447278832",
+      "category": "contemporary-general-fiction",
+      "sourceUrl": "https://ken-follett.com/books/the-armour-of-light/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "percy-jackson-and-the-olympians",
+      "sequenceNumber": 7,
+      "title": "Wrath of the Triple Goddess",
+      "author": "Rick Riordan",
+      "firstPublishYear": 2024,
+      "openLibraryWorkId": "OL45025627W",
+      "isbn13": "9781368107631",
+      "category": "young-adult-children",
+      "sourceUrl": "https://rickriordan.com/2024/01/wrath-of-the-triple-goddess/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "red-rising",
+      "sequenceNumber": 6,
+      "title": "Light Bringer",
+      "author": "Pierce Brown",
+      "firstPublishYear": 2023,
+      "openLibraryWorkId": "OL26353967W",
+      "isbn13": "9780425285978",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/545689/light-bringer-by-pierce-brown/hardcover/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "shatter-me",
+      "sequenceNumber": 5,
+      "title": "Defy Me",
+      "author": "Tahereh Mafi",
+      "firstPublishYear": 2019,
+      "openLibraryWorkId": "OL20145719W",
+      "isbn13": "9781405291798",
+      "category": "young-adult-children",
+      "sourceUrl": "https://www.harpercollins.com/products/defy-me-tahereh-mafi",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "silo",
+      "sequenceNumber": 3,
+      "title": "Dust",
+      "author": "Hugh Howey",
+      "firstPublishYear": 2013,
+      "openLibraryWorkId": "OL17623070W",
+      "isbn13": "9781804940846",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.penguin.co.uk/books/455625/dust-by-howey-hugh/9781804940846",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-inheritance-games",
+      "sequenceNumber": 4,
+      "title": "The Brothers Hawthorne",
+      "author": "Jennifer Lynn Barnes",
+      "firstPublishYear": 2023,
+      "openLibraryWorkId": "OL29046939W",
+      "isbn13": "9780241638491",
+      "category": "young-adult-children",
+      "sourceUrl": "https://www.penguin.co.uk/books/455104/the-brothers-hawthorne-by-barnes-jennifer-lynn/9780241638484",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 3,
+      "title": "The Dragon Reborn",
+      "author": "Robert Jordan",
+      "firstPublishYear": 1991,
+      "openLibraryWorkId": "OL7924143W",
+      "isbn13": "9780765334350",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://us.macmillan.com/books/9780765334350/thedragonreborn/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 7,
+      "title": "A Crown of Swords",
+      "author": "Robert Jordan",
+      "firstPublishYear": 1996,
+      "openLibraryWorkId": "OL7924161W",
+      "isbn13": "9780765336460",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://us.macmillan.com/books/9780765336460/acrownofswords/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 12,
+      "title": "The Gathering Storm",
+      "author": "Robert Jordan",
+      "firstPublishYear": 2009,
+      "openLibraryWorkId": "OL1946681W",
+      "isbn13": "9780765302304",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://us.macmillan.com/books/9780765302304/thegatheringstorm/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 13,
+      "title": "Towers of Midnight",
+      "author": "Robert Jordan",
+      "firstPublishYear": 2010,
+      "openLibraryWorkId": "OL15414340W",
+      "isbn13": "9781250252616",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://us.macmillan.com/books/9781250252616/towersofmidnight/",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-witcher",
+      "sequenceNumber": 9,
+      "title": "Crossroads of Ravens",
+      "author": "Andrzej Sapkowski",
+      "firstPublishYear": 2025,
+      "openLibraryWorkId": "OL44550081W",
+      "isbn13": "9781399633451",
+      "category": "fantasy-science-fiction",
+      "sourceUrl": "https://www.hachette.co.uk/titles/andrzej-sapkowski/crossroads-of-ravens/9781399633451/",
+      "expectedOpenLibraryAuthorId": "OL368638A",
+      "confidence": "HIGH",
+      "evidence": "official source + exact ISBN-13 + normal Open Library edition + exact parent Work",
+      "actualProductionWorkId": null
+    }
+  ],
+  "plannedMemberships": [
+    {
+      "collectionSlug": "a-court-of-thorns-and-roses",
+      "sequenceNumber": 2,
+      "title": "A Court of Mist and Fury",
+      "author": "Sarah J. Maas",
+      "openLibraryWorkId": "OL17860744W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "belladonna",
+      "sequenceNumber": 2,
+      "title": "Foxglove",
+      "author": "Adalyn Grace",
+      "openLibraryWorkId": "OL29327499W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "belladonna",
+      "sequenceNumber": 3,
+      "title": "Wisteria",
+      "author": "Adalyn Grace",
+      "openLibraryWorkId": "OL37618054W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "chestnut-springs",
+      "sequenceNumber": 2,
+      "title": "Heartless",
+      "author": "Elsie Silver",
+      "openLibraryWorkId": "OL34058365W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 1,
+      "title": "The Cuckoo's Calling",
+      "author": "Robert Galbraith",
+      "openLibraryWorkId": "OL16806416W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 2,
+      "title": "The Silkworm",
+      "author": "Robert Galbraith",
+      "openLibraryWorkId": "OL17324632W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 5,
+      "title": "Troubled Blood",
+      "author": "Robert Galbraith",
+      "openLibraryWorkId": "OL20839362W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 6,
+      "title": "The Ink Black Heart",
+      "author": "Robert Galbraith",
+      "openLibraryWorkId": "OL27411566W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "cormoran-strike",
+      "sequenceNumber": 7,
+      "title": "The Running Grave",
+      "author": "Robert Galbraith",
+      "openLibraryWorkId": "OL35721367W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 2,
+      "title": "The Likeness",
+      "author": "Tana French",
+      "openLibraryWorkId": "OL7989981W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 4,
+      "title": "Broken Harbor",
+      "author": "Tana French",
+      "openLibraryWorkId": "OL16239870W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 5,
+      "title": "The Secret Place",
+      "author": "Tana French",
+      "openLibraryWorkId": "OL17371637W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "dublin-murder-squad",
+      "sequenceNumber": 6,
+      "title": "The Trespasser",
+      "author": "Tana French",
+      "openLibraryWorkId": "OL17371638W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "earthsea",
+      "sequenceNumber": 4,
+      "title": "Tehanu",
+      "author": "Ursula K. Le Guin",
+      "openLibraryWorkId": "OL15056578W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 1,
+      "title": "Heartstopper: Volume One",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL20354498W",
+      "actualProductionWorkId": 1524
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 2,
+      "title": "Heartstopper: Volume Two",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL20354499W",
+      "actualProductionWorkId": 512
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 3,
+      "title": "Heartstopper: Volume Three",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL20736929W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 4,
+      "title": "Heartstopper: Volume Four",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL24476747W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "heartstopper",
+      "sequenceNumber": 6,
+      "title": "Heartstopper: Volume Six",
+      "author": "Alice Oseman",
+      "openLibraryWorkId": "OL45345337W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "kingsbridge",
+      "sequenceNumber": 5,
+      "title": "The Armour of Light",
+      "author": "Ken Follett",
+      "openLibraryWorkId": "OL34334996W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "percy-jackson-and-the-olympians",
+      "sequenceNumber": 7,
+      "title": "Wrath of the Triple Goddess",
+      "author": "Rick Riordan",
+      "openLibraryWorkId": "OL45025627W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "red-rising",
+      "sequenceNumber": 6,
+      "title": "Light Bringer",
+      "author": "Pierce Brown",
+      "openLibraryWorkId": "OL26353967W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "shatter-me",
+      "sequenceNumber": 5,
+      "title": "Defy Me",
+      "author": "Tahereh Mafi",
+      "openLibraryWorkId": "OL20145719W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "silo",
+      "sequenceNumber": 3,
+      "title": "Dust",
+      "author": "Hugh Howey",
+      "openLibraryWorkId": "OL17623070W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-century-trilogy",
+      "sequenceNumber": 2,
+      "title": "Winter of the World",
+      "author": "Ken Follett",
+      "openLibraryWorkId": "OL16531911W",
+      "actualProductionWorkId": 2493
+    },
+    {
+      "collectionSlug": "the-inheritance-games",
+      "sequenceNumber": 4,
+      "title": "The Brothers Hawthorne",
+      "author": "Jennifer Lynn Barnes",
+      "openLibraryWorkId": "OL29046939W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 3,
+      "title": "The Dragon Reborn",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL7924143W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 7,
+      "title": "A Crown of Swords",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL7924161W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 12,
+      "title": "The Gathering Storm",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL1946681W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 13,
+      "title": "Towers of Midnight",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL15414340W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-witcher",
+      "sequenceNumber": 9,
+      "title": "Crossroads of Ravens",
+      "author": "Andrzej Sapkowski",
+      "openLibraryWorkId": "OL44550081W",
+      "actualProductionWorkId": null
+    },
+    {
+      "collectionSlug": "the-wheel-of-time",
+      "sequenceNumber": 2,
+      "title": "The Great Hunt",
+      "author": "Robert Jordan",
+      "openLibraryWorkId": "OL7924135W",
+      "actualProductionWorkId": 281
+    }
+  ],
+  "seriesCompleteness": [
+    {
+      "slug": "the-lord-of-the-rings",
+      "name": "The Lord of the Rings",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "a-song-of-ice-and-fire",
+      "name": "A Song of Ice and Fire",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "his-dark-materials",
+      "name": "His Dark Materials",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-locked-tomb",
+      "name": "The Locked Tomb",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "fifty-shades",
+      "name": "Fifty Shades",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "three-sisters-island",
+      "name": "Three Sisters Island",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "geef-me-de-ruimte",
+      "name": "Geef me de ruimte",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "kinderen-van-moeder-aarde",
+      "name": "Kinderen van Moeder Aarde",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-housemaid",
+      "name": "The Housemaid",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "harry-potter",
+      "name": "Harry Potter",
+      "currentlyPublishedMainSeriesTotal": 7,
+      "productionMembershipsBefore": 7,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 7,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-hunger-games",
+      "name": "The Hunger Games",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-expanse",
+      "name": "The Expanse",
+      "currentlyPublishedMainSeriesTotal": 9,
+      "productionMembershipsBefore": 9,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 9,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "millennium-original-trilogy",
+      "name": "Millennium",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-witcher",
+      "name": "The Witcher",
+      "currentlyPublishedMainSeriesTotal": 9,
+      "productionMembershipsBefore": 8,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 9,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "bridgerton",
+      "name": "Bridgerton",
+      "currentlyPublishedMainSeriesTotal": 8,
+      "productionMembershipsBefore": 8,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 8,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "shatter-me",
+      "name": "Shatter Me",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "a-court-of-thorns-and-roses",
+      "name": "A Court of Thorns and Roses",
+      "currentlyPublishedMainSeriesTotal": 4,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 4,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-folk-of-the-air",
+      "name": "The Folk of the Air",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "twisted",
+      "name": "Twisted",
+      "currentlyPublishedMainSeriesTotal": 4,
+      "productionMembershipsBefore": 4,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 4,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-heroes-of-olympus",
+      "name": "The Heroes of Olympus",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "throne-of-glass",
+      "name": "Throne of Glass",
+      "currentlyPublishedMainSeriesTotal": 7,
+      "productionMembershipsBefore": 7,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 7,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "red-rising",
+      "name": "Red Rising",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "caraval",
+      "name": "Caraval",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "shadow-and-bone",
+      "name": "Shadow and Bone",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "maple-hills",
+      "name": "Maple Hills",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "once-upon-a-broken-heart",
+      "name": "Once Upon a Broken Heart",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "powerless",
+      "name": "Powerless",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "kingsbridge",
+      "name": "Kingsbridge",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 4,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "mistborn-era-one",
+      "name": "Mistborn Era One",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-century-trilogy",
+      "name": "The Century Trilogy",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 2,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "dreamland-billionaires",
+      "name": "Dreamland Billionaires",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "outlander",
+      "name": "Outlander",
+      "currentlyPublishedMainSeriesTotal": 9,
+      "productionMembershipsBefore": 9,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 9,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "mistborn-era-two",
+      "name": "Mistborn Era Two",
+      "currentlyPublishedMainSeriesTotal": 4,
+      "productionMembershipsBefore": 4,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 4,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "knockemout",
+      "name": "Knockemout",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-stormlight-archive",
+      "name": "The Stormlight Archive",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-wheel-of-time",
+      "name": "The Wheel of Time",
+      "currentlyPublishedMainSeriesTotal": 14,
+      "productionMembershipsBefore": 9,
+      "plannedMembershipsAdded": 5,
+      "totalAfter": 14,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "kings-of-sin",
+      "name": "Kings of Sin",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 6,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "chestnut-springs",
+      "name": "Chestnut Springs",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 4,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "crescent-city",
+      "name": "Crescent City",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "thursday-murder-club",
+      "name": "Thursday Murder Club",
+      "currentlyPublishedMainSeriesTotal": 5,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 5,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "heartstopper",
+      "name": "Heartstopper",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 1,
+      "plannedMembershipsAdded": 5,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "a-good-girl-s-guide-to-murder",
+      "name": "A Good Girl's Guide to Murder",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "belladonna",
+      "name": "Belladonna",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 1,
+      "plannedMembershipsAdded": 2,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "cormoran-strike",
+      "name": "Cormoran Strike",
+      "currentlyPublishedMainSeriesTotal": 8,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 5,
+      "totalAfter": 8,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "dublin-murder-squad",
+      "name": "Dublin Murder Squad",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 2,
+      "plannedMembershipsAdded": 4,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "dune",
+      "name": "Dune",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 6,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "earthsea",
+      "name": "Earthsea",
+      "currentlyPublishedMainSeriesTotal": 6,
+      "productionMembershipsBefore": 5,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 6,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "foundation",
+      "name": "Foundation",
+      "currentlyPublishedMainSeriesTotal": 7,
+      "productionMembershipsBefore": 7,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 7,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "silo",
+      "name": "Silo",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 2,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "six-of-crows",
+      "name": "Six of Crows",
+      "currentlyPublishedMainSeriesTotal": 2,
+      "productionMembershipsBefore": 2,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 2,
+      "positionsAfter": [
+        1,
+        2
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-broken-earth",
+      "name": "The Broken Earth",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-chronicles-of-narnia",
+      "name": "The Chronicles of Narnia",
+      "currentlyPublishedMainSeriesTotal": 7,
+      "productionMembershipsBefore": 7,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 7,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-inheritance-games",
+      "name": "The Inheritance Games",
+      "currentlyPublishedMainSeriesTotal": 4,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 4,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-poppy-war",
+      "name": "The Poppy War",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "the-empyrean",
+      "name": "The Empyrean",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "wolf-hall",
+      "name": "Wolf Hall",
+      "currentlyPublishedMainSeriesTotal": 3,
+      "productionMembershipsBefore": 3,
+      "plannedMembershipsAdded": 0,
+      "totalAfter": 3,
+      "positionsAfter": [
+        1,
+        2,
+        3
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    },
+    {
+      "slug": "percy-jackson-and-the-olympians",
+      "name": "Percy Jackson and the Olympians",
+      "currentlyPublishedMainSeriesTotal": 7,
+      "productionMembershipsBefore": 6,
+      "plannedMembershipsAdded": 1,
+      "totalAfter": 7,
+      "positionsAfter": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "missingPublishedPositionsAfter": [],
+      "status": "COMPLETE_TO_DATE"
+    }
+  ],
+  "validation": {
+    "review": 0,
+    "duplicateOpenLibraryWorkIds": [],
+    "duplicateIsbn13": [],
+    "duplicatePlannedPositions": [],
+    "isbnConflicts": 0,
+    "missingPublishedPositionsAfter": 0,
+    "seriesCompleteToDateAfter": 57,
+    "secondSimulatedMembershipRunChanges": 0
+  }
+}

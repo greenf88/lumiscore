@@ -11,7 +11,9 @@ import {
 import {
   getPreferredEditionLanguages,
   getWorkFirstPublishYear,
+  isSuspiciousRepresentativeEdition,
   rankEditionsForCover,
+  rankRepresentativeEditions,
   selectRepresentativeEdition,
   type EditionCandidate,
   type EditionRankingContext,
@@ -694,5 +696,30 @@ export async function loadCatalogBook(
 
   if (result.error) throw result.error;
   const work = asRow(result.data);
-  return work ? mapCatalogBook(work, [], [], 0, locale) : null;
+  if (!work) return null;
+  const book = mapCatalogBook(work, [], [], 0, locale);
+  if (!book) return null;
+
+  const context = getEditionRankingContext(work, book.title, locale);
+  const descriptionCandidates = rankRepresentativeEditions(
+    getRelatedEditions(work, []).map(toRankedEditionRow),
+    context,
+  )
+    .filter((candidate) => !isSuspiciousRepresentativeEdition(candidate, context))
+    .flatMap((candidate) => {
+      const openLibraryEditionId = candidate.openLibraryEditionId ?? null;
+      const isbn13 = readIsbn13(candidate.row);
+      const editionLanguage = readString(candidate.row, ['language', 'language_code']);
+      return openLibraryEditionId || isbn13
+        ? [{ openLibraryEditionId, isbn13, editionLanguage }]
+        : [];
+    })
+    .filter((candidate, index, candidates) =>
+      candidates.findIndex((other) =>
+        other.openLibraryEditionId === candidate.openLibraryEditionId &&
+        other.isbn13 === candidate.isbn13 &&
+        other.editionLanguage === candidate.editionLanguage) === index)
+    .slice(0, 3);
+
+  return { ...book, descriptionCandidates };
 }
