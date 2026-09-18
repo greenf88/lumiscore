@@ -2,6 +2,7 @@ export type NativeWorkType =
   | 'novel'
   | 'novella'
   | 'short_story'
+  | 'collection'
   | 'audiobook_original';
 
 export type NativeSeedMetadata = {
@@ -66,10 +67,8 @@ export const NETHERLANDS_NATIVE_DISPOSITIONS: Readonly<
   [key('Eens gegeven', 'Charlotte de Monchy')]: native('9789022590393', 2016, 'Boekerij'),
   [key('De Mitsukoshi Troostbaby Company', 'Auke Hulst')]: native('9789026346934', 2021, 'Ambo|Anthos'),
 
-  [key('De eilanden', 'Suzanne Vermeer')]: {
-    status: 'REJECT',
-    reason: 'Story collection containing seven works; it must not be imported as a standalone novel.',
-  },
+  [key('De eilanden', 'Suzanne Vermeer')]: native('9789400517813', 2019, 'A.W. Bruna Uitgevers', 'collection', 'paperback'),
+  [key('Winterberg', 'Suzanne Vermeer')]: native('9789400517905', 2013, 'A.W. Bruna Uitgevers', 'novel', 'paperback'),
   [key('Zuidenwind', 'Suzanne Vermeer')]: native('9789044977257', 2019, 'A.W. Bruna Uitgevers', 'novella', 'ebook'),
   [key('Lentevuur', 'Suzanne Vermeer')]: native('9789044978445', 2020, 'A.W. Bruna Uitgevers', 'novella', 'ebook'),
   [key('Souvenir', 'Suzanne Vermeer')]: native('9789044978834', 2020, 'A.W. Bruna Uitgevers', 'novel', 'ebook'),

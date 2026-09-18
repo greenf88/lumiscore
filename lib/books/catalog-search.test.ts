@@ -82,7 +82,7 @@ test('returns no results for empty, one-character, and unmatched queries', () =>
 });
 
 test('supports a dedicated results page with at least twenty ranked matches', () => {
-  const matches = Array.from({ length: 30 }, (_, index) =>
+  const matches = Array.from({ length: 120 }, (_, index) =>
     fixture(
       String(index + 100),
       `Catalog title ${String(index + 1).padStart(2, '0')}`,
@@ -102,6 +102,16 @@ test('supports a dedicated results page with at least twenty ranked matches', ()
     results.slice(0, 3).map((book) => book.title),
     ['Catalog title 01', 'Catalog title 02', 'Catalog title 03'],
   );
+});
+
+test('one author query can return the complete 54-work Suzanne Vermeer catalog once', () => {
+  const matches = Array.from({ length: 54 }, (_, index) =>
+    fixture(String(index + 1_220), `Suzanne title ${index + 1}`, 'Suzanne Vermeer'),
+  );
+  const results = rankCatalogSearchResults(matches, 'suzanne', CATALOG_SEARCH_PAGE_LIMIT);
+
+  assert.equal(results.length, 54);
+  assert.equal(new Set(results.map(({ workId }) => workId)).size, 54);
 });
 
 test('the reviewed production aliases resolve to their intended existing Works', () => {

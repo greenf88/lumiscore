@@ -341,9 +341,9 @@ test('preserves the existing catalog while adding the reviewed series batch', ()
   assert.equal(EXPANDED_SEED_BOOKS.length, 885);
   assert.equal(PRE_NETHERLANDS_SEED_BOOKS.length, 1000);
   assert.equal(NETHERLANDS_CORE_SEEDS.length, 250);
-  assert.equal(SUZANNE_VERMEER_SEEDS.length, 53);
-  assert.equal(NETHERLANDS_SEEDS.length, 303);
-  assert.equal(SEED_BOOKS.length, 1337);
+  assert.equal(SUZANNE_VERMEER_SEEDS.length, 54);
+  assert.equal(NETHERLANDS_SEEDS.length, 304);
+  assert.equal(SEED_BOOKS.length, 1338);
 
   const identities = SEED_BOOKS.map(seedIdentity);
   assert.equal(new Set(identities).size, SEED_BOOKS.length);
@@ -473,7 +473,7 @@ test('pins every pre-existing seed and explicitly classifies every Netherlands s
   const unpinnedSeeds = NETHERLANDS_SEEDS.filter(
     (seed) => !seed.expectedOpenLibraryWorkId,
   );
-  assert.equal(unpinnedSeeds.length, 49);
+  assert.equal(unpinnedSeeds.length, 50);
   for (const seed of unpinnedSeeds) {
     assert.ok(
       seed.nativeMetadata || seed.importDisposition,
@@ -512,15 +512,14 @@ test('plans verified, native, unresolved and rejected Netherlands seeds separate
   const plan = createOpenLibraryImportPlan(NETHERLANDS_SEEDS);
 
   assert.equal(plan.verifiedSeeds.length, 254);
-  assert.equal(plan.nativeSeeds.length, 47);
+  assert.equal(plan.nativeSeeds.length, 49);
   assert.equal(plan.skippedManualReviewSeeds.length, 1);
-  assert.equal(plan.rejectedSeeds.length, 1);
+  assert.equal(plan.rejectedSeeds.length, 0);
   assert.equal(plan.invalidUnpinnedSeeds.length, 0);
   assert.ok(
     plan.verifiedSeeds.every((seed) => seed.expectedOpenLibraryWorkId),
   );
   assert.equal(plan.skippedManualReviewSeeds[0]?.title, 'Onbreekbaar');
-  assert.equal(plan.rejectedSeeds[0]?.title, 'De eilanden');
 });
 
 test('creates stable normalized native identities and ISBN keys', () => {
@@ -553,22 +552,23 @@ test('keeps Open Library seeds on their unchanged identity path', () => {
 
 test('retains Suzanne Vermeer work distinctions', () => {
   const byTitle = new Map(SUZANNE_VERMEER_SEEDS.map((seed) => [seed.title, seed]));
-  assert.equal(byTitle.get('De eilanden')?.importDisposition, 'REJECT');
+  assert.equal(byTitle.get('De eilanden')?.nativeMetadata?.workType, 'collection');
+  assert.equal(byTitle.get('Winterberg')?.nativeMetadata?.isbn13, '9789400517905');
   assert.equal(byTitle.get('Sterrennacht')?.nativeMetadata?.workType, 'audiobook_original');
   for (const title of ['Vakantiegeld', 'De scheiding', 'Een vluchtig gebaar', 'Madonna', 'In de mist']) {
     assert.equal(byTitle.get(title)?.nativeMetadata?.workType, 'short_story');
   }
 });
 
-test('keeps all 47 native ISBN identities unique', () => {
+test('keeps all 49 native ISBN identities unique', () => {
   const nativeSeeds = NETHERLANDS_SEEDS.filter((seed) => seed.nativeMetadata);
   const isbns = nativeSeeds.map((seed) => seed.nativeMetadata!.isbn13);
   const identities = nativeSeeds.map((seed) =>
     getNativeWorkIdentityKey(seed.title, seed.author!),
   );
-  assert.equal(nativeSeeds.length, 47);
-  assert.equal(new Set(isbns).size, 47);
-  assert.equal(new Set(identities).size, 47);
+  assert.equal(nativeSeeds.length, 49);
+  assert.equal(new Set(isbns).size, 49);
+  assert.equal(new Set(identities).size, 49);
 });
 
 test('keeps an unexpected unpinned seed as a hard import error', () => {
