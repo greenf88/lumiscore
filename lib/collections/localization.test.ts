@@ -15,6 +15,9 @@ test('collection and reading-status copy is naturally localized in English and D
   assert.equal(translate('nl', 'collection.reading'), 'Aan het lezen');
   assert.equal(translate('nl', 'collection.read'), 'Gelezen');
   assert.equal(translate('nl', 'collection.dnf'), 'Gestopt');
+  assert.equal(translate('en', 'collection.continueHeading'), 'Continue your series');
+  assert.equal(translate('nl', 'collection.continueHeading'), 'Ga verder met je reeks');
+  assert.equal(translate('en', 'collection.continueReading'), 'Continue reading');
   assert.equal(translate('nl', 'collection.highestUnread'), 'Hoogst beoordeeld dat je nog niet hebt gelezen');
   assert.equal(translate('en', 'collection.nextUnread'), "A book you haven't read yet");
 });

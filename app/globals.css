@@ -198,16 +198,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .section-note { cursor: default; opacity: .72; }
 .book-grid { width: min(1380px, 100%); margin: 0 auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(14px, 1.5vw, 24px); }
 .continue-series { width: min(1380px, calc(100% - 48px)); display: grid; grid-template-columns: minmax(230px, .72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(28px, 5vw, 72px); margin: 56px auto 0; padding: clamp(24px, 4vw, 42px); border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 76%, transparent); }
-.continue-series-copy h2 { margin: 8px 0 18px; font-family: var(--serif); font-size: clamp(31px, 4vw, 46px); font-weight: 400; letter-spacing: -.04em; }
+.continue-series-heading h2 { margin: 8px 0 18px; font-family: var(--serif); font-size: clamp(31px, 4vw, 46px); font-weight: 400; letter-spacing: -.04em; }
+.continue-series-list { min-width: 0; display: grid; gap: 12px; }
+.continue-series-item { min-width: 0; display: grid; grid-template-columns: minmax(128px, .42fr) minmax(0, 1fr); align-items: center; gap: 16px; }
+.continue-series-copy { min-width: 0; }
 .continue-series-copy > a { border-bottom: 1px solid var(--teal); font-family: var(--serif); font-size: 18px; }
 .continue-series-copy p { margin: 9px 0 0; color: var(--muted); font-size: 11px; }
-.continue-series-copy > .continue-series-directory-link { min-height: 44px; display: inline-flex; align-items: center; margin-top: 8px; border-bottom: 0; color: var(--teal); font-family: var(--sans); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.continue-series-heading > .continue-series-directory-link { min-height: 44px; display: inline-flex; align-items: center; color: var(--teal); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .continue-series-book { min-width: 0; display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 14px; border: 1px solid var(--border); background: var(--surface); transition: border-color 160ms ease, transform 160ms ease; }
 .continue-series-book:hover { border-color: var(--teal); transform: translateY(-2px); }
 .continue-series-book .book-cover-small { width: 58px; height: 86px; }
 .continue-series-book > span { min-width: 0; display: grid; gap: 5px; }
 .continue-series-book > span strong { overflow-wrap: anywhere; font-family: var(--serif); font-size: 21px; font-weight: 400; }
 .continue-series-book > span small { overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.continue-series-book > span small:first-child { color: var(--teal); font-size: 8px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
 .continue-series-book > b { color: var(--teal); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
 .book-card { position: relative; isolation: isolate; min-width: 0; border: 1px solid var(--border); border-radius: 3px; background: var(--surface); overflow: hidden; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.09); transition: transform 190ms ease, box-shadow 190ms ease, border-color 190ms ease, background-color 280ms ease; }
 .book-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--teal) 44%, var(--border)); box-shadow: 0 22px 44px rgba(0, 0, 0, 0.16); }
@@ -424,6 +428,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-progress > span { color: var(--gold); font-size: 12px; font-weight: 800; }
 .collection-progress > i { grid-column: 1 / -1; height: 5px; overflow: hidden; border-radius: 99px; background: var(--surface); }
 .collection-progress > i b { height: 100%; display: block; border-radius: inherit; background: var(--teal); }
+.collection-next-book { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin-top: 18px !important; font-family: var(--sans) !important; font-size: 11px !important; }
+.collection-next-book span { color: var(--muted); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.collection-next-book a { color: var(--teal); font-family: var(--serif); font-size: 17px; }
 .collection-sign-in { margin-top: 24px; }
 .collection-complete, .collection-order-note { margin-top: 18px !important; color: var(--gold) !important; font-family: var(--sans) !important; font-size: 11px !important; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .collection-book-list { width: min(980px, calc(100% - 48px)); display: grid; gap: 12px; margin: 0 auto; padding: 34px 0 80px; }
@@ -435,6 +442,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-book-copy small { color: var(--teal); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .collection-book-copy strong { overflow-wrap: anywhere; font-family: var(--serif); font-size: 20px; font-weight: 400; }
 .collection-book-copy > span { overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.collection-book-copy .collection-book-status { width: fit-content; padding: 3px 6px; border: 1px solid var(--border); color: var(--gold); }
+.collection-book-row.status-dnf .collection-book-status { color: #df786e; }
 .collection-book-copy em { color: var(--gold); font-size: 10px; font-style: normal; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
 .my-books-page { width: min(1220px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; padding: 62px 0 84px; }
 .my-books-heading { max-width: 720px; }
@@ -604,6 +613,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .book-card-body > p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .want-button { min-height: 44px; }
   .continue-series { width: calc(100% - 32px); grid-template-columns: 1fr; gap: 22px; margin-top: 34px; padding: 22px 18px; }
+  .continue-series-item { grid-template-columns: 1fr; gap: 10px; }
   .continue-series-book { grid-template-columns: 50px minmax(0, 1fr); gap: 13px; }
   .continue-series-book .book-cover-small { width: 50px; height: 75px; }
   .continue-series-book > b { grid-column: 2; }

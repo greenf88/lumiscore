@@ -543,25 +543,38 @@ const ValueStrip = memo(function ValueStrip() {
   );
 });
 
-function ContinueSeries({ continuation }: { continuation: HomepageSeriesContinuation }) {
+function ContinueSeries({ continuations }: { continuations: HomepageSeriesContinuation[] }) {
   const { t } = useLumiScoreLocale();
-  const { collection, progress, nextBook } = continuation;
   return (
     <section className="continue-series" aria-labelledby="continue-series-title">
-      <div className="continue-series-copy">
+      <div className="continue-series-heading">
         <span className="eyebrow">{t('collection.continueEyebrow')}</span>
         <h2 id="continue-series-title">{t('collection.continueHeading')}</h2>
-        <a href={`/collection/${collection.slug}`}>{collection.name}</a>
-        <p>{progress.total === null
-          ? t('collection.readCount', { read: progress.read })
-          : t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
         <a className="continue-series-directory-link" href="/collections">{t('collections.browseAll')} →</a>
       </div>
-      <a className="continue-series-book" href={`/book/${nextBook.workId}`}>
-        <BookCover book={nextBook} small label={nextBook.title} />
-        <span><strong>{nextBook.title}</strong><small>{nextBook.author}</small></span>
-        <b>{t('collection.continueAction')} →</b>
-      </a>
+      <div className="continue-series-list">
+        {continuations.map(({ collection, progress, action, actionBook }) => (
+          <article className="continue-series-item" key={collection.id}>
+            <div className="continue-series-copy">
+              <a href={`/collection/${collection.slug}`}>{collection.name}</a>
+              <p>{progress.total === null
+                ? t('collection.readCount', { read: progress.read })
+                : t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
+            </div>
+            <a className="continue-series-book" href={`/book/${actionBook.workId}`}>
+              <BookCover book={actionBook} small label={actionBook.title} />
+              <span>
+                <small>{t(action === 'continue_reading'
+                  ? 'collection.continueReading'
+                  : 'collection.nextInSeries')}</small>
+                <strong>{actionBook.title}</strong>
+                <small>{actionBook.author}</small>
+              </span>
+              <b>{t('collection.continueAction')} →</b>
+            </a>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
@@ -584,7 +597,23 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number | null; categories: number };
 
-export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats, personalization, authState, catalogUnavailable, seriesContinuation }: { initialBooks: Book[]; dutchDiscoveryBooks: Book[]; catalogStats: CatalogStats; personalization: HomepagePersonalization; authState: HeaderAuthState; catalogUnavailable: boolean; seriesContinuation: HomepageSeriesContinuation | null }) {
+export function LumiScoreHome({
+  initialBooks,
+  dutchDiscoveryBooks,
+  catalogStats,
+  personalization,
+  authState,
+  catalogUnavailable,
+  seriesContinuations,
+}: {
+  initialBooks: Book[];
+  dutchDiscoveryBooks: Book[];
+  catalogStats: CatalogStats;
+  personalization: HomepagePersonalization;
+  authState: HeaderAuthState;
+  catalogUnavailable: boolean;
+  seriesContinuations: HomepageSeriesContinuation[];
+}) {
   const { locale } = useLumiScoreLocale();
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
@@ -707,7 +736,9 @@ export function LumiScoreHome({ initialBooks, dutchDiscoveryBooks, catalogStats,
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={visiblePersonalization} catalogUnavailable={catalogUnavailable} />
-      {seriesContinuation && <ContinueSeries continuation={seriesContinuation} />}
+      {seriesContinuations.length > 0 && (
+        <ContinueSeries continuations={seriesContinuations} />
+      )}
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
       <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />

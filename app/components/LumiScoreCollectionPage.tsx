@@ -17,20 +17,38 @@ import { BookCover, Footer, Header } from './LumiScoreHome';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 
+const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
+  want_to_read: 'collection.wantToRead',
+  reading: 'collection.reading',
+  read: 'collection.read',
+  dnf: 'collection.dnf',
+};
+
 export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) {
   const { collection, books, authenticated } = data;
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<Record<string, ReadingStatus>>(data.statuses);
   const statusMap = useMemo(() => new Map(Object.entries(statuses)), [statuses]);
+  const ratedWorkIds = useMemo(() => new Set(data.ratedWorkIds), [data.ratedWorkIds]);
   const seriesProgress = collection.collectionType === 'series'
-    ? calculateSeriesProgress(books, statusMap, collection.expectedMainSeriesTotal)
+    ? calculateSeriesProgress(
+      books,
+      statusMap,
+      collection.expectedMainSeriesTotal,
+      ratedWorkIds,
+    )
     : null;
-  const progress = seriesProgress ?? calculateCollectionProgress(books, statusMap);
+  const progress = seriesProgress ?? calculateCollectionProgress(
+    books,
+    statusMap,
+    ratedWorkIds,
+  );
   const progressLabel = canShowProgressDenominator(progress.total)
     ? t('collection.readProgress', { read: progress.read, total: progress.total })
     : t('collection.readCount', { read: progress.read });
-  const nextWorkId = seriesProgress?.nextBook?.workId ?? null;
+  const actionWorkId = seriesProgress?.actionBook?.workId ?? null;
+  const actionBook = books.find(({ workId }) => workId === actionWorkId) ?? null;
   const highlightedUnread = collection.collectionType === 'author_collection'
     ? selectHighestRatedUnread(books, statusMap)?.workId ?? null
     : null;
@@ -73,11 +91,23 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         </p>
         {collection.description && <p>{collection.description}</p>}
         {authenticated ? (
-          <div className="collection-progress" aria-label={progressLabel}>
-            <strong>{progressLabel}</strong>
-            {progress.percentage !== null && <span>{progress.percentage}%</span>}
-            {progress.percentage !== null && <i><b style={{ width: `${progress.percentage}%` }} /></i>}
-          </div>
+          <>
+            <div className="collection-progress" aria-label={progressLabel}>
+              <strong>{progressLabel}</strong>
+              {progress.percentage !== null && <span>{progress.percentage}%</span>}
+              {progress.percentage !== null && <i><b style={{ width: `${progress.percentage}%` }} /></i>}
+            </div>
+            {seriesProgress?.complete ? (
+              <p className="collection-complete">{t('collection.seriesComplete')}</p>
+            ) : actionBook ? (
+              <p className="collection-next-book">
+                <span>{t(seriesProgress?.continueBook
+                  ? 'collection.continueReading'
+                  : 'collection.nextInSeries')}</span>
+                <a href={`/book/${actionBook.workId}`}>{actionBook.book.title}</a>
+              </p>
+            ) : null}
+          </>
         ) : (
           <a className="status-sign-in collection-sign-in" href={`/login?next=${encodeURIComponent(returnTo)}`}>
             {t('collection.signInTrack')}
@@ -91,11 +121,13 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
       <section className="collection-book-list" aria-label={collection.name}>
         {books.map((item) => {
           const rating = formatPublicRatingDisplay(item.book.score, item.book.ratingsCount ?? 0, locale);
-          const isNext = item.workId === nextWorkId;
+          const itemStatus = statuses[item.workId] ?? null;
+          const isAction = item.workId === actionWorkId;
+          const isContinue = isAction && seriesProgress?.continueBook?.workId === item.workId;
           const isHighlighted = item.workId === highlightedUnread;
           const seriesTotal = seriesProgress?.total ?? null;
           return (
-            <article className={`collection-book-row${isNext || isHighlighted ? ' is-highlighted' : ''}`} key={item.workId}>
+            <article className={`collection-book-row${isAction || isHighlighted ? ' is-highlighted' : ''}${itemStatus ? ` has-status status-${itemStatus}` : ''}`} key={item.workId}>
               <a className="collection-book-main" href={`/book/${item.workId}`}>
                 <BookCover book={item.book} small label={item.book.title} />
                 <span className="collection-book-copy">
@@ -106,9 +138,12 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                   )}
                   <strong>{item.book.title}</strong>
                   <span>{item.book.author}{item.book.firstPublishYear ? ` · ${item.book.firstPublishYear}` : ''}</span>
-                  {(isNext || isHighlighted) && (
-                    <em>{isNext
-                      ? t('collection.nextInSeries')
+                  {authenticated && itemStatus && (
+                    <small className="collection-book-status">{t(STATUS_KEYS[itemStatus])}</small>
+                  )}
+                  {(isAction || isHighlighted) && (
+                    <em>{isAction
+                      ? t(isContinue ? 'collection.continueReading' : 'collection.nextInSeries')
                       : highlightedBook?.score !== null && (highlightedBook?.ratingsCount ?? 0) > 0
                         ? t('collection.highestUnread')
                         : t('collection.nextUnread')}</em>

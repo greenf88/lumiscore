@@ -3,7 +3,7 @@ import {
   calculateCollectionProgress,
   calculateSeriesProgress,
   selectHighestRatedUnread,
-  selectSeriesContinuation,
+  selectSeriesContinuations,
   type CollectionBook,
   type CollectionProgress,
   type CollectionSummary,
@@ -21,7 +21,6 @@ import {
   loadCatalogBooksByIds,
   loadCatalogBooksByIdsWithStoredCovers,
 } from './books.ts';
-import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
 import { supabase } from './client.ts';
 
 type CollectionRow = {
@@ -40,13 +39,19 @@ type MembershipRow = {
   subgroup: string | null;
   collections?: CollectionRow | CollectionRow[] | null;
 };
-type StatusRow = { work_id: number | string; status: ReadingStatus };
+type StatusRow = {
+  work_id: number | string;
+  status: ReadingStatus;
+  updated_at?: string | null;
+};
+type RatingRow = { work_id: number | string; updated_at?: string | null };
 
 export type CollectionPageData = {
   collection: CollectionSummary;
   books: CollectionBook[];
   authenticated: boolean;
   statuses: Record<string, ReadingStatus>;
+  ratedWorkIds: string[];
   progress: CollectionProgress | SeriesProgress;
   highlightedUnreadWorkId: string | null;
 };
@@ -61,7 +66,9 @@ export type BookCollectionContext = {
 export type HomepageSeriesContinuation = {
   collection: CollectionSummary;
   progress: SeriesProgress;
-  nextBook: Book;
+  action: 'continue_reading' | 'next_in_series';
+  actionBook: Book;
+  lastInteractedAt: string | null;
 };
 
 export type CollectionDirectoryItem = Omit<
@@ -204,25 +211,39 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   if (membershipResult.error) throw membershipResult.error;
   const memberships = (membershipResult.data ?? []) as MembershipRow[];
   const workIds = memberships.map((row) => String(row.work_id));
-  const [catalogBooks, statusesResult] = await Promise.all([
+  const [catalogBooks, statusesResult, ratingsResult] = await Promise.all([
     loadCatalogBooksByIds(workIds),
     user && workIds.length > 0
       ? client.from('user_book_status').select('work_id,status')
         .eq('user_id', user.id).in('work_id', workIds.map(Number))
       : Promise.resolve({ data: [] as StatusRow[], error: null }),
+    user && workIds.length > 0
+      ? client.from('ratings').select('work_id')
+        .eq('user_id', user.id).in('work_id', workIds.map(Number))
+      : Promise.resolve({ data: [] as RatingRow[], error: null }),
   ]);
   if (statusesResult.error) throw statusesResult.error;
+  if (ratingsResult.error) throw ratingsResult.error;
   const booksById = new Map(catalogBooks.flatMap((book): Array<[string, Book]> =>
     book.workId ? [[book.workId, book]] : []));
   const books = sortCollectionBooks(collection.collectionType, memberships.flatMap((row) => {
     const book = booksById.get(String(row.work_id));
     return book ? [mapMembership(row, book)] : [];
   }));
+  const ratedWorkIds = ((ratingsResult.data ?? []) as RatingRow[])
+    .map((row) => String(row.work_id));
   const statuses = statusRecord((statusesResult.data ?? []) as StatusRow[]);
+  for (const workId of ratedWorkIds) statuses[workId] ??= 'read';
   const statusMap = new Map(Object.entries(statuses));
+  const ratedWorkIdSet = new Set(ratedWorkIds);
   const progress = collection.collectionType === 'series'
-    ? calculateSeriesProgress(books, statusMap, collection.expectedMainSeriesTotal)
-    : calculateCollectionProgress(books, statusMap);
+    ? calculateSeriesProgress(
+      books,
+      statusMap,
+      collection.expectedMainSeriesTotal,
+      ratedWorkIdSet,
+    )
+    : calculateCollectionProgress(books, statusMap, ratedWorkIdSet);
   const highlighted = collection.collectionType === 'author_collection'
     ? selectHighestRatedUnread(books, statusMap)
     : null;
@@ -232,6 +253,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
     books,
     authenticated: Boolean(user),
     statuses,
+    ratedWorkIds,
     progress,
     highlightedUnreadWorkId: highlighted?.workId ?? null,
   };
@@ -282,23 +304,37 @@ export async function loadBookCollectionContext(
     : calculateCollectionProgress(contextBooks, emptyStatusMap);
   let progress: CollectionProgress | null = null;
   if (user && allMemberships.length > 0) {
-    const statusResult = await client
-      .from('user_book_status')
-      .select('work_id,status')
-      .eq('user_id', user.id)
-      .in('work_id', allMemberships.map((row) => Number(row.work_id)));
+    const workIds = allMemberships.map((row) => Number(row.work_id));
+    const [statusResult, ratingsResult] = await Promise.all([
+      client
+        .from('user_book_status')
+        .select('work_id,status')
+        .eq('user_id', user.id)
+        .in('work_id', workIds),
+      client
+        .from('ratings')
+        .select('work_id')
+        .eq('user_id', user.id)
+        .in('work_id', workIds),
+    ]);
     if (statusResult.error) throw statusResult.error;
+    if (ratingsResult.error) throw ratingsResult.error;
     const statusMap = new Map(
       ((statusResult.data ?? []) as StatusRow[])
         .map((row) => [String(row.work_id), row.status] as const),
+    );
+    const ratedWorkIds = new Set(
+      ((ratingsResult.data ?? []) as RatingRow[])
+        .map((row) => String(row.work_id)),
     );
     progress = collection.collectionType === 'series'
       ? calculateSeriesProgress(
         contextBooks,
         statusMap,
         collection.expectedMainSeriesTotal,
+        ratedWorkIds,
       )
-      : calculateCollectionProgress(contextBooks, statusMap);
+      : calculateCollectionProgress(contextBooks, statusMap, ratedWorkIds);
   }
 
   return {
@@ -323,55 +359,110 @@ function placeholderBook(workId: string): Book {
   };
 }
 
-export async function loadHomepageSeriesContinuation(): Promise<HomepageSeriesContinuation | null> {
-  const [{ client }, readState] = await Promise.all([
-    getVerifiedServerUser(),
-    loadReadWorkIdsForCurrentUser(),
-  ]);
-  if (!readState.authenticated || readState.workIds.length === 0) return null;
-  const readRows = readState.workIds.map((workId) => ({
-    work_id: workId,
-    status: 'read' as const,
-  }));
+function latestInteraction(
+  workIds: readonly string[],
+  activityByWorkId: ReadonlyMap<string, string>,
+): string | null {
+  return workIds.reduce<string | null>((latest, workId) => {
+    const value = activityByWorkId.get(workId);
+    if (!value) return latest;
+    return !latest || Date.parse(value) > Date.parse(latest) ? value : latest;
+  }, null);
+}
 
-  const touchedMemberships = await client
-    .from('collection_books')
-    .select('collection_id,work_id,sequence_number,collections(id,slug,name,collection_type,description,expected_main_series_total)')
-    .in('work_id', readRows.map((row) => Number(row.work_id)));
-  if (touchedMemberships.error) throw touchedMemberships.error;
-  const touched = (touchedMemberships.data ?? []) as unknown as MembershipRow[];
+export async function loadHomepageSeriesContinuations(
+  limit = 3,
+): Promise<HomepageSeriesContinuation[]> {
+  const { client, user } = await getVerifiedServerUser();
+  if (!user) return [];
+
+  const [statusesResult, ratingsResult, membershipsResult] = await Promise.all([
+    client
+      .from('user_book_status')
+      .select('work_id,status,updated_at')
+      .eq('user_id', user.id),
+    client
+      .from('ratings')
+      .select('work_id,updated_at')
+      .eq('user_id', user.id),
+    client
+      .from('collection_books')
+      .select('collection_id,work_id,sequence_number,publication_order,subgroup,collections(id,slug,name,collection_type,description,expected_main_series_total)')
+      .not('sequence_number', 'is', null),
+  ]);
+  if (statusesResult.error) throw statusesResult.error;
+  if (ratingsResult.error) throw ratingsResult.error;
+  if (membershipsResult.error) throw membershipsResult.error;
+
+  const statusRows = (statusesResult.data ?? []) as StatusRow[];
+  const ratingRows = (ratingsResult.data ?? []) as RatingRow[];
+  const statusMap = new Map(
+    statusRows.map((row) => [String(row.work_id), row.status] as const),
+  );
+  const ratedWorkIds = new Set(ratingRows.map((row) => String(row.work_id)));
+  const touchedWorkIds = new Set([...statusMap.keys(), ...ratedWorkIds]);
+  if (touchedWorkIds.size === 0) return [];
+
+  const activityByWorkId = new Map<string, string>();
+  for (const row of [...statusRows, ...ratingRows]) {
+    if (!row.updated_at) continue;
+    const workId = String(row.work_id);
+    const existing = activityByWorkId.get(workId);
+    if (!existing || Date.parse(row.updated_at) > Date.parse(existing)) {
+      activityByWorkId.set(workId, row.updated_at);
+    }
+  }
+
+  const allMemberships = (membershipsResult.data ?? []) as unknown as MembershipRow[];
   const collectionMap = new Map<string, CollectionSummary>();
-  for (const membership of touched) {
+  for (const membership of allMemberships) {
     const row = relatedCollection(membership);
     if (row?.collection_type === 'series') {
       collectionMap.set(String(row.id), mapCollection(row));
     }
   }
-  const collectionIds = [...collectionMap.keys()];
-  if (collectionIds.length === 0) return null;
-
-  const allMembershipsResult = await client
-    .from('collection_books')
-    .select('collection_id,work_id,sequence_number,publication_order,subgroup')
-    .in('collection_id', collectionIds.map(Number));
-  if (allMembershipsResult.error) throw allMembershipsResult.error;
-  const allMemberships = (allMembershipsResult.data ?? []) as MembershipRow[];
-  const statusMap = new Map(readRows.map((row) => [String(row.work_id), 'read' as const]));
   const candidates = [...collectionMap.entries()].map(([collectionId, collection]) => {
-    const books = allMemberships
-      .filter((row) => String(row.collection_id) === collectionId)
+    const collectionMemberships = allMemberships
+      .filter((row) => String(row.collection_id) === collectionId);
+    const books = collectionMemberships
       .map((row) => mapMembership(row, placeholderBook(String(row.work_id))));
+    const touchedIds = collectionMemberships
+      .map((row) => String(row.work_id))
+      .filter((workId) => touchedWorkIds.has(workId));
     return {
       collection,
       progress: calculateSeriesProgress(
         books,
         statusMap,
         collection.expectedMainSeriesTotal,
+        ratedWorkIds,
       ),
+      touched: touchedIds.length > 0,
+      lastInteractedAt: latestInteraction(touchedIds, activityByWorkId),
     };
   });
-  const selected = selectSeriesContinuation(candidates);
-  if (!selected?.progress.nextBook) return null;
-  const [nextBook] = await loadCatalogBooksByIds([selected.progress.nextBook.workId]);
-  return nextBook ? { ...selected, nextBook } : null;
+  const selected = selectSeriesContinuations(candidates, Math.min(3, limit));
+  if (selected.length === 0) return [];
+  const actionWorkIds = selected.flatMap(({ progress }) =>
+    progress.actionBook ? [progress.actionBook.workId] : []);
+  const actionBooks = await loadCatalogBooksByIds(actionWorkIds);
+  const booksByWorkId = new Map(actionBooks.flatMap((book) =>
+    book.workId ? [[book.workId, book] as const] : []));
+
+  return selected.flatMap((candidate): HomepageSeriesContinuation[] => {
+    const actionWorkId = candidate.progress.actionBook?.workId;
+    const actionBook = actionWorkId ? booksByWorkId.get(actionWorkId) : null;
+    if (!actionBook) return [];
+    return [{
+      ...candidate,
+      action: candidate.progress.continueBook
+        ? 'continue_reading'
+        : 'next_in_series',
+      actionBook,
+    }];
+  });
+}
+
+export async function loadHomepageSeriesContinuation(): Promise<HomepageSeriesContinuation | null> {
+  return (await loadHomepageSeriesContinuations(1))[0] ?? null;
 }

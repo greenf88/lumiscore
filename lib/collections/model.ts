@@ -33,10 +33,21 @@ export type CollectionProgress = {
 export type SeriesProgress = CollectionProgress & {
   sequenceComplete: boolean;
   contiguousRead: number;
+  continueBook: CollectionBook | null;
   nextBook: CollectionBook | null;
+  actionBook: CollectionBook | null;
   catalogComplete: boolean;
   complete: boolean;
 };
+
+export type SeriesContinuationCandidate = {
+  collection: CollectionSummary;
+  progress: SeriesProgress;
+  touched: boolean;
+  lastInteractedAt: string | null;
+};
+
+const EMPTY_RATED_WORK_IDS: ReadonlySet<string> = new Set();
 
 export function isReadingStatus(value: unknown): value is ReadingStatus {
   return READING_STATUSES.includes(value as ReadingStatus);
@@ -45,8 +56,10 @@ export function isReadingStatus(value: unknown): value is ReadingStatus {
 export function calculateCollectionProgress(
   books: readonly CollectionBook[],
   statuses: ReadonlyMap<string, ReadingStatus>,
+  ratedWorkIds: ReadonlySet<string> = EMPTY_RATED_WORK_IDS,
 ): CollectionProgress {
-  const read = books.filter(({ workId }) => statuses.get(workId) === 'read').length;
+  const read = books.filter(({ workId }) =>
+    statuses.get(workId) === 'read' || ratedWorkIds.has(workId)).length;
   const total = books.length;
   return {
     read,
@@ -96,8 +109,9 @@ export function calculateSeriesProgress(
   books: readonly CollectionBook[],
   statuses: ReadonlyMap<string, ReadingStatus>,
   expectedMainSeriesTotal: number | null = null,
+  ratedWorkIds: ReadonlySet<string> = EMPTY_RATED_WORK_IDS,
 ): SeriesProgress {
-  const collectionProgress = calculateCollectionProgress(books, statuses);
+  const collectionProgress = calculateCollectionProgress(books, statuses, ratedWorkIds);
   const total = safeExpectedSeriesTotal(books, expectedMainSeriesTotal);
   const progress: CollectionProgress = {
     ...collectionProgress,
@@ -110,19 +124,27 @@ export function calculateSeriesProgress(
       ...progress,
       sequenceComplete: false,
       contiguousRead: 0,
+      continueBook: null,
       nextBook: null,
+      actionBook: null,
       catalogComplete: false,
       complete: false,
     };
   }
 
+  const isCompleted = ({ workId }: CollectionBook) =>
+    statuses.get(workId) === 'read' || ratedWorkIds.has(workId);
   let contiguousRead = 0;
   while (
     contiguousRead < ordered.length &&
-    statuses.get(ordered[contiguousRead].workId) === 'read'
+    isCompleted(ordered[contiguousRead])
   ) {
     contiguousRead += 1;
   }
+
+  const continueBook = ordered.find(({ workId }) =>
+    statuses.get(workId) === 'reading' && !ratedWorkIds.has(workId)) ?? null;
+  const nextBook = ordered.find((book) => !isCompleted(book)) ?? null;
 
   const catalogComplete = total !== null &&
     ordered.length === total &&
@@ -132,7 +154,9 @@ export function calculateSeriesProgress(
     ...progress,
     sequenceComplete: true,
     contiguousRead,
-    nextBook: contiguousRead < ordered.length ? ordered[contiguousRead] : null,
+    continueBook,
+    nextBook,
+    actionBook: continueBook ?? nextBook,
     catalogComplete,
     complete: catalogComplete && progress.read === total,
   };
@@ -170,18 +194,50 @@ export function selectSeriesContinuation<T extends {
   collection: CollectionSummary;
   progress: SeriesProgress;
 }>(candidates: readonly T[]): T | null {
+  return selectSeriesContinuations(
+    candidates.map((candidate) => ({
+      ...candidate,
+      touched: candidate.progress.read > 0,
+      lastInteractedAt: null,
+    })),
+    1,
+  )[0] as T | undefined ?? null;
+}
+
+function activityTime(value: string | null): number {
+  if (!value) return 0;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function continuationPriority(progress: SeriesProgress): number {
+  if (progress.continueBook) return 0;
+  if (progress.read > 0) return 1;
+  return 2;
+}
+
+export function selectSeriesContinuations<T extends SeriesContinuationCandidate>(
+  candidates: readonly T[],
+  limit = 3,
+): T[] {
+  const safeLimit = Math.max(0, Math.trunc(limit));
   return [...candidates]
-    .filter(({ collection, progress }) =>
+    .filter(({ collection, progress, touched }) =>
+      touched &&
       collection.collectionType === 'series' &&
       progress.sequenceComplete &&
-      progress.contiguousRead > 0 &&
       !progress.complete &&
-      progress.nextBook !== null)
+      progress.actionBook !== null)
     .sort((left, right) =>
+      continuationPriority(left.progress) - continuationPriority(right.progress) ||
+      activityTime(right.lastInteractedAt) - activityTime(left.lastInteractedAt) ||
       right.progress.contiguousRead - left.progress.contiguousRead ||
       (right.progress.percentage ?? -1) - (left.progress.percentage ?? -1) ||
       left.collection.name.localeCompare(right.collection.name, 'en', {
         sensitivity: 'base',
+      }) ||
+      left.collection.slug.localeCompare(right.collection.slug, 'en', {
+        sensitivity: 'base',
       }))
-    [0] ?? null;
+    .slice(0, safeLimit);
 }

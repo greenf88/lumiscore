@@ -47,7 +47,7 @@ async function loadDutchHomepageCandidates(locale: 'en' | 'nl') {
 
 export default async function Home() {
   const { locale } = await resolveRequestLocale();
-  const [catalog, dutchCandidates, personalization, authState, seriesContinuation] = await Promise.all([
+  const [catalog, dutchCandidates, personalization, authState, seriesContinuations] = await Promise.all([
     loadHomepageBooks(),
     loadDutchHomepageCandidates(locale),
     import('@/lib/supabase/taste-test')
@@ -65,8 +65,8 @@ export default async function Home() {
       .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),
     import('@/lib/supabase/collections')
-      .then(({ loadHomepageSeriesContinuation }) => loadHomepageSeriesContinuation())
-      .catch(() => null),
+      .then(({ loadHomepageSeriesContinuations }) => loadHomepageSeriesContinuations(3))
+      .catch(() => []),
   ]);
   const highestRatedWorkIds = new Set(
     catalog.books.flatMap((book) => book.workId ? [book.workId] : []),
@@ -93,7 +93,7 @@ export default async function Home() {
         authState={authState}
         dutchDiscoveryBooks={dutchDiscoveryBooks}
         catalogUnavailable={catalog.unavailable}
-        seriesContinuation={seriesContinuation}
+        seriesContinuations={seriesContinuations}
       />
     </>
   );
