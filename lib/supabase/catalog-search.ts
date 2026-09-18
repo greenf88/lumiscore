@@ -11,7 +11,7 @@ import { mapCatalogWorks } from './books';
 import { supabase } from './client';
 import { loadPublicRatingSummaries } from './public-rating-summaries';
 
-const SEARCH_CANDIDATE_LIMIT = 40;
+const SEARCH_CANDIDATE_LIMIT = 100;
 const SEARCH_SELECT = [
   'id',
   'title',
