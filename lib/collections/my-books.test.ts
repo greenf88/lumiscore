@@ -167,7 +167,8 @@ test('Open Library source removal is presentation-only', () => {
 });
 
 test('book-detail back navigation remains a plain, stronger accessible link', () => {
-  assert.match(detail, /<a className="detail-back-link" href="\/">←/);
+  assert.match(detail, /href=\{searchReturnTo \?\? '\/browse'\}/);
+  assert.match(detail, /'detail\.backToSearch' : 'detail\.backToBooks'/);
   assert.match(styles, /\.book-detail \.detail-back-link \{[^}]*font-size: 16px/);
   assert.match(styles, /\.detail-back-link \{[^}]*min-height: 44px/);
 });
@@ -175,7 +176,7 @@ test('book-detail back navigation remains a plain, stronger accessible link', ()
 test('responsive header swaps crowded links for a compact navigation menu', () => {
   assert.match(styles, /@media \(max-width: 1040px\)[\s\S]*\.mobile-navigation \{ position: static; display: block; \}/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.main-nav > \.taste-test-nav-link \{ display: none; \}/);
-  assert.match(styles, /\.mobile-navigation summary \{[^}]*min-height: 44px/);
+  assert.match(styles, /\.mobile-navigation-trigger \{[^}]*min-height: 44px/);
 });
 
 test('guest cards and CTA retain mobile-safe layout and tap targets', () => {

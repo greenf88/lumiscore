@@ -7,22 +7,26 @@ import {
   isCatalogSearchQuery,
   normalizeCatalogSearchQuery,
 } from '@/lib/books/catalog-search';
+import {
+  serializeSearchReturnPath,
+  type SearchParamValues,
+} from '@/lib/navigation/search-return';
 
 type SearchPageProps = {
-  searchParams: Promise<{ q?: string | string[] }>;
+  searchParams: Promise<SearchParamValues>;
 };
 
 export const dynamic = 'force-dynamic';
 
-async function readQuery(searchParams: SearchPageProps['searchParams']) {
-  const { q } = await searchParams;
+function readQuery(searchParams: SearchParamValues) {
+  const { q } = searchParams;
   return normalizeCatalogSearchQuery(Array.isArray(q) ? q[0] ?? '' : q ?? '');
 }
 
 export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
-  const query = await readQuery(searchParams);
+  const query = readQuery(await searchParams);
   return {
     title: query ? `Search: ${query} — LumiScore` : 'Search books — LumiScore',
     description: query
@@ -33,7 +37,9 @@ export async function generateMetadata({
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const query = await readQuery(searchParams);
+  const resolvedSearchParams = await searchParams;
+  const query = readQuery(resolvedSearchParams);
+  const searchReturnTo = serializeSearchReturnPath(resolvedSearchParams);
   const authStatePromise = import('@/lib/supabase/auth')
     .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
     .catch(() => ({ authenticated: false }));
@@ -64,6 +70,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         results={results}
         searchFailed={searchFailed}
         authState={authState}
+        searchReturnTo={searchReturnTo}
       />
     </>
   );

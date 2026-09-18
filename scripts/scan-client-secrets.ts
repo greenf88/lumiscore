@@ -17,14 +17,23 @@ async function filesBelow(directory: string): Promise<string[]> {
 
 const environmentText = await readFile(resolve('.env.local'), 'utf8').catch(() => '');
 const configuredSecrets = new Map<string, string>();
+for (const name of SECRET_NAMES) {
+  const value = process.env[name]?.trim();
+  if (value) configuredSecrets.set(name, value);
+}
 for (const line of environmentText.split(/\r?\n/)) {
   const match = /^([A-Z0-9_]+)=(.*)$/.exec(line.trim());
   if (!match || !SECRET_NAMES.includes(match[1] as typeof SECRET_NAMES[number])) continue;
   const value = match[2].trim().replace(/^(['"])(.*)\1$/, '$2');
-  if (value) configuredSecrets.set(match[1], value);
+  if (value && !configuredSecrets.has(match[1])) {
+    configuredSecrets.set(match[1], value);
+  }
 }
 
-const clientFiles = await filesBelow(resolve('dist/client'));
+const clientRoots = ['dist/client', '.vercel/output/static'];
+const clientFiles = (await Promise.all(clientRoots.map((directory) =>
+  filesBelow(resolve(directory)).catch(() => []),
+))).flat();
 const leakedNames = new Set<string>();
 const leakedValues = new Set<string>();
 for (const file of clientFiles) {
@@ -38,6 +47,7 @@ for (const file of clientFiles) {
 }
 
 const result = {
+  clientRootsScanned: clientRoots,
   clientFilesScanned: clientFiles.length,
   configuredServerSecrets: Object.fromEntries(
     SECRET_NAMES.map((name) => [name, configuredSecrets.has(name)]),

@@ -23,6 +23,7 @@ type LoginPageProps = {
 const errorMessages: Record<string, TranslationKey> = {
   invalid_credentials: 'auth.invalidCredentials',
   signup_failed: 'auth.signupFailed',
+  invalid_signup_details: 'auth.invalidSignupDetails',
   confirmation_failed: 'auth.confirmationFailed',
 };
 
@@ -51,6 +52,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           messageKey === 'check_email'
             ? translate(locale, 'auth.checkEmail')
             : null
+        }
+        initialMode={
+          errorKey === 'signup_failed' || errorKey === 'invalid_signup_details'
+            ? 'sign-up'
+            : 'sign-in'
         }
       />
     </>

@@ -3,10 +3,7 @@
 import Image from 'next/image';
 import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { Book } from '../data/books';
-import {
-  getHeaderAuthPresentation,
-  type HeaderAuthState,
-} from '@/lib/auth/header';
+import type { HeaderAuthState } from '@/lib/auth/header';
 import {
   getOpenLibraryCoverVariantUrl,
   isUsableCoverImageDimensions,
@@ -29,6 +26,7 @@ import { formatLocalizedCount } from '@/lib/i18n/format';
 import { translate } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
+import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import { useWantToRead } from './useWantToRead';
@@ -240,8 +238,34 @@ export function Header({
   returnTo: string;
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const auth = getHeaderAuthPresentation(authState, returnTo);
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const navigationRef = useRef<HTMLDivElement>(null);
+  const navigationTriggerRef = useRef<HTMLButtonElement>(null);
+  const navigationPanelId = `mobile-navigation-${useId().replaceAll(':', '')}`;
   const { t } = useLumiScoreLocale();
+
+  useEffect(() => {
+    if (!mobileNavigationOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!navigationRef.current?.contains(event.target as Node)) {
+        setMobileNavigationOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      setMobileNavigationOpen(false);
+      navigationTriggerRef.current?.focus();
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileNavigationOpen]);
 
   return (
     <header className="site-header">
@@ -251,9 +275,27 @@ export function Header({
         <a href="/browse">{t('header.browse')}</a>
         <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
         <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
-        <details className="mobile-navigation">
-          <summary aria-label={t('header.openNavigation')}><span aria-hidden="true">•••</span></summary>
-          <div className="mobile-navigation-panel">
+        <div className="mobile-navigation" ref={navigationRef}>
+          <button
+            className="mobile-navigation-trigger"
+            type="button"
+            ref={navigationTriggerRef}
+            aria-label={t('header.openNavigation')}
+            aria-expanded={mobileNavigationOpen}
+            aria-controls={navigationPanelId}
+            onClick={() => setMobileNavigationOpen((open) => !open)}
+          >
+            <span className="hamburger-icon" aria-hidden="true"><i /><i /><i /></span>
+          </button>
+          {mobileNavigationOpen && <div
+            className="mobile-navigation-panel"
+            id={navigationPanelId}
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest('a')) {
+                setMobileNavigationOpen(false);
+              }
+            }}
+          >
             <a href="/browse">{t('browse.books')}</a>
             <a href="/collections">{t('browse.collections')}</a>
             <a href="/taste-test">{t('header.tasteTest')}</a>
@@ -263,28 +305,12 @@ export function Header({
             <a href="/zo-werkt-het">{t('footer.howItWorks')}</a>
             <a href="/voor-uitgevers">{t('footer.publishers')}</a>
             <a href="/contact">{t('footer.contact')}</a>
-          </div>
-        </details>
+          </div>}
+        </div>
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
         <LanguageSwitcher />
-        {auth.authenticated ? (
-          <details className="header-account">
-            <summary aria-label={t('header.openAccount')}>
-              <span className="header-account-avatar" aria-hidden="true">A</span>
-              <span className="header-account-label">{t('header.account')}</span>
-            </summary>
-            <div className="header-account-panel">
-              <span>{t('header.signedIn')}</span>
-              <form action="/auth/sign-out" method="post">
-                <input type="hidden" name="next" value={auth.returnTo} />
-                <button type="submit">{t('header.signOut')}</button>
-              </form>
-            </div>
-          </details>
-        ) : (
-          <a className="header-sign-in" href={auth.signInHref}>{t('header.signIn')}</a>
-        )}
+        <LumiScoreAccountMenu authState={authState} returnTo={returnTo} />
       </nav>
       {mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
     </header>
@@ -386,7 +412,7 @@ const Hero = memo(function Hero({ books, catalogStats, personalization, catalogU
           <h1>{t('home.heroStart')}<br /><em>{t('home.heroEmphasis')}</em></h1>
           <p className="hero-primary">{t('home.heroPrimary')}</p>
           <p className="hero-paper-copy">{t('home.heroCopy')}</p>
-          <a className="primary-cta" href="#discover">{t('home.findNext')} <span>→</span></a>
+          <a className="primary-cta" href="/taste-test">{t('home.tasteTestCta')} <span>→</span></a>
           <div className="paper-features">
             <div><i>✦</i><span><strong>{t('home.smartRecommendations')}</strong><small>{t('home.personalizedForYou')}</small></span></div>
             <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
@@ -423,12 +449,12 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
   dnf: 'collection.dnf',
 };
 
-export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void; resolveMissingCover?: boolean }) {
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnTo }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void; resolveMissingCover?: boolean; detailReturnTo?: string }) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
   const hasRatings = ratingDisplay.score !== '—';
-  const href = getBookHref(book);
+  const href = getBookHref(book, detailReturnTo);
   const bookContent = (
     <>
       <div className="card-cover-wrap">

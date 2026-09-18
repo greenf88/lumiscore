@@ -12,6 +12,7 @@ type LumiScoreSearchPageProps = {
   results: Book[];
   searchFailed: boolean;
   authState: HeaderAuthState;
+  searchReturnTo: string;
 };
 
 export function LumiScoreSearchPage({
@@ -19,6 +20,7 @@ export function LumiScoreSearchPage({
   results,
   searchFailed,
   authState,
+  searchReturnTo,
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
@@ -42,7 +44,7 @@ export function LumiScoreSearchPage({
         query={query}
         onQueryChange={setQuery}
         authState={authState}
-        returnTo={initialQuery ? `/search?q=${encodeURIComponent(initialQuery)}` : '/search'}
+        returnTo={searchReturnTo}
       />
       <section
         className="featured-section search-results-section"
@@ -88,6 +90,7 @@ export function LumiScoreSearchPage({
                 wanted={wanted.has(book.id)}
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
+                detailReturnTo={searchReturnTo}
               />
             ))}
           </div>

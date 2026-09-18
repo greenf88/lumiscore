@@ -11,6 +11,8 @@ test('logged-out desktop header receives a safe Sign in destination', () => {
     ),
     {
       authenticated: false,
+      displayName: null,
+      avatarLetter: '?',
       returnTo: '/search?q=science%20fiction',
       signInHref: '/login?next=%2Fsearch%3Fq%3Dscience%2520fiction',
     },
@@ -22,6 +24,8 @@ test('logged-in header retains a safe return path for Sign out', () => {
     getHeaderAuthPresentation({ authenticated: true }, '/taste-test'),
     {
       authenticated: true,
+      displayName: null,
+      avatarLetter: '?',
       returnTo: '/taste-test',
       signInHref: '/login?next=%2Ftaste-test',
     },
@@ -33,14 +37,37 @@ test('shared header renders accessible logged-out and logged-in controls', async
     new URL('../../app/components/LumiScoreHome.tsx', import.meta.url),
     'utf8',
   );
+  const account = await readFile(
+    new URL('../../app/components/LumiScoreAccountMenu.tsx', import.meta.url),
+    'utf8',
+  );
 
-  assert.match(source, /className="header-sign-in"[^>]+>\{t\('header\.signIn'\)\}<\/a>/);
-  assert.match(source, /<details className="header-account">/);
-  assert.match(source, /<summary aria-label=\{t\('header\.openAccount'\)\}>/);
-  assert.match(source, /action="\/auth\/sign-out" method="post"/);
-  assert.match(source, /<button type="submit">\{t\('header\.signOut'\)\}<\/button>/);
+  assert.match(source, /<LumiScoreAccountMenu authState=\{authState\} returnTo=\{returnTo\} \/>/);
+  assert.match(account, /className=\{variant === 'detail' \? 'detail-sign-in' : 'header-sign-in'\}/);
+  assert.match(account, /className="header-account-trigger"/);
+  assert.match(account, /aria-expanded=\{open\}/);
+  assert.match(account, /aria-controls=\{panelId\}/);
+  assert.match(account, /action="\/auth\/sign-out" method="post"/);
+  assert.match(account, /<button type="submit">\{t\('header\.signOut'\)\}<\/button>/);
   assert.match(source, /<LanguageSwitcher \/>/);
   assert.doesNotMatch(source, /className="avatar"[^>]+disabled/);
+  assert.doesNotMatch(source, /•••/);
+});
+
+test('logged-in header presents display name and derived avatar without exposing email', () => {
+  assert.deepEqual(
+    getHeaderAuthPresentation(
+      { authenticated: true, displayName: 'Élodie', avatarLetter: 'É' },
+      '/',
+    ),
+    {
+      authenticated: true,
+      displayName: 'Élodie',
+      avatarLetter: 'É',
+      returnTo: '/',
+      signInHref: '/login?next=%2F',
+    },
+  );
 });
 
 test('mobile header keeps a visible, keyboard-accessible Sign in path', async () => {

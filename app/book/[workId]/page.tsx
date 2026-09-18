@@ -9,9 +9,11 @@ import {
 } from '@/lib/books/book-detail';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
+import { getSafeSearchReturnPath } from '@/lib/navigation/search-return';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
+  searchParams: Promise<{ returnTo?: string | string[] }>;
 };
 
 export const dynamic = 'force-dynamic';
@@ -59,8 +61,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function BookPage({ params }: BookPageProps) {
+export default async function BookPage({ params, searchParams }: BookPageProps) {
   const { workId } = await params;
+  const returnToValue = (await searchParams).returnTo;
+  const searchReturnTo = getSafeSearchReturnPath(
+    Array.isArray(returnToValue) ? returnToValue[0] : returnToValue,
+  );
   const { locale } = await resolveRequestLocale();
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
     ({ loadBookRatingState }) => loadBookRatingState(workId),
@@ -81,12 +87,16 @@ export default async function BookPage({ params }: BookPageProps) {
       candidate: null,
       match: null,
     }));
-  const [book, initialRatingState, readingStatus, collectionContext, personalization] = await Promise.all([
+  const authStatePromise = import('@/lib/supabase/auth')
+    .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+    .catch(() => ({ authenticated: false }));
+  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState] = await Promise.all([
     getBook(workId, locale),
     ratingStatePromise,
     readingStatusPromise,
     collectionContextPromise,
     personalizationPromise,
+    authStatePromise,
   ]);
   if (!book) notFound();
 
@@ -105,6 +115,8 @@ export default async function BookPage({ params }: BookPageProps) {
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}
         personalization={personalization}
+        authState={authState}
+        searchReturnTo={searchReturnTo}
       />
     </>
   );

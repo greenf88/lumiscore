@@ -34,6 +34,8 @@ import {
   TASTE_TEST_GUEST_STORAGE_KEY,
 } from '@/lib/taste-test/guest-storage';
 import { useWantToRead } from './useWantToRead';
+import type { HeaderAuthState } from '@/lib/auth/header';
+import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -41,6 +43,8 @@ type LumiScoreBookDetailProps = {
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
   personalization: BookDetailPersonalization;
+  authState: HeaderAuthState;
+  searchReturnTo: string | null;
 };
 
 const MATCH_LABEL_KEYS: Record<MatchLabel, 'match.strong' | 'match.good' | 'match.possible' | 'match.early'> = {
@@ -79,6 +83,8 @@ export function LumiScoreBookDetail({
   initialReadingStatus,
   collectionContext,
   personalization,
+  authState,
+  searchReturnTo,
 }: LumiScoreBookDetailProps) {
   const { locale, t } = useLumiScoreLocale();
   const [ratingState, setRatingState] = useState(initialRatingState);
@@ -239,15 +245,7 @@ export function LumiScoreBookDetail({
         <LumiScoreWordmark />
         <div className="detail-header-actions">
           <a className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</a>
-          {ratingState.authenticated ? (
-            <form className="detail-account" action="/auth/sign-out" method="post">
-              <input type="hidden" name="next" value={detailPath} />
-              {ratingState.userEmail && <span>{ratingState.userEmail}</span>}
-              <button type="submit">{t('detail.signOut')}</button>
-            </form>
-          ) : (
-            <a className="detail-sign-in" href={loginHref}>{t('detail.signIn')}</a>
-          )}
+          <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
           <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
         </div>
@@ -280,7 +278,9 @@ export function LumiScoreBookDetail({
           )}
         </div>
         <div className="detail-copy">
-          <a className="detail-back-link" href="/">← {t('detail.backToBooks')}</a>
+          <a className="detail-back-link" href={searchReturnTo ?? '/browse'}>
+            ← {t(searchReturnTo ? 'detail.backToSearch' : 'detail.backToBooks')}
+          </a>
           <h1>{book.title}</h1>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>

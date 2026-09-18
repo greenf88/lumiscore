@@ -37,18 +37,27 @@ test('blocks anonymous writes and scopes every user operation to auth.uid()', ()
 });
 
 test('exposes only rounded public aggregate data', () => {
+  const functionDefinition = migration.slice(
+    migration.indexOf('create function public.get_work_rating_summary'),
+  );
+  const functionBody = functionDefinition
+    .slice(functionDefinition.indexOf('as $$') + 'as $$'.length)
+    .split('$$;')[0];
   assert.match(migration, /get_work_rating_summary\(target_work_id bigint\)/);
   assert.match(migration, /round\(avg\(rating\)::numeric, 1\)/);
   assert.match(migration, /count\(\*\)::bigint as rating_count/);
   assert.match(migration, /revoke all on function public\.get_work_rating_summary\(bigint\) from public/);
   assert.match(migration, /grant execute on function public\.get_work_rating_summary\(bigint\)[\s\S]*?to anon, authenticated/);
-  assert.doesNotMatch(
-    migration.slice(migration.indexOf('create function public.get_work_rating_summary')),
-    /select[\s\S]*?user_id/,
-  );
+  assert.doesNotMatch(functionDefinition, /select[\s\S]*?user_id/);
+  assert.match(functionDefinition, /security definer/);
+  assert.match(functionDefinition, /set search_path = ''/);
+  assert.doesNotMatch(functionBody, /execute\s+format|execute\s+\w+/);
 });
 
 test('exposes the same safe aggregate contract for bounded batch reads', () => {
+  const functionBody = batchMigration
+    .slice(batchMigration.indexOf('as $$') + 'as $$'.length)
+    .split('$$;')[0];
   assert.match(batchMigration, /get_work_rating_summaries\(target_work_ids bigint\[\]\)/);
   assert.match(batchMigration, /round\(avg\(ratings\.rating\)::numeric, 1\)/);
   assert.match(batchMigration, /count\(ratings\.rating\)::bigint as rating_count/);
@@ -56,4 +65,8 @@ test('exposes the same safe aggregate contract for bounded batch reads', () => {
   assert.match(batchMigration, /revoke all on function public\.get_work_rating_summaries\(bigint\[\]\) from public/);
   assert.match(batchMigration, /grant execute on function public\.get_work_rating_summaries\(bigint\[\]\)[\s\S]*?to anon, authenticated/);
   assert.doesNotMatch(batchMigration, /user_id/);
+  assert.match(batchMigration, /security definer/);
+  assert.match(batchMigration, /set search_path = ''/);
+  assert.match(batchMigration, /where requested_work_id > 0/);
+  assert.doesNotMatch(functionBody, /execute\s+format|execute\s+\w+/);
 });

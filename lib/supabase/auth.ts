@@ -1,6 +1,10 @@
 import type { User } from '@supabase/supabase-js';
 import { cache } from 'react';
 import type { HeaderAuthState } from '../auth/header.ts';
+import {
+  getAccountAvatarLetter,
+  readDisplayName,
+} from '../auth/display-name.ts';
 import { createServerSupabaseClient } from './server.ts';
 
 export const getVerifiedServerUser = cache(async (): Promise<{
@@ -15,7 +19,14 @@ export const getVerifiedServerUser = cache(async (): Promise<{
 export async function loadHeaderAuthState(): Promise<HeaderAuthState> {
   try {
     const { user } = await getVerifiedServerUser();
-    return { authenticated: Boolean(user) };
+    if (!user) return { authenticated: false };
+
+    const displayName = readDisplayName(user.user_metadata);
+    return {
+      authenticated: true,
+      displayName,
+      avatarLetter: getAccountAvatarLetter(displayName, user.email),
+    };
   } catch {
     return { authenticated: false };
   }
