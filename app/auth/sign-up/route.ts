@@ -10,7 +10,10 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   if (!isSameOriginRequest(request)) {
-    return new NextResponse('Forbidden.', { status: 403 });
+    return new NextResponse('Forbidden.', {
+      status: 403,
+      headers: PRIVATE_RESPONSE_HEADERS,
+    });
   }
 
   const formData = await request.formData();

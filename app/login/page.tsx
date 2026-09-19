@@ -51,7 +51,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         message={
           messageKey === 'check_email'
             ? translate(locale, 'auth.checkEmail')
-            : null
+            : messageKey === 'password_updated'
+              ? translate(locale, 'auth.passwordUpdated')
+              : null
         }
         initialMode={
           errorKey === 'signup_failed' || errorKey === 'invalid_signup_details'

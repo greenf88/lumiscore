@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreCollectionPage } from '@/app/components/LumiScoreCollectionPage';
 import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { measureServerOperation } from '@/lib/performance/server-timing';
 
 type CollectionPageProps = { params: Promise<{ slug: string }> };
 
@@ -11,7 +12,11 @@ export const dynamic = 'force-dynamic';
 const load = cache(async (slug: string) => {
   try {
     const { loadCollectionPageData } = await import('@/lib/supabase/collections');
-    return await loadCollectionPageData(slug);
+    return await measureServerOperation(
+      'collection.page',
+      'mixed',
+      () => loadCollectionPageData(slug),
+    );
   } catch (error) {
     console.error('Collection page load failed.', error);
     return null;

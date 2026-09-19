@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import {
   LUMISCORE_DEFAULT_DESCRIPTION,
@@ -55,6 +56,7 @@ export default async function RootLayout({
         >
           {children}
         </LumiScoreLocaleProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

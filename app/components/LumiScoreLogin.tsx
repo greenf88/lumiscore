@@ -87,6 +87,11 @@ export function LumiScoreLogin({
               {t('auth.passwordHint', { count: NEW_ACCOUNT_PASSWORD_MIN_LENGTH })}
             </p>
           )}
+          {mode === 'sign-in' && (
+            <a className="auth-forgot-link" href="/forgot-password">
+              {t('auth.forgotPassword')}
+            </a>
+          )}
           <button className="primary-cta auth-submit" type="submit">
             {t(mode === 'sign-up' ? 'auth.create' : 'auth.signIn')} <span>→</span>
           </button>

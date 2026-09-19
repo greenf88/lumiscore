@@ -5,6 +5,8 @@ import {
   type BookRatingState,
 } from '../ratings/model.ts';
 import { createServerSupabaseClient } from './server.ts';
+import { getVerifiedServerUser } from './auth.ts';
+import { supabase as publicSupabase } from './client.ts';
 
 type RatingSummaryRow = {
   lumiscore?: number | string | null;
@@ -39,15 +41,14 @@ async function getVerifiedUser(supabase: SupabaseClient): Promise<User | null> {
 
 export async function loadBookRatingState(workId: string): Promise<BookRatingState> {
   try {
-    const supabase = await createServerSupabaseClient();
-    const [summary, user] = await Promise.all([
-      loadPublicSummary(supabase, workId),
-      getVerifiedUser(supabase),
+    const [summary, { client, user }] = await Promise.all([
+      loadPublicSummary(publicSupabase, workId),
+      getVerifiedServerUser(),
     ]);
 
     if (!user) return { ...EMPTY_RATING_STATE, ...summary };
 
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('ratings')
       .select('rating')
       .eq('work_id', workId)

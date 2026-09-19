@@ -8,6 +8,7 @@ import {
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { selectDutchDiscoveryBooks } from '@/lib/books/dutch-discovery';
+import { measureServerOperation } from '@/lib/performance/server-timing';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
@@ -25,7 +26,11 @@ async function loadHomepageBooks() {
 
   try {
     const { loadHighestRatedCatalog } = await import('@/lib/supabase/books');
-    const catalog = await loadHighestRatedCatalog(18);
+    const catalog = await measureServerOperation(
+      'homepage.catalog',
+      'public',
+      () => loadHighestRatedCatalog(18),
+    );
     return { ...catalog, unavailable: false };
   } catch (error) {
     console.error('Homepage catalog load failed.', error);
@@ -39,7 +44,11 @@ async function loadDutchHomepageCandidates(locale: 'en' | 'nl') {
   if (locale !== 'nl') return [];
   try {
     const { loadDutchDiscoveryCatalogCandidates } = await import('@/lib/supabase/books');
-    return await loadDutchDiscoveryCatalogCandidates();
+    return await measureServerOperation(
+      'homepage.dutch_catalog',
+      'public',
+      loadDutchDiscoveryCatalogCandidates,
+    );
   } catch {
     return [];
   }
@@ -52,7 +61,11 @@ export default async function Home() {
     loadDutchHomepageCandidates(locale),
     import('@/lib/supabase/taste-test')
       .then(({ loadHomepagePersonalization }) =>
-        loadHomepagePersonalization(locale),
+        measureServerOperation(
+          'homepage.personalization',
+          'private',
+          () => loadHomepagePersonalization(locale),
+        ),
       )
       .catch((): HomepagePersonalization => ({
         authenticated: false,
@@ -62,10 +75,18 @@ export default async function Home() {
         recommendations: [],
       })),
     import('@/lib/supabase/auth')
-      .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+      .then(({ loadHeaderAuthState }) => measureServerOperation(
+        'homepage.auth',
+        'private',
+        loadHeaderAuthState,
+      ))
       .catch(() => ({ authenticated: false })),
     import('@/lib/supabase/collections')
-      .then(({ loadHomepageSeriesContinuations }) => loadHomepageSeriesContinuations(3))
+      .then(({ loadHomepageSeriesContinuations }) => measureServerOperation(
+        'homepage.series_continuations',
+        'private',
+        () => loadHomepageSeriesContinuations(3),
+      ))
       .catch(() => []),
   ]);
   const highestRatedWorkIds = new Set(

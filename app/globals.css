@@ -527,6 +527,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .auth-submit { width: 100%; justify-content: space-between; border: 0; cursor: pointer; }
 .auth-create { min-height: 44px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
 .auth-create:hover { border-color: var(--teal); }
+.auth-forgot-link { justify-self: end; margin-top: -7px; color: var(--teal); font-size: 11px; font-weight: 700; }
+.auth-forgot-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.auth-submit:disabled { cursor: wait; opacity: .72; }
+.auth-notice:focus { outline: 2px solid var(--teal); outline-offset: 3px; }
 .auth-back { margin: 24px auto 0; }
 
 :root[data-theme='paper'] .book-card { box-shadow: 0 14px 36px rgba(83, 65, 42, .08); }
@@ -741,7 +745,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .detail-taste-test-link { width: 36px; justify-content: center; font-size: 0; }
   .detail-taste-test-link::before { content: '✦'; font-size: 15px; }
   .detail-header .language-switcher button { min-width: 24px; padding-inline: 3px; }
-  .detail-header .theme-toggle-labeled { width: 44px; min-width: 44px; padding: 5px; }
+  .detail-header .theme-toggle-labeled { width: 46px; min-width: 46px; padding: 5px; }
+  .detail-header .theme-toggle-labeled .toggle-label { display: none; }
+  .detail-header .theme-toggle-labeled .theme-sun,
+  .detail-header .theme-toggle-labeled .theme-moon { display: none; }
+  .detail-header .theme-toggle-labeled .theme-track { flex: 0 0 34px; }
   .detail-sign-in { padding-inline: 3px; font-size: 9px; }
   .detail-account-menu { margin-inline: 1px; }
 }

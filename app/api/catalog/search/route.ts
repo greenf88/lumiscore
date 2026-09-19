@@ -4,6 +4,7 @@ import {
   isCatalogSearchQuery,
   normalizeCatalogSearchQuery,
 } from '@/lib/books/catalog-search';
+import { measureServerOperation } from '@/lib/performance/server-timing';
 
 export async function GET(request: Request) {
   const query = normalizeCatalogSearchQuery(
@@ -11,18 +12,24 @@ export async function GET(request: Request) {
   );
 
   if (!isCatalogSearchQuery(query)) {
-    return NextResponse.json({ results: [] });
+    return NextResponse.json({ results: [] }, {
+      headers: { 'Cache-Control': 'public, max-age=30, s-maxage=60' },
+    });
   }
 
   try {
     const { searchCatalog } = await import('@/lib/supabase/catalog-search');
-    const results = await searchCatalog(query, CATALOG_SEARCH_LIMIT);
+    const results = await measureServerOperation(
+      'catalog.search_api',
+      'public',
+      () => searchCatalog(query, CATALOG_SEARCH_LIMIT),
+    );
 
     return NextResponse.json(
       { results },
       {
         headers: {
-          'Cache-Control': 'no-store',
+          'Cache-Control': 'public, max-age=30, s-maxage=60, stale-while-revalidate=300',
         },
       },
     );

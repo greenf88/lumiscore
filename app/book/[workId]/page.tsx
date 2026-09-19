@@ -10,6 +10,7 @@ import {
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
 import { getSafeSearchReturnPath } from '@/lib/navigation/search-return';
+import { measureServerOperation } from '@/lib/performance/server-timing';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -22,7 +23,11 @@ const getBook = cache(async (workId: string, locale: 'en' | 'nl') => {
   if (!isCatalogWorkId(workId)) return null;
 
   const { loadCatalogBook } = await import('@/lib/supabase/books');
-  return loadCatalogBook(workId, locale);
+  return measureServerOperation(
+    'book.catalog',
+    'public',
+    () => loadCatalogBook(workId, locale),
+  );
 });
 
 export async function generateMetadata({
@@ -69,17 +74,33 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
   );
   const { locale } = await resolveRequestLocale();
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
-    ({ loadBookRatingState }) => loadBookRatingState(workId),
+    ({ loadBookRatingState }) => measureServerOperation(
+      'book.rating_state',
+      'mixed',
+      () => loadBookRatingState(workId),
+    ),
   );
   const readingStatusPromise = import('@/lib/supabase/book-status')
-    .then(({ loadUserBookStatuses }) => loadUserBookStatuses([workId]))
+    .then(({ loadUserBookStatuses }) => measureServerOperation(
+      'book.reading_status',
+      'private',
+      () => loadUserBookStatuses([workId]),
+    ))
     .catch(() => ({ authenticated: false, statuses: new Map() }));
   const collectionContextPromise = import('@/lib/supabase/collections')
-    .then(({ loadBookCollectionContext }) => loadBookCollectionContext(workId))
+    .then(({ loadBookCollectionContext }) => measureServerOperation(
+      'book.collection_context',
+      'mixed',
+      () => loadBookCollectionContext(workId),
+    ))
     .catch(() => null);
   const personalizationPromise = import('@/lib/supabase/taste-test')
     .then(({ loadBookDetailPersonalization }) =>
-      loadBookDetailPersonalization(workId, locale),
+      measureServerOperation(
+        'book.personalization',
+        'private',
+        () => loadBookDetailPersonalization(workId, locale),
+      ),
     )
     .catch((): BookDetailPersonalization => ({
       authenticated: false,
@@ -88,7 +109,11 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       match: null,
     }));
   const authStatePromise = import('@/lib/supabase/auth')
-    .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
+    .then(({ loadHeaderAuthState }) => measureServerOperation(
+      'book.auth',
+      'private',
+      loadHeaderAuthState,
+    ))
     .catch(() => ({ authenticated: false }));
   const [book, initialRatingState, readingStatus, collectionContext, personalization, authState] = await Promise.all([
     getBook(workId, locale),

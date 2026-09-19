@@ -22,6 +22,7 @@ import {
   loadCatalogBooksByIdsWithStoredCovers,
 } from './books.ts';
 import { supabase } from './client.ts';
+import { measureServerOperation } from '../performance/server-timing.ts';
 
 type CollectionRow = {
   id: number | string;
@@ -194,8 +195,7 @@ export async function loadCollectionsDirectory(): Promise<CollectionsDirectoryDa
 }
 
 export async function loadCollectionPageData(slug: string): Promise<CollectionPageData | null> {
-  const { client, user } = await getVerifiedServerUser();
-  const collectionResult = await client
+  const collectionResult = await supabase
     .from('collections')
     .select('id,slug,name,collection_type,description,expected_main_series_total')
     .eq('slug', slug)
@@ -204,24 +204,39 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   if (!collectionResult.data) return null;
 
   const collection = mapCollection(collectionResult.data as CollectionRow);
-  const membershipResult = await client
+  const authPromise = measureServerOperation(
+    'collection.auth',
+    'private',
+    getVerifiedServerUser,
+  );
+  const membershipResult = await supabase
     .from('collection_books')
     .select('collection_id,work_id,sequence_number,publication_order,subgroup')
     .eq('collection_id', collection.id);
   if (membershipResult.error) throw membershipResult.error;
   const memberships = (membershipResult.data ?? []) as MembershipRow[];
   const workIds = memberships.map((row) => String(row.work_id));
-  const [catalogBooks, statusesResult, ratingsResult] = await Promise.all([
-    loadCatalogBooksByIds(workIds),
-    user && workIds.length > 0
-      ? client.from('user_book_status').select('work_id,status')
-        .eq('user_id', user.id).in('work_id', workIds.map(Number))
-      : Promise.resolve({ data: [] as StatusRow[], error: null }),
-    user && workIds.length > 0
-      ? client.from('ratings').select('work_id')
-        .eq('user_id', user.id).in('work_id', workIds.map(Number))
-      : Promise.resolve({ data: [] as RatingRow[], error: null }),
+  const [catalogBooks, privateState] = await Promise.all([
+    measureServerOperation(
+      'collection.catalog',
+      'public',
+      () => loadCatalogBooksByIdsWithStoredCovers(workIds),
+    ),
+    authPromise.then(async ({ client, user }) => {
+      const [statusesResult, ratingsResult] = await Promise.all([
+        user && workIds.length > 0
+          ? client.from('user_book_status').select('work_id,status')
+            .eq('user_id', user.id).in('work_id', workIds.map(Number))
+          : Promise.resolve({ data: [] as StatusRow[], error: null }),
+        user && workIds.length > 0
+          ? client.from('ratings').select('work_id')
+            .eq('user_id', user.id).in('work_id', workIds.map(Number))
+          : Promise.resolve({ data: [] as RatingRow[], error: null }),
+      ]);
+      return { user, statusesResult, ratingsResult };
+    }),
   ]);
+  const { user, statusesResult, ratingsResult } = privateState;
   if (statusesResult.error) throw statusesResult.error;
   if (ratingsResult.error) throw ratingsResult.error;
   const booksById = new Map(catalogBooks.flatMap((book): Array<[string, Book]> =>
@@ -262,8 +277,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
 export async function loadBookCollectionContext(
   workId: string,
 ): Promise<BookCollectionContext | null> {
-  const { client, user } = await getVerifiedServerUser();
-  const membershipResult = await client
+  const membershipResult = await supabase
     .from('collection_books')
     .select('collection_id,work_id,sequence_number,publication_order,subgroup,collections(id,slug,name,collection_type,description,expected_main_series_total)')
     .eq('work_id', Number(workId));
@@ -284,7 +298,8 @@ export async function loadBookCollectionContext(
   if (!primary || !collectionRow) return null;
 
   const collection = mapCollection(collectionRow);
-  const allMembershipsResult = await client
+  const authPromise = getVerifiedServerUser();
+  const allMembershipsResult = await supabase
     .from('collection_books')
     .select('work_id,sequence_number')
     .eq('collection_id', collection.id);
@@ -303,6 +318,7 @@ export async function loadBookCollectionContext(
     )
     : calculateCollectionProgress(contextBooks, emptyStatusMap);
   let progress: CollectionProgress | null = null;
+  const { client, user } = await authPromise;
   if (user && allMemberships.length > 0) {
     const workIds = allMemberships.map((row) => Number(row.work_id));
     const [statusResult, ratingsResult] = await Promise.all([
