@@ -36,12 +36,19 @@ test('guest Want to Read values migrate without overwriting existing account sta
 
 test('book detail uses real collection membership and a plain collection link', () => {
   assert.match(detailPage, /loadBookCollectionContext\(workId\)/);
+  assert.match(detailPage, /loadVerifiedBookCollectionReturnTarget\(requestedWorkId, slug\)/);
   assert.match(detail, /collectionContext\.position/);
   assert.match(detail, /href={`\/collection\/\$\{collectionContext\.collection\.slug\}`}/);
   assert.match(detail, /initialReadingStatus/);
   assert.match(detail, /canShowSeriesDenominator/);
   assert.match(detail, /collection\.bookPosition/);
   assert.match(detail, /canShowProgressDenominator/);
+});
+
+test('collection book links carry the selected collection as typed return context', () => {
+  assert.match(collectionPage, /bookReturnContext = \{ kind: 'collection', slug: collection\.slug \}/);
+  assert.match(collectionPage, /getBookHref\(item\.book, bookReturnContext\)/);
+  assert.match(collectionPage, /getBookHref\(actionBook\.book, bookReturnContext\)/);
 });
 
 test('collection pages use reviewed totals and denominator-free fallback copy', () => {

@@ -36,6 +36,7 @@ import {
 import { useWantToRead } from './useWantToRead';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
+import type { BookReturnNavigation } from '@/lib/navigation/book-return';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -44,7 +45,7 @@ type LumiScoreBookDetailProps = {
   collectionContext: BookCollectionContext | null;
   personalization: BookDetailPersonalization;
   authState: HeaderAuthState;
-  searchReturnTo: string | null;
+  returnNavigation: BookReturnNavigation;
 };
 
 const MATCH_LABEL_KEYS: Record<MatchLabel, 'match.strong' | 'match.good' | 'match.possible' | 'match.early'> = {
@@ -84,7 +85,7 @@ export function LumiScoreBookDetail({
   collectionContext,
   personalization,
   authState,
-  searchReturnTo,
+  returnNavigation,
 }: LumiScoreBookDetailProps) {
   const { locale, t } = useLumiScoreLocale();
   const [ratingState, setRatingState] = useState(initialRatingState);
@@ -278,8 +279,14 @@ export function LumiScoreBookDetail({
           )}
         </div>
         <div className="detail-copy">
-          <a className="detail-back-link" href={searchReturnTo ?? '/browse'}>
-            ← {t(searchReturnTo ? 'detail.backToSearch' : 'detail.backToBooks')}
+          <a className="detail-back-link" href={returnNavigation.href}>
+            ← {returnNavigation.kind === 'collection'
+              ? t('detail.backToCollection', { name: returnNavigation.collectionName })
+              : t(returnNavigation.kind === 'search'
+                ? 'detail.backToSearch'
+                : returnNavigation.kind === 'collections'
+                  ? 'detail.backToCollections'
+                  : 'detail.backToBooks')}
           </a>
           <h1>{book.title}</h1>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>

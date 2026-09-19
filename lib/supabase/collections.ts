@@ -64,6 +64,11 @@ export type BookCollectionContext = {
   progress: CollectionProgress | null;
 };
 
+export type VerifiedBookCollectionReturnTarget = {
+  slug: string;
+  name: string;
+};
+
 export type HomepageSeriesContinuation = {
   collection: CollectionSummary;
   progress: SeriesProgress;
@@ -359,6 +364,33 @@ export async function loadBookCollectionContext(
     total: denominatorProgress.total,
     progress,
   };
+}
+
+export async function loadVerifiedBookCollectionReturnTarget(
+  workId: string,
+  slug: string,
+): Promise<VerifiedBookCollectionReturnTarget | null> {
+  if (!/^[1-9]\d*$/.test(workId)) return null;
+
+  const membershipResult = await supabase
+    .from('collection_books')
+    .select('work_id,collections!inner(slug,name)')
+    .eq('work_id', Number(workId))
+    .eq('collections.slug', slug)
+    .limit(1)
+    .maybeSingle();
+  if (membershipResult.error) throw membershipResult.error;
+
+  const membership = membershipResult.data as unknown as {
+    work_id: number | string;
+    collections?: Pick<CollectionRow, 'slug' | 'name'> | Array<Pick<CollectionRow, 'slug' | 'name'>> | null;
+  } | null;
+  const collection = Array.isArray(membership?.collections)
+    ? membership.collections[0] ?? null
+    : membership?.collections ?? null;
+  if (!collection || collection.slug !== slug) return null;
+
+  return { slug: collection.slug, name: collection.name };
 }
 
 function placeholderBook(workId: string): Book {

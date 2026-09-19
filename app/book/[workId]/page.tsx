@@ -9,7 +9,10 @@ import {
 } from '@/lib/books/book-detail';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
-import { getSafeSearchReturnPath } from '@/lib/navigation/search-return';
+import {
+  resolveBookReturnNavigation,
+  type BookReturnNavigation,
+} from '@/lib/navigation/book-return';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 
 type BookPageProps = {
@@ -69,10 +72,20 @@ export async function generateMetadata({
 export default async function BookPage({ params, searchParams }: BookPageProps) {
   const { workId } = await params;
   const returnToValue = (await searchParams).returnTo;
-  const searchReturnTo = getSafeSearchReturnPath(
-    Array.isArray(returnToValue) ? returnToValue[0] : returnToValue,
-  );
+  const requestedReturnTo = Array.isArray(returnToValue)
+    ? returnToValue[0]
+    : returnToValue;
   const { locale } = await resolveRequestLocale();
+  const returnNavigationPromise = resolveBookReturnNavigation(
+    requestedReturnTo,
+    workId,
+    (requestedWorkId, slug) => import('@/lib/supabase/collections')
+      .then(({ loadVerifiedBookCollectionReturnTarget }) => measureServerOperation(
+        'book.return_collection',
+        'public',
+        () => loadVerifiedBookCollectionReturnTarget(requestedWorkId, slug),
+      )),
+  ).catch((): BookReturnNavigation => ({ kind: 'browse', href: '/browse' }));
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
     ({ loadBookRatingState }) => measureServerOperation(
       'book.rating_state',
@@ -115,13 +128,14 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       loadHeaderAuthState,
     ))
     .catch(() => ({ authenticated: false }));
-  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState] = await Promise.all([
+  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
     getBook(workId, locale),
     ratingStatePromise,
     readingStatusPromise,
     collectionContextPromise,
     personalizationPromise,
     authStatePromise,
+    returnNavigationPromise,
   ]);
   if (!book) notFound();
 
@@ -141,7 +155,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
         collectionContext={collectionContext}
         personalization={personalization}
         authState={authState}
-        searchReturnTo={searchReturnTo}
+        returnNavigation={returnNavigation}
       />
     </>
   );

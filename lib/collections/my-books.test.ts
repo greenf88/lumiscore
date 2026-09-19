@@ -167,8 +167,11 @@ test('Open Library source removal is presentation-only', () => {
 });
 
 test('book-detail back navigation remains a plain, stronger accessible link', () => {
-  assert.match(detail, /href=\{searchReturnTo \?\? '\/browse'\}/);
-  assert.match(detail, /'detail\.backToSearch' : 'detail\.backToBooks'/);
+  assert.match(detail, /href=\{returnNavigation\.href\}/);
+  assert.match(detail, /detail\.backToCollection/);
+  assert.match(detail, /detail\.backToCollections/);
+  assert.match(detail, /detail\.backToSearch/);
+  assert.match(detail, /detail\.backToBooks/);
   assert.match(styles, /\.book-detail \.detail-back-link \{[^}]*font-size: 16px/);
   assert.match(styles, /\.detail-back-link \{[^}]*min-height: 44px/);
 });

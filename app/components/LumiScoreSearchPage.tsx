@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { BookCard, Footer, Header } from './LumiScoreHome';
@@ -25,6 +25,10 @@ export function LumiScoreSearchPage({
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
   const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, results);
+  const detailReturnContext = useMemo(
+    () => ({ kind: 'search', path: searchReturnTo } as const),
+    [searchReturnTo],
+  );
 
   const toggleTheme = useCallback(() => {
     const next =
@@ -90,7 +94,7 @@ export function LumiScoreSearchPage({
                 wanted={wanted.has(book.id)}
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
-                detailReturnTo={searchReturnTo}
+                detailReturnContext={detailReturnContext}
               />
             ))}
           </div>

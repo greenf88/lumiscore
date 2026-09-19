@@ -8,9 +8,10 @@ test('search cards preserve full search context and detail fallback stays clean'
   const detailPage = await readFile(new URL('../../app/book/[workId]/page.tsx', import.meta.url), 'utf8');
 
   assert.match(searchPage, /serializeSearchReturnPath\(resolvedSearchParams\)/);
-  assert.match(searchUi, /detailReturnTo=\{searchReturnTo\}/);
-  assert.match(detailPage, /getSafeSearchReturnPath/);
-  assert.match(detailPage, /searchReturnTo=\{searchReturnTo\}/);
+  assert.match(searchUi, /\{ kind: 'search', path: searchReturnTo \}/);
+  assert.match(searchUi, /detailReturnContext=\{detailReturnContext\}/);
+  assert.match(detailPage, /resolveBookReturnNavigation/);
+  assert.match(detailPage, /returnNavigation=\{returnNavigation\}/);
 });
 
 test('primary homepage CTA uses the existing taste test in both locales', async () => {

@@ -50,6 +50,13 @@ test('builds detail links only from real Supabase works.id values', () => {
     getBookHref(fixture({ workId: 'not-an-id' })),
     null,
   );
+  assert.equal(
+    getBookHref(fixture({ workId: '1296' }), {
+      kind: 'collection',
+      slug: 'suzanne-vermeer',
+    }),
+    '/book/1296?returnTo=%2Fcollection%2Fsuzanne-vermeer',
+  );
 });
 
 test('labels Open Library and LumiScore-native works without changing routing identity', () => {

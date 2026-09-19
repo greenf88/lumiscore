@@ -13,6 +13,7 @@ import {
   canShowSeriesDenominator,
 } from '@/lib/collections/presentation';
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
+import { getBookHref } from '@/lib/books/book-navigation';
 import { BookCover, Footer, Header } from './LumiScoreHome';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { useLumiScoreLocale } from './LumiScoreLocale';
@@ -54,6 +55,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
     : null;
   const highlightedBook = books.find(({ workId }) => workId === highlightedUnread)?.book ?? null;
   const returnTo = `/collection/${collection.slug}`;
+  const bookReturnContext = { kind: 'collection', slug: collection.slug } as const;
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -104,7 +106,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                 <span>{t(seriesProgress?.continueBook
                   ? 'collection.continueReading'
                   : 'collection.nextInSeries')}</span>
-                <a href={`/book/${actionBook.workId}`}>{actionBook.book.title}</a>
+                <a href={getBookHref(actionBook.book, bookReturnContext) ?? '/browse'}>{actionBook.book.title}</a>
               </p>
             ) : null}
           </>
@@ -128,7 +130,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           const seriesTotal = seriesProgress?.total ?? null;
           return (
             <article className={`collection-book-row${isAction || isHighlighted ? ' is-highlighted' : ''}${itemStatus ? ` has-status status-${itemStatus}` : ''}`} key={item.workId}>
-              <a className="collection-book-main" href={`/book/${item.workId}`}>
+              <a className="collection-book-main" href={getBookHref(item.book, bookReturnContext) ?? '/browse'}>
                 <BookCover book={item.book} small label={item.book.title} />
                 <span className="collection-book-copy">
                   {collection.collectionType === 'series' && item.sequenceNumber !== null && (

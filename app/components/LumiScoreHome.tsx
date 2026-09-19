@@ -13,6 +13,7 @@ import {
   getInitialBookCoverUrls,
 } from '@/lib/books/book-cover-state';
 import { getBookHref } from '@/lib/books/book-navigation';
+import type { BookLinkReturnContext } from '@/lib/navigation/book-return';
 import {
   CATALOG_SEARCH_DEBOUNCE_MS,
   isCatalogSearchQuery,
@@ -449,12 +450,21 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
   dnf: 'collection.dnf',
 };
 
-export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnTo }: { book: Book; wanted: boolean; status?: ReadingStatus | null; onToggle: (book: Book) => void; resolveMissingCover?: boolean; detailReturnTo?: string }) {
+type BookCardProps = {
+  book: Book;
+  wanted: boolean;
+  status?: ReadingStatus | null;
+  onToggle: (book: Book) => void;
+  resolveMissingCover?: boolean;
+  detailReturnContext?: BookLinkReturnContext;
+};
+
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext }: BookCardProps) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
   const hasRatings = ratingDisplay.score !== '—';
-  const href = getBookHref(book, detailReturnTo);
+  const href = getBookHref(book, detailReturnContext);
   const bookContent = (
     <>
       <div className="card-cover-wrap">
