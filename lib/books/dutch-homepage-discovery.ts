@@ -110,4 +110,3 @@ export function hasSufficientClassicPersonalization(input: {
     input.profileConfidence !== 'LOW' &&
     [...(input.similarityByWorkId?.values() ?? [])].some((value) => value > 0);
 }
-
