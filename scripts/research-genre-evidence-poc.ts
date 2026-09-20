@@ -40,34 +40,82 @@ function chooseCategory(rows: EvidenceRow[]): string | null {
   if (traits.has('romance')) return 'Romance';
   if (traits.has('fantasy')) return 'Fantasy';
   if (traits.has('science_fiction') || traits.has('speculative')) return 'Science fiction & speculative';
-  if (traits.has('literary') || traits.has('classic') || traits.has('contemporary')) return 'Literary & general fiction';
+  if (traits.has('literary') || traits.has('contemporary')) return 'Literary & general fiction';
   if (traits.has('nonfiction')) return 'History, society & current affairs';
   return null;
 }
 
+function deriveFacets(labels: readonly string[], publicationYear: number | null) {
+  const joined = labels.join(' | ');
+  const audience = /\b(young adult|teen(?:age)?|juvenile)\b/i.test(joined)
+    ? 'young_adult'
+    : /\b(children(?:'s)?|childrens|middle grade)\b/i.test(joined) ? 'children' : null;
+  const workForm = /\b(graphic novel|comics?)\b/i.test(joined)
+    ? 'graphic_narrative'
+    : /\b(poetry|poems?)\b/i.test(joined) ? 'poetry'
+      : /\b(drama|plays?)\b/i.test(joined) ? 'drama' : null;
+  const classicStatus = /\b(classic|classics|classic literature)\b/i.test(joined)
+    ? 'source_labelled_classic'
+    : null;
+  const publicationPeriod = publicationYear === null
+    ? null
+    : publicationYear < 1950 ? 'before_1950'
+      : publicationYear <= 1979 ? '1950_1979'
+        : publicationYear <= 1999 ? '1980_1999'
+          : publicationYear <= 2014 ? '2000_2014' : '2015_present';
+  return { audience, workForm, classicStatus, publicationPeriod };
+}
+
 async function queryWikidata(isbns: readonly string[]) {
-  const map = new Map<string, { item: string; genres: string[]; subjects: string[] }>();
-  const stats = { attemptedBatches: 0, successfulBatches: 0, failedOrTimedOutBatches: 0 };
-  for (let offset = 0; offset < isbns.length; offset += 60) {
+  const map = new Map<string, {
+    editionItem: string;
+    workItem: string | null;
+    evidenceEntity: 'work' | 'edition';
+    genres: string[];
+    subjects: string[];
+  }>();
+  const stats = { attemptedBatches: 0, successfulBatches: 0, retriedBatches: 0, failedOrTimedOutBatches: 0 };
+  for (let offset = 0; offset < isbns.length; offset += 15) {
     stats.attemptedBatches += 1;
-    const values = isbns.slice(offset, offset + 60).map((isbn) => `"${isbn}"`).join(' ');
-    const query = `SELECT ?isbn ?item ?genreLabel ?subjectLabel WHERE { VALUES ?isbn { ${values} } ?item wdt:P212 ?isbn. OPTIONAL { ?item wdt:P136 ?genre. ?genre rdfs:label ?genreLabel. FILTER(LANG(?genreLabel) IN ("en", "nl")) } OPTIONAL { ?item wdt:P921 ?subject. ?subject rdfs:label ?subjectLabel. FILTER(LANG(?subjectLabel) IN ("en", "nl")) } }`;
-    let response: Response;
-    try {
-      response = await fetch(`https://query.wikidata.org/sparql?query=${encodeURIComponent(query)}&format=json`, {
-        headers: { Accept: 'application/sparql-results+json', 'User-Agent': 'LumiScoreGenreResearch/1.0 (https://lumisco.re)' },
-        signal: AbortSignal.timeout(15_000),
-      });
-    } catch { stats.failedOrTimedOutBatches += 1; continue; }
-    if (!response.ok) { stats.failedOrTimedOutBatches += 1; continue; }
+    const values = isbns.slice(offset, offset + 15).map((isbn) => `"${isbn}"`).join(' ');
+    const query = `SELECT ?isbn ?edition ?work ?genre ?subject WHERE {
+      VALUES ?isbn { ${values} }
+      ?edition wdt:P212 ?isbn.
+      OPTIONAL { ?edition wdt:P629 ?work. }
+      BIND(COALESCE(?work, ?edition) AS ?evidenceEntity)
+      OPTIONAL { ?evidenceEntity wdt:P136 ?genre. }
+      OPTIONAL { ?evidenceEntity wdt:P921 ?subject. }
+    }`;
+    let response: Response | null = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      if (attempt === 1) {
+        stats.retriedBatches += 1;
+        await new Promise((resolveDelay) => setTimeout(resolveDelay, 750));
+      }
+      try {
+        const candidate = await fetch(`https://query.wikidata.org/sparql?query=${encodeURIComponent(query)}&format=json`, {
+          headers: { Accept: 'application/sparql-results+json', 'User-Agent': 'LumiScoreGenreResearch/1.0 (https://lumisco.re)' },
+          signal: AbortSignal.timeout(20_000),
+        });
+        if (candidate.ok) { response = candidate; break; }
+      } catch { /* one bounded retry below */ }
+    }
+    if (!response) { stats.failedOrTimedOutBatches += 1; continue; }
     stats.successfulBatches += 1;
     const payload = await response.json() as { results?: { bindings?: Array<Record<string, { value: string }>> } };
     for (const binding of payload.results?.bindings ?? []) {
       const isbn = binding.isbn?.value;
       if (!isbn) continue;
-      const current = map.get(isbn) ?? { item: binding.item?.value ?? '', genres: [], subjects: [] };
-      if (binding.genreLabel?.value) current.genres.push(binding.genreLabel.value);
-      if (binding.subjectLabel?.value) current.subjects.push(binding.subjectLabel.value);
+      const workItem = binding.work?.value ?? null;
+      const current = map.get(isbn) ?? {
+        editionItem: binding.edition?.value ?? '',
+        workItem,
+        evidenceEntity: workItem ? 'work' : 'edition',
+        genres: [],
+        subjects: [],
+      };
+      if (binding.genre?.value) current.genres.push(binding.genre.value);
+      if (binding.subject?.value) current.subjects.push(binding.subject.value);
       current.genres = [...new Set(current.genres)].sort(); current.subjects = [...new Set(current.subjects)].sort();
       map.set(isbn, current);
     }
@@ -111,6 +159,7 @@ const sample = selected.map((work) => {
   const isbn = isbn13(work);
   const wiki = isbn ? wikidata.get(isbn) : undefined;
   const category = chooseCategory(contentRows);
+  const facets = deriveFacets(rawLabels(contentRows), work.first_publish_year);
   const agreeingSources = sources.length + (wiki?.genres.length || wiki?.subjects.length ? 1 : 0);
   const decision = category && agreeingSources >= 2 ? 'HIGH' : category ? 'REVIEW' : 'REJECT';
   return {
@@ -123,6 +172,7 @@ const sample = selected.map((work) => {
     wikidata: wiki ?? null,
     officialPublisher: { checked: false, reason: 'No reproducible licensed bulk publisher source was available for this POC.' },
     proposedLumiScoreCategory: category,
+    proposedFacets: facets,
     confidence: decision === 'HIGH' ? 0.9 : decision === 'REVIEW' ? 0.65 : 0,
     outcome: decision,
     conflictReason: decision === 'HIGH' ? null : category ? 'Only one usable content source or no corroborating exact-ID source.' : 'No trustworthy genre/content evidence in the currently connected sources.',
@@ -134,7 +184,7 @@ const counts = Object.fromEntries(['HIGH', 'REVIEW', 'REJECT'].map((outcome) => 
 await mkdir(resolve('research', 'genre-evidence'), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify({
   generatedAt: new Date().toISOString(), productionWrites: false, sampleSize: sample.length,
-  selection: 'deterministic stratified current catalog sample; one batched catalog/evidence read plus bounded exact-ISBN Wikidata queries',
+  selection: 'deterministic stratified current catalog sample; one batched catalog/evidence read plus bounded exact-ISBN Wikidata Edition-to-Work queries',
   counts, wikidataQuery: wikidataResult.stats, rows: sample,
 }, null, 2)}\n`, 'utf8');
 console.log(JSON.stringify({ outputPath, counts, sampleSize: sample.length }));

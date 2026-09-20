@@ -8,7 +8,6 @@
     { "lumiscore": "Fantasy", "themaPrefixes": ["FM"], "deterministic": true },
     { "lumiscore": "Science fiction & speculative", "themaPrefixes": ["FL", "FQ"], "deterministic": true },
     { "lumiscore": "Historical fiction", "themaPrefixes": ["FV"], "deterministic": true },
-    { "lumiscore": "Children & teenage", "themaPrefixes": ["Y"], "deterministic": false, "note": "Preserve audience and subject separately; Y must be the primary family for juvenile works." },
     { "lumiscore": "Comics & graphic novels", "themaPrefixes": ["X"], "deterministic": true },
     { "lumiscore": "Biography & memoir", "themaPrefixes": ["DN"], "deterministic": true },
     { "lumiscore": "History, society & current affairs", "themaPrefixes": ["N", "J"], "deterministic": false },
@@ -19,10 +18,30 @@
     { "lumiscore": "Arts, language & culture", "themaPrefixes": ["A", "C", "D"], "deterministic": false },
     { "lumiscore": "Philosophy & religion", "themaPrefixes": ["Q"], "deterministic": true }
   ],
+  "separateFacets": [
+    {
+      "dimension": "audience",
+      "examples": ["children", "young_adult", "adult"],
+      "themaEvidence": "Y-family and audience qualifiers",
+      "rule": "Children and Young Adult describe intended audience and never replace a genre."
+    },
+    {
+      "dimension": "status",
+      "examples": ["classic"],
+      "rule": "Classic is an era/cultural-status facet and never proves literary fiction or another genre by itself."
+    },
+    {
+      "dimension": "work_form",
+      "examples": ["prose", "poetry", "drama", "graphic_narrative"],
+      "rule": "Work form remains separate from audience, genre and subject."
+    }
+  ],
   "invariants": [
     "Store the most specific Thema code and do not duplicate an ancestor.",
     "Preserve one publisher-declared main subject separately from supplementary subjects.",
-    "Keep subject, audience, format, publication era, story era and recommendation traits separate.",
+    "Keep work form, subject, audience, genre, publication era, story era and recommendation traits separate.",
+    "Children and Young Adult are audience facets, not genres.",
+    "Classic is an era/status facet, not a genre inference.",
     "A broad LumiScore browse category never replaces the underlying Thema code."
   ]
 }

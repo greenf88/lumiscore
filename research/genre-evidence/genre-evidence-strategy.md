@@ -4,7 +4,7 @@ Status: **research proposal only**. No classification in this folder is approved
 
 ## Decision summary
 
-Thema 1.6 is suitable as LumiScore's internal subject backbone, while a smaller 16-category LumiScore layer remains the reader-facing browse vocabulary. Store the most specific source Thema code(s), the publisher-declared main subject and qualifiers; derive the broad browse label. Never store both a detailed code and its ancestor. Audience, format, publication period, story period and recommendation traits remain separate.
+Thema 1.6 is suitable as LumiScore's internal subject backbone, while a smaller reader-facing LumiScore genre layer remains the browse vocabulary. Store the most specific source Thema code(s), the publisher-declared main subject and qualifiers; derive the broad browse label. Never store both a detailed code and its ancestor. Work form, audience, genre, subject, publication period, story period and recommendation traits remain separate. Children and Young Adult are audience facets, while Classics is an era/cultural-status facet rather than a genre.
 
 The best evidence hierarchy is:
 
@@ -22,7 +22,7 @@ The best evidence hierarchy is:
 | KB Nederlandse Bibliografie / NBT | Primary-supporting | Professionally catalogued | Strong Netherlands; weaker newest-title freshness is disclosed | Limited | Edition/title record; exact bibliographic identifiers | NBT linked open data advertised under a free licence; other datasets may require a request/contract | Pilot exact-ISBN subject coverage and licence fields before ingestion. |
 | Meta4books / Boekenbank | Primary commercial | Publisher-supplied ONIX including Thema | Strong Flanders and Dutch-market ISBNs; >1.8m ISBNs claimed | Foreign market titles included | Edition/product; ISBN | REST Products API returns ONIX 3; demo/membership and quote required | Best Flemish/Dutch commercial candidate; obtain quote and permitted caching/display terms. |
 | CB | Primary commercial | Publisher-supplied Thema/NUR/BISAC/keywords | Strong Netherlands | Foreign titles also present | Edition/product; ISBN | CB Online/webservices/ONIX access is account/product specific; no free bulk entitlement established | Request startup quote and rights for subject caching; do not scrape CB Online. |
-| Wikidata | Supporting | Variable but inspectable | Uneven | Broad long tail | Often Work or Edition; exact ISBN/Open Library ID required | Structured data CC0; SPARQL, API and dumps; shared endpoint limits | Corroboration and discovery. Inspect entity modelling; never link by approximate title. |
+| Wikidata | Supporting | Variable but inspectable | Uneven | Broad long tail | ISBN normally identifies an Edition; follow `P629` to its Work before reading `P136`/`P921`, or use another reviewed exact Work ID | Structured data CC0; SPARQL, API and dumps; shared endpoint limits | Corroboration and discovery. A missing direct Work-level `P212` match says nothing about linked Work coverage; never link by approximate title. |
 | Google Books | Supporting | Categories can be useful but broad/inconsistent | Moderate, edition dependent | Broad | Volume/Edition; exact returned ISBN-13 | Public read API; key/quota terms apply; bounded cached calls | Accept categories only after exact ISBN-13 validation; never primary alone. |
 | Open Library | Supporting | Large but noisy/community-sourced | Uneven | Broad | Work plus Editions; stored OL IDs | Monthly dumps are intended for bulk; low-volume API is not a third-party bulk backend | Normalize dump subjects, retain provenance, reward cross-edition agreement, route compound/noisy labels to review. |
 | Library of Congress | Supporting | Controlled headings, strong for US holdings | Low-to-moderate | Strong US/international | Bibliographic record; ISBN/LCCN | loc.gov API is limited to digital items; MARC open dataset and linked-data services are the bulk paths; dataset-specific terms | Useful corroboration for exact identifiers, not a Dutch primary source. |
@@ -36,34 +36,37 @@ Excluded: Goodreads/Amazon scraping, hidden APIs, copied protected descriptions,
 - additional codes only when they materially describe the whole book;
 - keep the most specific descendant, not its ancestor too;
 - subjects A–Y and qualifiers 1–6 are separate; qualifiers never stand alone;
-- Children/Teenage uses a Y code as main subject and an age qualifier where required;
+- Children/Teenage uses a Y code as main subject and an age qualifier where required, but LumiScore projects the intended readership into an audience facet rather than a genre;
 - the Thema time qualifier is story/content period, never original publication year;
 - a publisher code is source evidence, not an automatically accepted truth.
+- `classic` is a separately evidenced status/era facet and cannot by itself produce `Literary & general fiction`.
+- prose, poetry, drama and graphic narrative are work-form facets, not interchangeable with genre.
 
-The proposed 16-category mapping is in `thema-lumiscore-mapping.json`. Broad prefixes marked `deterministic: false` need a specific-code mapping or human review; a whole top-level family is too broad for a single consumer category.
+The proposed genre mapping plus separate audience/status/work-form facets is in `thema-lumiscore-mapping.json`. Broad prefixes marked `deterministic: false` need a specific-code mapping or human review; a whole top-level family is too broad for a single consumer category.
 
 ## 200-Work proof of concept
 
-The reproducible script performs paginated/batched read-only catalog and evidence queries, then bounded exact-ISBN Wikidata SPARQL queries. It writes a controlled summary, not raw external bulk caches. Selection contains 20 Suzanne Vermeer, 35 Dutch-market, 10 exact-ISBN Google-evidence, 25 classics, 25 nonfiction, 20 YA/children, 20 polluted/conflicting-subject, 25 legacy-gap and 20 international-fiction Works.
+The reproducible script performs paginated/batched read-only catalog and evidence queries, then bounded exact-ISBN Wikidata SPARQL queries that resolve ISBN Edition → `P629` Work → `P136`/`P921`. It writes a controlled summary, not raw external bulk caches. Selection contains 20 Suzanne Vermeer, 35 Dutch-market, 10 exact-ISBN Google-evidence, 25 classics, 25 nonfiction, 20 YA/children, 20 polluted/conflicting-subject, 25 legacy-gap and 20 international-fiction Works. The sample strata are coverage lenses only: YA/children and classics are not treated as genre labels.
 
 Result:
 
 | Outcome | Count | Meaning in this POC |
 |---|---:|---|
-| HIGH | 101 | At least two independent usable content signals agreed sufficiently for a proposal. Still not production-approved. |
-| REVIEW | 46 | One plausible content source, or missing corroboration. |
-| REJECT | 53 | No trustworthy genre/content signal from connected sources. |
+| HIGH | 99 | At least two independent usable content signals agreed sufficiently for a proposal. Still not production-approved. |
+| REVIEW | 43 | One plausible content source, or missing corroboration. |
+| REJECT | 58 | No trustworthy genre/content signal from connected sources. A classic/audience label alone no longer creates a genre. |
 
 Coverage observations:
 
 - 110/200 sampled Works had usable stored Open Library content labels;
 - 10/200 had existing exact-ISBN Google Books category evidence;
 - 198/200 had an ISBN-13;
-- all four bounded Wikidata ISBN batches completed, but returned 0 exact P212 matches for this sample; therefore Wikidata is not a dependable ISBN genre backbone here;
+- the corrected Wikidata test attempted 14 small Edition/ISBN → Work batches: 10 completed, four timed out after one bounded retry, and no exact Edition ISBN hit was observed in the completed responses;
+- this result is inconclusive rather than negative evidence: failed batches are not treated as missing metadata, the sample is limited, and direct Work-level `P212` absence is no longer used to infer no Work coverage;
 - no licensed ONIX/Thema feed was connected, so publisher Thema was correctly recorded as unavailable, not as negative evidence;
 - official publisher pages were not scraped or manually guessed.
 
-The 101 HIGH results demonstrate that existing corroborated evidence can help; they do **not** prove catalog-wide quality. The 49.5% REVIEW/REJECT share shows that a publisher/national-bibliography feed materially changes feasibility.
+The 99 HIGH results demonstrate that existing corroborated evidence can help; they do **not** prove catalog-wide quality. The 50.5% REVIEW/REJECT share shows that a publisher/national-bibliography feed materially changes feasibility.
 
 ## Classification architecture for a later migration
 
@@ -73,7 +76,7 @@ Minimal future model (not implemented now):
 
 - `id bigint generated always as identity primary key`
 - `work_id bigint references works(id) on delete cascade`
-- `dimension text` constrained to genre, subgenre, fiction_status, audience, format, story_period
+- `dimension text` constrained to genre, subgenre, fiction_status, audience, work_form, subject, publication_period, story_period, status
 - `taxon_system text` (for example `thema-1.6`, `lumiscore-browse-v1`)
 - `taxon_code text`
 - `taxon_label text`
@@ -90,11 +93,11 @@ Minimal future model (not implemented now):
 - `created_at`, `updated_at`
 - unique evidence identity across work, dimension, taxon, source and source identifier
 
-Keep `works.first_publish_year` outside this table. A separate approved mapping table/version can derive browse categories from source taxons. Recommendation traits remain in `work_trait_evidence` and are not genre facts.
+Keep `works.first_publish_year` outside this table. A separate approved mapping table/version can derive browse categories from source taxons. Recommendation traits remain in `work_trait_evidence` and are not genre facts. Audience, classic status and work form may support discovery facets but never manufacture a genre.
 
 ## Scale, review and cost
 
-The POC implies about 49.5% manual review without a primary feed: roughly 1,258 of 2,541 current Works and 2,743 of 5,541 Works. At an explicit planning assumption of 3–6 minutes per reviewed Work, that is 63–126 hours now and 137–274 hours at 5,541 Works. At €35–€60/hour, the review-only planning ranges are about €2.2k–€7.6k and €4.8k–€16.5k respectively. These are estimates, not supplier quotes.
+The POC implies about 50.5% manual review without a primary feed: roughly 1,283 of 2,541 current Works and 2,798 of 5,541 Works. At an explicit planning assumption of 3–6 minutes per reviewed Work, that is 64–128 hours now and 140–280 hours at 5,541 Works. At €35–€60/hour, the review-only planning ranges are about €2.2k–€7.7k and €4.9k–€16.8k respectively. These are estimates, not supplier quotes.
 
 CB and Meta4books prices and reuse rights require a quote. A paid feed is economically sensible if its annual fee plus integration is below the avoided review cost and exact-ISBN Thema coverage is proven on a representative trial. Request a 200–500 ISBN evaluation export before contracting.
 
@@ -104,9 +107,9 @@ CB and Meta4books prices and reuse rights require a quote. A paid feed is econom
 2. **Where do per-book Thema codes come from?** Publisher ONIX via CB/Meta4books or another licensed aggregator, not from the vocabulary itself.
 3. **Best Dutch coverage?** CB/Meta4books publisher metadata plus KB NBT; test overlap and freshness.
 4. **Highest accuracy combination?** Publisher Thema primary, national bibliography validation, then two-source supporting corroboration.
-5. **POC outcomes?** 101 HIGH, 46 REVIEW, 53 REJECT.
-6. **Manual review for 2,541?** Approximately 1,258 without a primary feed; measure again after a feed pilot.
-7. **Cost for 5,541?** Estimated review labour €4.8k–€16.5k plus unknown feed/integration costs.
+5. **POC outcomes?** 99 HIGH, 43 REVIEW, 58 REJECT after separating classic/audience facets from genre.
+6. **Manual review for 2,541?** Approximately 1,283 without a primary feed; measure again after a feed pilot.
+7. **Cost for 5,541?** Estimated review labour €4.9k–€16.8k plus unknown feed/integration costs.
 8. **Conflict authority?** Reviewed current publisher Thema for the exact edition, unless national-bibliography evidence or obvious miscoding triggers review.
 9. **Deterministic mappings?** Specific stable Thema leaves to broad LumiScore categories; never whole ambiguous top-level families.
 10. **Mandatory human review?** Cross-source conflicts, adult versus juvenile ambiguity, compound/noisy subjects, Work/Edition mismatch, and any identity below exact external ID/ISBN.
