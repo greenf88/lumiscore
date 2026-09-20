@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import {
-  BIRTH_PERIODS,
   READING_PERIODS,
   toggleReadingPeriod,
-  type BirthPeriod,
   type ReaderEraPreferences,
   type ReadingPeriod,
 } from '@/lib/preferences/reading-periods';
@@ -13,16 +11,6 @@ import type { TranslationKey } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { ThemeToggle } from './LumiScoreHome';
-
-const birthLabels: Record<BirthPeriod, TranslationKey> = {
-  before_1950: 'preferences.before1950',
-  '1950_1969': 'preferences.1950to1969',
-  '1970_1979': 'preferences.1970to1979',
-  '1980_1989': 'preferences.1980to1989',
-  '1990_1999': 'preferences.1990to1999',
-  '2000_2009': 'preferences.2000to2009',
-  prefer_not_to_say: 'preferences.preferNot',
-};
 
 const readingLabels: Record<ReadingPeriod, TranslationKey> = {
   before_1950: 'preferences.before1950',
@@ -42,7 +30,6 @@ export function LumiScoreReadingPreferences({
   next: string;
 }) {
   const { t } = useLumiScoreLocale();
-  const [birthPeriod, setBirthPeriod] = useState<BirthPeriod | null>(initial.birthPeriod);
   const [readingPeriods, setReadingPeriods] = useState<ReadingPeriod[]>(initial.readingPeriods);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
@@ -100,33 +87,19 @@ export function LumiScoreReadingPreferences({
           </div>
         </fieldset>
 
-        <fieldset className="preference-fieldset">
-          <legend>{t('preferences.birthLegend')}</legend>
-          <p>{t('preferences.birthCopy')}</p>
-          <div className="preference-options">
-            {BIRTH_PERIODS.map((period) => (
-              <label key={period} className="preference-option">
-                <input type="radio" name="birthPeriod" checked={birthPeriod === period} onChange={() => setBirthPeriod(period)} />
-                <span>{t(birthLabels[period])}</span>
-              </label>
-            ))}
-            <label className="preference-option is-disabled">
-              <input type="radio" name="birthPeriod" disabled aria-describedby="minor-policy-note" />
-              <span>{t('preferences.2010plus')}</span>
-            </label>
-          </div>
-          <p id="minor-policy-note" className="preference-note">{t('preferences.minorBlocked')}</p>
-        </fieldset>
-
         <p className="preference-privacy">{t('preferences.privacy')}</p>
         {status && <p className={`auth-notice${status.kind === 'error' ? ' auth-error' : ''}`} role={status.kind === 'error' ? 'alert' : 'status'}>{status.message}</p>}
         <div className="preference-actions">
-          <button className="primary-cta" type="button" disabled={saving} onClick={() => void request('PUT', { birthPeriod, readingPeriods })}>
+          <button className="primary-cta" type="button" disabled={saving} onClick={() => {
+            void request('PUT', { readingPeriods }).then((saved) => {
+              if (saved) window.location.assign(next);
+            });
+          }}>
             {t(saving ? 'preferences.saving' : 'preferences.save')}
           </button>
           <button type="button" className="auth-create" disabled={saving} onClick={() => {
             void request('DELETE').then((cleared) => {
-              if (cleared) { setBirthPeriod(null); setReadingPeriods([]); }
+              if (cleared) setReadingPeriods([]);
             });
           }}>{t('preferences.clear')}</button>
           <button type="button" className="auth-create" disabled={saving} onClick={() => {

@@ -3,10 +3,7 @@ import {
   isSameOriginRequest,
   PRIVATE_RESPONSE_HEADERS,
 } from '@/lib/auth/request';
-import {
-  isBirthPeriod,
-  normalizeReadingPeriods,
-} from '@/lib/preferences/reading-periods';
+import { normalizeReadingPeriods } from '@/lib/preferences/reading-periods';
 import { getVerifiedServerUser } from '@/lib/supabase/auth';
 import {
   clearReaderEraPreferences,
@@ -34,7 +31,6 @@ export async function PUT(request: NextRequest) {
   const { client, user } = await getVerifiedServerUser();
   if (!user) return json({ error: 'unauthorized' }, 401);
   const body = await request.json().catch(() => null) as {
-    birthPeriod?: unknown;
     readingPeriods?: unknown;
     dismiss?: unknown;
   } | null;
@@ -44,15 +40,12 @@ export async function PUT(request: NextRequest) {
       await dismissReaderEraOnboarding(client, user.id);
       return json({ ok: true });
     }
-    const birthPeriod = body?.birthPeriod === null
-      ? null
-      : isBirthPeriod(body?.birthPeriod) ? body.birthPeriod : undefined;
     const readingPeriods = normalizeReadingPeriods(body?.readingPeriods);
-    if (birthPeriod === undefined || readingPeriods === null) {
+    if (readingPeriods === null) {
       return json({ error: 'invalid_preferences' }, 400);
     }
-    await saveReaderEraPreferences(client, user.id, { birthPeriod, readingPeriods });
-    return json({ ok: true, birthPeriod, readingPeriods, onboardingDismissed: true });
+    await saveReaderEraPreferences(client, user.id, { readingPeriods });
+    return json({ ok: true, readingPeriods, onboardingDismissed: true });
   } catch {
     return json({ error: 'preferences_update_failed' }, 503);
   }

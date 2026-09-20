@@ -1,16 +1,9 @@
 create table if not exists public.user_reading_preferences (
   user_id uuid primary key references auth.users (id) on delete cascade,
-  birth_period text,
   reading_periods text[] not null default '{}',
   onboarding_dismissed boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint user_reading_preferences_birth_period_check check (
-    birth_period is null or birth_period = any (array[
-      'before_1950', '1950_1969', '1970_1979', '1980_1989',
-      '1990_1999', '2000_2009', 'prefer_not_to_say'
-    ])
-  ),
   constraint user_reading_preferences_reading_periods_check check (
     reading_periods <@ array[
       'before_1950', '1950_1979', '1980_1999', '2000_2014',
@@ -55,4 +48,4 @@ on public.user_reading_preferences for delete to authenticated
 using ((select auth.uid()) = user_id);
 
 comment on table public.user_reading_preferences is
-  'Private, optional reader birth-period and publication-era preferences. Birth period never affects ranking.';
+  'Private, optional reader publication-period preferences used as a bounded cold-start signal.';

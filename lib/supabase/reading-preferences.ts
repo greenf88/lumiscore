@@ -1,13 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import {
   EMPTY_READER_ERA_PREFERENCES,
-  type BirthPeriod,
   type ReaderEraPreferences,
   type ReadingPeriod,
 } from '../preferences/reading-periods.ts';
 
 type Row = {
-  birth_period: BirthPeriod | null;
   reading_periods: ReadingPeriod[] | null;
   onboarding_dismissed: boolean;
 };
@@ -18,13 +16,12 @@ export async function loadReaderEraPreferences(
 ): Promise<ReaderEraPreferences> {
   const { data, error } = await client
     .from('user_reading_preferences')
-    .select('birth_period,reading_periods,onboarding_dismissed')
+    .select('reading_periods,onboarding_dismissed')
     .eq('user_id', userId)
     .maybeSingle();
   if (error) throw error;
   const row = data as Row | null;
   return row ? {
-    birthPeriod: row.birth_period,
     readingPeriods: row.reading_periods ?? [],
     onboardingDismissed: row.onboarding_dismissed,
   } : EMPTY_READER_ERA_PREFERENCES;
@@ -33,11 +30,10 @@ export async function loadReaderEraPreferences(
 export async function saveReaderEraPreferences(
   client: SupabaseClient,
   userId: string,
-  preferences: Pick<ReaderEraPreferences, 'birthPeriod' | 'readingPeriods'>,
+  preferences: Pick<ReaderEraPreferences, 'readingPeriods'>,
 ): Promise<void> {
   const { error } = await client.from('user_reading_preferences').upsert({
     user_id: userId,
-    birth_period: preferences.birthPeriod,
     reading_periods: preferences.readingPeriods,
     onboarding_dismissed: true,
     updated_at: new Date().toISOString(),
@@ -63,7 +59,6 @@ export async function clearReaderEraPreferences(
 ): Promise<void> {
   const { error } = await client.from('user_reading_preferences').upsert({
     user_id: userId,
-    birth_period: null,
     reading_periods: [],
     onboarding_dismissed: true,
     updated_at: new Date().toISOString(),

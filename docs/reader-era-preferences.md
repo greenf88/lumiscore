@@ -1,4 +1,4 @@
-# Reader Era Preferences design
+# Reader publication-period preferences V1
 
 ## Product choice
 
@@ -6,22 +6,19 @@ The signup form stays limited to display name, email and password. After success
 
 Existing authenticated users receive at most one calm account-menu invitation. Dismissing it persists `onboarding_dismissed`; the settings link remains available in the account menu.
 
-## Age/minor policy finding
+## Deferred birth-period experiment
 
-No current LumiScore terms, minimum-age rule or explicit minor-user flow was found in the application. Broad birth period is not age verification. Therefore `2010 or later` is displayed disabled with an explanation and is absent from the accepted API/database values. Activating it is blocked until the owner establishes a legally reviewed young-reader policy. No exact birth date is requested or stored.
-
-Accepted birth values: `before_1950`, `1950_1969`, `1970_1979`, `1980_1989`, `1990_1999`, `2000_2009`, `prefer_not_to_say`.
+V1 does not ask for or store a birth period. It had no product effect, would add onboarding friction and could be mistaken for age verification. A later evidence-based experiment may revisit broad, non-overlapping birth-period blocks, but only after a documented research question, consent model, retention policy, minimum-age decision and cohort-analysis plan exist. Such an experiment must never collect a full date of birth or silently introduce a minor-user flow.
 
 ## Data use
 
-- Birth period is optional, private and has zero recommendation influence.
 - Direct reading-period preferences are optional and create only a maximum 0.035 ranking nudge for LOW-confidence profiles, 0.015 for MEDIUM and zero for HIGH.
 - No candidate is filtered out. Taste Test/ratings remain weighted at 0.8 similarity and are not altered.
 - `all_periods`, `no_preference`, empty preference and a failed preference read preserve existing behavior exactly.
 - Preference explanations are shown only when the nudge actually contributes.
 - No preference value enters URLs, analytics, server timing or logs.
 
-Future cohort use remains disabled. A reasonable minimum before any aggregate cohort signal is **at least 50 distinct consenting users per birth-period cohort and at least 20 independent meaningful book interactions in the cohort/category cell**, with suppression below either threshold. Only aggregate statistics may be used; never expose or consume another individual's row.
+Future cohort use remains disabled. If an approved future experiment collects an appropriate cohort signal, a reasonable minimum is **at least 50 distinct consenting users per cohort and at least 20 independent meaningful book interactions in the cohort/category cell**, with suppression below either threshold. Only aggregate statistics may be used; never expose or consume another individual's row.
 
 ## Security
 

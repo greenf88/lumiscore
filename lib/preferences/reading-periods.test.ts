@@ -27,9 +27,13 @@ test('migration stores broad periods only and enforces private owner RLS', async
   assert.match(migration, /enable row level security/);
   assert.match(migration, /force row level security/);
   assert.match(migration, /revoke all .* public, anon, authenticated/);
+  assert.match(migration, /grant select, insert, update, delete .* authenticated/);
   assert.match(migration, /\(select auth\.uid\(\)\) = user_id/g);
-  assert.doesNotMatch(migration, /date_of_birth|birth_date|email|service_role/i);
-  assert.doesNotMatch(migration, /2010_or_later/);
+  assert.match(migration, /for select to authenticated/);
+  assert.match(migration, /for insert to authenticated/);
+  assert.match(migration, /for update to authenticated[\s\S]*with check/);
+  assert.match(migration, /for delete to authenticated/);
+  assert.doesNotMatch(migration, /birth|date_of_birth|birth_date|email|service_role|security definer/i);
 });
 
 test('API derives user identity server-side and keeps responses private', async () => {
@@ -40,7 +44,7 @@ test('API derives user identity server-side and keeps responses private', async 
   assert.match(route, /getVerifiedServerUser/);
   assert.match(route, /PRIVATE_RESPONSE_HEADERS/);
   assert.match(route, /isSameOriginRequest/);
-  assert.doesNotMatch(route, /body\?\.userId|body\?\.user_id|SUPABASE_SECRET_KEY|service_role/);
+  assert.doesNotMatch(route, /birth|body\?\.userId|body\?\.user_id|SUPABASE_SECRET_KEY|service_role/);
 });
 
 test('onboarding uses exact bilingual copy and accessible native controls', async () => {
@@ -54,9 +58,8 @@ test('onboarding uses exact bilingual copy and accessible native controls', asyn
   );
   assert.match(component, /<fieldset className="preference-fieldset">/);
   assert.match(component, /type="checkbox"/);
-  assert.match(component, /type="radio"/);
-  assert.match(component, /disabled aria-describedby="minor-policy-note"/);
-  assert.doesNotMatch(component, /date|user-scalable|userId|user_id/i);
+  assert.doesNotMatch(component, /birth|type="radio"|2010 or later|2010 of later|user-scalable|userId|user_id/i);
+  assert.equal(component.match(/window\.location\.assign\(next\)/g)?.length, 2);
 });
 
 test('preference controls retain 44px touch targets and collapse at mobile width', async () => {

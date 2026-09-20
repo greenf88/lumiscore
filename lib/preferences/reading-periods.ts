@@ -1,33 +1,21 @@
-export const BIRTH_PERIODS = [
-  'before_1950', '1950_1969', '1970_1979', '1980_1989',
-  '1990_1999', '2000_2009', 'prefer_not_to_say',
-] as const;
-
 export const READING_PERIODS = [
   'before_1950', '1950_1979', '1980_1999', '2000_2014',
   '2015_present', 'all_periods', 'no_preference',
 ] as const;
 
-export type BirthPeriod = typeof BIRTH_PERIODS[number];
 export type ReadingPeriod = typeof READING_PERIODS[number];
 
 export type ReaderEraPreferences = {
-  birthPeriod: BirthPeriod | null;
   readingPeriods: ReadingPeriod[];
   onboardingDismissed: boolean;
 };
 
 export const EMPTY_READER_ERA_PREFERENCES: ReaderEraPreferences = {
-  birthPeriod: null,
   readingPeriods: [],
   onboardingDismissed: false,
 };
 
 const specialReadingPeriods = new Set<ReadingPeriod>(['all_periods', 'no_preference']);
-
-export function isBirthPeriod(value: unknown): value is BirthPeriod {
-  return typeof value === 'string' && (BIRTH_PERIODS as readonly string[]).includes(value);
-}
 
 export function isReadingPeriod(value: unknown): value is ReadingPeriod {
   return typeof value === 'string' && (READING_PERIODS as readonly string[]).includes(value);
