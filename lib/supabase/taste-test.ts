@@ -34,6 +34,7 @@ import { resolveLocaleBookLanguagePreference } from '../recommendations/language
 import { recommendGuestBooks } from '../recommendations/guest.ts';
 import { loadCollaborativeRecommendationSignals } from './collaborative.ts';
 import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
+import { loadReaderEraPreferences } from './reading-preferences.ts';
 
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
@@ -327,13 +328,14 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
     const { client, user } = await getVerifiedServerUser();
     if (!user) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
-    const [responsesResult, ratingsResult, catalog, collaborativeSignals, readState] = await Promise.all([
+    const [responsesResult, ratingsResult, catalog, collaborativeSignals, readState, readerPreferences] = await Promise.all([
       client.from('taste_test_responses').select('question_key,choice')
         .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id),
       client.from('ratings').select('work_id,rating').eq('user_id', user.id),
       loadRecommendationCatalog(client),
       loadCollaborativeRecommendationSignals(client),
       loadReadWorkIdsForCurrentUser().catch(() => ({ authenticated: true, workIds: [] })),
+      loadReaderEraPreferences(client, user.id).catch(() => null),
     ]);
     const answers = responsesResult.error ? {} : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]);
     const ratings = ratingsResult.error ? [] : (ratingsResult.data ?? []) as RatingRow[];
@@ -358,6 +360,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         locale,
         languagePreference: resolveLocaleBookLanguagePreference(locale, profile),
         collaborativeSignals,
+        readingPeriods: readerPreferences?.readingPeriods ?? null,
         limit: 10,
       })
       : [];

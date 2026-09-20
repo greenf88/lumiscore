@@ -27,4 +27,6 @@ test('signup sends the normalized display name through Supabase Auth metadata', 
   assert.match(route, /data: \{ display_name: displayName\.value \}/);
   assert.match(route, /isValidNewAccountPassword\(password\)/);
   assert.doesNotMatch(route, /service_role|SUPABASE_SECRET_KEY/);
+  assert.match(route, /getReadingPreferencesOnboardingPath\(next\)/);
+  assert.match(route, /callback\.searchParams\.set\('next', onboardingNext\)/);
 });

@@ -39,6 +39,8 @@ export function LumiScoreAccountMenu({
   const [displayName, setDisplayName] = useState(auth.displayName);
   const [draftName, setDraftName] = useState(auth.displayName ?? '');
   const [saving, setSaving] = useState(false);
+  const [preferenceInvite, setPreferenceInvite] = useState(false);
+  const preferencesChecked = useRef(false);
   const [status, setStatus] = useState<{
     kind: 'success' | 'error';
     message: string;
@@ -67,6 +69,15 @@ export function LumiScoreAccountMenu({
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!open || !auth.authenticated || preferencesChecked.current) return;
+    preferencesChecked.current = true;
+    void fetch('/api/account/reading-preferences', { cache: 'no-store' })
+      .then(async (response) => response.ok ? response.json() as Promise<{ onboardingDismissed?: unknown }> : null)
+      .then((payload) => setPreferenceInvite(payload?.onboardingDismissed === false))
+      .catch(() => undefined);
+  }, [auth.authenticated, open]);
 
   if (!auth.authenticated) {
     return (
@@ -170,6 +181,23 @@ export function LumiScoreAccountMenu({
               {status.message}
             </p>
           )}
+          {preferenceInvite && (
+            <div className="account-preference-invite">
+              <p>{t('preferences.invite')}</p>
+              <a href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>{t('preferences.inviteAction')}</a>
+              <button type="button" onClick={() => {
+                setPreferenceInvite(false);
+                void fetch('/api/account/reading-preferences', {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ dismiss: true }),
+                });
+              }}>{t('preferences.notNow')}</button>
+            </div>
+          )}
+          <a className="account-preferences-link" href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>
+            {t('preferences.menu')}
+          </a>
           <form action="/auth/sign-out" method="post">
             <input type="hidden" name="next" value={auth.returnTo} />
             <button type="submit">{t('header.signOut')}</button>

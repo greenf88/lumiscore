@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import {
   getSafeNextPath,
+  getReadingPreferencesOnboardingPath,
   isSameOriginRequest,
   PRIVATE_RESPONSE_HEADERS,
 } from '@/lib/auth/request';
@@ -21,6 +22,7 @@ export async function POST(request: NextRequest) {
   const password = String(formData.get('password') ?? '');
   const displayName = normalizeDisplayName(formData.get('displayName'));
   const next = getSafeNextPath(formData.get('next'));
+  const onboardingNext = getReadingPreferencesOnboardingPath(next);
   if (!displayName.ok || !isValidNewAccountPassword(password)) {
     return NextResponse.redirect(
       new URL(`/login?error=invalid_signup_details&next=${encodeURIComponent(next)}`, request.url),
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
     );
   }
   const callback = new URL('/auth/callback', request.url);
-  callback.searchParams.set('next', next);
+  callback.searchParams.set('next', onboardingNext);
 
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.auth.signUp({
@@ -40,11 +42,11 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  let destination = next;
+  let destination = onboardingNext;
   if (error) {
     destination = `/login?error=signup_failed&next=${encodeURIComponent(next)}`;
   } else if (!data.session) {
-    destination = `/login?message=check_email&next=${encodeURIComponent(next)}`;
+    destination = `/login?message=check_email&next=${encodeURIComponent(onboardingNext)}`;
   }
 
   return NextResponse.redirect(new URL(destination, request.url), {

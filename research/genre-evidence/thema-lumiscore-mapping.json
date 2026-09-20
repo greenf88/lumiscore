@@ -1,0 +1,28 @@
+{
+  "version": "poc-1",
+  "status": "proposal-only",
+  "rules": [
+    { "lumiscore": "Literary & general fiction", "themaPrefixes": ["FB", "FC", "FD"], "deterministic": true },
+    { "lumiscore": "Thrillers & mystery", "themaPrefixes": ["FF", "FH", "FJ"], "deterministic": true },
+    { "lumiscore": "Romance", "themaPrefixes": ["FR"], "deterministic": true },
+    { "lumiscore": "Fantasy", "themaPrefixes": ["FM"], "deterministic": true },
+    { "lumiscore": "Science fiction & speculative", "themaPrefixes": ["FL", "FQ"], "deterministic": true },
+    { "lumiscore": "Historical fiction", "themaPrefixes": ["FV"], "deterministic": true },
+    { "lumiscore": "Children & teenage", "themaPrefixes": ["Y"], "deterministic": false, "note": "Preserve audience and subject separately; Y must be the primary family for juvenile works." },
+    { "lumiscore": "Comics & graphic novels", "themaPrefixes": ["X"], "deterministic": true },
+    { "lumiscore": "Biography & memoir", "themaPrefixes": ["DN"], "deterministic": true },
+    { "lumiscore": "History, society & current affairs", "themaPrefixes": ["N", "J"], "deterministic": false },
+    { "lumiscore": "Business & economics", "themaPrefixes": ["K"], "deterministic": true },
+    { "lumiscore": "Health, relationships & self-help", "themaPrefixes": ["V"], "deterministic": true },
+    { "lumiscore": "Food, lifestyle & leisure", "themaPrefixes": ["W"], "deterministic": false },
+    { "lumiscore": "Science, nature & technology", "themaPrefixes": ["P", "R", "T", "U"], "deterministic": false },
+    { "lumiscore": "Arts, language & culture", "themaPrefixes": ["A", "C", "D"], "deterministic": false },
+    { "lumiscore": "Philosophy & religion", "themaPrefixes": ["Q"], "deterministic": true }
+  ],
+  "invariants": [
+    "Store the most specific Thema code and do not duplicate an ancestor.",
+    "Preserve one publisher-declared main subject separately from supplementary subjects.",
+    "Keep subject, audience, format, publication era, story era and recommendation traits separate.",
+    "A broad LumiScore browse category never replaces the underlying Thema code."
+  ]
+}

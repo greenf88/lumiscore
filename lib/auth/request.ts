@@ -25,6 +25,10 @@ export function getSafeNextPath(
   }
 }
 
+export function getReadingPreferencesOnboardingPath(next: string): string {
+  return `/reading-preferences?next=${encodeURIComponent(getSafeNextPath(next))}`;
+}
+
 export function isSameOriginRequest(request: NextRequest): boolean {
   const origin = request.headers.get('origin');
   if (!origin) return false;

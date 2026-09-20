@@ -14,6 +14,11 @@ import {
   type CollaborativeSignal,
 } from './collaborative.ts';
 import { translate } from '../i18n/translations.ts';
+import type { ReadingPeriod } from '../preferences/reading-periods.ts';
+import {
+  calculateEraPreferenceBoost,
+  getEraPreferenceExplanation,
+} from './era-preference.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
 export type MatchLabel = 'Strong match' | 'Good match' | 'Possible match' | 'Early match';
@@ -40,6 +45,7 @@ export type RankedRecommendation = PersonalizedRecommendation & {
   collaborativeScore: number | null;
   collaborativeWeight: number;
   finalRankingScore: number;
+  eraPreferenceBoost: number;
 };
 export type PersonalMatchResult = Pick<
   PersonalizedRecommendation,
@@ -185,6 +191,7 @@ export function recommendBooks(input: {
   locale?: Locale;
   languagePreference?: BookLanguagePreference | null;
   collaborativeSignals?: ReadonlyMap<string, CollaborativeSignal>;
+  readingPeriods?: readonly ReadingPeriod[] | null;
 }): RankedRecommendation[] {
   const limit = Math.max(1, Math.trunc(input.limit ?? 10));
   const remaining: ScoredCandidate[] = input.candidates
@@ -204,7 +211,12 @@ export function recommendBooks(input: {
         ? 0
         : personalSimilarity;
       const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);
-      const rankingScore = .8 * rankingPersonalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!);
+      const eraPreferenceBoost = calculateEraPreferenceBoost({
+        readingPeriods: input.readingPeriods,
+        firstPublishYear: book.firstPublishYear,
+        userConfidence: input.profile.confidence,
+      });
+      const rankingScore = .8 * rankingPersonalSimilarity + .15 * qualityPrior + .05 * deterministicExploration(book.workId!) + eraPreferenceBoost;
       const collaborativeSignal = input.collaborativeSignals?.get(book.workId!) ?? null;
       const finalRankingScore = applyCollaborativeBoost(rankingScore, collaborativeSignal);
       return {
@@ -219,12 +231,13 @@ export function recommendBooks(input: {
         collaborativeScore: collaborativeSignal?.score ?? null,
         collaborativeWeight: collaborativeSignal?.weight ?? 0,
         finalRankingScore,
+        eraPreferenceBoost,
         matchScore: personalMatch.matchScore,
         matchLabel: personalMatch.matchLabel,
         matchConfidence: personalMatch.matchConfidence,
         coverageLevel,
         metadataConfidence,
-        explanation: personalMatch.explanation,
+        explanation: personalMatch.explanation || getEraPreferenceExplanation(input.locale ?? 'en', eraPreferenceBoost),
         collaborativeExplanation: collaborativeSignal
           ? translate(input.locale ?? 'en', 'recommendation.collaborative')
           : '',
@@ -291,6 +304,7 @@ export function recommendBooks(input: {
       collaborativeScore: candidate.collaborativeScore,
       collaborativeWeight: candidate.collaborativeWeight,
       finalRankingScore: candidate.finalRankingScore,
+      eraPreferenceBoost: candidate.eraPreferenceBoost,
     };
   });
 }

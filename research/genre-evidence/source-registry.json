@@ -1,0 +1,11 @@
+{
+  "reviewedAt": "2026-09-20",
+  "sources": [
+    { "id": "publisher_onix_thema", "role": "primary", "identity": "exact ISBN-13 edition mapped to Work", "license": "contract/feed-specific; do not assume open reuse", "bulk": "ONIX feed", "decision": "preferred when publisher/CB/Meta4books rights are confirmed" },
+    { "id": "kb_nbt", "role": "primary-supporting-nl", "identity": "exact ISBN or controlled bibliographic identifier", "license": "NBT linked open data is advertised under a free licence; verify dataset terms at ingestion", "bulk": "linked data/dataset", "decision": "pilot for Dutch coverage" },
+    { "id": "wikidata", "role": "supporting", "identity": "exact ISBN, Open Library identifier or reviewed Work link", "license": "CC0 structured data", "bulk": "SPARQL/API/dumps", "decision": "corroboration, never fuzzy title-only acceptance" },
+    { "id": "google_books", "role": "supporting", "identity": "exact returned ISBN-13", "license": "Google Books API terms", "bulk": "API with quotas; cached bounded lookups", "decision": "supporting signal only because categories vary by edition" },
+    { "id": "open_library", "role": "supporting", "identity": "stored exact Work/Edition ID", "license": "Open Library data terms; verify per field/source", "bulk": "monthly dumps, not per-book API loops", "decision": "normalize and corroborate; polluted subjects cannot decide alone" },
+    { "id": "loc", "role": "supporting-international", "identity": "exact ISBN/LCCN", "license": "dataset/item-specific; verify before reuse", "bulk": "MARC open dataset/linked data", "decision": "controlled subject evidence where coverage exists" }
+  ]
+}
