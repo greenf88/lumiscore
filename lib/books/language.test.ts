@@ -55,7 +55,7 @@ test('runtime Dutch ISBN fallback stays aligned with reviewed native seed metada
   assert.deepEqual([...REVIEWED_DUTCH_LANGUAGE_ISBN13].toSorted(), seedIsbns);
 });
 
-test('Dutch discovery is locale-gated, Dutch-only and deterministic', () => {
+test('Dutch discovery is Dutch-only, deterministic and available in both UI locales', () => {
   const candidates = [
     book({ workId: '3', title: 'Zulu', editionLanguage: 'nld', coverUrls: ['https://covers.example/zulu.jpg'] }),
     book({ workId: '2', title: 'English', editionLanguage: 'eng', score: 10, ratingsCount: 20, coverUrls: ['https://covers.example/english.jpg'] }),
@@ -69,7 +69,7 @@ test('Dutch discovery is locale-gated, Dutch-only and deterministic', () => {
   assert.deepEqual(first, second);
   assert.ok(first.every(isDutchLanguageBook));
   assert.equal(shouldShowDutchDiscovery('nl', first.length), true);
-  assert.equal(shouldShowDutchDiscovery('en', first.length), false);
+  assert.equal(shouldShowDutchDiscovery('en', first.length), true);
 });
 
 test('Dutch discovery excludes coverless and placeholder-only books', () => {

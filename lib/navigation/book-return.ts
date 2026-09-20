@@ -6,12 +6,14 @@ const MAX_COLLECTION_SLUG_LENGTH = 120;
 export type BookLinkReturnContext =
   | { kind: 'search'; path: string }
   | { kind: 'collection'; slug: string }
-  | { kind: 'collections' };
+  | { kind: 'collections' }
+  | { kind: 'home' };
 
 export type BookReturnNavigation =
   | { kind: 'search'; href: string }
   | { kind: 'collection'; href: string; collectionName: string }
   | { kind: 'collections'; href: '/collections' }
+  | { kind: 'home'; href: '/' }
   | { kind: 'browse'; href: '/browse' };
 
 export type VerifiedCollectionReturnTarget = {
@@ -45,6 +47,7 @@ export function serializeBookReturnContext(
   if (context.kind === 'collection') {
     return getCollectionReturnPath(context.slug);
   }
+  if (context.kind === 'home') return '/';
   return '/collections';
 }
 
@@ -88,6 +91,10 @@ export async function resolveBookReturnNavigation(
 
   if (requestedReturnTo === '/collections') {
     return { kind: 'collections', href: '/collections' };
+  }
+
+  if (requestedReturnTo === '/') {
+    return { kind: 'home', href: '/' };
   }
 
   if (typeof requestedReturnTo !== 'string') {

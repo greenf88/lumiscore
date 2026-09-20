@@ -418,6 +418,7 @@ export async function loadCatalogBooks(limit = 50): Promise<Book[]> {
 export async function loadCatalogBooksByIds(
   workIds: readonly string[],
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
+  locale: Locale = 'en',
 ): Promise<Book[]> {
   const ids = [...new Set(
     workIds
@@ -433,7 +434,7 @@ export async function loadCatalogBooksByIds(
   if (result.error) throw result.error;
 
   const catalogBooks = asRows(result.data)
-    .map((work, index) => mapCatalogBook(work, [], [], index))
+    .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
   const summaries = prefetchedSummaries ?? await loadPublicRatingSummaries(
     supabase,
@@ -445,9 +446,10 @@ export async function loadCatalogBooksByIds(
 export async function loadCatalogBooksByIdsWithStoredCovers(
   workIds: readonly string[],
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
+  locale: Locale = 'en',
 ): Promise<Book[]> {
   const [books, storedCovers] = await Promise.all([
-    loadCatalogBooksByIds(workIds, prefetchedSummaries),
+    loadCatalogBooksByIds(workIds, prefetchedSummaries, locale),
     loadStoredCoverResolutionsBatched(workIds),
   ]);
   return applyStoredCoverResolutions(books, storedCovers.entries);

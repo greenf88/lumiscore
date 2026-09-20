@@ -33,11 +33,14 @@ import type { Locale } from '../i18n/config.ts';
 import { resolveLocaleBookLanguagePreference } from '../recommendations/language-preference.ts';
 import { recommendGuestBooks } from '../recommendations/guest.ts';
 import { loadCollaborativeRecommendationSignals } from './collaborative.ts';
-import { loadReadWorkIdsForCurrentUser } from './book-status.ts';
 import { loadReaderEraPreferences } from './reading-preferences.ts';
+import type { ReaderEraPreferences } from '../preferences/reading-periods.ts';
+import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
+import { cache } from 'react';
 
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
+type StatusRow = { work_id: number | string; status: string };
 type WorkFeatureRow = { id: number | string };
 type RecommendationCatalog = {
   candidates: RecommendationCandidate[];
@@ -100,6 +103,52 @@ function rowsToAnswers(rows: readonly ResponseRow[]): TasteTestAnswers {
   }
   return answers;
 }
+
+export type HomepageReaderContext = {
+  authenticated: boolean;
+  client: Awaited<ReturnType<typeof createServerSupabaseClient>>;
+  answers: TasteTestAnswers;
+  ratings: RatingRow[];
+  statuses: Map<string, ReadingStatus>;
+  readerPreferences: ReaderEraPreferences | null;
+};
+
+// React cache keeps these authenticated, explicitly user-scoped reads shared
+// within one homepage request. The result is never placed in a public cache or
+// returned to the client as raw profile/status data.
+export const loadHomepageReaderContext = cache(async (): Promise<HomepageReaderContext> => {
+  const { client, user } = await getVerifiedServerUser();
+  if (!user) {
+    return {
+      authenticated: false,
+      client,
+      answers: {},
+      ratings: [],
+      statuses: new Map(),
+      readerPreferences: null,
+    };
+  }
+
+  const [responsesResult, ratingsResult, statusesResult, readerPreferences] = await Promise.all([
+    client.from('taste_test_responses').select('question_key,choice')
+      .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id),
+    client.from('ratings').select('work_id,rating').eq('user_id', user.id),
+    client.from('user_book_status').select('work_id,status').eq('user_id', user.id),
+    loadReaderEraPreferences(client, user.id).catch(() => null),
+  ]);
+
+  return {
+    authenticated: true,
+    client,
+    answers: responsesResult.error ? {} : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]),
+    ratings: ratingsResult.error ? [] : (ratingsResult.data ?? []) as RatingRow[],
+    statuses: new Map(((statusesResult.error ? [] : statusesResult.data ?? []) as StatusRow[])
+      .flatMap((row) => isReadingStatus(row.status)
+        ? [[String(row.work_id), row.status] as const]
+        : [])),
+    readerPreferences,
+  };
+});
 
 async function loadRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
@@ -325,20 +374,14 @@ export async function loadBookDetailPersonalization(
 
 export async function loadHomepagePersonalization(locale: Locale = 'en'): Promise<HomepagePersonalization> {
   try {
-    const { client, user } = await getVerifiedServerUser();
-    if (!user) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
+    const reader = await loadHomepageReaderContext();
+    if (!reader.authenticated) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
-    const [responsesResult, ratingsResult, catalog, collaborativeSignals, readState, readerPreferences] = await Promise.all([
-      client.from('taste_test_responses').select('question_key,choice')
-        .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id),
-      client.from('ratings').select('work_id,rating').eq('user_id', user.id),
-      loadRecommendationCatalog(client),
-      loadCollaborativeRecommendationSignals(client),
-      loadReadWorkIdsForCurrentUser().catch(() => ({ authenticated: true, workIds: [] })),
-      loadReaderEraPreferences(client, user.id).catch(() => null),
+    const [catalog, collaborativeSignals] = await Promise.all([
+      loadRecommendationCatalog(reader.client),
+      loadCollaborativeRecommendationSignals(reader.client),
     ]);
-    const answers = responsesResult.error ? {} : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]);
-    const ratings = ratingsResult.error ? [] : (ratingsResult.data ?? []) as RatingRow[];
+    const { answers, ratings } = reader;
     const ratedIds = ratings.map(({ work_id }) => String(work_id));
     const ratingEvidence: RatingEvidence[] = ratings.map((rating) => {
       const workId = String(rating.work_id);
@@ -356,11 +399,14 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         candidates: catalog.candidates,
         profile,
         ratedWorkIds: new Set(ratedIds),
-        excludedWorkIds: new Set([...TASTE_TEST_WORK_IDS, ...readState.workIds]),
+        excludedWorkIds: new Set([
+          ...TASTE_TEST_WORK_IDS,
+          ...[...reader.statuses].flatMap(([workId, status]) => status === 'read' ? [workId] : []),
+        ]),
         locale,
         languagePreference: resolveLocaleBookLanguagePreference(locale, profile),
         collaborativeSignals,
-        readingPeriods: readerPreferences?.readingPeriods ?? null,
+        readingPeriods: reader.readerPreferences?.readingPeriods ?? null,
         limit: 10,
       })
       : [];

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
@@ -28,8 +28,8 @@ import { translate } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
-import { shouldShowDutchDiscovery } from '@/lib/books/dutch-discovery';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
+import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { useWantToRead } from './useWantToRead';
 import type { ReadingStatus } from '@/lib/collections/model';
 import {
@@ -457,9 +457,10 @@ type BookCardProps = {
   onToggle: (book: Book) => void;
   resolveMissingCover?: boolean;
   detailReturnContext?: BookLinkReturnContext;
+  label?: string;
 };
 
-export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext, label }: BookCardProps) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
@@ -468,6 +469,7 @@ export const BookCard = memo(function BookCard({ book, wanted, status, onToggle,
   const bookContent = (
     <>
       <div className="card-cover-wrap">
+        {label && <span className="discovery-card-label">{label}</span>}
         <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
         <BookCover book={book} resolveMissing={resolveMissingCover} />
       </div>
@@ -545,9 +547,63 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
   );
 }
 
-function DutchDiscoveryBooks({ books, wanted, statuses, onToggle }: { books: Book[]; wanted: Set<string>; statuses: ReadonlyMap<string, ReadingStatus>; onToggle: (book: Book) => void }) {
-  const { locale, t } = useLumiScoreLocale();
-  if (!shouldShowDutchDiscovery(locale, books.length)) return null;
+function DutchDiscoveryGroup({
+  id,
+  title,
+  books,
+  label,
+  wanted,
+  statuses,
+  onToggle,
+  source,
+}: {
+  id: string;
+  title: string;
+  books: Book[];
+  label: string;
+  wanted: Set<string>;
+  statuses: ReadonlyMap<string, ReadingStatus>;
+  onToggle: (book: Book) => void;
+  source?: ReactNode;
+}) {
+  if (books.length === 0) return null;
+
+  return (
+    <section className="dutch-discovery-group" aria-labelledby={id}>
+      <div className="dutch-discovery-group-heading">
+        <h3 id={id}>{title}</h3>
+        {source}
+      </div>
+      <div className="book-grid dutch-discovery-grid">
+        {books.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            wanted={wanted.has(book.id)}
+            status={book.workId ? statuses.get(book.workId) : null}
+            onToggle={onToggle}
+            resolveMissingCover={false}
+            detailReturnContext={{ kind: 'home' }}
+            label={label}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DutchDiscoveryBooks({ discovery, wanted, statuses, onToggle }: { discovery: DutchHomepageDiscovery; wanted: Set<string>; statuses: ReadonlyMap<string, ReadingStatus>; onToggle: (book: Book) => void }) {
+  const { t } = useLumiScoreLocale();
+  if (discovery.popular.books.length === 0 && discovery.classics.books.length === 0) return null;
+
+  const popularHeading = discovery.popular.current
+    ? discovery.popular.personalized
+      ? t('home.dutchPopularPersonalized')
+      : t('home.dutchPopularNow')
+    : t('home.dutchPopularFallback');
+  const classicHeading = discovery.classics.personalized
+    ? t('home.dutchClassicsPersonalized')
+    : t('home.dutchClassics');
 
   return (
     <section className="featured-section dutch-discovery-section" aria-labelledby="dutch-discovery-title">
@@ -558,10 +614,30 @@ function DutchDiscoveryBooks({ books, wanted, statuses, onToggle }: { books: Boo
           <p className="section-intro">{t('home.dutchDiscoveryCopy')}</p>
         </div>
       </div>
-      <div className="book-grid">
-        {books.map((book) => (
-          <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} />
-        ))}
+      <div className="dutch-discovery-groups">
+        <DutchDiscoveryGroup
+          id="dutch-discovery-popular"
+          title={popularHeading}
+          books={discovery.popular.books}
+          label={t('home.dutchPopularLabel')}
+          wanted={wanted}
+          statuses={statuses}
+          onToggle={onToggle}
+          source={discovery.popular.current ? (
+            <a href={discovery.popular.sourceUrl} target="_blank" rel="noreferrer">
+              {t('home.dutchPopularSource', { week: discovery.popular.week })}
+            </a>
+          ) : undefined}
+        />
+        <DutchDiscoveryGroup
+          id="dutch-discovery-classics"
+          title={classicHeading}
+          books={discovery.classics.books}
+          label={t('home.dutchClassicLabel')}
+          wanted={wanted}
+          statuses={statuses}
+          onToggle={onToggle}
+        />
       </div>
     </section>
   );
@@ -645,7 +721,7 @@ type CatalogStats = { books: number | null; categories: number };
 
 export function LumiScoreHome({
   initialBooks,
-  dutchDiscoveryBooks,
+  dutchDiscovery,
   catalogStats,
   personalization,
   authState,
@@ -653,7 +729,7 @@ export function LumiScoreHome({
   seriesContinuations,
 }: {
   initialBooks: Book[];
-  dutchDiscoveryBooks: Book[];
+  dutchDiscovery: DutchHomepageDiscovery;
   catalogStats: CatalogStats;
   personalization: HomepagePersonalization;
   authState: HeaderAuthState;
@@ -667,8 +743,8 @@ export function LumiScoreHome({
   const [searchStatus, setSearchStatus] = useState<SearchStatus>('idle');
   const [guestPersonalization, setGuestPersonalization] = useState<HomepagePersonalization | null>(null);
   const trackedBooks = useMemo(
-    () => [...catalogBooks, ...dutchDiscoveryBooks, ...searchResults],
-    [catalogBooks, dutchDiscoveryBooks, searchResults],
+    () => [...catalogBooks, ...dutchDiscovery.popular.books, ...dutchDiscovery.classics.books, ...searchResults],
+    [catalogBooks, dutchDiscovery, searchResults],
   );
   const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, trackedBooks);
 
@@ -786,7 +862,7 @@ export function LumiScoreHome({
         <ContinueSeries continuations={seriesContinuations} />
       )}
       <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
-      <DutchDiscoveryBooks books={dutchDiscoveryBooks} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
+      <DutchDiscoveryBooks discovery={dutchDiscovery} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />
     </main>

@@ -7,8 +7,8 @@ import {
 } from '@/lib/server-environment';
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 import { resolveRequestLocale } from '@/lib/i18n/server';
-import { selectDutchDiscoveryBooks } from '@/lib/books/dutch-discovery';
 import { measureServerOperation } from '@/lib/performance/server-timing';
+import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 
 const CATALOG_CATEGORY_COUNT = 7;
 
@@ -40,25 +40,31 @@ async function loadHomepageBooks() {
   }
 }
 
-async function loadDutchHomepageCandidates(locale: 'en' | 'nl') {
-  if (locale !== 'nl') return [];
+async function loadDutchDiscovery(locale: 'en' | 'nl'): Promise<DutchHomepageDiscovery> {
   try {
-    const { loadDutchDiscoveryCatalogCandidates } = await import('@/lib/supabase/books');
+    const { loadDutchHomepageDiscovery } = await import('@/lib/supabase/dutch-homepage-discovery');
     return await measureServerOperation(
-      'homepage.dutch_catalog',
-      'public',
-      loadDutchDiscoveryCatalogCandidates,
+      'homepage.dutch_discovery',
+      'mixed',
+      () => loadDutchHomepageDiscovery(locale),
     );
   } catch {
-    return [];
+    return {
+      popular: {
+        books: [], current: false, personalized: false,
+        sourceName: 'De Bestseller 60', sourceUrl: 'https://www.debestseller60.nl/',
+        year: 0, week: 0,
+      },
+      classics: { books: [], personalized: false },
+    };
   }
 }
 
 export default async function Home() {
   const { locale } = await resolveRequestLocale();
-  const [catalog, dutchCandidates, personalization, authState, seriesContinuations] = await Promise.all([
+  const [catalog, dutchDiscovery, personalization, authState, seriesContinuations] = await Promise.all([
     loadHomepageBooks(),
-    loadDutchHomepageCandidates(locale),
+    loadDutchDiscovery(locale),
     import('@/lib/supabase/taste-test')
       .then(({ loadHomepagePersonalization }) =>
         measureServerOperation(
@@ -89,15 +95,6 @@ export default async function Home() {
       ))
       .catch(() => []),
   ]);
-  const highestRatedWorkIds = new Set(
-    catalog.books.flatMap((book) => book.workId ? [book.workId] : []),
-  );
-  const dutchDiscoveryBooks = selectDutchDiscoveryBooks(
-    dutchCandidates,
-    highestRatedWorkIds,
-    6,
-  );
-
   return (
     <>
       <LumiScoreMetadata
@@ -112,7 +109,7 @@ export default async function Home() {
         }}
         personalization={personalization}
         authState={authState}
-        dutchDiscoveryBooks={dutchDiscoveryBooks}
+        dutchDiscovery={dutchDiscovery}
         catalogUnavailable={catalog.unavailable}
         seriesContinuations={seriesContinuations}
       />

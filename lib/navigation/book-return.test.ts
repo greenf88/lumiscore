@@ -163,6 +163,10 @@ test('book links serialize only typed, validated internal context', () => {
     appendBookReturnContext('/book/8', { kind: 'collections' }),
     '/book/8?returnTo=%2Fcollections',
   );
+  assert.equal(
+    appendBookReturnContext('/book/8', { kind: 'home' }),
+    '/book/8?returnTo=%2F',
+  );
 });
 
 test('book SEO stays canonical and independent from navigation context', async () => {

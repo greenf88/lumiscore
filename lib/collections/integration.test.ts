@@ -90,9 +90,10 @@ test('private progress queries are explicitly scoped to the verified user', () =
 });
 
 test('recommendation loader adds read-without-rating IDs to exclusions only', () => {
-  assert.match(personalization, /loadReadWorkIdsForCurrentUser/);
-  assert.match(personalization, /excludedWorkIds: new Set\(\[\.\.\.TASTE_TEST_WORK_IDS, \.\.\.readState\.workIds\]\)/);
-  assert.doesNotMatch(personalization, /want_to_read|\bdnf\b|\breading\b/);
+  assert.match(personalization, /from\('user_book_status'\)[\s\S]*?\.eq\('user_id', user\.id\)/);
+  assert.match(personalization, /excludedWorkIds: new Set\(\[[\s\S]*?TASTE_TEST_WORK_IDS[\s\S]*?status === 'read'/);
+  const recommendationBlock = personalization.slice(personalization.indexOf('export async function loadHomepagePersonalization'));
+  assert.doesNotMatch(recommendationBlock, /status === '(want_to_read|dnf|reading)'/);
 });
 
 test('collection queries are batched instead of one query per book', () => {

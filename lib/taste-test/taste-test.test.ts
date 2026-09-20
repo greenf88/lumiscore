@@ -136,8 +136,8 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
 test('homepage recommendations exclude Taste Test anchors and books marked Read', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
 
-  assert.match(persistence, /loadReadWorkIdsForCurrentUser/);
-  assert.match(persistence, /excludedWorkIds:\s*new Set\(\[\.\.\.TASTE_TEST_WORK_IDS, \.\.\.readState\.workIds\]\)/);
+  assert.match(persistence, /from\('user_book_status'\)[\s\S]*?\.eq\('user_id', user\.id\)/);
+  assert.match(persistence, /excludedWorkIds:\s*new Set\(\[[\s\S]*?TASTE_TEST_WORK_IDS[\s\S]*?status === 'read'/);
 });
 
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {
