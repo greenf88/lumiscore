@@ -138,8 +138,15 @@ test('directory, direct and Browse traffic resolve without a collection query', 
     { kind: 'browse', href: '/browse' },
   );
   assert.deepEqual(
-    await resolveBookReturnNavigation('/browse?page=3', '8', verifier),
-    { kind: 'browse', href: '/browse' },
+    await resolveBookReturnNavigation(
+      '/browse?page=3&pageSize=64&sort=newest&language=nl&language=en',
+      '8',
+      verifier,
+    ),
+    {
+      kind: 'browse',
+      href: '/browse?page=3&pageSize=64&sort=newest&language=nl&language=en',
+    },
   );
   assert.equal(verifierCalls, 0);
 });
@@ -166,6 +173,20 @@ test('book links serialize only typed, validated internal context', () => {
   assert.equal(
     appendBookReturnContext('/book/8', { kind: 'home' }),
     '/book/8?returnTo=%2F',
+  );
+  assert.equal(
+    appendBookReturnContext('/book/8', {
+      kind: 'browse',
+      path: '/browse?page=2&pageSize=128&sort=newest',
+    }),
+    '/book/8?returnTo=%2Fbrowse%3Fpage%3D2%26pageSize%3D128%26sort%3Dnewest',
+  );
+  assert.equal(
+    appendBookReturnContext('/book/8', {
+      kind: 'browse',
+      path: 'https://evil.example/browse?page=2',
+    }),
+    '/book/8',
   );
 });
 

@@ -1,4 +1,5 @@
 import { getSafeSearchReturnPath } from './search-return.ts';
+import { getSafeBrowseReturnPath } from './browse-return.ts';
 
 const COLLECTION_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MAX_COLLECTION_SLUG_LENGTH = 120;
@@ -7,6 +8,7 @@ export type BookLinkReturnContext =
   | { kind: 'search'; path: string }
   | { kind: 'collection'; slug: string }
   | { kind: 'collections' }
+  | { kind: 'browse'; path: string }
   | { kind: 'home' };
 
 export type BookReturnNavigation =
@@ -14,7 +16,7 @@ export type BookReturnNavigation =
   | { kind: 'collection'; href: string; collectionName: string }
   | { kind: 'collections'; href: '/collections' }
   | { kind: 'home'; href: '/' }
-  | { kind: 'browse'; href: '/browse' };
+  | { kind: 'browse'; href: string };
 
 export type VerifiedCollectionReturnTarget = {
   slug: string;
@@ -46,6 +48,9 @@ export function serializeBookReturnContext(
   }
   if (context.kind === 'collection') {
     return getCollectionReturnPath(context.slug);
+  }
+  if (context.kind === 'browse') {
+    return getSafeBrowseReturnPath(context.path);
   }
   if (context.kind === 'home') return '/';
   return '/collections';
@@ -89,36 +94,40 @@ export async function resolveBookReturnNavigation(
   const searchPath = getSafeSearchReturnPath(requestedReturnTo);
   if (searchPath) return { kind: 'search', href: searchPath };
 
-  if (requestedReturnTo === '/collections') {
-    return { kind: 'collections', href: '/collections' };
-  }
-
-  if (requestedReturnTo === '/') {
-    return { kind: 'home', href: '/' };
-  }
-
   if (typeof requestedReturnTo !== 'string') {
     return { kind: 'browse', href: '/browse' };
   }
 
   const requestedSlug = parseSpecificCollectionPath(requestedReturnTo);
-  if (!requestedSlug) return { kind: 'browse', href: '/browse' };
+  if (requestedSlug) {
+    const verified = await verifyCollectionMembership(workId, requestedSlug);
+    const verifiedPath = verified
+      ? getCollectionReturnPath(verified.slug)
+      : null;
+    if (
+      !verifiedPath ||
+      verified?.slug !== requestedSlug ||
+      verified.name.trim().length === 0
+    ) {
+      return { kind: 'browse', href: '/browse' };
+    }
 
-  const verified = await verifyCollectionMembership(workId, requestedSlug);
-  const verifiedPath = verified
-    ? getCollectionReturnPath(verified.slug)
-    : null;
-  if (
-    !verifiedPath ||
-    verified?.slug !== requestedSlug ||
-    verified.name.trim().length === 0
-  ) {
-    return { kind: 'browse', href: '/browse' };
+    return {
+      kind: 'collection',
+      href: verifiedPath,
+      collectionName: verified.name,
+    };
   }
 
-  return {
-    kind: 'collection',
-    href: verifiedPath,
-    collectionName: verified.name,
-  };
+  if (requestedReturnTo === '/collections') {
+    return { kind: 'collections', href: '/collections' };
+  }
+  if (requestedReturnTo === '/') {
+    return { kind: 'home', href: '/' };
+  }
+
+  const browsePath = getSafeBrowseReturnPath(requestedReturnTo);
+  return browsePath
+    ? { kind: 'browse', href: browsePath }
+    : { kind: 'browse', href: '/browse' };
 }

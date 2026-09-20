@@ -1,10 +1,13 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, type ChangeEvent } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
-  getCatalogBrowseHref,
+  CATALOG_BROWSE_PAGE_SIZES,
+  getCatalogBrowsePageAfterPageSizeChange,
+  normalizeCatalogBrowsePageSize,
 } from '@/lib/books/catalog-browse';
+import { updateBrowseReturnPath } from '@/lib/navigation/browse-return';
 import type { CatalogBrowsePage } from '@/lib/supabase/books';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
@@ -13,6 +16,7 @@ import { useWantToRead } from './useWantToRead';
 type LumiScoreBrowsePageProps = {
   data: CatalogBrowsePage & { available: boolean };
   authState: HeaderAuthState;
+  returnTo: string;
 };
 
 function paginationPages(currentPage: number, pageCount: number): Array<number | 'ellipsis'> {
@@ -32,7 +36,7 @@ function paginationPages(currentPage: number, pageCount: number): Array<number |
   return result;
 }
 
-export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProps) {
+export function LumiScoreBrowsePage({ data, authState, returnTo }: LumiScoreBrowsePageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const { wanted, statuses, toggleWanted } = useWantToRead(
@@ -43,7 +47,30 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
     () => paginationPages(data.page, data.pageCount),
     [data.page, data.pageCount],
   );
-  const returnTo = getCatalogBrowseHref(data.page, data.sort);
+  const preservedBrowseParams = useMemo(() => {
+    const params = new URLSearchParams(returnTo.split('?')[1] ?? '');
+    return ['language', 'genre', 'filter'].flatMap((name) =>
+      params.getAll(name).map((value, index) => ({ name, value, key: `${name}-${index}-${value}` })));
+  }, [returnTo]);
+  const detailReturnContext = useMemo(
+    () => ({ kind: 'browse' as const, path: returnTo }),
+    [returnTo],
+  );
+
+  const changePageSize = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    const nextPageSize = normalizeCatalogBrowsePageSize(event.currentTarget.value);
+    const nextPage = getCatalogBrowsePageAfterPageSizeChange(
+      data.page,
+      data.pageSize,
+      nextPageSize,
+      data.total,
+    );
+    window.location.assign(updateBrowseReturnPath(returnTo, {
+      page: nextPage,
+      pageSize: nextPageSize,
+      sort: data.sort,
+    }));
+  }, [data.page, data.pageSize, data.sort, data.total, returnTo]);
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -82,10 +109,24 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
         </div>
 
         <form className="browse-controls" action="/browse" method="get">
+          {preservedBrowseParams.map((parameter) => (
+            <input key={parameter.key} type="hidden" name={parameter.name} value={parameter.value} />
+          ))}
           <label htmlFor="browse-sort">{t('browse.sortBy')}</label>
           <select id="browse-sort" name="sort" defaultValue={data.sort}>
             <option value="az">{t('browse.sortAz')}</option>
             <option value="newest">{t('browse.sortNewest')}</option>
+          </select>
+          <label htmlFor="browse-page-size">{t('browse.pageSize')}</label>
+          <select
+            id="browse-page-size"
+            name="pageSize"
+            value={data.pageSize}
+            onChange={changePageSize}
+          >
+            {CATALOG_BROWSE_PAGE_SIZES.map((pageSize) => (
+              <option value={pageSize} key={pageSize}>{pageSize}</option>
+            ))}
           </select>
           <button type="submit">{t('browse.apply')}</button>
         </form>
@@ -106,6 +147,7 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
                 resolveMissingCover={false}
+                detailReturnContext={detailReturnContext}
               />
             ))}
           </div>
@@ -120,7 +162,7 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
         {data.available && data.pageCount > 1 && (
           <nav className="browse-pagination" aria-label={t('browse.pagination')}>
             {data.page > 1 ? (
-              <a href={getCatalogBrowseHref(data.page - 1, data.sort)} rel="prev">
+              <a href={updateBrowseReturnPath(returnTo, { page: data.page - 1 })} rel="prev">
                 ← {t('browse.previous')}
               </a>
             ) : <span aria-disabled="true">← {t('browse.previous')}</span>}
@@ -129,7 +171,7 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
                 <span className="pagination-ellipsis" aria-hidden="true" key={`ellipsis-${index}`}>…</span>
               ) : (
                 <a
-                  href={getCatalogBrowseHref(item, data.sort)}
+                  href={updateBrowseReturnPath(returnTo, { page: item })}
                   aria-current={item === data.page ? 'page' : undefined}
                   aria-label={t('browse.pageLabel', { page: item })}
                   key={item}
@@ -139,7 +181,7 @@ export function LumiScoreBrowsePage({ data, authState }: LumiScoreBrowsePageProp
               ))}
             </div>
             {data.page < data.pageCount ? (
-              <a href={getCatalogBrowseHref(data.page + 1, data.sort)} rel="next">
+              <a href={updateBrowseReturnPath(returnTo, { page: data.page + 1 })} rel="next">
                 {t('browse.next')} →
               </a>
             ) : <span aria-disabled="true">{t('browse.next')} →</span>}

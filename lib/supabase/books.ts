@@ -36,6 +36,7 @@ import {
 import { rankHighestRatedWorks } from '@/lib/ratings/highest-rated';
 import {
   CATALOG_BROWSE_PAGE_SIZE,
+  type CatalogBrowsePageSize,
   clampCatalogBrowsePage,
   getCatalogBrowseOrder,
   getCatalogBrowsePageCount,
@@ -482,7 +483,7 @@ export type CatalogBrowsePage = {
   books: Book[];
   total: number;
   page: number;
-  pageSize: number;
+  pageSize: CatalogBrowsePageSize;
   pageCount: number;
   sort: CatalogBrowseSort;
 };
@@ -490,8 +491,9 @@ export type CatalogBrowsePage = {
 async function queryCatalogBrowseRows(
   page: number,
   sort: CatalogBrowseSort,
+  pageSize: CatalogBrowsePageSize,
 ) {
-  const { from, to } = getCatalogBrowseRange(page, CATALOG_BROWSE_PAGE_SIZE);
+  const { from, to } = getCatalogBrowseRange(page, pageSize);
   let query = supabase
     .from('works')
     .select(HOMEPAGE_CATALOG_SELECT, { count: 'exact' });
@@ -511,20 +513,21 @@ async function queryCatalogBrowseRows(
 export async function loadCatalogBrowsePage(
   requestedPage: number,
   sort: CatalogBrowseSort,
+  pageSize: CatalogBrowsePageSize = CATALOG_BROWSE_PAGE_SIZE,
   locale: Locale = 'en',
 ): Promise<CatalogBrowsePage> {
   const normalizedPage = normalizeCatalogBrowsePage(requestedPage);
-  let result = await queryCatalogBrowseRows(normalizedPage, sort);
+  let result = await queryCatalogBrowseRows(normalizedPage, sort, pageSize);
   if (result.error) throw result.error;
 
   const total = result.count ?? result.data?.length ?? 0;
   const page = clampCatalogBrowsePage(
     normalizedPage,
     total,
-    CATALOG_BROWSE_PAGE_SIZE,
+    pageSize,
   );
   if (page !== normalizedPage) {
-    result = await queryCatalogBrowseRows(page, sort);
+    result = await queryCatalogBrowseRows(page, sort, pageSize);
     if (result.error) throw result.error;
   }
 
@@ -534,7 +537,7 @@ export async function loadCatalogBrowsePage(
   const workIds = catalogBooks.flatMap((book) =>
     book.workId ? [book.workId] : []);
   const [summaries, storedCovers] = await Promise.all([
-    loadPublicRatingSummaries(supabase, workIds),
+    loadPublicRatingSummariesBatched(supabase, workIds),
     loadStoredCoverResolutionsBatched(workIds),
   ]);
 
@@ -545,8 +548,8 @@ export async function loadCatalogBrowsePage(
     ),
     total,
     page,
-    pageSize: CATALOG_BROWSE_PAGE_SIZE,
-    pageCount: getCatalogBrowsePageCount(total, CATALOG_BROWSE_PAGE_SIZE),
+    pageSize,
+    pageCount: getCatalogBrowsePageCount(total, pageSize),
     sort,
   };
 }

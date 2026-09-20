@@ -9,6 +9,7 @@ import { loadCatalogBooksByIds } from './books.ts';
 
 type StatusRow = { work_id: number | string; status: string };
 type MyBooksStatusRow = StatusRow & { updated_at: string | null };
+const MAX_STATUS_LOOKUP_WORK_IDS = 128;
 
 export type MyBooksPageData = {
   authenticated: boolean;
@@ -37,7 +38,7 @@ export const loadReadWorkIdsForCurrentUser = cache(async (): Promise<{
 function normalizeWorkIds(workIds: readonly string[]): number[] {
   return [...new Set(workIds.map(Number).filter(
     (workId) => Number.isSafeInteger(workId) && workId > 0,
-  ))].slice(0, 100);
+  ))].slice(0, MAX_STATUS_LOOKUP_WORK_IDS);
 }
 
 export async function loadUserBookStatuses(

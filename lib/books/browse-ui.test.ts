@@ -35,8 +35,8 @@ test('public browse route loads catalog books without requiring a search query o
     new URL('../../app/browse/page.tsx', import.meta.url),
     'utf8',
   );
-  assert.match(page, /loadCatalogBrowsePage\(page, sort, locale\)/);
-  assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\}/);
+  assert.match(page, /loadCatalogBrowsePage\(page, sort, pageSize, locale\)/);
+  assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\} returnTo=\{returnTo\}/);
   assert.doesNotMatch(page, /redirect\(|notFound\(/);
   assert.doesNotMatch(page, /\bq\b.*required|isCatalogSearchQuery/);
 });
@@ -48,8 +48,44 @@ test('browse cards reuse BookCard and therefore canonical native book links', as
   ]);
   assert.match(browseSource, /<BookCard/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
+  assert.match(browseSource, /detailReturnContext=\{detailReturnContext\}/);
   assert.match(homeSource, /const href = getBookHref\(book\)/);
   assert.match(homeSource, /className="book-card-main-link"[\s\S]*?href=\{href\}/);
+});
+
+test('Browse exposes an accessible native page-size control and keeps page size in navigation', async () => {
+  const browseSource = await readFile(
+    new URL('../../app/components/LumiScoreBrowsePage.tsx', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(browseSource, /<label htmlFor="browse-page-size">\{t\('browse\.pageSize'\)\}<\/label>/);
+  assert.match(browseSource, /<select[\s\S]*?id="browse-page-size"[\s\S]*?name="pageSize"/);
+  assert.match(browseSource, /CATALOG_BROWSE_PAGE_SIZES\.map/);
+  assert.match(browseSource, /getCatalogBrowsePageAfterPageSizeChange/);
+  assert.match(browseSource, /window\.location\.assign/);
+  assert.match(browseSource, /updateBrowseReturnPath\(returnTo/);
+});
+
+test('128-card Browse pages keep ratings and stored-cover reads batched', async () => {
+  const [booksSource, browseSource, homeSource, statusRoute, statusLoader] = await Promise.all([
+    readFile(new URL('../supabase/books.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/LumiScoreBrowsePage.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/api/book-status/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../supabase/book-status.ts', import.meta.url), 'utf8'),
+  ]);
+  const loader = booksSource.slice(
+    booksSource.indexOf('export async function loadCatalogBrowsePage'),
+    booksSource.indexOf('export async function loadHomepageCatalog'),
+  );
+
+  assert.match(loader, /Promise\.all\(\[[\s\S]*?loadPublicRatingSummariesBatched\(supabase, workIds\)[\s\S]*?loadStoredCoverResolutionsBatched\(workIds\)/);
+  assert.doesNotMatch(loader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
+  assert.match(browseSource, /resolveMissingCover=\{false\}/);
+  assert.match(homeSource, /loading="lazy"/);
+  assert.match(statusRoute, /\.slice\(0, 128\)/);
+  assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
 });
 
 test('Browse is reachable in desktop and mobile navigation and search has a browse escape', async () => {
@@ -68,6 +104,8 @@ test('new browse and collection UI copy is complete in English and Dutch', () =>
   assert.equal(translate('nl', 'header.browse'), 'Ontdekken');
   assert.equal(translate('en', 'browse.collections'), 'Collections');
   assert.equal(translate('nl', 'browse.collections'), 'Collecties');
+  assert.equal(translate('en', 'browse.pageSize'), 'Books per page');
+  assert.equal(translate('nl', 'browse.pageSize'), 'Boeken per pagina');
   assert.equal(translate('en', 'collections.bookCount', { count: 5 }), '5 books');
   assert.equal(translate('nl', 'collections.bookCount', { count: 5 }), '5 boeken');
   assert.doesNotMatch(translate('en', 'collections.copy'), /complete|incomplete/i);

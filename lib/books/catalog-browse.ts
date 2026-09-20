@@ -1,4 +1,6 @@
-export const CATALOG_BROWSE_PAGE_SIZE = 30;
+export const CATALOG_BROWSE_PAGE_SIZES = [32, 64, 128] as const;
+export type CatalogBrowsePageSize = (typeof CATALOG_BROWSE_PAGE_SIZES)[number];
+export const CATALOG_BROWSE_PAGE_SIZE: CatalogBrowsePageSize = 32;
 
 export const CATALOG_BROWSE_SORTS = ['az', 'newest'] as const;
 export type CatalogBrowseSort = (typeof CATALOG_BROWSE_SORTS)[number];
@@ -17,6 +19,31 @@ export function normalizeCatalogBrowsePage(value: unknown): number {
       ? candidate
       : 1;
   return Number.isSafeInteger(page) && page > 0 ? page : 1;
+}
+
+export function normalizeCatalogBrowsePageSize(value: unknown): CatalogBrowsePageSize {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  const pageSize = typeof candidate === 'string' && /^\d+$/.test(candidate)
+    ? Number(candidate)
+    : typeof candidate === 'number'
+      ? candidate
+      : CATALOG_BROWSE_PAGE_SIZE;
+  return CATALOG_BROWSE_PAGE_SIZES.includes(pageSize as CatalogBrowsePageSize)
+    ? pageSize as CatalogBrowsePageSize
+    : CATALOG_BROWSE_PAGE_SIZE;
+}
+
+export function getCatalogBrowsePageAfterPageSizeChange(
+  currentPage: number,
+  currentPageSize: CatalogBrowsePageSize,
+  nextPageSize: CatalogBrowsePageSize,
+  total?: number,
+): number {
+  const firstItemIndex = (normalizeCatalogBrowsePage(currentPage) - 1) * currentPageSize;
+  const requestedPage = Math.floor(firstItemIndex / nextPageSize) + 1;
+  return typeof total === 'number'
+    ? clampCatalogBrowsePage(requestedPage, total, nextPageSize)
+    : requestedPage;
 }
 
 export function normalizeCatalogBrowseSort(value: unknown): CatalogBrowseSort {
@@ -72,10 +99,12 @@ export function getCatalogBrowseRange(
 export function getCatalogBrowseHref(
   page: number,
   sort: CatalogBrowseSort,
+  pageSize: CatalogBrowsePageSize = CATALOG_BROWSE_PAGE_SIZE,
 ): string {
   const params = new URLSearchParams();
-  if (sort !== 'az') params.set('sort', sort);
   if (page > 1) params.set('page', String(page));
+  if (pageSize !== CATALOG_BROWSE_PAGE_SIZE) params.set('pageSize', String(pageSize));
+  if (sort !== 'az') params.set('sort', sort);
   const query = params.toString();
   return query ? `/browse?${query}` : '/browse';
 }

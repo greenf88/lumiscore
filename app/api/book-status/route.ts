@@ -15,7 +15,7 @@ function requestedWorkIds(request: NextRequest): string[] {
     .split(',')
     .map((value) => value.trim())
     .filter(isCatalogWorkId)
-    .slice(0, 100);
+    .slice(0, 128);
 }
 
 export async function GET(request: NextRequest) {
