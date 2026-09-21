@@ -481,6 +481,43 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-book-copy .collection-book-status { width: fit-content; padding: 3px 6px; border: 1px solid var(--border); color: var(--gold); }
 .collection-book-row.status-dnf .collection-book-status { color: #df786e; }
 .collection-book-copy em { color: var(--gold); font-size: 10px; font-style: normal; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.collection-book-controls { min-width: 0; position: relative; }
+.collection-book-control-triggers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.collection-book-control-triggers > button { min-width: 0; min-height: 44px; display: grid; align-content: center; gap: 2px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg); color: var(--text); cursor: pointer; text-align: left; }
+.collection-book-control-triggers > button:hover:not(:disabled), .collection-book-control-triggers > button[aria-expanded='true'] { border-color: var(--teal); }
+.collection-book-control-triggers span { overflow: hidden; color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .06em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.collection-book-control-triggers strong { overflow: hidden; font-family: var(--serif); font-size: 12px; font-weight: 400; text-overflow: ellipsis; white-space: nowrap; }
+.collection-quick-editor { width: min(330px, calc(100vw - 32px)); position: absolute; z-index: 20; top: calc(100% + 7px); right: 0; padding: 12px; border: 1px solid var(--border); box-shadow: 0 14px 38px rgb(0 0 0 / 22%); background: var(--bg); }
+.collection-quick-editor [role='radiogroup'] { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.collection-quick-editor [role='radio'], .collection-editor-clear { min-height: 44px; padding: 7px 9px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); cursor: pointer; font-size: 10px; }
+.collection-quick-editor [role='radio'][aria-checked='true'] { border-color: var(--gold); background: var(--gold); color: #1d1a15; }
+.collection-quick-editor .collection-rating-options { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.collection-editor-clear { width: 100%; margin-top: 8px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.collection-book-controls button:focus-visible, .collection-bulk-progress button:focus-visible, .collection-book-select input:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.collection-book-controls button:disabled, .collection-bulk-progress button:disabled { cursor: wait; opacity: .55; }
+.collection-control-message { margin: 6px 0 0; color: #df786e; font-size: 9px; line-height: 1.4; }
+.collection-bulk-progress { width: min(980px, calc(100% - 48px)); display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 24px; margin: 26px auto 0; padding: 20px; border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.collection-bulk-progress h2 { margin: 0; font-family: var(--serif); font-size: 22px; font-weight: 400; }
+.collection-bulk-progress > div:first-child > p { margin: 5px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.collection-bulk-toggle, .collection-bulk-filters button, .collection-bulk-selection-actions button, .collection-bulk-action-bar button { min-height: 44px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); cursor: pointer; font-size: 10px; font-weight: 750; }
+.collection-bulk-toggle { border-color: var(--teal); color: var(--teal); }
+.collection-bulk-panel, .collection-bulk-feedback { grid-column: 1 / -1; }
+.collection-bulk-filters, .collection-bulk-selection-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.collection-bulk-filters button[aria-pressed='true'] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 18%, transparent); }
+.collection-bulk-selection-actions { margin-top: 10px; }
+.collection-bulk-visible-count { margin: 10px 0 0; color: var(--muted); font-size: 10px; }
+.collection-bulk-feedback { min-height: 18px; }
+.collection-bulk-feedback p { margin: 4px 0 0; color: var(--teal); font-size: 10px; }
+.collection-bulk-feedback p[role='alert'] { color: #df786e; }
+.collection-bulk-action-bar { position: fixed; z-index: 50; right: 50%; bottom: max(12px, env(safe-area-inset-bottom)); width: min(940px, calc(100% - 32px)); min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px; border: 1px solid var(--teal); box-shadow: 0 16px 48px rgb(0 0 0 / 32%); background: var(--bg); transform: translateX(50%); }
+.collection-bulk-action-bar > strong { flex: 0 0 auto; font-family: var(--serif); font-size: 16px; font-weight: 400; }
+.collection-bulk-action-bar > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.collection-page-shell.has-bulk-mode .collection-book-list { padding-bottom: 180px; }
+.collection-book-row.is-bulk-mode { grid-template-columns: 44px minmax(0, 1fr); }
+.collection-book-row.is-bulk-mode.is-selected { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 8%, var(--surface)); }
+.collection-book-select { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; }
+.collection-book-select input { width: 20px; height: 20px; accent-color: var(--teal); }
+.collection-book-select span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; }
 .my-books-page { width: min(1220px, calc(100% - 48px)); min-height: calc(100vh - 76px); margin: 0 auto; padding: 62px 0 84px; }
 .my-books-heading { max-width: 720px; }
 .my-books-heading h1 { margin: 15px 0 13px; font-family: var(--serif); font-size: clamp(48px, 7vw, 76px); font-weight: 400; line-height: 1; letter-spacing: -.05em; }
@@ -724,6 +761,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .collection-book-main .book-cover-small { width: 52px; height: 78px; }
   .collection-book-copy strong { font-size: 17px; }
   .reading-status-control.is-compact { width: 100%; min-width: 0; }
+  .collection-bulk-progress { width: calc(100% - 28px); grid-template-columns: 1fr; align-items: stretch; padding: 16px; }
+  .collection-bulk-toggle { width: 100%; }
+  .collection-bulk-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .collection-bulk-selection-actions { display: grid; grid-template-columns: 1fr; }
+  .collection-book-control-triggers { grid-template-columns: 1fr 1fr; }
+  .collection-quick-editor { width: 100%; position: static; margin-top: 7px; box-shadow: none; }
+  .collection-bulk-action-bar { max-height: min(52vh, 330px); align-items: stretch; flex-direction: column; overflow-y: auto; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .collection-bulk-action-bar > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+  .collection-bulk-action-bar button { width: 100%; }
+  .collection-book-row.is-bulk-mode { grid-template-columns: 44px minmax(0, 1fr); }
+  .collection-book-row.is-bulk-mode .collection-book-main { grid-template-columns: 52px minmax(0, 1fr); }
+  .collection-book-row.is-bulk-mode .mini-score { display: none; }
   .my-books-page { width: calc(100% - 28px); min-height: auto; padding: 42px 0 64px; }
   .my-books-heading h1 { font-size: clamp(42px, 14vw, 60px); }
   .my-books-heading p { font-size: 16px; }

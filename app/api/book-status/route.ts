@@ -45,9 +45,12 @@ export async function POST(request: NextRequest) {
     : [];
 
   try {
-    const statuses = await migrateGuestWantToRead(workIds);
-    return statuses
-      ? json({ statuses: Object.fromEntries(statuses) })
+    const result = await migrateGuestWantToRead(workIds);
+    return result
+      ? json({
+        statuses: Object.fromEntries(result.statuses),
+        ratedWorksPreserved: result.ratedWorksPreserved,
+      })
       : json({ error: 'Sign in to save reading statuses.' }, 401);
   } catch {
     return json({ error: 'Guest reading list could not be migrated.' }, 500);

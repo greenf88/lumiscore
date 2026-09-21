@@ -3,6 +3,10 @@ import { isSameOriginRequest, PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/reques
 import { isCatalogWorkId } from '@/lib/books/book-detail';
 import { isReadingStatus } from '@/lib/collections/model';
 import {
+  RatedWorkStatusConflictError,
+  StatusReconciliationError,
+} from '@/lib/collections/status-mutations';
+import {
   deleteUserBookStatus,
   loadUserBookStatuses,
   saveUserBookStatus,
@@ -48,7 +52,20 @@ export async function PUT(request: NextRequest, { params }: StatusRouteProps) {
     return saved
       ? json({ status: saved })
       : json({ error: 'Sign in to save a reading status.' }, 401);
-  } catch {
+  } catch (error) {
+    if (error instanceof RatedWorkStatusConflictError) {
+      return json({
+        error: 'Rated books must keep the Read status.',
+        code: 'rated_work_conflict',
+        conflictingWorkIds: error.conflictingWorkIds,
+      }, 409);
+    }
+    if (error instanceof StatusReconciliationError) {
+      return json({
+        error: 'The status may have been saved. Reload this book to confirm it.',
+        code: 'status_reconciliation_failed',
+      }, 503);
+    }
     return json({ error: 'Reading status could not be saved.' }, 500);
   }
 }
@@ -62,7 +79,20 @@ export async function DELETE(request: NextRequest, { params }: StatusRouteProps)
     return deleted === null
       ? json({ error: 'Sign in to change a reading status.' }, 401)
       : json({ status: null });
-  } catch {
+  } catch (error) {
+    if (error instanceof RatedWorkStatusConflictError) {
+      return json({
+        error: 'Rated books must keep the Read status.',
+        code: 'rated_work_conflict',
+        conflictingWorkIds: error.conflictingWorkIds,
+      }, 409);
+    }
+    if (error instanceof StatusReconciliationError) {
+      return json({
+        error: 'The status may have changed. Reload this book to confirm it.',
+        code: 'status_reconciliation_failed',
+      }, 503);
+    }
     return json({ error: 'Reading status could not be removed.' }, 500);
   }
 }

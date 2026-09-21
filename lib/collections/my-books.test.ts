@@ -108,8 +108,8 @@ test('safe guest migration is shared and never overwrites an existing status', (
   assert.match(guestHook, /localStorage\.removeItem\(GUEST_WANTED_STORAGE_KEY\)/);
   assert.match(statusLoader, /from\('works'\)/);
   assert.match(statusLoader, /catalogIds/);
-  assert.match(statusLoader, /missing = catalogIds\.filter/);
-  assert.match(statusLoader, /existingIds/);
+  assert.match(statusLoader, /planGuestWantToReadMigration/);
+  assert.match(statusLoader, /ratedWorksPreserved/);
 });
 
 test('logout never copies authenticated statuses into guest storage', () => {

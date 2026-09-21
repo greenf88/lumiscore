@@ -45,7 +45,11 @@ type StatusRow = {
   status: ReadingStatus;
   updated_at?: string | null;
 };
-type RatingRow = { work_id: number | string; updated_at?: string | null };
+type RatingRow = {
+  work_id: number | string;
+  rating?: number | string | null;
+  updated_at?: string | null;
+};
 
 export type CollectionPageData = {
   collection: CollectionSummary;
@@ -53,6 +57,7 @@ export type CollectionPageData = {
   authenticated: boolean;
   statuses: Record<string, ReadingStatus>;
   ratedWorkIds: string[];
+  userRatings: Record<string, number>;
   progress: CollectionProgress | SeriesProgress;
   highlightedUnreadWorkId: string | null;
 };
@@ -234,7 +239,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
             .eq('user_id', user.id).in('work_id', workIds.map(Number))
           : Promise.resolve({ data: [] as StatusRow[], error: null }),
         user && workIds.length > 0
-          ? client.from('ratings').select('work_id')
+          ? client.from('ratings').select('work_id,rating')
             .eq('user_id', user.id).in('work_id', workIds.map(Number))
           : Promise.resolve({ data: [] as RatingRow[], error: null }),
       ]);
@@ -252,8 +257,16 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   }));
   const ratedWorkIds = ((ratingsResult.data ?? []) as RatingRow[])
     .map((row) => String(row.work_id));
+  const userRatings = Object.fromEntries(
+    ((ratingsResult.data ?? []) as RatingRow[]).flatMap((row) => {
+      const rating = Number(row.rating);
+      return Number.isInteger(rating) && rating >= 1 && rating <= 10
+        ? [[String(row.work_id), rating] as const]
+        : [];
+    }),
+  );
   const statuses = statusRecord((statusesResult.data ?? []) as StatusRow[]);
-  for (const workId of ratedWorkIds) statuses[workId] ??= 'read';
+  for (const workId of ratedWorkIds) statuses[workId] = 'read';
   const statusMap = new Map(Object.entries(statuses));
   const ratedWorkIdSet = new Set(ratedWorkIds);
   const progress = collection.collectionType === 'series'
@@ -274,6 +287,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
     authenticated: Boolean(user),
     statuses,
     ratedWorkIds,
+    userRatings,
     progress,
     highlightedUnreadWorkId: highlighted?.workId ?? null,
   };

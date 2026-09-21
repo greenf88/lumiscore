@@ -15,7 +15,14 @@ import {
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { getBookHref } from '@/lib/books/book-navigation';
 import { BookCover, Footer, Header } from './LumiScoreHome';
-import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
+import { LumiScoreCollectionBookControls } from './LumiScoreCollectionBookControls';
+import {
+  LumiScoreCollectionBulkProgress,
+} from './LumiScoreCollectionBulkProgress';
+import {
+  filterCollectionWorkIds,
+  type CollectionBulkFilter,
+} from '@/lib/collections/bulk-progress';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 
 const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
@@ -30,8 +37,23 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<Record<string, ReadingStatus>>(data.statuses);
+  const [ratings, setRatings] = useState<Record<string, number>>(data.userRatings);
+  const [ratedIds, setRatedIds] = useState(() => new Set(data.ratedWorkIds));
+  const [bulkActive, setBulkActive] = useState(false);
+  const [bulkFilter, setBulkFilter] = useState<CollectionBulkFilter>('all');
+  const [selectedWorkIds, setSelectedWorkIds] = useState(() => new Set<string>());
+  const [bulkPending, setBulkPending] = useState(false);
+  const [bulkMessage, setBulkMessage] = useState('');
+  const [bulkError, setBulkError] = useState('');
   const statusMap = useMemo(() => new Map(Object.entries(statuses)), [statuses]);
-  const ratedWorkIds = useMemo(() => new Set(data.ratedWorkIds), [data.ratedWorkIds]);
+  const ratedWorkIds = ratedIds;
+  const visibleWorkIds = useMemo(() => filterCollectionWorkIds(
+    books,
+    statuses,
+    ratedWorkIds,
+    bulkActive ? bulkFilter : 'all',
+  ), [books, bulkActive, bulkFilter, ratedWorkIds, statuses]);
+  const visibleWorkIdSet = useMemo(() => new Set(visibleWorkIds), [visibleWorkIds]);
   const seriesProgress = collection.collectionType === 'series'
     ? calculateSeriesProgress(
       books,
@@ -70,8 +92,140 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
       ? t('collection.universe')
       : t('collection.authorCollection');
 
+  const updateLocalStatus = (workId: string, status: ReadingStatus | null) => {
+    setStatuses((current) => {
+      const next = { ...current };
+      if (status) next[workId] = status;
+      else delete next[workId];
+      return next;
+    });
+  };
+
+  const updateLocalRating = (workId: string, rating: number | null) => {
+    setRatings((current) => {
+      const next = { ...current };
+      if (rating === null) delete next[workId];
+      else next[workId] = rating;
+      return next;
+    });
+    setRatedIds((current) => {
+      const next = new Set(current);
+      if (rating === null) next.delete(workId);
+      else next.add(workId);
+      return next;
+    });
+  };
+
+  const toggleSelected = (workId: string) => {
+    setSelectedWorkIds((current) => {
+      const next = new Set(current);
+      if (next.has(workId)) next.delete(workId);
+      else if (next.size < 100) next.add(workId);
+      return next;
+    });
+  };
+
+  const applyBulkStatus = async (nextStatus: ReadingStatus | null) => {
+    const workIds = [...selectedWorkIds];
+    const ratedConflicts = nextStatus === 'read'
+      ? []
+      : workIds.filter((workId) => ratedWorkIds.has(workId));
+    if (ratedConflicts.length > 0) {
+      setBulkError(t('collection.bulkRatedConflict', { count: ratedConflicts.length }));
+      setBulkMessage('');
+      return;
+    }
+    if (!window.confirm(t('collection.bulkConfirm', { count: workIds.length }))) return;
+
+    const snapshot = { ...statuses };
+    setStatuses((current) => {
+      const next = { ...current };
+      for (const workId of workIds) {
+        if (nextStatus) next[workId] = nextStatus;
+        else delete next[workId];
+      }
+      return next;
+    });
+    setBulkPending(true);
+    setBulkError('');
+    setBulkMessage('');
+    let receivedResponse = false;
+    let ambiguousOutcome = false;
+    try {
+      const response = await fetch(`/api/collections/${encodeURIComponent(collection.slug)}/statuses/bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          workIds,
+          action: nextStatus ? 'set' : 'clear',
+          status: nextStatus,
+        }),
+      });
+      receivedResponse = true;
+      const payload = await response.json().catch(() => ({})) as {
+        statuses?: Record<string, ReadingStatus>;
+        ratedWorkIds?: string[];
+        changed?: number;
+        error?: string;
+        code?: string;
+        conflictingWorkIds?: string[];
+      };
+      ambiguousOutcome = payload.code === 'status_reconciliation_failed';
+      if (response.status === 401) {
+        window.location.assign(`/login?next=${encodeURIComponent(returnTo)}`);
+        return;
+      }
+      if (response.status === 409 && payload.code === 'rated_work_conflict') {
+        const conflicts = payload.conflictingWorkIds ?? [];
+        setRatedIds((current) => new Set([...current, ...conflicts]));
+        throw new Error(t('collection.bulkRatedConflict', { count: conflicts.length }));
+      }
+      if (!response.ok) throw new Error(payload.error ?? t('collection.bulkError'));
+      setStatuses((current) => {
+        const next = { ...current };
+        for (const workId of workIds) {
+          const canonical = payload.statuses?.[workId] ?? null;
+          if (canonical) next[workId] = canonical;
+          else delete next[workId];
+        }
+        return next;
+      });
+      const returnedRatedWorkIds = payload.ratedWorkIds;
+      if (returnedRatedWorkIds) {
+        setRatedIds((current) => new Set([...current, ...returnedRatedWorkIds]));
+      }
+      setBulkMessage(t('collection.bulkSuccess', { count: payload.changed ?? 0 }));
+    } catch (caught) {
+      if (!receivedResponse || ambiguousOutcome) {
+        try {
+          const reconcile = await fetch(`/api/book-status?workIds=${encodeURIComponent(workIds.join(','))}`, {
+            cache: 'no-store',
+          });
+          if (!reconcile.ok) throw new Error('RECONCILE_FAILED');
+          const payload = await reconcile.json() as { statuses?: Record<string, ReadingStatus> };
+          setStatuses((current) => {
+            const next = { ...current };
+            for (const workId of workIds) {
+              const canonical = payload.statuses?.[workId] ?? null;
+              if (canonical) next[workId] = canonical;
+              else delete next[workId];
+            }
+            return next;
+          });
+        } catch {
+          setStatuses(snapshot);
+        }
+      } else {
+        setStatuses(snapshot);
+      }
+      setBulkError(caught instanceof Error ? caught.message : t('collection.bulkError'));
+    } finally {
+      setBulkPending(false);
+    }
+  };
+
   return (
-    <main className="site-shell collection-page-shell">
+    <main className={`site-shell collection-page-shell${bulkActive ? ' has-bulk-mode' : ''}`}>
       <Header
         onThemeToggle={toggleTheme}
         query={query}
@@ -120,8 +274,36 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         )}
       </section>
 
+      {authenticated && (
+        <LumiScoreCollectionBulkProgress
+          active={bulkActive}
+          filter={bulkFilter}
+          visibleWorkIds={visibleWorkIds}
+          selectedWorkIds={selectedWorkIds}
+          ratedWorkIds={ratedWorkIds}
+          pending={bulkPending}
+          message={bulkMessage}
+          error={bulkError}
+          onToggleActive={() => {
+            setBulkActive((current) => !current);
+            setBulkMessage('');
+            setBulkError('');
+          }}
+          onFilterChange={setBulkFilter}
+          onSelectVisible={() => setSelectedWorkIds(new Set(visibleWorkIds.slice(0, 100)))}
+          onSelectUnknown={() => setSelectedWorkIds(new Set(
+            books.filter(({ workId }) => !statuses[workId]).map(({ workId }) => workId).slice(0, 100),
+          ))}
+          onDeselectRated={() => setSelectedWorkIds((current) => new Set(
+            [...current].filter((workId) => !ratedWorkIds.has(workId)),
+          ))}
+          onClearSelection={() => setSelectedWorkIds(new Set())}
+          onApply={(status) => void applyBulkStatus(status)}
+        />
+      )}
+
       <section className="collection-book-list" aria-label={collection.name}>
-        {books.map((item) => {
+        {books.filter(({ workId }) => visibleWorkIdSet.has(workId)).map((item) => {
           const rating = formatPublicRatingDisplay(item.book.score, item.book.ratingsCount ?? 0, locale);
           const itemStatus = statuses[item.workId] ?? null;
           const isAction = item.workId === actionWorkId;
@@ -129,9 +311,16 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           const isHighlighted = item.workId === highlightedUnread;
           const seriesTotal = seriesProgress?.total ?? null;
           return (
-            <article className={`collection-book-row${isAction || isHighlighted ? ' is-highlighted' : ''}${itemStatus ? ` has-status status-${itemStatus}` : ''}`} key={item.workId}>
+            <article className={`collection-book-row${bulkActive ? ' is-bulk-mode' : ''}${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}${itemStatus ? ` has-status status-${itemStatus}` : ''}`} key={item.workId}>
+              {bulkActive && (
+                <label className="collection-book-select">
+                  <input type="checkbox" checked={selectedWorkIds.has(item.workId)}
+                    onChange={() => toggleSelected(item.workId)} />
+                  <span>{t('collection.selectBook', { title: item.book.title })}</span>
+                </label>
+              )}
               <a className="collection-book-main" href={getBookHref(item.book, bookReturnContext) ?? '/browse'}>
-                <BookCover book={item.book} small label={item.book.title} />
+                <BookCover book={item.book} small label={item.book.title} resolveMissing={!bulkActive} />
                 <span className="collection-book-copy">
                   {collection.collectionType === 'series' && item.sequenceNumber !== null && (
                     <small>{canShowSeriesDenominator(item.sequenceNumber, seriesTotal)
@@ -153,20 +342,15 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                 </span>
                 <span className="mini-score"><strong>{rating.score}</strong><small>LumiScore</small></span>
               </a>
-              <LumiScoreReadingStatus
-                workId={item.workId}
-                status={statuses[item.workId] ?? null}
-                authenticated={authenticated}
-                returnTo={returnTo}
-                compact
-                showGuestCta={false}
-                onStatusChange={(status) => setStatuses((current) => {
-                  const next = { ...current };
-                  if (status) next[item.workId] = status;
-                  else delete next[item.workId];
-                  return next;
-                })}
-              />
+              {authenticated && !bulkActive && (
+                <LumiScoreCollectionBookControls
+                  workId={item.workId}
+                  status={statuses[item.workId] ?? null}
+                  rating={ratings[item.workId] ?? null}
+                  onStatusChange={(status) => updateLocalStatus(item.workId, status)}
+                  onRatingChange={(ratingValue) => updateLocalRating(item.workId, ratingValue)}
+                />
+              )}
             </article>
           );
         })}

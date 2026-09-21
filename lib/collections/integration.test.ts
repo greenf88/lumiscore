@@ -4,6 +4,7 @@ import test from 'node:test';
 
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
 const status = read('../supabase/book-status.ts');
+const statusMutations = read('./status-mutations.ts');
 const collections = read('../supabase/collections.ts');
 const detail = read('../../app/components/LumiScoreBookDetail.tsx');
 const detailPage = read('../../app/book/[workId]/page.tsx');
@@ -15,9 +16,10 @@ const personalization = read('../supabase/taste-test.ts');
 
 test('status persistence supports read without a rating and want-to-read independently', () => {
   assert.match(status, /from\('user_book_status'\)\.upsert/);
-  assert.match(status, /status,/);
-  assert.doesNotMatch(status, /from\('ratings'\)/);
-  assert.match(status, /status: 'want_to_read' as const/);
+  assert.match(status, /executeStatusMutation/);
+  assert.match(status, /from\('ratings'\)/);
+  assert.match(statusMutations, /status: 'want_to_read'/);
+  assert.match(statusMutations, /status: 'read'/);
 });
 
 test('rating submission visibly changes the independent status to Read', () => {
@@ -29,9 +31,8 @@ test('rating submission visibly changes the independent status to Read', () => {
 test('guest Want to Read values migrate without overwriting existing account state', () => {
   const hook = read('../../app/components/useWantToRead.ts');
   assert.match(hook, /method: 'POST'/);
-  assert.match(status, /existingIds/);
-  assert.match(status, /missing = catalogIds\.filter/);
-  assert.match(status, /status: 'want_to_read' as const/);
+  assert.match(status, /planGuestWantToReadMigration/);
+  assert.match(statusMutations, /status: 'want_to_read'/);
 });
 
 test('book detail uses real collection membership and a plain collection link', () => {

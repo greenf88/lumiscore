@@ -55,6 +55,11 @@ export function LumiScoreReadingStatus({
         window.location.assign(loginHref);
         return;
       }
+      if (response.status === 409) {
+        onStatusChange('read');
+        setError(t('collection.ratedMustRead'));
+        return;
+      }
       if (!response.ok) throw new Error(t('collection.statusError'));
     } catch (caught) {
       onStatusChange(previous);
