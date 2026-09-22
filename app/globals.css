@@ -501,6 +501,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-bulk-progress > div:first-child > p { margin: 5px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .collection-bulk-toggle, .collection-bulk-filters button, .collection-bulk-selection-actions button, .collection-bulk-action-bar button { min-height: 44px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); cursor: pointer; font-size: 10px; font-weight: 750; }
 .collection-bulk-toggle { border-color: var(--teal); color: var(--teal); }
+.collection-bulk-done { border-color: var(--teal); color: var(--teal); }
 .collection-bulk-panel, .collection-bulk-feedback { grid-column: 1 / -1; }
 .collection-bulk-filters, .collection-bulk-selection-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .collection-bulk-filters button[aria-pressed='true'] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 18%, transparent); }
@@ -767,9 +768,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .collection-bulk-selection-actions { display: grid; grid-template-columns: 1fr; }
   .collection-book-control-triggers { grid-template-columns: 1fr 1fr; }
   .collection-quick-editor { width: 100%; position: static; margin-top: 7px; box-shadow: none; }
-  .collection-bulk-action-bar { max-height: min(52vh, 330px); align-items: stretch; flex-direction: column; overflow-y: auto; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-  .collection-bulk-action-bar > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
-  .collection-bulk-action-bar button { width: 100%; }
+  .collection-bulk-action-bar { max-width: calc(100vw - 28px); max-height: min(52vh, 330px); min-width: 0; align-items: stretch; flex-direction: column; overflow-y: auto; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .collection-bulk-action-bar > div { width: 100%; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+  .collection-bulk-action-bar button { width: 100%; min-width: 0; overflow-wrap: anywhere; }
   .collection-book-row.is-bulk-mode { grid-template-columns: 44px minmax(0, 1fr); }
   .collection-book-row.is-bulk-mode .collection-book-main { grid-template-columns: 52px minmax(0, 1fr); }
   .collection-book-row.is-bulk-mode .mini-score { display: none; }

@@ -32,6 +32,8 @@ test('Dutch and English public header and Taste Test copy are both available', (
   assert.equal(translate('nl', 'header.signIn'), 'Inloggen');
   assert.equal(translate('en', 'header.discover'), 'Discover');
   assert.equal(translate('en', 'header.signIn'), 'Sign in');
+  assert.equal(translate('nl', 'collection.bulkDone'), 'Klaar');
+  assert.equal(translate('en', 'collection.bulkDone'), 'Done');
   assert.equal(translate('nl', 'taste.readingTaste'), 'Jouw leessmaak');
   assert.equal(translate('en', 'taste.readingTaste'), 'Your reading taste');
   assert.deepEqual(getTasteProfileConfidenceCopy('LOW', 'nl'), {

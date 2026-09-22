@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useEffect, useRef } from 'react';
 import type { ReadingStatus } from '@/lib/collections/model';
 import {
   COLLECTION_BULK_FILTERS,
@@ -33,7 +34,8 @@ export function LumiScoreCollectionBulkProgress({
   pending,
   message,
   error,
-  onToggleActive,
+  onOpen,
+  onClose,
   onFilterChange,
   onSelectVisible,
   onSelectUnknown,
@@ -49,7 +51,8 @@ export function LumiScoreCollectionBulkProgress({
   pending: boolean;
   message: string;
   error: string;
-  onToggleActive: () => void;
+  onOpen: () => void;
+  onClose: () => void;
   onFilterChange: (filter: CollectionBulkFilter) => void;
   onSelectVisible: () => void;
   onSelectUnknown: () => void;
@@ -58,7 +61,24 @@ export function LumiScoreCollectionBulkProgress({
   onApply: (status: ReadingStatus | null) => void;
 }) {
   const { t } = useLumiScoreLocale();
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const selectedRated = [...selectedWorkIds].filter((workId) => ratedWorkIds.has(workId)).length;
+  const closeAndRestoreFocus = useCallback(() => {
+    if (pending) return;
+    onClose();
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  }, [onClose, pending]);
+
+  useEffect(() => {
+    if (!active) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || pending) return;
+      event.preventDefault();
+      closeAndRestoreFocus();
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [active, closeAndRestoreFocus, pending]);
 
   return (
     <section className="collection-bulk-progress" aria-labelledby="collection-bulk-heading">
@@ -66,11 +86,15 @@ export function LumiScoreCollectionBulkProgress({
         <h2 id="collection-bulk-heading">{t('collection.bulkHeading')}</h2>
         <p>{t('collection.bulkCopy')}</p>
       </div>
-      <button className="collection-bulk-toggle" type="button" aria-expanded={active}
-        onClick={onToggleActive}>{active ? t('collection.bulkClose') : t('collection.bulkOpen')}</button>
+      <button ref={triggerRef} className="collection-bulk-toggle" type="button"
+        aria-expanded={active} aria-controls="collection-bulk-panel"
+        disabled={active && pending}
+        onClick={active ? closeAndRestoreFocus : onOpen}>
+        {active ? t('collection.bulkDone') : t('collection.bulkOpen')}
+      </button>
 
       {active && (
-        <div className="collection-bulk-panel">
+        <div className="collection-bulk-panel" id="collection-bulk-panel">
           <div className="collection-bulk-filters" role="group" aria-label={t('collection.filterLabel')}>
             {COLLECTION_BULK_FILTERS.map((value) => (
               <button key={value} type="button" aria-pressed={filter === value}
@@ -105,6 +129,8 @@ export function LumiScoreCollectionBulkProgress({
             <button type="button" disabled={pending} onClick={() => onApply(null)}>
               {t('collection.clearStatus')}
             </button>
+            <button className="collection-bulk-done" type="button" disabled={pending}
+              onClick={closeAndRestoreFocus}>{t('collection.bulkDone')}</button>
           </div>
         </div>
       )}

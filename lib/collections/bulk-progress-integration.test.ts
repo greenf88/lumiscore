@@ -102,6 +102,33 @@ test('bulk controls provide live feedback, alerts, sticky safe-area UI and 44px 
   assert.match(css, /collection-bulk-toggle[\s\S]*?min-height: 44px/);
 });
 
+test('bulk mode has an explicit localized exit in its header and fixed action row', () => {
+  assert.match(bulk, /active \? t\('collection\.bulkDone'\) : t\('collection\.bulkOpen'\)/);
+  assert.match(bulk, /collection-bulk-action-bar[\s\S]*?collection-bulk-done[\s\S]*?collection\.bulkDone/);
+  assert.match(css, /collection-bulk-action-bar button \{ min-height: 44px/);
+});
+
+test('closing bulk mode clears only transient UI and never mutates stored statuses', () => {
+  const closeStart = page.indexOf('const closeBulkMode');
+  const closeEnd = page.indexOf('const applyBulkStatus', closeStart);
+  const closeBlock = page.slice(closeStart, closeEnd);
+  assert.match(closeBlock, /setBulkActive\(false\)/);
+  assert.match(closeBlock, /setSelectedWorkIds\(new Set\(\)\)/);
+  assert.match(closeBlock, /setBulkMessage\(''\)/);
+  assert.match(closeBlock, /setBulkError\(''\)/);
+  assert.match(closeBlock, /if \(bulkPending\) return/);
+  assert.doesNotMatch(closeBlock, /setStatuses|fetch|DELETE|rollback|location|history/);
+});
+
+test('Escape and Done share safe close behavior and restore focus to the opener', () => {
+  assert.match(bulk, /event\.key !== 'Escape' \|\| pending/);
+  assert.match(bulk, /closeAndRestoreFocus\(\)/);
+  assert.match(bulk, /triggerRef\.current\?\.focus\(\)/);
+  assert.match(bulk, /disabled=\{active && pending\}/);
+  assert.match(bulk, /collection-bulk-done[\s\S]*?disabled=\{pending\}/);
+  assert.match(page, /window\.confirm/);
+});
+
 test('guest collection rendering keeps controls and personal zero states absent', () => {
   assert.match(page, /\{authenticated && \(/);
   assert.match(page, /authenticated && !bulkActive/);

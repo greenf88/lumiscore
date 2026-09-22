@@ -11,6 +11,9 @@ test('collection, status and continuation layouts collapse safely at phone width
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.reading-status-control label \{[^}]*grid-template-columns: 1fr/);
   assert.match(css, /\.collection-hero, \.collection-book-list \{ width: calc\(100% - 28px\); \}/);
   assert.match(css, /\.reading-status-control select \{[^}]*min-height: 44px/);
+  assert.match(css, /\.collection-bulk-action-bar \{[^}]*max-width: calc\(100vw - 28px\)[^}]*min-width: 0/);
+  assert.match(css, /\.collection-bulk-action-bar > div \{[^}]*width: 100%[^}]*min-width: 0[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.collection-bulk-action-bar button \{[^}]*min-width: 0[^}]*overflow-wrap: anywhere/);
 });
 
 test('wide layouts remain bounded instead of creating horizontal overflow', () => {

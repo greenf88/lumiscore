@@ -125,6 +125,20 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
     });
   };
 
+  const openBulkMode = useCallback(() => {
+    setBulkActive(true);
+    setBulkMessage('');
+    setBulkError('');
+  }, []);
+
+  const closeBulkMode = useCallback(() => {
+    if (bulkPending) return;
+    setBulkActive(false);
+    setSelectedWorkIds(new Set());
+    setBulkMessage('');
+    setBulkError('');
+  }, [bulkPending]);
+
   const applyBulkStatus = async (nextStatus: ReadingStatus | null) => {
     const workIds = [...selectedWorkIds];
     const ratedConflicts = nextStatus === 'read'
@@ -284,11 +298,8 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           pending={bulkPending}
           message={bulkMessage}
           error={bulkError}
-          onToggleActive={() => {
-            setBulkActive((current) => !current);
-            setBulkMessage('');
-            setBulkError('');
-          }}
+          onOpen={openBulkMode}
+          onClose={closeBulkMode}
           onFilterChange={setBulkFilter}
           onSelectVisible={() => setSelectedWorkIds(new Set(visibleWorkIds.slice(0, 100)))}
           onSelectUnknown={() => setSelectedWorkIds(new Set(
