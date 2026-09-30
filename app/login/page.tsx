@@ -1,16 +1,19 @@
 import type { Metadata } from 'next';
 import { LumiScoreLogin } from '@/app/components/LumiScoreLogin';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { getSafeNextPath } from '@/lib/auth/request';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Sign in — LumiScore',
   description: 'Sign in or create a LumiScore account to rate books.',
-};
+  canonicalPath: '/login',
+  noIndex: true,
+  follow: true,
+});
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -40,11 +43,6 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <>
-      <LumiScoreMetadata
-        title="Sign in — LumiScore"
-        description="Sign in or create a LumiScore account to rate books."
-        noIndex
-      />
       <LumiScoreLogin
         next={getSafeNextPath(requestedNext)}
         error={errorKey ? translate(locale, errorMessages[errorKey] ?? 'auth.failed') : null}

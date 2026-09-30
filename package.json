@@ -27,6 +27,7 @@
     "test:my-books": "node --experimental-strip-types --test lib/collections/my-books.test.ts",
     "test:guest-persistence": "node --experimental-strip-types --test lib/taste-test/guest-storage.test.ts lib/collections/guest-want-to-read.test.ts",
     "test:seo": "node --experimental-strip-types --test lib/seo/*.test.ts lib/launch-readiness.test.ts",
+    "test:seo-html": "node --experimental-strip-types --test scripts/test-server-seo.ts",
     "audit:collections": "node --env-file=.env.local --experimental-strip-types scripts/audit-collections.ts",
     "audit:collection-metadata": "node --env-file=.env.local --experimental-strip-types scripts/audit-live-collection-metadata.ts",
     "audit:series-completeness": "node --env-file=.env.local --experimental-strip-types scripts/audit-series-completeness.ts",

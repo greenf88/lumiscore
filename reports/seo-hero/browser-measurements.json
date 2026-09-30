@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-30",
+  "method": "Codex in-app Chromium; local production builds before/after; scripts/seo-lab-proxy.mjs injects identical PerformanceObservers. Same browser, viewport 390x844, DPR approximately 1, response Cache-Control no-store, no network/CPU throttling. External covers and live anonymous catalog responses are not deterministic. Not a production-origin Lighthouse/CrUX measurement.",
+  "baselineCommit": "5a91c735db0b9b94181e0e525db8b265003b6ae2",
+  "lcpElementEveryMobileRun": "DIV.hero-photo",
+  "ink": {
+    "beforeLcpMs": [1344, 1472, 1200], "beforeMedianMs": 1344,
+    "afterLcpMs": [1016, 884, 640], "afterMedianMs": 884,
+    "afterImage": "/assets/dark-reading-scene-1024.avif",
+    "afterResourceStartMs": [898.3, 717.9, 512],
+    "afterResourceEndMs": [918.5, 753.5, 534.4],
+    "afterEncodedBytes": 17526, "afterTransferBytes": 17826
+  },
+  "paper": {
+    "beforeLcpMs": [1628, 1340, 1116], "beforeMedianMs": 1340,
+    "afterLcpMs": [856, 636, 636], "afterMedianMs": 636,
+    "afterImage": "/assets/light-book-stack-1024.avif",
+    "afterResourceStartMs": [756.4, 537.5, 507.1],
+    "afterResourceEndMs": [771.5, 555.7, 518.3],
+    "afterEncodedBytes": 20568, "afterTransferBytes": 20868
+  },
+  "afterInitiator": "link",
+  "heroRequestsAfterPerRun": 1,
+  "allMeasuredRuns": {"layoutShiftEntries": [], "horizontalOverflow": false, "scriptErrors": [], "browserConsoleErrorsOrWarnings": []},
+  "desktopAfter": {
+    "viewport": "1440x1000, DPR approximately 1",
+    "paper": {"lcpMs": 1040, "encodedBytes": 40635, "transferBytes": 40935, "image": "/assets/light-book-stack-1536.avif"},
+    "ink": {"lcpMs": 876, "encodedBytes": 31594, "transferBytes": 31894, "image": "/assets/dark-reading-scene-1536.avif"}
+  },
+  "additionalNlChecks": [
+    {"viewport":"390x844", "theme":"ink", "lcpMs":716, "overflow":false},
+    {"viewport":"360x800", "theme":"paper", "lcpMs":880, "overflow":false}
+  ],
+  "productionOriginalFiles": [
+    {"path":"/assets/dark-reading-scene.png", "status":200, "contentLength":1659147, "bodyBytes":1659147, "contentEncoding":null, "identicalToRepository":true, "sha256":"e732556e129b52c56c26172ad99603d9bd40c43e3738fb98fd36572eb6616880"},
+    {"path":"/assets/light-book-stack.png", "status":200, "contentLength":1920889, "bodyBytes":1920889, "contentEncoding":null, "identicalToRepository":true, "sha256":"702b163a9410f908110d10e14c68d4d2d5747c1e52ff61a236bcd7cf9b725657"}
+  ],
+  "limitations": ["agent-browser executable blocked by Windows application-control policy; not bypassed", "Built-in browser supports visual/DOM inspection but not direct production Performance API access", "Local-only observer proxy buffers HTML before sending it, identically before/after; production streaming/CDN are not measured", "Original CSS image resource timings were absent; baseline byte sizes verified separately via HTTP, not invented", "Only emulated viewport on desktop CPU, not a physical phone or high-DPR screenshot", "WebP fallback supported in CSS and generated, not tested in an AVIF-incapable browser", "LCP differences also include variable server and catalog response times; no guaranteed production improvement"]
+}

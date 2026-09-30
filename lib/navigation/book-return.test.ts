@@ -200,9 +200,9 @@ test('book SEO stays canonical and independent from navigation context', async (
     page.indexOf('export default async function BookPage'),
   );
 
-  assert.match(metadataBlock, /alternates: \{ canonical: `\/book\/\$\{workId\}` \}/);
+  assert.match(metadataBlock, /canonicalPath: `\/book\/\$\{book\.workId\}`/);
   assert.doesNotMatch(metadataBlock, /searchParams|returnTo|returnNavigation/);
-  assert.match(page, /canonicalPath=\{`\/book\/\$\{book\.workId\}`\}/);
+  assert.doesNotMatch(page, /<LumiScoreMetadata/);
 });
 
 test('back navigation remains a keyboard-accessible, mobile-safe anchor', async () => {

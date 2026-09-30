@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreInformationPage } from './LumiScoreInformationPage';
-import {
-  LUMISCORE_DEFAULT_IMAGE,
-  LumiScoreMetadata,
-} from './LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import {
   getInformationPageContent,
@@ -17,31 +14,11 @@ export async function generateInformationPageMetadata(
   const { locale } = await resolveRequestLocale();
   const content = getInformationPageContent(key, locale);
 
-  return {
+  return createPageMetadata({
     title: content.seoTitle,
     description: content.seoDescription,
-    alternates: { canonical: content.path },
-    openGraph: {
-      title: content.seoTitle,
-      description: content.seoDescription,
-      url: content.path,
-      siteName: 'LumiScore',
-      type: 'website',
-      images: [{
-        url: LUMISCORE_DEFAULT_IMAGE,
-        width: 1664,
-        height: 936,
-        alt: content.title,
-      }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: content.seoTitle,
-      description: content.seoDescription,
-      images: [LUMISCORE_DEFAULT_IMAGE],
-    },
-    robots: { index: true, follow: true },
-  };
+    canonicalPath: content.path,
+  });
 }
 
 export async function LumiScoreInformationRoute({
@@ -59,11 +36,6 @@ export async function LumiScoreInformationRoute({
 
   return (
     <>
-      <LumiScoreMetadata
-        title={content.seoTitle}
-        description={content.seoDescription}
-        canonicalPath={content.path}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

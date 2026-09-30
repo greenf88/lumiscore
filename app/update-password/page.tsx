@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { LumiScorePasswordRecovery } from '@/app/components/LumiScorePasswordRecovery';
 import {
   isValidRecoveryState,
@@ -15,11 +15,13 @@ import { getVerifiedServerUser } from '@/lib/supabase/auth';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Choose a new password — LumiScore',
   description: 'Securely update your LumiScore password.',
-  robots: { index: false, follow: false },
-};
+  canonicalPath: '/update-password',
+  noIndex: true,
+  follow: false,
+});
 
 const errorMessages: Record<string, TranslationKey> = {
   password_mismatch: 'auth.passwordMismatch',
@@ -58,11 +60,6 @@ export default async function UpdatePasswordPage({
 
   return (
     <>
-      <LumiScoreMetadata
-        title="Choose a new password — LumiScore"
-        description="Securely update your LumiScore password."
-        noIndex
-      />
       <LumiScorePasswordRecovery
         mode="update"
         error={error

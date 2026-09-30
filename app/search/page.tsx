@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreSearchPage } from '@/app/components/LumiScoreSearchPage';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import type { Book } from '@/app/data/books';
 import {
   CATALOG_SEARCH_PAGE_LIMIT,
@@ -27,13 +27,14 @@ export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
   const query = readQuery(await searchParams);
-  return {
+  return createPageMetadata({
     title: query ? `Search: ${query} — LumiScore` : 'Search books — LumiScore',
     description: query
       ? `Search LumiScore for books and authors matching ${query}.`
       : 'Search the full LumiScore book catalog by title or author.',
-    robots: { index: false, follow: true },
-  };
+    canonicalPath: '/search',
+    noIndex: true,
+  });
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -57,14 +58,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   const authState = await authStatePromise;
-  const title = query ? `Search: ${query} — LumiScore` : 'Search books — LumiScore';
-  const description = query
-    ? `Search LumiScore for books and authors matching ${query}.`
-    : 'Search the full LumiScore book catalog by title or author.';
 
   return (
     <>
-      <LumiScoreMetadata title={title} description={description} noIndex />
       <LumiScoreSearchPage
         initialQuery={query}
         results={results}

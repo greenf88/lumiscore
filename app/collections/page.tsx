@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { LumiScoreCollectionsPage } from '@/app/components/LumiScoreCollectionsPage';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { normalizeCollectionDirectoryFilter } from '@/lib/collections/directory';
 import type { CollectionsDirectoryData } from '@/lib/supabase/collections';
 
@@ -30,14 +30,12 @@ export async function generateMetadata({
   searchParams,
 }: CollectionsPageProps): Promise<Metadata> {
   const filter = await readFilter(searchParams);
-  return {
+  return createPageMetadata({
     title: 'Browse collections — LumiScore',
     description: 'Explore series, universes and author collections on LumiScore.',
-    alternates: { canonical: '/collections' },
-    robots: filter === 'all'
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
-  };
+    canonicalPath: '/collections',
+    noIndex: filter !== 'all',
+  });
 }
 
 export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
@@ -51,12 +49,6 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
 
   return (
     <>
-      <LumiScoreMetadata
-        title="Browse collections — LumiScore"
-        description="Explore series, universes and author collections on LumiScore."
-        canonicalPath="/collections"
-        noIndex={filter !== 'all'}
-      />
       <LumiScoreCollectionsPage
         data={data}
         filter={filter}

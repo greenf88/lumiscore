@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import { LumiScoreTasteTest } from '@/app/components/LumiScoreTasteTest';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import type { Book } from '@/app/data/books';
 import { TASTE_TEST_WORK_IDS } from '@/lib/taste-test/config';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Taste Test — LumiScore',
   description: 'Choose between ten pairs of books to shape your LumiScore reading taste.',
-};
+  canonicalPath: '/taste-test',
+  noIndex: false,
+  follow: true,
+});
 
 export default async function TasteTestPage() {
   const [books, initialAuthState] = await Promise.all([
@@ -27,11 +30,6 @@ export default async function TasteTestPage() {
   ]);
   return (
     <>
-      <LumiScoreMetadata
-        title="Taste Test — LumiScore"
-        description="Choose between ten pairs of books to shape your LumiScore reading taste."
-        canonicalPath="/taste-test"
-      />
       <LumiScoreTasteTest books={books} initialAuthState={initialAuthState} />
     </>
   );

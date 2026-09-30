@@ -1,0 +1,43 @@
+{
+  "measuredAt": "2026-09-30T07:21:51.183Z",
+  "results": [
+    {
+      "name": "seo-navigation-i18n-information-performance",
+      "command": "node --experimental-strip-types --test lib/seo/*.test.ts lib/launch-readiness.test.ts lib/navigation/*.test.ts lib/i18n/*.test.ts lib/information/*.test.ts lib/performance/*.test.ts",
+      "exitCode": 0,
+      "tests": 54
+    },
+    {
+      "name": "book-auth-collection",
+      "command": "node --experimental-strip-types --test lib/books/*.test.ts lib/auth/*.test.ts lib/collections/my-books.test.ts lib/collections/directory.test.ts",
+      "exitCode": 0,
+      "tests": 151
+    },
+    {
+      "name": "server-html",
+      "command": "node --experimental-strip-types --test scripts/test-server-seo.ts",
+      "exitCode": 0,
+      "tests": 32
+    },
+    {
+      "name": "typescript",
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0
+    },
+    {
+      "name": "eslint",
+      "command": "node node_modules/eslint/bin/eslint.js . --ignore-pattern dist --ignore-pattern .next",
+      "exitCode": 0
+    },
+    {
+      "name": "client-secret-scan",
+      "command": "node --experimental-strip-types scripts/scan-client-secrets.ts",
+      "exitCode": 0
+    },
+    {
+      "name": "git-diff-check",
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ]
+}
