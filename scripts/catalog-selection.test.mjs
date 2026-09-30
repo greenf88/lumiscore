@@ -23,6 +23,8 @@ test('all 1000 records and explicit category/year/ISBN corrections agree with CS
   const csv=readCsv(await fs.readFile(path.join(root,'catalog/selection-v1/lumiscore-catalogusselectie-v1.corrected.csv'),'utf8'));
   const original=await fs.readFile(path.join(root,'catalog/selection-v1/lumiscore-catalogusselectie-v1.original.csv'));
   assert.equal(createHash('sha256').update(original).digest('hex'),'ff53583cb71447b14d8de2e4132d64f85702f2f93894ea9b569d3250a7caea82');
+  const correctedBytes=await fs.readFile(path.join(root,'catalog/selection-v1/lumiscore-catalogusselectie-v1.corrected.csv'));
+  assert.equal(createHash('sha256').update(correctedBytes).digest('hex'),'d59d8cdbfde34cbf2754b74650dfc8852472daaccd654c6853a23486a7ec0823');
   assert.equal(csv.length,1000);
   assert.ok(records.every(r=>r.classifier==='AI_EDITORIAL'&&!r.basis.includes('HIGH')));
   assert.equal(csv[513]['bestaande LumiScore Work-ID'],'1936');
