@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { LumiScorePasswordRecovery } from '@/app/components/LumiScorePasswordRecovery';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate } from '@/lib/i18n/translations';
@@ -7,11 +7,13 @@ import { translate } from '@/lib/i18n/translations';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: 'Reset password — LumiScore',
   description: 'Request a secure LumiScore password reset link.',
-  robots: { index: false, follow: false },
-};
+  canonicalPath: '/forgot-password',
+  noIndex: true,
+  follow: false,
+});
 
 type ForgotPasswordPageProps = {
   searchParams: Promise<{
@@ -32,11 +34,6 @@ export default async function ForgotPasswordPage({
 
   return (
     <>
-      <LumiScoreMetadata
-        title="Reset password — LumiScore"
-        description="Request a secure LumiScore password reset link."
-        noIndex
-      />
       <LumiScorePasswordRecovery
         mode="request"
         error={error === 'invalid_link'

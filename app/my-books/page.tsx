@@ -1,9 +1,16 @@
 import { cache } from 'react';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { LumiScoreMyBooks } from '@/app/components/LumiScoreMyBooks';
 import type { MyBooksPageData } from '@/lib/supabase/book-status';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata = createPageMetadata({
+  title: 'My books — LumiScore',
+  description: 'Manage your personal reading library on LumiScore.',
+  canonicalPath: '/my-books',
+  noIndex: true,
+});
 
 const load = cache(async (): Promise<MyBooksPageData> => {
   try {
@@ -21,12 +28,6 @@ export default async function MyBooksPage() {
   const data = await load();
   return (
     <>
-      <LumiScoreMetadata
-        title="My books — LumiScore"
-        description="Manage your personal reading library on LumiScore."
-        canonicalPath="/my-books"
-        noIndex
-      />
       <LumiScoreMyBooks data={data} />
     </>
   );

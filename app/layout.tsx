@@ -1,40 +1,39 @@
 import type { Metadata } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
-import {
-  LUMISCORE_DEFAULT_DESCRIPTION,
-  LUMISCORE_PRODUCTION_ORIGIN,
-} from './components/LumiScoreMetadata';
+import { LUMISCORE_DEFAULT_DESCRIPTION } from '@/lib/seo/page-metadata';
+import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(LUMISCORE_PRODUCTION_ORIGIN),
+  metadataBase: new URL(LUMISCORE_SITE_ORIGIN),
   title: 'LumiScore — Find your next great read',
   description: LUMISCORE_DEFAULT_DESCRIPTION,
+  // Relative to the request pathname, including framework not-found boundaries.
+  // Successful pages override this with their explicit canonical policy.
+  alternates: { canonical: './' },
   icons: { icon: '/favicon.ico' },
-  openGraph: {
-    title: 'LumiScore — Find your next great read',
-    description: 'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
-    url: '/',
-    siteName: 'LumiScore',
-    type: 'website',
-    images: [{ url: '/og.png', width: 1664, height: 936, alt: 'LumiScore — Find your next great read' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'LumiScore — Find your next great read',
-    description: 'Smart book recommendations, trusted reader ratings, and matches made for your taste.',
-    images: ['/og.png'],
-  },
 };
 
 const themeScript = `
   try {
-    const saved = localStorage.getItem('lumiscore-theme');
-    const theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'paper' : 'ink');
+    let saved;
+    try { saved = localStorage.getItem('lumiscore-theme'); } catch (_) {}
+    const theme = saved === 'paper' || saved === 'ink' ? saved : (matchMedia('(prefers-color-scheme: light)').matches ? 'paper' : 'ink');
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme === 'paper' ? 'light' : 'dark';
+    if (location.pathname === '/') {
+      const width = matchMedia('(min-width: 1100px), (min-resolution: 1.5dppx)').matches ? 1536 : 1024;
+      const artwork = theme === 'paper' ? 'light-book-stack' : 'dark-reading-scene';
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.as = 'image';
+      preload.type = 'image/avif';
+      preload.fetchPriority = 'high';
+      preload.href = '/assets/' + artwork + '-' + width + '.avif';
+      document.head.appendChild(preload);
+    }
   } catch (_) {}
 `;
 

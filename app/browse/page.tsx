@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { LumiScoreBrowsePage } from '@/app/components/LumiScoreBrowsePage';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { browseHasQuery, createPageMetadata } from '@/lib/seo/page-metadata';
 import {
   CATALOG_BROWSE_PAGE_SIZE,
   normalizeCatalogBrowsePage,
@@ -65,15 +65,12 @@ async function readBrowseState(searchParams: BrowsePageProps['searchParams']) {
 export async function generateMetadata({
   searchParams,
 }: BrowsePageProps): Promise<Metadata> {
-  const { requestedPath } = await readBrowseState(searchParams);
-  return {
+  return createPageMetadata({
     title: 'Browse books — LumiScore',
     description: 'Explore the LumiScore catalog and find your next book.',
-    alternates: { canonical: '/browse' },
-    robots: requestedPath === '/browse'
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
-  };
+    canonicalPath: '/browse',
+    noIndex: browseHasQuery(await searchParams),
+  });
 }
 
 export default async function BrowsePage({ searchParams }: BrowsePageProps) {
@@ -90,16 +87,9 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     pageSize: data.pageSize,
     sort: data.sort,
   });
-  const noIndex = returnTo !== '/browse';
 
   return (
     <>
-      <LumiScoreMetadata
-        title="Browse books — LumiScore"
-        description="Explore the LumiScore catalog and find your next book."
-        canonicalPath="/browse"
-        noIndex={noIndex}
-      />
       <LumiScoreBrowsePage data={data} authState={authState} returnTo={returnTo} />
     </>
   );

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreCollectionPage } from '@/app/components/LumiScoreCollectionPage';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 
 type CollectionPageProps = { params: Promise<{ slug: string }> };
@@ -26,12 +26,12 @@ const load = cache(async (slug: string) => {
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
   const { slug } = await params;
   const data = await load(slug);
-  if (!data) return { title: 'Collection not found — LumiScore', robots: { index: false } };
-  return {
+  if (!data) return createPageMetadata({ title: 'Collection not found — LumiScore', canonicalPath: `/collection/${encodeURIComponent(slug)}`, noIndex: true });
+  return createPageMetadata({
     title: `${data.collection.name} — LumiScore`,
     description: data.collection.description ?? `Track your progress through ${data.collection.name}.`,
-    alternates: { canonical: `/collection/${data.collection.slug}` },
-  };
+    canonicalPath: `/collection/${data.collection.slug}`,
+  });
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
@@ -40,11 +40,6 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
   if (!data) notFound();
   return (
     <>
-      <LumiScoreMetadata
-        title={`${data.collection.name} — LumiScore`}
-        description={data.collection.description ?? `Track your progress through ${data.collection.name}.`}
-        canonicalPath={`/collection/${data.collection.slug}`}
-      />
       <LumiScoreCollectionPage data={data} />
     </>
   );

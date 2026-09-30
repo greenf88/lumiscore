@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -41,32 +41,25 @@ export async function generateMetadata({
   const book = await getBook(workId, locale);
 
   if (!book) {
-    return {
+    return createPageMetadata({
       title: 'Book not found — LumiScore',
-      robots: { index: false, follow: false },
-    };
+      canonicalPath: `/book/${encodeURIComponent(workId)}`,
+      noIndex: true,
+      follow: false,
+    });
   }
 
   const title = `${book.title} by ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book);
   const cover = book.coverUrls?.[0];
 
-  return {
+  return createPageMetadata({
     title,
     description,
-    alternates: { canonical: `/book/${workId}` },
-    openGraph: {
-      title,
-      description,
-      images: cover ? [{ url: cover }] : [],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: cover ? [cover] : [],
-    },
-  };
+    canonicalPath: `/book/${book.workId}`,
+    image: cover ?? null,
+    type: 'article',
+  });
 }
 
 export default async function BookPage({ params, searchParams }: BookPageProps) {
@@ -141,13 +134,6 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
-      <LumiScoreMetadata
-        title={`${book.title} by ${book.author} | LumiScore`}
-        description={getBookMetadataDescription(book)}
-        canonicalPath={`/book/${book.workId}`}
-        image={book.coverUrls?.[0] ?? null}
-        type="article"
-      />
       <LumiScoreBookDetail
         book={book}
         initialRatingState={initialRatingState}

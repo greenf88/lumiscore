@@ -10,17 +10,17 @@ test('production catalog failures never fall back to demo ratings', async () => 
   assert.match(source, /catalogUnavailable=\{catalog\.unavailable\}/);
 });
 
-test('minimum launch SEO assets and direct Vinext metadata are present', async () => {
+test('minimum launch SEO assets use the single Vinext metadata owner', async () => {
   const [metadata, robots, sitemap, detail] = await Promise.all([
-    readFile(new URL('../app/components/LumiScoreMetadata.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('./seo/page-metadata.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/robots.txt/route.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/sitemap.xml/route.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/book/[workId]/page.tsx', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(metadata, /<meta property="og:title"/);
-  assert.match(metadata, /<link rel="canonical"/);
-  assert.match(metadata, /LUMISCORE_SITE_ORIGIN/);
+  assert.match(metadata, /openGraph:/);
+  assert.match(metadata, /alternates: \{ canonical: url \}/);
+  assert.match(metadata, /absoluteLumiScoreUrl/);
   assert.match(robots, /LUMISCORE_SITE_ORIGIN/);
   assert.match(sitemap, /from\('collections'\)/);
   assert.match(sitemap, /s-maxage=3600/);

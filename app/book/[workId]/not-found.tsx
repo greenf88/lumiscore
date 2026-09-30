@@ -1,20 +1,18 @@
 import type { Metadata } from 'next';
 import { LumiScoreWordmark } from '@/app/components/LumiScoreWordmark';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
 import { LanguageSwitcher } from '@/app/components/LumiScoreLocale';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate } from '@/lib/i18n/translations';
 
 export const metadata: Metadata = {
   title: 'Book not found — LumiScore',
-  robots: { index: false, follow: false },
+  // Vinext's HTTP 404 boundary supplies the single noindex directive.
 };
 
 export default async function BookNotFound() {
   const { locale } = await resolveRequestLocale();
   return (
     <>
-      <LumiScoreMetadata title="Book not found — LumiScore" noIndex />
       <main className="book-detail-shell book-not-found-shell">
         <header className="detail-header">
           <LumiScoreWordmark />

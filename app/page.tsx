@@ -1,5 +1,5 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
-import { LumiScoreMetadata } from './components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { books } from './data/books';
 import {
   logServerEnvironmentPresence,
@@ -11,6 +11,11 @@ import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 
 const CATALOG_CATEGORY_COUNT = 7;
+
+export const metadata = createPageMetadata({
+  title: 'LumiScore — Find your next great read',
+  canonicalPath: '/',
+});
 
 async function loadHomepageBooks() {
   logServerEnvironmentPresence();
@@ -97,10 +102,6 @@ export default async function Home() {
   ]);
   return (
     <>
-      <LumiScoreMetadata
-        title="LumiScore — Find your next great read"
-        canonicalPath="/"
-      />
       <LumiScoreHome
         initialBooks={catalog.books}
         catalogStats={{

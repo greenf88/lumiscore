@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { LumiScoreMetadata } from '@/app/components/LumiScoreMetadata';
+import { createPageMetadata } from '@/lib/seo/page-metadata';
 import { LumiScoreReadingPreferences } from '@/app/components/LumiScoreReadingPreferences';
 import { getSafeNextPath } from '@/lib/auth/request';
 import { getVerifiedServerUser } from '@/lib/supabase/auth';
 import { loadReaderEraPreferences } from '@/lib/supabase/reading-preferences';
 
 export const dynamic = 'force-dynamic';
-export const metadata: Metadata = { title: 'Reading preferences — LumiScore' };
+export const metadata: Metadata = createPageMetadata({
+  title: 'Reading preferences — LumiScore', canonicalPath: '/reading-preferences', noIndex: true,
+});
 
 export default async function ReadingPreferencesPage({
   searchParams,
@@ -22,7 +24,6 @@ export default async function ReadingPreferencesPage({
   const initial = await loadReaderEraPreferences(client, user.id);
 
   return <>
-    <LumiScoreMetadata title="Reading preferences — LumiScore" noIndex />
     <LumiScoreReadingPreferences initial={initial} next={next} />
   </>;
 }

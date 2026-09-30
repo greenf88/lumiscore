@@ -14,7 +14,8 @@
   --header: rgba(7, 23, 32, 0.92);
   --panel: rgba(12, 37, 47, 0.93);
   --panel-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
-  --hero-image: url('/assets/dark-reading-scene.png');
+  --hero-image: url('/assets/dark-reading-scene-1024.webp');
+  --hero-avif: url('/assets/dark-reading-scene-1024.avif');
   --serif: Georgia, 'Times New Roman', Times, serif;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: dark;
@@ -34,7 +35,8 @@
   --header: rgba(244, 239, 230, 0.93);
   --panel: rgba(255, 250, 242, 0.96);
   --panel-shadow: 0 24px 60px rgba(69, 54, 36, 0.14);
-  --hero-image: url('/assets/light-book-stack.png');
+  --hero-image: url('/assets/light-book-stack-1024.webp');
+  --hero-avif: url('/assets/light-book-stack-1024.avif');
   color-scheme: light;
 }
 
@@ -118,7 +120,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 :root[data-theme='paper'] .theme-thumb { transform: translateX(16px); }
 
 .hero { position: relative; isolation: isolate; min-height: 660px; overflow: hidden; background: var(--bg); }
-.hero-photo { position: absolute; z-index: -3; inset: 0; background-image: var(--hero-image); background-size: cover; background-position: center; transition: opacity 260ms ease; }
+.hero-photo { position: absolute; z-index: -3; inset: 0; background-image: var(--hero-image); background-image: image-set(var(--hero-avif) type("image/avif"), var(--hero-image) type("image/webp")); background-size: cover; background-position: center; transition: opacity 260ms ease; }
+/* Keep this selection aligned with the early, theme-aware preload in layout. */
+@media (min-width: 1100px), (min-resolution: 1.5dppx) {
+  :root {
+    --hero-image: url('/assets/dark-reading-scene-1536.webp');
+    --hero-avif: url('/assets/dark-reading-scene-1536.avif');
+  }
+  :root[data-theme='paper'] {
+    --hero-image: url('/assets/light-book-stack-1536.webp');
+    --hero-avif: url('/assets/light-book-stack-1536.avif');
+  }
+}
 .hero-wash { position: absolute; z-index: -2; inset: 0; background: linear-gradient(90deg, rgba(4, 17, 24, 0.98) 0%, rgba(4, 17, 24, 0.88) 37%, rgba(4, 17, 24, 0.35) 67%, rgba(4, 17, 24, 0.08) 100%), linear-gradient(0deg, rgba(7, 23, 32, 0.74), transparent 45%); }
 :root[data-theme='paper'] .hero-wash { background: linear-gradient(90deg, rgba(244, 239, 230, 0.99) 0%, rgba(244, 239, 230, 0.91) 40%, rgba(244, 239, 230, 0.32) 72%, rgba(244, 239, 230, 0.08) 100%), linear-gradient(0deg, rgba(244, 239, 230, 0.85), transparent 44%); }
 .hero-inner { width: min(1380px, calc(100% - 48px)); min-height: 660px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(390px, 0.7fr); align-items: center; gap: clamp(54px, 8vw, 130px); padding: 62px 24px 72px; }
