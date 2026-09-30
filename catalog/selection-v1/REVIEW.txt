@@ -1,0 +1,177 @@
+LumiScore Catalogusselectie V1 — lokale reviewoplevering, 30 september 2026
+
+STATUS
+Lokaal geïmplementeerd op feature/catalog-selection-v1-20260930, vanaf origin/main
+b95fb34d19260697efce0ab72f9e4fdc13eb23cd. Geen push, merge, deployment of
+productiemigratie. Alleen kandidaatgerichte, read-only bibliografische queries
+naar productie; geen gebruikersdata gelezen. Andere werkruimten niet gewijzigd.
+
+INVOERCORRECTIE
+Alle 1.000 kandidaten inhoudelijk herbeoordeeld met AI-boekenkennis; twijfelpunten
+gericht getoetst aan uitgevers/bibliotheek/DBNL/Folger. Dit is redactionele AI-
+indeling, geen HIGH-evidence, menselijke beoordeling of uitgeverscertificering.
+Origineel byte-identiek bewaard (ook in Git via .gitattributes):
+SHA256 FF53583CB71447B14D8DE2E4132D64F85702F2F93894EA9B569D3250A7CAEA82.
+
+Eén gecorrigeerd CSV, changes.csv met kandidaat-ID/veld/oud/nieuw/reden:
+- 705 gewijzigde hoofdlabels NL en EN, inclusief normalisatie naar het canonieke
+  model; dit getal betekent niet dat 705 boeken inhoudelijk verkeerd waren.
+- 908 herziene aanvullende-genrevelden; doelgroep en vorm zijn geen genres.
+- 221 gewijzigde jaarvelden, inclusief 16 leeggelaten onzekere jaren.
+- Alle 27 automatische Open Library-jaarvoorkeuren opnieuw beoordeeld.
+  Eerste druk, seriële publicatie, ontstaan/opvoering en editiejaar onderscheiden.
+  Macbeth: 1508 -> 1623. Divine Comedy: eerste druk 1472 bewust behouden,
+  niet vervangen door voltooiingsjaar 1321. Alle 27 uitkomsten in review-summary.json.
+- Twee ongeldige ISBN's verwijderd: 9781405876760 en 9780466619035.
+  Oorspronkelijke waarden blijven in de notities; geen vervangende ISBN verzonnen.
+- 13 werkvormen en één doelgroep gecorrigeerd; tien onzekere records op TWIJFEL.
+- De zes expliciet gemelde categoriefouten zijn hersteld, naast de overige
+  per-recordbeslissingen in review-decisions.mjs.
+
+MATCHING EN WERKELIJKE SELECTIE
+De oorspronkelijke 900/100 is niet afgedwongen. 900 directe catalogusmatches,
+plus één aanvankelijk gemiste vertaling: La sombra del viento is al aanwezig
+als De Schaduw van de Wind, Work 1936. Bron:
+https://www.bibliotheek.nl/catalogus/titel.410962694.html/de-schaduw-van-de-wind/
+Twaalf expliciete auteur-/titelvariantpinnen; geen algemene fuzzy-automerge.
+Gerichte ISBN-controle van de 100 oorspronkelijk ontbrekende kandidaten:
+geen extra match. ISBN-checksum is geen bewijs voor editie- of coveridentiteit.
+
+Importvoorstel en geslaagde lokale proef:
+887 bestaande Works koppelen + 99 ontbrekende Works toevoegen = 986 selectieleden.
+14 uitzonderingen, alle bestaande records, overslaan zonder bestaande Works samen
+te voegen of te verwijderen:
+0041 Leonardo; 0044 Michelle Obama in Her Own Words; 0047 Picasso; 0074 Laws, etc;
+0167 The Lord of the Rings (overkoepelend record); 0253 Tegen verkiezingen;
+0401 Bezorgde ouders; 0408 Breasts and Eggs; 0525 Max Havelaar; 0618 The trophy wife;
+0643 verzameld Shakespeare; 0795 The Spy Who Came in from the Cold;
+0863 Married at first sight; 0983 Organizational Behavior.
+Volledige redenen: review-summary.json en proposed-import-plan.json.
+De vier dubbele catalogusidentiteiten 0253/0401/0525/0795 worden niet gekozen,
+samengevoegd of hernummerd. Hun bestaande gebruikerskoppelingen blijven staan.
+
+IMPLEMENTATIE
+Selectief hergebruik van de lokale Taxonomy V2-foundation:
+16 stabiele categorie-ID's/labels, gedeelde requestnormalisatie, reviewed
+zoekaliassen, SQL EXISTS-filters vóór telling/paginering en fail-closed laadgedrag.
+Vier specifieke non-fictiecategorieën toegevoegd voor deze selectie:
+kunst/cultuur, filosofie/religie, economie/ondernemerschap en true crime.
+Geen merge van de oude branch, oude evidencegates of verplichte 200-Work-pilot.
+Geen categorisering op auteurwoorden, titeltokens of losse subjecttags.
+
+De additieve migratie 20260930185834_catalog_selection_v1.sql introduceert:
+catalog_categories, catalog_selections, catalog_selection_members,
+work_catalog_categories, catalog_work_title_aliases en een private editorial_records.
+AI-status, bronbasis, doelgroepen en vormen blijven intern bewaard.
+Publieke tabellen: alleen lezen voor anon/authenticated, RLS ingeschakeld.
+Private bewijsrecords: niet leesbaar voor anon/authenticated.
+SQL-RPC catalog_editorial_page: security invoker, lege search_path, geen dynamische
+SQL, geen gebruikersgegevens. Boeken zonder categorie blijven ongefilterd zichtbaar.
+Genres combineren met OR; andere filters met AND. Facettellingen respecteren
+zoektekst, taal en selectie maar negeren de gekozen genres.
+Beschikbare-editiesfilters gebruiken expliciete nl/nld/dut en en/eng; onbekende taal
+wordt niet uit titel, nationaliteit of onbewezen CSV-editieclaims afgeleid.
+
+Browse en Search gebruiken hetzelfde model, dezelfde query en databasepaginering.
+32/64/128, alfabetisch/nieuwste, NL/EN en volledige terugnavigatie blijven werken.
+Zoeken heeft geen afkaplimiet van 100 resultaten meer. De bestaande suggestiebalk
+blijft ongewijzigd. Zoekaliassen voor Frankenstein en La sombra del viento
+veranderen de opgeslagen bestaande boektitels niet.
+Geen fictieve rangposities, votes of scores; kandidaat-ID is uitsluitend identiteit.
+Genuine ratings en bestaande editie-/coverselectie hergebruikt, ook in batches voor
+128 resultaten. Nieuwe Works krijgen geen onbewezen editie, ISBN-koppeling of cover.
+
+IMPORTVEILIGHEID EN REPRODUCTIE
+node scripts/catalog-selection-local.mjs
+  Standaard snapshot-dry-run; opent geen database en toont alle voorgenomen acties.
+node scripts/catalog-selection-local.mjs --apply --local-dir=outputs/catalog-review-db
+  Uitsluitend lokale PGlite/PostgreSQL-opslag onder deze worktree/outputs.
+  Remote URL's en paden buiten outputs worden geweigerd. Gebruik voor een verse
+  schema-versie een nieuwe lege directory; geen automatische reset/migratie van data.
+De import draait transactioneel, is idempotent, blokkeert plan-/identiteitsdrift
+en weigert stilzwijgende revisies van al ingevoerde redactionele records.
+Bestaande titels, auteurs, jaartallen en gebruikersdata krijgen geen UPDATE/DELETE.
+Meerdere mogelijke auteurrecords worden vooraf per kandidaat uitgezonderd.
+De lokale fixture bevat alleen de gematchte bibliografische subset, geen complete
+productiekopie. De test voor gebruikersbehoud gebruikt een synthetische koppeling.
+
+CSV opnieuw genereren:
+ARTIFACT_NODE_MODULES instellen op de gebundelde artifact-tool node_modules-map,
+dan node scripts/correct-catalog-selection.mjs.
+Daarna node scripts/report-catalog-selection.mjs voor plan en samenvatting.
+De importer zelf heeft geen artifact-tool nodig. Enige nieuwe dependency:
+@electric-sql/pglite 0.3.14 (devDependency, geen runtime/dependency-upgrades).
+
+VALIDATIE
+- Lokale SQL-migratie uitgevoerd en categorieën persistent opgeslagen/teruggelezen.
+- Eerste import 887 koppelingen/99 inserts; tweede import nul nieuwe leden/Works.
+- Bestaande ID's/titels/auteurs/jaren en synthetische rating/status/collectiekoppeling
+  behouden; geen nieuwe ongeverifieerde edities; anon-writes/private reads geweigerd.
+- Relevante gerichte suite: 223 tests geslaagd.
+- Vollediger suite inclusief collecties: 321 tests, 319 geslaagd en twee bestaande fixturefouten wegens
+  ontbrekend catalog/collection-v1-quality-audit.json. Het bestand ontbreekt ook
+  in origin/main. Niet verzonnen, niet gekopieerd uit een andere vuile werkruimte,
+  en de falende tests niet uitgeschakeld.
+- Twee server-HTML-integratietests geslaagd op development én de echte gebouwde
+  Vercel-handler: gelijke Browse/Search Work-ID's, 32/64/128, paginering, selectie,
+  NL-cookie, zoekalias, lege categorie, robots/canonical/social tags.
+- TypeScript, ESLint, productiebuild (Vercel/Nitro), client-secretscan en
+  git diff --check geslaagd. Secretscan: 44 clientbestanden, geen server-secret
+  identifiers of waarden. Build gebruikt uitsluitend lokale dummyconfiguratie.
+- Sandboxbuild stuitte eerst op Windows EPERM/readlink; met expliciete
+  bestandstoegang geslaagd. Alleen bestaande bundelwaarschuwingen.
+- Vite preview verwachtte ten onrechte dist/server; de gegenereerde Vercel
+  Fetch-handler is daarom read-only op loopback gehost met het meegeleverde
+  catalog-selection-production-preview.mjs, zonder applicatieconfiguratie te wijzigen.
+
+BROWSERPROEF
+Werkelijk gebouwd resultaat, lokale database via read-only loopbackadapter.
+390x844 mobiel en 1440x900 desktop, NL/EN, Ink/Paper bekeken.
+Geen horizontale overflow (375 <= 390 en 1425 <= 1440); geen waargenomen
+consolefouten of framework-overlay. 126 fantasywerken, precies 64 kaarten bij
+pageSize=64; Browse/Search dezelfde 64 Work-ID's. Bij pageSize=128 alle 126.
+Spaanse titel geeft één resultaat: bestaand Work 1936. Boekpagina en teruglink
+naar dezelfde zoektekst/pageSize daadwerkelijk aangeklikt en gecontroleerd.
+Geen volledige productie- of externe-covergarantie: optionele rating/covercache-
+services zijn in deze fixture leeg en beeldcovers kunnen de bestaande fallback tonen.
+
+EXACT VOORGESTELD PRODUCTIEPLAN — NIET UITGEVOERD
+1. Review deze lokale commit, de gecorrigeerde CSV, 14 uitzonderingen en het
+   planbestand; besluit expliciet over release. Los de ontbrekende oude auditfixture
+   op of accepteer die bekende testbeperking afzonderlijk. Geen automatische vrijgave.
+2. Ververs read-only de kandidaatmatches in doelproject qvplwejffhjvxaypmjut:
+   Work-ID, OL-ID, werk-/editietitel, auteur, ISBN, alias/vertaling en relevante
+   zelfde-auteurrecords. Herbeoordeel drift; aantallen 887/99/14 zijn geen quota.
+   Controleer eveneens actuele auteurs, RLS en eventuele bestaande nieuwe tabellen.
+3. Test de exacte nieuwe migratie en importer eerst tegen een toegestane echte
+   stagingkopie van het actuele schema. De meegeleverde CLI is opzettelijk LOCAL-ONLY.
+   Een apart goedgekeurde, doelgebonden PostgreSQL-runner moet dezelfde importkern
+   gebruiken; verbinding/secretbeheer, bigint-conversie, transacties, statement/
+   lock-timeouts en de volledige live cataloguspreflight daar expliciet valideren.
+   Geen anonieme web-importendpoint of service-role sleutel in de browser.
+4. Leg backup/herstelpunt vast. Na afzonderlijke productietoestemming uitsluitend
+   deze additieve migratie toepassen; geen brede db-push van alle lokale migraties.
+   Draai een echte dry-run tegen het gemigreerde doel en laat het exacte plan plus
+   bronhash goedkeuren. Stop bij onverwachte tabellen, schema- of identiteitsdrift.
+5. Voer één transactie uit met cataloguslock en planhercontrole: categorieën,
+   selectie, alleen ontbrekende auteurs/Works, lidmaatschappen, genres, twee
+   bekende titelaliassen en private reviewrecords. Geen bestaande boekvelden,
+   edities, covers, ratings, statussen of collectiekoppelingen overschrijven.
+6. Controleer aantallen en IDs tegen het goedgekeurde live plan; vergelijk bestaande
+   bibliografische/gebruikerskoppelingen met de preflight. Tweede dry-run/apply
+   moet nul toevoegingen geven. Controleer anon read, denied write en private RLS.
+7. Pas daarna de goedgekeurde app via normale featurebranch/PR/CI publiceren.
+   Migratie en import vóór appactivatie: de nieuwe routes hebben de RPC nodig en
+   falen zichtbaar als die ontbreekt; er is geen stilzwijgend ongefilterde fallback.
+8. Productie-smoketest: Browse/Search categorieën, selectie, NL/EN, 32/64/128,
+   paginering, teruglinks, echte ratings/covers, server-HTML en console.
+   Bij mislukking stoppen. App terugzetten op vorige versie; additieve gegevens
+   laten staan. Nieuwe Works niet zomaar verwijderen zodra gebruikers ze kunnen
+   hebben gekoppeld. Geen improviserende DB-, DNS- of configuratiewijzigingen.
+
+RESTERENDE BEPERKINGEN
+AI-redactionele inschattingen kunnen worden bijgesteld; onzekerheden zijn expliciet.
+Bestaande foutieve jaartallen blijven publiek zichtbaar totdat een afzonderlijke,
+gerichte correctie van bestaande databasevelden wordt goedgekeurd.
+Staging-Supabase en productie-import/publicatie zijn nog niet uitgevoerd.
+Deze oplevering is klaar voor lokale review, niet een bevestiging dat dit live staat.

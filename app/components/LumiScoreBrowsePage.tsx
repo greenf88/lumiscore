@@ -1,12 +1,9 @@
 'use client';
 
-import { useCallback, useMemo, useState, type ChangeEvent } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
-import {
-  CATALOG_BROWSE_PAGE_SIZES,
-  getCatalogBrowsePageAfterPageSizeChange,
-  normalizeCatalogBrowsePageSize,
-} from '@/lib/books/catalog-browse';
+import type { EditorialQuery } from '@/lib/catalog/editorial-query';
+import { EditorialCatalogControls } from './EditorialCatalogControls';
 import { updateBrowseReturnPath } from '@/lib/navigation/browse-return';
 import type { CatalogBrowsePage } from '@/lib/supabase/books';
 import { BookCard, Footer, Header } from './LumiScoreHome';
@@ -14,9 +11,10 @@ import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
 
 type LumiScoreBrowsePageProps = {
-  data: CatalogBrowsePage & { available: boolean };
+  data: CatalogBrowsePage & { available: boolean; facets: Record<string, number> };
   authState: HeaderAuthState;
   returnTo: string;
+  filters: EditorialQuery;
 };
 
 function paginationPages(currentPage: number, pageCount: number): Array<number | 'ellipsis'> {
@@ -36,7 +34,7 @@ function paginationPages(currentPage: number, pageCount: number): Array<number |
   return result;
 }
 
-export function LumiScoreBrowsePage({ data, authState, returnTo }: LumiScoreBrowsePageProps) {
+export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: LumiScoreBrowsePageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const { wanted, statuses, toggleWanted } = useWantToRead(
@@ -47,30 +45,10 @@ export function LumiScoreBrowsePage({ data, authState, returnTo }: LumiScoreBrow
     () => paginationPages(data.page, data.pageCount),
     [data.page, data.pageCount],
   );
-  const preservedBrowseParams = useMemo(() => {
-    const params = new URLSearchParams(returnTo.split('?')[1] ?? '');
-    return ['language', 'genre', 'filter'].flatMap((name) =>
-      params.getAll(name).map((value, index) => ({ name, value, key: `${name}-${index}-${value}` })));
-  }, [returnTo]);
   const detailReturnContext = useMemo(
     () => ({ kind: 'browse' as const, path: returnTo }),
     [returnTo],
   );
-
-  const changePageSize = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-    const nextPageSize = normalizeCatalogBrowsePageSize(event.currentTarget.value);
-    const nextPage = getCatalogBrowsePageAfterPageSizeChange(
-      data.page,
-      data.pageSize,
-      nextPageSize,
-      data.total,
-    );
-    window.location.assign(updateBrowseReturnPath(returnTo, {
-      page: nextPage,
-      pageSize: nextPageSize,
-      sort: data.sort,
-    }));
-  }, [data.page, data.pageSize, data.sort, data.total, returnTo]);
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -108,28 +86,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo }: LumiScoreBrow
           </strong>
         </div>
 
-        <form className="browse-controls" action="/browse" method="get">
-          {preservedBrowseParams.map((parameter) => (
-            <input key={parameter.key} type="hidden" name={parameter.name} value={parameter.value} />
-          ))}
-          <label htmlFor="browse-sort">{t('browse.sortBy')}</label>
-          <select id="browse-sort" name="sort" defaultValue={data.sort}>
-            <option value="az">{t('browse.sortAz')}</option>
-            <option value="newest">{t('browse.sortNewest')}</option>
-          </select>
-          <label htmlFor="browse-page-size">{t('browse.pageSize')}</label>
-          <select
-            id="browse-page-size"
-            name="pageSize"
-            value={data.pageSize}
-            onChange={changePageSize}
-          >
-            {CATALOG_BROWSE_PAGE_SIZES.map((pageSize) => (
-              <option value={pageSize} key={pageSize}>{pageSize}</option>
-            ))}
-          </select>
-          <button type="submit">{t('browse.apply')}</button>
-        </form>
+        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} route="/browse" />
 
         {!data.available ? (
           <div className="empty-results" role="status">

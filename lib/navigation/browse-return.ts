@@ -6,11 +6,11 @@ import {
 } from '../books/catalog-browse.ts';
 
 const BROWSE_PATH = '/browse';
-const SINGLE_VALUE_KEYS = new Set(['page', 'pageSize', 'sort']);
-const REPEATABLE_KEYS = new Set(['language', 'genre', 'filter']);
+const SINGLE_VALUE_KEYS = new Set(['page', 'pageSize', 'sort', 'selection']);
+const REPEATABLE_KEYS = new Set(['language', 'genre', 'filter', 'category']);
 const SUPPORTED_KEYS = new Set([...SINGLE_VALUE_KEYS, ...REPEATABLE_KEYS]);
 const SAFE_FILTER_VALUE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const MAX_REPEATABLE_VALUES = 12;
+const MAX_REPEATABLE_VALUES = 32;
 
 export type CatalogBrowseNavigationState = {
   page: number;
@@ -26,6 +26,7 @@ function isSafePositiveInteger(value: string): boolean {
 
 function isSafeRepeatableValue(key: string, value: string): boolean {
   if (key === 'language') return value === 'en' || value === 'nl';
+  if (key === 'category') return value.length <= 60 && /^[a-z][a-z0-9_]+$/.test(value);
   return value.length > 0 && value.length <= 60 && SAFE_FILTER_VALUE.test(value);
 }
 
@@ -71,6 +72,7 @@ function parseBrowseReturnPath(value: unknown): URLSearchParams | null {
   if (sort !== null && !CATALOG_BROWSE_SORTS.includes(sort as CatalogBrowseSort)) {
     return null;
   }
+  if (params.has('selection') && params.get('selection') !== 'lumiscore-selectie-1000') return null;
 
   return params;
 }
@@ -85,7 +87,8 @@ function canonicalizeBrowseParams(params: URLSearchParams): string {
   if (pageSize) canonical.set('pageSize', pageSize);
   if (sort && sort !== 'az') canonical.set('sort', sort);
 
-  for (const key of ['language', 'genre', 'filter']) {
+  if (params.has('selection')) canonical.set('selection', params.get('selection')!);
+  for (const key of ['language', 'genre', 'filter', 'category']) {
     for (const value of params.getAll(key)) canonical.append(key, value);
   }
 

@@ -437,7 +437,7 @@ export async function loadCatalogBooksByIds(
   const catalogBooks = asRows(result.data)
     .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
-  const summaries = prefetchedSummaries ?? await loadPublicRatingSummaries(
+  const summaries = prefetchedSummaries ?? await loadPublicRatingSummariesBatched(
     supabase,
     catalogBooks.flatMap((book) => (book.workId ? [book.workId] : [])),
   );

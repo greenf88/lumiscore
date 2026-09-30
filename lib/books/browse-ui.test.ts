@@ -35,8 +35,9 @@ test('public browse route loads catalog books without requiring a search query o
     new URL('../../app/browse/page.tsx', import.meta.url),
     'utf8',
   );
-  assert.match(page, /loadCatalogBrowsePage\(page, sort, pageSize, locale\)/);
-  assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\} returnTo=\{returnTo\}/);
+  assert.match(page, /loadEditorialCatalog\(state, locale\)/);
+  assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\}/);
+  assert.match(page, /editorialHref\('\/browse', current\)/);
   assert.doesNotMatch(page, /redirect\(|notFound\(/);
   assert.doesNotMatch(page, /\bq\b.*required|isCatalogSearchQuery/);
 });
@@ -59,11 +60,12 @@ test('Browse exposes an accessible native page-size control and keeps page size 
     'utf8',
   );
 
-  assert.match(browseSource, /<label htmlFor="browse-page-size">\{t\('browse\.pageSize'\)\}<\/label>/);
-  assert.match(browseSource, /<select[\s\S]*?id="browse-page-size"[\s\S]*?name="pageSize"/);
-  assert.match(browseSource, /CATALOG_BROWSE_PAGE_SIZES\.map/);
-  assert.match(browseSource, /getCatalogBrowsePageAfterPageSizeChange/);
-  assert.match(browseSource, /window\.location\.assign/);
+  const controls = await readFile(new URL('../../app/components/EditorialCatalogControls.tsx', import.meta.url), 'utf8');
+  assert.match(browseSource, /<EditorialCatalogControls/);
+  assert.match(controls, /<label>\{nl \? 'Boeken per pagina' : 'Books per page'\}/);
+  assert.match(controls, /<select name="pageSize"/);
+  assert.match(controls, /\[32,64,128\]\.map/);
+  assert.match(controls, /method="get"/);
   assert.match(browseSource, /updateBrowseReturnPath\(returnTo/);
 });
 
