@@ -53,15 +53,34 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
     const dry=await importSelection(db,input.records,input.pins,plan);
     assert.equal(dry.applied,false);
     assert.equal((await db.query('select count(*)::int as n from public.catalog_selection_members')).rows[0].n,0);
+    // Fail after one candidate was written: the entire import must roll back.
+    await db.exec(`create function catalog_private.test_import_failure() returns trigger language plpgsql as $$
+      begin if new.candidate_id='LS1000-0002' then raise exception 'synthetic partial failure'; end if; return new; end $$;
+      create trigger test_import_failure before insert on catalog_private.editorial_records
+      for each row execute function catalog_private.test_import_failure();`);
+    const worksBeforeFailure=await readWorks(db);
+    await assert.rejects(()=>importSelection(db,input.records,input.pins,plan,{apply:true}),/synthetic partial failure/);
+    assert.deepEqual(await readWorks(db),worksBeforeFailure);
+    for(const table of ['catalog_categories','catalog_selections','catalog_selection_members','work_catalog_categories','catalog_work_title_aliases'])
+      assert.equal((await db.query('select count(*)::int as n from public.'+table)).rows[0].n,0);
+    await db.exec('drop trigger test_import_failure on catalog_private.editorial_records; drop function catalog_private.test_import_failure()');
     const first=await importSelection(db,input.records,input.pins,plan,{apply:true});
+    assert.deepEqual(plan.counts,{link:887,insert:99,skip:14});
     assert.equal(first.created,plan.counts.insert);assert.equal(first.linked,plan.counts.link);
     assert.deepEqual((await readWorks(db)).filter(w=>w.id<10000),before);
     assert.deepEqual((await db.query('select * from public.test_user_links')).rows,[{work_id:1936,rating:5,status:'read',collection:'favourites'}]);
+    const tables=['authors','works','editions','catalog_categories','catalog_selections','catalog_selection_members','work_catalog_categories','catalog_work_title_aliases'];
+    const snapshot=async()=>Promise.all([...tables.map(t=>'public.'+t),'catalog_private.editorial_records'].map(async t=>({table:t,
+      rows:(await db.query(`select t.xmin::text as row_version,to_jsonb(t) as data from ${t} t order by to_jsonb(t)::text`)).rows})));
+    const firstSnapshot=await snapshot();
     const second=await importSelection(db,input.records,input.pins,null,{apply:true});
     assert.equal(second.created,0);assert.equal(second.linked,0);assert.equal(second.pending,0);
+    assert.deepEqual(await snapshot(),firstSnapshot,'repeat must not update any row version');
     const count=(await db.query('select count(*)::int as n from public.catalog_selection_members')).rows[0].n;
     assert.equal((await db.query("select work_id from public.catalog_work_title_aliases where title='La sombra del viento'")).rows[0].work_id,1936);
     assert.equal(count,1000-plan.counts.skip);
+    assert.equal((await db.query('select count(*)::int as n from public.work_catalog_categories')).rows[0].n,1034);
+    assert.equal((await db.query('select label_nl from public.catalog_selections')).rows[0].label_nl,'LumiScore Selectie');
     assert.equal((await db.query('select count(*)::int as n from public.editions where work_id>10000')).rows[0].n,0);
     // Synthetic language metadata exercises the real SQL, not production guesses.
     await db.query("insert into public.editions(work_id,title,language) values(1936,'La sombra del viento','nld')");
@@ -73,6 +92,15 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
     assert.equal((await query('La sombra',[],['nl'])).workIds[0],1936);
     assert.equal((await query('La sombra',[],['en'])).total,0);
     const fantasy=await query('', ['fiction_fantasy']); assert.ok(fantasy.total>32);
+    assert.equal(fantasy.selectionCount,986,'selection total is independent of active filters');
+    assert.equal((await query('not-a-real-title')).selectionCount,986);
+    // Prove this is a live database count, not the expected fixture constant.
+    await db.transaction(async tx=>{
+      await tx.query('insert into public.catalog_selection_members values($1,99999,$2)',[SELECTION,'synthetic-count-sentinel']);
+      const changed=(await tx.query('select public.catalog_editorial_page() as data')).rows[0].data;
+      assert.equal(changed.selectionCount,987);
+      await tx.query('delete from public.catalog_selection_members where candidate_id=$1',['synthetic-count-sentinel']);
+    });
     const both=await query('', ['fiction_fantasy','fiction_literary_general']);
     assert.equal(new Set(both.workIds).size,both.workIds.length);
     const page2=await query('',[],[],2); assert.ok(page2.workIds.every(id=>!all.workIds.includes(id)));
@@ -80,11 +108,18 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
     await assert.rejects(()=>importSelection(db,input.records,input.pins,{...plan,source_hash:'changed'},{apply:true}),/drift/);
     const changed=structuredClone(input.records);changed[0].audience='changed';
     await assert.rejects(()=>importSelection(db,changed,input.pins,null,{apply:true}),/revision/);
-    await db.exec('set role anon');
-    assert.ok((await query()).total>0);
-    await assert.rejects(()=>db.query("insert into public.catalog_categories values('bad','bad','bad')"),/permission/);
-    await assert.rejects(()=>db.query('select * from catalog_private.editorial_records'),/permission/);
-    await db.exec('reset role');
+    for(const role of ['anon','authenticated']) {
+      await db.exec('set role '+role);
+      assert.ok((await query()).total>0);
+      for(const table of tables.slice(3)) {
+        await db.query('select * from public.'+table+' limit 1');
+        await assert.rejects(()=>db.query('delete from public.'+table+' where false'),/permission/);
+      }
+      await assert.rejects(()=>db.query("insert into public.catalog_categories values('bad','bad','bad')"),/permission/);
+      await assert.rejects(()=>db.query("update public.catalog_categories set label_nl='bad'"),/permission/);
+      await assert.rejects(()=>db.query('select * from catalog_private.editorial_records'),/permission/);
+      await db.exec('reset role');
+    }
     const saved=digest((await db.query('select * from public.work_catalog_categories order by work_id,category_id')).rows);
     await db.close();db=new PGlite(directory);await db.waitReady;
     assert.equal(digest((await db.query('select * from public.work_catalog_categories order by work_id,category_id')).rows),saved);

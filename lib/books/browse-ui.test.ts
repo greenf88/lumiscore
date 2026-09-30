@@ -88,6 +88,15 @@ test('128-card Browse pages keep ratings and stored-cover reads batched', async 
   assert.match(homeSource, /loading="lazy"/);
   assert.match(statusRoute, /\.slice\(0, 128\)/);
   assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
+  const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
+  const searchUi = await readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8');
+  assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 1);
+  assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale\)/);
+  const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('function applyStoredCoverResolutions('));
+  assert.match(byIdsLoader, /loadPublicRatingSummariesBatched\(/);
+  assert.match(byIdsLoader, /loadStoredCoverResolutionsBatched\(workIds\)/);
+  assert.doesNotMatch(byIdsLoader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
+  assert.match(searchUi, /resolveMissingCover=\{false\}/);
 });
 
 test('Browse is reachable in desktop and mobile navigation and search has a browse escape', async () => {
