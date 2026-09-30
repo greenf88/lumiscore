@@ -47,7 +47,7 @@ export async function importSelection(db, records, pins, expectedPlan, { apply=f
       const saved=(await tx.query('select * from public.catalog_categories where id=$1',[c.id])).rows[0];
       if(saved.label_nl!==c.nl||saved.label_en!==c.en)throw new Error('Category label conflict: '+c.id);
     }
-    await tx.query('insert into public.catalog_selections values($1,$2,$3) on conflict do nothing',[SELECTION,'LumiScore Selectie 1000','LumiScore Selection 1000']);
+    await tx.query('insert into public.catalog_selections values($1,$2,$3) on conflict do nothing',[SELECTION,'LumiScore Selectie','LumiScore Selection']);
     for(const action of pending) {
       const r=byId.get(action.candidate_id);
       let workId=action.work_id;

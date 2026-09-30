@@ -19,6 +19,7 @@ type LumiScoreSearchPageProps = {
   total: number;
   facets: Record<string, number>;
   pageCount: number;
+  selectionCount: number | null;
 };
 
 export function LumiScoreSearchPage({
@@ -27,7 +28,7 @@ export function LumiScoreSearchPage({
   searchFailed,
   authState,
   searchReturnTo,
-  filters, total, facets, pageCount,
+  filters, total, facets, pageCount, selectionCount,
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
@@ -77,7 +78,7 @@ export function LumiScoreSearchPage({
           </div>
         </div>
 
-        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} route="/search" />
+        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" />
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>

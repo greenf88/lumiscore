@@ -67,6 +67,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         facets={data.facets}
         filters={current}
         pageCount={data.pageCount}
+        selectionCount={data.selectionCount}
         searchFailed={searchFailed}
         authState={authState}
         searchReturnTo={editorialHref('/search', current)}

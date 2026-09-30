@@ -11,7 +11,7 @@ import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
 
 type LumiScoreBrowsePageProps = {
-  data: CatalogBrowsePage & { available: boolean; facets: Record<string, number> };
+  data: CatalogBrowsePage & { available: boolean; facets: Record<string, number>; selectionCount: number | null };
   authState: HeaderAuthState;
   returnTo: string;
   filters: EditorialQuery;
@@ -86,7 +86,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
           </strong>
         </div>
 
-        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} route="/browse" />
+        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} selectionCount={data.selectionCount} route="/browse" />
 
         {!data.available ? (
           <div className="empty-results" role="status">

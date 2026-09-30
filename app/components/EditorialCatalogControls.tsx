@@ -1,8 +1,8 @@
 'use client';
 import { editorialCategories, selectionSlug, editorialHref, type EditorialQuery } from '@/lib/catalog/editorial-query';
 import { useLumiScoreLocale } from './LumiScoreLocale';
-export function EditorialCatalogControls({ state, facets, route }: {
-  state: EditorialQuery; facets: Record<string, number>; route: '/browse' | '/search';
+export function EditorialCatalogControls({ state, facets, selectionCount, route }: {
+  state: EditorialQuery; facets: Record<string, number>; selectionCount: number | null; route: '/browse' | '/search';
 }) {
   const { locale } = useLumiScoreLocale();
   const nl = locale === 'nl';
@@ -24,7 +24,7 @@ export function EditorialCatalogControls({ state, facets, route }: {
       <label>{nl ? 'Selectie' : 'Selection'}
         <select name="selection" defaultValue={state.selection}>
           <option value="">{nl ? 'Alle boeken' : 'All books'}</option>
-          <option value={selectionSlug}>{nl ? 'LumiScore Selectie 1000' : 'LumiScore Selection 1000'}</option>
+          <option value={selectionSlug}>{nl ? 'LumiScore Selectie' : 'LumiScore Selection'}{selectionCount === null ? '' : ` (${selectionCount.toLocaleString(nl ? 'nl-NL' : 'en-US')})`}</option>
         </select>
       </label>
       <fieldset className="editorial-languages">

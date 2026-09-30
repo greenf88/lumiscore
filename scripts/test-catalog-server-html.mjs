@@ -35,7 +35,8 @@ test('pagination, clean Browse, language, empty category and reviewed translatio
   const dutch=await html('/browse?selection=lumiscore-selectie-1000','nl');
   assert.equal(inspectServerHtml(dutch).lang,'nl');
   assert.match(dutch,/986 boeken in de catalogus/);
-  assert.match(dutch,/LumiScore Selectie 1000/);
+  assert.match(dutch,/LumiScore Selectie(?:<!-- -->)? \(986\)/);
+  assert.doesNotMatch(dutch,/LumiScore Selectie 1000/);
   assert.equal(workIds(await html('/browse?category=nonfiction_cooking_food')).length,0);
   assert.deepEqual(workIds(await html('/search?q=La%20sombra%20del%20viento')),['1936']);
 });

@@ -115,6 +115,7 @@ create function public.catalog_editorial_page(
   )
   select jsonb_build_object('workIds',coalesce((select jsonb_agg(id order by position) from results),'[]'::jsonb),
     'total',total,'page',page,'pageSize',size,'pageCount',pages,
+    'selectionCount',(select count(*) from public.catalog_selection_members where selection_slug='lumiscore-selectie-1000'),
     'facets',coalesce((select jsonb_object_agg(id,count) from facets),'{}'::jsonb)) from paging;
 $$;
 revoke all on function public.catalog_editorial_page(text,text[],text,text[],text,integer,integer,bigint[]) from public;
