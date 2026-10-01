@@ -9,7 +9,7 @@
     "catalog:dry-run": "node scripts/catalog-selection-local.mjs",
     "catalog:local-apply": "node scripts/catalog-selection-local.mjs --apply",
     "catalog:postgres": "node scripts/catalog-selection-postgres.mjs",
-    "test:catalog-selection": "node --experimental-strip-types --test scripts/catalog-selection.test.mjs scripts/catalog-selection-postgres.test.mjs lib/catalog/editorial-query.test.ts",
+    "test:catalog-selection": "node --experimental-strip-types --test scripts/catalog-selection.test.mjs scripts/catalog-selection-postgres.test.mjs scripts/catalog-selection-rendezvous.test.mjs lib/catalog/editorial-query.test.ts",
     "test:catalog-html": "node --experimental-strip-types --test scripts/test-catalog-server-html.mjs",
     "dev": "vinext dev",
     "build": "vinext build",

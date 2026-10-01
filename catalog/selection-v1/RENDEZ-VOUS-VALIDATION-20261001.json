@@ -1,0 +1,58 @@
+{
+  "checked_at": "2026-10-01",
+  "decision": "C",
+  "candidate_id": "LS1000-0728",
+  "selected_work_id": 1078,
+  "other_work_id": 1739,
+  "version": "identity-20261001-rendezvous",
+  "manifest_sha256": "7f4ec50e3946624530a82097b4ec2b78526b669350c30219ae5e11d8281a7046",
+  "full_production_snapshot_plan": {
+    "captured_at": "2026-10-01T17:31:57.635486+00:00",
+    "counts": {"link": 875, "insert": 99, "skip": 26},
+    "changed_candidates": ["LS1000-0728"]
+  },
+  "local_real_supabase": {
+    "engine": "PostgreSQL 17.6.1.165 / GoTrue 2.196 / PostgREST 16.1 / Kong",
+    "public_collision_fixture_added": 1739,
+    "first_import_method": "existing-stack SERIALIZABLE outer transaction; importer savepoints; outer rollback",
+    "first_import": {"pending": 974, "created": 99, "linked": 875, "unchanged": 0},
+    "second_import_writes": 0,
+    "target_bound_runner_repeat_writes": 0,
+    "database_restart_repeat_writes": 0,
+    "rollback_failure_after_candidate": "LS1000-0728",
+    "partial_failure_fully_rolled_back": true,
+    "existing_bibliography_private_rows_and_xmin_unchanged": true,
+    "all_auth_table_hashes_unchanged": true,
+    "auth_rows_or_credentials_exported": false,
+    "sequence_rollback_claimed": false,
+    "members": 974,
+    "category_links": 1022,
+    "categories": 20,
+    "ledger": 974,
+    "new_editions": 0,
+    "other_work_selected": false
+  },
+  "tests": {
+    "identity_importer_manifest_query": {"passed": 13, "failed": 0},
+    "real_server_html": {"passed": 5, "failed": 0},
+    "existing_auth_ratings": {"passed": 49, "failed": 0},
+    "typescript_no_emit": "PASS",
+    "eslint_max_warnings_zero": "PASS",
+    "local_production_build": "PASS",
+    "client_secret_scan": {"files": 44, "leaks": 0},
+    "git_diff_check": "PASS",
+    "broad_historical_suite_rerun": false
+  },
+  "browser": {
+    "origin": "http://localhost:3983",
+    "real_local_supabase": true,
+    "nl_selection_label": "LumiScore Selectie (974)",
+    "outside_selection_work_ids": [1078, 1739],
+    "inside_selection_work_ids": [1078],
+    "observed_console_errors": 0,
+    "observed_console_warnings": 0
+  },
+  "production_import_migration_merge_or_deployment": false,
+  "production_work_repairs": false,
+  "release_status": "READY FOR CONTROLLED RETRY; fresh production preflight and explicit authorization for the new commit required"
+}

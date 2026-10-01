@@ -50,7 +50,18 @@ export function buildPlan(records,works,pins={}) {
     const pin=pins[r.candidate_id];
     const exact=candidates.filter(w=>normalizeIdentity(w.author)===normalizeIdentity(r.author)
       &&(normalizeIdentity(w.title)===normalizeIdentity(r.title)||(w.editions??[]).some(e=>normalizeIdentity(e.title)===normalizeIdentity(r.title))));
-    const pinned=pin?works.find(w=>w.id===pin.work_id&&normalizeIdentity(w.author)===normalizeIdentity(pin.author)&&normalizeIdentity(w.title)===normalizeIdentity(pin.title)&&olid(w.open_library_id)===pin.olid):null;
+    let pinned=pin?works.find(w=>w.id===pin.work_id&&normalizeIdentity(w.author)===normalizeIdentity(pin.author)&&normalizeIdentity(w.title)===normalizeIdentity(pin.title)&&olid(w.open_library_id)===pin.olid):null;
+    // Optional reviewed edition binding is fail-closed, not a title/author override.
+    // The frozen candidate hash also rejects changes of form (e.g. an adaptation).
+    if(pin?.edition_identity) {
+      const edition=pin.edition_identity;
+      const bound=works.filter(w=>(w.editions??[]).some(e=>e.open_library_edition_id===edition.open_library_edition_id
+        &&e.isbn_13===edition.isbn_13&&normalizeIdentity(e.title)===normalizeIdentity(pin.title)
+        &&(!e.language||['nl','nld','dut'].includes(e.language))));
+      if(digest(r)!==pin.candidate_hash||r.existing_work_id!==pin.work_id||r.open_library_id!==pin.olid
+        ||!r.isbns.includes(edition.isbn_13)||!validIsbn(edition.isbn_13)
+        ||!/^OL\d+M$/.test(edition.open_library_edition_id??'')||bound.length!==1||bound[0]!==pinned) pinned=null;
+    }
     let action={candidate_id:r.candidate_id,kind:'insert',work_id:null,reason:'No existing identity match after candidate-specific database and author/title review'};
     if(r.hold)action={...action,kind:'skip',reason:r.hold};
     else if(pin&&!pinned)action={...action,kind:'skip',reason:'Reviewed identity pin no longer matches live catalog'};

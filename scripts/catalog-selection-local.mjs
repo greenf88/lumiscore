@@ -9,10 +9,11 @@ import { reviewedInput } from './catalog-selection-inputs.mjs';
 export const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const json=async name=>JSON.parse(await fs.readFile(path.join(root,'catalog/selection-v1',name),'utf8'));
 export async function inputs() {
-  const {records,pins}=await reviewedInput();
+  const {records,pins,manifest}=await reviewedInput();
   const snapshot=await json('database-matches.json');
   const translated=await json('translation-match.json');
-  return {records,pins,works:[...new Map([...snapshot.matches,translated].map(w=>[w.id,w])).values()]};
+  const identityFixture=await json(manifest.identity_fixture_file);
+  return {records,pins,works:[...new Map([...snapshot.matches,translated,...identityFixture].map(w=>[w.id,w])).values()]};
 }
 export async function createLocalDatabase(directory, works) {
   if(directory)await fs.mkdir(path.dirname(directory),{recursive:true});

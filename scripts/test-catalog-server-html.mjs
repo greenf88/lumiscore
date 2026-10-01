@@ -11,6 +11,21 @@ const html=async (path,locale='en')=>{
   return body;
 };
 const workIds=body=>[...body.matchAll(/class="book-card-main-link"[^>]*href="\/book\/(\d+)/g)].map(m=>m[1]);
+test('Rendez-vous identity correction: Browse/Search select 1078, not English large-print 1739',async()=>{
+  // Browse has category/selection controls, not Search's q input.
+  const ids=[];
+  for(const page of [1,2]){
+    const params='?selection=lumiscore-selectie-1000&category=fiction_thriller_suspense&pageSize=128&page='+page;
+    const browse=await html('/browse'+params,'nl'),search=await html('/search'+params,'nl');
+    assert.deepEqual(workIds(browse),workIds(search));ids.push(...workIds(browse));
+    assert.match(browse,/LumiScore Selectie(?:<!-- -->)? \(974\)/);
+  }
+  assert.ok(ids.includes('1078'));assert.ok(!ids.includes('1739'));
+  const selected=await html('/search?q=Rendez&selection=lumiscore-selectie-1000&category=fiction_thriller_suspense','nl');
+  assert.deepEqual(workIds(selected),['1078']);assert.match(selected,/Rendez-vous/);assert.match(selected,/Esther Verhoef/);
+  const unfiltered=workIds(await html('/search?q=Rendez'));
+  assert.ok(unfiltered.includes('1078')&&unfiltered.includes('1739'),'Both old Works remain searchable');
+});
 test('real server HTML: Browse and Search produce identical filtered Work IDs, sizes and metadata',async()=>{
   for(const size of [32,64,128]){
     const params='?category=fiction_fantasy&selection=lumiscore-selectie-1000&pageSize='+size;

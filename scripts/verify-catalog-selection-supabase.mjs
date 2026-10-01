@@ -7,13 +7,15 @@ import { spawnSync, spawn, execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import pg from 'pg';
 import { inputs, root } from './catalog-selection-local.mjs';
-import { main, fingerprint, connectionConfig } from './catalog-selection-postgres.mjs';
+import { main, fingerprint, connectionConfig, safeInteger } from './catalog-selection-postgres.mjs';
 import { sha256 } from './catalog-selection-inputs.mjs';
+import { importSelection, livePlan } from './catalog-selection-db.mjs';
+import { digest } from './catalog-selection-core.mjs';
 
 const project='outputs/supabase-identity-validation';
 const output=path.join(root,project,'evidence');
 const mode=process.argv[2];
-assert.ok(['setup','access','verify','repeat','build','serve','secrets'].includes(mode),'Use setup, access, verify, repeat, build, serve or secrets');
+assert.ok(['setup','access','verify','repeat','build','serve','secrets','rendezvous'].includes(mode),'Use setup, access, verify, repeat, build, serve, secrets or rendezvous');
 const cli=process.env.LOCAL_SUPABASE_CLI_ENTRY;
 assert.ok(cli,'Set LOCAL_SUPABASE_CLI_ENTRY to the installed Supabase CLI JavaScript entry');
 const status=spawnSync(process.execPath,[cli,'status','--workdir',project,'-o','json'],{
@@ -46,7 +48,8 @@ if(['build','serve','secrets'].includes(mode)){
   const child=spawn(process.execPath,args,{cwd:root,env:environment,stdio:'inherit'});
   child.on('exit',code=>{process.exitCode=code??1;});
 }else{
-  const db=new pg.Client({connectionString:credentials.DB_URL});await db.connect();
+  const db=new pg.Client({connectionString:credentials.DB_URL,
+    types:{getTypeParser:(oid,format)=>oid===20?safeInteger:pg.types.getTypeParser(oid,format)}});await db.connect();
   try{
     const tables=['authors','works','editions','ratings','user_book_status','user_reading_preferences','taste_test_responses',
       'catalog_categories','catalog_selections','catalog_selection_members','work_catalog_categories','catalog_work_title_aliases'];
@@ -117,6 +120,87 @@ if(['build','serve','secrets'].includes(mode)){
       if(r.status===200){ready=true;break;}await new Promise(resolve=>setTimeout(resolve,250));
     }
     assert.ok(ready,'Real PostgREST catalog schema visible');
+
+    if(mode==='rendezvous'){
+      const input=await inputs(),fixture=input.works.find(w=>w.id===1739);
+      // Add only the missing public collision fixture to this owned local stack.
+      await db.query('begin');try{
+        const existing=(await db.query('select id,title,open_library_id from public.works where id=1739')).rows;
+        if(existing.length){assert.equal(existing[0].title,fixture.title);assert.equal(existing[0].open_library_id,fixture.open_library_id);}
+        else{
+          const author=(await db.query('select author_id from public.works where id=1078')).rows[0].author_id;
+          await db.query('insert into public.works(id,title,author_id,open_library_id,first_publish_year) values(1739,$1,$2,$3,$4)',[fixture.title,author,fixture.open_library_id,fixture.first_publish_year]);
+          const e=fixture.editions[0];
+          await db.query('insert into public.editions(work_id,title,isbn_10,isbn_13,language,open_library_edition_id,publisher) values(1739,$1,$2,$3,$4,$5,$6)',[e.title,e.isbn_10,e.isbn_13,e.language,e.open_library_edition_id,'W.F. Howes']);
+        }
+        await db.query('commit');
+      }catch(error){await db.query('rollback');throw error;}
+      const authState=async()=>{
+        const authTables=(await db.query("select tablename from pg_tables where schemaname='auth' order by tablename")).rows;
+        // Compare hashes in memory only; never write Auth rows or tokens to an artifact.
+        const hashes=[];
+        for(const {tablename} of authTables)hashes.push({table:tablename,hash:digest((await db.query(`select t.xmin::text as row_version,to_jsonb(t) as data from auth.\"${tablename}\" t order by to_jsonb(t)::text`)).rows)});
+        return hashes;
+      };
+      const before=await snapshot(),authBefore=await authState();
+      let dry,first,second;
+      await db.query('begin isolation level serializable');
+      try{
+        // Rehearse a fresh import without resetting the existing Supabase stack.
+        // All fixture preparation/import writes are rolled back at the outer boundary.
+        const owned=(await db.query('select work_id from catalog_private.editorial_records where selection_slug=$1 and work_id>100000',['lumiscore-selectie-1000'])).rows.map(r=>Number(r.work_id));
+        assert.equal(owned.length,99,'Only the 99 previously imported synthetic Works');
+        for(const table of ['ratings','user_book_status'])assert.equal((await db.query(`select count(*)::int as n from public.${table} where work_id=any($1::bigint[])`,[owned])).rows[0].n,0);
+        for(const table of ['catalog_private.editorial_records','public.catalog_selection_members'])await db.query(`delete from ${table} where selection_slug=$1`,['lumiscore-selectie-1000']);
+        for(const table of ['work_catalog_categories','catalog_work_title_aliases'])await db.query(`delete from public.${table}`);
+        await db.query("delete from public.catalog_selections where slug='lumiscore-selectie-1000'");
+        await db.query('delete from public.catalog_categories');
+        await db.query('delete from public.works where id=any($1::bigint[])',[owned]);
+        const fresh=await snapshot();
+        const adapter={query:(...args)=>db.query(...args),exec:sql=>db.query(sql),transaction:async callback=>{
+          await db.query('savepoint rehearsal_import');
+          try{const value=await callback({query:(...args)=>db.query(...args),exec:sql=>db.query(sql)});await db.query('release savepoint rehearsal_import');return value;}
+          catch(error){await db.query('rollback to savepoint rehearsal_import');await db.query('release savepoint rehearsal_import');throw error;}
+        }};
+        const plan=await livePlan(adapter,input.records,input.pins);
+        assert.deepEqual(plan.counts,{link:875,insert:99,skip:26});
+        assert.equal(plan.actions[727].work_id,1078);
+        dry=await importSelection(adapter,input.records,input.pins,plan);
+        assert.equal(dry.pending,974);assert.equal(dry.applied,false);assert.deepEqual(await snapshot(),fresh);
+        await db.query(`create function catalog_private.rendezvous_rehearsal_failure() returns trigger language plpgsql as $$
+          begin if new.candidate_id='LS1000-0729' then raise exception 'synthetic failure after Rendez-vous'; end if; return new; end $$;
+          create trigger rendezvous_rehearsal_failure before insert on catalog_private.editorial_records for each row execute function catalog_private.rendezvous_rehearsal_failure();`);
+        await assert.rejects(()=>importSelection(adapter,input.records,input.pins,plan,{apply:true}),/synthetic failure after Rendez-vous/);
+        assert.deepEqual(await snapshot(),fresh,'Partial import, including Rendez-vous, fully rolled back');
+        await db.query('drop trigger rendezvous_rehearsal_failure on catalog_private.editorial_records;drop function catalog_private.rendezvous_rehearsal_failure()');
+        first=await importSelection(adapter,input.records,input.pins,plan,{apply:true});
+        assert.equal(first.created,99);assert.equal(first.linked,875);assert.equal(first.pending,974);assert.equal(first.unchanged,0);
+        const imported=await snapshot();
+        for(const protectedTable of fresh.filter(t=>['authors','works','editions','ratings','user_book_status','user_reading_preferences','taste_test_responses'].includes(t.table))){
+          const rows=imported.find(t=>t.table===protectedTable.table).rows;
+          assert.deepEqual(rows.filter(r=>protectedTable.rows.some(old=>old.data.id!==undefined?old.data.id===r.data.id:JSON.stringify(old.data)===JSON.stringify(r.data))),protectedTable.rows);
+        }
+        assert.deepEqual(await authState(),authBefore);
+        const ids=(await db.query('select work_id::int as id from public.catalog_selection_members where candidate_id=$1',['LS1000-0728'])).rows;
+        assert.deepEqual(ids,[{id:1078}]);
+        assert.equal((await db.query('select count(*)::int as n from public.catalog_selection_members where work_id=1739')).rows[0].n,0);
+        const duplicate=(await db.query('select count(*)::int as n from public.catalog_selection_members')).rows[0].n;
+        assert.equal(duplicate,974);
+        second=await importSelection(adapter,input.records,input.pins,null,{apply:true});
+        assert.equal(second.pending,0);assert.equal(second.created,0);assert.equal(second.linked,0);
+        assert.deepEqual(await snapshot(),imported,'Second import preserves every data value and xmin');
+      }finally{await db.query('rollback');}
+      assert.deepEqual(await snapshot(),before,'Outer rollback restores the existing full stack');
+      assert.deepEqual(await authState(),authBefore,'Every Auth table remains unchanged');
+      report.rehearsal={mode:'real existing local Supabase; SERIALIZABLE outer transaction and importer savepoints; final rollback',
+        first:{pending:first.pending,created:first.created,linked:first.linked,unchanged:first.unchanged},secondWrites:second.pending,
+        dryCounts:dry.counts,matchedWork:1078,otherWorkSelected:false,failureAfterCandidate:'LS1000-0728',rollback:true,
+        existingBibliographyAndPrivateDataPreserved:true,authPreserved:true,existingStackRowsRestored:true,
+        sequenceNote:'PostgreSQL sequences may advance during rolled-back synthetic inserts; no persisted bibliography or user rows changed.'};
+      await save('rendezvous-rehearsal',report.rehearsal);
+      assert.deepEqual((await rpc({p_query:'Rendez',p_selection:'lumiscore-selectie-1000'})).workIds,[1078]);
+      console.log(JSON.stringify({status:'PASS',rehearsal:report.rehearsal}));
+    }
 
     if(mode==='repeat'){
       const args=['--target='+path.join(output,'local-target.json')],env={CATALOG_DATABASE_URL:credentials.DB_URL};

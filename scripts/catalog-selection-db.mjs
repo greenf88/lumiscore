@@ -4,7 +4,7 @@ export const SELECTION = 'lumiscore-selectie-1000';
 
 export async function readWorks(db) {
   return (await db.query(`select w.id,w.title,w.open_library_id,w.first_publish_year,a.name as author,
-    coalesce((select jsonb_agg(jsonb_build_object('title',e.title,'isbn_13',e.isbn_13,'isbn_10',e.isbn_10) order by e.id) from public.editions e where e.work_id=w.id),'[]'::jsonb) as editions
+    coalesce((select jsonb_agg(jsonb_build_object('title',e.title,'isbn_13',e.isbn_13,'isbn_10',e.isbn_10,'language',e.language,'open_library_edition_id',e.open_library_edition_id) order by e.id) from public.editions e where e.work_id=w.id),'[]'::jsonb) as editions
     from public.works w left join public.authors a on a.id=w.author_id order by w.id`)).rows;
 }
 

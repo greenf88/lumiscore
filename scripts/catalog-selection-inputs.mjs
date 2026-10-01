@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-export const revision='identity-20261001';
+export const revision='identity-20261001-rendezvous';
 export const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const directory=new URL('../catalog/selection-v1/',import.meta.url);
 export async function refuseLegacyRewrite() {
@@ -12,9 +12,14 @@ export async function reviewedInput() {
   const manifestBytes=await fs.readFile(new URL(`${revision}.manifest.json`,directory));
   const manifest=JSON.parse(manifestBytes);
   const bytes=await fs.readFile(new URL(`${revision}.records.json`,directory));
-  const pins=await fs.readFile(new URL('identity-pins.json',directory));
+  const pins=await fs.readFile(new URL(manifest.pins_file,directory));
   if(manifest.version!==revision || manifest.records_file!==`${revision}.records.json`
+    ||manifest.pins_file!==`${revision}.pins.json`
     ||sha256(bytes)!==manifest.files[manifest.records_file]||sha256(pins)!==manifest.pins_sha256)
     throw new Error('Frozen input checksum mismatch');
+  for(const [file,hash] of Object.entries(manifest.files)) {
+    if(!file.startsWith(revision+'.')||file.includes('/')||file.includes('\\')
+      ||sha256(await fs.readFile(new URL(file,directory)))!==hash)throw new Error('Frozen input checksum mismatch');
+  }
   return {records:JSON.parse(bytes),pins:JSON.parse(pins),manifest,manifestSha256:sha256(manifestBytes)};
 }
