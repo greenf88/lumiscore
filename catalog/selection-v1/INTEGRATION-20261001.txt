@@ -1,6 +1,7 @@
 LumiScore PR #2 — identity revision and integration review, 2026-10-01
 
-STATUS: BLOCKED — full PostgreSQL + Supabase Auth + PostgREST not available locally.
+STATUS: READY FOR PRODUCTION APPROVAL — actual local PostgreSQL/Auth/PostgREST
+validation completed. This is NOT production execution or merge authorization.
 This report supersedes the counts/release blockers in STAGING-REVIEW.txt, not its history.
 AI_EDITORIAL is the approved product decision. No HIGH-only classification gate or
 new review of all 200/1,000 books is required. No production writes were performed.
@@ -110,83 +111,133 @@ rollback, commit, parameter binding, bigint limits, frozen inputs and exclusions
 PGlite additionally proves whole-import rollback after a partial synthetic failure,
 zero writes/row-version changes on repeat, restart persistence, public-role read/
 write permissions, unchanged bibliography and synthetic user links. These checks
-do NOT establish actual pg-driver, Auth/JWT or PostgREST behavior.
+alone do NOT establish actual pg-driver, Auth/JWT or PostgREST behavior. The actual
+full-stack evidence below now supplements, rather than relabels, those earlier tests.
 
-4. Validation performed
+4. Actual full-stack validation performed (2026-10-01)
 
-- 11 targeted import/query tests passed.
-- Broader run: 457/459 passed. Both failures are ENOENT for the historical
-  catalog/collection-v1-quality-audit.json. Reproduced the two same failing tests
-  from an archive of CURRENT origin/main b95fb34d19260697efce0ab72f9e4fdc13eb23cd;
-  git ls-tree confirms that fixture is absent there. Three other baseline tests pass.
-- Three real built-server HTML tests passed: Browse/Search same ordered IDs at page
-  sizes 32/64/128, 124 fantasy matches, 974 members, query noindex, clean Browse
-  index, one canonical, no duplicate social tags, NL language, translation alias,
-  page-two detail return URLs and excluded Works still searchable outside selection.
-- TypeScript, ESLint, Vercel production build, client secret scan (44 files),
-  git diff --check passed. Build needed sandbox elevation for Windows readlink,
-  not configuration/code changes. No deployment was invoked.
-- Browser: actual local built handler localhost:3983, read-only PGlite-shaped API
-  127.0.0.1:3970. Category selection submitted in Browse and Search. Both show 124
-  fantasy books and actual selection count 974, explicitly not a ratings ranking.
-- Page 2 -> Work 152 -> explicit back link preserves page=2, pageSize=64,
-  fiction_fantasy and selection on BOTH routes.
-- NL/EN and Ink/Paper checked at desktop 1440x900 and mobile 390x844.
-  Document widths 1425/375, no horizontal overflow or captured console warnings/
-  errors. No visible new layout issue. Covers use normal remote loading/fallbacks.
-  This browser pass used the built-in browser because agent-browser was absent.
-- No hosted Preview functional validation claimed. A Ready Preview is separate
-  build evidence and cannot access this loopback database. No Preview env changed.
+Machine-readable, non-secret evidence: LOCAL-SUPABASE-EVIDENCE-20261001.json.
+Implementation reviewed: 90c3ef9c404a4ca20b3a04394eb718d6ad784a28; current remote
+main rechecked as b95fb34d19260697efce0ab72f9e4fdc13eb23cd. Initial worktree clean.
+Only this worktree was changed. No runtime application/import/migration defect was
+found; additions are the opt-in real-stack test harness and validation evidence.
 
-5. Missing infrastructure and exact next validation work
+- Docker client/server 29.8.1, Linux/AMD64; Compose 5.5.1; WSL 3.0.1.0,
+  kernel 6.18.40.1-1; Supabase CLI 2.116.0. CLI help read before options.
+- Started actual Supabase via CLI: PostgreSQL image 17.6.1.165, GoTrue v2.196.0,
+  PostgREST v16.1, Kong 2.8.1, Mailpit v1.30.2. Unneeded services excluded.
+- All 12 repository SQL migrations executed in filename order against a clean
+  local database, without changing their SQL. Hashes/names are in evidence JSON.
+  Missing original authors/works/editions schema was bootstrapped locally, using
+  the frozen public bibliography and synthetic missing membership sentinels.
+  Migration 20260917180127 also assumes 43 pre-existing named series; missing
+  historical series were provided as local fixture rows, NOT invented migrations.
+  This proves the migrations against that fixture, not production-schema parity.
+- SQL catalogs verified 19 validated FKs, 32 indexes, 27 policies, RLS/grants and
+  all 8 application functions. Private user tables have FORCE RLS. New catalog
+  tables and private ledger enable RLS without FORCE, as authored; grants/schema
+  restrictions and actual denied operations establish public-role isolation.
+  No new views. No unintended PUBLIC EXECUTE on any application function.
+  Two historical Works CHECKs are explicitly NOT VALID in the original migration;
+  they were observed as such, not silently validated or reported as missing FKs.
+- Exact production-intended pg runner main(): default read-only dry-run changed
+  neither rows nor xmin. Explicit target rejects a production endpoint and an
+  unknown live fingerprint; apply without plan or with changed SHA is rejected.
+  Frozen input/version hashes verified. Values are parameterized, as also tested.
+- Actual first plan: 875 links / 99 inserts / 26 skips. First apply: pending 974,
+  linked 875, created 99, unchanged 0. Stored: 974 members/ledger rows, 1022 category
+  links, 20 categories, zero new Editions. Existing bibliography and synthetic
+  private user rows/xmin unchanged by import. No ISBN or cover metadata assertions.
+- Injected a partial-failure trigger at LS1000-0002: real PostgreSQL transaction
+  rolled back all data and row-version changes. No blind automatic retry.
+- New post-import dry-run + approved second apply: pending/created/linked 0,
+  unchanged 974; all monitored data/xmin identical. Same result after an actual
+  Docker database restart and local app restart. Counts/API/HTML unchanged.
+- Real GoTrue created synthetic users A/B and password sign-ins supplied real JWTs.
+  Anon and both users read intended public editorial tables/RPC. INSERT, UPDATE,
+  DELETE denied for editorial tables. Private schema inaccessible through SQL and
+  PostgREST. No production users, sessions, credentials or private data copied.
+- ratings, user_book_status, user_reading_preferences and taste_test_responses:
+  anon CRUD denied; each user's own CRUD passed; other user's SELECT/PATCH/DELETE
+  returned zero rows; forged INSERT denied; own-row user_id reassignment denied.
+  Independent SQL role/claims tests checked USING and WITH CHECK/identity triggers
+  and confirmed owner data unchanged. Auth tests intentionally change only their
+  synthetic fixture rows after the separate import-preservation assertions.
+- Test-harness corrections: use WHERE filters and valid PATCH payloads. Empty
+  PATCH/no-WHERE requests can hit generic API/safeupdate behavior (21000), which
+  does NOT prove RLS. Final tests require actual 401/403 and SQL 42501 denials.
+  Serial snapshot reads avoid pg single-client concurrent-query deprecation.
+- Actual API: selection 974; unfiltered fixture 1062, including unclassified
+  sentinel; fantasy 124; sizes 32/64/128, disjoint pagination, alias Work 1936.
+  SQL language normalization exercised with a synthetic nld edition, rolled back.
+- Built app embeds ONLY real local Supabase URL/anon key; local service key is
+  server-only. Built Vercel handler runs at localhost:3983, API at 127.0.0.1:54321.
+  The old PGlite-shaped HTTP adapter is NOT used for any evidence in this section.
+- 11/11 targeted tests and 4/4 server-HTML tests pass. Original three repeated after
+  database/app restart: same ordered Browse/Search IDs, metadata, selection,
+  pagination, excluded books, alias, locale and exact detail return context. Added
+  a fourth regression for actual language=nl/sort=newest matching and detail return
+  on both routes (fixture Work 93). Also verified these controls in the browser.
+- TypeScript, ESLint with zero warnings, production build and diff check pass.
+  Client secret scan: 44 files, configured actual local server secret included in
+  scan, no secret identifiers or secret values in client output. No deployment.
+- Expanded broad scan: 457/461 pass, FOUR pre-existing ENOENT failures:
+  collection-v1-quality-audit.json (2) and catalog-expansion-trait-enrichment-
+  option-b-write-plan.json (2). ALL FOUR independently reproduced in a fresh Git
+  archive of current main b95fb34; both fixture files absent from that tree. The
+  latter script was not included in the earlier 459-test command. No wholly green
+  broad suite is claimed; unrelated missing artifacts were not manufactured.
+  Baseline archive was moved into node_modules/.cache after running it: leaving
+  another main source tree under outputs makes TypeScript include its old pages
+  against this branch's new aliases. No tsconfig or application fix was needed.
+- Browser (built-in browser; agent-browser absent): category/selection/64 chosen
+  in actual Browse AND Search. Both show 124 fantasy results/974 selection members.
+  Page 2 -> Work 152 -> visible back link returns EXACTLY to each page-two URL.
+  NL/EN, Ink/Paper, desktop 1440x900 and mobile 390x844 checked; widths 1425/375,
+  no overflow, captured console warnings/errors or visible new layout issue.
+  Browser network errors assessed through captured console and successful real
+  server/API requests; no exhaustive HAR captured. Screenshots inspected/saved.
+- No hosted Preview functional claim: it cannot reach loopback. No Preview env
+  changed. Automatic branch Preview, if any, is separate build evidence only.
 
-Windows has no Docker/Podman/psql; wsl.exe reports WSL not installed. Supabase CLI
-2.116.0 is present. No production substitute was used and no private data copied.
-Install/enable WSL2 and a Docker-compatible local runtime (e.g. Docker Desktop),
-start its engine, then initialize a dedicated local Supabase project under this
-worktree's outputs directory. No supabase link or remote db push/reset.
-Official setup: https://supabase.com/docs/guides/local-development/cli/getting-started
+5. Local reproducibility and environment caveats
 
-After installation, in this worktree:
-  supabase init --workdir outputs/supabase-identity-validation
-  docker network create -o com.docker.network.bridge.host_binding_ipv4=127.0.0.1 lumiscore-identity-local
-  supabase start --workdir outputs/supabase-identity-validation --network-id lumiscore-identity-local
-Use only credentials generated for that local stack. Do not publish ports remotely.
+Project: outputs/supabase-identity-validation; never supabase link or remote db push.
+Opt-in harness: scripts/verify-catalog-selection-supabase.mjs. Set the process-only
+LOCAL_SUPABASE_CLI_ENTRY to the installed CLI's dist/supabase.js, then use:
+  node scripts/verify-catalog-selection-supabase.mjs setup
+  node scripts/verify-catalog-selection-supabase.mjs verify
+  node scripts/verify-catalog-selection-supabase.mjs repeat
+  node scripts/verify-catalog-selection-supabase.mjs build
+  node scripts/verify-catalog-selection-supabase.mjs secrets
+  node scripts/verify-catalog-selection-supabase.mjs serve
+Setup REFUSES an existing application schema; no automatic reset/truncate/drop.
+Access mode reruns the synthetic Auth matrix only. Raw evidence remains in ignored
+outputs/supabase-identity-validation/evidence; credentials are not committed.
 
-The repository migrations assume pre-existing authors/works/editions; there is no
-complete initial schema migration. Prepare a local synthetic catalog bootstrap
-matching their required columns/constraints, then apply the existing baseline
-migrations in order and 20260930185834_catalog_selection_v1.sql. Do not substitute
-the PGlite mock Auth roles for actual Supabase Auth. Seed only the public catalog
-snapshot and synthetic data. Never copy production auth/users/sessions/preferences.
-
-Create a non-secret target JSON containing host, numeric port, database, user,
-database_oid, system_identifier, tls. Read the actual fingerprint using --inspect
-and independently verify the local container before enrolling it. Example commands:
-  npm run catalog:postgres -- --target=outputs/local-target.json --inspect
-  npm run catalog:postgres -- --target=outputs/local-target.json --out=outputs/local-dry-run.json
-  npm run catalog:postgres -- --target=outputs/local-target.json --apply --plan=outputs/local-dry-run.json --plan-sha256=<reviewed file SHA-256>
-
-Still required on that stack: actual first/second import and injected rollback;
-restart persistence; Auth sign-in with two synthetic accounts; real PostgREST
-public catalog reads and editorial insert/update/delete denials for anon and both
-users; own-rating/status/preference writes permitted, cross-user reads absent,
-cross-user changes/forged user_id denied or zero rows and owner data unchanged;
-private editorial evidence inaccessible. Check both grants and policies, not just
-HTTP status. Test tables ratings, user_book_status, user_reading_preferences and
-taste_test_responses. Verify unclassified visibility and pagination via the RPC.
-Rebuild local UI with REAL local stack URL/key, repeat browser/HTML checks and
-confirm that API, data and UI agree. These tests have NOT been executed yet.
+The official dedicated-network recommendation was followed:
+https://supabase.com/docs/guides/local-development
+Docker 29.8.1/Desktop nevertheless published API/DB/Mailpit on 0.0.0.0 and IPv6.
+Fixed ONLY those three new local containers to explicit 127.0.0.1 bindings; kept
+their volumes, original local Kong files/ownership, and stopped original containers
+as recoverable backups. Actual bindings rechecked: 54321, 54322, 54324 loopback.
+The harness now refuses non-loopback publication before any fixture/import write.
+On future startup CHECK actual docker port bindings; do not assume a network option
+alone isolates ports. No firewall, Docker-global, production or DNS setting changed.
+Local DB/stack kept for reproducibility; only synthetic Auth data is present.
 
 6. Production approval/runbook (not authorized for execution in this task)
 
 The exact reviewed commit and remote SHA are bound in the updated Draft PR #2 body;
 this file intentionally does not embed its own impossible self-referential SHA.
 Do not release any different commit without revalidation. Current base is b95fb34.
-1. Finish the full-stack checks above using that exact reviewed commit. Keep Draft
-   until all required technical evidence exists; no whole-catalog human review gate.
+1. Full local checks are completed above; keep this PR DRAFT as explicitly requested.
+   Review the exact final commit/evidence and acknowledge the four independently
+   reproduced baseline artifact failures; no whole-catalog human review gate.
 2. Obtain separate production approval. Verify target identity, current schema and
-   backups. Keep current app version active. Apply only the additive catalog
+   backups READ ONLY, including parity with the original base schema/grants and
+   existing historical series (local bootstrap is NOT a production migration).
+   Keep current app version active. Apply only the additive catalog
    migration 20260930185834_catalog_selection_v1.sql after baseline migrations.
 3. Verify the exact active version and hashes in section 2; generate a fresh target-
    specific dry-run. Review 875 links / 99 new Works / 26 skips against live data.
@@ -205,4 +256,7 @@ Do not release any different commit without revalidation. Current base is b95fb3
    selection via an independently reviewed forward change. Data repair requires
    a per-row dependency-aware plan; no database-wide backup restore over new users.
 
-BLOCKED — full local PostgreSQL/Supabase Auth/PostgREST validation still required.
+No production import, migration, merge, Production deployment, Supabase/Auth/RLS,
+Vercel/environment, DNS, taxonomy or paid staging change was performed.
+
+READY FOR PRODUCTION APPROVAL

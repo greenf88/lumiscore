@@ -1,0 +1,546 @@
+{
+  "date": "2026-10-01",
+  "reviewedImplementation": "90c3ef9c404a4ca20b3a04394eb718d6ad784a28",
+  "basis": "b95fb34d19260697efce0ab72f9e4fdc13eb23cd",
+  "scope": "real LOCAL Supabase; no production data or writes",
+  "versions": {
+    "docker": "29.8.1",
+    "compose": "5.5.1",
+    "wsl": "3.0.1.0",
+    "wslKernel": "6.18.40.1-1",
+    "supabaseCli": "2.116.0",
+    "postgresImage": "17.6.1.165",
+    "authImage": "v2.196.0",
+    "postgrestImage": "v16.1",
+    "kongImage": "2.8.1",
+    "mailpitImage": "v1.30.2",
+    "pg": "8.23.1"
+  },
+  "bootstrap": {
+    "source": "public frozen catalog snapshot; synthetic missing base schema and missing historical series",
+    "productionPrivateDataCopied": false
+  },
+  "migrations": [
+    {
+      "name": "20260903220000_add_native_work_metadata.sql",
+      "sha256": "d0547dcd76baafd90e3f1dfef24abe7933f82adaf8341414d29cbde0e8e58c2f"
+    },
+    {
+      "name": "20260908052221_secure_ratings_foundation.sql",
+      "sha256": "bbc0127740191fc4bd6ee637b5491b8beecf5fbfce2f793c330ca6a6f7a434f6"
+    },
+    {
+      "name": "20260910062625_add_batch_rating_summaries.sql",
+      "sha256": "0c2f621767de8711f02fdfa0a052e7bb8b6be688ad55b0dd4e59604bec43ff89"
+    },
+    {
+      "name": "20260911143044_durable_cover_resolution_cache.sql",
+      "sha256": "2c37b0e5ff904d7dbec7f1b32fcfd45c229cd9c27a14eecb60790cb98338003a"
+    },
+    {
+      "name": "20260913150000_taste_test_responses.sql",
+      "sha256": "7cb507d6cae918e38ce23275b920e18f0823de2b41e8c141db029fd4bee6b12d"
+    },
+    {
+      "name": "20260913182320_work_trait_evidence.sql",
+      "sha256": "8fbe6b03cbffb0b6a6291dc24bc7da619d305fa370dd880602bc9c72543345df"
+    },
+    {
+      "name": "20260915191053_collaborative_recommendation_signals.sql",
+      "sha256": "d2b11f1ce385300499613a767711e6daa566752b5c3a18af622f248578654417"
+    },
+    {
+      "name": "20260916071439_collections_v1.sql",
+      "sha256": "f10c6bc4cc9ddca841c21377f567b5bc1ea095a52372fca81384e20cc24f15ce"
+    },
+    {
+      "name": "20260917180127_add_collection_expected_main_series_total.sql",
+      "sha256": "eda7156628c761478fa3856bb00404fae5177586e95d03d49a50ec71de0af4eb"
+    },
+    {
+      "name": "20260919113332_add_catalog_foreign_key_indexes.sql",
+      "sha256": "6bbf76edf22bc203e1109d2d2155216026b5dffc155393e3cef9168e67906901"
+    },
+    {
+      "name": "20260920120000_add_user_reading_preferences.sql",
+      "sha256": "28cfc4f882a13866f1d487536d1ed3cf3f685a2f346c75ba1e396ce39df33254"
+    },
+    {
+      "name": "20260930185834_catalog_selection_v1.sql",
+      "sha256": "efb525fc352ff2e5d1fd4224b95e9268dd19a952028fc4f36ba1680982836b71"
+    }
+  ],
+  "import": {
+    "first": {
+      "applied": true,
+      "pending": 974,
+      "created": 99,
+      "linked": 875,
+      "unchanged": 0
+    },
+    "second": {
+      "applied": true,
+      "pending": 0,
+      "created": 0,
+      "linked": 0,
+      "unchanged": 974
+    },
+    "firstPlan": {
+      "link": 875,
+      "insert": 99,
+      "skip": 26
+    },
+    "version": "identity-20261001",
+    "manifest_sha256": "fd3f057e479ca7a78184295ad38348e829f49754115377d6b0c307c434de6041",
+    "rollback": true,
+    "dryRunReadOnly": true,
+    "targetRejection": true,
+    "existingValuesAndVersionsPreserved": true
+  },
+  "restartRepeat": {
+    "applied": true,
+    "pending": 0,
+    "created": 0,
+    "linked": 0,
+    "unchanged": 974
+  },
+  "counts": {
+    "members": 974,
+    "category_links": 1022,
+    "categories": 20,
+    "ledger": 974,
+    "new_editions": 0
+  },
+  "api": {
+    "selectionTotal": 974,
+    "unfilteredTotal": 1062,
+    "fantasyTotal": 124,
+    "pages": [
+      32,
+      64,
+      128
+    ],
+    "unclassifiedVisible": true,
+    "titleAlias1936": true
+  },
+  "access": [
+    {
+      "table": "ratings",
+      "anonCRUD": "denied",
+      "ownerCRUD": "passed",
+      "crossUserCRUD": "denied/zero rows",
+      "forgedInsert": "denied",
+      "updateWithCheck": "denied",
+      "sqlIsolation": "passed"
+    },
+    {
+      "table": "user_book_status",
+      "anonCRUD": "denied",
+      "ownerCRUD": "passed",
+      "crossUserCRUD": "denied/zero rows",
+      "forgedInsert": "denied",
+      "updateWithCheck": "denied",
+      "sqlIsolation": "passed"
+    },
+    {
+      "table": "user_reading_preferences",
+      "anonCRUD": "denied",
+      "ownerCRUD": "passed",
+      "crossUserCRUD": "denied/zero rows",
+      "forgedInsert": "denied",
+      "updateWithCheck": "denied",
+      "sqlIsolation": "passed"
+    },
+    {
+      "table": "taste_test_responses",
+      "anonCRUD": "denied",
+      "ownerCRUD": "passed",
+      "crossUserCRUD": "denied/zero rows",
+      "forgedInsert": "denied",
+      "updateWithCheck": "denied",
+      "sqlIsolation": "passed"
+    }
+  ],
+  "editorialPublicRead": true,
+  "editorialWritesDenied": true,
+  "privateLedgerDenied": true,
+  "relations": [
+    {
+      "schema": "catalog_private",
+      "name": "editorial_records",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "authors",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "catalog_categories",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "catalog_selection_members",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "catalog_selections",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "catalog_work_title_aliases",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "collection_books",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "collections",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "editions",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "ratings",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "taste_test_responses",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "user_book_status",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "user_reading_preferences",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "work_catalog_categories",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "work_cover_resolutions",
+      "rls": true,
+      "force_rls": false
+    },
+    {
+      "schema": "public",
+      "name": "work_trait_evidence",
+      "rls": true,
+      "force_rls": true
+    },
+    {
+      "schema": "public",
+      "name": "works",
+      "rls": true,
+      "force_rls": true
+    }
+  ],
+  "functions": [
+    {
+      "proname": "catalog_editorial_page",
+      "security_definer": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "get_collaborative_recommendation_signals",
+      "security_definer": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": false,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "get_work_rating_summaries",
+      "security_definer": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "get_work_rating_summary",
+      "security_definer": true,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "protect_rating_identity",
+      "security_definer": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "protect_user_book_status_identity",
+      "security_definer": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "sync_rating_to_read_status",
+      "security_definer": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    },
+    {
+      "proname": "touch_collection_updated_at",
+      "security_definer": false,
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "anon_execute": true,
+      "authenticated_execute": true
+    }
+  ],
+  "unexpectedPublicExecute": [],
+  "foreignKeys": {
+    "count": 19,
+    "allValidated": true
+  },
+  "historicalNotValidChecks": [
+    {
+      "conname": "works_source_type_check",
+      "contype": "c",
+      "convalidated": false
+    },
+    {
+      "conname": "works_work_type_check",
+      "contype": "c",
+      "convalidated": false
+    }
+  ],
+  "indexes": [
+    {
+      "table": "authors",
+      "name": "authors_pkey"
+    },
+    {
+      "table": "catalog_categories",
+      "name": "catalog_categories_pkey"
+    },
+    {
+      "table": "catalog_selection_members",
+      "name": "catalog_selection_members_pkey"
+    },
+    {
+      "table": "catalog_selection_members",
+      "name": "catalog_selection_members_selection_slug_candidate_id_key"
+    },
+    {
+      "table": "catalog_selection_members",
+      "name": "catalog_selection_members_work_idx"
+    },
+    {
+      "table": "catalog_selections",
+      "name": "catalog_selections_pkey"
+    },
+    {
+      "table": "catalog_work_title_aliases",
+      "name": "catalog_work_title_aliases_pkey"
+    },
+    {
+      "table": "collection_books",
+      "name": "collection_books_pkey"
+    },
+    {
+      "table": "collection_books",
+      "name": "collection_books_unique_sequence_idx"
+    },
+    {
+      "table": "collection_books",
+      "name": "collection_books_work_id_idx"
+    },
+    {
+      "table": "collections",
+      "name": "collections_pkey"
+    },
+    {
+      "table": "collections",
+      "name": "collections_slug_key"
+    },
+    {
+      "table": "editions",
+      "name": "editions_pkey"
+    },
+    {
+      "table": "editions",
+      "name": "editions_work_id_idx"
+    },
+    {
+      "table": "editorial_records",
+      "name": "editorial_records_pkey"
+    },
+    {
+      "table": "editorial_records",
+      "name": "editorial_records_work_idx"
+    },
+    {
+      "table": "ratings",
+      "name": "ratings_pkey"
+    },
+    {
+      "table": "ratings",
+      "name": "ratings_positive_user_work_idx"
+    },
+    {
+      "table": "ratings",
+      "name": "ratings_user_work_unique"
+    },
+    {
+      "table": "ratings",
+      "name": "ratings_work_id_idx"
+    },
+    {
+      "table": "taste_test_responses",
+      "name": "taste_test_responses_pkey"
+    },
+    {
+      "table": "user_book_status",
+      "name": "user_book_status_pkey"
+    },
+    {
+      "table": "user_book_status",
+      "name": "user_book_status_work_id_idx"
+    },
+    {
+      "table": "user_reading_preferences",
+      "name": "user_reading_preferences_pkey"
+    },
+    {
+      "table": "work_catalog_categories",
+      "name": "work_catalog_categories_category_idx"
+    },
+    {
+      "table": "work_catalog_categories",
+      "name": "work_catalog_categories_pkey"
+    },
+    {
+      "table": "work_cover_resolutions",
+      "name": "work_cover_resolutions_pkey"
+    },
+    {
+      "table": "work_trait_evidence",
+      "name": "work_trait_evidence_pkey"
+    },
+    {
+      "table": "works",
+      "name": "works_author_id_idx"
+    },
+    {
+      "table": "works",
+      "name": "works_native_identity_key_unique"
+    },
+    {
+      "table": "works",
+      "name": "works_open_library_id_key"
+    },
+    {
+      "table": "works",
+      "name": "works_pkey"
+    }
+  ],
+  "policiesCount": 27,
+  "views": [],
+  "browser": {
+    "host": "http://localhost:3983",
+    "desktop": [
+      1440,
+      900
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "documentWidths": [
+      1425,
+      375
+    ],
+    "horizontalOverflow": false,
+    "capturedConsoleWarningsOrErrors": 0,
+    "flow": "Browse AND Search: UI category/selection/64 -> page 2 -> Work 152 -> exact same URL",
+    "locales": [
+      "nl",
+      "en"
+    ],
+    "themes": [
+      "ink",
+      "paper"
+    ],
+    "databaseAndAppRestart": true
+  },
+  "validation": {
+    "targeted": "11/11",
+    "serverHTML": "Original 3/3 before AND after restart; final 4/4 with added real language/newest/detail-return regression",
+    "typescript": "passed",
+    "eslint": "passed, zero warnings",
+    "productionBuild": "passed; local generated Vercel handler, no deployment",
+    "clientSecrets": "44 files, actual configured local service-role secret scanned; no bundled server secret",
+    "broader": {
+      "passed": 457,
+      "total": 461,
+      "failed": 4,
+      "allFailuresReproducedOnCurrentMain": true,
+      "missingFixtures": [
+        "catalog/collection-v1-quality-audit.json (2 tests)",
+        "catalog/catalog-expansion-trait-enrichment-option-b-write-plan.json (2 tests)"
+      ]
+    }
+  },
+  "applicationFixes": [],
+  "limitations": [
+    "Missing original base schema is a local test bootstrap, not evidence of production-schema parity.",
+    "Historical missing fixtures remain unchanged; no wholly green broad suite claimed.",
+    "No hosted Preview functional check: it cannot access the local database.",
+    "Browser network errors inspected via captured console and real server/API checks; no full HAR captured."
+  ]
+}

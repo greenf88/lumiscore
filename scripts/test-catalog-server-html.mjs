@@ -63,3 +63,24 @@ test('page two detail return preserves editorial filters; excluded Works remain 
     assert.ok(!workIds(await html(query+'&selection=lumiscore-selectie-1000')).includes(id));
   }
 });
+
+test('real language filtering and non-default sort survive Browse/Search detail return',async()=>{
+  const params='?category=fiction_fantasy&selection=lumiscore-selectie-1000&language=nl&sort=newest&pageSize=64';
+  const pages=await Promise.all(['/browse','/search'].map(route=>html(route+params)));
+  assert.deepEqual(workIds(pages[0]),workIds(pages[1]));
+  assert.deepEqual(workIds(pages[0]),['93'],'Frozen public fixture has one classified Dutch fantasy Work');
+  for(const [index,route] of ['/browse','/search'].entries()){
+    const match=pages[index].match(/class="book-card-main-link"[^>]*href="([^\"]+)"/);
+    assert.ok(match);
+    const detailPath=match[1].replaceAll('&amp;','&');
+    const returnTo=new URL(detailPath,origin).searchParams.get('returnTo');
+    const parsed=new URL(returnTo,origin);
+    assert.equal(parsed.pathname,route);
+    for(const [key,value] of new URLSearchParams(params))assert.equal(parsed.searchParams.get(key),value);
+    const detail=await html(detailPath);
+    assert.ok(detail.includes(returnTo.replaceAll('&','&amp;')));
+    const tags=inspectServerHtml(detail);
+    assert.equal(tags.canonical.length,1);assert.equal(new URL(tags.canonical[0]).pathname,'/book/93');
+    assert.deepEqual(tags.robots,['index, follow']);assert.deepEqual(tags.duplicates,[]);
+  }
+});
