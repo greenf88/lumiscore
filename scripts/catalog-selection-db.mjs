@@ -4,8 +4,8 @@ export const SELECTION = 'lumiscore-selectie-1000';
 
 export async function readWorks(db) {
   return (await db.query(`select w.id,w.title,w.open_library_id,w.first_publish_year,a.name as author,
-    coalesce((select jsonb_agg(jsonb_build_object('title',e.title,'isbn_13',e.isbn_13,'isbn_10',e.isbn_10)) from public.editions e where e.work_id=w.id),'[]'::jsonb) as editions
-    from public.works w left join public.authors a on a.id=w.author_id`)).rows;
+    coalesce((select jsonb_agg(jsonb_build_object('title',e.title,'isbn_13',e.isbn_13,'isbn_10',e.isbn_10) order by e.id) from public.editions e where e.work_id=w.id),'[]'::jsonb) as editions
+    from public.works w left join public.authors a on a.id=w.author_id order by w.id`)).rows;
 }
 
 export async function livePlan(db,records,pins) {
@@ -25,7 +25,8 @@ export async function livePlan(db,records,pins) {
  */
 export async function importSelection(db, records, pins, expectedPlan, { apply=false }={}) {
   return db.transaction(async tx => {
-    await tx.exec('lock table public.works in share row exclusive mode');
+    // Dry-runs stay read-only. Apply serializes author creation and all catalog writers.
+    if(apply)await tx.exec('lock table public.authors, public.works, public.editions, public.catalog_categories, public.catalog_selections, public.catalog_selection_members, public.work_catalog_categories, public.catalog_work_title_aliases, catalog_private.editorial_records in share row exclusive mode');
     const plan=await livePlan(tx,records,pins);
     if(expectedPlan && digest(plan)!==digest(expectedPlan))throw new Error('Catalog drift: regenerate and review the dry-run');
     const byId=new Map(records.map(r=>[r.candidate_id,r]));

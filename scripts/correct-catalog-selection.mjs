@@ -5,6 +5,8 @@ import path from 'node:path';
 import { categoryCorrections,years,uncertainYears,yearNotes,hold,extraGenres,sources,formCorrections } from '../catalog/selection-v1/review-decisions.mjs';
 import model from '../lib/catalog/categories.json' with { type:'json' };
 import { csv,validIsbn,assertSelection,digest } from './catalog-selection-core.mjs';
+import { refuseLegacyRewrite } from './catalog-selection-inputs.mjs';
+await refuseLegacyRewrite();
 const runtime=process.env.ARTIFACT_NODE_MODULES;
 if(!runtime)throw new Error('Set ARTIFACT_NODE_MODULES to the bundled dependency node_modules path');
 const {Workbook}=createRequire(path.join(runtime,'__entry.cjs'))('@oai/artifact-tool');

@@ -16,13 +16,13 @@ test('real server HTML: Browse and Search produce identical filtered Work IDs, s
     const params='?category=fiction_fantasy&selection=lumiscore-selectie-1000&pageSize='+size;
     const browse=await html('/browse'+params),search=await html('/search'+params);
     assert.deepEqual(workIds(browse),workIds(search));
-    assert.equal(workIds(browse).length,Math.min(126,size));
+    assert.equal(workIds(browse).length,Math.min(124,size));
     for(const [body,route] of [[browse,'/browse'],[search,'/search']]){
       const tags=inspectServerHtml(body);
       assert.deepEqual(tags.robots,['noindex, follow']);assert.equal(tags.canonical.length,1);
       assert.equal(new URL(tags.canonical[0]).pathname,route);assert.deepEqual(tags.duplicates,[]);
     }
-    assert.match(browse,/126 books in the catalog/);
+    assert.match(browse,/124 books in the catalog/);
     assert.match(browse,/returnTo=.*fiction_fantasy/);
   }
 });
@@ -34,9 +34,32 @@ test('pagination, clean Browse, language, empty category and reviewed translatio
   assert.ok(workIds(page2).every(id=>!workIds(clean).includes(id)));
   const dutch=await html('/browse?selection=lumiscore-selectie-1000','nl');
   assert.equal(inspectServerHtml(dutch).lang,'nl');
-  assert.match(dutch,/986 boeken in de catalogus/);
-  assert.match(dutch,/LumiScore Selectie(?:<!-- -->)? \(986\)/);
+  assert.match(dutch,/974 boeken in de catalogus/);
+  assert.match(dutch,/LumiScore Selectie(?:<!-- -->)? \(974\)/);
   assert.doesNotMatch(dutch,/LumiScore Selectie 1000/);
   assert.equal(workIds(await html('/browse?category=nonfiction_cooking_food')).length,0);
   assert.deepEqual(workIds(await html('/search?q=La%20sombra%20del%20viento')),['1936']);
+});
+
+test('page two detail return preserves editorial filters; excluded Works remain searchable outside selection',async()=>{
+  for(const route of ['/browse','/search']){
+    const params='?page=2&pageSize=64&category=fiction_fantasy&selection=lumiscore-selectie-1000';
+    const page=await html(route+params);
+    const match=page.match(/class="book-card-main-link"[^>]*href="([^\"]+)"/);
+    assert.ok(match);
+    const detailPath=match[1].replaceAll('&amp;','&');
+    const returnTo=new URL(detailPath,origin).searchParams.get('returnTo');
+    const parsed=new URL(returnTo,origin);
+    assert.equal(parsed.pathname,route);
+    for(const [key,value] of new URLSearchParams(params))assert.equal(parsed.searchParams.get(key),value);
+    const detail=await html(detailPath);
+    assert.ok(detail.includes(returnTo.replaceAll('&','&amp;')));
+    const metadata=inspectServerHtml(detail);
+    assert.equal(metadata.robots.length,1);assert.equal(metadata.canonical.length,1);assert.deepEqual(metadata.duplicates,[]);
+  }
+  for(const [title,id] of [['De avonden','1016'],['Charlie and the Chocolate Factory','111'],['Herinneringen van een engelbewaarder','1015']]){
+    const query='/search?q='+encodeURIComponent(title);
+    assert.ok(workIds(await html(query)).includes(id));
+    assert.ok(!workIds(await html(query+'&selection=lumiscore-selectie-1000')).includes(id));
+  }
 });

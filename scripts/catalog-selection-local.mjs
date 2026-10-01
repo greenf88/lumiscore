@@ -5,10 +5,11 @@ import { fileURLToPath } from 'node:url';
 import { PGlite } from '@electric-sql/pglite';
 import { buildPlan } from './catalog-selection-core.mjs';
 import { importSelection, livePlan } from './catalog-selection-db.mjs';
+import { reviewedInput } from './catalog-selection-inputs.mjs';
 export const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
 const json=async name=>JSON.parse(await fs.readFile(path.join(root,'catalog/selection-v1',name),'utf8'));
 export async function inputs() {
-  const records=await json('reviewed-records.json'), pins=await json('identity-pins.json');
+  const {records,pins}=await reviewedInput();
   const snapshot=await json('database-matches.json');
   const translated=await json('translation-match.json');
   return {records,pins,works:[...new Map([...snapshot.matches,translated].map(w=>[w.id,w])).values()]};

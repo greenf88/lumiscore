@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { readCsv, buildPlan, digest } from './catalog-selection-core.mjs';
 import { inputs } from './catalog-selection-local.mjs';
 import model from '../lib/catalog/categories.json' with { type: 'json' };
+import { refuseLegacyRewrite } from './catalog-selection-inputs.mjs';
 
 const directory = new URL('../catalog/selection-v1/', import.meta.url);
 const bytes = name => fs.readFile(new URL(name, directory));
@@ -14,7 +15,9 @@ const correctedBytes = await bytes('lumiscore-catalogusselectie-v1.corrected.csv
 const original = readCsv(originalBytes.toString('utf8'));
 const corrected = readCsv(correctedBytes.toString('utf8'));
 const changes = readCsv((await bytes('changes.csv')).toString('utf8'));
-const { records, works, pins } = await inputs();
+// This historical CSV reconciliation deliberately reads the frozen V1 records.
+const { works, pins } = await inputs();
+const records = JSON.parse(await bytes('reviewed-records.json'));
 const plan = buildPlan(records, works, pins);
 const proposed = JSON.parse(await bytes('proposed-import-plan.json'));
 assert.deepEqual(plan, proposed);
@@ -83,6 +86,7 @@ const report = {
   exclusions: plan.actions.filter(a => a.kind === 'skip'),
 };
 if (process.argv.includes('--write-report')) {
+  await refuseLegacyRewrite();
   await fs.writeFile(new URL('REVIEW-DATA.json', directory), JSON.stringify(report, null, 2) + '\n');
 }
 console.log(JSON.stringify({ ...report, years: undefined, new_work_years: undefined,

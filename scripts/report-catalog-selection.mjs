@@ -2,6 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { inputs, root } from './catalog-selection-local.mjs';
 import { buildPlan, readCsv } from './catalog-selection-core.mjs';
+import { refuseLegacyRewrite } from './catalog-selection-inputs.mjs';
+await refuseLegacyRewrite();
 const {records,works,pins}=await inputs();
 const directory=path.join(root,'catalog/selection-v1');
 const original=readCsv(await fs.readFile(path.join(directory,'lumiscore-catalogusselectie-v1.original.csv'),'utf8'));

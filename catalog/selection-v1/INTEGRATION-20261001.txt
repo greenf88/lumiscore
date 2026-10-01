@@ -1,0 +1,208 @@
+LumiScore PR #2 — identity revision and integration review, 2026-10-01
+
+STATUS: BLOCKED — full PostgreSQL + Supabase Auth + PostgREST not available locally.
+This report supersedes the counts/release blockers in STAGING-REVIEW.txt, not its history.
+AI_EDITORIAL is the approved product decision. No HIGH-only classification gate or
+new review of all 200/1,000 books is required. No production writes were performed.
+
+1. Identity findings
+
+Compared all 24 IDENTITY_UNRESOLVED pilot records against all 1,000 candidates,
+using exact LumiScore Work-ID, OL Work-ID, edition ISBN and normalized exact title.
+14 candidates overlap; 10 pilot warnings do not overlap. All 14 overlaps are held
+out of this import. Two were already skipped, so the net reduction is 12 members.
+Exclusion is precautionary: author-ID conflicts do not prove the Work itself is wrong.
+The evidence does not justify silently importing a derivative as an original.
+
+Candidate       Work  Pilot  Title                              Decision
+LS1000-0421     1016  N025   De avonden                          exclude: comic adaptation
+LS1000-0602      345  N028   The Odyssey                         exclude: original/collected-work ISBN
+LS1000-0375      108  N031   The Subtle Art of Not Giving a F*ck exclude: unresolved author ID
+LS1000-0401     1020  N065   Bezorgde ouders                     already skipped; edition chain absent
+LS1000-0235       81  N071   Thinking, Fast and Slow             exclude: two ISBN parent Works
+LS1000-0920       12  N083   1984                                exclude: unresolved author ID
+LS1000-0526     1133  N089   Meester Kikker                      exclude: edition chain absent
+LS1000-0100      111  N092   Charlie and the Chocolate Factory   exclude: sticker activity book
+LS1000-0424     1022  N119   De geruchten                        exclude: unresolved author ID
+LS1000-0549     1017  N123   Op weg naar het einde               exclude: edition chain absent
+LS1000-0022       82  N126   Educated                            exclude: original/summary ISBN
+LS1000-0475     1015  N134   Herinneringen van een engelbewaarder exclude: wrong title/author ISBN
+LS1000-0863      696  N157   Married at first sight              already skipped; edition chain absent
+LS1000-0540     1029  N189   Oeroeg                              exclude: unresolved author ID
+
+Full candidate/catalog titles, authors, work forms, ISBNs, Edition IDs, Work IDs,
+source URLs, dates and factual cached evidence are in identity-20261001.review.json.
+Only the hold field changes in the new records; categories and bibliography do not.
+This is a review of the supplied frozen pilot evidence (OL 2026-09-27, KB minimal
+bibliography 2026-10-01), not a claim of fresh independent source verification.
+
+Separate production-repair queue (NOT executed; preserve all existing Work IDs):
+- Work/Edition 1016; OL699606W / OL25369977M; ISBN 9789023427070.
+  Catalog author Gerard Kornelis van het Reve; selection Gerard Reve, form roman.
+  KB says De avonden: een beeldverhaal, Dick Matena.
+  http://data.bibliotheken.nl/id/nbt/p305099353
+- Work/Edition 111; OL45790W / OL29338084M; ISBN 9780141376707.
+  Selection Roald Dahl, form roman; edition explicitly Whipple-Scrumptious Sticker
+  Activity Book. https://openlibrary.org/books/OL29338084M
+- Work/Edition 1015; OL11780437W / OL25433516M; ISBN 9789044335781.
+  Selection Willem Frederik Hermans, form roman; KB says Engelbewaarders,
+  Kristina Ohlsson. http://data.bibliotheken.nl/id/nbt/p394640462
+No automatic reassignment, merge, ISBN removal or bibliography update is included.
+
+2. Frozen input and expected results
+
+Active version: identity-20261001, authoritative JSON (not a replacement CSV).
+Records SHA-256: ee121760b727a7e020876ff2c69227a20472c4112376b2ba6443398209353b7b
+Manifest SHA-256: fd3f057e479ca7a78184295ad38348e829f49754115377d6b0c307c434de6041
+Previous corrected CSV SHA-256, unchanged:
+d59d8cdbfde34cbf2754b74650dfc8852472daaccd654c6853a23486a7ec0823
+The original CSV, changes.csv (3,567 changes), reviewed-records.json, old plan,
+identity pins and historical review reports remain preserved. Byte-hashed JSON
+is protected from checkout line-ending conversion. Legacy generators refuse to
+overwrite V1 after the revision freeze. The revision generator is repeatable and
+refuses changed existing output. Source-file hashes are in the new manifest.
+
+                            Previous    Revised
+Existing Works linked          887        875
+New Works                       99         99
+Selection members              986        974
+Skipped candidates              14         26
+Category memberships          1034       1022
+Categories                      20         20
+New Editions                     0          0
+New ISBN/cover assertions         0          0
+
+These are verified local snapshot counts, not guaranteed future production counts.
+Fresh target matching must produce the reviewed plan, otherwise stop and review
+the concrete drift. Do not manufacture replacements to reach a quota.
+
+3. Import execution review
+
+New scripts/catalog-selection-postgres.mjs uses pinned dev dependency pg 8.23.1
+and the SAME importSelection transaction used by the existing local harness.
+pnpm adds only this client and its 13 dependency packages; no existing dependency
+is upgraded. It also records four version-specific release-age exceptions (pg,
+pg-cloudflare, pg-connection-string, pg-protocol), following this repository's
+existing policy format. No global package policy or production setting is changed.
+No migration is executed by this runner. No dotenv or linked project is loaded.
+CATALOG_DATABASE_URL is supplied only in the process environment, never a CLI flag.
+
+- Default: repeatable-read READ ONLY transaction, rolled back after generating plan.
+- Explicit target file binds host, port, database, role, database OID and PostgreSQL
+  system identifier. The live fingerprint is checked before and inside transaction.
+- Remote connections require TLS with certificate verification. URL query-option
+  overrides and unknown target fields are rejected. No credentials in target file.
+- --apply additionally requires a reviewed dry-run file and its exact SHA-256;
+  both target and input-manifest hash are bound. The live plan must match exactly.
+- Single-client serializable apply; deterministic table locks before planning;
+  lock/statement/idle transaction timeouts; parameterized values; rollback on error.
+- Bigint IDs are parsed only within JavaScript's safe integer range (pg otherwise
+  returns bigint as strings, which would break strict identity comparisons).
+- No UPDATE/DELETE to existing Works, authors, editions or user data. No new editions.
+- CLI errors suppress database details/credentials; only safe SQLSTATE is logged.
+- A commit acknowledgement lost in transit is ambiguous: inspect the ledger with a
+  fresh dry-run before resuming. Never blindly retry using a stale pre-import plan.
+- An already applied V1 ledger with changed records fails closed. No silent revision
+  of an existing installation; any such case requires a separately approved plan.
+
+Unit tests cover endpoint/fingerprint rejection before callback, read-only default,
+rollback, commit, parameter binding, bigint limits, frozen inputs and exclusions.
+PGlite additionally proves whole-import rollback after a partial synthetic failure,
+zero writes/row-version changes on repeat, restart persistence, public-role read/
+write permissions, unchanged bibliography and synthetic user links. These checks
+do NOT establish actual pg-driver, Auth/JWT or PostgREST behavior.
+
+4. Validation performed
+
+- 11 targeted import/query tests passed.
+- Broader run: 457/459 passed. Both failures are ENOENT for the historical
+  catalog/collection-v1-quality-audit.json. Reproduced the two same failing tests
+  from an archive of CURRENT origin/main b95fb34d19260697efce0ab72f9e4fdc13eb23cd;
+  git ls-tree confirms that fixture is absent there. Three other baseline tests pass.
+- Three real built-server HTML tests passed: Browse/Search same ordered IDs at page
+  sizes 32/64/128, 124 fantasy matches, 974 members, query noindex, clean Browse
+  index, one canonical, no duplicate social tags, NL language, translation alias,
+  page-two detail return URLs and excluded Works still searchable outside selection.
+- TypeScript, ESLint, Vercel production build, client secret scan (44 files),
+  git diff --check passed. Build needed sandbox elevation for Windows readlink,
+  not configuration/code changes. No deployment was invoked.
+- Browser: actual local built handler localhost:3983, read-only PGlite-shaped API
+  127.0.0.1:3970. Category selection submitted in Browse and Search. Both show 124
+  fantasy books and actual selection count 974, explicitly not a ratings ranking.
+- Page 2 -> Work 152 -> explicit back link preserves page=2, pageSize=64,
+  fiction_fantasy and selection on BOTH routes.
+- NL/EN and Ink/Paper checked at desktop 1440x900 and mobile 390x844.
+  Document widths 1425/375, no horizontal overflow or captured console warnings/
+  errors. No visible new layout issue. Covers use normal remote loading/fallbacks.
+  This browser pass used the built-in browser because agent-browser was absent.
+- No hosted Preview functional validation claimed. A Ready Preview is separate
+  build evidence and cannot access this loopback database. No Preview env changed.
+
+5. Missing infrastructure and exact next validation work
+
+Windows has no Docker/Podman/psql; wsl.exe reports WSL not installed. Supabase CLI
+2.116.0 is present. No production substitute was used and no private data copied.
+Install/enable WSL2 and a Docker-compatible local runtime (e.g. Docker Desktop),
+start its engine, then initialize a dedicated local Supabase project under this
+worktree's outputs directory. No supabase link or remote db push/reset.
+Official setup: https://supabase.com/docs/guides/local-development/cli/getting-started
+
+After installation, in this worktree:
+  supabase init --workdir outputs/supabase-identity-validation
+  docker network create -o com.docker.network.bridge.host_binding_ipv4=127.0.0.1 lumiscore-identity-local
+  supabase start --workdir outputs/supabase-identity-validation --network-id lumiscore-identity-local
+Use only credentials generated for that local stack. Do not publish ports remotely.
+
+The repository migrations assume pre-existing authors/works/editions; there is no
+complete initial schema migration. Prepare a local synthetic catalog bootstrap
+matching their required columns/constraints, then apply the existing baseline
+migrations in order and 20260930185834_catalog_selection_v1.sql. Do not substitute
+the PGlite mock Auth roles for actual Supabase Auth. Seed only the public catalog
+snapshot and synthetic data. Never copy production auth/users/sessions/preferences.
+
+Create a non-secret target JSON containing host, numeric port, database, user,
+database_oid, system_identifier, tls. Read the actual fingerprint using --inspect
+and independently verify the local container before enrolling it. Example commands:
+  npm run catalog:postgres -- --target=outputs/local-target.json --inspect
+  npm run catalog:postgres -- --target=outputs/local-target.json --out=outputs/local-dry-run.json
+  npm run catalog:postgres -- --target=outputs/local-target.json --apply --plan=outputs/local-dry-run.json --plan-sha256=<reviewed file SHA-256>
+
+Still required on that stack: actual first/second import and injected rollback;
+restart persistence; Auth sign-in with two synthetic accounts; real PostgREST
+public catalog reads and editorial insert/update/delete denials for anon and both
+users; own-rating/status/preference writes permitted, cross-user reads absent,
+cross-user changes/forged user_id denied or zero rows and owner data unchanged;
+private editorial evidence inaccessible. Check both grants and policies, not just
+HTTP status. Test tables ratings, user_book_status, user_reading_preferences and
+taste_test_responses. Verify unclassified visibility and pagination via the RPC.
+Rebuild local UI with REAL local stack URL/key, repeat browser/HTML checks and
+confirm that API, data and UI agree. These tests have NOT been executed yet.
+
+6. Production approval/runbook (not authorized for execution in this task)
+
+The exact reviewed commit and remote SHA are bound in the updated Draft PR #2 body;
+this file intentionally does not embed its own impossible self-referential SHA.
+Do not release any different commit without revalidation. Current base is b95fb34.
+1. Finish the full-stack checks above using that exact reviewed commit. Keep Draft
+   until all required technical evidence exists; no whole-catalog human review gate.
+2. Obtain separate production approval. Verify target identity, current schema and
+   backups. Keep current app version active. Apply only the additive catalog
+   migration 20260930185834_catalog_selection_v1.sql after baseline migrations.
+3. Verify the exact active version and hashes in section 2; generate a fresh target-
+   specific dry-run. Review 875 links / 99 new Works / 26 skips against live data.
+   Any different plan requires scoped drift review, not an automatic override.
+4. Apply using that approved plan file and SHA. Verify 974 members, 1022 category
+   links, 20 categories, 974 private ledger rows and no new editions or changed old
+   bibliography/user links. Expected translation title alias remains Work 1936.
+5. Generate a NEW post-import dry-run and apply that plan for idempotence proof:
+   pending=0, created=0, linked=0, unchanged=974, unchanged row versions. Verify
+   real API access controls, Browse/Search counts, exclusions and return links.
+6. Only after separate release authority, publish the app with normal repository
+   strategy and verify production HTML/UI. No such release occurred in this task.
+7. On failure roll back the application release first. Retain the additive tables
+   and new Works. NEVER delete/merge newly created Works or cascade-delete ratings,
+   reading statuses or preferences acquired since import. If necessary hide the
+   selection via an independently reviewed forward change. Data repair requires
+   a per-row dependency-aware plan; no database-wide backup restore over new users.
+
+BLOCKED — full local PostgreSQL/Supabase Auth/PostgREST validation still required.

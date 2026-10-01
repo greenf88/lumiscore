@@ -67,7 +67,7 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
       assert.equal((await db.query('select count(*)::int as n from public.'+table)).rows[0].n,0);
     await db.exec('drop trigger test_import_failure on catalog_private.editorial_records; drop function catalog_private.test_import_failure()');
     const first=await importSelection(db,input.records,input.pins,plan,{apply:true});
-    assert.deepEqual(plan.counts,{link:887,insert:99,skip:14});
+    assert.deepEqual(plan.counts,{link:875,insert:99,skip:26});
     assert.equal(first.created,plan.counts.insert);assert.equal(first.linked,plan.counts.link);
     assert.deepEqual((await readWorks(db)).filter(w=>w.id<10000),before);
     assert.deepEqual((await db.query('select * from public.test_user_links')).rows,[{work_id:1936,rating:5,status:'read',collection:'favourites'}]);
@@ -81,7 +81,7 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
     const count=(await db.query('select count(*)::int as n from public.catalog_selection_members')).rows[0].n;
     assert.equal((await db.query("select work_id from public.catalog_work_title_aliases where title='La sombra del viento'")).rows[0].work_id,1936);
     assert.equal(count,1000-plan.counts.skip);
-    assert.equal((await db.query('select count(*)::int as n from public.work_catalog_categories')).rows[0].n,1034);
+    assert.equal((await db.query('select count(*)::int as n from public.work_catalog_categories')).rows[0].n,1022);
     assert.equal((await db.query('select label_nl from public.catalog_selections')).rows[0].label_nl,'LumiScore Selectie');
     assert.equal((await db.query('select count(*)::int as n from public.editions where work_id>10000')).rows[0].n,0);
     // Synthetic language metadata exercises the real SQL, not production guesses.
@@ -94,13 +94,13 @@ test('persistent import, dry-run, repeat, RLS, existing user data and database p
     assert.equal((await query('La sombra',[],['nl'])).workIds[0],1936);
     assert.equal((await query('La sombra',[],['en'])).total,0);
     const fantasy=await query('', ['fiction_fantasy']); assert.ok(fantasy.total>32);
-    assert.equal(fantasy.selectionCount,986,'selection total is independent of active filters');
-    assert.equal((await query('not-a-real-title')).selectionCount,986);
+    assert.equal(fantasy.selectionCount,974,'selection total is independent of active filters');
+    assert.equal((await query('not-a-real-title')).selectionCount,974);
     // Prove this is a live database count, not the expected fixture constant.
     await db.transaction(async tx=>{
       await tx.query('insert into public.catalog_selection_members values($1,99999,$2)',[SELECTION,'synthetic-count-sentinel']);
       const changed=(await tx.query('select public.catalog_editorial_page() as data')).rows[0].data;
-      assert.equal(changed.selectionCount,987);
+      assert.equal(changed.selectionCount,975);
       await tx.query('delete from public.catalog_selection_members where candidate_id=$1',['synthetic-count-sentinel']);
     });
     const both=await query('', ['fiction_fantasy','fiction_literary_general']);
