@@ -4,6 +4,7 @@ import { nitro } from 'nitro/vite';
 import vinext from 'vinext';
 import { defineConfig, loadEnv } from 'vite';
 import hostingConfig from './.openai/hosting.json';
+import { publicAssetUrls } from './lib/build/public-asset-urls';
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   '00000000-0000-4000-8000-000000000000';
@@ -113,7 +114,7 @@ export default defineConfig(async ({ mode }) => {
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
     plugins: isVercelBuild
-      ? [vinext(), nitro()]
+      ? [vinext(), nitro(), publicAssetUrls()]
       : [
           vinext(),
           sites(),
