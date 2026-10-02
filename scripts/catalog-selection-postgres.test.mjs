@@ -5,22 +5,24 @@ import { connectionConfig, safeInteger, postgresAdapter } from './catalog-select
 import { sha256, refuseLegacyRewrite } from './catalog-selection-inputs.mjs';
 import { buildPlan } from './catalog-selection-core.mjs';
 import { inputs } from './catalog-selection-local.mjs';
-const target={host:'127.0.0.1',port:54322,database:'postgres',user:'postgres',database_oid:'5',system_identifier:'123'};
+const target={schema:'lumiscore-catalog-target-2',environment:'local-test',dry_run:true,tls:false,
+  connection:{form:'direct',host:'127.0.0.1',port:54322,database:'postgres',login_username:'postgres',project_ref:null},
+  session:{database:'postgres',current_user:'postgres',session_user:'postgres',database_oid:'5',system_identifier:'123'}};
 test('target guard rejects wrong endpoints, libpq overrides and unsafe integers',()=>{
   const config=connectionConfig('postgresql://postgres:synthetic@127.0.0.1:54322/postgres',target);
   assert.equal(config.ssl,false);assert.equal(config.types.getTypeParser(20)('1936'),1936);
   assert.throws(()=>safeInteger('9007199254740993'),/safe range/);
   for(const url of ['postgresql://postgres:x@other:54322/postgres','postgresql://postgres:x@127.0.0.1:54322/other','postgresql://postgres:x@127.0.0.1:54322/postgres?host=remote'])
     assert.throws(()=>connectionConfig(url,target));
-  assert.throws(()=>connectionConfig('postgresql://postgres:x@db.example:5432/postgres',{...target,host:'db.example',port:5432}),/TLS/);
-  assert.throws(()=>connectionConfig('postgresql://postgres:x@127.0.0.1:54322/postgres',{...target,password:'never log'}),/Unknown/);
+  assert.throws(()=>connectionConfig('postgresql://postgres:x@db.example:5432/postgres',{...target,environment:'production'}),/TLS/);
+  assert.throws(()=>connectionConfig('postgresql://postgres:x@127.0.0.1:54322/postgres',{...target,password:'never log'}),/unknown/);
 });
-function mock(actual=target){const calls=[];return {calls,query:async(sql,params)=>{calls.push({sql,params});return {rows:[actual]};}};}
+function mock(actual=target.session){const calls=[];return {calls,query:async(sql,params)=>{calls.push({sql,params});return {rows:[actual]};}};}
 test('dry-run uses read-only transaction and checks server identity before callback',async()=>{
   const client=mock();let called=false;
   await postgresAdapter(client,target).transaction(async()=>{called=true;});
   assert.ok(called);assert.match(client.calls[0].sql,/read only/);assert.equal(client.calls.at(-1).sql,'rollback');
-  const wrong=mock({...target,system_identifier:'999'});
+  const wrong=mock({...target.session,system_identifier:'999'});
   await assert.rejects(()=>postgresAdapter(wrong,target,{apply:true}).transaction(async()=>assert.fail('writes forbidden')),/fingerprint/);
   assert.equal(wrong.calls.at(-1).sql,'rollback');
 });

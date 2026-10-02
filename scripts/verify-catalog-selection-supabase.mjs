@@ -203,7 +203,11 @@ if(['build','serve','secrets'].includes(mode)){
     }
 
     if(mode==='repeat'){
-      const args=['--target='+path.join(output,'local-target.json')],env={CATALOG_DATABASE_URL:credentials.DB_URL};
+      const target={schema:'lumiscore-catalog-target-2',environment:'local-test',dry_run:true,tls:false,
+        connection:{form:'direct',host:'127.0.0.1',port:54322,database:'postgres',login_username:'postgres',project_ref:null},
+        session:await fingerprint(db)};
+      await save('local-target-v2',target);
+      const args=['--target='+path.join(output,'local-target-v2.json')],env={CATALOG_DATABASE_URL:credentials.DB_URL};
       const before=await snapshot(),dry=await main(args,env),file=path.join(output,'restart-dry-run.json');
       await fs.writeFile(file,JSON.stringify(dry,null,2)+'\n');
       const applied=await main([...args,'--apply','--plan='+file,'--plan-sha256='+sha256(await fs.readFile(file))],env);
@@ -227,12 +231,14 @@ if(['build','serve','secrets'].includes(mode)){
       await db.query("insert into public.user_reading_preferences(user_id,reading_periods) values($1,array['before_1950'])",[users[0].id]);
       await db.query("insert into public.taste_test_responses(user_id,quiz_version,question_key,choice) values($1,'local','sentinel','left')",[users[0].id]);
       if(mode==='setup'){
-      const target={host:'127.0.0.1',port:54322,...await fingerprint(db),tls:false};
-      const targetPath=path.join(output,'local-target.json');await save('local-target',target);
+      const target={schema:'lumiscore-catalog-target-2',environment:'local-test',dry_run:true,tls:false,
+        connection:{form:'direct',host:'127.0.0.1',port:54322,database:'postgres',login_username:'postgres',project_ref:null},
+        session:await fingerprint(db)};
+      const targetPath=path.join(output,'local-target-v2.json');await save('local-target-v2',target);
       const args=['--target='+targetPath], importEnv={CATALOG_DATABASE_URL:credentials.DB_URL};
       await assert.rejects(()=>main([],importEnv),/Explicit target/);
-      assert.throws(()=>connectionConfig('postgresql://postgres:secret@production.supabase.co:5432/postgres',target),/target mismatch/);
-      await save('unknown-target',{...target,system_identifier:'unknown'});
+      assert.throws(()=>connectionConfig('postgresql://postgres:secret@production.supabase.co:5432/postgres',target),/identity mismatch/);
+      await save('unknown-target',{...target,session:{...target.session,system_identifier:'999'}});
       await assert.rejects(()=>main(['--target='+path.join(output,'unknown-target.json')],importEnv),/fingerprint mismatch/);
       const before=await snapshot();
       const dry=await main(args,importEnv);
