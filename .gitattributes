@@ -8,3 +8,5 @@ catalog/selection-v1/identity-pins.json -text
 catalog/selection-v1/identity-20261001.*.json -text
 catalog/selection-v1/identity-20261001-rendezvous.*.json -text
 supabase/migrations/*.sql text eol=lf
+# Historical contract fixture hashes must survive Windows/Linux fresh checkouts.
+test/fixtures/*.contract.json -text

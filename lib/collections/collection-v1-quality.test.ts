@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
@@ -48,10 +49,20 @@ type FinalPlan = {
 };
 
 async function loadAudit(): Promise<Audit> {
-  return JSON.parse(await readFile(
-    new URL('../../catalog/collection-v1-quality-audit.json', import.meta.url),
-    'utf8',
-  )) as Audit;
+  // Historical public review contract, not a live database snapshot or write plan.
+  const bytes = await readFile(
+    new URL('../../test/fixtures/collection-v1-quality.contract.json', import.meta.url),
+  );
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'a3350ddd064bec69c50a2b7265ecd929339231e98ed810e26081f03e0b834943');
+  const audit = JSON.parse(bytes.toString('utf8')) as Audit & {
+    fixtureKind: string; productionExecution: boolean; sourceByteSha256: string;
+  };
+  assert.equal(audit.fixtureKind, 'historical-public-review-contract');
+  assert.equal(audit.productionExecution, false);
+  assert.equal(audit.sourceByteSha256,
+    'f4afe11d63e6f5c1ff9e13515fe72666af6747212876ce259aaf9bd4207aab49');
+  return audit;
 }
 
 async function loadFinalPlan(): Promise<FinalPlan> {
@@ -70,6 +81,9 @@ test('the frozen V1 audit covers every live collection and refuses unsafe writes
   assert.equal(audit.productionWrites, 0);
   assert.equal(audit.writeGate.passed, false);
   assert.equal(audit.counts.missingPublishedBooks, 31);
+  assert.equal(audit.collectionAudit.length, 59);
+  assert.equal(audit.collectionAudit.filter(({ type }) => type === 'series').length, 57);
+  assert.equal(audit.missingBooks.length, 31);
 });
 
 test('complete reviewed series are contiguous and every known gap has one explicit row', async () => {
