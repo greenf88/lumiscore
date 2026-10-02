@@ -58,6 +58,10 @@ make both the fixture contracts and all unit/contract tests runnable in CI.
 
 - `pnpm test:fixture-contracts`: **8/8**, including fresh Git clones under both
   autocrlf modes and seven original tests from an unrelated cwd without credentials.
+  Additionally, the committed tree was materialized as a separate fresh detached
+  worktree with `core.autocrlf=true`: **8/8** without any dependency installation,
+  environment file or legacy audit artifact; clean Git status. No personal path
+  is embedded in the scripts or fixtures.
 - `pnpm test:unit`: **514/514**, zero failures/skips/cancellations. Includes all
   previously failing files plus catalog/selection, target/TLS/importer, migration
   bytes/index, collections, ratings/Auth, recommendation, covers, language and SEO.
