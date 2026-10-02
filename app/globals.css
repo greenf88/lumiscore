@@ -861,3 +861,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
+
+.editorial-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin: 24px 0; padding: 18px; border: 1px solid var(--border); border-radius: 12px; }
+.editorial-controls > label { display: grid; gap: 6px; min-width: 0; }
+.editorial-controls select, .editorial-controls input:not([type="checkbox"]), .editorial-controls button { max-width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; color: inherit; background: var(--surface); font: inherit; }
+.editorial-controls details { flex-basis: 100%; }
+.editorial-controls summary { cursor: pointer; padding: 8px 0; }
+.editorial-controls fieldset { border: 0; padding: 8px 0; min-width: 0; }
+.editorial-category-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.editorial-category-list label, .editorial-languages label { display: flex; align-items: start; gap: 8px; overflow-wrap: anywhere; }
+.editorial-languages { display: flex; flex-wrap: wrap; gap: 12px; }
+.editorial-selection-note { flex-basis: 100%; margin: 0; font-size: .9rem; }
+@media (max-width: 600px) {
+  .editorial-controls { padding: 12px; }
+  .editorial-controls > label { flex: 1 1 100%; }
+}

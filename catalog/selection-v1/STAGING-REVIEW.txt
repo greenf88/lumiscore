@@ -1,0 +1,178 @@
+LumiScore Catalogusselectie V1 — vervolg-review, 30 september 2026
+
+STATUS EN BASIS
+Review van a79cf84692b49c95cc8319e8056cd30e512f0e7a tegen opnieuw gefetchte
+origin/main b95fb34d19260697efce0ab72f9e4fdc13eb23cd. Werkruimte was schoon,
+branch en origin klopten. Main is sinds de oorspronkelijke basis niet gewijzigd.
+De volledige code-/migratiediff en de gegevensartefacten zijn nagegaan.
+Publicatie uitsluitend als featurebranch en DRAFT-PR. Geen productievrijgave.
+REVIEW.txt blijft het historische verslag van de eerste lokale implementatie;
+dit bestand beschrijft de aanvullende review en gaat voor bij gewijzigde status.
+
+GEVONDEN EN OPGELOST
+1. De publieke selectienaam claimde 1000 leden. Nu LumiScore Selectie / LumiScore
+   Selection met het actuele aantal uit de SQL-RPC. De totale selectieomvang
+   staat los van zoek-/genre-/taalfilters. Onbeschikbaar is geen gefingeerde nul.
+   Interne slug en kandidaat-ID's blijven stabiel; het zijn geen rangposities.
+2. Het gecorrigeerde CSV is nu net als het origineel bytevast in Git, zodat
+   Windows/Linux-regelafbrekingen de goedgekeurde invoerhash niet veranderen.
+3. Reviewdekking aangevuld: alle CSV-cellen en veldwijzigingen gereconcilieerd,
+   alle 221 jaren uitgesplitst, echte rijversies gecontroleerd bij herhaling,
+   terugdraaien van een gedeeltelijk mislukte transactie, anon/authenticated-
+   rechten en batching in de werkelijk gebruikte nieuwe loader getest.
+Geen andere codeblocker aangetroffen binnen deze review. Geen dependency-upgrade,
+auth-, homepage-, SEO-framework-, redirect- of productieschemawijziging uitgevoerd.
+De React/Next.js-richtlijnen zijn gebruikt voor client/server-grenzen, batching,
+toegankelijke native controls en behoud van bestaande metadata-afspraken.
+
+GEGEVENS
+Reproduceerbare celcontrole: node scripts/review-catalog-selection.mjs
+Volledige uitsplitsing: REVIEW-DATA.json (geen uitvoerbaar correctieplan).
+1000 invoerrijen, 3567 expliciete veldwijzigingen. Daarnaast zijn 1000 afgeleide
+notitievelden en 17 bronvelden gewijzigd door de oorspronkelijke correctiegenerator;
+die staan niet als losse wijzigingen in changes.csv en zijn nu expliciet vermeld.
+Plan opnieuw berekend: 887 links, 99 nieuwe Works, 14 skips, 986 selectieleden,
+1034 Work-categoriekoppelingen, 20 categorieën, 2 titelaliassen, 986 private records.
+Het lokale bibliografische snapshot is geen complete, actuele productiekopie.
+
+221 jaarwijzigingen:
+- 200 bij bestaande gekoppelde Works: alleen CSV/private redactionele evidence,
+  geen wijziging van works.first_publish_year.
+- 9 bij nieuwe Works: 0417=1878, 0551=2003, 0566=1921, 0590=NULL,
+  0712=1919, 0733=NULL, 0765=1843, 0802=1896, 0891=1915.
+- 12 bij overgeslagen kandidaten: alleen reviewinvoer, geen importrecord.
+Alle 99 nieuwe jaartallen en hun bronbasis staan in REVIEW-DATA.json.
+201 verschillen met bestaande databasejaren zijn apart als niet-goedgekeurde
+voorstellen vastgelegd (inclusief het extra vertaalde Work 1936). De importer
+leest die voorstellen niet. Bestaande titels, auteurs, identifiers en jaren:
+NUL UPDATE/DELETE. Ook geen writes naar ratings, status, voorkeuren of collecties.
+Geen nieuwe edities/ISBN's/covers: beide ongeldige ISBN's ontbreken in de
+gestructureerde importvelden; ze blijven uitsluitend in historische notities.
+Twaalf naam-/titelpinnen plus één vertaalpin; geen fuzzy samenvoegingen.
+Alle 14 uitzonderingen blijven uitgesloten; volledige IDs/redenen in REVIEW-DATA.
+
+SUPABASE EN PRODUCTIECOMPATIBILITEIT — READ-ONLY
+De gekoppelde Supabase-account toont alleen qvplwejffhjvxaypmjut (productie),
+zonder development branches. Docker/Podman zijn niet beschikbaar; Docker Desktop
+ontbreekt en wsl --list meldt dat WSL niet geïnstalleerd is. CLI 2.116.0 aanwezig.
+Een volledige lokale stack met PostgREST + Auth kan daarom niet worden gestart.
+Geen betaald project aangemaakt, geen Auth-/gebruikersgegevens overgenomen.
+De vereiste echte Supabase-, API- en geauthenticeerde schrijftests zijn NIET gedaan.
+PGlite SQL-rollen zijn geen vervanging voor Supabase Auth of JWT/PostgREST-validatie.
+
+Productie uitsluitend binnen READ ONLY-transacties op schema-metadata bekeken:
+authors/works/editions hebben bigint BY DEFAULT identity IDs; relevante kolommen
+en nullable velden passen bij de inserts. OL-identifiers zijn uniek; relevante
+FK-indexen bestaan. Geen catalog_categories of nieuwe RPC aanwezig, geen triggers
+op de drie bibliografische tabellen gevonden. De nieuwe additieve tabellen raken
+de bestaande app niet. De nieuwe app vereist wel migratie EN import vooraf.
+Geen volledige productie-importpreflight: live matching/auteursdrift, huidige
+grants en echte queryprestaties moeten in de staging/releaseprocedure worden getest.
+De huidige CLI blijft bewust LOCAL-ONLY. Een doelgebonden PostgreSQL-runner met
+geteste transacties, bigint-normalisatie, timeouts en hash-/plangates ontbreekt
+nog voor staging/productie. Dat is een expliciete releasevoorwaarde.
+
+UITGEVOERDE LOKALE VALIDATIE
+Nieuwe database uitsluitend onder deze worktree/outputs/catalog-staging-review-db.
+Voor openen bevestigd: lokaal pad onder outputs, geen URL of remote credentials.
+Migratie, dry-run en import opnieuw uitgevoerd: 887 links + 99 inserts.
+Geautomatiseerde persistente SQL-proef: 986 leden, 1034 categoriekoppelingen,
+herhaling nul inserts/updates, alle rijversies gelijk, reopen behoudt data.
+Gedeeltelijke fout na eerste kandidaat: gehele transactie teruggedraaid.
+Work-ID 1936 blijft behouden, bestaande bibliografische rijen en synthetische
+rating/status/collectiekoppeling blijven gelijk. Ongecategoriseerde sentinel
+blijft ongefilterd zichtbaar; multigenre geeft geen dubbele IDs.
+32/64/128, page bounds, lege uitslagen, taalfilters en titelalias getest.
+Anon en authenticated kunnen publieke catalogustabellen lezen; writes en private
+evidence-reads geweigerd. Dit betreft lokale SQL-rollen, geen echte Auth-sessies.
+
+TESTS
+- Brede suite: 336 tests, 334 geslaagd, 2 ENOENT-fixturefouten.
+- Dezelfde twee tests werkelijk uitgevoerd op een nieuwe schone checkout van
+  actuele main b95fb34: identieke ontbrekende catalog/collection-v1-quality-audit.json.
+  Geen fixture verzonnen, tests niet uitgezet. Baselinebestand ongewijzigd.
+- Gerichte importer/query/UI-suite: 16/16 geslaagd (overlap met brede suite).
+- Gebouwde server-HTML: 2/2 geslaagd, zelfde Browse/Search Work-ID's, 32/64/128,
+  schone Browse index/follow, queryvarianten noindex/follow, één canonical,
+  geen dubbele robots/OG/Twitter-tags, NL en vertaalalias.
+- TypeScript, ESLint en git diff --check geslaagd.
+- Productiebuild met Vercel/Nitro geslaagd (49,55 s laatste bouwfase), uitsluitend
+  loopback Supabase + dummy publishable key. Geen echte serversecrets ingesteld.
+- Client-secretscan: 44 bestanden, geen secret-identifiers of ingestelde secrets.
+  Dit bewijst niet de nog niet beschikbaar zijnde staging/Preview-configuratie.
+
+BROWSER
+Werkelijk gebouwde Vercel-handler op localhost:3983 met read-only PGlite-adapter
+op 127.0.0.1:3970. De adapter is GEEN Supabase-stagingserver.
+390x844 en 1440x900, NL/EN en Ink/Paper gecontroleerd. Geen waargenomen console-
+errors/overlay; horizontale contentbreedte 375/1425 binnen 390/1440.
+Toetsenbord wijzigt pageSize naar 128 en dient formulier in. Fantasy geeft 126
+kaarten, selectie blijft 986, ook na harde refresh. SQL reopen apart gecontroleerd.
+Search met Spaanse titel/selection/sort=newest/pageSize=64 geeft bestaand Work1936;
+detail aangeklikt en via teruglink naar exact dezelfde filters teruggekeerd.
+Geen per-kaart metadata-resolver: resolveMissingCover=false op beide routes;
+ratings/stored covers batched, één catalogus-RPC en batch Work-load.
+Optionele rating/cover-/collectieservices zijn leeg in de lokale adapter. Echte
+gebruikersschrijfflows en volledige productie-coverdekking niet bewezen.
+
+VERCEL PREVIEW VOOR PUSH GECONTROLEERD
+Project lumiscore, prj_44WeKduJU042ZAI85eAifSWwoY0i, team_NL9Fcz67bLA1x0vjmhrRSpmG.
+Dashboard: huidige Production draait b95fb34; productiebranch is main.
+NEXT_PUBLIC_SUPABASE_URL bestaat voor Production en twee andere specifieke
+Previewbranches, niet generiek en niet voor deze featurebranch.
+Publishable key is gedeeld Production/Preview. SUPABASE_SECRET_KEY alleen
+Production; GOOGLE_BOOKS_API_KEY Production/Preview. Waarden niet onthuld/gekopieerd.
+Geen configuratie veranderd. Automatische Preview mag gebouwd worden, maar
+wordt NIET interactief getest of functioneel goedgekeurd zonder stagingbinding.
+Post-push deployment-URL/status en definitieve release-SHA komen in de draft-PR.
+
+PRODUCTIEPLAN — NIET UITVOEREN ZONDER NIEUWE TOESTEMMING
+Release-identiteit: exacte definitieve feature-SHA uit deze draft-PR/oplevering,
+geen bewegende branchref. CSV: lumiscore-catalogusselectie-v1.corrected.csv.
+SHA256: d59d8cdbfde34cbf2754b74650dfc8852472daaccd654c6853a23486a7ec0823.
+Semantische records-SHA256: 354aded6d54b23d04f5dff4698e73fb8a309cd2ee85911456e334d648c087df3.
+
+1. Eerst een aantoonbaar geïsoleerde Supabase-stack beschikbaar maken (Docker/
+   lokale stack of bestaande staging, geen betaald project zonder toestemming).
+   Actueel schema zonder productie-Auth/persoonlijke leesdata, alleen catalogus
+   en synthetische gebruikers. Doelgebonden PostgreSQL-runner afronden en testen.
+   Voor ELKE migratie/import exact endpoint/projectref controleren; productie
+   uitsluiten. Branchspecifieke Preview-URL + publishable key naar ditzelfde doel;
+   nooit een productie-servicekey in Preview en geen Production-env wijzigen.
+2. Pas uitsluitend 20260930185834_catalog_selection_v1.sql toe op staging.
+   Dry-run -> expliciete plangoedkeuring -> import -> herhaling -> echte PostgREST,
+   Auth/RLS/gebruikersschrijftests -> browsermatrix/HTML. Bewijs nul herhaalupdates.
+   Stop bij schema-, bibliografie-, auteur-, hash- of plandrift. Exacte release-SHA
+   testen; bronhash is geen vervanging voor doel- en plancontrole.
+3. Pas na groene staging en afzonderlijke productietoestemming: herstelpunt en
+   huidige app-SHA b95fb34 vastleggen, kandidaatgerichte actuele read-only
+   matching uitvoeren (incl. zelfde auteur/vertaling/ISBN). Geen brede export van
+   gebruikersdata. Live aantallen opnieuw beoordelen, niet naar 887/99/14 forceren.
+4. Productievolgorde: additieve migratie -> dry-run met bevroren input/planhash ->
+   één transactionele import -> resultaatcontrole -> pas daarna appmerge/deploy.
+   GEEN brede db push van alle migraties en GEEN automatische startup-import.
+   Verwachting bij ongewijzigde catalogus: +99 Works, 887 bestaande gekoppeld,
+   +20 categorieën, +986 selectieleden, +1034 genrelinks, +2 titelaliassen,
+   +986 private editorial records. Nieuwe auteurs alleen indien eenduidig afwezig;
+   exact aantal uit live preflight, lokale synthetische auteur-ID's niet overnemen.
+   Bestaande bibliografische/user-velden die veranderen: GEEN. De 14 uitzonderingen
+   uit REVIEW-DATA blijven uitgesloten. Geen edities/ISBN's/covers toevoegen.
+5. Timeouts en rollback-on-error in runner; cataloguslock en live planhercontrole
+   binnen transactie. Fout voor commit geeft geen gedeeltelijke import. Na
+   verbindingsverlies eerst outcome/ledger lezen, niet blind opnieuw importeren.
+   Ongewijzigde herhaling moet nul inserts/updates geven. Wijzigende evidence
+   expliciet laten beoordelen, nooit stilzwijgend vervangen.
+6. Livechecks: counts/IDs/hashledger, canonicals/robots/social tags, Browse/Search
+   gecombineerde filters/32-64-128/teruglinks, NL/EN, Ink/Paper, bestaande echte
+   ratings/status en performance. Geen synthetische writes naar productie zonder
+   aanvullende toestemming; geïsoleerde geauthenticeerde proef blijft staging.
+7. Herstel: app terug naar vorige beoordeelde versie. Additieve tabellen/Works
+   voorlopig laten staan, nooit blind verwijderen. Eventuele latere gerichte
+   verwijdering van deze selectie-/genrelinks vereist provenance- en afhankelijk-
+   hedencontrole. Nieuwe Works met inmiddels ratings/leesstatus blijven behouden.
+   Geen schema-, DNS-, taalrouting- of configuratie-improvisatie.
+
+VOLGENDE BESLISSING
+Deze draft is geschikt voor code-/gegevensreview, niet voor merge of productie.
+Eerst containeromgeving of geïsoleerde staging en geteste PostgreSQL-runner;
+daarna de ontbrekende volledige Supabase/API/Auth- en Preview-validatie afronden.

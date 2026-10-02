@@ -7,7 +7,8 @@ test('search cards preserve full search context and detail fallback stays clean'
   const searchUi = await readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8');
   const detailPage = await readFile(new URL('../../app/book/[workId]/page.tsx', import.meta.url), 'utf8');
 
-  assert.match(searchPage, /serializeSearchReturnPath\(resolvedSearchParams\)/);
+  assert.match(searchPage, /editorialQuery\(resolvedSearchParams\)/);
+  assert.match(searchPage, /editorialHref\('\/search', current\)/);
   assert.match(searchUi, /\{ kind: 'search', path: searchReturnTo \}/);
   assert.match(searchUi, /detailReturnContext=\{detailReturnContext\}/);
   assert.match(detailPage, /resolveBookReturnNavigation/);

@@ -1,0 +1,10 @@
+# Preserve the user-supplied input byte-for-byte, including BOM and line endings.
+catalog/selection-v1/lumiscore-catalogusselectie-v1.original.csv -text whitespace=cr-at-eol
+# Freeze the approved import input hash across Windows and Linux checkouts too.
+catalog/selection-v1/lumiscore-catalogusselectie-v1.corrected.csv -text whitespace=cr-at-eol
+# Byte-hashed import inputs must not change with core.autocrlf.
+catalog/selection-v1/reviewed-records.json -text
+catalog/selection-v1/identity-pins.json -text
+catalog/selection-v1/identity-20261001.*.json -text
+catalog/selection-v1/identity-20261001-rendezvous.*.json -text
+supabase/migrations/*.sql text eol=lf

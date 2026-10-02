@@ -6,6 +6,11 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "catalog:dry-run": "node scripts/catalog-selection-local.mjs",
+    "catalog:local-apply": "node scripts/catalog-selection-local.mjs --apply",
+    "catalog:postgres": "node scripts/catalog-selection-postgres.mjs",
+    "test:catalog-selection": "node --experimental-strip-types --test scripts/catalog-selection.test.mjs scripts/catalog-selection-postgres.test.mjs scripts/catalog-selection-target.test.mjs scripts/catalog-selection-rendezvous.test.mjs lib/catalog/editorial-query.test.ts",
+    "test:catalog-html": "node --experimental-strip-types --test scripts/test-catalog-server-html.mjs",
     "dev": "vinext dev",
     "build": "vinext build",
     "build:vercel": "vite build",
@@ -58,6 +63,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
+    "@electric-sql/pglite": "0.3.14",
     "@openai/sites-vite-plugin": "^0.1.0 || ^0.2.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
@@ -68,6 +74,7 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "nitro": "3.0.260903-beta",
+    "pg": "8.23.1",
     "react-server-dom-webpack": "19.2.6",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",

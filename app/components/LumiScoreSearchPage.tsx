@@ -6,6 +6,8 @@ import type { HeaderAuthState } from '@/lib/auth/header';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
+import type { EditorialQuery } from '@/lib/catalog/editorial-query';
+import { EditorialCatalogControls, EditorialPagination } from './EditorialCatalogControls';
 
 type LumiScoreSearchPageProps = {
   initialQuery: string;
@@ -13,6 +15,11 @@ type LumiScoreSearchPageProps = {
   searchFailed: boolean;
   authState: HeaderAuthState;
   searchReturnTo: string;
+  filters: EditorialQuery;
+  total: number;
+  facets: Record<string, number>;
+  pageCount: number;
+  selectionCount: number | null;
 };
 
 export function LumiScoreSearchPage({
@@ -21,6 +28,7 @@ export function LumiScoreSearchPage({
   searchFailed,
   authState,
   searchReturnTo,
+  filters, total, facets, pageCount, selectionCount,
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
@@ -39,7 +47,7 @@ export function LumiScoreSearchPage({
     localStorage.setItem('lumiscore-theme', next);
   }, []);
 
-  const hasQuery = initialQuery.length >= 2;
+  const hasQuery = initialQuery.length >= 2 || filters.categories.length > 0 || Boolean(filters.selection) || filters.languages.length > 0;
 
   return (
     <main className="site-shell search-page-shell">
@@ -58,18 +66,19 @@ export function LumiScoreSearchPage({
           <div>
             <span className="eyebrow">{t('search.fullCatalog')}</span>
             <h1 id="search-results-title">
-              {hasQuery ? t('search.resultsFor', { query: initialQuery }) : t('search.title')}
+              {initialQuery.length >= 2 ? t('search.resultsFor', { query: initialQuery }) : t('search.title')}
             </h1>
           </div>
           <div className="section-tools">
             <span>
               {hasQuery
-                ? `${results.length.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(results.length === 1 ? 'common.book' : 'common.books')}`
+                ? `${total.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(total === 1 ? 'common.book' : 'common.books')}`
                 : t('search.enterTitle')}
             </span>
           </div>
         </div>
 
+        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" />
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>
@@ -94,6 +103,7 @@ export function LumiScoreSearchPage({
                 wanted={wanted.has(book.id)}
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
+                resolveMissingCover={false}
                 detailReturnContext={detailReturnContext}
               />
             ))}
@@ -105,6 +115,7 @@ export function LumiScoreSearchPage({
             <p>{t('home.tryAnother')}</p>
           </div>
         )}
+        {hasQuery && <EditorialPagination state={filters} pageCount={pageCount} route="/search" />}
       </section>
       <Footer onThemeToggle={toggleTheme} />
     </main>
