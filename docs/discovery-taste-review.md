@@ -20,6 +20,7 @@ Base: `5ce044cb07eb0a5ceb3d8eceb0ed3f7f5e730aae`; branch `feature/discovery-tast
 All database writes below occurred solely in disposable, in-process PGlite fixtures; no production migration, catalog import, user rating or status write was executed.
 
 - Full unit suite: **539 passed, zero failed** (188.9 seconds, concurrent fixture-heavy run). Subsequent focused checks: **68 passed** after the review-write guard and legacy-order safeguard. An additional guard assertion is included in that focused run. TypeScript and ESLint pass after final UI changes.
+- Final SQL/input/empty-schema recovery run: **8 passed**; subsequent scroll/navigation checks: **25 passed**. Equivalent URL defaults/query ordering share the same scroll key. The narrow unused-schema recovery preserves the original ratings, read statuses and editorial RPC in the disposable fixture.
 - SQL fixtures contain 10,134 synthetic Works and exercise canonical author/category/language intersection across multiple pages, duplicate Editions, empty results and highest score beyond the aggregate's first 100-ID batch.
 - Three complete rounds store **60 distinct explicit ratings**, one separate skip stores no rating, persisted state survives refresh, retries preserve count, existing ratings remain unchanged, and the existing trigger creates read status. Other-owner reads/actions and direct client writes are denied; anon cannot call private progression. A concurrent normal rating is preserved atomically. Exhaustion does not recycle prior offers.
 - Five existing real server-HTML catalog tests pass; two added HTML checks pass against the local public read-only review server. They cover category count/links/NL/EN/empty copy, original Home destination, bounded recommendation count and single consistent SEO tags. Fixtures deliberately assert the observed public category baseline.
@@ -33,10 +34,21 @@ All database writes below occurred solely in disposable, in-process PGlite fixtu
 | Measurement | Observed result | Scope |
 | --- | --- | --- |
 | Two author/category/language page queries | 184ms combined | In-process PostgreSQL, synthetic 10,134 Works, concurrent full test run; not remote latency/SLA |
+| Same two filtered queries, isolated focused rerun | 98ms combined | Same synthetic dataset; illustrates local-run/concurrency variability |
 | Filtered RPC page JSON | 259 bytes, 32 Work IDs | Excludes later book hydration, covers, HTTP and framework payload |
 | Public cold recommendation catalog loader | 164 requests, 6,216,593 decoded response-body bytes, largest response 792,792 bytes, 2,540ms wall time | Real public catalog, 10,134 Works; existing Work/Edition, public aggregate and evidence batch shapes; excludes ranking, later hydration, reader queries and cover requests |
 
 The cold loader remains a significant server-side cost. It does not send all 10,134 Works to the browser. Existing guest catalog cache is five minutes; authenticated loading is not equivalently cached. Changing ranking/storage architecture is not claimed here. One local run, warmed remote caches and workstation/network effects limit inference. New filtered page queries run server-side; no whole-catalog client filter was introduced. No production EXPLAIN or query-time claim is made for the new, unapplied RPC.
+
+## Published preview result — additional open gate
+
+Draft PR: https://github.com/greenf88/lumiscore/pull/8
+
+Preview: https://lumiscore-git-feature-discovery-taste-a1fe88-rgkgroeneveld-9102.vercel.app
+
+Automatic Vercel build and Preview Comments check were green for implementation commit `a380c07d48076b427177101144f48ca76489d2eb`. The online shell loads, but **Categories reports its public source unavailable and Home reports catalog unavailable/zero books**. Consequently this is not a working data-backed preview or a complete functional sign-off. Local public-read-only review on the same code did load the real catalog. The underlying remote configuration/runtime cause is not confirmed: the Vercel deployment reader returned 403 for this scope and build-log reading was unavailable. No remote env values were obtained, copied or changed.
+
+Remaining blockers: (1) identify/approve a separate Supabase test target and safe preview configuration; (2) resolve the online public catalog's unavailable state using authorized configuration/log access; (3) complete the authenticated end-to-end/browser checks described above. A green deployment build does not clear these gates. The PR remains Draft; no merge, production deployment or production migration is authorized/performed.
 
 ## Migration and separate-test execution gate
 
