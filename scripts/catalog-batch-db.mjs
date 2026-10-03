@@ -1,4 +1,4 @@
-import {digest,planBatch} from './catalog-batch-core.mjs';
+import {digest,planBatch,LARGE_BATCH_SCHEMA} from './catalog-batch-core.mjs';
 export async function readBatchState(tx,slug){
  const query=async sql=>(await tx.query(sql)).rows;
  return {authors:await query('select * from public.authors order by id'),works:await query('select * from public.works order by id'),editions:await query('select * from public.editions order by id'),aliases:await query('select * from public.catalog_work_title_aliases order by work_id,title'),ledger:(await tx.query('select * from catalog_private.editorial_records where selection_slug=$1 order by candidate_id',[slug])).rows,members:(await tx.query('select * from public.catalog_selection_members where selection_slug=$1 order by candidate_id',[slug])).rows};
@@ -9,14 +9,16 @@ export async function executeBatch(db,input,{apply=false,confirmation,expected,l
  if(apply&&!expected)throw Error('REVIEWED_PLAN_REQUIRED');
  return db.transaction(async tx=>{
   if(apply)await tx.exec('lock table '+locked+' in share row exclusive mode');
-  const state=await readBatchState(tx,input.slug),plan=planBatch(input,state,{local});
+  const state=await readBatchState(tx,input.slug);
+  if(input.schema===LARGE_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
+  const plan=planBatch(input,state,{local}),size=input.required_new_works;
   if(plan.counts.conflicts)throw Error('IDENTITY_CONFLICT_REQUIRES_REVIEW');
   if(apply&&digest(plan)!==digest(expected))throw Error('CATALOG_DRIFT_REQUIRES_NEW_PLAN');
-  if(plan.counts.new_works!==500&&plan.counts.unchanged!==500)throw Error('EXACT_NET_NEW_500_REQUIRED');
-  if(!apply||plan.counts.unchanged===500)return {...plan,applied:false,writes:0};
+  if(plan.counts.new_works!==size&&plan.counts.unchanged!==size)throw Error('EXACT_NET_NEW_'+size+'_REQUIRED');
+  if(!apply||plan.counts.unchanged===size)return {...plan,applied:false,writes:0};
   const selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
   if(selection.length)throw Error('UNOWNED_SELECTION_COLLISION');
-  await tx.query('insert into public.catalog_selections(slug,label_nl,label_en) values($1,$2,$3)',[input.slug,'Catalogusuitbreiding +500','Catalog expansion +500']);
+  await tx.query('insert into public.catalog_selections(slug,label_nl,label_en) values($1,$2,$3)',[input.slug,'Catalogusuitbreiding +'+size,'Catalog expansion +'+size]);
   const authors=new Map(state.authors.map(a=>[a.id,a]));
   const byCandidate=new Map(input.records.map(r=>[r.candidate_id,r]));
   const pendingAuthors=[...new Map(plan.actions.filter(a=>a.author_id===null).map(a=>{
@@ -52,13 +54,15 @@ export async function executeBatch(db,input,{apply=false,confirmation,expected,l
   await tx.query(`insert into catalog_private.editorial_records(selection_slug,candidate_id,work_id,record_hash,editorial_status,classifier,audience,work_form,evidence)
    select $1,candidate_id,work_id,record_hash,'ZEKER','AI_EDITORIAL',null,null,evidence from jsonb_to_recordset($2::jsonb)
    as x(candidate_id text,work_id bigint,record_hash text,evidence jsonb)`,[input.slug,JSON.stringify(ledger)]);
-  return {...plan,applied:true,writes:1+newAuthors.length+500*4};
+  return {...plan,applied:true,writes:1+newAuthors.length+size*4};
  });
 }
 const quote=v=>'"'+v.replaceAll('"','""')+'"';
 export async function recoveryPlan(tx,input,{local=false}={}){
- const state=await readBatchState(tx,input.slug);planBatch(input,state,{local});
- if(state.ledger.length!==500)throw Error('RECOVERY_REQUIRES_COMPLETE_OWNED_BATCH');
+ const state=await readBatchState(tx,input.slug);
+ if(input.schema===LARGE_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
+ planBatch(input,state,{local});
+ if(state.ledger.length!==input.required_new_works)throw Error('RECOVERY_REQUIRES_COMPLETE_OWNED_BATCH');
  const references=(await tx.query(`select ns.nspname as schema,c.relname as name,a.attname as column
   from pg_constraint k join pg_class c on c.oid=k.conrelid join pg_namespace ns on ns.oid=c.relnamespace
   join pg_attribute a on a.attrelid=k.conrelid and a.attnum=k.conkey[1]
