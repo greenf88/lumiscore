@@ -2,11 +2,12 @@ import {digest,normalizeIdentity,validIsbn} from './catalog-selection-core.mjs';
 export {digest};
 export const BATCH_SCHEMA='lumiscore-additive-batch-1';
 export const LARGE_BATCH_SCHEMA='lumiscore-additive-batch-2';
+export const EXPANSION_BATCH_SCHEMA='lumiscore-additive-batch-3';
 const fail=code=>{throw new Error(code);};
 const ol=(value,suffix)=>String(value??'').replace(suffix==='W'?'/works/':suffix==='A'?'/authors/':'/books/','');
 const identity=(title,author)=>normalizeIdentity(title)+'::'+normalizeIdentity(author);
 export function validateBatch(input,{local=false}={}){
- const size=input?.schema===BATCH_SCHEMA?500:input?.schema===LARGE_BATCH_SCHEMA?1860:0;
+ const size=input?.schema===BATCH_SCHEMA?500:input?.schema===LARGE_BATCH_SCHEMA?1860:input?.schema===EXPANSION_BATCH_SCHEMA?5134:0;
  if(!size||!new RegExp('^lumiscore-plus'+size+'-[a-z0-9-]+$').test(input.slug)||input.required_new_works!==size||!Array.isArray(input.records)||input.records.length!==size)fail('BATCH_CONTRACT_INVALID');
  if(input.synthetic&&!local)fail('SYNTHETIC_PRODUCTION_INPUT_FORBIDDEN');
  const seen=new Set(),authors=new Map(),authorIdsByName=new Map();
@@ -17,7 +18,7 @@ export function validateBatch(input,{local=false}={}){
   if(!['eng','en','dut','nld','nl'].includes(e.language)||!Number.isInteger(r.year)||r.year<1||r.year>2026)fail('INVALID_PUBLICATION_METADATA');
   if(p?.route!=='ISBN_EDITION_WORK'||p.isbn_13!==e.isbn_13||p.edition_key!=='/books/'+e.open_library_edition_id||digest(p.work_keys)!==digest(['/works/'+r.open_library_id])||digest(p.author_keys)!==digest(['/authors/'+r.author.open_library_id])||!p.verified_at)fail('UNPROVEN_IDENTITY_CHAIN');
   const apiProof=/^https:\/\/openlibrary\.org\/api\/books\?/.test(p.source_url??'');
-  const dumpProof=size===1860&&/^https:\/\/archive\.org\/download\/ol_dump_\d{4}-\d{2}-\d{2}\/ol_dump_editions_\d{4}-\d{2}-\d{2}\.txt\.gz$/.test(p.source_url??'')&&/^[a-f0-9]{40}$/.test(p.dump?.sha1??'')&&/^[a-f0-9]{64}$/.test(p.dump?.sha256??'')&&/^[a-f0-9]{64}$/.test(p.dump?.record_sha256??'')&&Number.isInteger(p.dump?.revision)&&p.dump.revision>0;
+  const dumpProof=(size===1860||size===5134)&&/^https:\/\/archive\.org\/download\/ol_dump_\d{4}-\d{2}-\d{2}\/ol_dump_editions_\d{4}-\d{2}-\d{2}\.txt\.gz$/.test(p.source_url??'')&&/^[a-f0-9]{40}$/.test(p.dump?.sha1??'')&&/^[a-f0-9]{64}$/.test(p.dump?.sha256??'')&&/^[a-f0-9]{64}$/.test(p.dump?.record_sha256??'')&&Number.isInteger(p.dump?.revision)&&p.dump.revision>0;
   if(!(apiProof||dumpProof)||!p.search_url?.startsWith('https://openlibrary.org/search.json?'))fail('INVALID_PROVENANCE');
   if(dumpProof){
    const source=p.dump.record;
@@ -44,10 +45,10 @@ export function validateBatch(input,{local=false}={}){
 }
 export function planBatch(input,state,{local=false}={}){
  validateBatch(input,{local});
- if(input.schema===LARGE_BATCH_SCHEMA){
+ if(input.schema===LARGE_BATCH_SCHEMA||input.schema===EXPANSION_BATCH_SCHEMA){
   const selection=state.selection??[];
   if(selection.length>1||selection.length===1&&!state.ledger.length)fail('UNOWNED_SELECTION_COLLISION');
-  if(selection.length===1&&(selection[0].label_nl!=='Catalogusuitbreiding +1860'||selection[0].label_en!=='Catalog expansion +1860')||state.ledger.length&&!selection.length)fail('PERSISTED_SELECTION_DRIFT');
+  if(selection.length===1&&(selection[0].label_nl!=='Catalogusuitbreiding +'+input.required_new_works||selection[0].label_en!=='Catalog expansion +'+input.required_new_works)||state.ledger.length&&!selection.length)fail('PERSISTED_SELECTION_DRIFT');
  }
  if(state.ledger.some(e=>!input.records.some(r=>r.candidate_id===e.candidate_id)))fail('UNKNOWN_PERSISTED_CANDIDATE');
  const names=new Map(state.authors.map(a=>[a.id,a.name])),workById=new Map(state.works.map(w=>[w.id,w])),batchHash=digest(input);
@@ -79,6 +80,6 @@ export function planBatch(input,state,{local=false}={}){
   actions.push({candidate_id:r.candidate_id,record_hash:digest(r),kind,work_id,author_id:author?.id??null,reason});
  }
  const counts={new_works:actions.filter(a=>a.kind==='insert').length,new_authors:newAuthors.size,reused_authors:new Set(actions.filter(a=>a.kind==='insert'&&a.author_id!==null).map(a=>a.author_id)).size,author_reuse_references:actions.filter(a=>a.kind==='insert'&&a.author_id!==null).length,new_editions:actions.filter(a=>a.kind==='insert').length,unchanged:actions.filter(a=>a.kind==='unchanged').length,conflicts:actions.filter(a=>a.kind==='conflict').length,skips:0,collection_memberships:0,category_links:0,selection_members:actions.filter(a=>a.kind==='insert').length};
- if(input.schema===LARGE_BATCH_SCHEMA){counts.new_selections=counts.new_works?1:0;counts.ownership_records=counts.new_works;}
+ if(input.schema===LARGE_BATCH_SCHEMA||input.schema===EXPANSION_BATCH_SCHEMA){counts.new_selections=counts.new_works?1:0;counts.ownership_records=counts.new_works;}
  return {schema:'lumiscore-additive-plan-1',batch_hash:batchHash,actions,counts};
 }
