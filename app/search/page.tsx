@@ -68,6 +68,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         filters={current}
         pageCount={data.pageCount}
         selectionCount={data.selectionCount}
+        categories={data.categories}
+        selectedAuthor={data.selectedAuthor}
+        discoveryAvailable={data.discoveryAvailable}
         searchFailed={searchFailed}
         authState={authState}
         searchReturnTo={editorialHref('/search', current)}

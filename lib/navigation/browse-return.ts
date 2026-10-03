@@ -6,7 +6,7 @@ import {
 } from '../books/catalog-browse.ts';
 
 const BROWSE_PATH = '/browse';
-const SINGLE_VALUE_KEYS = new Set(['page', 'pageSize', 'sort', 'selection']);
+const SINGLE_VALUE_KEYS = new Set(['page', 'pageSize', 'sort', 'selection', 'author', 'q']);
 const REPEATABLE_KEYS = new Set(['language', 'genre', 'filter', 'category']);
 const SUPPORTED_KEYS = new Set([...SINGLE_VALUE_KEYS, ...REPEATABLE_KEYS]);
 const SAFE_FILTER_VALUE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -35,8 +35,7 @@ function parseBrowseReturnPath(value: unknown): URLSearchParams | null {
   if (
     value.includes('\\') ||
     value.includes('#') ||
-    /[\u0000-\u001f\u007f]/u.test(value) ||
-    /%(?:00|23|2f|3a|5c)/iu.test(value)
+    /[\u0000-\u001f\u007f]/u.test(value)
   ) {
     return null;
   }
@@ -73,6 +72,8 @@ function parseBrowseReturnPath(value: unknown): URLSearchParams | null {
     return null;
   }
   if (params.has('selection') && params.get('selection') !== 'lumiscore-selectie-1000') return null;
+  if (params.has('author') && !isSafePositiveInteger(params.get('author')!)) return null;
+  if (params.has('q') && (params.get('q')!.length > 100 || /[\u0000-\u001f\u007f\\]/u.test(params.get('q')!))) return null;
 
   return params;
 }
@@ -86,6 +87,7 @@ function canonicalizeBrowseParams(params: URLSearchParams): string {
   if (page && page !== '1') canonical.set('page', page);
   if (pageSize) canonical.set('pageSize', pageSize);
   if (sort && sort !== 'az') canonical.set('sort', sort);
+  for (const key of ['q', 'author']) if (params.has(key)) canonical.set(key, params.get(key)!);
 
   if (params.has('selection')) canonical.set('selection', params.get('selection')!);
   for (const key of ['language', 'genre', 'filter', 'category']) {

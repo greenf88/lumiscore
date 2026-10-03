@@ -193,12 +193,18 @@ export function recommendBooks(input: {
   collaborativeSignals?: ReadonlyMap<string, CollaborativeSignal>;
   readingPeriods?: readonly ReadingPeriod[] | null;
 }): RankedRecommendation[] {
-  const limit = Math.max(1, Math.trunc(input.limit ?? 10));
+  const limit = Math.max(1, Math.min(25, Math.trunc(input.limit ?? 20)));
+  const seen = new Set<string>();
   const remaining: ScoredCandidate[] = input.candidates
     .filter(({ book }) => Boolean(book.workId)
       && !input.ratedWorkIds.has(book.workId!)
       && !input.excludedWorkIds?.has(book.workId!))
     .filter(({ coverageLevel }) => coverageLevel !== 'none')
+    .filter(({ book }) => {
+      if (seen.has(book.workId!)) return false;
+      seen.add(book.workId!);
+      return true;
+    })
     .map(({ book, traits, metadataConfidence, coverageLevel, seriesKey }) => {
       const personalMatch = calculatePersonalMatch({
         profile: input.profile,

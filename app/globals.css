@@ -876,3 +876,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .editorial-controls { padding: 12px; }
   .editorial-controls > label { flex: 1 1 100%; }
 }
+/* Discovery review: responsive lists reuse existing Ink/Paper design tokens. */
+.recommendations-overview, .category-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; margin: 24px 0; }
+.recommendations-overview > div, .category-overview > a { min-width: 0; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.category-overview > a { display: flex; flex-direction: column; gap: 10px; min-height: 80px; overflow-wrap: anywhere; }
+.selected-filters { display: flex; flex-wrap: wrap; gap: 8px; flex-basis: 100%; }
+.selected-filters > span { padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px; }
+.editorial-controls fieldset { min-width: 0; }
+.editorial-controls ul { padding-left: 16px; max-height: 280px; overflow: auto; }
+.taste-rating-test { max-width: 960px; margin-inline: auto; }
+.taste-rating-test > p, .taste-rating-test > label { display: block; margin-block: 20px; line-height: 1.7; }
+.taste-rating-test input, .taste-rating-test select { max-width: 100%; min-height: 44px; background: var(--panel); color: inherit; border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+.taste-rating-card { border: 1px solid var(--border); padding: clamp(16px, 4vw, 32px); border-radius: 16px; touch-action: pan-y; }
+.taste-rating-card .book-cover { width: 160px; height: 240px; margin-inline: auto; }
+.taste-rating-card h2 { overflow-wrap: anywhere; }
+.taste-rating-test button { min-height: 44px; padding: 10px 14px; margin: 6px 4px; border: 1px solid var(--border); border-radius: 8px; color: inherit; background: var(--panel); cursor: pointer; }
+.taste-rating-test button:disabled { opacity: .55; cursor: default; }
+.taste-score-buttons { display: flex; flex-wrap: wrap; gap: 4px; }
+.taste-score-buttons button[aria-pressed="true"] { outline: 3px solid currentColor; outline-offset: 2px; }
+.taste-rating-test fieldset { margin-block: 20px; border: 0; padding: 0; }
+.taste-search-results { padding-left: 16px; }
+.taste-search-results button { text-align: left; overflow-wrap: anywhere; }
+.prototype-label { border-left: 4px solid currentColor; padding-left: 16px; }

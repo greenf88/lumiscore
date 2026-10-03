@@ -372,7 +372,7 @@ export async function loadBookDetailPersonalization(
   };
 }
 
-export async function loadHomepagePersonalization(locale: Locale = 'en'): Promise<HomepagePersonalization> {
+export async function loadHomepagePersonalization(locale: Locale = 'en', limit = 20): Promise<HomepagePersonalization> {
   try {
     const reader = await loadHomepageReaderContext();
     if (!reader.authenticated) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
@@ -392,7 +392,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         traits: effective?.traits ?? emptyTasteVector(),
       };
     });
-    const profile = buildTasteProfile(answers, ratingEvidence);
+    const profile = buildTasteProfile(answers, ratingEvidence, locale);
     const hasEvidence = profile.selectedCount > 0 || profile.meaningfulRatingCount > 0;
     const recommendations = hasEvidence
       ? recommendBooks({
@@ -407,7 +407,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
         languagePreference: resolveLocaleBookLanguagePreference(locale, profile),
         collaborativeSignals,
         readingPeriods: reader.readerPreferences?.readingPeriods ?? null,
-        limit: 10,
+        limit,
       })
       : [];
     return {
@@ -425,6 +425,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en'): Promis
 export async function loadGuestHomepagePersonalization(
   answers: TasteTestAnswers,
   locale: Locale = 'en',
+  limit = 20,
 ): Promise<HomepagePersonalization> {
   const client = await createServerSupabaseClient();
   const catalog = await loadGuestRecommendationCatalog(client);
@@ -432,7 +433,7 @@ export async function loadGuestHomepagePersonalization(
     answers,
     candidates: catalog.candidates,
     locale,
-    limit: 10,
+    limit,
   });
   const hasEvidence = profile.selectedCount > 0;
 
