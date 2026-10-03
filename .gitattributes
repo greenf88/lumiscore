@@ -10,3 +10,5 @@ catalog/selection-v1/identity-20261001-rendezvous.*.json -text
 supabase/migrations/*.sql text eol=lf
 # Historical contract fixture hashes must survive Windows/Linux fresh checkouts.
 test/fixtures/*.contract.json -text
+# Frozen additive batch manifests and public provenance are byte-hashed.
+catalog/expansion-500/*.json -text
