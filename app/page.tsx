@@ -10,8 +10,6 @@ import { resolveRequestLocale } from '@/lib/i18n/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 
-const CATALOG_CATEGORY_COUNT = 7;
-
 export const metadata = createPageMetadata({
   title: 'LumiScore — Find your next great read',
   canonicalPath: '/',
@@ -67,7 +65,7 @@ async function loadDutchDiscovery(locale: 'en' | 'nl'): Promise<DutchHomepageDis
 
 export default async function Home() {
   const { locale } = await resolveRequestLocale();
-  const [catalog, dutchDiscovery, personalization, authState, seriesContinuations] = await Promise.all([
+  const [catalog, dutchDiscovery, personalization, authState, seriesContinuations, categories] = await Promise.all([
     loadHomepageBooks(),
     loadDutchDiscovery(locale),
     import('@/lib/supabase/taste-test')
@@ -99,6 +97,7 @@ export default async function Home() {
         () => loadHomepageSeriesContinuations(3),
       ))
       .catch(() => []),
+    import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),
   ]);
   return (
     <>
@@ -106,7 +105,7 @@ export default async function Home() {
         initialBooks={catalog.books}
         catalogStats={{
           books: catalog.total,
-          categories: CATALOG_CATEGORY_COUNT,
+          categories: categories?.length ?? null,
         }}
         personalization={personalization}
         authState={authState}

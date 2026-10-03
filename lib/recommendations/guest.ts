@@ -24,7 +24,7 @@ export function recommendGuestBooks(input: {
           excludedWorkIds: new Set(TASTE_TEST_WORK_IDS),
           locale: input.locale,
           languagePreference: resolveLocaleBookLanguagePreference(input.locale, profile),
-          limit: input.limit ?? 10,
+          limit: input.limit ?? 20,
         })
       : [],
   };

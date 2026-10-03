@@ -19,7 +19,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     import('@/lib/supabase/auth').then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),
   ]);
-  const state = editorialQuery({ ...params, q: undefined });
+  const state = editorialQuery(params);
   let data = unavailableEditorialPage(state);
   try {
     const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');

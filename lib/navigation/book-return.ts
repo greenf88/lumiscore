@@ -1,5 +1,6 @@
 import { getSafeSearchReturnPath } from './search-return.ts';
 import { getSafeBrowseReturnPath } from './browse-return.ts';
+import { recommendationReturnPath } from '../catalog/discovery.ts';
 
 const COLLECTION_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MAX_COLLECTION_SLUG_LENGTH = 120;
@@ -9,6 +10,7 @@ export type BookLinkReturnContext =
   | { kind: 'collection'; slug: string }
   | { kind: 'collections' }
   | { kind: 'browse'; path: string }
+  | { kind: 'recommendations'; path: string }
   | { kind: 'home' };
 
 export type BookReturnNavigation =
@@ -16,6 +18,7 @@ export type BookReturnNavigation =
   | { kind: 'collection'; href: string; collectionName: string }
   | { kind: 'collections'; href: '/collections' }
   | { kind: 'home'; href: '/' }
+  | { kind: 'recommendations'; href: string }
   | { kind: 'browse'; href: string };
 
 export type VerifiedCollectionReturnTarget = {
@@ -52,6 +55,7 @@ export function serializeBookReturnContext(
   if (context.kind === 'browse') {
     return getSafeBrowseReturnPath(context.path);
   }
+  if (context.kind === 'recommendations') return recommendationReturnPath(context.path);
   if (context.kind === 'home') return '/';
   return '/collections';
 }
@@ -93,6 +97,8 @@ export async function resolveBookReturnNavigation(
   // A complete, validated search URL retains priority over other contexts.
   const searchPath = getSafeSearchReturnPath(requestedReturnTo);
   if (searchPath) return { kind: 'search', href: searchPath };
+  const recommendations = recommendationReturnPath(requestedReturnTo);
+  if (recommendations) return { kind: 'recommendations', href: recommendations };
 
   if (typeof requestedReturnTo !== 'string') {
     return { kind: 'browse', href: '/browse' };

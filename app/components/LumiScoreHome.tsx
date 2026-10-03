@@ -274,6 +274,7 @@ export function Header({
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
         <a href="/browse">{t('header.browse')}</a>
+        <a href="/categories">{t('home.categories')}</a>
         <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
         <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
         <div className="mobile-navigation" ref={navigationRef}>
@@ -299,6 +300,7 @@ export function Header({
           >
             <a href="/browse">{t('browse.books')}</a>
             <a href="/collections">{t('browse.collections')}</a>
+            <a href="/categories">{t('home.categories')}</a>
             <a href="/taste-test">{t('header.tasteTest')}</a>
             <a href="/my-books">{t('header.myBooks')}</a>
             <span className="mobile-navigation-divider" aria-hidden="true" />
@@ -318,7 +320,7 @@ export function Header({
   );
 }
 
-const RecommendationRow = memo(function RecommendationRow({ book, recommendation }: { book: Book; recommendation?: PersonalizedRecommendation }) {
+const RecommendationRow = memo(function RecommendationRow({ book, recommendation, returnContext = { kind: 'home' } }: { book: Book; recommendation?: PersonalizedRecommendation; returnContext?: BookLinkReturnContext }) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(
@@ -330,7 +332,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     book.source === 'demo' && score !== null && (book.ratingsCount ?? 0) > 0
       ? formatCardRatingCount(book, locale)
       : ratingDisplay.count;
-  const href = getBookHref(book);
+  const href = getBookHref(book, returnContext);
   const matchText = recommendation
     ? recommendation.matchScore !== null
       ? `${t('home.yourMatch')} ${recommendation.matchScore}%`
@@ -346,7 +348,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     : ratingStatus;
   const content = (
     <>
-      <BookCover book={book} small />
+      <BookCover book={book} small resolveMissing={false} />
       <span className="recommendation-copy">
         <strong>{book.title}</strong>
         <span>{book.author}</span>
@@ -364,6 +366,21 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     <div className="recommendation-row">{content}</div>
   );
 });
+
+export function RecommendationsSection({ personalization, limit = 20, returnTo = '/' }: { personalization: HomepagePersonalization; limit?: number; returnTo?: string }) {
+  const { locale, t } = useLumiScoreLocale();
+  const nl = locale === 'nl';
+  const items = personalization.recommendations.slice(0, limit);
+  return <section className="featured-section" id="recommendations" aria-labelledby="recommendations-title">
+    <div className="section-heading"><h2 id="recommendations-title">{t('home.upNext')}</h2><a href="/recommendations">{nl ? 'Kies 10–25 aanbevelingen' : 'Choose 10–25 recommendations'}</a></div>
+    <p>{items.length} {nl ? 'unieke aanbevolen boeken' : 'unique recommended books'}</p>
+    {!personalization.hasEvidence ? <p>{nl ? 'We hebben nog geen bruikbaar smaakprofiel. Beoordeel gelezen boeken of hervat je smaaktest; we verzinnen geen persoonlijke matches.' : 'There is not enough taste evidence yet. Rate books you have read or resume your taste test; we do not invent personal matches.'} <a href="/taste-test">{nl ? 'Smaaktest' : 'Taste test'}</a></p>
+      : items.length < 10 && <p role="status">{nl ? 'Er zijn momenteel minder dan tien geschikte, nog niet gelezen kandidaten met voldoende betrouwbare metadata. We tonen alleen de echte resultaten.' : 'There are currently fewer than ten suitable unread candidates with sufficiently reliable metadata. Only genuine results are shown.'}</p>}
+    <div className="recommendations-overview">{items.map(item => <div key={item.book.workId}>
+      <RecommendationRow book={item.book} recommendation={item} returnContext={returnTo === '/' ? { kind: 'home' } : { kind: 'recommendations', path: returnTo }} />
+    </div>)}</div>
+  </section>;
+}
 
 const RecommendationPanel = memo(function RecommendationPanel({ books, personalization, catalogUnavailable }: { books: Book[]; personalization: HomepagePersonalization; catalogUnavailable: boolean }) {
   const { t } = useLumiScoreLocale();
@@ -396,7 +413,7 @@ const RecommendationPanel = memo(function RecommendationPanel({ books, personali
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : curated.map((book) => <RecommendationRow key={book.id} book={book} />)}
       </div>
-      {!catalogUnavailable && <a className="view-all" href="/browse">{t('home.browseAll')} <span>→</span></a>}
+      {!catalogUnavailable && <a className="view-all" href="#recommendations">{t('home.upNext')} ({personalization.recommendations.length}) <span>→</span></a>}
     </aside>
   );
 });
@@ -421,7 +438,7 @@ const Hero = memo(function Hero({ books, catalogStats, personalization, catalogU
           <a className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></a>
           <dl className="hero-stats">
             <div><dt>{catalogStats.books === null ? '—' : catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
-            <div><dt>{catalogStats.categories}</dt><dd>{t('home.categories')}</dd></div>
+            <div><dt><a href="/categories" aria-label={`${catalogStats.categories ?? '—'} ${t('home.categories')}`}>{catalogStats.categories ?? '—'}</a></dt><dd><a href="/categories">{t('home.categories')}</a></dd></div>
           </dl>
         </div>
         <RecommendationPanel books={books} personalization={personalization} catalogUnavailable={catalogUnavailable} />
@@ -539,7 +556,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
       ) : isLoading && displayedBooks.length === 0 ? (
         <div className="search-loading" role="status">{t('home.searchingCatalog')}</div>
       ) : displayedBooks.length > 0 ? (
-        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} />)}</div>
+        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} detailReturnContext={searchActive ? { kind: 'search', path: `/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}` } : { kind: 'home' }} />)}</div>
       ) : (
         <div className="empty-results"><span>⌕</span><h3>{t('home.noBooks')}</h3><p>{t('home.tryAnother')}</p></div>
       )}
@@ -717,7 +734,7 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
   );
 }
 
-type CatalogStats = { books: number | null; categories: number };
+type CatalogStats = { books: number | null; categories: number | null };
 
 export function LumiScoreHome({
   initialBooks,
@@ -858,6 +875,7 @@ export function LumiScoreHome({
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
       <Hero books={catalogBooks} catalogStats={catalogStats} personalization={visiblePersonalization} catalogUnavailable={catalogUnavailable} />
+      <RecommendationsSection personalization={visiblePersonalization} />
       {seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}

@@ -5,6 +5,8 @@ import {
 import type { CoverResolutionState } from '@/lib/books/cover-resolution-result';
 import { normalizeOpenLibraryId, uniqueCoverUrls } from '@/lib/books/covers';
 import { normalizeVerifiedIsbn13 } from '@/lib/books/google-books-covers';
+import { readServerEnvironment } from '@/lib/server-environment';
+import { isProductionBackedReview } from '@/lib/supabase/review-target';
 import {
   loadStoredCoverResolutions,
   mergeStoredCoverResolution,
@@ -105,7 +107,10 @@ async function resolveWithDurableCache(
   }
 
   const live = await resolveBookCovers(lookup);
-  if (!lumiScoreWorkId || !stored.available) {
+  // Preview inspection must not refresh durable production cover-cache records.
+  const readOnlyReview = isProductionBackedReview({ deploymentEnvironment: process.env.VERCEL_ENV, nodeEnvironment: process.env.NODE_ENV,
+    supabaseUrl: readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') });
+  if (!lumiScoreWorkId || !stored.available || readOnlyReview) {
     return {
       coverUrls: live.coverUrls,
       state: aggregateState(

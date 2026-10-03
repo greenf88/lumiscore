@@ -8,6 +8,7 @@ import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
 import { EditorialCatalogControls, EditorialPagination } from './EditorialCatalogControls';
+import type { PublicCategory, AuthorOption } from '@/lib/catalog/discovery';
 
 type LumiScoreSearchPageProps = {
   initialQuery: string;
@@ -20,6 +21,9 @@ type LumiScoreSearchPageProps = {
   facets: Record<string, number>;
   pageCount: number;
   selectionCount: number | null;
+  categories: PublicCategory[];
+  selectedAuthor: AuthorOption | null;
+  discoveryAvailable: boolean;
 };
 
 export function LumiScoreSearchPage({
@@ -28,7 +32,7 @@ export function LumiScoreSearchPage({
   searchFailed,
   authState,
   searchReturnTo,
-  filters, total, facets, pageCount, selectionCount,
+  filters, total, facets, pageCount, selectionCount, categories, selectedAuthor, discoveryAvailable,
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
@@ -47,7 +51,7 @@ export function LumiScoreSearchPage({
     localStorage.setItem('lumiscore-theme', next);
   }, []);
 
-  const hasQuery = initialQuery.length >= 2 || filters.categories.length > 0 || Boolean(filters.selection) || filters.languages.length > 0;
+  const hasQuery = initialQuery.length >= 2 || filters.categories.length > 0 || Boolean(filters.selection) || Boolean(filters.author) || filters.languages.length > 0;
 
   return (
     <main className="site-shell search-page-shell">
@@ -78,7 +82,7 @@ export function LumiScoreSearchPage({
           </div>
         </div>
 
-        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" />
+        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" categories={categories} selectedAuthor={selectedAuthor} discoveryAvailable={discoveryAvailable} />
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>
