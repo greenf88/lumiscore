@@ -1,6 +1,6 @@
 # Discovery and rating-based taste test — review evidence
 
-Status: implementation and local verification complete; NOT approved for production or fully verified in an authenticated online preview. A separate Supabase test project has not been identified. Do not merge or apply this migration to production to work around that gate.
+Status: implementation has local evidence, but NOT fully verified in an authenticated online preview or approved for production. Preview diagnosis and isolated test preparation are recorded below. A separate hosted test Supabase still needs approval. Do not merge or apply this migration to production to work around that gate.
 
 ## Baseline and concrete changes
 
@@ -17,7 +17,7 @@ Base: `5ce044cb07eb0a5ceb3d8eceb0ed3f7f5e730aae`; branch `feature/discovery-tast
 
 ## Verification
 
-All database writes below occurred solely in disposable, in-process PGlite fixtures; no production migration, catalog import, user rating or status write was executed.
+The original implementation checks used disposable, in-process PGlite fixtures. The additional isolated full-Supabase checks below use real local Auth/PostgREST/PostgreSQL with synthetic accounts only. No production migration, catalog import, user rating or status write was executed.
 
 - Full unit suite: **539 passed, zero failed** (188.9 seconds, concurrent fixture-heavy run). Subsequent focused checks: **68 passed** after the review-write guard and legacy-order safeguard. An additional guard assertion is included in that focused run. TypeScript and ESLint pass after final UI changes.
 - Final SQL/input/empty-schema recovery run: **8 passed**; subsequent scroll/navigation checks: **25 passed**. Equivalent URL defaults/query ordering share the same scroll key. The narrow unused-schema recovery preserves the original ratings, read statuses and editorial RPC in the disposable fixture.
@@ -48,7 +48,51 @@ Preview: https://lumiscore-git-feature-discovery-taste-a1fe88-rgkgroeneveld-9102
 
 Automatic Vercel build and Preview Comments check were green for implementation commit `a380c07d48076b427177101144f48ca76489d2eb`. The online shell loads, but **Categories reports its public source unavailable and Home reports catalog unavailable/zero books**. Consequently this is not a working data-backed preview or a complete functional sign-off. Local public-read-only review on the same code did load the real catalog. The underlying remote configuration/runtime cause is not confirmed: the Vercel deployment reader returned 403 for this scope and build-log reading was unavailable. No remote env values were obtained, copied or changed.
 
-Remaining blockers: (1) identify/approve a separate Supabase test target and safe preview configuration; (2) resolve the online public catalog's unavailable state using authorized configuration/log access; (3) complete the authenticated end-to-end/browser checks described above. A green deployment build does not clear these gates. The PR remains Draft; no merge, production deployment or production migration is authorized/performed.
+The paragraph above is the historical first observation. **Updated 2026-10-03:** the authorized Vercel dashboard now proves the cause: deployment `dpl_WFoNTw1DKvQE15pLB2zqtzbFERM4` at `4b75a59f92e9a0a47508b154465d5df823aa82f6` built with URL presence **false**, publishable-key presence **true**. Existing Preview URL overrides apply only to `fix/bulk-progress-exit` and `feature/collection-bulk-progress-v1`, not PR #8. It uses no usable Supabase project. No key value was read. The minimal correction is a new, separately approved test project's matching URL/key plus Preview origin, scoped to this branch and rebuilt. No remote setting was changed. Standalone HTTP probes reached Vercel's login protection, not a broken JS asset. Caught auth fallbacks produced misleading successful duration metrics; zero/unavailable UI is not a verified empty database.
+
+Read-only production evidence: 13 baseline migrations, existing legacy catalog RPC and public SELECT/RLS, no PR #8 migration/RPC. Missing new functions are a separate new-feature gate, not the cause of all preview reads failing. Only production is visible in the Free organization; no branch/test project exists. A distinct local stack and reproducible synthetic test artifacts have been prepared. See [the exact test-environment and bundled approval plan](discovery-test-environment.md) for resources/costs, identities, original-byte migration stages, historical prerequisite handling, synthetic users, branch-specific config, Auth/RLS/reset steps and remaining browser checks.
+
+An actual read-only transaction with `SET LOCAL ROLE anon` returned 20 public categories and a legacy catalog total of 10,134 Works. This proves the existing public SQL permissions on production, not that the broken Preview connects there. No production reader or Auth data was inspected.
+
+## Additional isolated integration evidence — 2026-10-03
+
+- Own local full Supabase project `lumiscore-pr8-discovery`, PostgreSQL 17, CLI 2.116.0, Node v24.20.0. Dedicated loopback ports 55431/55432/55434; existing identity-validation stack untouched. Synthetic schema totals: 389 Works (305 main candidates + 84 historical-migration placeholders), 608 Editions, 12 Authors, 20 existing category definitions, 46 Collections. The placeholder Works have no Editions/evidence and cannot enter NL/EN rounds. This minimal base is not a production-schema-parity claim.
+- **Three new fixture/target/loopback tests passed**; final **42 focused fixture + SQL/discovery/recommendation tests passed**, zero failures (49.7 seconds). Full 539-test/build evidence above is reused for unchanged application code. Fresh TypeScript and ESLint pass; the existing 98 browser-build files pass the client secret scan (no real server credentials supplied, so not a proof about remotely configured values). Diff whitespace check passes. PR #8's production migration bytes and application implementation are unchanged by this preparation.
+- **Real Auth + PostgREST + database pass**, not mocks: two confirmed synthetic users, actual password login and reauthentication mid-round, real refresh tokens, three voluntary rounds of twenty explicit ratings each, 60 distinct newly rated Works, one skip without rating. Existing test-user scores stay unchanged; retries are idempotent; rating-implies-read and user preference/rating/round isolation are enforced. A separate normal score edit changes highest-score order as expected. Anonymous and forged-owner/private-schema requests are rejected.
+- Real public RPC filtering returns 100 unique Works across four pages (32/32/32/4) for author 8800001 + fantasy + NL + “Synthetic”; incompatible Cooking gives zero. Browser checks on the local synthetic server exercised selecting author/category/language/query, page two, book 033 and its return link: all parameters and page two survived. Desktop NL/Ink and mobile 390×844 EN/Paper inspected; mobile 32 book links, no horizontal overflow/error overlay/captured console errors. Home loaded 389 books/20 categories; hydrated existing device-only guest preferences produced twenty recommendations, not invented ratings.
+- Finally, only the two run-created users were globally signed out/deleted. A separate read-only check confirms **zero Auth users, ratings, reading statuses, preferences, rounds and offers**, with bibliography still 389/608. Credentials remained in memory and were never printed. Stopping this task's stack preserves its volumes; no existing stack, production secret or backup is removed.
+- **Still unproven:** all online Preview catalog/filter/rating/SSR-cookie flows; browser-authenticated refresh/sign-out/sign-in, saved-score propagation through profile/recommendations, actual swipe confirmation/cancel, rating-sensitive browser return/scroll and full small/exhausted browser states. Passing local API tests is not online functional sign-off. Draft remains required.
+
+Current blockers: approve/provision the isolated hosted target and branch Preview configuration, then prove the catalog and full authenticated browser filter/rating/return flows. Local PostgreSQL or API evidence is not online browser sign-off. PR #8 remains Draft; no production migration/write, merge, main push or remote configuration change is performed.
+
+## Category provenance — production definitions versus PR #8
+
+All **20** public rows below were read directly from production in a read-only transaction on 2026-10-03, match existing `lib/catalog/categories.json` at the base commit, and were already present before PR #8. That file is unchanged in this PR, and the new migration has no category insert/update/delete. PR #8 introduces **zero categories**, only dynamic presentation/count/linking. Synthetic copies in test support do not alter production taxonomy.
+
+| Existing production category ID | Existing linked Works | Added by PR #8 |
+| --- | ---: | --- |
+| fiction_fantasy | 124 | no |
+| fiction_feelgood | 4 | no |
+| fiction_historical | 56 | no |
+| fiction_horror | 31 | no |
+| fiction_literary_general | 263 | no |
+| fiction_mystery_crime | 62 | no |
+| fiction_romance | 91 | no |
+| fiction_science_fiction | 91 | no |
+| fiction_thriller_suspense | 111 | no |
+| nonfiction_arts_culture | 3 | no |
+| nonfiction_biography_memoir | 54 | no |
+| nonfiction_cooking_food | 0 | no |
+| nonfiction_economics_business | 17 | no |
+| nonfiction_history | 15 | no |
+| nonfiction_philosophy_religion | 13 | no |
+| nonfiction_psychology_self_development | 37 | no |
+| nonfiction_science_nature | 13 | no |
+| nonfiction_society_current_affairs | 24 | no |
+| nonfiction_travel | 3 | no |
+| nonfiction_true_crime | 10 | no |
+
+Counts are observations, not import instructions. A Work may have multiple categories; their sum is not the catalog size. Unclassified Works remain in unrestricted Browse.
 
 ## Migration and separate-test execution gate
 
