@@ -13,10 +13,12 @@ export async function loadBatch(manifestFile,expectedHash){
  if(!/^[a-f0-9]{64}$/.test(expectedHash??''))throw Error('EXPLICIT_MANIFEST_HASH_REQUIRED');
  const bytes=await fs.readFile(manifestFile);if(bytesHash(bytes)!==expectedHash)throw Error('MANIFEST_BYTES_DRIFT');
  const manifest=JSON.parse(bytes);
- if(manifest.schema!=='lumiscore-additive-manifest-1'||!/^candidates-v\d+\.json$/.test(manifest.records_file))throw Error('MANIFEST_CONTRACT_INVALID');
+ const legacy=manifest.schema==='lumiscore-additive-manifest-1'&&manifest.batch_schema==='lumiscore-additive-batch-1'&&manifest.required_new_works===500;
+ const large=manifest.schema==='lumiscore-additive-manifest-2'&&manifest.batch_schema==='lumiscore-additive-batch-2'&&manifest.required_new_works===1860;
+ if(!(legacy||large)||!/^candidates-v\d+\.json$/.test(manifest.records_file))throw Error('MANIFEST_CONTRACT_INVALID');
  const recordsBytes=await fs.readFile(path.join(path.dirname(manifestFile),manifest.records_file));
  if(bytesHash(recordsBytes)!==manifest.records_sha256)throw Error('RECORDS_BYTES_DRIFT');
- const input={schema:manifest.batch_schema,slug:manifest.slug,required_new_works:500,records:JSON.parse(recordsBytes)};
+ const input={schema:manifest.batch_schema,slug:manifest.slug,required_new_works:manifest.required_new_works,records:JSON.parse(recordsBytes)};
  validateBatch(input);if(digest(input)!==manifest.batch_hash)throw Error('BATCH_CONTENT_DRIFT');
  return {input,manifest_sha256:expectedHash};
 }
