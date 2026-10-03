@@ -1,4 +1,4 @@
-import {digest,planBatch,LARGE_BATCH_SCHEMA} from './catalog-batch-core.mjs';
+import {digest,planBatch,LARGE_BATCH_SCHEMA,EXPANSION_BATCH_SCHEMA} from './catalog-batch-core.mjs';
 export async function readBatchState(tx,slug){
  const query=async sql=>(await tx.query(sql)).rows;
  return {authors:await query('select * from public.authors order by id'),works:await query('select * from public.works order by id'),editions:await query('select * from public.editions order by id'),aliases:await query('select * from public.catalog_work_title_aliases order by work_id,title'),ledger:(await tx.query('select * from catalog_private.editorial_records where selection_slug=$1 order by candidate_id',[slug])).rows,members:(await tx.query('select * from public.catalog_selection_members where selection_slug=$1 order by candidate_id',[slug])).rows};
@@ -10,7 +10,7 @@ export async function executeBatch(db,input,{apply=false,confirmation,expected,l
  return db.transaction(async tx=>{
   if(apply)await tx.exec('lock table '+locked+' in share row exclusive mode');
   const state=await readBatchState(tx,input.slug);
-  if(input.schema===LARGE_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
+  if(input.schema===LARGE_BATCH_SCHEMA||input.schema===EXPANSION_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
   const plan=planBatch(input,state,{local}),size=input.required_new_works;
   if(plan.counts.conflicts)throw Error('IDENTITY_CONFLICT_REQUIRES_REVIEW');
   if(apply&&digest(plan)!==digest(expected))throw Error('CATALOG_DRIFT_REQUIRES_NEW_PLAN');
@@ -60,7 +60,7 @@ export async function executeBatch(db,input,{apply=false,confirmation,expected,l
 const quote=v=>'"'+v.replaceAll('"','""')+'"';
 export async function recoveryPlan(tx,input,{local=false}={}){
  const state=await readBatchState(tx,input.slug);
- if(input.schema===LARGE_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
+ if(input.schema===LARGE_BATCH_SCHEMA||input.schema===EXPANSION_BATCH_SCHEMA)state.selection=(await tx.query('select * from public.catalog_selections where slug=$1',[input.slug])).rows;
  planBatch(input,state,{local});
  if(state.ledger.length!==input.required_new_works)throw Error('RECOVERY_REQUIRES_COMPLETE_OWNED_BATCH');
  const references=(await tx.query(`select ns.nspname as schema,c.relname as name,a.attname as column
