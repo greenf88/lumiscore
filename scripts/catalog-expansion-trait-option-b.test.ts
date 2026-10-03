@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
 import test from 'node:test';
 import { buildEffectiveWorkTraitVector } from '../lib/recommendations/work-trait-evidence.ts';
 
@@ -29,11 +28,25 @@ function canonical(value: unknown): string {
   return JSON.stringify(value);
 }
 
+async function loadPlan() {
+  const bytes = await readFile(
+    new URL('../test/fixtures/catalog-expansion-option-b.contract.json', import.meta.url),
+  );
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'ca482c7999f44f6be8af67723efaa49caafe535a4ee5e7ebee076280bdc89492');
+  const plan = JSON.parse(bytes.toString('utf8'));
+  assert.equal(plan.fixtureKind, 'historical-public-review-contract');
+  assert.equal(plan.productionExecution, false);
+  assert.equal(plan.sourceByteSha256,
+    '3aff38e83dadf41fa9ee4a9f3b40a3dcdb393830d6343d45534ed9a3e62a4c2c');
+  // Pin the original reviewed rows independently of the fixture's self-reported hash.
+  assert.equal(plan.rowsSha256,
+    'eaab592ae6079a10fcc3a8d1f5895299fad31e20d469344746d88d72c05bf192');
+  return plan;
+}
+
 test('strict Option B plan contains only the five approved exact-ISBN nonfiction rows', async () => {
-  const plan = JSON.parse(await readFile(
-    resolve('catalog', 'catalog-expansion-trait-enrichment-option-b-write-plan.json'),
-    'utf8',
-  )) as {
+  const plan = await loadPlan() as {
     mode: string;
     explicitlyUnusedPlan: string;
     scope: { rowCount: number; targetWorkIds: number[] };
@@ -73,10 +86,9 @@ test('strict Option B plan contains only the five approved exact-ISBN nonfiction
 });
 
 test('all five strict Option B works remain PARTIAL without era evidence', async () => {
-  const plan = JSON.parse(await readFile(
-    resolve('catalog', 'catalog-expansion-trait-enrichment-option-b-write-plan.json'),
-    'utf8',
-  )) as { rows: Array<Row & { raw_labels: string[]; mapping_version: string; verified_at: string }> };
+  const plan = await loadPlan() as {
+    rows: Array<Row & { raw_labels: string[]; mapping_version: string; verified_at: string }>;
+  };
 
   assert.equal(plan.rows.length, 5);
   for (const row of plan.rows) {

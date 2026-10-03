@@ -6,6 +6,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "test:unit": "node --experimental-strip-types --test \"lib/**/*.test.ts\" \"scripts/*.test.ts\" \"scripts/*.test.mjs\"",
+    "test:fixture-contracts": "node --experimental-strip-types --test lib/collections/collection-v1-quality.test.ts scripts/catalog-expansion-trait-option-b.test.ts scripts/catalog-fixture-contracts.test.mjs",
     "catalog:dry-run": "node scripts/catalog-selection-local.mjs",
     "catalog:local-apply": "node scripts/catalog-selection-local.mjs --apply",
     "catalog:postgres": "node scripts/catalog-selection-postgres.mjs",
