@@ -1,0 +1,41 @@
+{
+  "schema": "lumiscore-additive-manifest-1",
+  "batch_schema": "lumiscore-additive-batch-1",
+  "slug": "lumiscore-plus500-20261003-v1",
+  "required_new_works": 500,
+  "records_file": "candidates-v8.json",
+  "records_sha256": "cef5a3086aff025ff130b2072c56a482db98ce34f8c00df2412f92fcdf844e36",
+  "batch_hash": "3544839acc085507834b215e6e4f15e5c8f8cd0026f784eabdfec3d3a3323aa0",
+  "production_authorization": "READ_ONLY_DRY_RUN_ONLY",
+  "source_request_count": 67,
+  "source_cap": 70,
+  "reserves_remaining": 22,
+  "selection_policy": "Existing review candidates and current catalog gaps first; bounded NL-fiction and EN-fantasy/SF/thriller/dystopia/fiction source want_to_read searches. Fixed page/lane/Work-ID tie-break. Only single-author, exact ISBN/normal Edition/single-parent Work chains. Bibliographic IDs, all source ISBNs, canonical titles, translated Edition titles and stored aliases excluded against current production in memory. No fuzzy matching. Editorial review excludes omnibus sets, adaptations, comics, reference substitutes and ambiguous volume bindings; known contradictory author identities quarantined. No genre or Collection claims are inferred.",
+  "form_review_exclusions": [
+    {
+      "work": "OL14950507W",
+      "title": "Michael Crichton's Jurassic World (Jurassic Park / Lost World)",
+      "reason": "Multiple existing novels in one bound edition; never count toward net-new individual Works"
+    },
+    {
+      "work": "OL15290520W",
+      "title": "Novels (Angels & Demons / Da Vinci Code)",
+      "reason": "Multiple existing novels in one bound edition; never count toward net-new individual Works"
+    }
+  ],
+  "previous_revision_policy": "All earlier manifests and plans are superseded and not approved for apply; use this byte hash only.",
+  "source_policy": "Sequential batch requests >=1100 ms start spacing; public facts only; no HTML scrape/account/paid source. Exact source URLs and timestamp retained per row.",
+  "production_identity_review": {
+    "source": "Fresh repeatable-read read-only target-verified snapshot; compare both canonical and chosen Edition title to existing Works",
+    "baseline_works": 2640,
+    "replacements": [
+      {
+        "candidate_id": "LSPLUS500-0495",
+        "excluded_work": "OL181823W",
+        "reason": "AMBIGUOUS_AUTHOR",
+        "replacement_work": "OL19761919W"
+      }
+    ]
+  },
+  "source_rank_note": "Ranks for page4/limit200 normalized to actual offset600; individual records retain exact source URL."
+}
