@@ -201,6 +201,7 @@ export function LumiScoreBookDetail({
         throw new Error(payload.error ?? t('detail.ratingSaveError'));
       }
       setRatingState(payload.state);
+      try { sessionStorage.setItem('lumiscore-rating-changed', '1'); } catch { /* Optional navigation freshness. */ }
       setReadingStatus('read');
     } catch (error) {
       setRatingError(
@@ -231,6 +232,7 @@ export function LumiScoreBookDetail({
         throw new Error(payload.error ?? t('detail.ratingRemoveError'));
       }
       setRatingState(payload.state);
+      try { sessionStorage.setItem('lumiscore-rating-changed', '1'); } catch { /* Optional navigation freshness. */ }
     } catch (error) {
       setRatingError(
         error instanceof Error ? error.message : t('detail.ratingRemoveError'),

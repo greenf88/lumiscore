@@ -5,6 +5,7 @@ import { LUMISCORE_DEFAULT_DESCRIPTION } from '@/lib/seo/page-metadata';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import './globals.css';
+import { OverviewScrollMemory } from './components/OverviewScrollMemory';
 
 export const metadata: Metadata = {
   metadataBase: new URL(LUMISCORE_SITE_ORIGIN),
@@ -54,6 +55,7 @@ export default async function RootLayout({
           hasPersistedChoice={hasPersistedChoice}
         >
           {children}
+          <OverviewScrollMemory />
         </LumiScoreLocaleProvider>
         <SpeedInsights />
       </body>

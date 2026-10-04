@@ -7,6 +7,7 @@ import {
   normalizeGuestTasteTestAnswers,
 } from '@/lib/taste-test/guest-storage';
 import { loadGuestHomepagePersonalization } from '@/lib/supabase/taste-test';
+import { recommendationLimit } from '@/lib/catalog/discovery';
 
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
   const locale = isLocale(record.locale) ? record.locale : 'en';
 
   try {
-    return json(await loadGuestHomepagePersonalization(answers, locale));
+    return json(await loadGuestHomepagePersonalization(answers, locale, recommendationLimit(record.limit)));
   } catch (error) {
     console.error('Guest recommendations temporarily unavailable.', error);
     return json({ error: 'Recommendations are temporarily unavailable.' }, 503);

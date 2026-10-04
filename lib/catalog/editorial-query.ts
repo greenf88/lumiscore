@@ -6,11 +6,14 @@ export const selectionSlug = 'lumiscore-selectie-1000';
 export type CatalogParams = Record<string, string | string[] | undefined>;
 const values = (value: string | string[] | undefined) => value === undefined ? [] : Array.isArray(value) ? value : [value];
 export function editorialQuery(params: CatalogParams) {
-  const categories = [...new Set(values(params.category))].filter(id => model.categories.some(c => c.id === id));
+  // Public category labels and existence come from the database, not research files.
+  const categories = [...new Set(values(params.category))].filter(id => /^[a-z][a-z0-9_]{1,59}$/.test(id) && id !== 'unknown').slice(0, 32);
   const languages = [...new Set(values(params.language))].filter(id => id === 'nl' || id === 'en');
   const query = normalizeCatalogSearchQuery(values(params.q)[0] ?? '');
+  const rawAuthor = values(params.author)[0] ?? '';
+  const author = /^\d+$/.test(rawAuthor) && Number.isSafeInteger(Number(rawAuthor)) && Number(rawAuthor) > 0 ? String(Number(rawAuthor)) : '';
   return {
-    query, categories, languages,
+    query, categories, languages, author,
     selection: values(params.selection)[0] === selectionSlug ? selectionSlug : '',
     page: normalizeCatalogBrowsePage(params.page),
     pageSize: normalizeCatalogBrowsePageSize(params.pageSize),
@@ -28,7 +31,8 @@ export function editorialRpcArgs(state: EditorialQuery) {
 }
 export function editorialHref(route: '/browse' | '/search', state: EditorialQuery) {
   const params = new URLSearchParams();
-  if (state.query && route === '/search') params.set('q', state.query);
+  if (state.query) params.set('q', state.query);
+  if (state.author) params.set('author', state.author);
   if (state.page > 1) params.set('page', String(state.page));
   params.set('pageSize', String(state.pageSize));
   if (state.sort !== 'az') params.set('sort', state.sort);

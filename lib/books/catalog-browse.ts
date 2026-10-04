@@ -2,7 +2,7 @@ export const CATALOG_BROWSE_PAGE_SIZES = [32, 64, 128] as const;
 export type CatalogBrowsePageSize = (typeof CATALOG_BROWSE_PAGE_SIZES)[number];
 export const CATALOG_BROWSE_PAGE_SIZE: CatalogBrowsePageSize = 32;
 
-export const CATALOG_BROWSE_SORTS = ['az', 'newest'] as const;
+export const CATALOG_BROWSE_SORTS = ['az', 'newest', 'highest'] as const;
 export type CatalogBrowseSort = (typeof CATALOG_BROWSE_SORTS)[number];
 
 export type CatalogBrowseOrder = {
@@ -54,6 +54,7 @@ export function normalizeCatalogBrowseSort(value: unknown): CatalogBrowseSort {
 }
 
 export function getCatalogBrowseOrder(sort: CatalogBrowseSort): CatalogBrowseOrder[] {
+  if (sort === 'highest') throw new Error('Highest-score ordering requires the server-paged catalog_discovery_page RPC.');
   return sort === 'newest'
     ? [
         { column: 'first_publish_year', ascending: false, nullsFirst: false },

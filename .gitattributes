@@ -8,6 +8,10 @@ catalog/selection-v1/identity-pins.json -text
 catalog/selection-v1/identity-20261001.*.json -text
 catalog/selection-v1/identity-20261001-rendezvous.*.json -text
 supabase/migrations/*.sql text eol=lf
+# Reviewed synthetic test SQL hashes must survive Windows/Linux checkouts.
+test-support/discovery/*.sql text eol=lf
+# Commit-bound release-plan hash must survive Windows/Linux checkouts.
+docs/discovery-production-release-plan.md text eol=lf
 # Historical contract fixture hashes must survive Windows/Linux fresh checkouts.
 test/fixtures/*.contract.json -text
 # Frozen additive batch manifests and public provenance are byte-hashed.

@@ -23,6 +23,15 @@ function candidate(workId: string, title: string, author: string, traits: Parame
 
 const duneProfile = buildTasteProfile({ 'fantasy-or-science-fiction': 'right' }, []);
 
+test('default twenty unique Works, configurable ten to twenty-five, genuine shortages and empty pool', () => {
+  const candidates=Array.from({length:40},(_,i)=>candidate(String(10000+i),`Book ${i}`,`Author ${i}`,{science_fiction:1}));
+  const input={candidates:[...candidates,...candidates],profile:duneProfile,ratedWorkIds:new Set<string>()};
+  assert.equal(recommendBooks(input).length,20);
+  for(const limit of [10,20,25]) { const result=recommendBooks({...input,limit});assert.equal(result.length,limit);assert.equal(new Set(result.map(x=>x.book.workId)).size,limit); }
+  assert.equal(recommendBooks({...input,candidates:candidates.slice(0,5)}).length,5);
+  assert.deepEqual(recommendBooks({...input,candidates:[]}),[]);
+});
+
 test('already-rated books are excluded', () => {
   const results = recommendBooks({ candidates: [candidate('8', 'Dune', 'Frank Herbert', { science_fiction: 1 })], profile: duneProfile, ratedWorkIds: new Set(['8']) });
   assert.deepEqual(results, []);

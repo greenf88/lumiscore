@@ -50,7 +50,7 @@ test('browse cards reuse BookCard and therefore canonical native book links', as
   assert.match(browseSource, /<BookCard/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
   assert.match(browseSource, /detailReturnContext=\{detailReturnContext\}/);
-  assert.match(homeSource, /const href = getBookHref\(book\)/);
+  assert.match(homeSource, /const href = getBookHref\(book, detailReturnContext\)/);
   assert.match(homeSource, /className="book-card-main-link"[\s\S]*?href=\{href\}/);
 });
 
@@ -90,7 +90,9 @@ test('128-card Browse pages keep ratings and stored-cover reads batched', async 
   assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
   const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
   const searchUi = await readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8');
-  assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 1);
+  assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 2);
+  assert.match(editorialLoader, /rpc\('catalog_discovery_page'/);
+  assert.match(editorialLoader, /response\.error\?\.code === 'PGRST202' && !state\.author && state\.sort !== 'highest'/);
   assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale\)/);
   const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('function applyStoredCoverResolutions('));
   assert.match(byIdsLoader, /loadPublicRatingSummariesBatched\(/);

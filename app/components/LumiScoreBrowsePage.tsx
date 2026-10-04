@@ -5,13 +5,13 @@ import type { HeaderAuthState } from '@/lib/auth/header';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
 import { EditorialCatalogControls } from './EditorialCatalogControls';
 import { updateBrowseReturnPath } from '@/lib/navigation/browse-return';
-import type { CatalogBrowsePage } from '@/lib/supabase/books';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
+import type { EditorialPage } from '@/lib/supabase/editorial-catalog';
 
 type LumiScoreBrowsePageProps = {
-  data: CatalogBrowsePage & { available: boolean; facets: Record<string, number>; selectionCount: number | null };
+  data: EditorialPage;
   authState: HeaderAuthState;
   returnTo: string;
   filters: EditorialQuery;
@@ -86,7 +86,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
           </strong>
         </div>
 
-        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} selectionCount={data.selectionCount} route="/browse" />
+        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} selectionCount={data.selectionCount} route="/browse" categories={data.categories} selectedAuthor={data.selectedAuthor} discoveryAvailable={data.discoveryAvailable} />
 
         {!data.available ? (
           <div className="empty-results" role="status">
