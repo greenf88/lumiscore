@@ -8,11 +8,13 @@ import pg from 'pg';
 import { assertLocalTarget, FIXTURE_ID, reviewedFixtureInputs, setupDiscoveryFixture } from './discovery-test-fixture.mjs';
 import { verifyLocalDiscoveryApi } from './discovery-test-api.mjs';
 import { confineLocalPorts } from './discovery-test-loopback.mjs';
+import { verifyFunctionPermissions } from './discovery-permissions.mjs';
 const exec=promisify(execFile), root=fileURLToPath(new URL('../',import.meta.url));
 const workdir=path.join(root,'outputs','pr8-local'), project='lumiscore-pr8-discovery', network='lumiscore-pr8-discovery';
 const mode=process.argv[2];
 const safeEnv={...process.env};
 for(const key of Object.keys(safeEnv)) if(/SECRET|TOKEN|SERVICE_ROLE|DATABASE|SUPABASE|GOOGLE_BOOKS|NEXT_PUBLIC_/.test(key)) delete safeEnv[key];
+safeEnv.SUPABASE_TELEMETRY_DISABLED='1';
 const docker=process.platform==='win32'?path.join(process.env.LOCALAPPDATA,'Programs','DockerDesktop','resources','bin','docker.exe'):'docker';
 const cliEntry=process.platform==='win32'?path.join(process.env.APPDATA,'npm','node_modules','supabase','dist','supabase.js'):null;
 const run=async(file,args)=>{
@@ -96,7 +98,9 @@ try {
         const guard=new pg.Client({connectionString:status.DB_URL,ssl:false,connectionTimeoutMillis:5000});
         try {await guard.connect();await guard.query('begin read only');await checkDisposableData(guard);await guard.query('rollback');}
         finally {await guard.end();}
-        await cli(['db','reset','--local','--no-seed']); status=await localStatus();
+        await cli(['db','reset','--local','--no-seed','--network-id',network]);
+        // CLI reset recreates gateway bindings; re-confine this owned stack before use.
+        await confineLocalPorts(run,docker,workdir); status=await localStatus();
       }
     }
     if(['start','reset','verify','evidence'].includes(mode)) {
@@ -113,7 +117,7 @@ try {
       const marker=(await db.query('select identity from discovery_test_private.marker')).rows;
       if(marker.length!==1||marker[0].identity!==FIXTURE_ID) throw new Error('Synthetic target marker mismatch.');
       await checkDisposableData(db);
-      if(mode==='verify') {stage='real-auth-postgrest-tests';console.log(JSON.stringify(await verifyLocalDiscoveryApi(status)));}
+      if(mode==='verify') {stage='effective-function-permissions';console.log(JSON.stringify(await verifyFunctionPermissions(db)));stage='real-auth-postgrest-tests';console.log(JSON.stringify(await verifyLocalDiscoveryApi(status)));}
       else if(mode==='evidence') {
         stage='read-only-cleanup-evidence';await db.query('begin read only');
         const counts=(await db.query(`select (select count(*) from auth.users)::int as synthetic_users,
@@ -136,5 +140,9 @@ try {
       await new Promise(resolve=>child.on('exit',code=>{process.exitCode=code??1;resolve();}));
     }
   }
-} catch {console.error(`LOCAL DISCOVERY TEST BLOCKED — ${stage}; raw credential-bearing output withheld.`);process.exitCode=1;}
+} catch(error) {
+  const safeReasons=['Disposable container identity mismatch.','Unexpected disposable port mapping.','Unexpected disposable container network.','Local Docker unavailable.','Local Docker timeout.','Local Docker operation failed; response withheld.','Bounded response exceeded.'];
+  const reason=safeReasons.includes(error.message)?error.message:'details withheld';
+  console.error(`LOCAL DISCOVERY TEST BLOCKED — ${stage}; ${reason}; raw credential-bearing output withheld.`);process.exitCode=1;
+}
 finally {if(db) await db.end().catch(()=>{}); if(status) for(const key of Object.keys(status)) status[key]='';}

@@ -1,8 +1,8 @@
 # Discovery and rating-based taste test — review evidence
 
-Current status (2026-10-04): **isolated online verification is complete and PR #8 is Ready for review**, not approved for production. The actual browser plus database evidence at implementation SHA `9917a7115bfc5937b6d8331da0dc8c0ae8f34dee` is preserved in [online verification](discovery-online-verification-20261004.md). The checkpoints below are historical; their earlier Draft/blocked/zero-user statements are not the current state. No provisioning/migration/import was repeated.
+Current status (2026-10-04): **minimal explicit-function-ACL correction and revised release preparation**. Earlier security sign-off missed the independent Supabase default anon EXECUTE grant on `taste_rating_state()`; production release stopped before writes. Confirmed rights-contract mismatch, not proven anonymous data disclosure. See [new actual database/API verification](discovery-permissions-verification-20261004.md) and [revised two-migration release proposal](discovery-production-release-plan.md). Old approval for `5ae5ad2fea5f9edb2929c8ca8460e95ffeef947c` does not cover changed artifacts. Production untouched. Application bytes unchanged; prior browser evidence at `9917a7115bfc5937b6d8331da0dc8c0ae8f34dee` remains functional evidence, not proof of the missed grant. All checkpoints below are historical and superseded by current records.
 
-## Production-release preparation — current authoritative checkpoint
+## Historical production-release preparation — superseded by ACL re-review above
 
 The full PR diff, relevant existing/new migrations, navigation/query state, recommendation evidence, owner-isolated round mutation and production swipe gate were reviewed. No concrete functional or security blocker was found; no application/migration/fixture correction was needed. Primary-author filtering reflects the existing one-author-per-Work model, not a new coauthor taxonomy. All twenty public categories already exist on production.
 

@@ -3,11 +3,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
+import { permissionsMigration, verifyFunctionPermissions } from './discovery-permissions.mjs';
 const migration = '20261003183631_discovery_taste_rounds.sql';
 const sql = async file => readFile(new URL(`../supabase/migrations/${file}`, import.meta.url), 'utf8');
 const a = '00000000-0000-4000-8000-000000000001';
 const b = '00000000-0000-4000-8000-000000000002';
-async function fixture() {
+async function fixture({ correctPermissions = true } = {}) {
   const db = new PGlite(); await db.waitReady;
   await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create table auth.users(id uuid primary key);
@@ -29,7 +30,10 @@ async function fixture() {
   await db.exec(`insert into public.catalog_categories values('fiction_fantasy','Fantasy','Fantasy'),('empty_category','Leeg','Empty');
     insert into public.work_catalog_categories select id,'fiction_fantasy' from public.works where id<=5000;
     insert into public.ratings(user_id,work_id,rating) values('${a}',1,6),('${b}',10134,10);`);
+  // Reproduce the explicit Supabase default ACL, not merely PUBLIC inheritance.
+  await db.exec('alter default privileges in schema public grant execute on functions to anon, authenticated, service_role');
   await db.exec(await sql(migration));
+  if (correctPermissions) await db.exec(await sql(permissionsMigration));
   return db;
 }
 async function asUser(db, id = a) {
@@ -40,6 +44,37 @@ async function asUser(db, id = a) {
 const state = async db => (await db.query('select public.taste_rating_state() as state')).rows[0].state;
 const act = async (db, action, r = null, work = null, score = null, language = 'en') => (await db.query(
   'select public.taste_rating_advance($1,$2,$3,$4,$5) as state', [action,r,work,score,language])).rows[0].state;
+
+test('forward rights correction catches explicit anon default grants and preserves data/function contracts', async () => {
+  const db = await fixture({ correctPermissions: false });
+  try {
+    assert.equal((await db.query("select has_function_privilege('anon','public.taste_rating_state()','EXECUTE') as allowed")).rows[0].allowed, true);
+    await assert.rejects(() => verifyFunctionPermissions(db), /Effective anon EXECUTE/);
+    const before = (await db.query('select * from public.ratings order by user_id,work_id')).rows;
+    const defaults = (await db.query('select defaclrole,defaclnamespace,defaclobjtype,defaclacl from pg_default_acl order by oid')).rows;
+    await db.exec(await sql(permissionsMigration));
+    await verifyFunctionPermissions(db);
+    // Repeating the exact GRANT/REVOKE is harmless; migration history is not edited.
+    await db.exec(await sql(permissionsMigration));
+    await verifyFunctionPermissions(db);
+    assert.deepEqual((await db.query('select * from public.ratings order by user_id,work_id')).rows, before);
+    assert.deepEqual((await db.query('select defaclrole,defaclnamespace,defaclobjtype,defaclacl from pg_default_acl order by oid')).rows, defaults);
+    // Catch inherited effective access too: named ACL removal alone is insufficient.
+    await db.exec('grant authenticated to anon');
+    await assert.rejects(() => verifyFunctionPermissions(db), /Effective anon EXECUTE/);
+    await db.exec('revoke authenticated from anon');
+    await db.exec('create role unexpected_test_role; grant execute on function public.taste_rating_state() to unexpected_test_role');
+    await assert.rejects(() => verifyFunctionPermissions(db), /Unplanned EXECUTE/);
+    await db.exec('revoke execute on function public.taste_rating_state() from unexpected_test_role');
+    await verifyFunctionPermissions(db);
+    await db.exec('set role anon');
+    await assert.rejects(() => state(db), error => error.code === '42501' && /function taste_rating_state/.test(error.message));
+    for (const table of ['taste_rating_rounds','taste_rating_offers'])
+      await assert.rejects(() => db.query(`select * from public.${table}`), error => error.code === '42501');
+    await asUser(db);
+    assert.equal((await state(db)).round, null);
+  } finally { await db.close(); }
+});
 
 test('server discovery paginates canonical author/category intersection and highest score beyond first 100 Works', async () => {
   const db = await fixture();

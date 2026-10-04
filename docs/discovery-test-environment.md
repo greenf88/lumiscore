@@ -1,8 +1,8 @@
 # PR #8: preview diagnosis and isolated verification plan
 
-Initial proposal: 2026-10-03. The human approved its bounded hosted-test scope on 2026-10-04. This document itself grants no additional authority. **Current state: required isolated online flows are proved; PR #8 is Ready for review, but production release still needs separate approval.** Earlier Draft/blocked/partial checkpoints below are historical, not instructions to provision again.
+Initial proposal: 2026-10-03. Hosted-test scope approved 2026-10-04; additional minimal ACL correction separately approved. **Current state: same Free test project and two synthetic accounts retained; forward permissions migration `20261004120823` adds the fifteenth version without rewriting prior history.** See [actual rights/API proof](discovery-permissions-verification-20261004.md) and [revised release proposal](discovery-production-release-plan.md). Production untouched; old release approval does not cover new artifacts. Prior online functional proof is retained for unchanged runtime. Earlier Draft/blocked/partial/setup checkpoints below are historical, not provisioning instructions.
 
-## Completed online environment — current authoritative checkpoint
+## Historical completed online environment — superseded by ACL checkpoint above
 
 Reuse existing Free project `hlvujbrmfdlrfxdjwsmb`, its fourteen original migrations, 389 Works/608 Editions/12 Authors/20 existing categories/46 Collections, private synthetic marker and exactly two marked synthetic test users. The [final online verification record](discovery-online-verification-20261004.md) gives the exact deployment/SHA, sixty browser ratings across three rounds, owner isolation, retries, refresh/sign-in resume, filtering/navigation and eight visual combinations. Test-only temporary B state was restored to the baseline; A's completed rounds and both encrypted test credentials remain for review. No new project, seed, migration, account, reset or rebuild is needed just to repeat setup.
 

@@ -26,18 +26,18 @@ test('local target guard rejects production, other stacks, paths, query options 
   assert.throws(()=>assertReviewedArtifacts({fixture:sql+'changed'},{fixture:hash}));
   assert.throws(()=>assertReviewedArtifacts({fixture:sql},{fixture:hash,extra:hash}));
   const key = role => 'local.'+Buffer.from(JSON.stringify({iss:'supabase-demo',role})).toString('base64url')+'.test';
-  const good={API_URL:'http://127.0.0.1:55431',DB_URL:'postgresql://postgres:test@127.0.0.1:55432/postgres',ANON_KEY:key('anon'),SERVICE_ROLE_KEY:key('service_role')};
+  const good={API_URL:'http://127.0.0.1:55431',DB_URL:'postgresql://postgres@127.0.0.1:55432/postgres',ANON_KEY:key('anon'),SERVICE_ROLE_KEY:key('service_role')};
   assert.equal(assertLocalTarget(good),true);
   for (const override of [
     {API_URL:'https://qvplwejffhjvxaypmjut.supabase.co'},
-    {DB_URL:'postgresql://postgres:test@db.qvplwejffhjvxaypmjut.supabase.co:5432/postgres'},
-    {API_URL:'http://127.0.0.1:54321'}, {DB_URL:'postgresql://postgres:test@127.0.0.1:54322/postgres'},
+    {DB_URL:'postgresql://postgres@db.qvplwejffhjvxaypmjut.supabase.co:5432/postgres'},
+    {API_URL:'http://127.0.0.1:54321'}, {DB_URL:'postgresql://postgres@127.0.0.1:54322/postgres'},
     {API_URL:'http://127.0.0.1:55431/?target=other'}, {DB_URL:good.DB_URL+'?host=other'},
     {ANON_KEY:key('service_role')}, {SERVICE_ROLE_KEY:key('anon')},
   ]) assert.throws(()=>assertLocalTarget({...good,...override}));
 });
 test('complete hashed migration chain builds from empty synthetic schema, including collection preconditions', async () => {
-  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,14); assert.equal(inputs.categories.length,20);
+  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,15); assert.equal(inputs.categories.length,20);
   const db=new PGlite(); await db.waitReady;
   try {
     await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;

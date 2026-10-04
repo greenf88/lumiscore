@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { assertLocalTarget } from './discovery-test-fixture.mjs';
+import { verifyAnonymousTasteApi } from './discovery-permissions.mjs';
 export async function verifyLocalDiscoveryApi(status) {
   assertLocalTarget(status);
   const options={auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}};
@@ -21,6 +22,7 @@ export async function verifyLocalDiscoveryApi(status) {
   const act=(client,action,state,work,score)=>rpc(client,'taste_rating_advance',{
     p_action:action,p_round_id:state?.round?.id??null,p_work_id:work??null,p_score:score??null,p_language:'en'});
   try {
+    await verifyAnonymousTasteApi(anon);
     assert.equal(ok(await anon.from('catalog_categories').select('id')).length,20);
     const pages=[];
     for(let page=1;page<=4;page++) pages.push(await rpc(anon,'catalog_discovery_page',{
