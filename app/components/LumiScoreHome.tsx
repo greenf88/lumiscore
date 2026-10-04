@@ -475,9 +475,10 @@ type BookCardProps = {
   resolveMissingCover?: boolean;
   detailReturnContext?: BookLinkReturnContext;
   label?: string;
+  hideWishlistAction?: boolean;
 };
 
-export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext, label }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext, label, hideWishlistAction = false }: BookCardProps) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
@@ -514,7 +515,7 @@ export const BookCard = memo(function BookCard({ book, wanted, status, onToggle,
           {bookContent}
         </a>
       ) : bookContent}
-      <div className="book-card-action">
+      {!hideWishlistAction && <div className="book-card-action">
         {status && status !== 'want_to_read' ? (
           <span className="card-reading-status">✓ {t(CARD_STATUS_KEYS[status])}</span>
         ) : (
@@ -522,7 +523,7 @@ export const BookCard = memo(function BookCard({ book, wanted, status, onToggle,
             <span aria-hidden="true">{wanted ? '✓' : '+'}</span>{t('home.wantToRead')}
           </button>
         )}
-      </div>
+      </div>}
     </article>
   );
 });

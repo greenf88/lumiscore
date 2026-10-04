@@ -6,6 +6,7 @@ export function recommendationLimit(value: unknown): number {
 }
 export function recommendationReturnPath(value: unknown): string | null {
   if (value === '/taste-test/result') return value;
+  if (value === '/bookmatch') return value;
   if (typeof value !== 'string' || !/^\/recommendations(?:\?limit=\d{2})?$/.test(value)) return null;
   const n = new URL(value, 'https://lumisco.re').searchParams.get('limit');
   return n === null ? '/recommendations' : Number(n) >= 10 && Number(n) <= 25 ? `/recommendations?limit=${Number(n)}` : null;

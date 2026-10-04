@@ -917,3 +917,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .taste-result-books > div { min-width: 0; overflow-wrap: anywhere; }
 .taste-next-steps { display: flex; flex-wrap: wrap; gap: 20px; margin-block: 24px; }
 .taste-result button, .taste-result select { min-height: 44px; }
+.bookmatch { max-width: 760px; margin: 0 auto; }
+.bookmatch h1 { font: 400 clamp(30px,4vw,48px)/1.12 var(--serif); }
+.bookmatch > p { color: var(--muted); }
+.bookmatch-card,.bookmatch-advice { max-width: 430px; margin: 24px auto; padding: 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--panel); }
+.bookmatch-card { touch-action: pan-y; }
+.bookmatch-card:focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }
+.bookmatch .book-card { width: 100%; }
+.bookmatch h2 { font: 400 24px/1.2 var(--serif); margin-bottom: 16px; }
+.bookmatch .card-cover-wrap { padding: 14px; }
+.bookmatch .book-cover { width: min(160px,100%); height: 240px; margin-inline: auto; }
+.bookmatch button { min-height: 44px; padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
+.bookmatch button:disabled { cursor: default; opacity: .55; }
+.bookmatch-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.bookmatch-actions button { flex: 1 0 100px; }
+.bookmatch-help { color: var(--muted); font-size: 13px; }
