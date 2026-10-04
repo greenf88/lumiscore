@@ -115,6 +115,14 @@ The additional round pair gives no consistent measured latency gain and overlaps
 
 This change is initially published as a Draft PR. A green build alone does not prove its new branch Preview has catalog access. Keep Draft if the branch Preview lacks a working public data target or authenticated review evidence. Do not reuse the old branch's test overrides automatically; configuration changes were not approved here.
 
+### Published review status
+
+[Draft PR #9](https://github.com/greenf88/lumiscore/pull/9) was opened for application commit `e4a5e2a231386243a36fe70fe74fc66e764b05d8` against unchanged main. It is mergeable but remains Draft. The GitHub connector denied PR creation with 403; the existing authorized GitHub browser session created it without changing integration access.
+
+The automatic Preview for that commit is Ready at `https://lumiscore-1dwp3t395-rgkgroeneveld-9102.vercel.app/`, deployment `dpl_FWNsjMAozjJoDwn56VmsmDcED5zE`. The two successful remote checks are **Vercel deployment** and **Vercel Preview Comments**, not a remote execution of the full local test suite. The authorized browser homepage visibly displays “Catalogus tijdelijk niet beschikbaar” and zero featured books. Its data target/configuration has not been proven, so this is not a successful data-backed online verification. Direct unauthenticated API probing is stopped by Vercel Authentication (401); browser navigation to Browse is also blocked by the client. Neither protection was bypassed and no setting was changed.
+
+The remaining review gate is therefore concrete: establish approved branch-only access to the existing synthetic test project, without production fallback or shared overrides, and enable access to the existing protected synthetic test credentials under an authorized identity. Then recheck the modified authenticated recommendation flow, rating freshness and isolation online before Ready. This task does **not** authorize those configuration/access changes or hosted test writes; bundle any necessary extension into a separate approval. No new project or database migration is needed for the application diff. A subsequent documentation-only commit records this status; its final SHA is reported on the PR, with application evidence reused only because application code is unchanged.
+
 ## Review and separate release proposal
 
 Review the final PR HEAD and its exact diff: evidence-first public loader, one sitemap path, focused regression tests, reproducible read-only/synthetic measurements and this report. Confirm fresh CI and data-backed Preview/local browser evidence, including the remaining authenticated browser gate, before Ready for review. Preserve the isolated branch, other workspaces, secrets and backups.
