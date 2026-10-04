@@ -6,6 +6,7 @@ export function buildPublicSitemapPaths(
     '/',
     '/browse',
     '/collections',
+    '/categories',
     '/taste-test',
     '/over-ons',
     '/zo-werkt-het',

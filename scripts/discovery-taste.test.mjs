@@ -166,7 +166,8 @@ test('reviewed empty-schema recovery is narrow and preserves existing ratings/st
   const db = await fixture();
   try {
     const doc = await readFile(new URL('../docs/discovery-taste-review.md', import.meta.url), 'utf8');
-    const recovery = doc.match(/-- BEGIN REVIEW-ONLY RECOVERY\n([\s\S]*?)-- END REVIEW-ONLY RECOVERY/)[1];
+    const recovery = doc.match(/-- BEGIN REVIEW-ONLY RECOVERY\r?\n([\s\S]*?)-- END REVIEW-ONLY RECOVERY/)?.[1];
+    assert.ok(recovery, 'Reviewed recovery block must exist on both LF and CRLF checkouts');
     await db.exec(recovery);
     assert.equal((await db.query('select count(*)::int as n from public.ratings')).rows[0].n,2);
     assert.equal((await db.query('select count(*)::int as n from public.user_book_status')).rows[0].n,2);

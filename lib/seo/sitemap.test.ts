@@ -9,6 +9,7 @@ test('sitemap paths include all current public books and collections without dup
       '/',
       '/browse',
       '/collections',
+      '/categories',
       '/taste-test',
       '/over-ons',
       '/zo-werkt-het',
@@ -20,6 +21,16 @@ test('sitemap paths include all current public books and collections without dup
       '/book/1300',
     ],
   );
+});
+
+test('canonical category overview occurs once; discovery variants stay excluded', () => {
+  const paths = buildPublicSitemapPaths(['168', '168'], ['dune', 'dune']);
+  assert.equal(paths.filter((path) => path === '/categories').length, 1);
+  assert.equal(paths.filter((path) => path === '/book/168').length, 1);
+  assert.equal(paths.filter((path) => path === '/collection/dune').length, 1);
+  assert.equal(paths.some((path) => path.includes('?')), false);
+  assert.equal(paths.includes('/search'), false);
+  assert.equal(paths.includes('/recommendations'), false);
 });
 
 test('sitemap excludes malformed and private routes', () => {

@@ -2,16 +2,13 @@ import type { Book } from '../../app/data/books.ts';
 import type {
   PersonalMatchResult,
   PersonalizedRecommendation,
-  RecommendationCandidate,
 } from '../recommendations/engine.ts';
 import { calculatePersonalMatch, recommendBooks } from '../recommendations/engine.ts';
 import { getReviewedWorkTraitCorrection } from '../recommendations/reviewed-work-trait-corrections.ts';
 import {
   buildEffectiveWorkTraitVector,
-  type EffectiveWorkTraits,
 } from '../recommendations/work-trait-evidence.ts';
 import {
-  TASTE_TEST_ANCHORS,
   TASTE_TEST_QUESTIONS,
   TASTE_TEST_VERSION,
   TASTE_TEST_WORK_IDS,
@@ -23,10 +20,9 @@ import { buildTasteProfile, type RatingEvidence } from '../taste-test/profile.ts
 import { emptyTasteVector } from '../taste-test/traits.ts';
 import type { TasteVector } from '../taste-test/traits.ts';
 import type { WorkTraitCoverageLevel } from '../recommendations/work-trait-evidence.ts';
-import { applyRatingSummaries } from '../ratings/card-summaries.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
-import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
+import { loadRecommendationCatalog as loadPublicRecommendationCatalog, type RecommendationCatalog } from './recommendation-catalog.ts';
 import { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
@@ -41,30 +37,11 @@ import { cache } from 'react';
 type ResponseRow = { question_key: string; choice: string };
 type RatingRow = { work_id: number | string; rating: number };
 type StatusRow = { work_id: number | string; status: string };
-type WorkFeatureRow = { id: number | string };
-type RecommendationCatalog = {
-  candidates: RecommendationCandidate[];
-  traitsById: Map<string, EffectiveWorkTraits>;
-};
-
-const RECOMMENDATION_CATALOG_PAGE_SIZE = 1000;
 const GUEST_RECOMMENDATION_CATALOG_TTL_MS = 5 * 60 * 1_000;
 let guestRecommendationCatalogCache: {
   expiresAt: number;
   result: Promise<RecommendationCatalog>;
 } | null = null;
-const RECOMMENDATION_CATALOG_SELECT = [
-  'id',
-  'title',
-  'first_publish_year',
-  'open_library_id',
-  'source_type',
-  'work_type',
-  'author_id',
-  'cover_id',
-  'authors(id,name)',
-  'editions(id,open_library_edition_id,isbn_13,language)',
-].join(',');
 
 export type TasteTestServerState = {
   authenticated: boolean;
@@ -153,60 +130,7 @@ export const loadHomepageReaderContext = cache(async (): Promise<HomepageReaderC
 async function loadRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
 ): Promise<RecommendationCatalog> {
-  const firstPage = await client
-    .from('works')
-    .select(RECOMMENDATION_CATALOG_SELECT, { count: 'exact' })
-    .order('id', { ascending: true })
-    .range(0, RECOMMENDATION_CATALOG_PAGE_SIZE - 1);
-  if (firstPage.error) throw firstPage.error;
-
-  const total = firstPage.count ?? firstPage.data?.length ?? 0;
-  const remainingStarts = Array.from(
-    { length: Math.max(0, Math.ceil(total / RECOMMENDATION_CATALOG_PAGE_SIZE) - 1) },
-    (_, index) => (index + 1) * RECOMMENDATION_CATALOG_PAGE_SIZE,
-  );
-  const remainingPages = await Promise.all(remainingStarts.map((start) =>
-    client
-      .from('works')
-      .select(RECOMMENDATION_CATALOG_SELECT)
-      .order('id', { ascending: true })
-      .range(start, start + RECOMMENDATION_CATALOG_PAGE_SIZE - 1),
-  ));
-  const failedPage = remainingPages.find(({ error }) => error);
-  if (failedPage?.error) throw failedPage.error;
-
-  const rows = [
-    ...(firstPage.data ?? []),
-    ...remainingPages.flatMap(({ data }) => data ?? []),
-  ] as unknown as WorkFeatureRow[];
-  const books = mapCatalogWorks(rows);
-  const workIds = books.flatMap((book) => book.workId ? [book.workId] : []);
-  const [summaries, evidenceByWorkId] = await Promise.all([
-    loadPublicRatingSummariesBatched(client, workIds),
-    loadWorkTraitEvidenceBatched(client, workIds),
-  ]);
-  const hydrated = applyRatingSummaries(books, summaries);
-  const traitsById = new Map(rows.map((row) => {
-    const workId = String(row.id);
-    return [workId, buildEffectiveWorkTraitVector(
-      evidenceByWorkId.get(workId) ?? [],
-      getReviewedWorkTraitCorrection(workId),
-    )] as const;
-  }));
-  const candidates = hydrated.flatMap((book) => {
-    if (!book.workId) return [];
-    const effective = traitsById.get(book.workId);
-    if (!effective || effective.coverageLevel === 'none') return [];
-    const anchor = TASTE_TEST_ANCHORS[book.workId];
-    return [{
-      book,
-      traits: effective.traits,
-      metadataConfidence: effective.metadataConfidence,
-      coverageLevel: effective.coverageLevel,
-      seriesKey: anchor?.seriesKey,
-    }];
-  });
-  return { candidates, traitsById };
+  return loadPublicRecommendationCatalog(client, mapCatalogWorks);
 }
 
 function loadGuestRecommendationCatalog(
