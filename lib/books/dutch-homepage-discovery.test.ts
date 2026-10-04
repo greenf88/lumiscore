@@ -182,7 +182,10 @@ test('authenticated profile reads are explicitly user scoped and guests make no 
 
   assert.doesNotMatch(guestReturn, /\.from\(/);
   assert.match(contextBlock, /taste_test_responses'[\s\S]*\.eq\('user_id', user\.id\)/);
-  assert.match(contextBlock, /ratings'[\s\S]*\.eq\('user_id', user\.id\)/);
-  assert.match(contextBlock, /user_book_status'[\s\S]*\.eq\('user_id', user\.id\)/);
+  assert.match(contextBlock, /loadReaderRows<RatingRow>\(client, 'ratings', 'work_id,rating', user\.id\)/);
+  assert.match(contextBlock, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  const pager = await readFile(new URL('../supabase/reader-rows.ts', import.meta.url), 'utf8');
+  assert.match(pager, /\.eq\('user_id', userId\)\.order\('work_id'\)\.range\(offset, offset \+ 999\)/);
+  assert.match(pager, /if \(error\) throw error/);
   assert.doesNotMatch(contextBlock, /console\.(log|info|debug)/);
 });

@@ -136,7 +136,9 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
 test('homepage recommendations exclude Taste Test anchors and books marked Read', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
 
-  assert.match(persistence, /from\('user_book_status'\)[\s\S]*?\.eq\('user_id', user\.id\)/);
+  assert.match(persistence, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  const pager = await readFile(new URL('../supabase/reader-rows.ts', import.meta.url), 'utf8');
+  assert.match(pager, /\.eq\('user_id', userId\)\.order\('work_id'\)\.range\(offset, offset \+ 999\)/);
   assert.match(persistence, /excludedWorkIds:\s*new Set\(\[[\s\S]*?TASTE_TEST_WORK_IDS[\s\S]*?status === 'read'/);
 });
 
