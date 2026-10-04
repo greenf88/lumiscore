@@ -371,6 +371,10 @@ export function RecommendationsSection({ personalization, limit = 20, returnTo =
   const { locale, t } = useLumiScoreLocale();
   const nl = locale === 'nl';
   const items = personalization.recommendations.slice(0, limit);
+  if (personalization.unavailable) return <section className="featured-section" id="recommendations" aria-labelledby="recommendations-title">
+    <h2 id="recommendations-title">{t('home.upNext')}</h2>
+    <p role="alert">{nl ? 'Aanbevelingen konden niet laden. Dit is geen leeg profiel. Vernieuw de pagina om opnieuw te proberen.' : 'Recommendations could not load. This is not an empty profile. Refresh the page to try again.'}</p>
+  </section>;
   return <section className="featured-section" id="recommendations" aria-labelledby="recommendations-title">
     <div className="section-heading"><h2 id="recommendations-title">{t('home.upNext')}</h2><a href="/recommendations">{nl ? 'Kies 10–25 aanbevelingen' : 'Choose 10–25 recommendations'}</a></div>
     <p>{items.length} {nl ? 'unieke aanbevolen boeken' : 'unique recommended books'}</p>

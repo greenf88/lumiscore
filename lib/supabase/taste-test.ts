@@ -30,6 +30,7 @@ import { resolveLocaleBookLanguagePreference } from '../recommendations/language
 import { recommendGuestBooks } from '../recommendations/guest.ts';
 import { loadCollaborativeRecommendationSignals } from './collaborative.ts';
 import { loadReaderEraPreferences } from './reading-preferences.ts';
+import { loadReaderRows } from './reader-rows.ts';
 import type { ReaderEraPreferences } from '../preferences/reading-periods.ts';
 import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
 import { cache } from 'react';
@@ -51,6 +52,7 @@ export type TasteTestServerState = {
 };
 
 export type HomepagePersonalization = {
+  unavailable?: boolean;
   authenticated: boolean;
   ratingCount: number;
   tasteTestAnsweredCount: number;
@@ -106,20 +108,21 @@ export const loadHomepageReaderContext = cache(async (): Promise<HomepageReaderC
     };
   }
 
-  const [responsesResult, ratingsResult, statusesResult, readerPreferences] = await Promise.all([
+  const [responsesResult, ratings, statuses, readerPreferences] = await Promise.all([
     client.from('taste_test_responses').select('question_key,choice')
       .eq('quiz_version', TASTE_TEST_VERSION).eq('user_id', user.id),
-    client.from('ratings').select('work_id,rating').eq('user_id', user.id),
-    client.from('user_book_status').select('work_id,status').eq('user_id', user.id),
+    loadReaderRows<RatingRow>(client, 'ratings', 'work_id,rating', user.id),
+    loadReaderRows<StatusRow>(client, 'user_book_status', 'work_id,status', user.id),
     loadReaderEraPreferences(client, user.id).catch(() => null),
   ]);
+  if (responsesResult.error) throw responsesResult.error;
 
   return {
     authenticated: true,
     client,
-    answers: responsesResult.error ? {} : rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]),
-    ratings: ratingsResult.error ? [] : (ratingsResult.data ?? []) as RatingRow[],
-    statuses: new Map(((statusesResult.error ? [] : statusesResult.data ?? []) as StatusRow[])
+    answers: rowsToAnswers((responsesResult.data ?? []) as ResponseRow[]),
+    ratings,
+    statuses: new Map(statuses
       .flatMap((row) => isReadingStatus(row.status)
         ? [[String(row.work_id), row.status] as const]
         : [])),
@@ -342,7 +345,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
       recommendations: await hydratePublicRecommendations(recommendations),
     };
   } catch {
-    return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
+    return { unavailable:true, authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
   }
 }
 
