@@ -51,6 +51,7 @@ export type TasteTestServerState = {
 };
 
 export type HomepagePersonalization = {
+  unavailable?: boolean;
   authenticated: boolean;
   ratingCount: number;
   tasteTestAnsweredCount: number;
@@ -342,7 +343,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
       recommendations: await hydratePublicRecommendations(recommendations),
     };
   } catch {
-    return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
+    return { unavailable:true, authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
   }
 }
 

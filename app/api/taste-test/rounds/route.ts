@@ -37,9 +37,9 @@ export async function POST(request: NextRequest) {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return json({ error: 'Sign in to save explicit ratings.' }, 401);
     if (reviewUsesProduction()) return json({ error: 'separate-test-database-required' }, 503);
-    const { data, error } = await client.rpc('taste_rating_advance', {
+    const { data, error } = await client.rpc('taste_rating_advance_v2', {
       p_action: action.action, p_round_id: action.roundId ?? null, p_work_id: action.workId ? Number(action.workId) : null,
-      p_score: action.score ?? null, p_language: action.language,
+      p_score: action.score ?? null, p_language: action.language, p_goal: action.goal ?? 20,
     });
     if (error?.code === '23505') return json({ error: 'existing-rating-preserved' }, 409);
     if (error?.code === '22023') return json({ error: 'stale-or-invalid-action' }, 409);

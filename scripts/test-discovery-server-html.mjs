@@ -28,5 +28,14 @@ test('server Home and recommendation overview carry valid originating destinatio
   assert.match(overview, /<option selected="">25<\/option>/);
   assert.match(overview, /id="recommendations"/);
   const guest = await html('/taste-test');
-  assert.match(guest, /twenty different books/);
+  assert.match(guest, /10, 15 or 30 different books/);
+});
+test('private result shell has one noindex canonical; signed-out API cannot reveal another reader',async()=>{
+  const result=await html('/taste-test/result');
+  assert.match(result, /noindex, follow/);
+  assert.doesNotMatch(result, /Synthetic Reader|worldbuilder|ratedCount/);
+  const response=await fetch(origin+'/api/taste-test/result?user_id=someone-else');
+  assert.equal(response.status,200);
+  assert.match(response.headers.get('cache-control'),/private.*no-store/);
+  assert.deepEqual(await response.json(),{kind:'signed-out'});
 });

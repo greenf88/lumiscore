@@ -1,0 +1,44 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { buildEffectiveWorkTraitVector,evidenceRowsForTraits } from '../recommendations/work-trait-evidence.ts';
+import { buildRatingResultProfile,reliableResultTraits,recommendRatingResult } from './rating-result.ts';
+import { parseRoundAction } from './rating-round.ts';
+import { recommendationReturnPath } from '../catalog/discovery.ts';
+const effective=(traits:Parameters<typeof evidenceRowsForTraits>[0]['traits'],confidence=1)=>buildEffectiveWorkTraitVector(evidenceRowsForTraits({workId:'1',traits,confidence,source:'manual',sourceKey:'synthetic',rawLabels:[],verifiedAt:'2026-10-04'}));
+const evidence=new Map(Array.from({length:30},(_,i)=>[String(i+1),effective({fantasy:1})]));
+test('shrunk affinities are truthful: sparse, low, mixed, missing, invalid and duplicate ratings',()=>{
+  const one=buildRatingResultProfile([{workId:'1',rating:10}],evidence);
+  assert.equal(one.affinities[0].score,null);assert.equal(one.vector.fantasy,.25);assert.equal(one.archetype,null);
+  const high=buildRatingResultProfile(Array.from({length:10},(_,i)=>({workId:String(i+1),rating:10})),evidence);
+  assert.equal(high.affinities[0].score,88);assert.equal(high.archetype,'worldbuilder');
+  const low=buildRatingResultProfile(Array.from({length:10},(_,i)=>({workId:String(i+1),rating:1})),evidence);
+  assert.equal(low.affinities[0].score,12);assert.equal(low.archetype,null);
+  const mixed=buildRatingResultProfile(Array.from({length:10},(_,i)=>({workId:String(i+1),rating:i%2?10:1})),evidence);
+  assert.equal(mixed.affinities[0].score,50);assert.equal(mixed.archetype,null);
+  const missing=buildRatingResultProfile([{workId:'1000',rating:10},{workId:'2',rating:0},{workId:'3',rating:1.5}],evidence);
+  assert.equal(missing.missingCount,1);assert.equal(missing.affinities.length,0);
+  assert.equal(buildRatingResultProfile([{workId:'1',rating:9},{workId:'1',rating:9}],evidence).ratingCount,1);
+  const multi=reliableResultTraits(effective({fantasy:1,romance:1}));
+  assert.equal(multi.fantasy,.5);assert.equal(multi.romance,.5);
+  assert.equal(reliableResultTraits(effective({fantasy:1},.5)).fantasy,0);
+});
+test('twenty unique recommendations exclude rated/read/unavailable; reasons are supported, not probabilities',()=>{
+  const ratings=Array.from({length:5},(_,i)=>({workId:String(i+1),rating:10}));
+  const profile=buildRatingResultProfile(ratings,evidence);
+  const candidates=Array.from({length:30},(_,i)=>({book:{id:'work-'+(i+1),workId:String(i+1),source:'supabase' as const,title:'Synthetic',author:'Synthetic',score:null,ratingsCount:null,match:null,cover:'fallback'},...effective({fantasy:1})}));
+  const input={profile,candidates:[...candidates,...candidates],evidence,excludedIds:new Set(['1','2','3','4','5','6']),availableIds:new Set(evidence.keys()),locale:'en' as const};
+  const result=recommendRatingResult(input);
+  assert.equal(result.length,20);assert.equal(new Set(result.map(x=>x.book.workId)).size,20);
+  assert.ok(result.every(x=>!input.excludedIds.has(x.book.workId!) && x.matchScore===null && /5 books/.test(x.explanation)));
+  assert.equal(recommendRatingResult({...input,availableIds:new Set()}).length,0);
+  assert.equal(recommendRatingResult({...input,availableIds:new Set(['7','8'])}).length,2);
+  assert.match(recommendRatingResult({...input,profile:buildRatingResultProfile([],evidence)})[0].explanation,/exploratory/);
+});
+test('round parsing preserves old clients and strictly accepts only new lengths/extensions',()=>{
+  assert.equal(recommendationReturnPath('/taste-test/result'),'/taste-test/result');
+  for(const value of ['/taste-test/result?user=someone','//evil.test/taste-test/result','/taste-test/result/']) assert.equal(recommendationReturnPath(value),null);
+  assert.ok(parseRoundAction({action:'start',language:'en'}));
+  for(const goal of [10,15,30]) assert.ok(parseRoundAction({action:'start',language:'en',goal}));
+  for(const goal of [0,20,'10',100]) assert.equal(parseRoundAction({action:'start',language:'en',goal}),null);
+  assert.equal(parseRoundAction({action:'rate',language:'en',goal:10}),null);
+});
