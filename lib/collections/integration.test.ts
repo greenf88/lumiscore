@@ -91,7 +91,11 @@ test('private progress queries are explicitly scoped to the verified user', () =
 });
 
 test('recommendation loader adds read-without-rating IDs to exclusions only', () => {
-  assert.match(personalization, /from\('user_book_status'\)[\s\S]*?\.eq\('user_id', user\.id\)/);
+  assert.match(personalization, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  const readerRows = read('../supabase/reader-rows.ts');
+  assert.match(readerRows, /\.eq\('user_id', userId\)/);
+  assert.match(readerRows, /\.order\('work_id'/);
+  assert.match(readerRows, /\.range\(offset, offset \+ 999\)/);
   assert.match(personalization, /excludedWorkIds: new Set\(\[[\s\S]*?TASTE_TEST_WORK_IDS[\s\S]*?status === 'read'/);
   const recommendationBlock = personalization.slice(personalization.indexOf('export async function loadHomepagePersonalization'));
   assert.doesNotMatch(recommendationBlock, /status === '(want_to_read|dnf|reading)'/);
