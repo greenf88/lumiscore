@@ -77,6 +77,7 @@ export default async function Home() {
         ),
       )
       .catch((): HomepagePersonalization => ({
+        unavailable: true,
         authenticated: false,
         ratingCount: 0,
         tasteTestAnsweredCount: 0,
