@@ -1,8 +1,18 @@
 # Discovery and rating-based taste test — review evidence
 
-Status (2026-10-04): the bounded hosted-test proposal is approved and its separate Free database/fixtures/Auth settings are prepared, but NOT fully verified in an authenticated online preview or approved for production. PR #8 remains Draft. No production writes or merge are authorized. The historical evidence below is superseded only by the hosted checkpoint here; local success is not online sign-off.
+Current status (2026-10-04): **isolated online verification is complete and PR #8 is Ready for review**, not approved for production. The actual browser plus database evidence at implementation SHA `9917a7115bfc5937b6d8331da0dc8c0ae8f34dee` is preserved in [online verification](discovery-online-verification-20261004.md). The checkpoints below are historical; their earlier Draft/blocked/zero-user statements are not the current state. No provisioning/migration/import was repeated.
 
-## Hosted checkpoint — continuation prepared before Preview rebuild
+## Production-release preparation — current authoritative checkpoint
+
+The full PR diff, relevant existing/new migrations, navigation/query state, recommendation evidence, owner-isolated round mutation and production swipe gate were reviewed. No concrete functional or security blocker was found; no application/migration/fixture correction was needed. Primary-author filtering reflects the existing one-author-per-Work model, not a new coauthor taxonomy. All twenty public categories already exist on production.
+
+Fresh production checks used verified official-CA TLS, separately validated connection/session identity, read-only repeatable-read snapshots and the official CLI 2.116.0 identity query/dry-run. Production has thirteen migrations; **only `20261003183631_discovery_taste_rounds.sql` is pending**, SHA-256 `6bad8c98bddf86b6e4e6476e092d2cbe6080132234717410c113bf97ae0de089`. New objects are absent. Catalog totals remain 10,134/10,293/5,650; private editorial records 8,468. This task made no production writes. Production URL and exact branch Preview URL were independently inspected read-only and point to production and test respectively. Keys remained hidden; no configuration was changed.
+
+Fresh full suite: 547 passes, zero failures; the additional offline migration-plan guard was tested separately. TypeScript, lint, Vinext/Vercel-target local builds and 98-file client secret scan pass. Those local builds use test public configuration and do not claim to be Production deployments. Existing exact-runtime online evidence and seven server-HTML checks are reused. Final head/manifest/remote CI are bound in the PR approval envelope rather than pretending this document can contain its own commit hash.
+
+The [production release plan](discovery-production-release-plan.md) records the exact delta, actual protected schema/evidence artifacts, one-migration captured CLI procedure, transition compatibility, production HTTP baseline, live matrix, non-destructive app rollback and one approval proposal. HTTP medians range from 29ms for a cached Search API to 415ms for Browse in the small sample; these are not LCP or p95. Existing full-catalog recommendation server cost and two new offer-FK index INFOs remain explicit limitations; no unrelated index/security change is made. Production swipe stays disabled. **Stop before migration, merge and Production deployment.**
+
+## Historical hosted checkpoint — before Preview rebuild (superseded above)
 
 Reviewed/executed feature HEAD remains `b28c0dbef9180c8e53095e96fddfa57b8823eecc`; current `origin/main` is `5ce044cb07eb0a5ceb3d8eceb0ed3f7f5e730aae`. PR/deployment status checked again: PR #8 open/Draft, HEAD exact, Vercel/Preview Comments green, existing deployment `GKSY6WUFYs1F2xzPH3S2nPW6fadP`. **That deployment predates the new saved variables and does not prove test-project usage.** No rebuild was started.
 

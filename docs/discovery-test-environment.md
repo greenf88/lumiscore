@@ -1,8 +1,16 @@
 # PR #8: preview diagnosis and isolated verification plan
 
-Initial proposal: 2026-10-03. The human approved its bounded hosted-test scope on 2026-10-04. This document itself grants no additional authority. Keep PR #8 Draft until every required online flow is proved.
+Initial proposal: 2026-10-03. The human approved its bounded hosted-test scope on 2026-10-04. This document itself grants no additional authority. **Current state: required isolated online flows are proved; PR #8 is Ready for review, but production release still needs separate approval.** Earlier Draft/blocked/partial checkpoints below are historical, not instructions to provision again.
 
-## Approved hosted execution — 2026-10-04
+## Completed online environment — current authoritative checkpoint
+
+Reuse existing Free project `hlvujbrmfdlrfxdjwsmb`, its fourteen original migrations, 389 Works/608 Editions/12 Authors/20 existing categories/46 Collections, private synthetic marker and exactly two marked synthetic test users. The [final online verification record](discovery-online-verification-20261004.md) gives the exact deployment/SHA, sixty browser ratings across three rounds, owner isolation, retries, refresh/sign-in resume, filtering/navigation and eight visual combinations. Test-only temporary B state was restored to the baseline; A's completed rounds and both encrypted test credentials remain for review. No new project, seed, migration, account, reset or rebuild is needed just to repeat setup.
+
+The optional Google-key override was omitted for the documented valid-ISBN short-circuit, not replaced by a fake/empty key. Authorized Vercel dashboard + Git integration resolved access without bypass. Three exact-branch public overrides point to this test target; Production remains production. Current production-read-only release preparation is recorded in [release plan](discovery-production-release-plan.md), not an approval to apply these fourteen test migrations to production. Subsequent documentation-only pushes may create ordinary automatic Preview builds; never start a duplicate manual rebuild or promote a test Preview to Production.
+
+Preserve the existing external DPAPI ciphertext and users; no passwords in Git/screenshots/logs. Use only the recorded target/marker-gated evidence and masked loopback sign-in bridge when needed. The completed B-reset journal must not be replayed without a newly owned fixture. Broad reset, project/account deletion and production writes remain outside this preparation.
+
+## Historical approved hosted execution — 2026-10-04 (superseded above)
 
 Execution is **partially complete; continuation gates below supersede the earlier Google/storage stop**. The historical diagnosis below describes the old deployed configuration, not the newly saved branch overrides. No second project or repeated migration/seed is required.
 
