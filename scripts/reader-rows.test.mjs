@@ -70,4 +70,8 @@ test('homepage consumes the owner pager and displays an unavailable state instea
   const ui=await readFile(new URL('../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
   assert.match(ui,/if \(personalization.unavailable\) return/);
   assert.match(ui,/This is not an empty profile/);
+  for(const route of ['app/page.tsx','app/recommendations/page.tsx']) {
+    const page=await readFile(new URL('../'+route,import.meta.url),'utf8');
+    assert.match(page,/\.catch\(\(\): HomepagePersonalization => \(\{\s*unavailable:\s*true/);
+  }
 });
