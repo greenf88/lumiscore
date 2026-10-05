@@ -9,6 +9,10 @@ test('page/API are both fail-closed and interest state has no database writer or
   assert.doesNotMatch(ui,/taste_rating|\/ratings|status:\s*['"]read/);
   assert.match(ui,/sessionStorage.setItem/);assert.match(ui,/deck.owner!==owner/);
   assert.match(ui,/onPointerUp/);assert.match(ui,/onKeyDown/);assert.match(ui,/onPointerCancel/);
+  assert.match(ui,/className="bookmatch-stage" aria-busy=\{loading\}/);
+  const css=await file('app/globals.css');
+  assert.match(css,/\.bookmatch-stage\s*\{\s*min-block-size:/);
+  assert.doesNotMatch(css,/\.bookmatch-stage\s*\{[^}]*(?:overflow:\s*hidden|(?<!-)\bheight\s*:)/);
   const sitemap=await file('lib/seo/sitemap.ts');assert.doesNotMatch(sitemap,/bookmatch/);
   const wishlist=await file('app/api/bookmatch/wishlist/route.ts');
   assert.match(wishlist,/prototypeAllowed/);assert.match(wishlist,/isSameOriginRequest/);assert.match(wishlist,/user_id:user.id/);assert.match(wishlist,/ignoreDuplicates:true/);

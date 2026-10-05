@@ -920,6 +920,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .bookmatch { max-width: 760px; margin: 0 auto; }
 .bookmatch h1 { font: 400 clamp(30px,4vw,48px)/1.12 var(--serif); }
 .bookmatch > p { color: var(--muted); }
+/* Reserve the round's space before its asynchronous deck arrives. This is a
+   minimum, not a clipped/fixed height: long titles and larger text can grow. */
+.bookmatch-stage { min-block-size: 50rem; }
+.bookmatch-stage > p { color: var(--muted); }
 .bookmatch-card,.bookmatch-advice { max-width: 430px; margin: 24px auto; padding: 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--panel); }
 .bookmatch-card { touch-action: pan-y; }
 .bookmatch-card:focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }

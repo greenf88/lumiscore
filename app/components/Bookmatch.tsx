@@ -85,6 +85,7 @@ function BookmatchRound({owner,locale,authenticated}:{owner:string;locale:Locale
     <h1 id="bookmatch-title">{nl?'Tien swipes. Eén volgend boek.':'Ten swipes. One next book.'}</h1>
     <p>{nl?'Kies wat je aanspreekt. Dit zijn interesses, geen beoordelingen of gelezenstatussen. Alleen lokaal/Preview.':'Choose what interests you. These are interests, not ratings or read statuses. Local/Preview only.'}</p>
     {storageUnavailable && <p role="status">{nl?'Lokale sessieopslag is niet beschikbaar; verversen kan je keuzes verliezen.':'Session storage is unavailable; refreshing may lose your choices.'}</p>}
+    <div className="bookmatch-stage" aria-busy={loading}>
     {loading ? <p role="status">{nl?'Beschikbare boeken laden…':'Loading available books…'}</p> : error ? <div role="alert"><h2>{nl?'Boekmatch kon niet laden':'Bookmatch could not load'}</h2><p>{nl?'Dit is een laadfout, geen lege catalogus. Bij 1.000 eerdere kaarten is de prototypesessie begrensd.':'This is a loading error, not an empty catalog. The prototype session is bounded at 1,000 earlier cards.'}</p><button onClick={()=>{activeRequest.current?.abort();const c=new AbortController();activeRequest.current=c;void load(session??fresh(),c.signal);}}>{nl?'Opnieuw proberen':'Retry'}</button></div>
     : session && <>
       <p role="status">{count}/10 {nl?'inhoudelijke keuzes':'substantive choices'} · {session.choices.filter(x=>x.decision==='skip').length} {nl?'overgeslagen':'skipped'}</p>
@@ -100,6 +101,7 @@ function BookmatchRound({owner,locale,authenticated}:{owner:string;locale:Locale
         <button onClick={restart}>{nl?'Opnieuw ontdekken':'Discover again'}</button>
       </div>}
     </>}
+    </div>
   </section>;
 }
 // Interest events never call this writer. Only an explicit wishlist click does.
