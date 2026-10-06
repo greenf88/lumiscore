@@ -37,7 +37,7 @@ test('local target guard rejects production, other stacks, paths, query options 
   ]) assert.throws(()=>assertLocalTarget({...good,...override}));
 });
 test('complete hashed migration chain builds from empty synthetic schema, including collection preconditions', async () => {
-  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,16); assert.equal(inputs.categories.length,20);
+  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,18); assert.equal(inputs.categories.length,20);
   const db=new PGlite(); await db.waitReady;
   try {
     await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;

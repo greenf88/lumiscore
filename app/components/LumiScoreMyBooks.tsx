@@ -52,7 +52,7 @@ function MyBooksCard({
 }) {
   const { locale, t } = useLumiScoreLocale();
   const { book, status } = item;
-  const rating = formatPublicRatingDisplay(book.score, book.ratingsCount ?? 0, locale);
+  const rating = formatPublicRatingDisplay(book.score, book.ratingsCount, locale, book.ratingBand);
   const statusLabel = t(STATUS_KEYS[status]);
 
   return (

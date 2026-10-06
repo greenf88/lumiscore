@@ -6,11 +6,11 @@ import type { Book } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import {
-  formatRatingCount,
   MAX_RATING,
   MIN_RATING,
   type BookRatingState,
 } from '@/lib/ratings/model';
+import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { BookCover, ThemeToggle } from './LumiScoreHome';
 import { LumiScoreBookDescription } from './LumiScoreBookDescription';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
@@ -36,7 +36,7 @@ import {
 import { useWantToRead } from './useWantToRead';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
-import type { BookReturnNavigation } from '@/lib/navigation/book-return';
+import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/navigation/book-return';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -99,12 +99,10 @@ export function LumiScoreBookDetail({
     hasEvidence: boolean;
     match: PersonalMatchResult | null;
   } | null>(null);
-  const detailPath = `/book/${book.workId}`;
+  const detailPath = bookAuthenticationReturnPath(book.workId!, returnNavigation);
   const loginHref = `/login?next=${encodeURIComponent(detailPath)}`;
-  const score =
-    ratingState.ratingCount > 0 && ratingState.lumiscore !== null
-      ? ratingState.lumiscore.toFixed(1)
-      : '—';
+  const publicRating = formatPublicRatingDisplay(ratingState.lumiscore, ratingState.ratingCount, locale, ratingState.ratingBand);
+  const score = publicRating.score;
   const backCover = getVerifiedBackCover(book);
   const isAuthenticated = ratingState.authenticated;
   const guestPersonalizationKey = `${book.workId ?? book.id}:${locale}:${personalization.candidate ? 'candidate' : 'none'}`;
@@ -282,7 +280,7 @@ export function LumiScoreBookDetail({
         </div>
         <div className="detail-copy">
           <a className="detail-back-link" href={returnNavigation.href}>
-            ← {returnNavigation.kind === 'collection'
+            ← {returnNavigation.kind === 'editorial' ? (locale === 'nl' ? 'Terug naar de selectie' : 'Back to the selection') : returnNavigation.kind === 'collection'
               ? t('detail.backToCollection', { name: returnNavigation.collectionName })
               : t(returnNavigation.kind === 'search'
                 ? 'detail.backToSearch'
@@ -330,7 +328,7 @@ export function LumiScoreBookDetail({
             <section className="detail-score-panel" aria-labelledby="lumiscore-heading">
               <span id="lumiscore-heading">LumiScore</span>
               <strong>{score}</strong>
-              <p>{ratingState.ratingCount === 0 ? t('common.notRated') : formatRatingCount(ratingState.ratingCount, locale)}</p>
+              <p>{publicRating.count}</p>
             </section>
             <section className="detail-score-panel detail-match-panel" aria-labelledby="match-heading">
               <span id="match-heading">{t('detail.yourMatch')}</span>

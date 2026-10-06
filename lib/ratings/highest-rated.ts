@@ -4,7 +4,7 @@ export type HighestRatedWork = {
   workId: string;
   title: string;
   score: number | null;
-  ratingCount: number;
+  ratingCount: number | null;
 };
 
 export function rankHighestRatedWorks<T extends HighestRatedWork>(
@@ -19,11 +19,11 @@ export function rankHighestRatedWorks<T extends HighestRatedWork>(
     .filter((work) =>
       work.score !== null &&
       Number.isFinite(work.score) &&
-      work.ratingCount >= safeMinimumRatings,
+      (work.ratingCount === null || work.ratingCount >= safeMinimumRatings),
     )
     .toSorted((left, right) =>
       right.score! - left.score! ||
-      right.ratingCount - left.ratingCount ||
+      (right.ratingCount ?? 0) - (left.ratingCount ?? 0) ||
       left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }) ||
       Number(left.workId) - Number(right.workId) ||
       left.workId.localeCompare(right.workId, 'en'),

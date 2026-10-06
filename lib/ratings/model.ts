@@ -9,7 +9,8 @@ export type BookRatingState = {
   userEmail: string | null;
   userRating: number | null;
   lumiscore: number | null;
-  ratingCount: number;
+  ratingCount: number | null;
+  ratingBand?: string | null;
 };
 
 export const EMPTY_RATING_STATE: BookRatingState = {

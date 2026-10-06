@@ -315,7 +315,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
 
       <section className="collection-book-list" aria-label={collection.name}>
         {books.filter(({ workId }) => visibleWorkIdSet.has(workId)).map((item) => {
-          const rating = formatPublicRatingDisplay(item.book.score, item.book.ratingsCount ?? 0, locale);
+          const rating = formatPublicRatingDisplay(item.book.score, item.book.ratingsCount, locale, item.book.ratingBand);
           const itemStatus = statuses[item.workId] ?? null;
           const isAction = item.workId === actionWorkId;
           const isContinue = isAction && seriesProgress?.continueBook?.workId === item.workId;
@@ -346,7 +346,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                   {(isAction || isHighlighted) && (
                     <em>{isAction
                       ? t(isContinue ? 'collection.continueReading' : 'collection.nextInSeries')
-                      : highlightedBook?.score !== null && (highlightedBook?.ratingsCount ?? 0) > 0
+                      : highlightedBook?.score !== null && Boolean(highlightedBook?.ratingBand)
                         ? t('collection.highestUnread')
                         : t('collection.nextUnread')}</em>
                   )}

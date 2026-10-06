@@ -243,7 +243,7 @@ export function Header({
   const navigationRef = useRef<HTMLDivElement>(null);
   const navigationTriggerRef = useRef<HTMLButtonElement>(null);
   const navigationPanelId = `mobile-navigation-${useId().replaceAll(':', '')}`;
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
 
   useEffect(() => {
     if (!mobileNavigationOpen) return;
@@ -275,6 +275,7 @@ export function Header({
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
         <a href="/browse">{t('header.browse')}</a>
         <a href="/categories">{t('home.categories')}</a>
+        <a href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</a>
         <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
         <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
         <div className="mobile-navigation" ref={navigationRef}>
@@ -301,6 +302,7 @@ export function Header({
             <a href="/browse">{t('browse.books')}</a>
             <a href="/collections">{t('browse.collections')}</a>
             <a href="/categories">{t('home.categories')}</a>
+            <a href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</a>
             <a href="/taste-test">{t('header.tasteTest')}</a>
             <a href="/my-books">{t('header.myBooks')}</a>
             <span className="mobile-navigation-divider" aria-hidden="true" />
@@ -327,6 +329,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     score,
     book.ratingsCount ?? 0,
     locale,
+    book.ratingBand,
   );
   const ratingStatus =
     book.source === 'demo' && score !== null && (book.ratingsCount ?? 0) > 0
@@ -462,7 +465,7 @@ function formatCardRatingCount(book: Book, locale: Locale): string {
   const count = book.ratingsCount ?? 0;
   return book.source === 'demo'
     ? formatRatings(count, locale)
-    : formatPublicRatingDisplay(book.score, count, locale).count;
+    : formatPublicRatingDisplay(book.score, count, locale, book.ratingBand).count;
 }
 
 const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
@@ -484,7 +487,7 @@ type BookCardProps = {
 export const BookCard = memo(function BookCard({ book, wanted, status, onToggle, resolveMissingCover = true, detailReturnContext, label }: BookCardProps) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
-  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount ?? 0, locale);
+  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount, locale, book.ratingBand);
   const hasRatings = ratingDisplay.score !== '—';
   const href = getBookHref(book, detailReturnContext);
   const bookContent = (

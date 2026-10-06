@@ -30,7 +30,7 @@ test('highest-rated selection excludes unrated books without mutating its input'
 
   assert.equal(HIGHEST_RATED_MINIMUM_RATINGS, 1);
   assert.equal(result.length, 2);
-  assert.ok(result.every(({ ratingCount }) => ratingCount >= 1));
+  assert.ok(result.every(({ ratingCount }) => ratingCount === null || ratingCount >= 1));
   assert.deepEqual(works, original);
 });
 

@@ -667,7 +667,7 @@ export async function loadHighestRatedCatalog(limit = 18): Promise<{
       workId,
       title,
       score: summaries.get(workId)?.lumiscore ?? null,
-      ratingCount: summaries.get(workId)?.ratingCount ?? 0,
+      ratingCount: summaries.get(workId)?.ratingCount ?? null,
     })),
     safeLimit,
   );

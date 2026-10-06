@@ -4,7 +4,7 @@ import { hasUsableInitialBookCover } from './book-cover-state.ts';
 import { isDutchLanguageBook } from './language.ts';
 
 function hasRealRating(book: Book): boolean {
-  return book.score !== null && (book.ratingsCount ?? 0) > 0;
+  return book.score !== null;
 }
 
 export function shouldShowDutchDiscovery(
