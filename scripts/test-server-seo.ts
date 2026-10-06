@@ -10,6 +10,7 @@ const cases: [string, string, string][] = [
   ['/', '/', 'index, follow'], ['/browse', '/browse', 'index, follow'],
   ...['page=1', 'page=2', 'pageSize=32', 'pageSize=48', 'sort=az', 'sort=rating', 'language=nl', 'genre=fantasy', 'filter=classic', 'page=1&page=2', 'unknown=', 'pageSize=invalid'].map((query): [string,string,string] => [`/browse?${query}`, '/browse', 'noindex, follow']),
   ['/collections', '/collections', 'index, follow'], ['/collections?type=series', '/collections', 'noindex, follow'],
+  ['/categories', '/categories', 'index, follow'],
   [collectionPath, collectionPath, 'index, follow'], [bookPath, bookPath, 'index, follow'],
   [`${bookPath}?returnTo=%2Fbrowse%3Fpage%3D2`, bookPath, 'index, follow'],
   ...['/over-ons','/zo-werkt-het','/voor-uitgevers','/contact','/taste-test'].map((path): [string,string,string] => [path,path,'index, follow']),
@@ -38,7 +39,7 @@ for (const [path, canonical, robots] of cases) {
   });
 }
 test('language selection still changes server HTML without changing canonicals', async () => {
-  for (const path of ['/','/browse','/over-ons','/zo-werkt-het','/voor-uitgevers','/contact']) {
+  for (const path of ['/','/browse','/categories','/over-ons','/zo-werkt-het','/voor-uitgevers','/contact']) {
     const variants: Record<string,string>[] = [{'accept-language':'nl-NL'}, {cookie:'lumiscore-locale=nl'}];
     for (const headers of variants) {
       const response=await fetch(`${origin}${path}`,{headers});
@@ -67,7 +68,7 @@ test('sitemap retains book and collection coverage and excludes parameter varian
   assert.equal(response.status,200);
   const xml=await response.text();
   const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
-  for(const path of ['/browse','/collections',bookPath,collectionPath]) assert.ok(urls.includes(`https://lumisco.re${path}`));
+  for(const path of ['/browse','/collections','/categories',bookPath,collectionPath]) assert.ok(urls.includes(`https://lumisco.re${path}`));
   assert.ok(urls.every(url=>!new URL(url).search));
   assert.equal(new Set(urls).size,urls.length);
 });

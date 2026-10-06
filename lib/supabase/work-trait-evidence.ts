@@ -53,6 +53,39 @@ function parseEvidenceRow(row: EvidenceRow): WorkTraitEvidence | null {
   };
 }
 
+// Public evidence only: no reader/profile data. Page by the complete primary-key
+// order so the REST row limit cannot silently discard evidence in dense batches.
+export async function loadRecommendationWorkTraitEvidence(
+  client: SupabaseClient,
+): Promise<Map<string, WorkTraitEvidence[]>> {
+  const pageSize = 1000;
+  const page = (start: number, count?: 'exact') => client
+    .from('work_trait_evidence')
+    .select(EVIDENCE_SELECT, count ? { count } : undefined)
+    .eq('mapping_version', TASTE_TRAIT_MAPPING_VERSION)
+    .order('work_id').order('trait').order('source').order('source_key')
+    .range(start, start + pageSize - 1);
+  const first = await page(0, 'exact');
+  if (first.error) throw first.error;
+  if (first.count === null) throw new Error('Recommendation evidence count unavailable.');
+  const starts = Array.from(
+    { length: Math.max(0, Math.ceil(first.count / pageSize) - 1) },
+    (_, index) => (index + 1) * pageSize,
+  );
+  const rest = await Promise.all(starts.map((start) => page(start)));
+  const failure = rest.find(({ error }) => error);
+  if (failure?.error) throw failure.error;
+  const grouped = new Map<string, WorkTraitEvidence[]>();
+  for (const row of [first, ...rest].flatMap(({ data }) => data ?? []) as EvidenceRow[]) {
+    const evidence = parseEvidenceRow(row);
+    if (!evidence) continue;
+    const entries = grouped.get(evidence.workId) ?? [];
+    entries.push(evidence);
+    grouped.set(evidence.workId, entries);
+  }
+  return grouped;
+}
+
 export async function loadWorkTraitEvidenceBatched(
   client: SupabaseClient,
   workIds: readonly string[],
