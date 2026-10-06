@@ -68,7 +68,7 @@ async function checkDisposableData(client) {
 }
 let status, db, stage='input-review';
 try {
-  if(!['prepare','start','reset','verify','evidence','dev','stop'].includes(mode)||process.argv.length!==3) throw new Error('Usage: discovery-test-local.mjs prepare|start|reset|verify|evidence|dev|stop');
+  if(!['prepare','start','reset','verify','evidence','dev','vercel-build','stop'].includes(mode)||process.argv.length!==3) throw new Error('Usage: discovery-test-local.mjs prepare|start|reset|verify|evidence|dev|vercel-build|stop');
   await reviewedFixtureInputs();
   if(mode==='prepare') {
     await mkdir(path.join(workdir,'supabase'),{recursive:true});
@@ -134,9 +134,10 @@ try {
       }
       else console.log('ISOLATED SYNTHETIC CATALOG READY');
     }
-    if(mode==='dev') {
+    if(mode==='dev'||mode==='vercel-build') {
       const env={...safeEnv,NEXT_PUBLIC_SUPABASE_URL:status.API_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:status.ANON_KEY,NEXT_PUBLIC_SITE_ORIGIN:'http://127.0.0.1:3015',WRANGLER_WRITE_LOGS:'false',WRANGLER_LOG_PATH:'.wrangler/logs',MINIFLARE_REGISTRY_PATH:'.wrangler/registry'};
-      const child=spawn(process.execPath,['node_modules/vinext/dist/cli.js','dev','--hostname','127.0.0.1','--port','3015'],{cwd:root,env,stdio:'inherit',windowsHide:true});
+      if(mode==='vercel-build') Object.assign(env,{VERCEL:'1',VERCEL_ENV:'preview',NITRO_PRESET:'vercel'});
+      const child=spawn(process.execPath,mode==='dev'?['node_modules/vinext/dist/cli.js','dev','--hostname','127.0.0.1','--port','3015']:['node_modules/vite/bin/vite.js','build'],{cwd:root,env,stdio:'inherit',windowsHide:true});
       await new Promise(resolve=>child.on('exit',code=>{process.exitCode=code??1;resolve();}));
     }
   }

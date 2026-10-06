@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Taste Test — LumiScore',
-  description: 'Rate twenty books you have read, save your progress and discover your reading taste.',
+  description: 'Choose 10, 15 or 30 books you have read, save your progress and discover your reading taste.',
   canonicalPath: '/taste-test',
   noIndex: false,
   follow: true,

@@ -27,5 +27,6 @@ export function RecommendationOverview({ personalization, limit }: { personaliza
   if (!personalization.authenticated && complete && !current) return <p role="status">{locale === 'nl' ? 'Aanbevelingen laden…' : 'Loading recommendations…'}</p>;
   if (!personalization.authenticated && complete && current && !current.guest) return <p role="status">{locale === 'nl' ? 'Aanbevelingen zijn tijdelijk niet beschikbaar. Vernieuw de pagina om opnieuw te proberen.' : 'Recommendations are temporarily unavailable. Refresh the page to try again.'}</p>;
   const guest = current?.guest;
+  if (personalization.unavailable) return <p role="alert">{locale==='nl'?'Aanbevelingen konden niet laden. Dit is geen leeg profiel. Vernieuw de pagina om opnieuw te proberen.':'Recommendations could not load. This is not an empty profile. Refresh the page to try again.'}</p>;
   return <RecommendationsSection personalization={personalization.authenticated ? personalization : guest ?? personalization} limit={limit} returnTo={`/recommendations?limit=${limit}`} />;
 }
