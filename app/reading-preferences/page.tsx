@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { LumiScoreReadingPreferences } from '@/app/components/LumiScoreReadingPreferences';
 import { getSafeNextPath } from '@/lib/auth/request';
 import { getVerifiedServerUser } from '@/lib/supabase/auth';
 import { loadReaderEraPreferences } from '@/lib/supabase/reading-preferences';
+import { resolveRequestLocale } from '@/lib/i18n/server';
+import { localizedHref } from '@/lib/i18n/paths';
 
 export const dynamic = 'force-dynamic';
-export const metadata: Metadata = createPageMetadata({
+export async function generateMetadata() { return createLocalizedPageMetadata({
   title: 'Reading preferences — LumiScore', canonicalPath: '/reading-preferences', noIndex: true,
-});
+}); }
 
 export default async function ReadingPreferencesPage({
   searchParams,
@@ -20,7 +21,8 @@ export default async function ReadingPreferencesPage({
   const value = Array.isArray(params.next) ? params.next[0] : params.next;
   const next = getSafeNextPath(value, '/');
   const { client, user } = await getVerifiedServerUser();
-  if (!user) redirect(`/login?next=${encodeURIComponent(`/reading-preferences?next=${encodeURIComponent(next)}`)}`);
+  const { locale } = await resolveRequestLocale();
+  if (!user) redirect(localizedHref(`/login?next=${encodeURIComponent(localizedHref(`/reading-preferences?next=${encodeURIComponent(localizedHref(next, locale))}`, locale))}`, locale));
   const initial = await loadReaderEraPreferences(client, user.id);
 
   return <>

@@ -306,7 +306,7 @@ test('wrong-language exact ISBN is not displayed and an edition cannot leak acro
   assert.equal(crossWork.description, null);
 });
 
-test('an English-only international edition may keep its exact English work description in NL UI', async () => {
+test('an English-only international edition cannot turn a Dutch route into English copy', async () => {
   clearBookDescriptionCacheForTests();
   const resolution = await resolveBookDescription(
     {
@@ -317,8 +317,8 @@ test('an English-only international edition may keep its exact English work desc
     async () => jsonResponse({ description: 'Exact English work description.' }),
   );
 
-  assert.equal(resolution.description?.language, 'en');
-  assert.equal(resolution.description?.text, 'Exact English work description.');
+  assert.equal(resolution.description, null);
+  assert.equal(resolution.state, 'confirmed_missing');
 });
 
 test('a bounded alternate edition ISBN of the same stored Work can supply the desired language', async () => {
@@ -420,15 +420,16 @@ test('splits a long unpunctuated paragraph so the disclosure always reveals cont
   assert.equal(paragraphs.join(' '), text);
 });
 
-test('book detail description requests and resolves the active locale without an empty fallback section', async () => {
+test('book detail receives server copy without a robots-blocked hydration request', async () => {
   const [component, route] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreBookDescription.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/api/books/[workId]/description/route.ts', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(component, /description\?locale=\$\{encodeURIComponent\(locale\)\}/);
-  assert.match(component, /if \(!description\) return null/);
-  assert.doesNotMatch(component, /No description available|Nog geen beschrijving/);
+  assert.doesNotMatch(component, /fetch\(|useEffect|\/api\//);
+  assert.match(component, /description\?\.language === locale/);
+  assert.match(component, /publicDescriptionSource/);
+  assert.match(component, /geverifieerde Nederlandse beschrijving/);
   assert.match(route, /isLocale\(requestedLocale\)/);
   assert.match(route, /loadCatalogBook\(workId, locale\)/);
   assert.match(route, /openLibraryEditionId: book\.openLibraryEditionId/);

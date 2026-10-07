@@ -1,10 +1,12 @@
 'use client';
 import { useEffect } from 'react';
 import { overviewScrollKey } from '@/lib/navigation/overview-scroll';
+import { splitLocalePath } from '@/lib/i18n/paths';
 export function OverviewScrollMemory() {
   useEffect(() => {
     const path = location.pathname;
-    if (!['/', '/browse', '/search', '/collections', '/recommendations'].includes(path) && !/^\/collection\/[a-z0-9-]+$/.test(path)) return;
+    const unprefixed = splitLocalePath(path).path;
+    if (!['/', '/browse', '/search', '/collections', '/recommendations'].includes(unprefixed) && !/^\/collection\/[a-z0-9-]+$/.test(unprefixed)) return;
     const key = overviewScrollKey(path, location.search);
     let frame = 0;
     let cancelled = false;

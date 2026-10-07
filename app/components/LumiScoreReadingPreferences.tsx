@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import { useState } from 'react';
 import {
   READING_PERIODS,
@@ -29,7 +32,7 @@ export function LumiScoreReadingPreferences({
   initial: ReaderEraPreferences;
   next: string;
 }) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const [readingPeriods, setReadingPeriods] = useState<ReadingPeriod[]>(initial.readingPeriods);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: 'success' | 'error'; message: string } | null>(null);
@@ -92,7 +95,7 @@ export function LumiScoreReadingPreferences({
         <div className="preference-actions">
           <button className="primary-cta" type="button" disabled={saving} onClick={() => {
             void request('PUT', { readingPeriods }).then((saved) => {
-              if (saved) window.location.assign(next);
+              if (saved) window.location.assign(localizedHref(next, locale));
             });
           }}>
             {t(saving ? 'preferences.saving' : 'preferences.save')}
@@ -108,10 +111,10 @@ export function LumiScoreReadingPreferences({
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ dismiss: true }),
-            }).finally(() => { window.location.assign(next); });
+            }).finally(() => { window.location.assign(localizedHref(next, locale)); });
           }}>{t('preferences.skip')}</button>
         </div>
-        <a className="detail-back-link auth-back" href={next}>← {t('preferences.back')}</a>
+        <LocaleLink className="detail-back-link auth-back" href={next}>← {t('preferences.back')}</LocaleLink>
       </section>
     </main>
   );

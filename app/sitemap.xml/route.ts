@@ -1,13 +1,8 @@
-import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { supabase } from '@/lib/supabase/client';
-import { buildPublicSitemapPaths } from '@/lib/seo/sitemap';
+import { buildLocalizedSitemap } from '@/lib/seo/sitemap';
 
 const PAGE_SIZE = 1_000;
 
-function sitemapEntry(path: string, priority?: string): string {
-  const location = new URL(path, LUMISCORE_SITE_ORIGIN).toString();
-  return `<url><loc>${location}</loc>${priority ? `<priority>${priority}</priority>` : ''}</url>`;
-}
 
 async function loadAllCollectionSlugs(): Promise<string[]> {
   const slugs: string[] = [];
@@ -59,15 +54,8 @@ export async function GET() {
       loadAllWorkIds(),
       loadAllCollectionSlugs(),
     ]);
-    const entries = buildPublicSitemapPaths(workIds, collectionSlugs)
-      .map((path) => sitemapEntry(
-        path,
-        path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6',
-      ))
-      .join('');
-
     return new Response(
-      `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</urlset>`,
+      buildLocalizedSitemap(workIds, collectionSlugs),
       {
         headers: {
           'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=21600',

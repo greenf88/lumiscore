@@ -57,7 +57,7 @@ test('hero preloads only the active theme and matches responsive CSS selection',
   const layout = await readFile(new URL('../../app/layout.tsx', import.meta.url), 'utf8');
   const css = await readFile(new URL('../../app/globals.css', import.meta.url), 'utf8');
   for (const source of [layout, css]) assert.match(source, /\(min-width: 1100px\), \(min-resolution: 1\.5dppx\)/);
-  assert.match(layout, /location\.pathname === '\/'/);
+  assert.match(layout, /\['\/en', '\/nl', '\/en\/', '\/nl\/'\]\.includes\(location.pathname\)/);
   assert.match(layout, /preload\.fetchPriority = 'high'/);
   assert.match(css, /image-set\(var\(--hero-avif\) type\("image\/avif"\), var\(--hero-image\) type\("image\/webp"\)\)/);
   assert.doesNotMatch(css, /(?:dark-reading-scene|light-book-stack)\.png/);
@@ -70,7 +70,7 @@ test('theme preload handles saved choice, device density, storage denial and non
   for (const saved of ['ink', 'paper', null, 'invalid', 'storage-denied']) {
     for (const light of [true, false]) {
       for (const large of [true, false]) {
-        for (const pathname of ['/', '/browse', '/book/1']) {
+        for (const pathname of ['/en', '/nl', '/nl/', '/en/browse', '/nl/book/1']) {
           const links: Record<string, string>[] = [];
           const element = { dataset: {} as Record<string,string>, style: {} };
           runInNewContext(script, {
@@ -81,7 +81,7 @@ test('theme preload handles saved choice, device density, storage denial and non
           });
           const theme = saved === 'ink' || saved === 'paper' ? saved : light ? 'paper' : 'ink';
           assert.equal(element.dataset.theme, theme);
-          assert.equal(links.length, pathname === '/' ? 1 : 0);
+          assert.equal(links.length, ['/en', '/nl', '/nl/'].includes(pathname) ? 1 : 0);
           if (links.length) {
             assert.equal(links[0].href, `/assets/${theme === 'paper' ? 'light-book-stack' : 'dark-reading-scene'}-${large ? 1536 : 1024}.avif`);
             assert.equal(links[0].fetchPriority, 'high');

@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import { useState } from 'react';
 import type { ReadingStatus } from '@/lib/collections/model';
 import { useLumiScoreLocale } from './LumiScoreLocale';
@@ -28,14 +31,14 @@ export function LumiScoreReadingStatus({
   showGuestCta?: boolean;
   onStatusChange: (status: ReadingStatus | null) => void;
 }) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const loginHref = `/login?next=${encodeURIComponent(returnTo)}`;
 
   if (!authenticated) {
     return showGuestCta
-      ? <a className="status-sign-in" href={loginHref}>{t('collection.signInTrack')}</a>
+      ? <LocaleLink className="status-sign-in" href={loginHref}>{t('collection.signInTrack')}</LocaleLink>
       : null;
   }
 
@@ -52,7 +55,7 @@ export function LumiScoreReadingStatus({
         body: next ? JSON.stringify({ status: next }) : undefined,
       });
       if (response.status === 401) {
-        window.location.assign(loginHref);
+        window.location.assign(localizedHref(loginHref, locale));
         return;
       }
       if (response.status === 409) {

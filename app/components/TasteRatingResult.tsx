@@ -1,4 +1,6 @@
 'use client';
+
+import { LocaleLink } from './LumiScoreLocale';
 import { useEffect, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type { RatingResult } from '@/lib/supabase/rating-result';
@@ -21,7 +23,7 @@ export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
   useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[]);
   useEffect(()=>{
     const controller = new AbortController();
-    fetch('/api/taste-test/result',{cache:'no-store',signal:controller.signal}).then(async response=>{
+    fetch(`/api/taste-test/result?locale=${locale}`,{cache:'no-store',signal:controller.signal}).then(async response=>{
       if (!response.ok) throw new Error();
       const result = await response.json() as RatingResult;
       if (!controller.signal.aborted) {setLoaded({locale,result});setFailed(false);}
@@ -34,7 +36,7 @@ export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
       <p>{nl?'Dit is een laadfout, geen leeg smaakprofiel. Je opgeslagen beoordelingen blijven behouden.':'This is a loading error, not an empty profile. Your saved ratings remain intact.'}</p>
       <button onClick={()=>{setFailed(false);setLoaded(null);setRetry(x=>x+1);}}>{nl?'Opnieuw proberen':'Try again'}</button></section>
     : !result ? <section className="featured-section" role="status">{nl?'Je persoonlijke resultaat laden…':'Loading your personal result…'}</section>
-    : result.kind==='signed-out' ? <section className="featured-section"><h1>{nl?'Je persoonlijke leessmaak':'Your personal reading taste'}</h1><p>{nl?'Meld je aan om je opgeslagen beoordelingen te gebruiken.':'Sign in to use your saved ratings.'}</p><a href="/login?next=%2Ftaste-test%2Fresult">{nl?'Aanmelden':'Sign in'}</a></section>
+    : result.kind==='signed-out' ? <section className="featured-section"><h1>{nl?'Je persoonlijke leessmaak':'Your personal reading taste'}</h1><p>{nl?'Meld je aan om je opgeslagen beoordelingen te gebruiken.':'Sign in to use your saved ratings.'}</p><LocaleLink href="/login?next=%2Ftaste-test%2Fresult">{nl?'Aanmelden':'Sign in'}</LocaleLink></section>
     : <TasteResultContent result={result} />}
   </DiscoveryPageShell>;
 }
@@ -60,6 +62,6 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
     : <div className="book-grid">{result.recommendations.map(x=><BookCard key={x.book.workId}
       book={x.book} wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}
       resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} />)}</div>}
-    <nav aria-label={nl?'Volgende stap':'Next step'} className="taste-next-steps"><a href="/taste-test">{nl?'Verfijn je smaak':'Refine your taste'}</a></nav>
+    <nav aria-label={nl?'Volgende stap':'Next step'} className="taste-next-steps"><LocaleLink href="/taste-test">{nl?'Verfijn je smaak':'Refine your taste'}</LocaleLink></nav>
   </section>;
 }

@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { Fragment, useCallback, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type {
@@ -12,7 +14,7 @@ function RichText({ parts }: { parts: InformationTextPart[] }) {
   return parts.map((part, index) => typeof part === 'string' ? (
     <Fragment key={`${part}-${index}`}>{part}</Fragment>
   ) : (
-    <a href={part.href} key={`${part.href}-${index}`}>{part.text}</a>
+    <LocaleLink href={part.href} key={`${part.href}-${index}`}>{part.text}</LocaleLink>
   ));
 }
 
@@ -66,10 +68,10 @@ export function LumiScoreInformationPage({
                 </p>
               ))}
               {section.email && (
-                <a className="information-email" href={section.email.href}>
+                <LocaleLink className="information-email" href={section.email.href}>
                   {section.email.address}
                   <span aria-hidden="true">→</span>
-                </a>
+                </LocaleLink>
               )}
             </section>
           ))}

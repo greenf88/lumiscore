@@ -1,16 +1,15 @@
-import type { Metadata } from 'next';
 import { RatingTasteTest } from '@/app/components/RatingTasteTest';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = createPageMetadata({
+export async function generateMetadata() { return createLocalizedPageMetadata({
   title: 'Taste Test — LumiScore',
   description: 'Choose 10, 15 or 30 books you have read, save your progress and discover your reading taste.',
   canonicalPath: '/taste-test',
   noIndex: false,
   follow: true,
-});
+}); }
 
 export default async function TasteTestPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const [params, initialAuthState] = await Promise.all([

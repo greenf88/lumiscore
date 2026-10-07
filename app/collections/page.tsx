@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { LumiScoreCollectionsPage } from '@/app/components/LumiScoreCollectionsPage';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { normalizeCollectionDirectoryFilter } from '@/lib/collections/directory';
 import type { CollectionsDirectoryData } from '@/lib/supabase/collections';
 
@@ -30,7 +30,7 @@ export async function generateMetadata({
   searchParams,
 }: CollectionsPageProps): Promise<Metadata> {
   const filter = await readFilter(searchParams);
-  return createPageMetadata({
+  return createLocalizedPageMetadata({
     title: 'Browse collections — LumiScore',
     description: 'Explore series, universes and author collections on LumiScore.',
     canonicalPath: '/collections',

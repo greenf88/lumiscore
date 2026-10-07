@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import {
   DISPLAY_NAME_MAX_LENGTH,
@@ -33,7 +36,7 @@ export function LumiScoreAccountMenu({
   returnTo: string;
   variant?: AccountMenuVariant;
 }) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const auth = getHeaderAuthPresentation(authState, returnTo);
   const [open, setOpen] = useState(false);
   const [displayName, setDisplayName] = useState(auth.displayName);
@@ -81,12 +84,12 @@ export function LumiScoreAccountMenu({
 
   if (!auth.authenticated) {
     return (
-      <a
+      <LocaleLink
         className={variant === 'detail' ? 'detail-sign-in' : 'header-sign-in'}
         href={auth.signInHref}
       >
         {t('header.signIn')}
-      </a>
+      </LocaleLink>
     );
   }
 
@@ -184,7 +187,7 @@ export function LumiScoreAccountMenu({
           {preferenceInvite && (
             <div className="account-preference-invite">
               <p>{t('preferences.invite')}</p>
-              <a href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>{t('preferences.inviteAction')}</a>
+              <LocaleLink href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>{t('preferences.inviteAction')}</LocaleLink>
               <button type="button" onClick={() => {
                 setPreferenceInvite(false);
                 void fetch('/api/account/reading-preferences', {
@@ -195,11 +198,11 @@ export function LumiScoreAccountMenu({
               }}>{t('preferences.notNow')}</button>
             </div>
           )}
-          <a className="account-preferences-link" href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>
+          <LocaleLink className="account-preferences-link" href={`/reading-preferences?next=${encodeURIComponent(auth.returnTo)}`}>
             {t('preferences.menu')}
-          </a>
+          </LocaleLink>
           <form action="/auth/sign-out" method="post">
-            <input type="hidden" name="next" value={auth.returnTo} />
+            <input type="hidden" name="next" value={localizedHref(auth.returnTo, locale)} />
             <button type="submit">{t('header.signOut')}</button>
           </form>
         </div>

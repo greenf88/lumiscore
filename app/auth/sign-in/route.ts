@@ -3,6 +3,7 @@ import {
   getSafeNextPath,
   isSameOriginRequest,
   PRIVATE_RESPONSE_HEADERS,
+  authDestination,
 } from '@/lib/auth/request';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
     ? `/login?error=invalid_credentials&next=${encodeURIComponent(next)}`
     : next;
 
-  return NextResponse.redirect(new URL(destination, request.url), {
+  return NextResponse.redirect(new URL(authDestination(destination, next), request.url), {
     status: 303,
     headers: PRIVATE_RESPONSE_HEADERS,
   });

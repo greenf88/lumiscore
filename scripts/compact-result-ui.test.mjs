@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL('../' + path, import.meta.url), 'utf8');
 test('completion navigation is after response validation, never in failure handler', async () => {
   const source = await read('app/components/RatingTasteTest.tsx');
-  assert.match(source, /if \(!r.ok\) throw new Error\(\);[\s\S]*const next = await r.json\(\) as Response;[\s\S]*if \(shouldOpenCompletedResult\(action, data\?\.state \?\? null, next\)\) window.location.assign\('\/taste-test\/result'\);\s*\} catch \{ setError\(true\); \}/);
+  assert.match(source, /if \(!r.ok\) throw new Error\(\);[\s\S]*const next = await r.json\(\) as Response;[\s\S]*if \(shouldOpenCompletedResult\(action, data\?\.state \?\? null, next\)\) window.location.assign\(localizedHref\('\/taste-test\/result', locale\)\);\s*\} catch \{ setError\(true\); \}/);
 });
 test('compact result shows labels and existing scores only as decorative bars; no report or counts', async () => {
   const source = await read('app/components/TasteRatingResult.tsx');

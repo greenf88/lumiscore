@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import { useCallback, useMemo, useState } from 'react';
 import {
   calculateCollectionProgress,
@@ -33,7 +36,7 @@ const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.r
 
 export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) {
   const { collection, books, authenticated } = data;
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<Record<string, ReadingStatus>>(data.statuses);
   const [ratings, setRatings] = useState<Record<string, number>>(data.userRatings);
@@ -185,7 +188,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
       };
       ambiguousOutcome = payload.code === 'status_reconciliation_failed';
       if (response.status === 401) {
-        window.location.assign(`/login?next=${encodeURIComponent(returnTo)}`);
+        window.location.assign(localizedHref(`/login?next=${encodeURIComponent(localizedHref(returnTo, locale))}`, locale));
         return;
       }
       if (response.status === 409 && payload.code === 'rated_work_conflict') {
@@ -247,7 +250,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         returnTo={returnTo}
       />
       <section className="collection-hero">
-        <a className="detail-back-link" href="/">← {t('collection.backToBooks')}</a>
+        <LocaleLink className="detail-back-link" href="/">← {t('collection.backToBooks')}</LocaleLink>
         <span className="eyebrow">{typeLabel.toUpperCase()}</span>
         <h1>{collection.name}</h1>
         <p className="collection-book-count">
@@ -273,14 +276,14 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                 <span>{t(seriesProgress?.continueBook
                   ? 'collection.continueReading'
                   : 'collection.nextInSeries')}</span>
-                <a href={getBookHref(actionBook.book, bookReturnContext) ?? '/browse'}>{actionBook.book.title}</a>
+                <LocaleLink href={getBookHref(actionBook.book, bookReturnContext) ?? '/browse'}>{actionBook.book.title}</LocaleLink>
               </p>
             ) : null}
           </>
         ) : (
-          <a className="status-sign-in collection-sign-in" href={`/login?next=${encodeURIComponent(returnTo)}`}>
+          <LocaleLink className="status-sign-in collection-sign-in" href={`/login?next=${encodeURIComponent(returnTo)}`}>
             {t('collection.signInTrack')}
-          </a>
+          </LocaleLink>
         )}
         {collection.collectionType !== 'series' && (
           <p className="collection-order-note">{t('collection.noOfficialOrder')}</p>

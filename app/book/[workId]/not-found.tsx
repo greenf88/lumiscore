@@ -1,3 +1,5 @@
+
+import { LocaleLink } from '@/app/components/LumiScoreLocale';
 import type { Metadata } from 'next';
 import { LumiScoreWordmark } from '@/app/components/LumiScoreWordmark';
 import { LanguageSwitcher } from '@/app/components/LumiScoreLocale';
@@ -22,7 +24,7 @@ export default async function BookNotFound() {
           <span className="eyebrow">{translate(locale, 'notFound.eyebrow')}</span>
           <h1 id="book-not-found-title">{translate(locale, 'notFound.heading')}</h1>
           <p>{translate(locale, 'notFound.copy')}</p>
-          <a className="primary-cta" href="/#discover">{translate(locale, 'notFound.browse')} <span>→</span></a>
+          <LocaleLink className="primary-cta" href="/#discover">{translate(locale, 'notFound.browse')} <span>→</span></LocaleLink>
         </section>
       </main>
     </>

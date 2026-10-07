@@ -1,21 +1,24 @@
 import type { Metadata } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
-import { LUMISCORE_DEFAULT_DESCRIPTION } from '@/lib/seo/page-metadata';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
-import { resolveRequestLocale } from '@/lib/i18n/server';
+import { resolveRequestLocale, requestPagePath } from '@/lib/i18n/server';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import './globals.css';
 import { OverviewScrollMemory } from './components/OverviewScrollMemory';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata: Metadata = await createLocalizedPageMetadata({ title: 'LumiScore — Find your next great read', canonicalPath: (await requestPagePath()).split('?')[0] });
+  delete metadata.robots;
+  metadata.alternates = { canonical: metadata.alternates?.canonical };
+  return {
+  ...metadata,
   metadataBase: new URL(LUMISCORE_SITE_ORIGIN),
-  title: 'LumiScore — Find your next great read',
-  description: LUMISCORE_DEFAULT_DESCRIPTION,
   // Relative to the request pathname, including framework not-found boundaries.
   // Successful pages override this with their explicit canonical policy.
-  alternates: { canonical: './' },
   icons: { icon: '/favicon.ico' },
-};
+  };
+}
 
 const themeScript = `
   try {
@@ -24,7 +27,7 @@ const themeScript = `
     const theme = saved === 'paper' || saved === 'ink' ? saved : (matchMedia('(prefers-color-scheme: light)').matches ? 'paper' : 'ink');
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme === 'paper' ? 'light' : 'dark';
-    if (location.pathname === '/') {
+    if (['/en', '/nl', '/en/', '/nl/'].includes(location.pathname)) {
       const width = matchMedia('(min-width: 1100px), (min-resolution: 1.5dppx)').matches ? 1536 : 1024;
       const artwork = theme === 'paper' ? 'light-book-stack' : 'dark-reading-scene';
       const preload = document.createElement('link');
@@ -55,6 +58,7 @@ export default async function RootLayout({
         <LumiScoreLocaleProvider
           initialLocale={locale}
           hasPersistedChoice={hasPersistedChoice}
+          initialPath={await requestPagePath()}
         >
           {children}
           <OverviewScrollMemory />

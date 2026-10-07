@@ -1,4 +1,7 @@
 'use client';
+
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
 import { selectionSlug, editorialHref, type EditorialQuery } from '@/lib/catalog/editorial-query';
 import type { PublicCategory, AuthorOption } from '@/lib/catalog/discovery';
 import { AuthorFilter } from './AuthorFilter';
@@ -10,7 +13,7 @@ export function EditorialCatalogControls({ state, facets, selectionCount, route,
   const { locale } = useLumiScoreLocale();
   const nl = locale === 'nl';
   return (
-    <form className="editorial-controls" id="catalog-filters" action={route} method="get">
+    <form className="editorial-controls" id="catalog-filters" action={localizedHref(route, locale)} method="get">
       <label>{nl ? 'Titel of auteur' : 'Title or author'}
         <input name="q" defaultValue={state.query} maxLength={100} />
       </label>
@@ -46,7 +49,7 @@ export function EditorialCatalogControls({ state, facets, selectionCount, route,
         <select name="pageSize" defaultValue={state.pageSize}>{[32,64,128].map(size => <option key={size}>{size}</option>)}</select>
       </label>
       <button type="submit">{nl ? 'Toepassen' : 'Apply'}</button>
-      <a href={route}>{nl ? 'Filters wissen' : 'Clear filters'}</a>
+      <LocaleLink href={route}>{nl ? 'Filters wissen' : 'Clear filters'}</LocaleLink>
       {(state.query || state.author || state.categories.length > 0 || state.languages.length > 0 || state.selection) && <div className="selected-filters" aria-label={nl ? 'Geselecteerde filters' : 'Selected filters'}>
         {state.query && <span>{state.query}</span>}{state.author && <span>{selectedAuthor?.name ?? `Author #${state.author}`}</span>}
         {state.categories.map(id => <span key={id}>{categories.find(c => c.id === id)?.[nl ? 'nl' : 'en'] ?? id}</span>)}
@@ -63,8 +66,8 @@ export function EditorialPagination({ state, pageCount, route }: { state: Editor
   const { locale } = useLumiScoreLocale();
   if (pageCount <= 1) return null;
   return <nav className="browse-pagination" aria-label={locale === 'nl' ? 'Paginering' : 'Pagination'}>
-    {state.page > 1 && <a rel="prev" href={editorialHref(route, { ...state, page: state.page - 1 })}>{locale === 'nl' ? 'Vorige' : 'Previous'}</a>}
+    {state.page > 1 && <LocaleLink rel="prev" href={editorialHref(route, { ...state, page: state.page - 1 })}>{locale === 'nl' ? 'Vorige' : 'Previous'}</LocaleLink>}
     <span>{state.page} / {pageCount}</span>
-    {state.page < pageCount && <a rel="next" href={editorialHref(route, { ...state, page: state.page + 1 })}>{locale === 'nl' ? 'Volgende' : 'Next'}</a>}
+    {state.page < pageCount && <LocaleLink rel="next" href={editorialHref(route, { ...state, page: state.page + 1 })}>{locale === 'nl' ? 'Volgende' : 'Next'}</LocaleLink>}
   </nav>;
 }

@@ -59,7 +59,7 @@ test('saving or skipping reading preferences returns to the validated authentica
     new URL('../../app/components/LumiScoreReadingPreferences.tsx', import.meta.url),
     'utf8',
   );
-  assert.equal(component.match(/window\.location\.assign\(next\)/g)?.length, 2);
+  assert.equal(component.match(/window\.location\.assign\(localizedHref\(next, locale\)\)/g)?.length, 2);
   assert.match(component, /request\('PUT', \{ readingPeriods \}\)\.then\(\(saved\)/);
   assert.match(component, /body: JSON\.stringify\(\{ dismiss: true \}\)/);
 });

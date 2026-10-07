@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useCallback, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { hasUsableInitialBookCover } from '@/lib/books/book-cover-state';
@@ -47,7 +49,7 @@ function CollectionDirectoryCard({ item }: { item: CollectionDirectoryItem }) {
 
   return (
     <article className="collection-directory-card">
-      <a href={getCollectionHref(collection.slug)}>
+      <LocaleLink href={getCollectionHref(collection.slug)}>
         <div className={`collection-cover-stack cover-count-${covers.length}`} aria-hidden="true">
           {covers.length > 0 ? covers.map((book) => (
             <BookCover key={book.workId} book={book} small resolveMissing={false} />
@@ -60,7 +62,7 @@ function CollectionDirectoryCard({ item }: { item: CollectionDirectoryItem }) {
           <small>{t('collection.noOfficialOrder')}</small>
         )}
         <b>{t('collections.open')} <span aria-hidden="true">→</span></b>
-      </a>
+      </LocaleLink>
     </article>
   );
 }
@@ -99,8 +101,8 @@ export function LumiScoreCollectionsPage({
       />
       <section className="collections-directory" aria-labelledby="collections-title">
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
-          <a href="/browse">{t('browse.books')}</a>
-          <a href="/collections" aria-current="page">{t('browse.collections')}</a>
+          <LocaleLink href="/browse">{t('browse.books')}</LocaleLink>
+          <LocaleLink href="/collections" aria-current="page">{t('browse.collections')}</LocaleLink>
         </nav>
         <div className="browse-heading">
           <div>
@@ -117,13 +119,13 @@ export function LumiScoreCollectionsPage({
 
         <nav className="collection-filters" aria-label={t('collections.filterLabel')}>
           {COLLECTION_DIRECTORY_FILTERS.map((value) => (
-            <a
+            <LocaleLink
               href={getCollectionDirectoryHref(value)}
               aria-current={filter === value ? 'page' : undefined}
               key={value}
             >
               {t(FILTER_LABELS[value])}
-            </a>
+            </LocaleLink>
           ))}
         </nav>
 

@@ -17,15 +17,18 @@ const cases: [string, string, string][] = [
   ['/search?q=tolkien', '/search', 'noindex, follow'], ['/my-books', '/my-books', 'noindex, follow'],
   ['/login?next=%2Fmy-books', '/login', 'noindex, follow'], ['/forgot-password', '/forgot-password', 'noindex, nofollow'],
 ];
-for (const [path, canonical, robots] of cases) {
-  test(`server HTML ${path}`, async () => {
-    const response = await fetch(`${origin}${path}`);
+for (const locale of ['en', 'nl'] as const) for (const [path, canonical, robots] of cases) {
+  const route = `/${locale}${path === '/' ? '' : path}`;
+  const canonicalRoute = `/${locale}${canonical === '/' ? '' : canonical}`;
+  test(`server HTML ${route}`, async () => {
+    const response = await fetch(`${origin}${route}`, { headers: { cookie: `lumiscore-locale=${locale === 'nl' ? 'en' : 'nl'}`, 'accept-language': locale === 'nl' ? 'en-US' : 'nl-NL' } });
     assert.equal(response.status,200);
     const html = await response.text();
     const tags = inspectServerHtml(html);
     assert.deepEqual(tags.robots,[robots]);
     assert.equal(tags.canonical.length,1);
-    assert.equal(new URL(tags.canonical[0]).href,`https://lumisco.re${canonical}`);
+    assert.equal(tags.lang,locale);
+    assert.equal(new URL(tags.canonical[0]).href,`https://lumisco.re${canonicalRoute}`);
     assert.deepEqual(tags.duplicates,[]);
     for (const key of ['og:title','og:description','og:url','og:type','twitter:card','twitter:title','twitter:description']) assert.equal(tags.metadata[key]?.length,1,key);
     assert.deepEqual(tags.metadata['og:url'],tags.canonical);
@@ -38,24 +41,21 @@ for (const [path, canonical, robots] of cases) {
     if(canonical===collectionPath) assert.ok(tags.metadata['og:title'][0].includes(tags.h1[0]));
   });
 }
-test('language selection still changes server HTML without changing canonicals', async () => {
+test('legacy URLs redirect to one fixed default independently of browser language', async () => {
   for (const path of ['/','/browse','/categories','/over-ons','/zo-werkt-het','/voor-uitgevers','/contact']) {
     const variants: Record<string,string>[] = [{'accept-language':'nl-NL'}, {cookie:'lumiscore-locale=nl'}];
     for (const headers of variants) {
-      const response=await fetch(`${origin}${path}`,{headers});
-      const tags=inspectServerHtml(await response.text());
-      assert.equal(tags.lang,'nl',path);
-      assert.equal(tags.canonical.length,1);
-      assert.equal(new URL(tags.canonical[0]).href,`https://lumisco.re${path}`);
-      assert.deepEqual(tags.duplicates,[]);
+      const response: Response=await fetch(`${origin}${path}`,{headers,redirect:'manual'});
+      assert.equal(response.status,308,path);
+      assert.equal(new URL(response.headers.get('location')!,origin).pathname,`/en${path==='/'?'':path}`);
     }
   }
 });
 test('legacy book URL and protected recovery redirects remain intact',async()=>{
   const redirects: [string,string,number][] = [
-    [bookPath.replace('/book/','/books/'),bookPath,308],
-    ['/update-password','/forgot-password?error=invalid_link',307],
-    ['/reading-preferences','/login?next=%2Freading-preferences%3Fnext%3D%252F',307],
+    [bookPath.replace('/book/','/books/'),`/en${bookPath}`,308],
+    ['/nl/update-password','/nl/forgot-password?error=invalid_link',307],
+    ['/en/reading-preferences','/en/login?next=%2Fen%2Freading-preferences%3Fnext%3D%252Fen',307],
   ];
   for(const [path,expected,status] of redirects) {
     const response: Response=await fetch(`${origin}${path}`,{redirect:'manual'});
@@ -68,13 +68,14 @@ test('sitemap retains book and collection coverage and excludes parameter varian
   assert.equal(response.status,200);
   const xml=await response.text();
   const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
-  for(const path of ['/browse','/collections','/categories',bookPath,collectionPath]) assert.ok(urls.includes(`https://lumisco.re${path}`));
+  for(const locale of ['en','nl']) for(const path of ['/browse','/collections','/categories',bookPath,collectionPath]) assert.ok(urls.includes(`https://lumisco.re/${locale}${path}`));
   assert.ok(urls.every(url=>!new URL(url).search));
   assert.equal(new Set(urls).size,urls.length);
 });
 
 test('not-found HTML has one framework noindex and a request-relative canonical',async()=>{
-  for (const path of ['/book/99999999','/book/not-a-number','/collection/not-a-real-collection','/not-a-real-route']) {
+  for (const locale of ['en','nl']) for (const suffix of ['/book/99999999','/book/not-a-number','/collection/not-a-real-collection','/not-a-real-route']) {
+    const path=`/${locale}${suffix}`;
     const response: Response=await fetch(`${origin}${path}`);
     assert.equal(response.status,404,path);
     const tags=inspectServerHtml(await response.text());

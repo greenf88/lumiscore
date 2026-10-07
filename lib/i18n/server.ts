@@ -1,27 +1,30 @@
 import 'server-only';
 
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import {
-  LOCALE_COOKIE_NAME,
+  DEFAULT_LOCALE,
   isLocale,
-  localeFromLanguage,
   type Locale,
 } from './config.ts';
+import { LOCALE_REQUEST_HEADER, PATH_REQUEST_HEADER, splitLocalePath } from './paths.ts';
 
 export type RequestLocale = {
   locale: Locale;
   hasPersistedChoice: boolean;
 };
 
-export async function resolveRequestLocale(): Promise<RequestLocale> {
-  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
-  const persistedLocale = cookieStore.get(LOCALE_COOKIE_NAME)?.value;
-  if (isLocale(persistedLocale)) {
-    return { locale: persistedLocale, hasPersistedChoice: true };
+export async function resolveRequestLocale(request?: Request): Promise<RequestLocale> {
+  // Private API representations receive the page locale explicitly; cookies
+  // cannot race hydration or change an existing round's stored language.
+  if (request) {
+    const locale = new URL(request.url).searchParams.get('locale');
+    return { locale: isLocale(locale) ? locale : DEFAULT_LOCALE, hasPersistedChoice: true };
   }
+  const headerStore = await headers();
+  const routeLocale = headerStore.get(LOCALE_REQUEST_HEADER);
+  return { locale: isLocale(routeLocale) ? routeLocale : DEFAULT_LOCALE, hasPersistedChoice: true };
+}
 
-  return {
-    locale: localeFromLanguage(headerStore.get('accept-language')),
-    hasPersistedChoice: false,
-  };
+export async function requestPagePath(): Promise<string> {
+  return splitLocalePath((await headers()).get(PATH_REQUEST_HEADER) ?? '/').path;
 }

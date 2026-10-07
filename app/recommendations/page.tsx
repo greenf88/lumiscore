@@ -2,10 +2,10 @@ import { DiscoveryPageShell } from '@/app/components/DiscoveryPageShell';
 import { RecommendationOverview } from '@/app/components/RecommendationOverview';
 import { recommendationLimit } from '@/lib/catalog/discovery';
 import { resolveRequestLocale } from '@/lib/i18n/server';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 export const dynamic = 'force-dynamic';
-export const metadata = createPageMetadata({ title: 'Recommendations — LumiScore', canonicalPath: '/recommendations', noIndex: true });
+export async function generateMetadata() { return createLocalizedPageMetadata({ title: 'Recommendations — LumiScore', canonicalPath: '/recommendations', noIndex: true }); }
 export default async function RecommendationsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const [{ locale }, params, authState] = await Promise.all([resolveRequestLocale(), searchParams,
     import('@/lib/supabase/auth').then(m => m.loadHeaderAuthState()).catch(() => ({ authenticated: false }))]);
