@@ -25,12 +25,27 @@ test('home has only a compact authenticated recommendation preview and no guest 
   const home=await read('app/components/LumiScoreHome.tsx');
   assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
   assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
+  assert.match(page,/loadHighestRatedCatalog\(8\)/);
+  assert.equal((page.match(/loadHomepagePersonalization\(locale, 3\)/g) ?? []).length, 1);
+  assert.match(home,/personalization\.recommendations\.slice\(0, 3\)/);
+  assert.match(home,/loading="lazy"/);
   assert.doesNotMatch(home,/<RecommendationsSection|loadGuestHomepagePersonalization|\/api\/recommendations\/guest/);
   assert.match(home,/personalization\.authenticated && <RecommendationPanel/);
   assert.match(home,/href="\/recommendations"/);
   assert.match(home,/href="\/browse\?sort=highest"/);
   assert.match(await read('app/components/LumiScoreTasteTest.tsx'), /href="\/recommendations">\{t\('taste.seeRecommendations'\)/);
   assert.doesNotMatch(await read('app/recommendations/page.tsx'), /Choose 10|recommendation-limit/);
+});
+
+test('local review routes use real components without adding an application authentication bypass', async () => {
+  const main=await read('test-support/compact-taste/main.tsx');
+  assert.match(main,/location\.pathname === '\/taste-test\/result' \? <TasteRatingResult/);
+  assert.match(main,/<HomePreview/);
+  const adapter=await read('scripts/compact-taste-local.mjs');
+  assert.match(adapter,/configFile: false, envFile: false/);
+  assert.match(adapter,/host: '127\.0\.0\.1'/);
+  assert.match(adapter,/buildRatingResultProfile/);
+  assert.doesNotMatch(adapter,/createClient|createServerSupabaseClient|process\.env\./);
 });
 test('rating UI keeps explicit save/skip/search with compact progress and no language question', async () => {
   const taste=await read('app/components/RatingTasteTest.tsx');

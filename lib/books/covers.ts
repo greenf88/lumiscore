@@ -89,3 +89,30 @@ export function getOpenLibraryCoverVariantUrl(
 
   return url.replace(/-[SML]\.jpg(?=\?|$)/, `-${size}.jpg`);
 }
+
+export type CoverPresentation = 'compact' | 'card' | 'taste' | 'detail';
+
+// Provider variants only: no image proxy, URL guessing on other hosts or stored-data changes.
+// Density candidates let Retina cards stay sharp; the small taste cover needs only M.
+export function getBookCoverImageSource(url: string, presentation: CoverPresentation, largeFallback = false) {
+  const large = getOpenLibraryCoverVariantUrl(url, 'L');
+  const medium = getOpenLibraryCoverVariantUrl(url, 'M');
+  const small = getOpenLibraryCoverVariantUrl(url, 'S');
+  if (medium === large || presentation === 'detail' || largeFallback) {
+    return { src: large, srcSet: undefined, canRetryLarge: false };
+  }
+  if (presentation === 'compact') {
+    return { src: small, srcSet: `${small} 1x, ${medium} 2x`, canRetryLarge: true };
+  }
+  return {
+    src: medium,
+    srcSet: presentation === 'card' ? `${medium} 1x, ${large} 2x` : undefined,
+    canRetryLarge: true,
+  };
+}
+
+export function nextBookCoverAttempt(index: number, canRetryLarge: boolean) {
+  return canRetryLarge
+    ? { index, largeFallbackIndex: index }
+    : { index: index + 1, largeFallbackIndex: null };
+}

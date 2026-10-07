@@ -1,5 +1,10 @@
 @import 'tailwindcss/index.css';
 
+/* Self-hosted Latin subsets cover Dutch/English and their punctuation. */
+@font-face { font-family: Inter; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/inter-latin.woff2') format('woff2'); }
+@font-face { font-family: Lora; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/lora-latin.woff2') format('woff2'); }
+@font-face { font-family: Lora; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/lora-latin-italic.woff2') format('woff2'); }
+
 :root {
   --bg: #071720;
   --bg-2: #0b1f29;
@@ -8,7 +13,7 @@
   --text: #f7f3eb;
   --muted: #9da9ac;
   --border: rgba(191, 210, 210, 0.16);
-  --teal: #4f9ba0;
+  --teal: #72b6bb;
   --teal-deep: #42646b;
   --gold: #e2a24c;
   --header: rgba(7, 23, 32, 0.92);
@@ -16,7 +21,18 @@
   --panel-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
   --hero-image: url('/assets/dark-reading-scene-1024.webp');
   --hero-avif: url('/assets/dark-reading-scene-1024.avif');
-  --serif: Georgia, 'Times New Roman', Times, serif;
+  --serif: Lora, Georgia, 'Times New Roman', Times, serif;
+  --logo-serif: Georgia, 'Times New Roman', Times, serif;
+  --type-body: 16px;
+  --type-meta: 14px;
+  --type-small: 13px;
+  --type-book: clamp(18px, 1.5vw, 20px);
+  --type-section: clamp(28px, 3vw, 36px);
+  --type-page: clamp(32px, 4.5vw, 52px);
+  --type-hero: clamp(40px, 6vw, 80px);
+  --gold-text: #e2a24c;
+  --action-bg: #355f66;
+  --danger: #e68c82;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: dark;
 }
@@ -27,11 +43,14 @@
   --surface: #fffaf2;
   --surface-raised: #fffdf8;
   --text: #1f2328;
-  --muted: #687476;
+  --muted: #536164;
   --border: rgba(70, 82, 81, 0.16);
   --teal: #42646b;
   --teal-deep: #4d6d70;
   --gold: #c9832d;
+  --gold-text: #87500e;
+  --action-bg: #42646b;
+  --danger: #9d352f;
   --header: rgba(244, 239, 230, 0.93);
   --panel: rgba(255, 250, 242, 0.96);
   --panel-shadow: 0 24px 60px rgba(69, 54, 36, 0.14);
@@ -65,10 +84,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   transition: background-color 280ms ease, border-color 280ms ease;
 }
 
-.wordmark { min-height: 44px; justify-self: start; display: inline-flex; align-items: center; gap: 11px; font-family: var(--serif); font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
+.wordmark { min-height: 44px; justify-self: start; display: inline-flex; align-items: center; gap: 11px; font-family: var(--logo-serif); font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
 .wordmark > span:last-child > span { color: var(--gold); }
 .logo-mark { position: relative; display: inline-flex; width: 29px; height: 29px; align-items: flex-end; gap: 2px; }
-.logo-mark i { display: block; width: 7px; border: 1px solid var(--teal); border-radius: 1px 1px 3px 3px; transform-origin: bottom; }
+.logo-mark i { display: block; width: 7px; border: 1px solid #4f9ba0; border-radius: 1px 1px 3px 3px; transform-origin: bottom; }
+:root[data-theme='paper'] .logo-mark i { border-color: #42646b; }
 .logo-mark i:nth-child(1) { height: 22px; transform: rotate(-9deg); }
 .logo-mark i:nth-child(2) { height: 27px; background: var(--teal-deep); }
 .logo-mark i:nth-child(3) { height: 20px; transform: rotate(8deg); border-color: var(--gold); }
@@ -952,26 +972,28 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .taste-rating-card:hover { transform: none; }
 .taste-saved { color: var(--teal); }
 /* Scoring is the compact exception to overview cards. Controls never shrink for a cover. */
-.taste-rating-test { max-width: 560px; padding: 12px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+.taste-rating-test { max-width: 560px; padding: 8px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
 .taste-round-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .taste-rating-test h1 { margin: 0; font-size: clamp(26px, 4vw, 32px); }
 .taste-round-toolbar { flex-wrap: nowrap; gap: 8px; margin: 0; }
 .taste-round-toolbar .rating-round-progress { margin: 0; font-size: 15px; white-space: nowrap; }
 .taste-round-toolbar button, .taste-round-toolbar .primary-cta { margin: 0; min-height: 44px; padding: 8px 12px; font-size: 13px; }
-.taste-feedback { min-height: 18px; font-size: 12px; line-height: 18px; color: var(--teal); }
-.taste-rating-card { width: 100%; margin: 4px 0 0; padding: 10px; gap: 8px; overflow: visible; }
+.taste-feedback { min-height: 12px; font-size: 11px; line-height: 12px; color: var(--teal); }
+.taste-rating-card { width: 100%; margin: 4px 0 0; padding: 10px; gap: 8px; border-radius: 8px; overflow: visible; }
 .taste-book-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.taste-book-identity .book-cover { flex: 0 0 auto; width: auto; height: clamp(32px, calc(100svh - 430px), 100px); height: clamp(32px, calc(100dvh - 430px), 100px); aspect-ratio: .66; padding: 0; }
+.taste-book-identity .book-cover { flex: 0 0 auto; width: auto; height: clamp(88px, calc(100svh - 350px), 156px); height: clamp(88px, calc(100dvh - 350px), 156px); aspect-ratio: .66; padding: 0; }
 .taste-book-identity .book-card-body { min-width: 0; padding: 0; }
-.taste-book-identity h3 { min-height: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.taste-book-identity h3 { min-height: 0; font-size: 20px; line-height: 1.25; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .taste-book-identity .book-card-body > p { margin: 4px 0 0; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .taste-book-identity .cover-title { font-size: 9px; }
 .taste-book-identity .cover-author, .taste-book-identity .cover-kicker, .taste-book-identity .cover-mark { display: none; }
 .taste-rating-actions { padding: 0; }
-.taste-rating-test fieldset { min-width: 0; margin: 0 0 8px; }
-.taste-rating-test legend { margin-bottom: 4px; font-size: 13px; }
+.taste-rating-test fieldset { min-width: 0; margin: 0 0 6px; }
+.taste-rating-test legend { margin-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.taste-rating-test .taste-score-buttons button { border-radius: 5px; }
+.taste-rating-test .taste-score-buttons button[aria-pressed="true"] { outline: 2px solid var(--teal); outline-offset: 2px; }
 .taste-save-skip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.taste-save-skip button { min-width: 0; min-height: 44px; margin: 0; padding: 8px; font-size: 14px; }
+.taste-save-skip button { min-width: 0; min-height: 44px; margin: 0; padding: 8px; border-radius: 5px; font-size: 14px; }
 .taste-book-search { margin-top: 8px; }
 .taste-book-search summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-size: 13px; }
 .taste-book-search summary::before { content: '+'; margin-right: 8px; color: var(--teal); }
@@ -979,6 +1001,74 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .taste-book-search label, .taste-book-search input { display: block; width: 100%; }
 .taste-book-search summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .taste-result-link { margin-top: 8px; }
+
+/* One typography scale, with compact scoring as an explicit functional exception. */
+body { font-size: var(--type-body); line-height: 1.5; }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.25; letter-spacing: -.01em; }
+button, input, select, textarea { font-family: var(--sans); }
+.hero-copy h1 { font-size: var(--type-hero); line-height: 1.15; letter-spacing: -.015em; }
+.hero-copy h1 em { color: var(--gold-text); }
+.browse-heading h1, .search-results-heading h1, .detail-copy h1,
+.information-page h1, .editorial-lists h1, .taste-result h1 { font-size: var(--type-page); line-height: 1.2; letter-spacing: -.01em; }
+.information-hero h1, .collection-hero h1, .my-books-heading h1, .auth-card h1, .book-not-found h1, .taste-results h1, .taste-test-heading h1, .taste-test-unavailable h1 { font-size: var(--type-page); line-height: 1.2; letter-spacing: -.01em; }
+.section-heading h2, .panel-heading h2, .continue-series-heading h2,
+.taste-result h2 { font-size: var(--type-section); line-height: 1.25; letter-spacing: -.01em; }
+.information-section h2, .book-description h2, .rating-section h2, .detail-information h2 { font-size: var(--type-section); line-height: 1.25; letter-spacing: -.01em; }
+.book-card h3, .recommendation-copy strong, .continue-series-book > span strong { font-size: var(--type-book); line-height: 1.25; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
+.book-card h3 { min-height: 2.5em; }
+.recommendation-copy strong { white-space: normal; overflow: visible; text-overflow: clip; }
+.book-card-body > p, .recommendation-copy > span:not(.match-line), .detail-author { font-family: var(--sans); font-size: var(--type-meta); line-height: 1.45; }
+.book-year, .book-genre { font-size: var(--type-small); font-weight: 500; letter-spacing: 0; text-transform: none; white-space: normal; overflow: visible; }
+.book-meta, .book-card-body .book-match, .match-line, .card-editorial-note,
+.collection-book-card .collection-card-context { font-size: var(--type-small); line-height: 1.45; letter-spacing: 0; text-transform: none; }
+.section-intro, .browse-heading p, .detail-description, .account-name-prompt,
+.site-footer p { font-family: var(--sans); font-size: var(--type-body); line-height: 1.55; }
+.book-description p, .information-hero > p, .collection-hero > p, .my-books-heading p, .my-books-guest-cta p, .my-books-loading, .my-books-gate p, .my-books-empty p, .auth-card > p, .account-preference-invite p, .taste-test-heading p, .taste-test-unavailable p, .taste-result-summary, .book-not-found p { font-family: var(--sans); font-size: var(--type-body); line-height: 1.55; }
+.value-icon, .value-item strong, .paper-features strong, .collection-progress strong, .collection-book-control-triggers strong, .collection-bulk-action-bar > strong, .detail-information dd, .preference-fieldset legend, .rating-options button, .detail-score-panel > strong { font-family: var(--sans); font-variant-numeric: tabular-nums; }
+.detail-author { font-style: normal; }
+.hero-stats dt, .mini-score strong, .score-badge strong, .detail-score strong { font-family: var(--sans); font-variant-numeric: tabular-nums; font-weight: 600; }
+.score-badge small, .mini-score small { font-family: var(--sans); letter-spacing: .01em; }
+.eyebrow, .section-tools, .view-all, .learn-link, .hero-stats dd,
+.dutch-discovery-group-heading a, .continue-series-directory-link,
+.empty-results-action, .browse-pagination > a, .browse-pagination > span,
+.browse-controls label, .header-sign-in, .header-account-label,
+.footer-nav a, .footer-bottom { font-size: var(--type-small); font-weight: 600; line-height: 1.45; letter-spacing: .025em; text-transform: none; }
+.main-nav, .search-bar input, .want-button, .primary-cta, .browse-controls button,
+.mobile-navigation-panel a, .header-account-panel button { font-size: var(--type-body); font-weight: 600; letter-spacing: 0; text-transform: none; }
+.want-button { padding-inline: 6px; line-height: 1.3; }
+.main-nav > .taste-test-nav-link, .language-switcher button[aria-pressed='true'],
+.detail-taste-test-link { color: var(--gold-text); }
+.primary-cta, .primary-cta:hover, .browse-controls button,
+.taste-rating-test button.primary-cta { background: var(--action-bg); color: #fff; }
+.primary-cta:hover { box-shadow: 0 0 0 2px var(--teal); }
+.search-bar input::placeholder { opacity: 1; }
+.taste-rating-test h1 { font-size: clamp(24px, 4vw, 30px); line-height: 1.25; }
+.taste-book-identity h3 { min-height: 0; font-size: var(--type-book); }
+.taste-book-identity .book-card-body > p { font-size: var(--type-small); }
+.taste-round-toolbar .rating-round-progress, .taste-round-toolbar button,
+.taste-save-skip button, .taste-book-search summary, .taste-rating-test legend { font-size: var(--type-body); line-height: 1.25; letter-spacing: 0; }
+.taste-score-buttons button { font-size: var(--type-body); line-height: 1.25; }
+.taste-feedback { font-size: 12px; line-height: 1.25; min-height: 15px; }
+.taste-round-choices button { font-size: var(--type-body); }
+.language-switcher button { font-size: var(--type-small); font-weight: 600; letter-spacing: 0; }
+:root[data-theme='paper'] .paper-features strong { font-family: var(--sans); font-size: var(--type-body); }
+:root[data-theme='paper'] .paper-features small { font-size: var(--type-small); }
+:root[data-theme='paper'] .learn-link { font-size: var(--type-small); letter-spacing: .025em; text-transform: none; }
+.directory-switcher a, .detail-sign-in, .detail-taste-test-link, .detail-back-link,
+.card-reading-status, .detail-cover-figure figcaption, .detail-information dt { font-size: var(--type-small); font-weight: 600; letter-spacing: .025em; text-transform: none; }
+.directory-switcher a[aria-current='page'], .mini-score strong, .taste-test-cta span,
+.taste-choice-mark, .taste-neither[aria-pressed='true'], .taste-confidence strong,
+.detail-match-panel > strong, .collection-progress > span, .collection-book-copy .collection-book-status,
+.collection-book-copy em, .my-books-tabs button span { color: var(--gold-text); }
+.collection-complete, .collection-order-note { color: var(--gold-text) !important; }
+.detail-year, .detail-score-panel > span, .detail-score-panel > p { font-size: var(--type-small); letter-spacing: .025em; text-transform: none; }
+.rating-section > div:first-child > p { font-size: var(--type-body); }
+.collection-directory-card h2 { line-height: 1.25; letter-spacing: -.01em; }
+.rating-feedback, .reading-status-error, .account-name-status.is-error, .collection-book-row.status-dnf .collection-book-status, .collection-control-message, .collection-bulk-feedback p[role='alert'], .auth-error { color: var(--danger); }
+@media (min-width: 761px) and (max-width: 1350px) {
+  .site-header { grid-template-columns: auto minmax(160px, 1fr) auto; gap: 12px; padding-inline: 20px; }
+  .main-nav { gap: 10px; font-size: var(--type-meta); }
+}
 @media (max-width: 760px) {
   .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .my-books-grid { max-width: none; }
