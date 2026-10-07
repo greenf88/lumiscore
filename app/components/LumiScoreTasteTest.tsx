@@ -209,7 +209,7 @@ export function LumiScoreTasteTest({
               {saveStatus === 'saving' ? t('taste.saving') : saveStatus === 'saved' ? t('taste.savedAccount') : saveStatus === 'error' ? t('taste.savedLocalSyncError') : !authenticated ? t('taste.savedLocal') : ''}
             </p>
             <div className="taste-result-actions">
-              <a className="primary-cta" href="/">{t('taste.seeRecommendations')} <span>→</span></a>
+              <a className="primary-cta" href="/recommendations">{t('taste.seeRecommendations')} <span>→</span></a>
               {!authenticated && <a className="taste-sign-in" href="/login?next=%2Ftaste-test">{t('taste.signInToSave')}</a>}
               <button type="button" onClick={() => { setQuestionIndex(0); setShowResults(false); }}>{t('taste.again')}</button>
             </div>

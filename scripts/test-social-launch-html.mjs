@@ -28,7 +28,9 @@ test('book login retains the server-verified editorial return path', async () =>
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.ok(html.includes('/login?next=%2Fbook%2F102%3FreturnTo%3D%252Ftoplijsten%252Fdystopie-vanaf-1990'));
-  assert.ok(html.includes('Onvoldoende beoordelingen'));
+  // The local UI fixture now has five synthetic raters for this Work.
+  assert.ok(html.includes('5–9'));
+  assert.ok(!html.includes('5 beoordelingen'));
 });
 test('English server metadata and list content follow the existing locale cookie', async () => {
   const response = await fetch(base + paths[2], { headers: { Cookie: 'lumiscore-locale=en' } });

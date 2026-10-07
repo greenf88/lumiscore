@@ -26,6 +26,8 @@ import {
 } from '@/lib/books/language';
 import {
   applyRatingSummaries,
+  ratingSummaryMap,
+  type PublicRatingSummaryRow,
   type PublicRatingSummary,
 } from '@/lib/ratings/card-summaries';
 import {
@@ -33,7 +35,7 @@ import {
   loadStoredCoverResolutionsBatched,
   type StoredCoverResolution,
 } from '@/lib/supabase/cover-resolutions';
-import { rankHighestRatedWorks } from '@/lib/ratings/highest-rated';
+import { highestRatedPageArgs, readHighestRatedPage } from '@/lib/ratings/highest-rated-page';
 import {
   CATALOG_BROWSE_PAGE_SIZE,
   type CatalogBrowsePageSize,
@@ -623,56 +625,21 @@ export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
     }));
 }
 
-export async function loadHighestRatedCatalog(limit = 18): Promise<{
+export async function loadHighestRatedCatalog(limit = 8): Promise<{
   books: Book[];
   total: number;
 }> {
-  const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
-  const firstPage = await supabase
-    .from('works')
-    .select('id,title', { count: 'exact' })
-    .order('id', { ascending: true })
-    .range(0, 999);
-  if (firstPage.error) throw firstPage.error;
-
-  const total = firstPage.count ?? firstPage.data?.length ?? 0;
-  const remainingStarts = Array.from(
-    { length: Math.max(0, Math.ceil(total / 1000) - 1) },
-    (_, index) => (index + 1) * 1000,
-  );
-  const remainingPages = await Promise.all(remainingStarts.map((start) =>
-    supabase
-      .from('works')
-      .select('id,title')
-      .order('id', { ascending: true })
-      .range(start, start + 999),
-  ));
-  const failedPage = remainingPages.find(({ error }) => error);
-  if (failedPage?.error) throw failedPage.error;
-
-  const identities = [
-    ...(firstPage.data ?? []),
-    ...remainingPages.flatMap(({ data }) => data ?? []),
-  ].flatMap((row) => {
-    const workId = String(row.id ?? '').trim();
-    const title = typeof row.title === 'string' ? row.title.trim() : '';
-    return workId && title ? [{ workId, title }] : [];
-  });
-  const summaries = await loadPublicRatingSummariesBatched(
-    supabase,
-    identities.map(({ workId }) => workId),
-  );
-  const ranked = rankHighestRatedWorks(
-    identities.map(({ workId, title }) => ({
-      workId,
-      title,
-      score: summaries.get(workId)?.lumiscore ?? null,
-      ratingCount: summaries.get(workId)?.ratingCount ?? null,
-    })),
-    safeLimit,
-  );
+  const rankedPage = await supabase.rpc('catalog_discovery_page', highestRatedPageArgs(limit));
+  if (rankedPage.error) throw rankedPage.error;
+  const { ids, total } = readHighestRatedPage(rankedPage.data, limit);
+  if (ids.length === 0) return { books: [], total };
+  // Do not turn a failed aggregate request into a misleading empty catalog.
+  const summaryResponse = await supabase.rpc('get_work_rating_summaries_v2', { target_work_ids: ids.map(Number) });
+  if (summaryResponse.error) throw summaryResponse.error;
+  if (!Array.isArray(summaryResponse.data)) throw new Error('Highest-rated summaries unavailable.');
+  const summaries = ratingSummaryMap(summaryResponse.data as PublicRatingSummaryRow[]);
   const books = await loadCatalogBooksByIds(
-    ranked.map(({ workId }) => workId),
+    ids,
     summaries,
   );
   const booksById = new Map(
@@ -681,9 +648,9 @@ export async function loadHighestRatedCatalog(limit = 18): Promise<{
   );
 
   return {
-    books: ranked.flatMap(({ workId }) => {
+    books: ids.flatMap((workId) => {
       const book = booksById.get(workId);
-      return book ? [book] : [];
+      return book && book.score !== null && Boolean(book.ratingBand) ? [book] : [];
     }),
     total,
   };

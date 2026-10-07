@@ -140,7 +140,7 @@ test('guest My Books exposes only Want to Read with shared local removal', () =>
   assert.match(page, /useWantToRead\(false, books\)/);
   assert.match(page, /toggleWanted\(book\)/);
   assert.match(page, /my-books-remove/);
-  assert.match(page, /resolveMissing=\{authenticated\}/);
+  assert.match(page, /resolveMissingCover=\{authenticated\}/);
   assert.doesNotMatch(guestMyBooksSource, /MY_BOOKS_STATUSES|myBooks\.reading|myBooks\.read|myBooks\.dnf/);
   assert.match(translations, /Remove \{title\} from Want to Read/);
   assert.match(translations, /Verwijder \{title\} uit Wil ik lezen/);
@@ -185,5 +185,5 @@ test('responsive header swaps crowded links for a compact navigation menu', () =
 test('guest cards and CTA retain mobile-safe layout and tap targets', () => {
   assert.match(styles, /\.my-books-remove \{[^}]*min-height: 44px/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.my-books-guest-cta \{[^}]*flex-direction: column/);
-  assert.match(styles, /\.my-books-grid \{ max-width: 290px; grid-template-columns: 1fr/);
+  assert.match(styles, /\.my-books-grid \{ max-width: none; grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
 });

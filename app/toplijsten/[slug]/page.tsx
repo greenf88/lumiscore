@@ -16,5 +16,5 @@ export default async function TopListPage({ params }: Props) {
   const list = getEditorialTopList((await params).slug);
   if (!list) notFound();
   const authState = await import('@/lib/supabase/auth').then(m=>m.loadHeaderAuthState()).catch(()=>({authenticated:false}));
-  return <DiscoveryPageShell path={'/toplijsten/'+list.slug} authState={authState}><EditorialTopList list={list} /></DiscoveryPageShell>;
+  return <DiscoveryPageShell path={'/toplijsten/'+list.slug} authState={authState}><EditorialTopList list={list} authenticated={authState.authenticated} /></DiscoveryPageShell>;
 }
