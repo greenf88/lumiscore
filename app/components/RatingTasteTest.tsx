@@ -8,6 +8,7 @@ import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCover } from './LumiScoreHome';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
+import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 type Response = { authenticated: boolean; available: boolean; state: RatingRoundState | null; book: Book | null };
 export function RatingTasteTest({ authState, swipePrototype }: { authState: HeaderAuthState; swipePrototype: boolean }) {
@@ -62,6 +63,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
       setData(next); setPaused(false); setScore(null); setIntent(null); setResults([]); setQuery('');
       setSaved(action === 'rate');
       if (action === 'rate') { try { sessionStorage.setItem('lumiscore-rating-changed', '1'); } catch { /* Optional. */ } }
+      if (shouldOpenCompletedResult(action, data?.state ?? null, next)) window.location.assign('/taste-test/result');
     } catch { setError(true); } finally { lock.current = false; setPending(false); }
   };
   const round = data?.state?.round;
