@@ -7,7 +7,8 @@ import { DiscoveryPageShell } from '../../app/components/DiscoveryPageShell';
 const titles = ['De stad aan het einde van de wereld', 'Een reis door het onbekende', 'Het huis tussen de sterren'];
 const books: Book[] = Array.from({ length: 20 }, (_, index) => ({
   id: `local-overview-${index}`, workId: String(991001 + index), source: 'demo',
-  title: `${titles[index % titles.length]} ${index + 1}`, author: 'Synthetische Auteur',
+  title: index === 3 ? 'Een uitzonderlijk lange geschiedenis van een huis tussen de sterren' : `${titles[index % titles.length]} ${index + 1}`,
+  author: index === 3 ? 'Synthetische Auteur met een Lange Naam' : 'Synthetische Auteur',
   firstPublishYear: 1990 + index, cover: 'orbit', coverUrls: ['/compact-cover.svg'],
   score: index < 8 ? 9 - index / 10 : null, ratingsCount: null,
   ratingBand: index < 8 ? '3–4' : null, match: null,

@@ -2,11 +2,17 @@
 // synthetic in-memory round adapter. Never enables a bypass in the application.
 import { createServer } from 'vite';
 import react from '@vitejs/plugin-react';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseRoundAction } from '../lib/taste-test/rating-round.ts';
 import { buildRatingResultProfile } from '../lib/taste-test/rating-result.ts';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const port = Number(process.argv.find(value => value.startsWith('--port='))?.split('=')[1] ?? 3107);
+const before = process.argv.includes('--before');
+const baseline = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:app/globals.css'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
+const baselineTranslations = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:lib/i18n/translations.ts'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
+if (before && baseline?.status !== 0) throw new Error('Approved styling baseline unavailable.');
+if (before && baselineTranslations?.status !== 0) throw new Error('Approved translation baseline unavailable.');
 if (!Number.isInteger(port) || port < 3107 || port > 3110) throw new Error('Local fixture port must be 3107–3110.');
 const titles = ['De stad aan het einde van de wereld', 'Een reis door het onbekende', 'Het huis tussen de sterren',
   'Een uitzonderlijk lange synthetische boektitel over de vergeten geschiedenis van een stad aan de andere kant van de wereld'];
@@ -28,12 +34,17 @@ const json = (res, data, status = 200) => {
 };
 const server = await createServer({
   configFile: false, envFile: false, root: root + 'test-support/compact-taste', publicDir: root + 'public',
-  cacheDir: root + '.wrangler/compact-taste-vite',
+  cacheDir: root + '.wrangler/compact-taste-vite-' + port,
   resolve: { alias: { '@': root, 'next/image': root + 'node_modules/vinext/dist/shims/image.js' }, dedupe: ['react', 'react-dom'] },
   define: { 'process.env': '{}' },
   css: { postcss: { plugins: [] } },
   server: { host: '127.0.0.1', port, strictPort: true, fs: { allow: [root] } },
-  plugins: [react(), { name: 'local-synthetic-round-adapter', configureServer(vite) {
+  plugins: [{ name: 'fixed-styling-baseline', enforce: 'pre', load(id) {
+    if (before && id.replaceAll('\\', '/').split('?')[0] === root.replaceAll('\\', '/') + 'app/globals.css') return baseline.stdout;
+    if (before && id.replaceAll('\\', '/').split('?')[0] === root.replaceAll('\\', '/') + 'lib/i18n/translations.ts') return baselineTranslations.stdout;
+  }, transformIndexHtml(html) {
+    return before ? html : html.replace('</head>', '<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="/fonts/lora-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous"></head>');
+  } }, react(), { name: 'local-synthetic-round-adapter', configureServer(vite) {
     vite.middlewares.use(async (req, res, next) => {
       const url = new URL(req.url, `http://127.0.0.1:${port}`);
       // Bounded local diagnostic: paths only, never bodies, cookies or headers.
