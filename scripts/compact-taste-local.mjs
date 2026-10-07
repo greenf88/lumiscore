@@ -5,15 +5,19 @@ import react from '@vitejs/plugin-react';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { parseRoundAction } from '../lib/taste-test/rating-round.ts';
-import { buildRatingResultProfile } from '../lib/taste-test/rating-result.ts';
+import { buildRatingResultProfile, recommendRatingResult } from '../lib/taste-test/rating-result.ts';
+import { buildEffectiveWorkTraitVector, evidenceRowsForTraits } from '../lib/recommendations/work-trait-evidence.ts';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const port = Number(process.argv.find(value => value.startsWith('--port='))?.split('=')[1] ?? 3107);
 const before = process.argv.includes('--before');
+const resultReview = process.argv.includes('--result-review');
+const missingEvidence = process.argv.includes('--missing-evidence');
+let failFinalSave = process.argv.includes('--fail-final-save');
 const baseline = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:app/globals.css'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
 const baselineTranslations = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:lib/i18n/translations.ts'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
 if (before && baseline?.status !== 0) throw new Error('Approved styling baseline unavailable.');
 if (before && baselineTranslations?.status !== 0) throw new Error('Approved translation baseline unavailable.');
-if (!Number.isInteger(port) || port < 3107 || port > 3110) throw new Error('Local fixture port must be 3107–3110.');
+if (!Number.isInteger(port) || port < 3107 || port > 3115) throw new Error('Local fixture port must be 3107–3115.');
 const titles = ['De stad aan het einde van de wereld', 'Een reis door het onbekende', 'Het huis tussen de sterren',
   'Een uitzonderlijk lange synthetische boektitel over de vergeten geschiedenis van een stad aan de andere kant van de wereld'];
 const books = Array.from({ length: 40 }, (_, i) => ({ id: 'local-compact-' + i, workId: String(990001 + i), source: 'demo',
@@ -23,6 +27,15 @@ let position = 0;
 let round = { id: 'dddddddd-0000-4000-8000-000000000001', number: 1, language: 'nl', goal: 20,
   complete: false, ratedCount: 0, offeredCount: 1 };
 const ratings = new Map();
+const evidence = new Map(books.map(book => [book.workId, buildEffectiveWorkTraitVector(evidenceRowsForTraits({
+  workId: book.workId, traits: {thriller_mystery: 1, dark: .8, fast_paced: .7}, confidence: 1,
+  source: 'manual', sourceKey: 'local-synthetic-result', rawLabels: [], verifiedAt: '2026-10-07',
+}))]));
+if (resultReview) {
+  // Local in-memory fixtures only; the final score must still be explicitly saved.
+  for (const book of books.slice(0, 9)) ratings.set(book.workId, 10);
+  position = 9; round = {...round, goal: 10, ratedCount: 9, offeredCount: 10};
+}
 const journal = [];
 const requests = [];
 const response = () => ({ authenticated: true, available: true, state: {
@@ -56,16 +69,26 @@ const server = await createServer({
       if (url.pathname === '/__evidence' && req.method === 'GET') return json(res, { syntheticUIOnly: true, round, ratings: [...ratings], journal, requests });
       if (url.pathname === '/api/catalog/search') return json(res, { results: books });
       if (url.pathname === '/api/book-status') return json(res, { statuses: {} });
-      if (url.pathname === '/api/taste-test/result') return json(res, {
-        kind: 'result', profile: buildRatingResultProfile([...ratings].map(([workId, rating]) => ({ workId, rating })), new Map()),
-        roundRatedCount: round.ratedCount, language: round.language, partial: !round.complete, exhausted: false, recommendations: [],
-      });
+      if (url.pathname === '/api/taste-test/result') {
+        const resultEvidence = missingEvidence ? new Map() : evidence;
+        const profile = buildRatingResultProfile([...ratings].map(([workId, rating]) => ({ workId, rating })), resultEvidence);
+        return json(res, {kind: 'result', profile,
+          roundRatedCount: round.ratedCount, language: round.language, partial: !round.complete, exhausted: false,
+          recommendations: recommendRatingResult({profile, evidence: resultEvidence,
+            candidates: books.map(book => ({book, ...evidence.get(book.workId)})),
+            excludedIds: new Set(ratings.keys()), availableIds: new Set(books.map(book => book.workId)), locale: round.language}),
+        });
+      }
       if (url.pathname === '/api/taste-test/rounds') {
         if (req.method === 'GET') return json(res, response());
         if (req.method !== 'POST') return json(res, {}, 405);
         let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 4096) return json(res, {}, 413); }
         let action; try { action = parseRoundAction(JSON.parse(body)); } catch { return json(res, {}, 400); }
         if (!action || (action.action !== 'start' && action.roundId !== round.id)) return json(res, {}, 400);
+        if (failFinalSave && action.action === 'rate' && round.ratedCount === round.goal - 1) {
+          failFinalSave = false;
+          return json(res, {localFixture: true, saveRejected: true}, 503);
+        }
         journal.push(action);
         if (action.action === 'start') {
           round = { ...round, id: 'dddddddd-0000-4000-8000-' + String(round.number + 1).padStart(12, '0'), number: round.number + 1,
