@@ -34,6 +34,7 @@ export type Book = {
   firstPublishYear?: number | null;
   score: number | null;
   ratingsCount: number | null;
+  ratingBand?: string | null;
   match: number | null;
   cover: string;
   isbn10?: string | null;

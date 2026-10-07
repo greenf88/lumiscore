@@ -1,0 +1,67 @@
+# LumiScore social launch local review
+
+Prepared 6 October 2026 for editorial review before 9 October. Local implementation only; no hosted migration, Auth setting, push or deployment is authorized by this document.
+
+## Pages and content
+
+`/toplijsten`, `/toplijsten/dystopie-vanaf-1990` (10 books) and `/toplijsten/fantasy-sciencefiction` (25 books) are editorial reading routes, not community rankings. Content, original book-publication years, existing Work IDs, original NL/EN notes and selection reasons live in `lib/catalog/top-lists.json`. The 35 identities were matched read-only against existing production catalog metadata. No identities or classifications are written. Eight choices lack a cached image; the existing title/author fallback remains available. The other 27 reuse existing Open Library cover URLs.
+
+Divergent uses the verified original year 2011 only in the editorial content, not the existing catalog field 2010. Good Omens credits both authors in this content. The Three-Body Problem uses first standalone book publication 2008, distinct from 2006 serialization and 2014 English translation. These are presentation notes, not catalog repairs. Genre labels are editorial inclusion judgments, not new database classifications.
+
+## Privacy contract
+
+`20261006164920_rating_summary_input_bounds.sql` retains the prepared raw-input boundary of 100 one-dimensional IDs. `20261006173806_public_rating_privacy_b.sql` adds the five-distinct-rater threshold, the bands 5–9 / 10–19 / 20–49 / 50+, and an explicit insufficient-evidence state. New V2 RPC returns no exact count. Both existing RPC signatures return null exact counts and threshold-safe scores. Discovery sorting does not discard unrated books or use exact counts as a tie-break. Collaborative contributions require five distinct contributing peers. Own ratings and user-owned taste state remain private and usable.
+
+The threshold is not an anonymity guarantee: with five independently known eights and exactly one new rating, a new mean 8.2 identifies nine among integer ratings 1–10. Old published aggregates cannot be withdrawn from third-party archives. Below-threshold community quality is neutral in recommendations, not zero. Above-threshold quality uses the published score without inventing an exact sample size; ranking may change as an intended consequence of this policy.
+
+## Local preview
+
+Use two terminals in this worktree. Existing dependencies suffice; no package install or hosted connection is needed.
+
+1. Run `node scripts/social-launch-fixture.mjs` (loopback port 55441). This uses a disposable in-memory PGlite database and a public visitor-only HTTP adapter. It does not implement login or rating writes, and never contacts hosted Supabase.
+2. Set process-local `NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55441`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=local-synthetic-public-client` and `NEXT_PUBLIC_SITE_ORIGIN=https://lumisco.re`. The client value is a fixture marker, not a credential. Do not load a hosted `.env` or any secret/service-role/Google key. Run `node node_modules/vinext/dist/cli.js dev --hostname localhost --port 3106` and open `http://localhost:3106/toplijsten`.
+3. Run `node --test scripts/test-social-launch-html.mjs`. The test accepts loopback HTTP targets only.
+
+The adapter serves a snapshot of the selected public book identities, fake local edition metadata and actual local SQL summary bodies. It is not a full Supabase/PostgREST/Auth environment. The browser route ends at the existing login/registration interface; actual authentication and owner writes are separate hosted release gates. Stop only these two local processes when finished; no original volumes or credentials are involved.
+
+## Local evidence and release gates
+
+172 targeted unit/SQL tests and 6 server-HTML tests passed. SQL tests run the complete 18-migration synthetic chain, explicit Supabase-like default grants and actual anon/authenticated roles. They cover threshold/band boundaries, legacy routes, raw input bounds, private table denial, two-owner isolation, collaborative four/five-peer boundaries and unchanged rating rows/default privileges. Existing flexible-round, guest-answer, result and recommendation tests remain green. These are local proofs, not a new hosted result.
+
+Browser checks measured 390×844 and 1280×900 CSS pixels; no horizontal overflow. NL/EN, Ink/Paper, editorial labels, a loaded cover, missing-cover fallback, list-to-book return and the existing sign-in interface were checked. The verified editorial return survives login and continue-browsing links. No credentials were entered, accounts created or rating writes performed. Server HTML has exactly one robots/canonical and one each of the tested OG/Twitter tags, localized EN content and a real 404 for unknown list slugs. This is not a new LCP/CLS audit or real-phone test.
+
+TypeScript, targeted ESLint, Vinext and Vercel-preset builds and the generated-client secret scan passed. Vercel file tracing required a local sandbox escalation for an ancestor readlink operation, not a code/configuration change or deployment. The separate release proposal records exact migration hashes and the final local commit. Required future gates: hosted test migration/API/browser verification, independently approved password-minimum tests, fresh production preflight and separate release execution approval. Herauthentication and Bookmatch remain outside this release.
+
+## Local interface revision — 7 October 2026
+
+This is an uncommitted local revision on base 09ac723c5daaa3075e6695d8e980f680155cc9e8, not a published release. Regular overview cards now share BookCard/BookCardIdentity: two mobile columns, wrapping titles, separate year, privacy-B score/band and aligned actions. Editorial ranks, Your Match and collection controls remain. Full recommendation cards omit long repeated explanations; home retains an authenticated three-book personal panel. The guest preference-result link opens /recommendations rather than the guest homepage.
+
+Home hydrates at most eight globally ranked books through the existing catalog_discovery_page RPC. Its button opens /browse?sort=highest. The RPC returns a bounded 32-ID page, then eight metadata records are hydrated: no first-1,000-row cutoff. Personal recommendations hydrate three result cards, but the existing catalog-wide candidate computation is unchanged. No user-shared personal cache or second full recommendation grid loads on home. The full list loads fresh after navigation.
+
+Taste rating rounds have equal 10/15/30 buttons, compact progress, short save/skip/pause/result actions and five score columns (1–5, then 6–10). New rounds use site locale. Existing round ID, language, length and progress are retained, including legacy 20-book rounds. Selecting a score never saves automatically; explicit Save and its confirmed response remain necessary. The older guest preference-pair chooser is not a regular overview and has not been redesigned.
+
+Visitor preview: http://localhost:3106/ and http://localhost:3106/toplijsten/dystopie-vanaf-1990. The loopback fixture has no Auth implementation, so authenticated rating-round and personal-panel browser controls remain pending. No hosted users, writes, migrations or credentials were used.
+
+The six referenced screenshots were not present in the visible attachments; existing Highest rated styling is the provisional reference. New screenshots, actual 390px/desktop checks, Ink/Paper visual quality, console checks and clicking through the revised taste UI remain unverified. Computer Use denied localhost and prohibited alternate-surface/raw-browser workarounds. Older visual evidence does not count for this revision. SQL/action/HTML evidence is not browser proof.
+
+74 targeted unit/SQL/HTML tests passed, including six editorial HTML checks. They cover global ranking across 10,134 synthetic Works, privacy B, saved round language/length, explicit rating versus skip, guest request gating and layout contracts. The existing isolated PostgreSQL flexible-round test also passed (legacy 20, real save/skip/resume/retries and owner isolation). TypeScript, targeted lint and both builds passed. The Vercel-preset build required a filesystem-only sandbox escalation for an existing ancestor readlink restriction, not a configuration change. Secret and diff checks are recorded in the external preparation report.
+
+Raw equal-data samples: C:/Users/rickg/Documents/Codex/lumiscore-ordered-review-20261004/ui-home-measurements-20261007.json. Three warm alternating development HTTP samples per locale: API requests 6→4, JSON response bytes 11,773→4,685 (60.2% lower), EN HTML median 72,676→53,494 bytes and NL 73,050→53,666. Complete-HTML median EN 139→126 ms (127–155 versus 115–133), NL 136→133 ms (116–150 versus 126–138). Anonymous synthetic loopback HTTP only: not LCP/CLS, total image/JS transfer, authenticated performance or a production guarantee. No reliable visual-load speed improvement is claimed.
+
+React guidance informed shared components and stable derived arrays; Supabase guidance retained the existing RPC/privacy model and actual PostgreSQL verification rather than a schema change. Publication awaits visual review, missing browser evidence and a newly finalized exact release artifact. No push, migration or deployment performed; parked work remains parked.
+
+## Reference images received — 7 October 2026
+
+The six original reference photos are now supplied and visually inspected. Their actual content is: Foto 1 standard Highest rated two-column cards; Foto 2 compact curated three-book panel; Foto 3 full recommendation rows to replace; Foto 4 rating buttons to realign; Foto 5 active round; Foto 6 completed legacy 20-book round/new-round controls. These are reference images, not evidence of the revised local application.
+
+Follow-up adjustment: the localized First published label now precedes the serif title, matching Foto 1; existing genre context, where present, is kept below the author. Cover aspect ratio 0.66, common surfaces, score badge and action styling stay shared. Screenshot scores/counts are not copied over privacy B. Compact personal explanations remain confined to the three-book panel; the full list uses standard cards and Your Match. The selected score outline stays inside its button to avoid overlap. Compact round progress now uses rating-round-progress, separate from the guest preference test's 3px bar: this fixes an actual CSS inheritance collision in the preceding local revision without changing saved state or APIs. A regression test guards the localized label order and distinct progress class. 21 directly relevant checks passed after these refinements, including localized HTML and saved-round action tests; TypeScript and lint passed. Earlier broader evidence remains applicable to unchanged SQL/data behavior.
+
+Browser access remains blocked, so current screenshots, real applied viewport checks and authenticated browser flows are still pending. Receipt of the reference images resolves only the missing-reference issue. Publication remains withheld. Earlier performance samples belong to the preceding local UI revision; these presentation refinements do not change the four-request/eight-book loading path, but their visual performance was not remeasured. Both final builds, the 110-file client secret scan and normal diff check passed after the reference refinements. Local HTTP HTML confirms eight cards and the First published label before the title.
+
+## Release preparation after visual acceptance — 7 October 2026
+
+Rick accepted the revised local interface and explicitly authorized this bounded release, including the two unchanged privacy/input migrations on test then production, necessary branch-only test Preview, at most six own synthetic users/22 ratings if needed and cleanup, maximum $0. The password package and Bookmatch remain outside this release. No original users, ratings or catalog identities may be changed. Fresh fetch confirms main still 8fc421dc4f24686aea9d869d01bab87239236c6d; both hosted migration histories still end at 20261004164419. New local UI tests (15), client scan (110 files) and diff check passed again; existing final builds remain source-valid. Hosted acceptability is still a gate, not implied by visual acceptance. The authenticated Vercel dashboard session is usable; the connector's team403 does not prove dashboard access is missing. This section supersedes historical missing-reference and approval-status statements above, not historical test evidence.
+
+## Source checks
+
+In addition to each book's existing Open Library Work reference: [Good Omens authors and 1990](https://terrypratchett.com/books/good-omens/), [Scythe 2016 and dystopia](https://www.simonandschuster.com/books/Scythe/Neal-Shusterman/Arc-of-a-Scythe/9781442472426), [Unwind 2007](https://www.simonandschuster.com/books/Unwind/Neal-Shusterman/Unwind-Dystology/9781416912040), [Butler's Parable series](https://www.octaviabutler.com/parableseries/), [Divergent original 2011](https://en.wikipedia.org/wiki/Divergent_(novel)), [Three-Body serialization and book publication](https://en.wikipedia.org/wiki/The_Three-Body_Problem_(novel)). Supabase [functions](https://supabase.com/docs/guides/database/functions) and [password security](https://supabase.com/docs/guides/auth/password-security) inform the bounded privilege and subsequent Auth plans.

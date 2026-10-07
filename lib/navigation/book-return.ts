@@ -1,6 +1,7 @@
 import { getSafeSearchReturnPath } from './search-return.ts';
 import { getSafeBrowseReturnPath } from './browse-return.ts';
 import { recommendationReturnPath } from '../catalog/discovery.ts';
+import { editorialTopLists } from '../catalog/top-lists.ts';
 
 const COLLECTION_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MAX_COLLECTION_SLUG_LENGTH = 120;
@@ -14,6 +15,7 @@ export type BookLinkReturnContext =
   | { kind: 'home' };
 
 export type BookReturnNavigation =
+  | { kind: 'editorial'; href: string }
   | { kind: 'search'; href: string }
   | { kind: 'collection'; href: string; collectionName: string }
   | { kind: 'collections'; href: '/collections' }
@@ -30,6 +32,14 @@ type VerifyCollectionMembership = (
   workId: string,
   slug: string,
 ) => Promise<VerifiedCollectionReturnTarget | null>;
+
+export function bookAuthenticationReturnPath(workId: string, navigation: BookReturnNavigation): string {
+  const path = `/book/${workId}`;
+  // Preserve only server-verified editorial membership; never echo raw query input.
+  return navigation.kind === 'editorial'
+    ? `${path}?returnTo=${encodeURIComponent(navigation.href)}`
+    : path;
+}
 
 export function getCollectionReturnPath(slug: string): string | null {
   if (
@@ -103,6 +113,9 @@ export async function resolveBookReturnNavigation(
   if (typeof requestedReturnTo !== 'string') {
     return { kind: 'browse', href: '/browse' };
   }
+
+  const editorial = editorialTopLists.find(list => requestedReturnTo === '/toplijsten/'+list.slug && list.workIds.includes(workId));
+  if (editorial) return { kind: 'editorial', href: '/toplijsten/'+editorial.slug };
 
   const requestedSlug = parseSpecificCollectionPath(requestedReturnTo);
   if (requestedSlug) {

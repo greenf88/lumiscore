@@ -76,7 +76,7 @@ export function recommendRatingResult(input: {
     const traits = reliableResultTraits(input.evidence.get(id));
     if (!TASTE_TRAITS.some(trait => traits[trait] > 0)) return [];
     const overlap = TASTE_TRAITS.reduce((sum,trait) => sum + input.profile.vector[trait]*traits[trait],0);
-    const quality = candidate.book.score !== null && (candidate.book.ratingsCount ?? 0) > 0 ? candidate.book.score / 10 : .55;
+    const quality = candidate.book.score !== null ? candidate.book.score / 10 : .55;
     return [{ candidate, traits, rank: overlap + .05*quality }];
   }).sort((a,c) => c.rank-a.rank || Number(a.candidate.book.workId)-Number(c.candidate.book.workId)).slice(0,20).map(({candidate,traits}) => ({
     book:candidate.book, matchScore:null, matchLabel:null, matchConfidence:'low',

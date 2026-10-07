@@ -24,7 +24,7 @@ async function loadHomepageBooks() {
   ) {
     return process.env.NODE_ENV === 'production'
       ? { books: [], total: null, unavailable: true }
-      : { books, total: books.length, unavailable: false };
+      : { books: books.slice(0, 8), total: books.length, unavailable: false };
   }
 
   try {
@@ -32,71 +32,67 @@ async function loadHomepageBooks() {
     const catalog = await measureServerOperation(
       'homepage.catalog',
       'public',
-      () => loadHighestRatedCatalog(18),
+      () => loadHighestRatedCatalog(8),
     );
     return { ...catalog, unavailable: false };
   } catch (error) {
     console.error('Homepage catalog load failed.', error);
     return process.env.NODE_ENV === 'production'
       ? { books: [], total: null, unavailable: true }
-      : { books, total: books.length, unavailable: false };
+      : { books: books.slice(0, 8), total: books.length, unavailable: false };
   }
 }
 
-async function loadDutchDiscovery(locale: 'en' | 'nl'): Promise<DutchHomepageDiscovery> {
-  try {
-    const { loadDutchHomepageDiscovery } = await import('@/lib/supabase/dutch-homepage-discovery');
-    return await measureServerOperation(
-      'homepage.dutch_discovery',
-      'mixed',
-      () => loadDutchHomepageDiscovery(locale),
-    );
-  } catch {
-    return {
+// The homepage is a small entry point, not a second complete discovery directory.
+// Dutch discovery remains available through the language filters in Browse.
+const emptyDutchDiscovery: DutchHomepageDiscovery = {
       popular: {
         books: [], current: false, personalized: false,
         sourceName: 'De Bestseller 60', sourceUrl: 'https://www.debestseller60.nl/',
         year: 0, week: 0,
       },
       classics: { books: [], personalized: false },
-    };
-  }
-}
+};
+
+const emptyPersonalization: HomepagePersonalization = {
+  authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0,
+  hasEvidence: false, recommendations: [],
+};
 
 export default async function Home() {
   const { locale } = await resolveRequestLocale();
+  const authPromise = import('@/lib/supabase/auth')
+    .then(({ loadHeaderAuthState }) => measureServerOperation('homepage.auth', 'private', loadHeaderAuthState))
+    .catch(() => ({ authenticated: false }));
   const [catalog, dutchDiscovery, personalization, authState, seriesContinuations, categories] = await Promise.all([
     loadHomepageBooks(),
-    loadDutchDiscovery(locale),
+    emptyDutchDiscovery,
     import('@/lib/supabase/taste-test')
-      .then(({ loadHomepagePersonalization }) =>
-        measureServerOperation(
+      .then(async ({ loadHomepagePersonalization }) => {
+        if (!(await authPromise).authenticated) return emptyPersonalization;
+        const personal = await measureServerOperation(
           'homepage.personalization',
           'private',
-          () => loadHomepagePersonalization(locale),
-        ),
-      )
-      .catch((): HomepagePersonalization => ({
+          () => loadHomepagePersonalization(locale, 3),
+        );
+        // Auth is independently verified; a failed recommendation load must remain visible.
+        return { ...personal, authenticated: true };
+      })
+      .catch(async (): Promise<HomepagePersonalization> => ({
         unavailable: true,
-        authenticated: false,
+        authenticated: (await authPromise).authenticated,
         ratingCount: 0,
         tasteTestAnsweredCount: 0,
         hasEvidence: false,
         recommendations: [],
       })),
-    import('@/lib/supabase/auth')
-      .then(({ loadHeaderAuthState }) => measureServerOperation(
-        'homepage.auth',
-        'private',
-        loadHeaderAuthState,
-      ))
-      .catch(() => ({ authenticated: false })),
+    authPromise,
     import('@/lib/supabase/collections')
-      .then(({ loadHomepageSeriesContinuations }) => measureServerOperation(
+      .then(async ({ loadHomepageSeriesContinuations }) => (await authPromise).authenticated ? measureServerOperation(
         'homepage.series_continuations',
         'private',
         () => loadHomepageSeriesContinuations(3),
-      ))
+      ) : [])
       .catch(() => []),
     import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),
   ]);

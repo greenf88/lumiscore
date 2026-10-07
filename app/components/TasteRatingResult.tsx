@@ -5,7 +5,7 @@ import type { RatingResult } from '@/lib/supabase/rating-result';
 import { getTraitLabel } from '@/lib/taste-test/traits';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
-import { BookCard } from './LumiScoreHome';
+import { BookCard, recommendationMatchLabel } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 const EMPTY_BOOKS: never[] = [];
@@ -64,9 +64,9 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
     <p>{nl?'Onderwerpen (zoals geschiedenis en oorlog) en doelgroep: nog geen goedgekeurde kenmerken beschikbaar. Publicatieperiode is geen verhaalonderwerp.':'Subjects (such as history and war) and audience: no approved traits available yet. Publication era is not a story subject.'}</p>
     <h2>{nl?'Boeken om verder te ontdekken':'Books to discover next'}</h2>
     {result.recommendations.length===0 ? <p role="status">{nl?'Geen geschikte, beschikbare, nog niet gelezen boeken met betrouwbare kenmerken in deze taal. We verzinnen geen matches.':'No suitable, available unread books with reliable traits in this language. We do not invent matches.'} <a href="/browse">{nl?'Alle boeken bekijken':'Browse all books'}</a></p>
-    : <><p role="status">{result.recommendations.length}/20 {nl?'unieke suggesties. Een kleinere set is het volledige beschikbare resultaat.':'unique suggestions. A smaller set is the complete available result.'}</p><div className="taste-result-books">{result.recommendations.map(x=><div key={x.book.workId}>
-      <BookCard book={x.book} wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted} resolveMissingCover={false} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} />
-      <p className="recommendation-reason">{x.explanation}</p></div>)}</div></>}
+    : <div className="book-grid">{result.recommendations.map(x=><BookCard key={x.book.workId}
+      book={x.book} wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}
+      resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} />)}</div>}
     <nav aria-label={nl?'Volgende stappen':'Next steps'} className="taste-next-steps"><a className="primary-cta" href="/taste-test">{nl?'Vrijwillig meer beoordelen':'Rate more, if you like'}</a><a href="/my-books">{nl?'Mijn profiel en boeken':'My profile and books'}</a></nav>
     <p>{nl?'Meer beoordelingen helpen je profiel verfijnen, vooral wanneer betrouwbare kenmerken beschikbaar zijn.':'More ratings help refine your profile, especially when reliable traits are available.'}</p>
   </section>;

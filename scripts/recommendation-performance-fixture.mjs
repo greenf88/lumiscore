@@ -60,10 +60,11 @@ export async function createRecommendationFixture({works=10134,evidenceWorks=128
       const url=new URL(String(input)),table=url.pathname.split('/').at(-1);metrics.requests++;
       if(failure?.(url)) return new Response(JSON.stringify({message:'Synthetic failure'}),{status:503,headers:{'Content-Type':'application/json'}});
       let rows,total;
-      if(table==='get_work_rating_summaries') {
+      if(table==='get_work_rating_summaries_v2') {
         metrics.rpc++;
         const ids=JSON.parse(init.body).target_work_ids;
-        rows=ids.map(id=>({work_id:Number(id),rating_count:Number(id)%25,lumiscore:5+Number(id)%5}));
+        rows=ids.map(id=>({work_id:Number(id),rating_count_band:Number(id)%25>=5?'5–9':null,
+          evidence_status:Number(id)%25>=5?'available':'insufficient_evidence',lumiscore:Number(id)%25>=5?5+Number(id)%5:null}));
       } else {
         const conditions=[],params=[];
         const idFilter=url.searchParams.get(table==='works'?'id':'work_id');

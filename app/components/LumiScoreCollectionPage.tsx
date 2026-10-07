@@ -12,9 +12,8 @@ import {
   canShowProgressDenominator,
   canShowSeriesDenominator,
 } from '@/lib/collections/presentation';
-import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { getBookHref } from '@/lib/books/book-navigation';
-import { BookCover, Footer, Header } from './LumiScoreHome';
+import { BookCard, Footer, Header } from './LumiScoreHome';
 import { LumiScoreCollectionBookControls } from './LumiScoreCollectionBookControls';
 import {
   LumiScoreCollectionBulkProgress,
@@ -34,7 +33,7 @@ const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.r
 
 export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) {
   const { collection, books, authenticated } = data;
-  const { locale, t } = useLumiScoreLocale();
+  const { t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<Record<string, ReadingStatus>>(data.statuses);
   const [ratings, setRatings] = useState<Record<string, number>>(data.userRatings);
@@ -313,16 +312,23 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         />
       )}
 
-      <section className="collection-book-list" aria-label={collection.name}>
+      <section className="book-grid collection-book-list" aria-label={collection.name}>
         {books.filter(({ workId }) => visibleWorkIdSet.has(workId)).map((item) => {
-          const rating = formatPublicRatingDisplay(item.book.score, item.book.ratingsCount ?? 0, locale);
           const itemStatus = statuses[item.workId] ?? null;
           const isAction = item.workId === actionWorkId;
           const isContinue = isAction && seriesProgress?.continueBook?.workId === item.workId;
           const isHighlighted = item.workId === highlightedUnread;
           const seriesTotal = seriesProgress?.total ?? null;
           return (
-            <article className={`collection-book-row${bulkActive ? ' is-bulk-mode' : ''}${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}${itemStatus ? ` has-status status-${itemStatus}` : ''}`} key={item.workId}>
+            <BookCard book={item.book} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
+              className={`collection-book-card${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}`}
+              label={collection.collectionType === 'series' && item.sequenceNumber !== null
+                ? canShowSeriesDenominator(item.sequenceNumber,seriesTotal)
+                  ? t('collection.bookOf',{position:item.sequenceNumber,total:seriesTotal})
+                  : t('collection.bookPosition',{position:item.sequenceNumber}) : undefined}
+              actions={authenticated && !bulkActive ? <LumiScoreCollectionBookControls
+                workId={item.workId} status={statuses[item.workId] ?? null} rating={ratings[item.workId] ?? null}
+                onStatusChange={status => updateLocalStatus(item.workId,status)} onRatingChange={value => updateLocalRating(item.workId,value)} /> : null}>
               {bulkActive && (
                 <label className="collection-book-select">
                   <input type="checkbox" checked={selectedWorkIds.has(item.workId)}
@@ -330,39 +336,19 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
                   <span>{t('collection.selectBook', { title: item.book.title })}</span>
                 </label>
               )}
-              <a className="collection-book-main" href={getBookHref(item.book, bookReturnContext) ?? '/browse'}>
-                <BookCover book={item.book} small label={item.book.title} resolveMissing={!bulkActive} />
-                <span className="collection-book-copy">
-                  {collection.collectionType === 'series' && item.sequenceNumber !== null && (
-                    <small>{canShowSeriesDenominator(item.sequenceNumber, seriesTotal)
-                      ? t('collection.bookOf', { position: item.sequenceNumber, total: seriesTotal })
-                      : t('collection.bookPosition', { position: item.sequenceNumber })}</small>
-                  )}
-                  <strong>{item.book.title}</strong>
-                  <span>{item.book.author}{item.book.firstPublishYear ? ` · ${item.book.firstPublishYear}` : ''}</span>
+                <div className="collection-card-context">
                   {authenticated && itemStatus && (
                     <small className="collection-book-status">{t(STATUS_KEYS[itemStatus])}</small>
                   )}
                   {(isAction || isHighlighted) && (
                     <em>{isAction
                       ? t(isContinue ? 'collection.continueReading' : 'collection.nextInSeries')
-                      : highlightedBook?.score !== null && (highlightedBook?.ratingsCount ?? 0) > 0
+                      : highlightedBook?.score !== null && Boolean(highlightedBook?.ratingBand)
                         ? t('collection.highestUnread')
                         : t('collection.nextUnread')}</em>
                   )}
-                </span>
-                <span className="mini-score"><strong>{rating.score}</strong><small>LumiScore</small></span>
-              </a>
-              {authenticated && !bulkActive && (
-                <LumiScoreCollectionBookControls
-                  workId={item.workId}
-                  status={statuses[item.workId] ?? null}
-                  rating={ratings[item.workId] ?? null}
-                  onStatusChange={(status) => updateLocalStatus(item.workId, status)}
-                  onRatingChange={(ratingValue) => updateLocalRating(item.workId, ratingValue)}
-                />
-              )}
-            </article>
+                </div>
+            </BookCard>
           );
         })}
       </section>

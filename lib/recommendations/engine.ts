@@ -61,8 +61,9 @@ export type PersonalMatchResult = Pick<
 const QUALITY_NEUTRAL_SCORE = 5.5;
 const QUALITY_PRIOR_RATINGS = 5;
 
-export function calculateQualityPrior(average: number | null, ratingCount: number): number {
-  if (average === null || ratingCount <= 0) return QUALITY_NEUTRAL_SCORE / 10;
+export function calculateQualityPrior(average: number | null, ratingCount: number | null): number {
+  if (average !== null && ratingCount === null) return average / 10;
+  if (average === null || ratingCount === null || ratingCount <= 0) return QUALITY_NEUTRAL_SCORE / 10;
   const smoothed = (average * ratingCount + QUALITY_NEUTRAL_SCORE * QUALITY_PRIOR_RATINGS) / (ratingCount + QUALITY_PRIOR_RATINGS);
   return Math.max(0, Math.min(1, smoothed / 10));
 }
@@ -216,7 +217,7 @@ export function recommendBooks(input: {
       const rankingPersonalSimilarity = coverageLevel === 'era_only'
         ? 0
         : personalSimilarity;
-      const qualityPrior = calculateQualityPrior(book.score, book.ratingsCount ?? 0);
+      const qualityPrior = calculateQualityPrior(book.score, book.ratingBand ? null : book.ratingsCount ?? 0);
       const eraPreferenceBoost = calculateEraPreferenceBoost({
         readingPeriods: input.readingPeriods,
         firstPublishYear: book.firstPublishYear,

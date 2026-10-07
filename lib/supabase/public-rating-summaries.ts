@@ -13,7 +13,7 @@ export async function loadPublicRatingSummaries(
   const targetWorkIds = normalizeRatingWorkIds(workIds);
   if (targetWorkIds.length === 0) return new Map();
 
-  const { data, error } = await supabase.rpc('get_work_rating_summaries', {
+  const { data, error } = await supabase.rpc('get_work_rating_summaries_v2', {
     target_work_ids: targetWorkIds,
   });
   if (error) return new Map();

@@ -7,31 +7,19 @@ import {
 import { createServerSupabaseClient } from './server.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { supabase as publicSupabase } from './client.ts';
-
-type RatingSummaryRow = {
-  lumiscore?: number | string | null;
-  rating_count?: number | string | null;
-};
-
-function asFiniteNumber(value: unknown): number | null {
-  const number = typeof value === 'number' ? value : Number(value);
-  return Number.isFinite(number) ? number : null;
-}
+import { ratingSummaryMap, type PublicRatingSummaryRow } from '../ratings/card-summaries.ts';
 
 async function loadPublicSummary(
   supabase: SupabaseClient,
   workId: string,
-): Promise<Pick<BookRatingState, 'lumiscore' | 'ratingCount'>> {
+): Promise<Pick<BookRatingState, 'lumiscore' | 'ratingCount' | 'ratingBand'>> {
   const { data, error } = await supabase
-    .rpc('get_work_rating_summary', { target_work_id: Number(workId) })
-    .maybeSingle<RatingSummaryRow>();
+    .rpc('get_work_rating_summaries_v2', { target_work_ids: [Number(workId)] })
+    .maybeSingle<PublicRatingSummaryRow>();
 
-  if (error || !data) return { lumiscore: null, ratingCount: 0 };
+  if (error || !data) return { lumiscore: null, ratingCount: null, ratingBand: null };
 
-  return {
-    lumiscore: asFiniteNumber(data.lumiscore),
-    ratingCount: asFiniteNumber(data.rating_count) ?? 0,
-  };
+  return ratingSummaryMap([data]).get(workId) ?? { lumiscore: null, ratingCount: null, ratingBand: null };
 }
 
 async function getVerifiedUser(supabase: SupabaseClient): Promise<User | null> {

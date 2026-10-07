@@ -15,8 +15,7 @@ import {
 } from '@/lib/collections/my-books';
 import type { ReadingStatus } from '@/lib/collections/model';
 import type { MyBooksPageData } from '@/lib/supabase/book-status';
-import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
-import { BookCover, Footer, Header } from './LumiScoreHome';
+import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import {
@@ -50,26 +49,13 @@ function MyBooksCard({
   onStatusChange: (status: ReadingStatus | null) => void;
   onGuestRemove?: () => void;
 }) {
-  const { locale, t } = useLumiScoreLocale();
+  const { t } = useLumiScoreLocale();
   const { book, status } = item;
-  const rating = formatPublicRatingDisplay(book.score, book.ratingsCount ?? 0, locale);
   const statusLabel = t(STATUS_KEYS[status]);
 
   return (
-    <article className="book-card my-books-card">
-      <a className="book-card-main-link" href={`/book/${book.workId}`} aria-label={t('home.viewBook', { title: book.title, author: book.author })}>
-        <div className="card-cover-wrap">
-          <span className="score-badge"><strong>{rating.score}</strong><small>LumiScore</small></span>
-          <BookCover book={book} resolveMissing={authenticated} />
-        </div>
-        <div className="book-card-body">
-          <span className="book-genre">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</span>
-          <h3>{book.title}</h3>
-          <p>{book.author}</p>
-          <div className="book-meta"><span>{rating.count}</span></div>
-        </div>
-      </a>
-      <div className="book-card-action my-books-card-action">
+    <BookCard book={book} className="my-books-card" resolveMissingCover={authenticated} actions={
+      <div className="my-books-card-action">
         <span className="my-books-status" aria-label={t('myBooks.currentStatus', { status: statusLabel })}>{statusLabel}</span>
         {authenticated ? (
           <LumiScoreReadingStatus
@@ -91,7 +77,7 @@ function MyBooksCard({
           </button>
         )}
       </div>
-    </article>
+    } />
   );
 }
 

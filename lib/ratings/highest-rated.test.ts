@@ -30,7 +30,7 @@ test('highest-rated selection excludes unrated books without mutating its input'
 
   assert.equal(HIGHEST_RATED_MINIMUM_RATINGS, 1);
   assert.equal(result.length, 2);
-  assert.ok(result.every(({ ratingCount }) => ratingCount >= 1));
+  assert.ok(result.every(({ ratingCount }) => ratingCount === null || ratingCount >= 1));
   assert.deepEqual(works, original);
 });
 
@@ -67,9 +67,10 @@ test('homepage uses the global aggregate ranking and Highest rated label', async
     readFile(new URL('../supabase/books.ts', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(page, /loadHighestRatedCatalog\(18\)/);
+  assert.match(page, /loadHighestRatedCatalog\(8\)/);
   assert.match(home, /t\('home\.highestRated'\)/);
   assert.doesNotMatch(home, /Featured today/);
   assert.match(catalog, /loadPublicRatingSummariesBatched/);
-  assert.match(catalog, /rankHighestRatedWorks/);
+  assert.match(catalog, /rpc\('catalog_discovery_page'/);
+  assert.match(catalog, /readHighestRatedPage/);
 });

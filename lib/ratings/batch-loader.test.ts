@@ -10,8 +10,8 @@ test('loads every displayed work through one aggregate RPC call', async () => {
       calls.push({ name, args });
       return {
         data: [
-          { work_id: 8, lumiscore: '8.0', rating_count: '1' },
-          { work_id: 1265, lumiscore: null, rating_count: '0' },
+          { work_id: 8, lumiscore: '8.0', rating_count_band: '5–9', evidence_status: 'available' },
+          { work_id: 1265, lumiscore: null, rating_count_band: null, evidence_status: 'insufficient_evidence' },
         ],
         error: null,
       };
@@ -22,12 +22,12 @@ test('loads every displayed work through one aggregate RPC call', async () => {
 
   assert.deepEqual(calls, [
     {
-      name: 'get_work_rating_summaries',
+      name: 'get_work_rating_summaries_v2',
       args: { target_work_ids: [8, 1265] },
     },
   ]);
-  assert.deepEqual(summaries.get('8'), { lumiscore: 8, ratingCount: 1 });
-  assert.deepEqual(summaries.get('1265'), { lumiscore: null, ratingCount: 0 });
+  assert.deepEqual(summaries.get('8'), { lumiscore: 8, ratingCount: null, ratingBand: '5–9' });
+  assert.deepEqual(summaries.get('1265'), { lumiscore: null, ratingCount: null, ratingBand: null });
 });
 
 test('loads a recommendation catalog in bounded batches instead of per-card queries', async () => {
