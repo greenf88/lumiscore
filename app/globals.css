@@ -952,26 +952,28 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .taste-rating-card:hover { transform: none; }
 .taste-saved { color: var(--teal); }
 /* Scoring is the compact exception to overview cards. Controls never shrink for a cover. */
-.taste-rating-test { max-width: 560px; padding: 12px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+.taste-rating-test { max-width: 560px; padding: 8px max(12px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
 .taste-round-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .taste-rating-test h1 { margin: 0; font-size: clamp(26px, 4vw, 32px); }
 .taste-round-toolbar { flex-wrap: nowrap; gap: 8px; margin: 0; }
 .taste-round-toolbar .rating-round-progress { margin: 0; font-size: 15px; white-space: nowrap; }
 .taste-round-toolbar button, .taste-round-toolbar .primary-cta { margin: 0; min-height: 44px; padding: 8px 12px; font-size: 13px; }
-.taste-feedback { min-height: 18px; font-size: 12px; line-height: 18px; color: var(--teal); }
-.taste-rating-card { width: 100%; margin: 4px 0 0; padding: 10px; gap: 8px; overflow: visible; }
+.taste-feedback { min-height: 12px; font-size: 11px; line-height: 12px; color: var(--teal); }
+.taste-rating-card { width: 100%; margin: 4px 0 0; padding: 10px; gap: 8px; border-radius: 8px; overflow: visible; }
 .taste-book-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.taste-book-identity .book-cover { flex: 0 0 auto; width: auto; height: clamp(32px, calc(100svh - 430px), 100px); height: clamp(32px, calc(100dvh - 430px), 100px); aspect-ratio: .66; padding: 0; }
+.taste-book-identity .book-cover { flex: 0 0 auto; width: auto; height: clamp(88px, calc(100svh - 350px), 156px); height: clamp(88px, calc(100dvh - 350px), 156px); aspect-ratio: .66; padding: 0; }
 .taste-book-identity .book-card-body { min-width: 0; padding: 0; }
-.taste-book-identity h3 { min-height: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.taste-book-identity h3 { min-height: 0; font-size: 20px; line-height: 1.15; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .taste-book-identity .book-card-body > p { margin: 4px 0 0; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .taste-book-identity .cover-title { font-size: 9px; }
 .taste-book-identity .cover-author, .taste-book-identity .cover-kicker, .taste-book-identity .cover-mark { display: none; }
 .taste-rating-actions { padding: 0; }
-.taste-rating-test fieldset { min-width: 0; margin: 0 0 8px; }
-.taste-rating-test legend { margin-bottom: 4px; font-size: 13px; }
+.taste-rating-test fieldset { min-width: 0; margin: 0 0 6px; }
+.taste-rating-test legend { margin-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.taste-rating-test .taste-score-buttons button { border-radius: 5px; }
+.taste-rating-test .taste-score-buttons button[aria-pressed="true"] { outline: 2px solid var(--teal); outline-offset: 2px; }
 .taste-save-skip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.taste-save-skip button { min-width: 0; min-height: 44px; margin: 0; padding: 8px; font-size: 14px; }
+.taste-save-skip button { min-width: 0; min-height: 44px; margin: 0; padding: 8px; border-radius: 5px; font-size: 14px; }
 .taste-book-search { margin-top: 8px; }
 .taste-book-search summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-size: 13px; }
 .taste-book-search summary::before { content: '+'; margin-right: 8px; color: var(--teal); }

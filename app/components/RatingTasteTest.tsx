@@ -105,7 +105,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
             onPointerCancel={() => { swipeStart.current = null; }}
             onPointerUp={e => { const start = swipeStart.current; swipeStart.current = null; if (!start || !swipePrototype || pending) return; const dx = e.clientX - start.x; if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(e.clientY - start.y) * 2) setIntent(dx > 0 ? 'read' : 'skip'); }}>
             <div className="taste-book-identity">
-              <BookCover book={book} resolveMissing={false} />
+              <BookCover book={book} presentation="taste" resolveMissing={false} />
               <div className="book-card-body"><h3 title={book.title}>{book.title}</h3><p title={book.author}>{book.author}</p></div>
             </div>
             <div className="taste-rating-actions">

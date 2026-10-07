@@ -3,7 +3,7 @@ import { absoluteLumiScoreUrl } from './site-origin.ts';
 
 export const LUMISCORE_DEFAULT_DESCRIPTION =
   'Smart book recommendations, trusted reader ratings, and matches made for your taste.';
-export const LUMISCORE_DEFAULT_IMAGE = '/og.png';
+export const LUMISCORE_DEFAULT_IMAGE = '/og.jpg';
 
 /** One owner: Next/Vinext's Metadata API. Do not also render metadata in JSX. */
 export function createPageMetadata({

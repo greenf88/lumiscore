@@ -6,7 +6,7 @@ const require = createRequire(import.meta.resolve('next/package.json'));
 const sharp = require('sharp');
 const results = [];
 for (const name of ['dark-reading-scene', 'light-book-stack']) {
-  const source = `public/assets/${name}.png`;
+  const source = `public/assets/${name}.webp`;
   results.push({ file: source, bytes: (await stat(source)).size, width: 1536, height: 1024 });
   for (const width of [1024, 1536]) {
     for (const format of ['avif', 'webp']) {

@@ -5,8 +5,10 @@ import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type Re
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
-  getOpenLibraryCoverVariantUrl,
+  getBookCoverImageSource,
+  nextBookCoverAttempt,
   isUsableCoverImageDimensions,
+  type CoverPresentation,
 } from '@/lib/books/covers';
 import {
   getBookCoverIdentity,
@@ -101,6 +103,7 @@ async function loadResolvedCovers(book: Book): Promise<string[]> {
 type BookCoverProps = {
   book: Book;
   small?: boolean;
+  presentation?: CoverPresentation;
   label?: string;
   resolveMissing?: boolean;
 };
@@ -108,6 +111,7 @@ type BookCoverProps = {
 function BookCoverForIdentity({
   book,
   small = false,
+  presentation = small ? 'compact' : 'card',
   label,
   resolveMissing = true,
 }: BookCoverProps) {
@@ -116,12 +120,14 @@ function BookCoverForIdentity({
     getInitialBookCoverUrls(book),
   );
   const [coverIndex, setCoverIndex] = useState(0);
+  const [largeFallbackIndex, setLargeFallbackIndex] = useState<number | null>(null);
   const [coverLoaded, setCoverLoaded] = useState(false);
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
-  const displayedCoverUrl = coverUrl
-    ? getOpenLibraryCoverVariantUrl(coverUrl, small ? 'M' : 'L')
+  const imageSource = coverUrl
+    ? getBookCoverImageSource(coverUrl, presentation, largeFallbackIndex === coverIndex)
     : null;
+  const displayedCoverUrl = imageSource?.src ?? null;
 
   const requestResolvedCovers = useCallback(() => {
     if (
@@ -142,6 +148,15 @@ function BookCoverForIdentity({
     if (!coverUrl) requestResolvedCovers();
   }, [coverUrl, requestResolvedCovers]);
 
+  const handleCoverFailure = () => {
+    const next = nextBookCoverAttempt(coverIndex, imageSource?.canRetryLarge ?? false);
+    setCoverLoaded(false);
+    setLargeFallbackIndex(next.largeFallbackIndex);
+    setCoverIndex(next.index);
+    // Try the same verified identity at L before resolving/advancing to another cover.
+    if (next.index !== coverIndex) requestResolvedCovers();
+  };
+
   return (
     <div
       className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
@@ -154,6 +169,8 @@ function BookCoverForIdentity({
       <span className="cover-mark">✦</span>
       <span className="cover-author">{book.author}</span>
       {displayedCoverUrl && (
+        <picture key={displayedCoverUrl}>
+        {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
           key={displayedCoverUrl}
           className={`book-cover-image${coverLoaded ? ' is-loaded' : ''}`}
@@ -170,19 +187,14 @@ function BookCoverForIdentity({
                 event.currentTarget.naturalHeight,
               )
             ) {
-              requestResolvedCovers();
-              setCoverLoaded(false);
-              setCoverIndex((index) => index + 1);
+              handleCoverFailure();
               return;
             }
             setCoverLoaded(true);
           }}
-          onError={() => {
-            requestResolvedCovers();
-            setCoverLoaded(false);
-            setCoverIndex((index) => index + 1);
-          }}
+          onError={handleCoverFailure}
         />
+        </picture>
       )}
     </div>
   );

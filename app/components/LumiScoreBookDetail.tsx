@@ -257,7 +257,7 @@ export function LumiScoreBookDetail({
           <figure className="detail-cover-figure">
             <div className="detail-cover-wrap">
               <span className="score-badge detail-score-badge"><strong>{score}</strong><small>LumiScore</small></span>
-              <BookCover book={book} label={t('detail.frontCoverOf', { title: book.title })} />
+              <BookCover book={book} presentation="detail" label={t('detail.frontCoverOf', { title: book.title })} />
             </div>
             <figcaption>{t('detail.frontCover')}</figcaption>
           </figure>

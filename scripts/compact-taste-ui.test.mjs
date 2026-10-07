@@ -28,3 +28,13 @@ test('active rounds show Pause, paused rounds show Resume; failed resume does no
   assert.match(source, /setSaved\(action === 'rate'\)/);
   assert.match(source, /if \(workId\) window.scrollTo\(\{ top: 0, behavior: 'instant' \}\)/);
 });
+
+test('polished scoring keeps a readable cover rather than a thumbnail on short screens', async () => {
+  const css = await read('app/globals.css');
+  assert.match(css, /\.taste-book-identity \.book-cover \{[^}]*clamp\(88px, calc\(100svh - 350px\), 156px\)[^}]*clamp\(88px, calc\(100dvh - 350px\), 156px\)/);
+  assert.match(css, /\.taste-book-identity h3 \{[^}]*font-size: 20px[^}]*-webkit-line-clamp: 2/);
+  assert.doesNotMatch(css, /\.taste-book-identity \.book-cover \{[^}]*clamp\(32px/);
+  // Geometry is separately checked in the real component at 320x430 and 390x520.
+  assert.match(css, /\.taste-score-buttons button \{[^}]*min-height: 44px/);
+  assert.match(css, /\.taste-save-skip button \{[^}]*min-height: 44px/);
+});
