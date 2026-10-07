@@ -65,6 +65,20 @@ test('formats rated and unrated card states consistently', () => {
   });
 });
 
+test('accepts the three-rater band, keeps legacy bands and withholds exact counts in NL/EN', () => {
+  const summary = ratingSummaryMap([
+    { work_id: 8, lumiscore: '8.0', rating_count: 3, rating_count_band: '3–4', evidence_status: 'available' },
+  ]).get('8');
+  assert.deepEqual(summary, { lumiscore: 8, ratingCount: null, ratingBand: '3–4' });
+  assert.deepEqual(formatPublicRatingDisplay(8, 3, 'nl', '3–4'), { score: '8.0', count: '3–4 beoordelaars' });
+  assert.deepEqual(formatPublicRatingDisplay(8, 3, 'en', '3–4'), { score: '8.0', count: '3–4 raters' });
+  for (const band of ['1–2', '3', 'unknown']) {
+    assert.deepEqual(ratingSummaryMap([
+      { work_id: 8, lumiscore: 8, rating_count_band: band, evidence_status: 'available' },
+    ]).get('8'), { lumiscore: null, ratingCount: null, ratingBand: null });
+  }
+});
+
 test('legacy counts, malformed evidence and invalid scores fail closed without a zero score', () => {
   for (const row of [
     { work_id: 8, lumiscore: 9, rating_count: 1 },

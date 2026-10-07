@@ -1,6 +1,6 @@
 import type { Book } from '@/app/data/books';
 import type { Locale } from '../i18n/config.ts';
-export const RATING_COUNT_BANDS = ['5–9', '10–19', '20–49', '50+'] as const;
+export const RATING_COUNT_BANDS = ['3–4', '5–9', '10–19', '20–49', '50+'] as const;
 export type RatingCountBand = typeof RATING_COUNT_BANDS[number];
 export type PublicRatingSummaryRow = {
   work_id?: number | string | null;

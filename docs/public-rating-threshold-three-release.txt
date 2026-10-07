@@ -1,0 +1,74 @@
+LumiScore public-score threshold: local release preparation, 2026-10-07
+
+Requested change: publish a book's public average from three DISTINCT raters.
+Zero, one or two raters still show insufficient evidence. Public counts remain
+bands, adding 3–4 while preserving 5–9 / 10–19 / 20–49 / 50+. Exact counts stay
+withheld on the V2 and both compatibility RPCs. The same average flows into
+global Highest rated ranking and card summaries; this does not create ratings.
+
+Base: origin/main 3c9e67c65e2f7faaeb027a4a5b03d6a6b7a53561.
+Branch: fix/public-rating-threshold-three-20261007.
+New migration: 20261007080316_public_rating_threshold_three.sql
+SHA-256: 043d1a26197aaa14dd660dcf74acc48e84795181b6cd52d0f93e3d94c81d1ff2
+Previously deployed migration bytes and histories are not rewritten.
+
+Only V2 aggregate body and public-policy comments change in SQL. Keep bounded
+one-dimensional raw input (100), stable behavior, empty search_path and current
+explicit anon/authenticated EXECUTE, no PUBLIC EXECUTE. Compatibility APIs and
+discovery call V2 and inherit the policy without replacement. Collaborative
+peer threshold remains FIVE; taste state, RLS, user isolation and own ratings
+remain unchanged. The frontend accepts 3–4 in addition to existing bands.
+
+Privacy trade-off: reducing the threshold reduces protection for small groups.
+Neither threshold is an anonymity guarantee. Known individual scores and changes
+in a published mean can reveal another score; archived published means cannot
+be retracted. Do not claim guaranteed anonymity or add synthetic production
+ratings to meet the threshold. Three people must independently rate the SAME book.
+
+Local verification covers all band boundaries, old-five to new-three upgrade,
+replay, effective ACLs, raw bounds, legacy count suppression, global ranking,
+owner isolation, retained five-peer collaborative behavior and original rows /
+default privileges / unaffected function definitions. NL/EN card formatting
+accepts 3–4 and rejects malformed bands.
+
+No push, hosted writes, hosted account creation, merge or deployment authorized
+for this changed artifact set. No passwords, Bookmatch or parked work changes.
+
+Proposed separately approved release sequence:
+1. Pin reviewed source commit + migration hash; fresh remote HEAD/CI and test /
+   production identity, TLS, migration-history and protected-data preflight.
+2. Build/deploy application with added band first. It is backwards compatible
+   with the current five-rater database. Otherwise old clients fail closed for
+   3–4; do not attribute that temporary missing score to lost ratings.
+3. Apply ONLY the new migration once via existing verified CLI/TLS route,
+   test first, then production after tests succeed. Reuse bounded synthetic
+   local evidence; any new hosted synthetic writes need explicit scope approval.
+4. Confirm 0–2 hidden / 3–4 available, legacy exact counts null, bounded input,
+   effective grants unchanged, raw ratings private, existing records untouched.
+5. Verify automatic production deployment, same-book real public scores/cards
+   and global ordering. No production testaccounts, test ratings or imports.
+
+Recovery: application rollback can fail closed on the 3–4 band. If necessary,
+prepare a separately reviewed FORWARD migration restoring the previous V2 body
+and comments from 20261006173806 without touching any data or history. Do not
+drop functions/tables, delete ratings or silently rerun the historical migration.
+The previous release approval does not cover this new migration.
+
+Completed local validation:
+- 102 rating/privacy/recommendation checks passed, plus 3 fixture checks (105
+  unique checks). A second targeted run of 14 overlapping checks also passed.
+- TypeScript, targeted ESLint, Vinext build, local Vercel-preset build and
+  git diff --check passed. The Vercel dependency tracer required the existing
+  local filesystem escalation; it did not perform a deployment.
+- Client scan: 110 generated files, no server-secret identifiers bundled;
+  no credentials loaded for these builds.
+- New migration UTF-8 without BOM, LF-only, exact SHA-256 as above.
+- Known independent historical test failure: prepare-discovery-production.test.mjs
+  still expects 13 baseline migrations. Unmodified released source already fails
+  with 15 versus 13; new full fixture reports 16 versus 13. The old PR8 planner /
+  test are not repaired or reused by this new release. No claim all unit tests
+  are green. This needs explicit review before relying on a broad release suite.
+- No fresh hosted verification, database migration or public-score change yet.
+
+Official reference: https://supabase.com/docs/guides/database/functions
+Changelog reviewed 2026-10-07: https://supabase.com/changelog

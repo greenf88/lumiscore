@@ -5,7 +5,8 @@ import { readFile } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 import { setupDiscoveryFixture } from './discovery-test-fixture.mjs';
 const migration = await readFile(new URL('../supabase/migrations/20261006173806_public_rating_privacy_b.sql',import.meta.url),'utf8');
-test('Privacy B protects all public SQL routes, preserves owners and never writes existing data',async t=>{
+const thresholdMigration = await readFile(new URL('../supabase/migrations/20261007080316_public_rating_threshold_three.sql',import.meta.url),'utf8');
+test('Three-rater public scores protect all SQL routes, preserve owners and never write existing data',async t=>{
   const db=new PGlite();
   const uid=n=>'00000000-0000-4000-8000-'+String(n).padStart(12,'0');
   try {
@@ -16,12 +17,22 @@ test('Privacy B protects all public SQL routes, preserves owners and never write
       alter default privileges in schema public grant execute on functions to anon,authenticated;`);
     await setupDiscoveryFixture(db);
     for(let n=1;n<=51;n++) await db.query('insert into auth.users values($1)',[uid(n)]);
-    const bands=[[0,null],[1,null],[4,null],[5,'5–9'],[6,'5–9'],[9,'5–9'],[10,'10–19'],[19,'10–19'],[20,'20–49'],[49,'20–49'],[50,'50+']];
+    const bands=[[0,null],[1,null],[2,null],[3,'3–4'],[4,'3–4'],[5,'5–9'],[6,'5–9'],[9,'5–9'],[10,'10–19'],[19,'10–19'],[20,'20–49'],[49,'20–49'],[50,'50+']];
     for(let i=0;i<bands.length;i++) for(let n=1;n<=bands[i][0];n++)
       await db.query('insert into public.ratings(user_id,work_id,rating) values($1,$2,8)',[uid(n),8800001+i]);
     const before=(await db.query('select user_id,work_id,rating from public.ratings order by user_id,work_id')).rows;
     const defaults=(await db.query('select * from pg_default_acl order by oid')).rows;
-    await db.exec(migration); // replay safety, actual bodies
+    await db.exec(migration); // Upgrade from the already deployed five-rater policy.
+    assert.equal((await db.query('select lumiscore from public.get_work_rating_summaries_v2(array[8800004]::bigint[])')).rows[0].lumiscore,null);
+    const protectedFunctions = async () => (await db.query(`select oid::regprocedure::text as signature,
+      pg_get_functiondef(oid) as definition, proacl::text as acl from pg_proc
+      where pronamespace='public'::regnamespace and proname in
+      ('get_work_rating_summary','get_work_rating_summaries','catalog_discovery_page',
+       'get_collaborative_recommendation_signals','taste_rating_state') order by oid`)).rows;
+    const functionsBefore = await protectedFunctions();
+    await db.exec(thresholdMigration);
+    await db.exec(thresholdMigration); // Idempotent replacement, no duplicate data or privileges.
+    assert.deepEqual(await protectedFunctions(),functionsBefore);
     assert.deepEqual((await db.query('select user_id,work_id,rating from public.ratings order by user_id,work_id')).rows,before);
     assert.deepEqual((await db.query('select * from pg_default_acl order by oid')).rows,defaults);
     await t.test('anon sees threshold, bands and no exact counts through old or new APIs',async()=>{
@@ -29,11 +40,11 @@ test('Privacy B protects all public SQL routes, preserves owners and never write
       for(let i=0;i<bands.length;i++){
         const [n,band]=bands[i],id=8800001+i;
         const v2=(await db.query('select * from public.get_work_rating_summaries_v2(array[$1]::bigint[])',[id])).rows[0];
-        assert.equal(v2.rating_count_band,band); assert.equal(v2.evidence_status,n>=5?'available':'insufficient_evidence');
-        assert.equal(v2.lumiscore,n>=5?'8.0':null); assert.equal('rating_count' in v2,false);
+        assert.equal(v2.rating_count_band,band); assert.equal(v2.evidence_status,n>=3?'available':'insufficient_evidence');
+        assert.equal(v2.lumiscore,n>=3?'8.0':null); assert.equal('rating_count' in v2,false);
         for(const call of ['public.get_work_rating_summary($1::bigint)','public.get_work_rating_summaries(array[$1]::bigint[])']){
           const row=(await db.query('select * from '+call,[id])).rows[0];
-          assert.equal(row.rating_count,null); assert.equal(row.lumiscore,n>=5?'8.0':null);
+          assert.equal(row.rating_count,null); assert.equal(row.lumiscore,n>=3?'8.0':null);
         }
       }
       await assert.rejects(()=>db.query('select * from public.ratings'),e=>e.code==='42501');
@@ -46,6 +57,8 @@ test('Privacy B protects all public SQL routes, preserves owners and never write
       assert.equal(ranked.total,389); assert.ok(ranked.workIds.includes(8800001),'unpublishable works remain discoverable');
       assert.ok(ranked.workIds.indexOf(8800004)<ranked.workIds.indexOf(8800001),'published scores precede unknowns');
       assert.equal(JSON.stringify(ranked).includes('rating_count'),false);
+      const threeIds=bands.flatMap(([n],i)=>n===3?[8800001+i]:[]);
+      assert.ok(threeIds.every(id=>ranked.workIds.indexOf(id)>=0&&ranked.workIds.indexOf(id)<ranked.workIds.indexOf(8800001)));
       await db.exec('reset role');
     });
     await t.test('authenticated owns exact ratings; state RPC remains anon-denied; five distinct peers required',async()=>{
