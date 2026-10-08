@@ -8,7 +8,11 @@ export async function proxy(request: NextRequest) {
   if (decision.kind === 'redirect') {
     const target = request.nextUrl.clone();
     target.pathname = decision.path;
-    return NextResponse.redirect(target, 308);
+    // Recovery keeps cached permanent destinations live without adding new
+    // permanent redirect cache entries. Never redirect locale URLs to legacy.
+    const redirect = NextResponse.redirect(target, 307);
+    redirect.headers.set('Cache-Control', 'no-store');
+    return redirect;
   }
   // Retain the existing session refresh and refreshed request cookies.
   const session = await refreshSupabaseSession(request);

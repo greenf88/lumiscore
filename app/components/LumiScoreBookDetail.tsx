@@ -5,7 +5,7 @@ import { localizedHref } from '@/lib/i18n/paths';
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import type { Book, VerifiedBookDescription } from '../data/books';
+import type { Book } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import {
@@ -43,7 +43,6 @@ import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/n
 
 type LumiScoreBookDetailProps = {
   book: Book;
-  description: VerifiedBookDescription | null;
   initialRatingState: BookRatingState;
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
@@ -84,7 +83,6 @@ function GuestWantToRead({ book }: { book: Book }) {
 
 export function LumiScoreBookDetail({
   book,
-  description,
   initialRatingState,
   initialReadingStatus,
   collectionContext,
@@ -342,7 +340,7 @@ export function LumiScoreBookDetail({
             </section>
           </div>
 
-          {book.workId && <LumiScoreBookDescription description={description} />}
+          {book.workId && <LumiScoreBookDescription workId={book.workId} />}
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus

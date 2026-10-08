@@ -122,9 +122,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     ))
     .catch(() => ({ authenticated: false }));
   const bookPromise = getBook(workId, locale);
-  const descriptionPromise = bookPromise.then(async book => book
-    ? (await import('@/lib/books/public-description')).loadPublicBookDescription(book, locale) : null);
-  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation, description] = await Promise.all([
+  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
     bookPromise,
     ratingStatePromise,
     readingStatusPromise,
@@ -132,7 +130,6 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     personalizationPromise,
     authStatePromise,
     returnNavigationPromise,
-    descriptionPromise,
   ]);
   if (!book) notFound();
 
@@ -140,7 +137,6 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     <>
       <LumiScoreBookDetail
         book={book}
-        description={description}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

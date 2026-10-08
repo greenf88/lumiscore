@@ -420,13 +420,16 @@ test('splits a long unpunctuated paragraph so the disclosure always reveals cont
   assert.equal(paragraphs.join(' '), text);
 });
 
-test('book detail receives server copy without a robots-blocked hydration request', async () => {
+test('recovery restores optional client synopsis while retaining source, language and API gates', async () => {
   const [component, route] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreBookDescription.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/api/books/[workId]/description/route.ts', import.meta.url), 'utf8'),
   ]);
 
-  assert.doesNotMatch(component, /fetch\(|useEffect|\/api\//);
+  assert.match(component, /useEffect/);
+  assert.match(component, /fetch\(`/);
+  assert.match(component, /controller\.abort\(\)/);
+  assert.match(component, /resolved\?\.key === requestKey/);
   assert.match(component, /description\?\.language === locale/);
   assert.match(component, /publicDescriptionSource/);
   assert.match(component, /geverifieerde Nederlandse beschrijving/);

@@ -12,14 +12,14 @@ async function fixture() {
   type Cookie = { name:string; value:string; path?:string; httpOnly?:boolean; secure?:boolean };
   const response = (kind:string, target?:URL, options?:{request?:{headers:Headers}}) => {
     const cookies:Cookie[]=[];
-    return {kind,target,options,headers:new Headers(),cookies:{getAll:()=>cookies,set:(cookie:Cookie)=>cookies.push(cookie)}};
+    return {kind,target,options,status:200,headers:new Headers(),cookies:{getAll:()=>cookies,set:(cookie:Cookie)=>cookies.push(cookie)}};
   };
   let refreshes=0;
   const runtimeExports:Record<string, (request:unknown)=>Promise<ReturnType<typeof response>>>={};
   const source=await readFile(new URL('../../proxy.ts',import.meta.url),'utf8');
   const compiled=ts.transpile(source,{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022});
   runInNewContext(compiled, {exports:runtimeExports,Headers,require:(name:string)=>{
-    if(name==='next/server') return {NextResponse:{next:(options:Parameters<typeof response>[2])=>response('next',undefined,options),rewrite:(target:URL,options:Parameters<typeof response>[2])=>response('rewrite',target,options),redirect:(target:URL)=>response('redirect',target)}};
+    if(name==='next/server') return {NextResponse:{next:(options:Parameters<typeof response>[2])=>response('next',undefined,options),rewrite:(target:URL,options:Parameters<typeof response>[2])=>response('rewrite',target,options),redirect:(target:URL,status:number)=>({...response('redirect',target),status})}};
     if(name==='./lib/i18n/paths') return paths;
     if(name==='@/lib/auth/request') return {PRIVATE_RESPONSE_HEADERS};
     if(name==='@/lib/supabase/proxy') return {refreshSupabaseSession:async(request:{headers:Headers})=>{
@@ -60,6 +60,8 @@ test('legacy redirect remains fixed; neutral actions receive no caller-supplied 
   const legacy=await f.proxy(f.request('/book/123?returnTo=%2Fbrowse'));
   assert.equal(legacy.target?.pathname,'/en/book/123');
   assert.equal(legacy.target?.search,'?returnTo=%2Fbrowse');
+  assert.equal(legacy.status,307);
+  assert.equal(legacy.headers.get('cache-control'),'no-store');
   assert.equal(f.refreshes(),0);
   const action=await f.proxy(f.request('/auth/callback'));
   assert.equal(action.kind,'next');
