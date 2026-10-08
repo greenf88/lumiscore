@@ -5,10 +5,13 @@ import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
+// An isolated header fixture, not a real session or hosted Auth connection.
+const headerFixture = process.argv.includes('--header-authenticated');
+const port = headerFixture ? 3121 : 3120;
 for (const key of Object.keys(process.env)) if (/SUPABASE|GOOGLE_BOOKS|DATABASE/.test(key)) delete process.env[key];
 const bookSource = `export const books = Array.from({length:80},(_,i)=>({id:'synthetic-'+i,source:'supabase',workId:String(i+1),editionId:String(i+1),title:'Synthetic book '+(i+1),author:'Synthetic author',firstPublishYear:2000,score:null,ratingsCount:null,match:null,cover:'orbit',openLibraryWorkId:'OL'+(i+1)+'W'}));`;
 const modules = {
-  'lib/supabase/auth.ts': `export async function loadHeaderAuthState(){return {authenticated:false}};export async function getVerifiedServerUser(){return {client:null,user:null}}`,
+  'lib/supabase/auth.ts': `export async function loadHeaderAuthState(){return {authenticated:${headerFixture}}};export async function getVerifiedServerUser(){return {client:null,user:null}}`,
   'lib/supabase/books.ts': bookSource + `export async function loadCatalogBook(id){return books.find(b=>b.workId===id)??null};export async function loadHighestRatedCatalog(limit){return {books:books.slice(0,limit),total:80}};export async function loadCatalogBooksByIds(ids){return books.filter(b=>ids.includes(b.workId))};export const loadCatalogBooksByIdsWithStoredCovers=loadCatalogBooksByIds;`,
   'lib/supabase/editorial-catalog.ts': bookSource + `export function unavailableEditorialPage(s){return {books:[],total:0,page:1,pageSize:s.pageSize,pageCount:1,sort:s.sort,facets:{},selectionCount:0,available:false,categories:[],selectedAuthor:null,discoveryAvailable:true}};export async function loadEditorialCatalog(s){return {...unavailableEditorialPage(s),books:books.slice((s.page-1)*s.pageSize,s.page*s.pageSize),total:80,page:s.page,pageCount:Math.ceil(80/s.pageSize),available:true}}`,
   'lib/supabase/categories.ts': `export async function loadPublicCategories(){return [{id:'fiction',en:'Fiction',nl:'Fictie'}]}`,
@@ -22,7 +25,7 @@ const modules = {
 const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'node_modules/.vite-seo-critical',
   css:{postcss:{plugins:[tailwindcss()]}}, resolve:{alias:{'@':root}},
   plugins:[{name:'loopback-synthetic-seo-loaders',enforce:'pre',load(id){const relative=id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0];return modules[relative]??null}},vinext()],
-  server:{host:'127.0.0.1',port:3120,strictPort:true},
+  server:{host:'127.0.0.1',port,strictPort:true},
 });
 await server.listen();
-console.log('SYNTHETIC SEO SSR PREVIEW http://127.0.0.1:3120/en and /nl — no database');
+console.log(`SYNTHETIC SEO SSR PREVIEW http://127.0.0.1:${port}/en and /nl — no database${headerFixture ? ', authenticated header fixture only' : ''}`);

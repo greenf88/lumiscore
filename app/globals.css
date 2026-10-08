@@ -1070,6 +1070,14 @@ button, input, select, textarea { font-family: var(--sans); }
   .site-header { grid-template-columns: auto minmax(160px, 1fr) auto; gap: 12px; padding-inline: 20px; }
   .main-nav { gap: 10px; font-size: var(--type-meta); }
 }
+/* Keep the full wordmark and taste link clear between phone and desktop layouts. */
+@media (560px < width <= 760px) {
+  .site-header { gap: 8px; padding-inline: 12px; }
+  .site-header .main-nav { gap: 4px; }
+  .site-header .header-account-label, .site-header .header-account-chevron,
+  .site-header .theme-sun, .site-header .theme-moon { display: none; }
+  .site-header .header-account-trigger { width: 44px; justify-content: center; }
+}
 @media (max-width: 760px) {
   .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .my-books-grid { max-width: none; }

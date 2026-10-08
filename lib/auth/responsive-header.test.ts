@@ -20,3 +20,14 @@ test('shared header prevents wrapping and preserves compact mobile controls', as
   assert.match(css, /\.hamburger-icon i \{[^}]*background: currentColor/);
   assert.doesNotMatch(css, /\.mobile-navigation summary/);
 });
+
+test('middle-width header keeps wordmark and taste link with compact account controls', async () => {
+  const css = await readFile(new URL('../../app/globals.css', import.meta.url), 'utf8');
+  const middleWidth = css.split('@media (560px < width <= 760px) {')[1]?.split('@media')[0];
+  assert.ok(middleWidth, 'explicitly cover the previous 682px collision and its neighbours');
+  assert.match(middleWidth, /\.site-header \{ gap: 8px; padding-inline: 12px;/);
+  assert.match(middleWidth, /\.site-header \.main-nav \{ gap: 4px;/);
+  assert.match(middleWidth, /\.site-header \.header-account-label, \.site-header \.header-account-chevron,\s*\.site-header \.theme-sun, \.site-header \.theme-moon \{ display: none;/);
+  assert.match(middleWidth, /\.site-header \.header-account-trigger \{ width: 44px; justify-content: center;/);
+  assert.doesNotMatch(middleWidth, /wordmark|taste-test-nav-link|font-size|overflow/);
+});

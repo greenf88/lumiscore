@@ -56,3 +56,15 @@ Bij applicatierollback blijft de database onaangeroerd. Omdat permanente redirec
 - [Supabase SSR en vernieuwde cookies/cacheheaders](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=framework&framework=nextjs).
 
 Controle afgerond: 7 oktober 2026, 21:18 UTC. De audit zelf is niet opnieuw uitgevoerd.
+
+## Aanvullende headercorrectie — 8 oktober 2026
+
+De hosted accountheader had bij682px circa21,94px overlap tussen het volledige logo en de smaaktestlink. De minimale CSS-correctie geldt uitsluitend boven560 tot en met760px: kleinere tussenruimtes/padding en de bestaande compacte account-/themapresentatie. Logo, smaaktestlink, menu, zoekactie, thema, taal en accountbediening blijven behouden. Font-, kleur-, kaart-, routing-, Auth- en ratinglogica veranderen niet. De range-syntax sluit ook fractionele schermbreedtes tussen560 en561px in; zo ontstaat geen gat tussen breakpoints.
+
+Nieuwe broncontracttest plus bestaande header-/locale-/proxyselectie:14/14 groen. TypeScript, gerichte ESLint, Vinext-build, Vercel-bundelbuild, client-secretscan128bestanden en diffcontrole groen. De pnpm-wrapper weigerde terecht een installatie via de bestaande node_modules-junction; geen reinstall of verwijdering uitgevoerd. De aanwezige TypeScript/ESLint/buildtools zijn rechtstreeks gebruikt, zonder afhankelijkheidswijziging.
+
+Werkelijke lokale browserlayout:50 stabiele metingen na CSS- en fontloading, NL/EN, account/gast, breedtes390,560,561,620,681,682,683,760,761,820,1280; aanvullende Paper-accountcontroles bij390/682/1280. Geen logo/nav- of control-overlap en geen horizontale overflow. Gemeten iframe-viewports kwamen overeen met alle aangevraagde breedtes. Op682px is de logo/nav-ruimte157,20px(NL-account) en159,32px(EN-account); bediening44px hoog. Dit is een geïsoleerde lokale **layoutfixture**, geen hosted login-/telefoonbewijs. Opdesktop blijft de bestaande taalbediening36px plus randen; geen nieuwe desktop-touchmaatclaim.
+
+De fixture gebruikt echte SSR-headermarkup en CSS/fonts van de bestaande loopbackpreview. Optioneel `node scripts/seo-critical-local.mjs --header-authenticated` levert uitsluitend een synthetische ingelogde header op127.0.0.1:3121; alle database-/Authcredentials worden uit dat proces verwijderd en er bestaat geen echte sessie. De standaard3120-fixture blijft ongewijzigd werken. De externe layoutviewer en bewijs staan buiten Git in `outputs/seo-critical-20261007/`. De browsertool negeerde de gewone viewportoverride; die is niet als mobiele verificatie geclaimd.
+
+Het geldige eerdere hosted bewijs voor login,4/10-voortgang,20unieke aanbevelingen en terugnavigatie wordt hergebruikt. Geen ratings, leesstatussen, Authaccounts of voortgang gemuteerd. Nul migraties. Definitieve commit/deployment en eventuele resterende originele HTTP-bronbeperking worden in het externe `seo-critical-release-proposal-20261008.md` vastgelegd; dit is geen productie-releasegoedkeuring.
