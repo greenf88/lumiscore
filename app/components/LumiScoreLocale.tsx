@@ -1,99 +1,36 @@
 'use client';
 
-import {
-  createContext,
-  startTransition,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-import {
-  LOCALE_STORAGE_KEY,
-  isLocale,
-  localeFromLanguage,
-  serializeLocaleCookie,
-  type Locale,
-} from '@/lib/i18n/config';
+import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode, type AnchorHTMLAttributes } from 'react';
+import { LOCALE_STORAGE_KEY, serializeLocaleCookie, type Locale } from '@/lib/i18n/config';
+import { localizedHref } from '@/lib/i18n/paths';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
 
 type LocaleContextValue = {
   locale: Locale;
+  pagePath: string;
   setLocale: (locale: Locale) => void;
   t: (key: TranslationKey, variables?: Record<string, string | number>) => string;
 };
-
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-export function LumiScoreLocaleProvider({
-  children,
-  initialLocale,
-  hasPersistedChoice,
-}: {
-  children: ReactNode;
-  initialLocale: Locale;
-  hasPersistedChoice: boolean;
+function rememberLocale(locale: Locale) {
+  try { localStorage.setItem(LOCALE_STORAGE_KEY, locale); } catch { /* Optional storage. */ }
+  document.cookie = serializeLocaleCookie(locale);
+}
+
+export function LumiScoreLocaleProvider({ children, initialLocale, initialPath = '/' }: {
+  children: ReactNode; initialLocale: Locale; hasPersistedChoice: boolean; initialPath?: string;
 }) {
-  const [locale, updateLocale] = useState(initialLocale);
-
-  useEffect(() => {
-    document.documentElement.lang = locale;
-  }, [locale]);
-
-  useEffect(() => {
-    let storedLocale: string | null = null;
-    try {
-      storedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);
-    } catch {
-      // Storage is optional; the server-rendered locale remains usable.
-    }
-
-    if (hasPersistedChoice) {
-      if (storedLocale !== initialLocale) {
-        try {
-          localStorage.setItem(LOCALE_STORAGE_KEY, initialLocale);
-        } catch {
-          // The cookie remains the authoritative explicit choice.
-        }
-      }
-      return;
-    }
-
-    if (isLocale(storedLocale) && storedLocale !== initialLocale) {
-      document.cookie = serializeLocaleCookie(storedLocale);
-      window.location.reload();
-      return;
-    }
-
-    if (!hasPersistedChoice && !storedLocale) {
-      const browserLocale = localeFromLanguage(navigator.language);
-      if (browserLocale !== initialLocale) {
-        startTransition(() => updateLocale(browserLocale));
-      }
-    }
-  }, [hasPersistedChoice, initialLocale]);
-
-  const setLocale = useCallback((nextLocale: Locale) => {
-    if (nextLocale === locale) return;
-    try {
-      localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
-    } catch {
-      // The cookie still persists the explicit choice when storage is blocked.
-    }
-    document.cookie = serializeLocaleCookie(nextLocale);
-    document.documentElement.lang = nextLocale;
-    updateLocale(nextLocale);
-    window.location.reload();
-  }, [locale]);
-
+  // The URL/server locale is authoritative, even with conflicting browser preferences.
+  useEffect(() => { document.documentElement.lang = initialLocale; }, [initialLocale]);
+  const setLocale = useCallback((locale: Locale) => {
+    rememberLocale(locale);
+    if (locale !== initialLocale) window.location.assign(localizedHref(window.location.pathname + window.location.search + window.location.hash, locale));
+  }, [initialLocale]);
   const value = useMemo<LocaleContextValue>(() => ({
-    locale,
-    setLocale,
-    t: (key, variables) => translate(locale, key, variables),
-  }), [locale, setLocale]);
-
+    locale: initialLocale, pagePath: initialPath, setLocale,
+    t: (key, variables) => translate(initialLocale, key, variables),
+  }), [initialLocale, initialPath, setLocale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 
@@ -103,22 +40,19 @@ export function useLumiScoreLocale(): LocaleContextValue {
   return context;
 }
 
-export function LanguageSwitcher() {
-  const { locale, setLocale, t } = useLumiScoreLocale();
+/** Ordinary anchors keep routing, query context and crawlability without JS. */
+export function LocaleLink({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) {
+  const { locale } = useLumiScoreLocale();
+  return <a {...props} href={href ? localizedHref(href, locale) : href} />;
+}
 
-  return (
-    <div className="language-switcher" role="group" aria-label={t('language.label')}>
-      {(['nl', 'en'] as const).map((option) => (
-        <button
-          key={option}
-          type="button"
-          aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
-          aria-pressed={locale === option}
-          onClick={() => setLocale(option)}
-        >
-          {option.toUpperCase()}
-        </button>
-      ))}
-    </div>
-  );
+export function LanguageSwitcher() {
+  const { locale, pagePath, t } = useLumiScoreLocale();
+  return <div className="language-switcher" role="group" aria-label={t('language.label')}>
+    {(['nl', 'en'] as const).map(option => <a key={option}
+      href={localizedHref(pagePath, option)}
+      aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
+      aria-current={locale === option ? 'page' : undefined}
+      onClick={() => rememberLocale(option)}>{option.toUpperCase()}</a>)}
+  </div>;
 }

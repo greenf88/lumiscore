@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
@@ -153,7 +155,7 @@ export function LumiScoreTasteTest({
           <span className="eyebrow">{t('taste.eyebrow')}</span>
           <h1>{t('taste.unavailable')}</h1>
           <p>{t('taste.booksUnavailable')}</p>
-          <a className="primary-cta" href="/">{t('taste.backToBooks')} <span>→</span></a>
+          <LocaleLink className="primary-cta" href="/">{t('taste.backToBooks')} <span>→</span></LocaleLink>
         </section>
       </main>
     );
@@ -209,8 +211,8 @@ export function LumiScoreTasteTest({
               {saveStatus === 'saving' ? t('taste.saving') : saveStatus === 'saved' ? t('taste.savedAccount') : saveStatus === 'error' ? t('taste.savedLocalSyncError') : !authenticated ? t('taste.savedLocal') : ''}
             </p>
             <div className="taste-result-actions">
-              <a className="primary-cta" href="/recommendations">{t('taste.seeRecommendations')} <span>→</span></a>
-              {!authenticated && <a className="taste-sign-in" href="/login?next=%2Ftaste-test">{t('taste.signInToSave')}</a>}
+              <LocaleLink className="primary-cta" href="/recommendations">{t('taste.seeRecommendations')} <span>→</span></LocaleLink>
+              {!authenticated && <LocaleLink className="taste-sign-in" href="/login?next=%2Ftaste-test">{t('taste.signInToSave')}</LocaleLink>}
               <button type="button" onClick={() => { setQuestionIndex(0); setShowResults(false); }}>{t('taste.again')}</button>
             </div>
           </div>

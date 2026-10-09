@@ -1,4 +1,7 @@
 'use client';
+
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
 import { useEffect, useRef, useState } from 'react';
 import type { Book } from '@/app/data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
@@ -33,12 +36,12 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     catch { /* Keep the in-memory pause choice if optional storage is unavailable. */ }
   };
   const reload = async () => {
-    try { const r = await fetch('/api/taste-test/rounds', { cache: 'no-store' }); if (!r.ok) throw new Error(); receive(await r.json()); setError(false); }
+    try { const r = await fetch(`/api/taste-test/rounds?locale=${locale}`, { cache: 'no-store' }); if (!r.ok) throw new Error(); receive(await r.json()); setError(false); }
     catch { setError(true); }
   };
-  useEffect(() => { const controller = new AbortController(); fetch('/api/taste-test/rounds', { cache: 'no-store', signal: controller.signal }).then(async r => {
+  useEffect(() => { const controller = new AbortController(); fetch(`/api/taste-test/rounds?locale=${locale}`, { cache: 'no-store', signal: controller.signal }).then(async r => {
     if (!r.ok) throw new Error(); const next = await r.json() as Response; if (!controller.signal.aborted) receive(next);
-  }).catch(() => { if (!controller.signal.aborted) setError(true); }); return () => controller.abort(); }, []);
+  }).catch(() => { if (!controller.signal.aborted) setError(true); }); return () => controller.abort(); }, [locale]);
   useEffect(() => {
     const controller = new AbortController();
     const timer = setTimeout(() => {
@@ -53,7 +56,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     if (lock.current) return;
     lock.current = true; setPending(true); setError(false); setSaved(false);
     try {
-      const r = await fetch('/api/taste-test/rounds', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const r = await fetch(`/api/taste-test/rounds?locale=${locale}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buildRoundRequest(action, data?.state ?? null, locale, goal, workId, rating, extensionGoal)) });
       if (!r.ok) throw new Error();
       const next = await r.json() as Response;
@@ -63,7 +66,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
       setData(next); setPaused(false); setScore(null); setIntent(null); setResults([]); setQuery('');
       setSaved(action === 'rate');
       if (action === 'rate') { try { sessionStorage.setItem('lumiscore-rating-changed', '1'); } catch { /* Optional. */ } }
-      if (shouldOpenCompletedResult(action, data?.state ?? null, next)) window.location.assign('/taste-test/result');
+      if (shouldOpenCompletedResult(action, data?.state ?? null, next)) window.location.assign(localizedHref('/taste-test/result', locale));
     } catch { setError(true); } finally { lock.current = false; setPending(false); }
   };
   const round = data?.state?.round;
@@ -91,7 +94,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     {swipePrototype && <p className="prototype-label">{nl ? 'Reviewprototype — swipes kiezen alleen een intentie, nooit een score.' : 'Review prototype — swipes choose intent, never a score.'}</p>}
     {error && <div role="alert"><p>{nl ? 'De actie is niet bevestigd. Bestaande ratings worden nooit overschreven. Vernieuw je voortgang om een eventuele opgeslagen actie te controleren.' : 'The action was not confirmed. Existing ratings are never overwritten. Refresh progress to check whether an action was saved.'}</p><button type="button" disabled={pending} onClick={reload}>{nl ? 'Voortgang vernieuwen' : 'Refresh progress'}</button></div>}
     {!data && !error && <p role="status">{nl ? 'Voortgang laden…' : 'Loading progress…'}</p>}
-    {data && !data.authenticated ? <><p>{nl ? 'Meld je aan om echte ratings en rondes op te slaan. De bestaande gasttest bewaart alleen smaakkeuzes op dit apparaat, geen boekratings.' : 'Sign in to save real ratings and rounds. The existing guest test only saves taste choices on this device, not book ratings.'}</p><a className="primary-cta" href="/login?next=%2Ftaste-test">{nl ? 'Aanmelden en beoordelen' : 'Sign in and rate'}</a><a href="/taste-test/preferences">{nl ? 'Gastvoorkeuren hervatten' : 'Resume guest preferences'}</a></>
+    {data && !data.authenticated ? <><p>{nl ? 'Meld je aan om echte ratings en rondes op te slaan. De bestaande gasttest bewaart alleen smaakkeuzes op dit apparaat, geen boekratings.' : 'Sign in to save real ratings and rounds. The existing guest test only saves taste choices on this device, not book ratings.'}</p><LocaleLink className="primary-cta" href="/login?next=%2Ftaste-test">{nl ? 'Aanmelden en beoordelen' : 'Sign in and rate'}</LocaleLink><LocaleLink href="/taste-test/preferences">{nl ? 'Gastvoorkeuren hervatten' : 'Resume guest preferences'}</LocaleLink></>
       : data && !data.available ? <p role="status">{nl ? 'Deze review wacht op de voortgangsmigratie in een aparte testdatabase. Op productie worden geen testratings geschreven.' : 'This review awaits the progress migration in a separate test database. No test ratings are written to production.'}</p>
       : data?.authenticated && <>
         {round && !round.complete && <div className="taste-feedback" role="status">{paused
@@ -128,7 +131,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
           <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== book?.workId).map(b => <li key={b.workId}><button type="button" disabled={pending} onClick={() => act('choose', b.workId!)}>{b.title} — {b.author}</button></li>)}</ul>
           </details>
         </>}
-        {round && (round.ratedCount >= 10 || data.state?.exhausted || round.complete) && <a className="primary-cta taste-result-link" href="/taste-test/result">{nl ? 'Resultaat bekijken' : 'See result'}</a>}
+        {round && (round.ratedCount >= 10 || data.state?.exhausted || round.complete) && <LocaleLink className="primary-cta taste-result-link" href="/taste-test/result">{nl ? 'Resultaat bekijken' : 'See result'}</LocaleLink>}
       </>}
   </section></DiscoveryPageShell>;
 }

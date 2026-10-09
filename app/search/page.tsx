@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreSearchPage } from '@/app/components/LumiScoreSearchPage';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { editorialQuery, editorialHref } from '@/lib/catalog/editorial-query';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { unavailableEditorialPage } from '@/lib/supabase/editorial-catalog';
@@ -26,7 +26,7 @@ export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
   const query = readQuery(await searchParams);
-  return createPageMetadata({
+  return createLocalizedPageMetadata({
     title: query ? `Search: ${query} — LumiScore` : 'Search books — LumiScore',
     description: query
       ? `Search LumiScore for books and authors matching ${query}.`

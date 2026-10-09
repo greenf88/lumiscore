@@ -1,8 +1,11 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import type { Book } from '../data/books';
+import type { Book, VerifiedBookDescription } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import {
@@ -40,6 +43,7 @@ import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/n
 
 type LumiScoreBookDetailProps = {
   book: Book;
+  description: VerifiedBookDescription | null;
   initialRatingState: BookRatingState;
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
@@ -80,6 +84,7 @@ function GuestWantToRead({ book }: { book: Book }) {
 
 export function LumiScoreBookDetail({
   book,
+  description,
   initialRatingState,
   initialReadingStatus,
   collectionContext,
@@ -192,7 +197,7 @@ export function LumiScoreBookDetail({
         error?: string;
       };
       if (response.status === 401) {
-        window.location.assign(loginHref);
+        window.location.assign(localizedHref(loginHref, locale));
         return;
       }
       if (!response.ok || !payload.state) {
@@ -223,7 +228,7 @@ export function LumiScoreBookDetail({
         error?: string;
       };
       if (response.status === 401) {
-        window.location.assign(loginHref);
+        window.location.assign(localizedHref(loginHref, locale));
         return;
       }
       if (!response.ok || !payload.state) {
@@ -245,7 +250,7 @@ export function LumiScoreBookDetail({
       <header className="detail-header">
         <LumiScoreWordmark />
         <div className="detail-header-actions">
-          <a className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</a>
+          <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
           <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
           <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
@@ -279,7 +284,7 @@ export function LumiScoreBookDetail({
           )}
         </div>
         <div className="detail-copy">
-          <a className="detail-back-link" href={returnNavigation.href}>
+          <LocaleLink className="detail-back-link" href={returnNavigation.href}>
             ← {returnNavigation.kind === 'editorial' ? (locale === 'nl' ? 'Terug naar de selectie' : 'Back to the selection') : returnNavigation.kind === 'collection'
               ? t('detail.backToCollection', { name: returnNavigation.collectionName })
               : t(returnNavigation.kind === 'search'
@@ -287,14 +292,14 @@ export function LumiScoreBookDetail({
                 : returnNavigation.kind === 'collections'
                   ? 'detail.backToCollections'
                   : 'detail.backToBooks')}
-          </a>
+          </LocaleLink>
           <h1>{book.title}</h1>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
 
           {collectionContext && (
             <section className="detail-collection" aria-label={t('collection.collection')}>
-              <a href={`/collection/${collectionContext.collection.slug}`}>
+              <LocaleLink href={`/collection/${collectionContext.collection.slug}`}>
                 <strong>
                   {t(
                     collectionContext.collection.collectionType === 'series'
@@ -320,7 +325,7 @@ export function LumiScoreBookDetail({
                     ? 'collection.viewFullSeries'
                     : 'collection.viewAllBooks')} →
                 </span>
-              </a>
+              </LocaleLink>
             </section>
           )}
 
@@ -337,7 +342,7 @@ export function LumiScoreBookDetail({
             </section>
           </div>
 
-          {book.workId && <LumiScoreBookDescription workId={book.workId} />}
+          {book.workId && <LumiScoreBookDescription description={description} />}
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus
@@ -389,7 +394,7 @@ export function LumiScoreBookDetail({
                 )}
               </>
             ) : (
-              <a className="primary-cta rating-sign-in" href={loginHref}>{t('detail.signInToRate')} <span>→</span></a>
+              <LocaleLink className="primary-cta rating-sign-in" href={loginHref}>{t('detail.signInToRate')} <span>→</span></LocaleLink>
             )}
             <p className="rating-feedback" role="status" aria-live="polite">{ratingError ?? ''}</p>
           </section>

@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useCallback, useMemo, useState } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
@@ -94,9 +96,9 @@ export function LumiScoreSearchPage({
             <span>⌕</span>
             <h2>{t('search.findBook')}</h2>
             <p>{t('search.instructions')}</p>
-            <a className="empty-results-action" href="/browse">
+            <LocaleLink className="empty-results-action" href="/browse">
               {t('search.browseAll')} <span aria-hidden="true">→</span>
-            </a>
+            </LocaleLink>
           </div>
         ) : results.length > 0 ? (
           <div className="book-grid">

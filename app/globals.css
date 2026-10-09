@@ -130,9 +130,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .account-name-status.is-success { color: var(--teal); }
 .account-name-status.is-error { color: #df786e; }
 .language-switcher { display: inline-flex; flex: 0 0 auto; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
-.language-switcher button { min-width: 30px; min-height: 36px; border: 0; padding: 0 7px; background: transparent; color: var(--muted); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: .06em; }
-.language-switcher button + button { border-left: 1px solid var(--border); }
-.language-switcher button[aria-pressed='true'] { background: var(--surface); color: var(--gold); }
+.language-switcher a { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; min-width: 30px; min-height: 36px; border: 0; padding: 0 7px; background: transparent; color: var(--muted); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: .06em; }
+.language-switcher a + a { border-left: 1px solid var(--border); }
+.language-switcher a[aria-current='page'] { background: var(--surface); color: var(--gold); }
 .theme-toggle { min-width: 44px; min-height: 44px; display: inline-flex; justify-content: center; gap: 5px; align-items: center; padding: 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
 .theme-sun, .theme-moon { font-size: 14px; line-height: 1; }
 .theme-track { position: relative; width: 34px; height: 18px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); }
@@ -636,7 +636,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .main-nav > a:not(.taste-test-nav-link):not(.header-sign-in) { display: none; }
   .mobile-navigation { position: static; display: block; }
   .mobile-navigation-panel { right: max(12px, env(safe-area-inset-right)); width: min(220px, calc(100vw - 24px)); }
-  .language-switcher button { min-height: 44px; }
+  .language-switcher a { min-height: 44px; }
   .hero-inner { grid-template-columns: 1fr 390px; gap: 38px; padding-inline: 0; }
   .hero-copy h1 { font-size: clamp(54px, 7vw, 74px); }
   .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
@@ -694,7 +694,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .main-nav { min-width: 0; gap: 4px; }
   .main-nav > .taste-test-nav-link { display: none; }
   .header-sign-in { font-size: 9px; }
-  .site-header .language-switcher button { min-width: 26px; padding-inline: 4px; }
+  .site-header .language-switcher a { min-width: 26px; padding-inline: 4px; }
   .theme-sun, .theme-moon { display: none; }
   .header-account-label { display: none; }
   .header-account-trigger, .mobile-search-button { width: 40px; height: 44px; justify-content: center; }
@@ -766,7 +766,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .detail-header .theme-toggle-labeled { padding: 8px; }
   .detail-header .toggle-label { display: none; }
   .detail-header-actions { gap: 10px; }
-  .detail-header .language-switcher button { min-height: 44px; }
+  .detail-header .language-switcher a { min-height: 44px; }
   .detail-taste-test-link { font-size: 9px; }
   .detail-account-menu .header-account-label, .detail-account-menu .header-account-chevron { display: none; }
   .book-detail { min-height: auto; width: min(100% - 32px, 430px); grid-template-columns: 1fr; gap: 42px; padding: 42px 0 64px; }
@@ -851,7 +851,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .taste-test-nav-link { width: 40px; justify-content: center; }
   .taste-test-nav-link { font-size: 0 !important; }
   .taste-test-nav-link::before { content: '✦'; font-size: 15px; }
-  .site-header .language-switcher button { min-width: 27px; padding-inline: 3px; }
+  .site-header .language-switcher a { min-width: 27px; padding-inline: 3px; }
   .header-sign-in { padding-inline: 4px; }
   .detail-header { gap: 6px; padding-inline: 12px; }
   .detail-header .wordmark { width: 44px; flex: 0 0 44px; }
@@ -859,7 +859,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .detail-header-actions { min-width: 0; gap: 3px; }
   .detail-taste-test-link { width: 36px; justify-content: center; font-size: 0; }
   .detail-taste-test-link::before { content: '✦'; font-size: 15px; }
-  .detail-header .language-switcher button { min-width: 24px; padding-inline: 3px; }
+  .detail-header .language-switcher a { min-width: 24px; padding-inline: 3px; }
   .detail-header .theme-toggle-labeled { width: 46px; min-width: 46px; padding: 5px; }
   .detail-header .theme-toggle-labeled .toggle-label { display: none; }
   .detail-header .theme-toggle-labeled .theme-sun,
@@ -1037,7 +1037,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .main-nav, .search-bar input, .want-button, .primary-cta, .browse-controls button,
 .mobile-navigation-panel a, .header-account-panel button { font-size: var(--type-body); font-weight: 600; letter-spacing: 0; text-transform: none; }
 .want-button { padding-inline: 6px; line-height: 1.3; }
-.main-nav > .taste-test-nav-link, .language-switcher button[aria-pressed='true'],
+.main-nav > .taste-test-nav-link, .language-switcher a[aria-current='page'],
 .detail-taste-test-link { color: var(--gold-text); }
 .primary-cta, .primary-cta:hover, .browse-controls button,
 .taste-rating-test button.primary-cta { background: var(--action-bg); color: #fff; }
@@ -1051,7 +1051,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .taste-score-buttons button { font-size: var(--type-body); line-height: 1.25; }
 .taste-feedback { font-size: 12px; line-height: 1.25; min-height: 15px; }
 .taste-round-choices button { font-size: var(--type-body); }
-.language-switcher button { font-size: var(--type-small); font-weight: 600; letter-spacing: 0; }
+.language-switcher a { font-size: var(--type-small); font-weight: 600; letter-spacing: 0; }
 :root[data-theme='paper'] .paper-features strong { font-family: var(--sans); font-size: var(--type-body); }
 :root[data-theme='paper'] .paper-features small { font-size: var(--type-small); }
 :root[data-theme='paper'] .learn-link { font-size: var(--type-small); letter-spacing: .025em; text-transform: none; }
@@ -1069,6 +1069,14 @@ button, input, select, textarea { font-family: var(--sans); }
 @media (min-width: 761px) and (max-width: 1350px) {
   .site-header { grid-template-columns: auto minmax(160px, 1fr) auto; gap: 12px; padding-inline: 20px; }
   .main-nav { gap: 10px; font-size: var(--type-meta); }
+}
+/* Keep the full wordmark and taste link clear between phone and desktop layouts. */
+@media (560px < width <= 760px) {
+  .site-header { gap: 8px; padding-inline: 12px; }
+  .site-header .main-nav { gap: 4px; }
+  .site-header .header-account-label, .site-header .header-account-chevron,
+  .site-header .theme-sun, .site-header .theme-moon { display: none; }
+  .site-header .header-account-trigger { width: 44px; justify-content: center; }
 }
 @media (max-width: 760px) {
   .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }

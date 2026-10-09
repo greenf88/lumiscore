@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -41,7 +41,7 @@ export async function generateMetadata({
   const book = await getBook(workId, locale);
 
   if (!book) {
-    return createPageMetadata({
+    return createLocalizedPageMetadata({
       title: 'Book not found — LumiScore',
       canonicalPath: `/book/${encodeURIComponent(workId)}`,
       noIndex: true,
@@ -49,11 +49,11 @@ export async function generateMetadata({
     });
   }
 
-  const title = `${book.title} by ${book.author} | LumiScore`;
-  const description = getBookMetadataDescription(book);
+  const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
+  const description = getBookMetadataDescription(book, locale);
   const cover = book.coverUrls?.[0];
 
-  return createPageMetadata({
+  return createLocalizedPageMetadata({
     title,
     description,
     canonicalPath: `/book/${book.workId}`,
@@ -121,14 +121,18 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       loadHeaderAuthState,
     ))
     .catch(() => ({ authenticated: false }));
-  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
-    getBook(workId, locale),
+  const bookPromise = getBook(workId, locale);
+  const descriptionPromise = bookPromise.then(async book => book
+    ? (await import('@/lib/books/public-description')).loadPublicBookDescription(book, locale) : null);
+  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation, description] = await Promise.all([
+    bookPromise,
     ratingStatePromise,
     readingStatusPromise,
     collectionContextPromise,
     personalizationPromise,
     authStatePromise,
     returnNavigationPromise,
+    descriptionPromise,
   ]);
   if (!book) notFound();
 
@@ -136,6 +140,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     <>
       <LumiScoreBookDetail
         book={book}
+        description={description}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useCallback, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
@@ -68,8 +70,8 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
       />
       <section className="browse-page" aria-labelledby="browse-title">
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
-          <a href="/browse" aria-current="page">{t('browse.books')}</a>
-          <a href="/collections">{t('browse.collections')}</a>
+          <LocaleLink href="/browse" aria-current="page">{t('browse.books')}</LocaleLink>
+          <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink>
         </nav>
         <div className="browse-heading">
           <div>
@@ -119,28 +121,28 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         {data.available && data.pageCount > 1 && (
           <nav className="browse-pagination" aria-label={t('browse.pagination')}>
             {data.page > 1 ? (
-              <a href={updateBrowseReturnPath(returnTo, { page: data.page - 1 })} rel="prev">
+              <LocaleLink href={updateBrowseReturnPath(returnTo, { page: data.page - 1 })} rel="prev">
                 ← {t('browse.previous')}
-              </a>
+              </LocaleLink>
             ) : <span aria-disabled="true">← {t('browse.previous')}</span>}
             <div>
               {pageItems.map((item, index) => item === 'ellipsis' ? (
                 <span className="pagination-ellipsis" aria-hidden="true" key={`ellipsis-${index}`}>…</span>
               ) : (
-                <a
+                <LocaleLink
                   href={updateBrowseReturnPath(returnTo, { page: item })}
                   aria-current={item === data.page ? 'page' : undefined}
                   aria-label={t('browse.pageLabel', { page: item })}
                   key={item}
                 >
                   {item}
-                </a>
+                </LocaleLink>
               ))}
             </div>
             {data.page < data.pageCount ? (
-              <a href={updateBrowseReturnPath(returnTo, { page: data.page + 1 })} rel="next">
+              <LocaleLink href={updateBrowseReturnPath(returnTo, { page: data.page + 1 })} rel="next">
                 {t('browse.next')} →
-              </a>
+              </LocaleLink>
             ) : <span aria-disabled="true">{t('browse.next')} →</span>}
           </nav>
         )}

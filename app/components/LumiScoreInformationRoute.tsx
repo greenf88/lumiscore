@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { LumiScoreInformationPage } from './LumiScoreInformationPage';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import {
   getInformationPageContent,
@@ -14,7 +14,7 @@ export async function generateInformationPageMetadata(
   const { locale } = await resolveRequestLocale();
   const content = getInformationPageContent(key, locale);
 
-  return createPageMetadata({
+  return createLocalizedPageMetadata({
     title: content.seoTitle,
     description: content.seoDescription,
     canonicalPath: content.path,

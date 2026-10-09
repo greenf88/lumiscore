@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { authDestination } from '@/lib/auth/request';
 import {
   getSafeNextPath,
   getReadingPreferencesOnboardingPath,
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
   const onboardingNext = getReadingPreferencesOnboardingPath(next);
   if (!displayName.ok || !isValidNewAccountPassword(password)) {
     return NextResponse.redirect(
-      new URL(`/login?error=invalid_signup_details&next=${encodeURIComponent(next)}`, request.url),
+      new URL(authDestination(`/login?error=invalid_signup_details&next=${encodeURIComponent(next)}`, next), request.url),
       { status: 303, headers: PRIVATE_RESPONSE_HEADERS },
     );
   }
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
     destination = `/login?message=check_email&next=${encodeURIComponent(onboardingNext)}`;
   }
 
-  return NextResponse.redirect(new URL(destination, request.url), {
+  return NextResponse.redirect(new URL(authDestination(destination, next), request.url), {
     status: 303,
     headers: PRIVATE_RESPONSE_HEADERS,
   });

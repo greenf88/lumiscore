@@ -1,5 +1,4 @@
-import type { Metadata } from 'next';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { LumiScorePasswordRecovery } from '@/app/components/LumiScorePasswordRecovery';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate } from '@/lib/i18n/translations';
@@ -7,13 +6,13 @@ import { translate } from '@/lib/i18n/translations';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export const metadata: Metadata = createPageMetadata({
+export async function generateMetadata() { return createLocalizedPageMetadata({
   title: 'Reset password — LumiScore',
   description: 'Request a secure LumiScore password reset link.',
   canonicalPath: '/forgot-password',
   noIndex: true,
   follow: false,
-});
+}); }
 
 type ForgotPasswordPageProps = {
   searchParams: Promise<{

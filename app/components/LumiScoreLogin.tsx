@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import { useState } from 'react';
 import { DISPLAY_NAME_MAX_LENGTH } from '@/lib/auth/display-name';
 import { NEW_ACCOUNT_PASSWORD_MIN_LENGTH } from '@/lib/auth/credentials';
@@ -20,7 +23,7 @@ export function LumiScoreLogin({
   message,
   initialMode,
 }: LumiScoreLoginProps) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const [mode, setMode] = useState(initialMode);
   const toggleTheme = () => {
     const theme =
@@ -55,7 +58,7 @@ export function LumiScoreLogin({
           action={mode === 'sign-up' ? '/auth/sign-up' : '/auth/sign-in'}
           method="post"
         >
-          <input type="hidden" name="next" value={next} />
+          <input type="hidden" name="next" value={localizedHref(next, locale)} />
           {mode === 'sign-up' && (
             <label>
               <span>{t('auth.name')}</span>
@@ -88,9 +91,9 @@ export function LumiScoreLogin({
             </p>
           )}
           {mode === 'sign-in' && (
-            <a className="auth-forgot-link" href="/forgot-password">
+            <LocaleLink className="auth-forgot-link" href="/forgot-password">
               {t('auth.forgotPassword')}
-            </a>
+            </LocaleLink>
           )}
           <button className="primary-cta auth-submit" type="submit">
             {t(mode === 'sign-up' ? 'auth.create' : 'auth.signIn')} <span>→</span>
@@ -103,7 +106,7 @@ export function LumiScoreLogin({
             {t(mode === 'sign-up' ? 'auth.backToSignIn' : 'auth.create')}
           </button>
         </form>
-        <a className="detail-back-link auth-back" href={next}>← {t('auth.continue')}</a>
+        <LocaleLink className="detail-back-link auth-back" href={next}>← {t('auth.continue')}</LocaleLink>
       </section>
     </main>
   );

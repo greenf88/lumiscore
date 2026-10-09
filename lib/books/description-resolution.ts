@@ -284,8 +284,8 @@ export async function resolveBookDescription(
       values.findIndex((other) =>
         other.editionId === candidate.editionId && other.isbn13 === candidate.isbn13) === index)
     .slice(0, 3);
-  const editionLocale = candidates[0]?.locale ?? localeFromLanguage(lookup.editionLanguage);
-  const descriptionLanguage = editionLocale ?? locale;
+  // Site-language intent wins over an available edition in another language.
+  const descriptionLanguage = locale;
   const states: Array<DescriptionResolutionState | null> = [];
 
   // Preserve the established exact-work Open Library priority for English.
@@ -323,16 +323,9 @@ export async function resolveBookDescription(
       states.push(googleBooks.state);
     }
   }
-  if (workId && descriptionLanguage === 'nl') {
-    const openLibrary = await resolveOpenLibraryDescription(
-      workId,
-      descriptionLanguage,
-      false,
-      fetchImplementation,
-    );
-    if (openLibrary.description) return openLibrary;
-    states.push(openLibrary.state);
-  }
+  // Work-level languages describe editions, not the language of a shared
+  // synopsis. Do not relabel that synopsis as Dutch; require exact edition
+  // or ISBN language evidence above, otherwise show the localized fallback.
   return {
     state: mergeResolutionState(states),
     description: null,

@@ -1,5 +1,5 @@
 import { LumiScoreHome } from './components/LumiScoreHome';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { books } from './data/books';
 import {
   logServerEnvironmentPresence,
@@ -10,10 +10,10 @@ import { resolveRequestLocale } from '@/lib/i18n/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 
-export const metadata = createPageMetadata({
+export async function generateMetadata() { return createLocalizedPageMetadata({
   title: 'LumiScore — Find your next great read',
   canonicalPath: '/',
-});
+}); }
 
 async function loadHomepageBooks() {
   logServerEnvironmentPresence();

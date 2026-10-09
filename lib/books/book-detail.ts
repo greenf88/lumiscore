@@ -13,7 +13,8 @@ export function getCatalogSourceLabel(book: Book, locale: Locale = 'en'): string
     : translate(locale, 'detail.openLibraryCatalog');
 }
 
-export function getBookMetadataDescription(book: Book): string {
+export function getBookMetadataDescription(book: Book, locale: Locale = 'en'): string {
+  if (locale === 'nl') return `${book.title} van ${book.author}${book.firstPublishYear ? `, voor het eerst verschenen in ${book.firstPublishYear}` : ''}. Bekijk boekinformatie en de beoordelingsstatus op LumiScore.`;
   const year = book.firstPublishYear
     ? `, first published in ${book.firstPublishYear}`
     : '';

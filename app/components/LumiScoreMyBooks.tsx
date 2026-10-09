@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Book } from '@/app/data/books';
 import {
@@ -152,7 +154,7 @@ function GuestMyBooks() {
     <>
       <aside className="my-books-guest-cta">
         <p>{t('myBooks.guestSignInCopy')}</p>
-        <a href="/login?next=%2Fmy-books">{t('myBooks.signIn')} <span>→</span></a>
+        <LocaleLink href="/login?next=%2Fmy-books">{t('myBooks.signIn')} <span>→</span></LocaleLink>
       </aside>
       {state.loading ? (
         <div className="my-books-loading" role="status">{t('myBooks.loading')}</div>
@@ -177,7 +179,7 @@ function GuestMyBooks() {
         <div className="my-books-empty">
           <h2>{t('myBooks.emptyWantToRead')}</h2>
           <p>{t('myBooks.emptyWantToReadCopy')}</p>
-          <a href="/#discover">{t('myBooks.discover')} →</a>
+          <LocaleLink href="/#discover">{t('myBooks.discover')} →</LocaleLink>
         </div>
       )}
     </>
@@ -281,7 +283,7 @@ export function LumiScoreMyBooks({ data }: { data: MyBooksPageData }) {
               ) : (
                 <div className="my-books-empty">
                   <h2>{t(EMPTY_KEYS[activeStatus])}</h2>
-                  <a href="/#discover">{t('myBooks.discover')} →</a>
+                  <LocaleLink href="/#discover">{t('myBooks.discover')} →</LocaleLink>
                 </div>
               )}
             </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+
 import { useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { NEW_ACCOUNT_PASSWORD_MIN_LENGTH } from '@/lib/auth/credentials';
@@ -122,9 +124,9 @@ export function LumiScorePasswordRecovery({
           )}
           <SubmitButton mode={mode} />
         </form>
-        <a className="detail-back-link auth-back" href="/login">
+        <LocaleLink className="detail-back-link auth-back" href="/login">
           ← {t('auth.backToSignIn')}
-        </a>
+        </LocaleLink>
       </section>
     </main>
   );

@@ -10,13 +10,13 @@ function reviewUsesProduction() {
     supabaseUrl: readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') });
 }
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
-async function present(state: RatingRoundState) {
-  const { locale } = await resolveRequestLocale();
+async function present(state: RatingRoundState, request: Request) {
+  const { locale } = await resolveRequestLocale(request);
   const { loadCatalogBooksByIdsWithStoredCovers } = await import('@/lib/supabase/books');
   const books = state.currentWorkId ? await loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale) : [];
   return { authenticated: true, available: true, state, book: books[0] ?? null };
 }
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return json({ authenticated: false, available: true, state: null, book: null });
@@ -24,7 +24,7 @@ export async function GET() {
     const { data, error } = await client.rpc('taste_rating_state');
     if (error?.code === 'PGRST202') return json({ authenticated: true, available: false, reason: 'migration-required' });
     if (error) throw error;
-    return json(await present(data as RatingRoundState));
+    return json(await present(data as RatingRoundState, request));
   } catch { return json({ error: 'Taste round unavailable.' }, 503); }
 }
 export async function POST(request: NextRequest) {
@@ -45,6 +45,6 @@ export async function POST(request: NextRequest) {
     if (error?.code === '22023') return json({ error: 'stale-or-invalid-action' }, 409);
     if (error?.code === 'PGRST202') return json({ error: 'migration-required' }, 503);
     if (error) throw error;
-    return json(await present(data as RatingRoundState));
+    return json(await present(data as RatingRoundState, request));
   } catch { return json({ error: 'Action could not be confirmed. Refresh to see saved progress.' }, 503); }
 }

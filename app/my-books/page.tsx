@@ -1,16 +1,16 @@
 import { cache } from 'react';
-import { createPageMetadata } from '@/lib/seo/page-metadata';
+import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { LumiScoreMyBooks } from '@/app/components/LumiScoreMyBooks';
 import type { MyBooksPageData } from '@/lib/supabase/book-status';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = createPageMetadata({
+export async function generateMetadata() { return createLocalizedPageMetadata({
   title: 'My books — LumiScore',
   description: 'Manage your personal reading library on LumiScore.',
   canonicalPath: '/my-books',
   noIndex: true,
-});
+}); }
 
 const load = cache(async (): Promise<MyBooksPageData> => {
   try {

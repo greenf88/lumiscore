@@ -466,8 +466,8 @@ export function getInformationPageContent(
 }
 
 export function buildInformationPageJsonLd(page: InformationPageContent) {
-  const url = absoluteLumiScoreUrl(page.path);
-  const homeUrl = absoluteLumiScoreUrl('/');
+  const url = absoluteLumiScoreUrl(`/${page.locale}${page.path}`);
+  const homeUrl = absoluteLumiScoreUrl(`/${page.locale}`);
 
   return [
     {

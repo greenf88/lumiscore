@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { localizedHref, splitLocalePath } from '../i18n/paths.ts';
 
 export function getSafeNextPath(
   value: FormDataEntryValue | string | null | undefined,
@@ -26,7 +27,14 @@ export function getSafeNextPath(
 }
 
 export function getReadingPreferencesOnboardingPath(next: string): string {
-  return `/reading-preferences?next=${encodeURIComponent(getSafeNextPath(next))}`;
+  const path = `/reading-preferences?next=${encodeURIComponent(getSafeNextPath(next))}`;
+  const { locale } = splitLocalePath(next);
+  return locale ? localizedHref(path, locale) : path;
+}
+
+export function authDestination(destination: string, next: string): string {
+  const { locale } = splitLocalePath(getSafeNextPath(next));
+  return locale ? localizedHref(destination, locale) : destination;
 }
 
 export function isSameOriginRequest(request: NextRequest): boolean {

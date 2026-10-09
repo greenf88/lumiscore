@@ -1,5 +1,8 @@
 'use client';
 
+import { LocaleLink } from './LumiScoreLocale';
+import { localizedHref } from '@/lib/i18n/paths';
+
 import Image from 'next/image';
 import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
@@ -208,10 +211,10 @@ export const BookCover = memo(function BookCover(props: BookCoverProps) {
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   const inputId = useId();
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
 
   return (
-    <form className={`search-bar${mobile ? ' search-bar-mobile' : ''}`} action="/search" method="get" role="search">
+    <form className={`search-bar${mobile ? ' search-bar-mobile' : ''}`} action={localizedHref('/search', locale)} method="get" role="search">
       <label className="sr-only" htmlFor={inputId}>{t('header.search')}</label>
       <span className="search-icon" aria-hidden="true" />
       <input id={inputId} name="q" value={query} onChange={(event) => onChange(event.target.value)} placeholder={t('header.search')} />
@@ -280,11 +283,11 @@ export function Header({
       <LumiScoreWordmark />
       <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
-        <a href="/browse">{t('header.browse')}</a>
-        <a href="/categories">{t('home.categories')}</a>
-        <a href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</a>
-        <a className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</a>
-        <a className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</a>
+        <LocaleLink href="/browse">{t('header.browse')}</LocaleLink>
+        <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
+        <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
+        <LocaleLink className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</LocaleLink>
+        <LocaleLink className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</LocaleLink>
         <div className="mobile-navigation" ref={navigationRef}>
           <button
             className="mobile-navigation-trigger"
@@ -306,17 +309,17 @@ export function Header({
               }
             }}
           >
-            <a href="/browse">{t('browse.books')}</a>
-            <a href="/collections">{t('browse.collections')}</a>
-            <a href="/categories">{t('home.categories')}</a>
-            <a href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</a>
-            <a href="/taste-test">{t('header.tasteTest')}</a>
-            <a href="/my-books">{t('header.myBooks')}</a>
+            <LocaleLink href="/browse">{t('browse.books')}</LocaleLink>
+            <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink>
+            <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
+            <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
+            <LocaleLink href="/taste-test">{t('header.tasteTest')}</LocaleLink>
+            <LocaleLink href="/my-books">{t('header.myBooks')}</LocaleLink>
             <span className="mobile-navigation-divider" aria-hidden="true" />
-            <a href="/over-ons">{t('footer.about')}</a>
-            <a href="/zo-werkt-het">{t('footer.howItWorks')}</a>
-            <a href="/voor-uitgevers">{t('footer.publishers')}</a>
-            <a href="/contact">{t('footer.contact')}</a>
+            <LocaleLink href="/over-ons">{t('footer.about')}</LocaleLink>
+            <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
+            <LocaleLink href="/voor-uitgevers">{t('footer.publishers')}</LocaleLink>
+            <LocaleLink href="/contact">{t('footer.contact')}</LocaleLink>
           </div>}
         </div>
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
@@ -354,7 +357,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
   );
 
   return href ? (
-    <a className="recommendation-row" href={href}>{content}</a>
+    <LocaleLink className="recommendation-row" href={href}>{content}</LocaleLink>
   ) : (
     <div className="recommendation-row">{content}</div>
   );
@@ -380,7 +383,7 @@ export function RecommendationsSection({ personalization, limit = 20, returnTo =
   </section>;
   return <section className="featured-section" id="recommendations" aria-labelledby="recommendations-title">
     <div className="section-heading"><h2 id="recommendations-title">{t('home.yourNextBooks')}</h2></div>
-    {!personalization.hasEvidence ? <p>{nl ? 'We hebben nog geen bruikbaar smaakprofiel. Beoordeel gelezen boeken of hervat je smaaktest; we verzinnen geen persoonlijke matches.' : 'There is not enough taste evidence yet. Rate books you have read or resume your taste test; we do not invent personal matches.'} <a href="/taste-test">{nl ? 'Smaaktest' : 'Taste test'}</a></p>
+    {!personalization.hasEvidence ? <p>{nl ? 'We hebben nog geen bruikbaar smaakprofiel. Beoordeel gelezen boeken of hervat je smaaktest; we verzinnen geen persoonlijke matches.' : 'There is not enough taste evidence yet. Rate books you have read or resume your taste test; we do not invent personal matches.'} <LocaleLink href="/taste-test">{nl ? 'Smaaktest' : 'Taste test'}</LocaleLink></p>
       : items.length < 10 && <p role="status">{nl ? 'Er zijn momenteel minder dan tien geschikte, nog niet gelezen kandidaten met voldoende betrouwbare metadata. We tonen alleen de echte resultaten.' : 'There are currently fewer than ten suitable unread candidates with sufficiently reliable metadata. Only genuine results are shown.'}</p>}
     <div className="book-grid">{items.map(item => <BookCard key={item.book.workId} book={item.book}
       wanted={wanted.has(getGuestWantedStorageId(item.book))} status={item.book.workId ? statuses.get(item.book.workId) : null}
@@ -403,10 +406,10 @@ const RecommendationPanel = memo(function RecommendationPanel({ personalization 
         <div><h2 id="up-next-title">{t('home.yourNextBooks')}</h2><span className="eyebrow">{t('home.recommendationsCurated')}</span></div>
       </div>
       {showTasteTestCta && (
-        <a className="taste-test-cta" href="/taste-test">
+        <LocaleLink className="taste-test-cta" href="/taste-test">
           <strong>{t('home.improveRecommendations')}</strong>
           <span>{t('home.takeTasteTest')}</span>
-        </a>
+        </LocaleLink>
       )}
       <div className="recommendation-list">
         {personalization.unavailable ? (
@@ -418,7 +421,7 @@ const RecommendationPanel = memo(function RecommendationPanel({ personalization 
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : <p className="recommendation-empty">{t('home.noPersonalEvidence')}</p>}
       </div>
-      {!personalization.unavailable && <a className="view-all" href="/recommendations">{t('home.seeMore')} <span>→</span></a>}
+      {!personalization.unavailable && <LocaleLink className="view-all" href="/recommendations">{t('home.seeMore')} <span>→</span></LocaleLink>}
     </aside>
   );
 });
@@ -435,15 +438,15 @@ const Hero = memo(function Hero({ catalogStats, personalization }: { catalogStat
           <h1>{t('home.heroStart')}<br /><em>{t('home.heroEmphasis')}</em></h1>
           <p className="hero-primary">{t('home.heroPrimary')}</p>
           <p className="hero-paper-copy">{t('home.heroCopy')}</p>
-          <a className="primary-cta" href="/taste-test">{t('home.tasteTestCta')} <span>→</span></a>
+          <LocaleLink className="primary-cta" href="/taste-test">{t('home.tasteTestCta')} <span>→</span></LocaleLink>
           <div className="paper-features">
             <div><i>✦</i><span><strong>{t('home.smartRecommendations')}</strong><small>{t('home.personalizedForYou')}</small></span></div>
             <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
           </div>
-          <a className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></a>
+          <LocaleLink className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></LocaleLink>
           <dl className="hero-stats">
             <div><dt>{catalogStats.books === null ? '—' : catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
-            <div><dt><a href="/categories" aria-label={`${catalogStats.categories ?? '—'} ${t('home.categories')}`}>{catalogStats.categories ?? '—'}</a></dt><dd><a href="/categories">{t('home.categories')}</a></dd></div>
+            <div><dt><LocaleLink href="/categories" aria-label={`${catalogStats.categories ?? '—'} ${t('home.categories')}`}>{catalogStats.categories ?? '—'}</LocaleLink></dt><dd><LocaleLink href="/categories">{t('home.categories')}</LocaleLink></dd></div>
           </dl>
         </div>
         {personalization.authenticated && <RecommendationPanel personalization={personalization} />}
@@ -511,13 +514,13 @@ export const BookCard = memo(function BookCard({ book, wanted = false, status, o
       {href ? (
         // Vinext's production Link chunk loses navigateClientSide's named export.
         // Use native document navigation: Link cancels the click before throwing.
-        <a
+        <LocaleLink
           className="book-card-main-link"
           href={href}
           aria-label={t('home.viewBook', { title: book.title, author: book.author })}
         >
           {bookContent}
-        </a>
+        </LocaleLink>
       ) : bookContent}
       {children}
       <div className="book-card-action">
@@ -549,7 +552,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
         <div className="section-tools">
           <span aria-live="polite">{isLoading ? t('home.searching') : `${displayedBooks.length.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(displayedBooks.length === 1 ? 'common.book' : 'common.books')}`}</span>
           {searchActive && displayedBooks.length > 0 ? (
-            <a href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>{t('home.viewAllResults')} <b aria-hidden="true">→</b></a>
+            <LocaleLink href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>{t('home.viewAllResults')} <b aria-hidden="true">→</b></LocaleLink>
           ) : null}
         </div>
       </div>
@@ -564,7 +567,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
       ) : (
         <div className="empty-results"><span>⌕</span><h3>{t('home.noBooks')}</h3><p>{t('home.tryAnother')}</p></div>
       )}
-      {!searchActive && !catalogUnavailable && <div className="section-more"><a className="primary-cta" href="/browse?sort=highest">{t('home.seeMoreHighlyRated')} <span aria-hidden="true">→</span></a></div>}
+      {!searchActive && !catalogUnavailable && <div className="section-more"><LocaleLink className="primary-cta" href="/browse?sort=highest">{t('home.seeMoreHighlyRated')} <span aria-hidden="true">→</span></LocaleLink></div>}
     </section>
   );
 }
@@ -646,9 +649,9 @@ function DutchDiscoveryBooks({ discovery, wanted, statuses, onToggle }: { discov
           statuses={statuses}
           onToggle={onToggle}
           source={discovery.popular.current ? (
-            <a href={discovery.popular.sourceUrl} target="_blank" rel="noreferrer">
+            <LocaleLink href={discovery.popular.sourceUrl} target="_blank" rel="noreferrer">
               {t('home.dutchPopularSource', { week: discovery.popular.week })}
-            </a>
+            </LocaleLink>
           ) : undefined}
         />
         <DutchDiscoveryGroup
@@ -689,18 +692,18 @@ function ContinueSeries({ continuations }: { continuations: HomepageSeriesContin
       <div className="continue-series-heading">
         <span className="eyebrow">{t('collection.continueEyebrow')}</span>
         <h2 id="continue-series-title">{t('collection.continueHeading')}</h2>
-        <a className="continue-series-directory-link" href="/collections">{t('collections.browseAll')} →</a>
+        <LocaleLink className="continue-series-directory-link" href="/collections">{t('collections.browseAll')} →</LocaleLink>
       </div>
       <div className="continue-series-list">
         {continuations.map(({ collection, progress, action, actionBook }) => (
           <article className="continue-series-item" key={collection.id}>
             <div className="continue-series-copy">
-              <a href={`/collection/${collection.slug}`}>{collection.name}</a>
+              <LocaleLink href={`/collection/${collection.slug}`}>{collection.name}</LocaleLink>
               <p>{progress.total === null
                 ? t('collection.readCount', { read: progress.read })
                 : t('collection.readProgress', { read: progress.read, total: progress.total })}</p>
             </div>
-            <a className="continue-series-book" href={`/book/${actionBook.workId}`}>
+            <LocaleLink className="continue-series-book" href={`/book/${actionBook.workId}`}>
               <BookCover book={actionBook} small label={actionBook.title} />
               <span>
                 <small>{t(action === 'continue_reading'
@@ -710,7 +713,7 @@ function ContinueSeries({ continuations }: { continuations: HomepageSeriesContin
                 <small>{actionBook.author}</small>
               </span>
               <b>{t('collection.continueAction')} →</b>
-            </a>
+            </LocaleLink>
           </article>
         ))}
       </div>
@@ -725,13 +728,13 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
       <div className="footer-brand">
         <LumiScoreWordmark />
         <p>{t('footer.tagline')}</p>
-        <a className="domain-link" href="/">lumisco.re</a>
+        <LocaleLink className="domain-link" href="/">lumisco.re</LocaleLink>
       </div>
       <nav className="footer-nav" aria-label={t('footer.navigation')}>
-        <a href="/over-ons">{t('footer.about')}</a>
-        <a href="/zo-werkt-het">{t('footer.howItWorks')}</a>
-        <a href="/voor-uitgevers">{t('footer.publishers')}</a>
-        <a href="/contact">{t('footer.contact')}</a>
+        <LocaleLink href="/over-ons">{t('footer.about')}</LocaleLink>
+        <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
+        <LocaleLink href="/voor-uitgevers">{t('footer.publishers')}</LocaleLink>
+        <LocaleLink href="/contact">{t('footer.contact')}</LocaleLink>
       </nav>
       <div className="footer-theme"><span>{t('footer.readingMode')}</span><ThemeToggle onToggle={onThemeToggle} labeled /></div>
       <div className="footer-bottom"><span>© 2026 LumiScore</span><span>{t('footer.madeForReaders')}</span></div>
