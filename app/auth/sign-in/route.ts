@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const errorCategory = error?.code === 'email_not_confirmed' ? 'email_not_confirmed' : 'invalid_credentials';
   const destination = error
-    ? `/login?error=invalid_credentials&next=${encodeURIComponent(next)}`
+    ? `/login?error=${errorCategory}&next=${encodeURIComponent(next)}`
     : next;
 
   return NextResponse.redirect(new URL(authDestination(destination, next), request.url), {
