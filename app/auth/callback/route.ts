@@ -12,6 +12,7 @@ import { getSafeNextPath, PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import { absoluteLumiScoreUrl } from '@/lib/seo/site-origin';
+import { registrationCallbackDestination } from '@/lib/auth/registration';
 
 const VERIFIED_RECOVERY_MAX_AGE_SECONDS = 10 * 60;
 
@@ -97,11 +98,13 @@ export async function GET(request: NextRequest) {
       () => supabase.auth.exchangeCodeForSession(code),
     );
     if (!error) {
-      return privateRedirect(next);
+      return NextResponse.redirect(registrationCallbackDestination(request.url, next, true), {
+        status: 303, headers: PRIVATE_RESPONSE_HEADERS,
+      });
     }
   }
 
-  return privateRedirect(
-    `/login?error=confirmation_failed&next=${encodeURIComponent(next)}`,
-  );
+  return NextResponse.redirect(registrationCallbackDestination(request.url, next, false), {
+    status: 303, headers: PRIVATE_RESPONSE_HEADERS,
+  });
 }

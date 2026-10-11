@@ -9,6 +9,7 @@ import {
 import { normalizeDisplayName } from '@/lib/auth/display-name';
 import { isValidNewAccountPassword } from '@/lib/auth/credentials';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { attemptSignup } from '@/lib/auth/registration';
 
 export async function POST(request: NextRequest) {
   if (!isSameOriginRequest(request)) {
@@ -33,20 +34,24 @@ export async function POST(request: NextRequest) {
   const callback = new URL('/auth/callback', request.url);
   callback.searchParams.set('next', onboardingNext);
 
-  const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: callback.toString(),
-      data: { display_name: displayName.value },
-    },
+  const result = await attemptSignup(async () => {
+    const supabase = await createServerSupabaseClient();
+    return supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: callback.toString(),
+        data: { display_name: displayName.value },
+      },
+    });
   });
 
   let destination = onboardingNext;
-  if (error) {
-    destination = `/login?error=signup_failed&next=${encodeURIComponent(next)}`;
-  } else if (!data.session) {
+  if (result.error) {
+    // Safe operational category; never log Auth errors, form data or credentials.
+    console.warn('auth.signup_failed', { category: result.error });
+    destination = `/login?error=${result.error}&next=${encodeURIComponent(next)}`;
+  } else if (!result.hasSession) {
     destination = `/login?message=check_email&next=${encodeURIComponent(onboardingNext)}`;
   }
 

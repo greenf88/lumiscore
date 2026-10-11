@@ -49,8 +49,8 @@ test('confirmed-email callback preserves safe reading-preferences onboarding wit
   );
   assert.match(callback, /const next = getSafeNextPath\(/);
   assert.match(callback, /exchangeCodeForSession\(code\)/);
-  assert.match(callback, /if \(!error\) \{\s*return privateRedirect\(next\);/);
-  assert.match(callback, /login\?error=confirmation_failed&next=/);
+  assert.match(callback, /if \(!error\) \{\s*return NextResponse.redirect\(registrationCallbackDestination\(request.url, next, true\)/);
+  assert.match(callback, /registrationCallbackDestination\(request.url, next, false\)/);
   assert.match(callback, /PRIVATE_RESPONSE_HEADERS/);
 });
 

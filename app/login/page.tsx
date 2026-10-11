@@ -3,6 +3,7 @@ import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { getSafeNextPath } from '@/lib/auth/request';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
+import { isSignupError, SIGNUP_ERROR_MESSAGES } from '@/lib/auth/registration';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,8 +25,8 @@ type LoginPageProps = {
 
 const errorMessages: Record<string, TranslationKey> = {
   invalid_credentials: 'auth.invalidCredentials',
-  signup_failed: 'auth.signupFailed',
-  invalid_signup_details: 'auth.invalidSignupDetails',
+  ...SIGNUP_ERROR_MESSAGES,
+  email_not_confirmed: 'auth.emailNotConfirmed',
   confirmation_failed: 'auth.confirmationFailed',
 };
 
@@ -53,7 +54,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               : null
         }
         initialMode={
-          errorKey === 'signup_failed' || errorKey === 'invalid_signup_details'
+          isSignupError(errorKey)
             ? 'sign-up'
             : 'sign-in'
         }
