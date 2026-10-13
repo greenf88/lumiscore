@@ -12,6 +12,8 @@ const port = Number(process.argv.find(value => value.startsWith('--port='))?.spl
 const before = process.argv.includes('--before');
 const resultReview = process.argv.includes('--result-review');
 const missingEvidence = process.argv.includes('--missing-evidence');
+const directReview = process.argv.includes('--direct-review');
+let failNext = false, delayMs = 0, exhausted = false;
 let failFinalSave = process.argv.includes('--fail-final-save');
 const baseline = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:app/globals.css'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
 const baselineTranslations = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:lib/i18n/translations.ts'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
@@ -26,7 +28,9 @@ const books = Array.from({ length: 40 }, (_, i) => ({ id: 'local-compact-' + i, 
 let position = 0;
 let round = { id: 'dddddddd-0000-4000-8000-000000000001', number: 1, language: 'nl', goal: 20,
   complete: false, ratedCount: 0, offeredCount: 1 };
+if (directReview) round = null;
 const ratings = new Map();
+const decided = new Set();
 const evidence = new Map(books.map(book => [book.workId, buildEffectiveWorkTraitVector(evidenceRowsForTraits({
   workId: book.workId, traits: {thriller_mystery: 1, dark: .8, fast_paced: .7}, confidence: 1,
   source: 'manual', sourceKey: 'local-synthetic-result', rawLabels: [], verifiedAt: '2026-10-07',
@@ -39,8 +43,8 @@ if (resultReview) {
 const journal = [];
 const requests = [];
 const response = () => ({ authenticated: true, available: true, state: {
-  round, currentWorkId: round.complete ? null : books[position % books.length].workId, exhausted: false },
-  book: round.complete ? null : books[position % books.length] });
+  round, currentWorkId: !round || round.complete || exhausted ? null : books[position % books.length].workId, exhausted },
+  book: !round || round.complete || exhausted ? null : books[position % books.length] });
 const json = (res, data, status = 200) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(data));
@@ -67,16 +71,30 @@ const server = await createServer({
         return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 100"><rect width="66" height="100" fill="#214956"/><circle cx="43" cy="36" r="20" fill="#dab071"/><path d="M0 90L34 38L66 84V100H0" fill="#12262f"/></svg>');
       }
       if (url.pathname === '/__evidence' && req.method === 'GET') return json(res, { syntheticUIOnly: true, round, ratings: [...ratings], journal, requests });
-      if (url.pathname === '/api/catalog/search') return json(res, { results: books });
+      // Explicitly opted-in loopback fixture controls, never an application route.
+      if (directReview && url.pathname === '/__control' && req.method === 'POST') {
+        let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 1024) return json(res, {}, 413); }
+        let control; try { control = JSON.parse(body); } catch { return json(res, {}, 400); }
+        if (control.reset) { round = null; position = 0; ratings.clear(); decided.clear(); journal.length = 0; exhausted = false; }
+        failNext = Boolean(control.failNext); delayMs = Math.max(0, Math.min(2000, Number(control.delayMs) || 0));
+        if (control.final) {
+          for (const b of books.slice(0, 9)) { ratings.set(b.workId, 8); decided.add(b.workId); }
+          position = 9; round = { id: 'dddddddd-0000-4000-8000-000000000009', number: 9, language: 'nl', goal: 10, complete: false, ratedCount: 9, offeredCount: 10 };
+        }
+        if (control.exhausted && round) exhausted = true;
+        return json(res, { syntheticUIOnly: true });
+      }
+      if (url.pathname === '/api/catalog/search') return json(res, { results: directReview
+        ? books.filter(b => `${b.title} ${b.author}`.toLowerCase().includes((url.searchParams.get('q') ?? '').toLowerCase())) : books });
       if (url.pathname === '/api/book-status') return json(res, { statuses: {} });
       if (url.pathname === '/api/taste-test/result') {
         const resultEvidence = missingEvidence ? new Map() : evidence;
         const profile = buildRatingResultProfile([...ratings].map(([workId, rating]) => ({ workId, rating })), resultEvidence);
         return json(res, {kind: 'result', profile,
-          roundRatedCount: round.ratedCount, language: round.language, partial: !round.complete, exhausted: false,
+          roundRatedCount: round?.ratedCount ?? 0, language: round?.language ?? 'nl', partial: !round?.complete, exhausted,
           recommendations: recommendRatingResult({profile, evidence: resultEvidence,
             candidates: books.map(book => ({book, ...evidence.get(book.workId)})),
-            excludedIds: new Set(ratings.keys()), availableIds: new Set(books.map(book => book.workId)), locale: round.language}),
+            excludedIds: new Set(ratings.keys()), availableIds: new Set(books.map(book => book.workId)), locale: round?.language ?? 'nl'}),
         });
       }
       if (url.pathname === '/api/taste-test/rounds') {
@@ -84,20 +102,31 @@ const server = await createServer({
         if (req.method !== 'POST') return json(res, {}, 405);
         let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 4096) return json(res, {}, 413); }
         let action; try { action = parseRoundAction(JSON.parse(body)); } catch { return json(res, {}, 400); }
-        if (!action || (action.action !== 'start' && action.roundId !== round.id)) return json(res, {}, 400);
+        if (!action || (action.action !== 'start' && action.roundId !== round?.id)) return json(res, {}, 400);
+        if (delayMs) await new Promise(resolve => setTimeout(resolve, delayMs));
+        if (failNext) { failNext = false; return json(res, { syntheticUIOnly: true, saveRejected: true }, 503); }
         if (failFinalSave && action.action === 'rate' && round.ratedCount === round.goal - 1) {
           failFinalSave = false;
           return json(res, {localFixture: true, saveRejected: true}, 503);
         }
         journal.push(action);
         if (action.action === 'start') {
-          round = { ...round, id: 'dddddddd-0000-4000-8000-' + String(round.number + 1).padStart(12, '0'), number: round.number + 1,
+          if (round && !round.complete) return json(res, response());
+          round = { ...round, id: 'dddddddd-0000-4000-8000-' + String((round?.number ?? 0) + 1).padStart(12, '0'), number: (round?.number ?? 0) + 1,
             language: action.language, goal: action.goal, complete: false, ratedCount: 0, offeredCount: 1 };
         } else if (action.action === 'rate' && !ratings.has(action.workId)) {
-          ratings.set(action.workId, action.score); round.ratedCount++; position++; round.offeredCount++;
+          if (decided.has(action.workId)) return json(res, {}, 409);
+          ratings.set(action.workId, action.score); decided.add(action.workId); round.ratedCount++; position++; round.offeredCount++;
           round.complete = round.ratedCount >= round.goal;
-        } else if (action.action === 'skip') { position++; round.offeredCount++; }
-        else if (action.action === 'choose') { const i = books.findIndex(book => book.workId === action.workId); if (i >= 0) position = i; }
+        } else if (action.action === 'skip') { decided.add(action.workId); position++; round.offeredCount++; }
+        else if (action.action === 'choose') {
+          if (directReview && decided.has(action.workId)) return json(res, {}, 409);
+          const i = books.findIndex(book => book.workId === action.workId); if (i >= 0) position = i;
+        }
+        if (directReview && round && !round.complete) {
+          while (position < books.length && decided.has(books[position].workId)) position++;
+          exhausted = position >= books.length;
+        }
         return json(res, response());
       }
       if (url.pathname.startsWith('/api/')) return json(res, { localFixture: true }, 404);
