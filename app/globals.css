@@ -1085,3 +1085,79 @@ button, input, select, textarea { font-family: var(--sans); }
   .card-editorial-note { margin-inline: 12px; }
   .collection-book-card .collection-book-control-triggers { grid-template-columns: 1fr; }
 }
+
+/* Scoped taste-test presentation; shared header/footer and book cards stay intact. */
+.featured-section.taste-direct-test {
+  width: 100%; max-width: 580px;
+  min-height: calc(100svh - 76px);
+  padding: 24px max(22px, env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
+}
+.taste-direct-test .taste-round-heading { min-height: 44px; margin-bottom: 12px; }
+.taste-direct-test .taste-round-heading .eyebrow { font-size: 12px; letter-spacing: .12em; }
+.taste-direct-test button { margin: 0; min-height: 44px; font-size: 16px; line-height: 1.3; border-radius: 6px; }
+.taste-direct-test h1 { font-family: var(--serif); font-size: clamp(30px, 7.8vw, 40px); line-height: 1.25; font-weight: 500; letter-spacing: -.015em; }
+.taste-direct-test h1.sr-only { margin: -1px; }
+.taste-start-screen h1 { margin: 12px 0 28px; max-width: 460px; }
+.taste-start-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.taste-direct-test .taste-start-choices button {
+  min-width: 0; min-height: 132px; padding: 18px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  border-color: var(--teal); background: transparent; box-shadow: none;
+}
+.taste-start-choices strong { font-family: var(--serif); font-size: clamp(36px, 10vw, 48px); font-weight: 500; line-height: 1; }
+.taste-start-choices span { font-size: 12px; color: var(--teal); }
+.taste-direct-test button:hover:not(:disabled) { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 9%, var(--bg)); }
+.taste-direct-progress { display: grid; gap: 10px; margin: 0 0 20px; font-size: 16px; }
+.taste-direct-progress [role='progressbar'] { height: 6px; width: 100%; border-radius: 8px; background: color-mix(in srgb, var(--muted) 22%, var(--bg)); overflow: hidden; }
+.taste-direct-progress [role='progressbar'] > span { display: block; height: 100%; background: var(--teal); border-radius: inherit; }
+.taste-direct-test .taste-rating-card { margin: 0; padding: 14px; gap: 18px; box-shadow: none; background: color-mix(in srgb, var(--surface) 45%, var(--bg)); }
+.taste-direct-test .taste-book-identity { align-items: center; gap: 16px; }
+.taste-direct-test .taste-book-identity .book-cover { height: clamp(100px, calc(100svh - 540px), 180px); width: auto; aspect-ratio: .66; max-width: 35%; }
+.taste-direct-test .taste-book-identity h2 { font-family: var(--serif); font-size: var(--type-book); font-weight: 500; line-height: 1.25; margin: 0; overflow-wrap: anywhere; }
+.taste-direct-test .taste-book-identity h2:focus { outline: none; }
+.taste-direct-test .taste-book-identity .book-card-body > p { display: block; overflow: visible; margin-top: 8px; font-size: 14px; line-height: 1.4; }
+.taste-direct-test .taste-long-identity { display: flow-root; }
+.taste-direct-test .taste-long-identity .book-cover { float: left; margin: 0 14px 8px 0; }
+.taste-direct-test .taste-long-identity .book-card-body { display: contents; }
+.taste-direct-test fieldset { margin: 0 0 16px; }
+.taste-direct-test legend { font-size: 16px; color: var(--text); font-weight: 500; margin-bottom: 10px; }
+.taste-direct-test .taste-score-buttons { gap: 8px; }
+.taste-direct-test .taste-score-buttons button { min-width: 44px; min-height: 48px; padding: 8px 0; }
+.taste-direct-test .taste-skip-button, .taste-direct-test .taste-search-toggle { width: 100%; min-height: 48px; }
+.taste-direct-test .taste-search-toggle { display: flex; gap: 10px; justify-content: center; align-items: center; border-color: var(--teal); background: transparent; margin-top: 12px; }
+.taste-search-toggle > span { color: var(--teal); font-size: 24px; line-height: 1; flex-shrink: 0; }
+.taste-direct-test .taste-book-search { margin-top: 20px; }
+.taste-direct-test .taste-book-search input { margin-block: 8px; }
+.taste-direct-test .taste-result-link { display: inline-block; margin-top: 24px; min-height: 44px; padding-block: 12px; color: var(--teal); text-decoration: underline; text-underline-offset: 4px; }
+.taste-direct-test .taste-action-error { margin-bottom: 16px; padding: 12px; border: 1px solid var(--danger); border-radius: 6px; }
+.taste-direct-test .taste-action-error p, .taste-direct-test .taste-exhausted p { line-height: 1.5; margin: 0 0 12px; }
+.taste-direct-test .taste-paused { padding-block: 24px; }
+@media (max-width: 359px) {
+  .featured-section.taste-direct-test { padding-inline: max(20px, env(safe-area-inset-left)); }
+  .taste-direct-test .taste-rating-card { padding: 10px; }
+  .taste-direct-test .taste-score-buttons { gap: 6px; }
+  .taste-direct-test .taste-book-identity { gap: 12px; }
+  .taste-direct-test .taste-long-identity .book-cover { height: 88px; margin-right: 10px; }
+}
+@media (max-height: 650px) and (max-width: 600px) {
+  .featured-section.taste-direct-test { padding-top: 12px; }
+  .taste-direct-test .taste-round-heading { margin-bottom: 6px; }
+  .taste-direct-test .taste-direct-progress { margin-bottom: 12px; gap: 8px; }
+  .taste-direct-test .taste-rating-card { gap: 12px; }
+  .taste-direct-test .taste-book-identity .book-cover { height: 100px; }
+  .taste-direct-test fieldset { margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .taste-direct-test *, .taste-direct-test *::before, .taste-direct-test *::after { transition: none; animation: none; }
+}
+@media (max-width: 359px) and (max-height: 650px) {
+  .featured-section.taste-direct-test { padding-top: 8px; }
+  .taste-direct-test .taste-round-heading { margin-bottom: 2px; }
+  .taste-direct-test .taste-direct-progress { margin-bottom: 8px; gap: 6px; }
+  .taste-direct-test .taste-rating-card { gap: 8px; }
+  .taste-direct-test .taste-long-identity h2 { line-height: 1.15; }
+  .taste-direct-test .taste-long-identity .book-card-body > p { font-size: 13px; line-height: 1.35; }
+  .taste-direct-test .taste-book-identity.taste-long-identity .book-cover { height: 88px; }
+  .taste-direct-test legend { margin-bottom: 6px; }
+  .taste-direct-test fieldset { margin-bottom: 8px; }
+  .taste-direct-test .taste-score-buttons button, .taste-direct-test .taste-skip-button { min-height: 44px; }
+}

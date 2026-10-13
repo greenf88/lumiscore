@@ -10,16 +10,17 @@ import { LumiScoreLocaleProvider } from '../../app/components/LumiScoreLocale';
 import { isLocale, LOCALE_STORAGE_KEY } from '../../lib/i18n/config';
 import '../../app/globals.css';
 const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-const locale = isLocale(stored) ? stored : 'nl';
+const routeLocale = location.pathname.split('/')[1];
+const locale = isLocale(routeLocale) ? routeLocale : isLocale(stored) ? stored : 'nl';
 const theme = localStorage.getItem('lumiscore-theme') === 'paper' ? 'paper' : 'ink';
 document.documentElement.dataset.theme = theme;
 createRoot(document.getElementById('root')!).render(
-  <LumiScoreLocaleProvider initialLocale={locale} hasPersistedChoice={true}>
+  <LumiScoreLocaleProvider initialLocale={locale} hasPersistedChoice={true} initialPath={location.pathname.replace(/^\/(en|nl)(?=\/|$)/, '') || '/'}>
     {location.pathname === '/covers' ? <CoverPreview />
       : location.pathname === '/book/991001' ? <DetailPreview />
       : location.pathname === '/' ? <HomePreview guest={new URLSearchParams(location.search).has('guest')} />
       : location.pathname === '/recommendations' ? <HomePreview fullRecommendations />
-      : location.pathname === '/taste-test/result' ? <TasteRatingResult authState={{ authenticated: true, displayName: 'Lokale testlezer', avatarLetter: 'T' }} />
+      : location.pathname.endsWith('/taste-test/result') ? <TasteRatingResult authState={{ authenticated: true, displayName: 'Lokale testlezer', avatarLetter: 'T' }} />
       : <RatingTasteTest authState={{ authenticated: true, displayName: 'Lokale testlezer', avatarLetter: 'T' }} swipePrototype={false} />}
   </LumiScoreLocaleProvider>,
 );

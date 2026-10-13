@@ -1,0 +1,117 @@
+LumiScore — directe smaaktest, lokaal reviewpakket — 13 oktober 2026
+
+Basis: origin/main 30bfd0084128c288c2c34d1cf0855341b1ade62a, vers opgehaald.
+Branch: feature/taste-direct-rating-20261013.
+Werkruimte: work/lumiscore-taste-direct-rating-20261013 (nieuw en geïsoleerd).
+Wijzigings-SHA: de commit die dit verslag bevat; exacte SHA staat bij oplevering.
+Visuele richting: de door Rick aangeleverde vierdelige Paper/Ink-ontwerpafbeelding.
+Status: uitsluitend lokaal; geen push, PR, merge of deployment.
+
+Nieuwe flow
+- 10/15/30 zijn drie directe startacties, geen losse Start-knop of voortgang
+  voordat een ronde bestaat. Lopende/legacy-20-rondes worden niet vervangen.
+- Score 1–10 verstuurt onmiddellijk één bestaande POST /api/taste-test/rounds.
+  De serverrespons bepaalt boek en teller. Geen extra bevestiging of volgende-knop.
+- Eén synchrone gate blokkeert alle rondeacties, pauze, refresh en zoeken tijdens
+  opslag. Na succes blijft deze 500 ms dicht; dubbele muisklikken en herhaalde
+  toetsen worden aanvullend geweerd. Er zijn geen automatische retries.
+- Een niet-bevestigde opslag houdt het huidige boek en de teller vast. De lezer
+  kan bewust opnieuw proberen of de servervoortgang ophalen. Een netwerkmelding
+  betekent niet gegarandeerd dat de server niets heeft opgeslagen; de bestaande
+  Work-idempotentie beschermt de bewuste retry.
+- Overslaan verstuurt geen score; de voortgangsbalk telt uitsluitend ratings.
+- De afzonderlijke zoekknop opent de bestaande cataloguszoekroute. Annuleren
+  wijzigt niets. Een gekozen boek gebruikt dezelfde directe ratingflow.
+- Hervatten verschijnt alleen na pauzeren. Bestaande taal, lengte, ratings en
+  voortgang blijven servergestuurd. Een resultaatlink vereist minstens tien
+  ratings in de ronde, niet alleen een uitgeputte kandidatenvoorraad.
+- De geslaagde laatste rating opent de bestaande gelokaliseerde resultaatroute.
+  De resultaatberekening en aanbevelingen zijn niet gewijzigd.
+
+Vormgeving en toegankelijkheid
+- Lora/Inter, huidige tokens, BookCover/fallback en globale header/footer behouden.
+- Twee scorerijen van vijf. Knoppen minstens 44 x 44 CSS-pixels; normaal 48 hoog.
+- Rustige startkeuzes, dunne voortgangsbalk, beperkte schaduw, geen zware effecten.
+- Lange identiteiten lopen waar nodig onder de cover door, zonder tekstafkapping.
+- Acties blijven bereikbaar met gewone paginascroll; geen scrollvak in de kaart.
+- Status/voortgang en fouten hebben toegankelijke meldingen. Het volgende boek
+  krijgt focus zonder gewone rating-scrollsprong; bewust zoeken brengt de gekozen
+  kaart weer in beeld. Keyboardfocus op echte bediening blijft zichtbaar.
+- Reduced motion wordt gerespecteerd. De bestaande Ink/Paper-contrastcontroles
+  zijn opnieuw geslaagd; geen nieuwe merkkleuren of fonts.
+
+Bewijs
+1. 55 gerichte tests opnieuw geslaagd op de definitieve code, waaronder negen
+   nieuwe tests voor starts, requestvorm, actievergrendeling/cooldown, fouten,
+   handmatige retry, voortgang, uitputting, laatste score en vertalingen.
+2. De afzonderlijke bestaande PGlite/PostgreSQL-test scripts/taste-results.test.mjs
+   is in deze werkruimte geslaagd: legacy20, 10/15/30, herhaling/idempotentie,
+   behoud van bestaande ratings, permissies en tweegebruikersisolatie. Latere
+   wijzigingen waren uitsluitend UI/CSS/fixture; SQL en opslagroute ongewijzigd.
+   De bestaande Read-trigger en dubbele-Work-controles zijn tevens traceerbaar
+   in scripts/discovery-taste.test.mjs; geen wijziging van die opslaglogica.
+3. TypeScript --noEmit, volledige bron-ESLint en Vinext-productiebuild geslaagd.
+   De lintaanroep sluit gegenereerde dist, .next en .wrangler uit. De gewone
+   lintaanroep pikte eerst lokale Vite-cachebestanden op; geen bronfout verborgen.
+4. Clientsecretscan: 65 bestanden, geen secret-identifiers of secretwaarden.
+   Er zijn voor deze build geen database-/Auth-secrets geladen.
+5. Browser -> lokale synthetische adapter -> UI, géén hosted of Auth-bewijs:
+   - 10/15/30 startten ieder met precies die doelinstelling; NL-start gebruikte NL.
+   - Dubbele klik: precies één rating en één boekwisseling, teller 1/10.
+   - Gesimuleerde 503: hetzelfde boek en 1/10; bewuste retry daarna 2/10.
+   - Pauze en herladen: nog 2/10; Resume behield het aangeboden boek.
+   - Skip: één skip, nog twee ratings en 2/10, dus geen rating erbij.
+   - Zoeken/openen/sluiten: nul ratings; Choose behield ronde15 en nul ratings.
+     Rating van het gekozen Work daarna: één rating en 1/15.
+   - Laatste score: gesimuleerde fout behield 9/10; bewuste retry gaf 10/10,
+     één werkelijke finale adapterwrite en /nl/taste-test/result vanaf boven.
+   - Uitputting op 0/10: duidelijke zoek-/pauzestap, geen resultaatlink en
+     geen automatische verzoeklus.
+   - Keyboard Enter startte tien boeken. NL/EN en Paper/Ink zijn zichtbaar getest.
+6. Gemeten browserviewports: 320x568, 375x667, 390x600, 390x700, 430x800,
+   1280x800. Geen horizontale pagina-overflow; scoreknoppen >=44x44.
+   Bij de zeer lange fixturetitel: op 320x568 eindigden scores op y=510,4 en
+   Overslaan op y=562,4; op 390x600 op y=523 en y=581. Zoekknop kan dan onder
+   de vouw staan en is met paginascroll bereikbaar. Titel/auteur worden niet
+   weggeknipt om alles in een kunstmatig vaste kaart te dwingen.
+
+Screenshots (buiten Git, 390x700, EN, dezelfde synthetische boekidentiteit)
+outputs/taste-direct-rating-20261013/paper-start.jpg
+outputs/taste-direct-rating-20261013/paper-rate.jpg
+outputs/taste-direct-rating-20261013/ink-start.jpg
+outputs/taste-direct-rating-20261013/ink-rate.jpg
+Aanvullend: outputs/taste-direct-rating-20261013/desktop-nl-rate.jpg.
+Paden zijn relatief aan C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/.
+
+Lokale preview en reproduceerbaarheid
+node --experimental-strip-types scripts/compact-taste-local.mjs --direct-review --port=3114
+http://localhost:3114/nl/taste-test (EN via bestaande taalwissel).
+De bestaande lokale fixture is uitgebreid, niet de applicatie-API. Zij bindt
+uitsluitend loopback, leest geen envbestand of credentials en gebruikt geen
+Supabase/Auth-client. De expliciete lokale __control-testfunctie wordt nooit
+door productiecode geïmporteerd. Alle eigen fixtures zijn resetbaar/geheugen-only;
+geen echte testaccounts, oorspronkelijke gebruikers of 64 ratings aangeraakt.
+
+Beperkingen
+- Geen hosted Preview of echte Auth-/databaseflow opnieuw doorlopen; dat was
+  niet geautoriseerd/nodig voor deze lokale interfaceopdracht. Lokale mockwrites
+  zijn geen bewijs voor mail, login, productiestorage of netwerkbetrouwbaarheid.
+- Geen echte iPhone/Safari-browserbalken gemeten. Viewportemulatie is apart gelabeld.
+- De beschikbare browserzoomtoets veranderde de gemeten viewport/DPR niet; een
+  echte 200%-zoom-/vergrote-tekstcontrole blijft een testercontrole. Natuurlijke
+  verticale paginascroll is bewust mogelijk, zonder vaste kaarthoogte of clipping.
+- De synthetische lokale covers bewijzen verhoudingen en fallback, niet de
+  scherpte van elke externe cataloguscover. De bestaande covercomponent is intact.
+- Geen claim over een volledig groene historische suite of deployment gedaan.
+
+Scope en herstel
+Geen wijziging van algoritmen, taxonomie, Auth, API-route, schema, RLS,
+migraties, configuratie of Bookmatch. Nul migraties nodig.
+FIRST_TESTER_CHECKLIST.md bevat geen bestaand smaaktestpunt; niet uitgebreid en
+geen nieuwe masterlijst gemaakt. Andere werkruimtes en lokale wijzigingen behouden.
+Herstel vóór publicatie: dit lokale pakket niet publiceren; huidige productie
+blijft onveranderd. Herstel na een later goedgekeurde release: applicatiecommit
+reverten of de vorige applicatieversie op basis 30bfd008... opnieuw publiceren
+volgens het afzonderlijk goedgekeurde releasepad. Geen databaseherstel of
+down-migratie: nieuwe expliciete ratings en voortgang blijven compatibel en behouden.
+Resterend: visuele beoordeling en afzonderlijk akkoord voor push/Preview/release.
