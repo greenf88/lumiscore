@@ -50,7 +50,8 @@ test('browse cards reuse BookCard and therefore canonical native book links', as
   assert.match(browseSource, /<BookCard/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
   assert.match(browseSource, /detailReturnContext=\{detailReturnContext\}/);
-  assert.match(homeSource, /const href = getBookHref\(book, detailReturnContext\)/);
+  assert.match(browseSource, /wanted=\{wanted\.has\(getGuestWantedStorageId\(book\)\)\}/);
+  assert.match(homeSource, /const href = explicitHref \?\? getBookHref\(book, detailReturnContext\)/);
   assert.match(homeSource, /className="book-card-main-link"[\s\S]*?href=\{href\}/);
 });
 
@@ -60,11 +61,11 @@ test('Browse exposes an accessible native page-size control and keeps page size 
     'utf8',
   );
 
-  const controls = await readFile(new URL('../../app/components/EditorialCatalogControls.tsx', import.meta.url), 'utf8');
-  assert.match(browseSource, /<EditorialCatalogControls/);
-  assert.match(controls, /<label>\{nl \? 'Boeken per pagina' : 'Books per page'\}/);
+  const controls = await readFile(new URL('../../app/components/BrowseCatalogControls.tsx', import.meta.url), 'utf8');
+  assert.match(browseSource, /<BrowseCatalogControls/);
+  assert.match(controls, /<label>\{t\('browse\.pageSize'\)\}/);
   assert.match(controls, /<select name="pageSize"/);
-  assert.match(controls, /\[32,64,128\]\.map/);
+  assert.match(controls, /\[32, 64, 128\]\.map/);
   assert.match(controls, /method="get"/);
   assert.match(browseSource, /updateBrowseReturnPath\(returnTo/);
 });
@@ -106,9 +107,9 @@ test('Browse is reachable in desktop and mobile navigation and search has a brow
     readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8'),
   ]);
-  assert.match(homeSource, /<a href="\/browse">\{t\('header\.browse'\)\}<\/a>/);
-  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<a href="\/browse">/);
-  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<a href="\/collections">/);
+  assert.match(homeSource, /<LocaleLink href="\/browse">\{t\('header\.browse'\)\}<\/LocaleLink>/);
+  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/browse"/);
+  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/collections"/);
   assert.match(searchSource, /className="empty-results-action" href="\/browse"/);
 });
 

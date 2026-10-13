@@ -462,6 +462,7 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
 };
 
 type BookCardProps = {
+  variant?: 'standard' | 'browse';
   book: Book;
   wanted?: boolean;
   status?: ReadingStatus | null;
@@ -477,7 +478,7 @@ type BookCardProps = {
   className?: string;
 };
 
-export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel'>) {
+export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard' }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant'>) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount, locale, book.ratingBand);
@@ -486,31 +487,34 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
       <div className="card-cover-wrap">
         {label && <span className="discovery-card-label">{label}</span>}
         {rank !== undefined && <span className="card-rank">#{rank}</span>}
-        <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
+        {variant !== 'browse' && <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>}
         <BookCover book={book} resolveMissing={resolveMissingCover} />
       </div>
       <div className="book-card-body">
-        <span className="book-year">{book.firstPublishYear != null
+        {variant !== 'browse' && <span className="book-year">{book.firstPublishYear != null
           ? t('common.firstPublished', { year: book.firstPublishYear })
-          : t('common.publicationUnavailable')}</span>
+          : t('common.publicationUnavailable')}</span>}
         <h3>{book.title}</h3>
         <p>{book.author}</p>
-        {book.genre && <span className="book-genre">{book.genre}</span>}
+        {variant !== 'browse' && book.genre && <span className="book-genre">{book.genre}</span>}
         {matchLabel && <span className="book-match">{matchLabel}</span>}
         <div className="book-meta">
-          <span>{ratingDisplay.count}</span>
+          {variant === 'browse' ? ratingDisplay.score === '—'
+            ? <span>{t('browse.noReliableScore')}</span>
+            : <><span className="browse-score" aria-label={`LumiScore ${ratingDisplay.score}`}>{ratingDisplay.score}</span><span>{ratingDisplay.count}</span></>
+            : <span>{ratingDisplay.count}</span>}
         </div>
       </div>
     </>
   );
 }
 
-export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '' }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard' }: BookCardProps) {
   const { t } = useLumiScoreLocale();
   const href = explicitHref ?? getBookHref(book, detailReturnContext);
-  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} />;
+  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} />;
   return (
-    <article className={`book-card${className ? ' ' + className : ''}`} id={book.id}>
+    <article className={`book-card${variant === 'browse' ? ' browse-card' : ''}${className ? ' ' + className : ''}`} id={book.id}>
       {href ? (
         // Vinext's production Link chunk loses navigateClientSide's named export.
         // Use native document navigation: Link cancels the click before throwing.
