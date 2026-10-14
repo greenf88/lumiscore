@@ -76,3 +76,29 @@ credentials op; oorspronkelijke testgebruikers en hun actuele 68 ratings behoude
 (historische verwijzing naar 64 is achterhaald). Branchkoppeling niet wijzigen.
 
 Parkeerwerk: Bookmatch/PR11, herauthenticatie, Browse en overig vervolg ongemoeid.
+
+Gerichte hosted vervolgcontrole — 14 oktober 2026
+De browser is opnieuw bereikbaar; de eerdere algemene browserblokkade is vervallen.
+Op 46c35e6 zijn caption en coverlabel hosted bevestigd in NL/EN en Paper/Ink.
+Werkelijk gemeten 320/375/390/430/1280 CSS-pixels: geen horizontale overflow,
+overlap of buiten beeld liggende headeracties. Ook 560/682/820 en aangevraagde821
+(werkelijk822) gecontroleerd; mobiel menutarget44px. Escape herstelt zichtbare focus.
+Screenshots en ruwe geometrie staan buiten Git onder outputs/ux-fixes-20261014.
+
+Nieuwe concrete bevinding binnen de mobiele headerfix: muisklik op de zichtbare
+Smaaktest-menulink sloot het paneel maar liet de boek-URL staan, tweemaal bevestigd
+(ook scoped locator + navigatieverwachting). Enter op dezelfde link navigeerde wel.
+Een eerste hypothese over click-bubbling/unmount bleek bij lokale herhaling NIET
+de oorzaak; die proefwijziging is volledig teruggedraaid. De echte browser-hit-test
+op de zichtbare Smaaktest-link raakte de cover-IMG, niet de link: de header had
+z-index:auto en de cover lag vóór het menu. Screenshot bevestigt bedekking.
+Minimale correctie: position:relative en z-index:20 op detail-header, gelijk aan
+de bestaande site-headerlaag. Menu-, Escape-, buitenklik- en linkgedrag ongewijzigd.
+Geen aangepaste router, nieuwe feature, URL-, Auth- of configuratiewijziging.
+Gerichte regressieassertie toegevoegd; actuele lokale/hosted klikcontrole en exacte
+vervolg-SHA worden in het externe reviewpakket vastgelegd.
+Lokale echte hit-test na fix: A/correctTarget=true; dezelfde muisklik navigeert nu
+naar /nl/taste-test. 50 gerichte tests, TypeScript, bronlint, Vinext-productiebuild,
+secretscan (65 bestanden) en diffcontrole groen op de definitieve code.
+Nog steeds geen eigen ingelogde tijdelijke testsessie: twee hosted saves en hun
+neutrale vervolgkaarten blijven gate vóór merge. Bestaande ratings niet gebruiken.

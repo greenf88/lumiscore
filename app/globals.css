@@ -386,7 +386,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .information-email span { color: var(--gold); font-size: 18px; }
 
 .book-detail-shell { min-height: 100vh; background: radial-gradient(circle at 76% 20%, color-mix(in srgb, var(--teal) 14%, transparent), transparent 34%), var(--bg); }
-.detail-header { min-height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 80px); border-bottom: 1px solid var(--border); background: var(--header); backdrop-filter: blur(18px); }
+.detail-header { position: relative; z-index: 20; min-height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 80px); border-bottom: 1px solid var(--border); background: var(--header); backdrop-filter: blur(18px); }
 .detail-header-actions { display: flex; align-items: center; gap: 18px; }
 .detail-sign-in { min-height: 44px; display: inline-flex; align-items: center; color: var(--teal); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .detail-account-menu .header-account-label { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }

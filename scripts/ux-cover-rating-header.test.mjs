@@ -36,3 +36,10 @@ test('rating hover is gated to a real hover pointer; focus-visible remains indep
   assert.match(source, /workId: chosenWork, score: rating/);
   assert.match(source, /setData\(next\); setSelectedScore\(null\)/);
 });
+
+test('detail header establishes the same raised stacking layer as the shared header so covers cannot intercept menu clicks', async () => {
+  const css = await read('app/globals.css');
+  assert.match(css, /\.detail-header \{ position: relative; z-index: 20;/);
+  assert.match(css, /\.mobile-navigation-panel \{[^}]*z-index: 32/);
+  // Actual pointer hit-testing and click navigation are verified in the browser.
+});
