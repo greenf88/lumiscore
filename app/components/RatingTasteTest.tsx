@@ -12,7 +12,7 @@ import { BookCover } from './LumiScoreHome';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
-import { canOpenRoundResult, createRoundActionGate, roundProgress } from '@/lib/taste-test/direct-rating';
+import { canOpenRoundResult, createRoundActionGate, isPendingWorkScore, roundProgress, type PendingWorkScore } from '@/lib/taste-test/direct-rating';
 
 type Response = { authenticated: boolean; available: boolean; state: RatingRoundState | null; book: Book | null };
 const scores = Array.from({ length: MAX_RATING - MIN_RATING + 1 }, (_, i) => i + MIN_RATING);
@@ -24,7 +24,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const [error, setError] = useState(false);
   const [saved, setSaved] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [selectedScore, setSelectedScore] = useState<number | null>(null);
+  const [selectedScore, setSelectedScore] = useState<PendingWorkScore>(null);
   const [prototypeIntent, setPrototypeIntent] = useState<'read' | 'skip' | null>(null);
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -90,7 +90,8 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     if (action === 'start' && round && !round.complete) return;
     const before = data?.state ?? null;
     revision.current++;
-    setError(false); setSaved(false); setSelectedScore(rating ?? null);
+    setError(false); setSaved(false);
+    setSelectedScore(action === 'rate' && chosenWork && rating !== undefined ? { workId: chosenWork, score: rating } : null);
     return gate.current.run(async () => {
       const r = await fetch(`/api/taste-test/rounds?locale=${locale}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -190,7 +191,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                       <button type="button" disabled={pending} onClick={() => setPrototypeIntent('read')}>{locale === 'nl' ? 'Gelezen — kies score' : 'Read — choose score'}</button></div>}
                     {(!swipePrototype || prototypeIntent === 'read') && <fieldset disabled={pending || !workId}><legend>{t('directTaste.yourRating')}</legend>
                     <div className="taste-score-buttons">{scores.map(n => <button type="button" key={n}
-                      aria-label={t('directTaste.rate', { score: n })} aria-pressed={pending && selectedScore === n}
+                      aria-label={t('directTaste.rate', { score: n })} aria-pressed={isPendingWorkScore(selectedScore, workId, n, pending)}
                       onKeyDown={e => { if (e.repeat) e.preventDefault(); }}
                       onClick={e => { if (e.detail <= 1 && workId) void act('rate', workId, n); }}>{n}</button>)}</div>
                   </fieldset>}

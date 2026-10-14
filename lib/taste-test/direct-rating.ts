@@ -1,5 +1,12 @@
 import { ROUND_GOAL, type RatingRoundState } from './rating-round.ts';
 
+export type PendingWorkScore = { workId: string; score: number } | null;
+
+export function isPendingWorkScore(selection: PendingWorkScore, workId: string | null | undefined,
+  score: number, pending: boolean): boolean {
+  return Boolean(pending && workId && selection?.workId === workId && selection.score === score);
+}
+
 export function canOpenRoundResult(state: RatingRoundState | null): boolean {
   return Boolean(state?.round && state.round.ratedCount >= 10);
 }

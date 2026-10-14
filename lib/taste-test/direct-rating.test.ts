@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { canOpenRoundResult, createRoundActionGate, roundProgress } from './direct-rating.ts';
+import { canOpenRoundResult, createRoundActionGate, isPendingWorkScore, roundProgress } from './direct-rating.ts';
 import { buildRoundRequest } from './round-request.ts';
 import { shouldOpenCompletedResult } from './result-presentation.ts';
 import type { RatingRoundState } from './rating-round.ts';
@@ -11,6 +11,34 @@ const state = (ratedCount = 0, goal = 10): RatingRoundState => ({
   currentWorkId: '100', exhausted: false,
 });
 const deferred = <T>() => { let resolve!: (value: T) => void; const promise = new Promise<T>(r => { resolve = r; }); return { promise, resolve }; };
+
+test('pending score feedback belongs only to the exact Work, never a next, searched or resumed Work', () => {
+  const selection = { workId: '100', score: 8 };
+  assert.equal(isPendingWorkScore(selection, '100', 8, true), true);
+  assert.equal(isPendingWorkScore(selection, '100', 7, true), false);
+  for (const workId of ['101', '120', undefined]) {
+    assert.equal(isPendingWorkScore(selection, workId, 8, true), false);
+  }
+  assert.equal(isPendingWorkScore(selection, '100', 8, false), false);
+  assert.equal(isPendingWorkScore(null, '100', 8, true), false);
+});
+
+test('consecutive accepted saves are neutral immediately on book swap, including the gate cooldown', async () => {
+  let work = '100', selection: { workId: string; score: number } | null = null, pending = false, writes = 0;
+  const gate = createRoundActionGate(async () => {
+    assert.equal(isPendingWorkScore(selection, work, 8, pending), false);
+  });
+  for (const nextWork of ['101', '102']) {
+    selection = { workId: work, score: 8 };
+    await gate.run(async () => {
+      writes++;
+      assert.equal(isPendingWorkScore(selection, work, 8, pending), true);
+      return nextWork;
+    }, next => { work = next; selection = null; }, assert.fail, value => { pending = value; });
+    assert.equal(isPendingWorkScore(selection, work, 8, pending), false);
+  }
+  assert.equal(writes, 2);
+});
 
 for (const goal of [10, 15, 30]) test(`one start action immediately sends the selected goal ${goal}, in either language`, async () => {
   for (const locale of ['en', 'nl'] as const) {
