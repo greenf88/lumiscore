@@ -122,21 +122,5 @@ export async function loadWorkTraitEvidenceBatched(
 
 /** Complete bounded evidence for the account owner's rated Works only. */
 export async function loadReadingProfileEvidence(client: SupabaseClient, workIds: readonly string[]) {
-  const ids = [...new Set(workIds.map(Number).filter(id => Number.isSafeInteger(id) && id > 0))];
-  const grouped = new Map<string, WorkTraitEvidence[]>();
-  for (let start = 0; start < ids.length; start += 200) {
-    for (let offset = 0; ; offset += 1000) {
-      const {data,error} = await client.from('work_trait_evidence').select(EVIDENCE_SELECT)
-        .in('work_id',ids.slice(start,start+200)).eq('mapping_version',TASTE_TRAIT_MAPPING_VERSION)
-        .order('work_id').order('trait').order('source').order('source_key').range(offset,offset+999);
-      if (error) throw error;
-      if (!Array.isArray(data)) throw new Error('Reading profile evidence unavailable.');
-      for (const row of data as EvidenceRow[]) {
-        const evidence = parseEvidenceRow(row);
-        if (evidence) grouped.set(evidence.workId,[...(grouped.get(evidence.workId) ?? []),evidence]);
-      }
-      if (data.length < 1000) break;
-    }
-  }
-  return grouped;
+  return loadWorkTraitEvidenceBatched(client,workIds);
 }

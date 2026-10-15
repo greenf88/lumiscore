@@ -1,0 +1,42 @@
+Lokale PR22-compatibiliteit voor gedeelde smaaklogica — 15 oktober 2026
+
+Afzonderlijke worktree: work/lumiscore-shared-profile-account-20261015.
+Branch review/shared-profile-account-20261015, basis exact PR22
+1973704acbbc9eea409d6e0d7520c4f3da5ba22a. Oorspronkelijke PR22 ongemoeid.
+Gedeelde main-logica b38d2e27699af08078aaef5a2dd3ed25942ecdba lokaal gekopieerd
+als bc98de19c77023e115c296f26a000cbfe0630f82. Eén add/add-conflict in
+TasteProfileSummary opgelost met exact de nieuwe gedeelde presentatie.
+Dit is geen merge naar main, geen push of deployment.
+
+Accountadapter gebruikt loadReaderTasteProfile en bestaande readingProfileTotals;
+geen eigen berekening/paginering/kenmerkenselectie meer. Locale expliciet doorgegeven.
+Oude loadReadingProfileEvidence is alleen een compatibiliteitsalias naar de ene
+volledig gepagineerde batchloader. Gastredirect, noindex/no-store, owner-ID uit
+getVerifiedServerUser en bestaande telregels zijn behouden.
+
+Gerichte vier-oppervlakkentest roept de ECHTE resultaat-/account-/homepage-/detail-
+loaders aan met geïsoleerd synthetisch SDK-transport: volledige profielobjecten,
+dekking/status/volgorde, opgeslagen gastantwoord, A/B en NL/EN gelijk. Boekmatches
+op de drie boekoppervlakken gelijk. Afzonderlijke echte lokale PostgreSQL-tests
+bewijzen bestaande schema/RLS en paging voorbij1000, ook dichte evidencebatches.
+Geen hosted/Auth-/productiebewijs geclaimd.
+
+Loopbackreview op3126, originele PR22-preview3124 blijft ongemoeid.
+review=reader: ondersteund profiel; review=sparse: echte nieuwe berekening met
+tien synthetische ratings maar zonder inhoudelijke kenmerken. Geen fake lezertype.
+Gebruik node --experimental-strip-types scripts/home-profile-review-local.mjs.
+Geen credentials of externe verbindingen. Lokale fixtures niet geïmporteerd door
+release-entrypoints. Definitieve SHA/checks/beelden in extern REVIEW-PACKAGE.
+
+Latere integratie: eerst status/basis PR22 controleren. Als PR22 apart wordt
+uitgebracht, vervolgens de nieuwe gedeelde logica plus deze accountadapter reviewen.
+Beide bestaande homepage/accountcommits behouden. Geen nieuwe migratie nodig.
+Eerdere releasegoedkeuring dekt de nieuwe smaaklogica NIET.
+Herstel: alleen nieuwe logica/adapter applicatief terugdraaien, alle data behouden.
+
+Accountadapter-verificatie:147gerichte tests groen,14lokale echte SSR-controles
+groen (NL/EN gast, eigenaar, leeg, veel, B, fout en sparse). TypeScript/lint/beide
+builds/secretscan67bestanden en diffcontrole groen. Geen fixturekenmerken in dist.
+Browser:390×780 NL Paper account/resultaat exact dezelfde tekst/voorkeursvolgorde;
+EN Ink sparse toont één eerlijke melding, nul voorkeuren. Desktop1280×900 zonder
+overflow. Browserconsole0errors/warnings. Geen fysieke telefoonclaim.
