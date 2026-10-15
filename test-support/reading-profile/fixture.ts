@@ -10,7 +10,7 @@ export function fixtureClient(mode:string){
  const count=mode==='empty'?0:mode==='many'?1505:mode==='b'?1:10;
  const ratings=Array.from({length:count},(_,i)=>({work_id:990001+i,rating:8}));
  const statuses=[...ratings.map(r=>({work_id:r.work_id,status:'read'})),...Array.from({length:mode==='empty'||mode==='b'?0:14},(_,i)=>({work_id:1000000+i,status:'read'})),...Array.from({length:mode==='empty'||mode==='b'?0:18},(_,i)=>({work_id:1000100+i,status:'want_to_read'})),...Array.from({length:mode==='empty'||mode==='b'?0:3},(_,i)=>({work_id:1000200+i,status:'reading'}))];
- const evidence=ratings.flatMap(r=>evidenceFor(String(r.work_id)).map(e=>({work_id:Number(e.workId),trait:e.trait,weight:e.weight,confidence:e.confidence,source:e.source,source_key:e.sourceKey,raw_labels:e.rawLabels,mapping_version:e.mappingVersion,verified_at:e.verifiedAt})));
+ const evidence=mode==='sparse'?[]:ratings.flatMap(r=>evidenceFor(String(r.work_id)).map(e=>({work_id:Number(e.workId),trait:e.trait,weight:e.weight,confidence:e.confidence,source:e.source,source_key:e.sourceKey,raw_labels:e.rawLabels,mapping_version:e.mappingVersion,verified_at:e.verifiedAt})));
  return {from(table:string){let owner='',ids:number[]|null=null,range=[0,999];
   const q={select(){return q;},eq(key:string,value:string){if(key==='user_id')owner=value;return q;},order(){return q;},in(_key:string,value:number[]){ids=value;return q;},range(lo:number,hi:number){range=[lo,hi];return q;},async then(resolve:(x:unknown)=>unknown){
    if(mode==='error')return resolve({data:null,error:new Error('SYNTHETIC_READ_FAILURE')});

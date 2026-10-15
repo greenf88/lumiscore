@@ -19,6 +19,7 @@ import {
 import {
   buildTasteProfile,
   getTasteProfileConfidenceCopy,
+  type TasteProfile,
 } from '@/lib/taste-test/profile';
 import { BookCover, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
@@ -28,6 +29,7 @@ type ServerState = {
   answers: TasteTestAnswers;
   ratingCount: number;
   persistenceAvailable: boolean;
+  profile: TasteProfile | null;
 };
 
 function answerPayload(answers: TasteTestAnswers) {
@@ -54,12 +56,14 @@ export function LumiScoreTasteTest({
   const [showResults, setShowResults] = useState(false);
   const [query, setQuery] = useState('');
   const [authenticated, setAuthenticated] = useState(initialAuthState.authenticated);
+  const [savedProfile,setSavedProfile]=useState<TasteProfile|null>(null);
   const [saveStatus, setSaveStatus] = useState<'loading' | 'idle' | 'saving' | 'saved' | 'local' | 'error'>('loading');
   const question = TASTE_TEST_QUESTIONS[questionIndex];
   const leftBook = booksById.get(question.leftWorkId);
   const rightBook = booksById.get(question.rightWorkId);
   const currentChoice = answers[question.key];
-  const profile = useMemo(() => buildTasteProfile(answers, [], locale), [answers, locale]);
+  const questionnaireProfile = useMemo(() => buildTasteProfile(answers, [], locale), [answers, locale]);
+  const profile=authenticated&&savedProfile?savedProfile:questionnaireProfile;
   const confidenceCopy = getTasteProfileConfidenceCopy(profile.confidence, locale);
 
   const toggleTheme = useCallback(() => {
@@ -76,7 +80,7 @@ export function LumiScoreTasteTest({
       return false;
     }
     setSaveStatus('saving');
-    const response = await fetch('/api/taste-test', {
+    const response = await fetch(`/api/taste-test?locale=${locale}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ answers: answerPayload(nextAnswers) }),
@@ -86,9 +90,10 @@ export function LumiScoreTasteTest({
       return false;
     }
     localStorage.removeItem(TASTE_TEST_GUEST_STORAGE_KEY);
+    const state=await response.json() as ServerState;setSavedProfile(state.profile);
     setSaveStatus('saved');
     return true;
-  }, [authenticated]);
+  }, [authenticated,locale]);
 
   useEffect(() => {
     const guestAnswers = parseGuestTasteTestAnswers(localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY));
@@ -99,22 +104,24 @@ export function LumiScoreTasteTest({
       setQuestionIndex(progress.nextQuestionIndex);
       setShowResults(progress.complete);
     };
-    void fetch('/api/taste-test', { cache: 'no-store' })
+    void fetch(`/api/taste-test?locale=${locale}`, { cache: 'no-store' })
       .then(async (response) => {
         if (!response.ok) throw new Error('Taste Test state unavailable.');
         const state = await response.json() as ServerState;
         if (cancelled) return;
         setAuthenticated(state.authenticated);
+        setSavedProfile(state.profile);
         const merged = state.authenticated ? { ...state.answers, ...guestAnswers } : guestAnswers;
         restore(merged);
         setSaveStatus(state.authenticated ? 'idle' : 'local');
         if (state.authenticated && state.persistenceAvailable && Object.keys(guestAnswers).length > 0) {
-          const response = await fetch('/api/taste-test', {
+          const response = await fetch(`/api/taste-test?locale=${locale}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ answers: answerPayload(merged) }),
           });
           if (!cancelled && response.ok) {
+            const state=await response.json() as ServerState;if(!cancelled)setSavedProfile(state.profile);
             localStorage.removeItem(TASTE_TEST_GUEST_STORAGE_KEY);
             setSaveStatus('saved');
           }
@@ -123,10 +130,10 @@ export function LumiScoreTasteTest({
       .catch(() => {
         if (cancelled) return;
         restore(guestAnswers);
-        setSaveStatus('local');
+        setSaveStatus(initialAuthState.authenticated?'error':'local');
       });
     return () => { cancelled = true; };
-  }, []);
+  }, [locale,initialAuthState.authenticated]);
 
   const choose = (choice: TasteTestChoice) => {
     setAnswers((current) => {
@@ -138,7 +145,7 @@ export function LumiScoreTasteTest({
   };
 
   const finish = async () => {
-    if (profile.answeredCount !== TASTE_TEST_QUESTIONS.length) return;
+    if (questionnaireProfile.answeredCount !== TASTE_TEST_QUESTIONS.length) return;
     setShowResults(true);
     try {
       await persistAnswers(answers);
@@ -202,11 +209,11 @@ export function LumiScoreTasteTest({
           <div className="taste-results">
             <span className="eyebrow">{t('taste.profile')}</span>
             <h1 id="taste-test-title">{t('taste.readingTaste')}</h1>
-            <p className="taste-result-summary">{profile.summary}</p>
+            {authenticated&&!savedProfile?<p role="alert">{locale==='nl'?'Je opgeslagen leesprofiel kon niet laden. Probeer het later opnieuw.':'Your saved reading profile could not load. Please try again later.'}</p>:<><p className="taste-result-summary">{profile.summary}</p>
             <div className="taste-confidence">
               <strong>{confidenceCopy.label}</strong>
               <span>{confidenceCopy.description}</span>
-            </div>
+            </div></>}
             <p className="taste-save-status" role="status" aria-live="polite">
               {saveStatus === 'saving' ? t('taste.saving') : saveStatus === 'saved' ? t('taste.savedAccount') : saveStatus === 'error' ? t('taste.savedLocalSyncError') : !authenticated ? t('taste.savedLocal') : ''}
             </p>

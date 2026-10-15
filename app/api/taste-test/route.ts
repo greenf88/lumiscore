@@ -15,9 +15,9 @@ function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
 }
 
-export async function GET() {
+export async function GET(request:NextRequest) {
   try {
-    return json(await loadTasteTestServerState());
+    return json(await loadTasteTestServerState(request.nextUrl.searchParams.get('locale')==='nl'?'nl':'en'));
   } catch {
     return json({ error: 'Taste Test data is temporarily unavailable.' }, 500);
   }
@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest) {
     answers.push({ questionKey: value.questionKey, choice: value.choice });
   }
   try {
-    const state = await saveTasteTestAnswers(answers);
+    const state = await saveTasteTestAnswers(answers,request.nextUrl.searchParams.get('locale')==='nl'?'nl':'en');
     return state ? json(state) : json({ error: 'Sign in to save your Taste Test.' }, 401);
   } catch {
     return json({ error: 'Your Taste Test could not be saved.' }, 500);

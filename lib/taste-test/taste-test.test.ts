@@ -108,16 +108,16 @@ test('user evidence confidence has explicit low, medium and high gates', () => {
 
 test('user evidence confidence has friendly product copy without changing its internal value', () => {
   assert.deepEqual(getTasteProfileConfidenceCopy('LOW'), {
-    label: 'Early profile',
-    description: "We're still learning your taste.",
+    label: 'Limited evidence',
+    description: 'Few supported preferences so far; this is not a prediction of accuracy.',
   });
   assert.deepEqual(getTasteProfileConfidenceCopy('MEDIUM'), {
-    label: 'Good profile',
-    description: "We've got a good first read on your taste.",
+    label: 'Growing evidence',
+    description: 'Based on available book traits and your stated preferences, not proven accuracy.',
   });
   assert.deepEqual(getTasteProfileConfidenceCopy('HIGH'), {
-    label: 'Strong profile',
-    description: 'We know your reading taste well.',
+    label: 'Broader evidence',
+    description: 'More of your ratings have usable content traits; this does not mean the labels are human-verified.',
   });
 });
 
@@ -136,7 +136,9 @@ test('authenticated persistence uses the current Supabase user and own-row RLS',
 test('homepage recommendations exclude Taste Test anchors and books marked Read', async () => {
   const persistence = await readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8');
 
-  assert.match(persistence, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  const shared=await readFile(new URL('../supabase/reader-taste-profile.ts',import.meta.url),'utf8');
+  assert.match(shared,/loadReaderRows<ReaderStatusRow>\(client,'user_book_status','work_id,status',userId\)/);
+  assert.match(persistence,/loadReaderTasteProfile\(client,user\.id,locale\)/);
   const pager = await readFile(new URL('../supabase/reader-rows.ts', import.meta.url), 'utf8');
   assert.match(pager, /\.eq\('user_id', userId\)\.order\('work_id'\)\.range\(offset, offset \+ 999\)/);
   assert.match(persistence, /excludedWorkIds:\s*new Set\(\[[\s\S]*?TASTE_TEST_WORK_IDS[\s\S]*?status === 'read'/);

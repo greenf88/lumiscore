@@ -126,7 +126,8 @@ test('book detail loads shared Taste Test personalization instead of requiring r
   assert.match(component, /parseGuestTasteTestAnswers/);
   assert.match(component, /calculatePersonalMatch/);
   assert.doesNotMatch(component, /detail-match-panel[\s\S]{0,180}<strong>—<\/strong>/);
-  assert.match(loader, /buildTasteProfile\(answers, ratingEvidence, locale\)/);
+  assert.match(loader, /loadReaderTasteProfile\(client,user\.id,locale\)/);
+  assert.match(loader, /const profile = reader!\.profile/);
   assert.match(loader, /profile\.selectedCount > 0 \|\| profile\.meaningfulRatingCount > 0/);
 });
 
@@ -152,7 +153,7 @@ test('coverage NONE renders a dash without an explanatory paragraph', async () =
   assert.match(component, /candidate\.coverageLevel === 'none'[\s\S]*?\? null/);
   assert.match(component, /<span id="match-heading">\{t\('detail\.yourMatch'\)\}<\/span>/);
   assert.match(component, /<strong>\{matchValue\}<\/strong>/);
-  assert.match(component, /\{matchCopy && <p>\{matchCopy\}<\/p>\}/);
+  assert.match(component, /\{matchCopy && <p[^>]*>\{matchCopy\}<\/p>\}/);
   assert.doesNotMatch(component, /\n\s*<p>\{matchCopy\}<\/p>/);
 });
 
@@ -163,7 +164,7 @@ test('ERA_ONLY renders a dash without explanatory copy', async () => {
   );
 
   assert.match(component, /candidate\.coverageLevel === 'era_only'[\s\S]*?\? null/);
-  assert.match(component, /\{matchCopy && <p>\{matchCopy\}<\/p>\}/);
+  assert.match(component, /\{matchCopy && <p[^>]*>\{matchCopy\}<\/p>\}/);
 });
 
 test('valid PARTIAL and RICH match content remains available', async () => {

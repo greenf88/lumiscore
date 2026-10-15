@@ -1,0 +1,102 @@
+LumiScore — gedeeld leesprofiel — lokaal reviewpakket, 15 oktober 2026
+
+Scope / basis
+Actuele origin/main: 9e28f0ff7fba00c371bdebe31a030b916778baee.
+Branch: feature/shared-taste-profile-20261015, geïsoleerde worktree.
+Geen toepasselijke AGENTS.md. Geen andere werkruimte aangepast.
+PR22 is nog Draft, HEAD1973704acbbc9eea409d6e0d7520c4f3da5ba22a,
+niet gemerged. Die twee homepage/accountcommits zijn NIET in deze branch opgenomen.
+De accountpagina bestaat nog niet op main. Haar koppeling wordt afzonderlijk lokaal
+tegen exact PR22 voorbereid; de oorspronkelijke PR22-branch blijft ongewijzigd.
+Exacte commits/integratiestatus en diff worden in het externe REVIEW-PACKAGE vastgelegd.
+Het eerdere releaseakkoord dekt deze gewijzigde smaaklogica niet.
+
+Oorzaak
+Homepage/detail gebruikten een genormaliseerde vectorsom, de uitslag een per-trait
+gemiddelde met prior3. De eerste meaningfulRatingCount telde zelfs ratings zonder
+kenmerken mee. De uitslag telde periode-only Works als classified en kon daarmee
+de lezertypegate vullen. Detailratings en dichte evidencebatches waren niet volledig
+gepagineerd. De uitslag negeerde eerder opgeslagen antwoorden op de voorkeurentest.
+De aanbevelingssortering klemde matchpercentages af naar het vorige boek, waardoor
+dezelfde boekmatch op detail en in de lijst kon verschillen.
+
+Gedeeld model
+Eén buildTasteProfile; buildRatingResultProfile is alleen een inputadapter.
+Eén reliableProfileTraits met bestaande bron-/mappingallowlist, confidence>=0,6,
+bronprioriteit en beoordeelde correcties. Geen pilotlabels/nieuwe classificaties.
+Alle geldige gehele1–10-cijfers, één keer per positieve veilige Work-ID, alle pagina's.
+Nieuwste updated_at bepaalt een duplicaat; onbeslisbare conflicten tellen eenmaal,
+maar geven geen verzonnen positieve of negatieve voorkeur. DB-PK blijft ongewijzigd.
+Read en skip zijn geen cijfers. Ontbrekende kenmerken worden niet negatief gewogen.
+Cijfergewicht blijft (cijfer−5,5)/4,5; per-Work L1-normalisatie en prior3 behouden
+uit de conservatievere bestaande uitslagberekening. Geen laatste L2-normalisatie
+die die kleine-aantallendemping weer wegneemt. Cosinus normaliseert pas bij matches.
+
+Afzonderlijke dekking: ratedWorks, contentWorks, eraOnlyWorks, unknownWorks en
+contentRatio. Inhoud = betrouwbaar toegestane kenmerken behalve classic/contemporary.
+Periode-only mag geen inhoudelijk lezertype, hoge bewijsdekking of inhoudelijke
+boekmatch dragen. Periode-/taalvoorkeuren kunnen de bestaande rangschikking beïnvloeden.
+Gatewaarden centraal: zichtbaar3ondersteuningen/3positieve ondersteuningen/score60;
+lezertype5inhoudelijk beoordeelde Works, minstens de helft inhoudelijke dekking,
+minstens3positieve genrebeoordelingen. Geen drempel verlaagd.
+HIGH: bestaande10inhoudelijke ratings of complete10vragen/5keuzes+5inhoudelijke
+ratings, nu ook minstens50% inhoudelijke dekking. Gastantwoorden alleen maximaal
+MEDIUM. Dit zijn bewijsvoorwaarden, geen gemeten voorspellende nauwkeurigheid.
+Metadata-rich/confidence zijn geen bewijs van menselijke validatie.
+
+Gastvoorkeuren
+Bestaande anchors/vragen/neither en lokale opslag blijven bestaan. Opgeslagen
+eigen quizantwoorden worden door alle authenticated-consumenten meegenomen.
+Zelfgerapporteerde ondersteuning blijft apart van positieve boekcijfers.
+De bestaande blendstappen blijven, gestuurd door bruikbare inhoudelijke ratings;
+onbekende boekkenmerken verdringen geen bestaande gastvoorkeuren.
+Zonder gastantwoorden is de vector uitsluitend uit beschikbare ratingkenmerken.
+Ingelogde voorkeurentest gebruikt de serverberekening inclusief ratings, niet meer
+alleen haar lokale antwoorden. Een laadfout wordt geen schijnbaar leeg leesprofiel.
+Ook boekdetail markeert een mislukte profielread expliciet unavailable en toont
+een korte NL/EN-statusmelding, niet de tekst alsof iemand nog geen profiel heeft.
+Echte React-HTML-regressie en fouttransporttest controleren dit onderscheid.
+
+Loaders / privacy / ranking
+loadReaderTasteProfile deelt complete, expliciet owner-gefilterde rating/statusreads,
+quiz-v1-antwoorden op de tien toegestane sleutels, en bewijs voor alleen eigen Rated
+Works in batches200 met volledige1000-rijenpagina's en samengestelde sleutelvolgorde.
+React.cache is request-local; geen persoonlijke module-/publieke cache.
+Homepage, Nederlandse discovery, detail, uitslag en voorkeuren-API gebruiken dit model.
+Accountadapter hoort bij de afzonderlijke lokale PR22-compatibiliteitsversie.
+RLS/Auth/private API-headers/same-origin-regels zijn niet gewijzigd.
+Geen extra catalogusdownload of N+1 toegevoegd aan de profielberekening.
+Kwaliteit/diversiteit/taal/reeks/collaboratieve regels blijven afzonderlijke ranking.
+Resultaat, homepage en detail delen calculatePersonalMatch; geen afklemmen op basis
+van lijstpositie. Exact matchcijfer pas bij HIGH en bestaande rich/metadata>=0,8.
+Het bestaande begrensde affiniteitscijfer is geen kanspercentage.
+
+Presentatie
+Eén compact TasteProfileSummary voor uitslag en account; dezelfde voorkeurvolgorde.
+Geen nieuwe vragenlijst, Luminator, illustraties of nieuwe thema-/typografieschaal.
+NL/EN behouden. Bij weinig inhoudelijke dekking één korte eerlijke melding.
+Geen extra rapporttekst of zichtbare percentages toegevoegd aan de uitslag.
+
+Bewijs / beperkingen
+Gerichte unit-, React-HTML- en echte lokale PostgreSQL/RLS-proeven, inclusief meer
+dan1000ratings/statussen,1200evidencerijen in één batch, updates/deletes en A/B/anon.
+Synthetische vergelijking met productiebroncode opgeslagen in extern pakket.
+Telling1051/10134 uit Ricks aangeleverde tekst is NIET opnieuw productiegeteld.
+Deze wijziging verbetert consistentie, niet de inhoudelijke catalogusdekking.
+Geen hosted of echte telefoonproef; geen productie-/testprojectwrites voor dit pakket.
+Classificatiepilot read-only/geparkeerd. PR22-testaccount blijft bij dat aparte traject.
+Definitieve test/buildaantallen en accountcompatibiliteitsbewijs in extern REVIEW-PACKAGE.
+
+Herstel / release
+Normale applicatierevert van uitsluitend de nieuwe smaaklogicacommit(s), op de
+dan actuele main. Account/homepagecommits behouden; geen gegevens terugdraaien.
+Geen migraties, Auth/RLS/configwijzigingen. Lokaal committen; niet pushen of releasen.
+Voor een later releasebesluit: PR22-status/basis opnieuw controleren, uitsluitend
+de expliciet samengestelde code reviewen en het nieuwe pakket afzonderlijk goedkeuren.
+
+Richtlijnen
+Supabase/Postgres: expliciete ownerfilters, bestaande RLS, volledige stabiele paging.
+React: request-lokale deduplicatie, geen persoonlijke modulecache, gedeelde presentatie.
+https://supabase.com/docs/reference/javascript/range
+https://supabase.com/docs/guides/database/postgres/row-level-security
+https://react.dev/reference/react/cache

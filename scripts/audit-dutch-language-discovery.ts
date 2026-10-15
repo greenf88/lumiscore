@@ -12,6 +12,7 @@ import { loadWorkTraitEvidenceBatched } from '../lib/supabase/work-trait-evidenc
 import { rankHighestRatedWorks } from '../lib/ratings/highest-rated.ts';
 import { TASTE_TEST_WORK_IDS } from '../lib/taste-test/config.ts';
 import type { TasteProfile } from '../lib/taste-test/profile.ts';
+import { buildTasteProfile } from '../lib/taste-test/profile.ts';
 import {
   emptyTasteVector,
   normalizeTasteVector,
@@ -58,6 +59,7 @@ const PROFILE_DEFINITIONS = {
 function auditProfile(vector: Partial<TasteVector>): TasteProfile {
   const normalized = normalizeTasteVector(tasteVector(vector));
   return {
+    ...buildTasteProfile({},[]),
     vector: normalized,
     tasteTestVector: normalized,
     ratingsVector: emptyTasteVector(),

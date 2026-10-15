@@ -1,5 +1,6 @@
 import type { Book } from '../../app/data/books.ts';
 import type { TasteProfile } from '../taste-test/profile.ts';
+import {contentTasteVector} from '../taste-test/profile.ts';
 import { cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts';
 import { buildRecommendationExplanation } from './explanations.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
@@ -120,7 +121,7 @@ export function getMatchPresentation(input: {
   if (
     input.candidateCoverage === 'rich' &&
     input.metadataConfidence >= .8 &&
-    input.userConfidence !== 'LOW'
+    input.userConfidence === 'HIGH'
   ) {
     return {
       matchScore: calculateDisplayedMatchScore({
@@ -150,7 +151,7 @@ export function calculatePersonalMatch(input: {
 }): PersonalMatchResult {
   const personalSimilarity = Math.max(
     0,
-    cosineTasteSimilarity(input.profile.vector, input.candidate.traits),
+    cosineTasteSimilarity(contentTasteVector(input.profile.vector), contentTasteVector(input.candidate.traits)),
   );
   const presentation = getMatchPresentation({
     personalSimilarity,
@@ -290,16 +291,10 @@ export function recommendBooks(input: {
     }
     selected.push(remaining.shift()!);
   }
-  let previousDisplayedMatch = 100;
   return selected.map((candidate) => {
-    const matchScore = candidate.matchScore === null
-      ? null
-      : Math.min(previousDisplayedMatch, candidate.matchScore);
-    if (matchScore !== null) previousDisplayedMatch = matchScore;
-
     return {
       book: candidate.book,
-      matchScore,
+      matchScore: candidate.matchScore,
       matchLabel: candidate.matchLabel,
       matchConfidence: candidate.matchConfidence,
       explanation: candidate.explanation,

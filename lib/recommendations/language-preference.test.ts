@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Book } from '../../app/data/books.ts';
 import type { TasteProfile } from '../taste-test/profile.ts';
+import { buildTasteProfile } from '../taste-test/profile.ts';
 import { emptyTasteVector, tasteVector } from '../taste-test/traits.ts';
-import { calculateDisplayedMatchScore, recommendBooks, type RecommendationCandidate } from './engine.ts';
+import { recommendBooks, type RecommendationCandidate } from './engine.ts';
 import {
   getLocaleLanguagePreferenceStrength,
   resolveLocaleBookLanguagePreference,
@@ -18,6 +19,7 @@ function vectorForSimilarity(similarity: number) {
 
 function profile(meaningfulRatingCount = 0): TasteProfile {
   return {
+    ...buildTasteProfile({},[]),
     vector: tasteVector({ science_fiction: 1 }),
     tasteTestVector: tasteVector({ science_fiction: 1 }),
     ratingsVector: emptyTasteVector(),
@@ -114,10 +116,7 @@ test('locale ordering never changes personal similarity or inflates the Dutch ma
   assert.equal(dutch.personalMatch, english.personalMatch);
   assert.equal(dutch.rankingScore, english.rankingScore);
   assert.equal(dutch.matchScore, english.matchScore);
-  assert.equal(dutch.matchScore, calculateDisplayedMatchScore({
-    personalSimilarity: dutch.personalMatch,
-    userConfidence: 'MEDIUM',
-  }));
+  assert.equal(dutch.matchScore,null);
 });
 
 test('unknown language receives no Dutch preference', () => {

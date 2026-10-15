@@ -34,6 +34,7 @@ import {
 } from '../lib/recommendations/work-trait-evidence.ts';
 import { TASTE_TEST_ANCHORS, TASTE_TEST_WORK_IDS } from '../lib/taste-test/config.ts';
 import type { TasteProfile } from '../lib/taste-test/profile.ts';
+import { buildTasteProfile } from '../lib/taste-test/profile.ts';
 import {
   TASTE_TRAITS,
   cosineTasteSimilarity,
@@ -352,6 +353,7 @@ async function loadRatingSummaries(workIds: number[]) {
 
 function auditProfile(vector: Partial<TasteVector>): TasteProfile {
   return {
+    ...buildTasteProfile({},[]),
     vector: normalizeTasteVector(tasteVector(vector)),
     tasteTestVector: normalizeTasteVector(tasteVector(vector)),
     ratingsVector: emptyTasteVector(), blend: { tasteTest: 1, ratings: 0 },

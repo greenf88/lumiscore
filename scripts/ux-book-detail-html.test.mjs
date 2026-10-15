@@ -30,6 +30,9 @@ test('NL/EN detail HTML preserves the accessible cover, account, locale and them
       assert.match(html, /href="\/en\/book\/991001"/);
       assert.match(html, /class="theme-toggle theme-toggle-labeled"/);
       assert.match(html, /class="detail-sign-in"/);
+      const failed=renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:'/book/991001'},createElement(DetailPreview,{profileUnavailable:true})));
+      assert.match(failed,locale==='nl'?/Je leesprofiel kon niet laden/:/Your reading profile could not load/);
+      assert.doesNotMatch(failed,locale==='nl'?/Doe de Smaaktest of beoordeel boeken om jouw match te zien/:/Take the Taste Test or rate books to see your match/);
     }
   } finally { await vite.close(); }
 });

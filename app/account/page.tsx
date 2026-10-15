@@ -10,6 +10,6 @@ export async function generateMetadata(){return createLocalizedPageMetadata({tit
 export default async function AccountPage(){
   const [{client,user},{locale}]=await Promise.all([getVerifiedServerUser(),resolveRequestLocale()]);
   if(!user)redirect(localizedHref('/login?next='+encodeURIComponent(localizedHref('/account',locale)),locale));
-  const [authState,data]=await Promise.all([loadHeaderAuthState(),loadReadingProfileForOwner(client,user.id).catch(()=>null)]);
+  const [authState,data]=await Promise.all([loadHeaderAuthState(),loadReadingProfileForOwner(client,user.id,locale).catch(()=>null)]);
   return <LumiScoreReadingProfile authState={authState} email={user.email??null} data={data} />;
 }

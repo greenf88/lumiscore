@@ -109,6 +109,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       ),
     )
     .catch((): BookDetailPersonalization => ({
+      unavailable: true,
       authenticated: false,
       hasEvidence: false,
       candidate: null,

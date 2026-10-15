@@ -5,7 +5,7 @@ import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const largeText=process.argv.includes('--large-text'),port=largeText?3125:3124;
+const largeText=process.argv.includes('--large-text'),port=largeText?3127:3126;
 for(const key of Object.keys(process.env))if(/SUPABASE|DATABASE|SECRET|TOKEN|GOOGLE_BOOKS/.test(key))delete process.env[key];
 const fixture=JSON.stringify(root.replaceAll('\\','/')+'test-support/reading-profile/fixture.ts');
 const auth=`import {cookies} from 'next/headers';import {requestPagePath} from '@/lib/i18n/server';import {fixtureUser,fixtureClient} from ${fixture};
