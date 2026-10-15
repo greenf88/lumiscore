@@ -964,7 +964,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-book-card .collection-quick-editor { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
 .my-books-card { max-width: none; }
 .section-more { display: flex; justify-content: center; margin-top: 28px; }
-.recommendation-panel .recommendation-reason { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.recommendation-panel .recommendation-reason { overflow: visible; display: block; -webkit-line-clamp: unset; overflow-wrap: anywhere; font-size: var(--type-small); line-height: 1.45; }
 .hero-inner:not(:has(.recommendation-panel)) { grid-template-columns: 1fr; }
 .taste-rating-test h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 44px); line-height: 1.1; }
 .taste-round-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-block: 20px; }
@@ -1471,7 +1471,9 @@ button, input, select, textarea { font-family: var(--sans); }
   border-color: var(--action-bg);
   color: #fff;
 }
-.recommendation-panel .view-all.ui-primary:hover { background: var(--teal-deep); color: #fff; }
+@media (hover: hover) and (pointer: fine) {
+  .recommendation-panel .view-all.ui-primary:hover { background: var(--teal-deep); color: #fff; }
+}
 .book-description .description-source {
   margin: 10px 0 0;
   padding: 0;
