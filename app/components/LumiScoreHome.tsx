@@ -32,6 +32,7 @@ import { translate } from '@/lib/i18n/translations';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
+import { MobileNavigation } from './MobileNavigation';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { useWantToRead } from './useWantToRead';
@@ -249,34 +250,7 @@ export function Header({
   returnTo: string;
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-  const navigationRef = useRef<HTMLDivElement>(null);
-  const navigationTriggerRef = useRef<HTMLButtonElement>(null);
-  const navigationPanelId = `mobile-navigation-${useId().replaceAll(':', '')}`;
   const { locale, t } = useLumiScoreLocale();
-
-  useEffect(() => {
-    if (!mobileNavigationOpen) return;
-
-    const handlePointerDown = (event: PointerEvent) => {
-      if (!navigationRef.current?.contains(event.target as Node)) {
-        setMobileNavigationOpen(false);
-      }
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      event.preventDefault();
-      setMobileNavigationOpen(false);
-      navigationTriggerRef.current?.focus();
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [mobileNavigationOpen]);
 
   return (
     <header className="site-header">
@@ -288,40 +262,7 @@ export function Header({
         <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
         <LocaleLink className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</LocaleLink>
         <LocaleLink className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</LocaleLink>
-        <div className="mobile-navigation" ref={navigationRef}>
-          <button
-            className="mobile-navigation-trigger"
-            type="button"
-            ref={navigationTriggerRef}
-            aria-label={t('header.openNavigation')}
-            aria-expanded={mobileNavigationOpen}
-            aria-controls={navigationPanelId}
-            onClick={() => setMobileNavigationOpen((open) => !open)}
-          >
-            <span className="hamburger-icon" aria-hidden="true"><i /><i /><i /></span>
-          </button>
-          {mobileNavigationOpen && <div
-            className="mobile-navigation-panel"
-            id={navigationPanelId}
-            onClick={(event) => {
-              if ((event.target as HTMLElement).closest('a')) {
-                setMobileNavigationOpen(false);
-              }
-            }}
-          >
-            <LocaleLink href="/browse">{t('browse.books')}</LocaleLink>
-            <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink>
-            <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
-            <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
-            <LocaleLink href="/taste-test">{t('header.tasteTest')}</LocaleLink>
-            <LocaleLink href="/my-books">{t('header.myBooks')}</LocaleLink>
-            <span className="mobile-navigation-divider" aria-hidden="true" />
-            <LocaleLink href="/over-ons">{t('footer.about')}</LocaleLink>
-            <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
-            <LocaleLink href="/voor-uitgevers">{t('footer.publishers')}</LocaleLink>
-            <LocaleLink href="/contact">{t('footer.contact')}</LocaleLink>
-          </div>}
-        </div>
+        <MobileNavigation />
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
         <LanguageSwitcher />

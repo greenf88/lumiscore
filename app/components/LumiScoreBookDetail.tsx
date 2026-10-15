@@ -39,6 +39,7 @@ import {
 import { useWantToRead } from './useWantToRead';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
+import { MobileNavigation } from './MobileNavigation';
 import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/navigation/book-return';
 
 type LumiScoreBookDetailProps = {
@@ -251,6 +252,7 @@ export function LumiScoreBookDetail({
         <LumiScoreWordmark />
         <div className="detail-header-actions">
           <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
+          <MobileNavigation />
           <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
           <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
@@ -264,7 +266,6 @@ export function LumiScoreBookDetail({
               <span className="score-badge detail-score-badge"><strong>{score}</strong><small>LumiScore</small></span>
               <BookCover book={book} presentation="detail" label={t('detail.frontCoverOf', { title: book.title })} />
             </div>
-            <figcaption>{t('detail.frontCover')}</figcaption>
           </figure>
           {backCover && (
             <figure className="detail-cover-figure">

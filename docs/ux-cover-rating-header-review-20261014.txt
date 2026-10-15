@@ -1,0 +1,104 @@
+LumiScore — drie gerichte UX-fixes — 14 oktober 2026
+
+Basis en targets
+Origin/main en gecontroleerde productie: dd7b11089e863e855cf74e1ec68f1c7aa7d8008f.
+PR19 is gemerged; de directe smaaktest is live. Geen herhaling van die release.
+Productieherstelpunt: dpl_Gus4B4oBZMEgbfAhtWHNVkQCMkhv, READY, gekoppeld aan
+lumisco.re. Project prj_44WeKduJU042ZAI85eAifSWwoY0i / team rgkgroeneveld-9102.
+Geïsoleerde werkruimte: work/lumiscore-ux-fixes-20261014.
+Lokale branch: fix/cover-rating-header-20261014.
+Voor de vervolg-PR wordt de bestaande remote feature/taste-direct-rating-20261013
+fast-forward bijgewerkt. Deze heeft al de toegestane testkoppeling; geen nieuwe
+environmentinstellingen, algemene Preview- of productieconfiguratie worden gewijzigd.
+Testproject: hlvujbrmfdlrfxdjwsmb. Productie: qvplwejffhjvxaypmjut (geen testwrites).
+Browse-commit aca818b13debd95a09fd5f1ee840b14440d8acd3 blijft uitsluitend in de
+andere werkruimte; geen Browse-herontwerp in deze diff.
+
+Oorzaken en minimale wijzigingen
+1. Detail had expliciet een zichtbare figcaption detail.frontCover. Verwijderd,
+   in beide talen; geen leeg vervangend element. Het bestaande toegankelijke
+   frontCoverOf-label, coverbestanden, scorebadge en achtercover blijven intact.
+2. Geselecteerde score werd al gewist na succes; de kaart was al per ronde/Work
+   gekeyed en focus ging naar de nieuwe boektitel zonder scrollsprong. De oude
+   CSS-hoverachtergrond was echter ongeconditioneerd, dus ook op touch toepasbaar.
+   Dit is een aantoonbare CSS-risicobron, geen gereproduceerde mobiele hoofdoorzaak.
+   Hover nu uitsluitend (hover:hover) en (pointer:fine); scores krijgen daarbij
+   geen geselecteerd lijkende hoverachtergrond. Tijdelijke feedback bevat daarnaast
+   expliciet workId + score, en aria-pressed vereist dezelfde Work en pending.
+   Keyboardfocus blijft expliciet zichtbaar, ook op de menu-ingang en menulinks.
+   Opslagroute, action gate, 500ms cooldown en scorings-/Read-logica onveranderd.
+3. Detailheader kon zijn smaaktestlabel afbreken; de oude kleine-screenregel maakte
+   een stericoon, maar latere typografieregels overschreven de fontgrootte.
+   Desktoplabel heeft nowrap en krimpt niet. Onder het bestaande 820px-breakpoint
+   verhuist de actie naar hetzelfde bestaande mobiele menu. De bestaande menu-
+   implementatie is ongewijzigd qua links/gedrag geëxtraheerd en gedeeld met Header.
+   Profiel, logo, taal en thema behouden; menu-aanraakdoel 44px. Geen globaal redesign.
+
+Verificatie
+- 49 gerichte tests: smaaktest-/resultaatlogica, round requests, pause, gate/races,
+  opslagfout/expliciete retry, twee opeenvolgende saves, Work-gebonden feedback,
+  UI-contracten en echte React-detail-HTML in NL/EN. Geen hosted testwrites.
+- TypeScript --noEmit en volledige bron-ESLint geslaagd (gegenereerde dist/.next/
+  .wrangler uitgesloten). Vinext-productiebuild en Vite-build geslaagd op deze
+  code; clientsecretscan: 65 bestanden, geen secretwaarden of secret-identifiers.
+  Alleen bestaande niet-blokkerende Vinext-classificatie/dynamic-importwaarschuwingen.
+- Bestaand geldig PR19-bewijs blijft geldig voor ongewijzigde opslaglogica; het
+  vervangt NIET de gevraagde nieuwe hosted highlight-/viewportcontrole.
+- Browsertool: createBrowserTab meldt "Browser is not available: iab"; inventaris
+  geeft apps=[] en browsers=[]. Daarom geen nieuwe echte browserscreenshots,
+  geen claim over touch, 320/375/390/430/desktop of Paper/Ink-geometry na de fix.
+  De daadwerkelijke layout en twee opeenvolgende hosted saves moeten nog worden
+  gecontroleerd zodra de browser beschikbaar is. Geen alternatieve authenticatie-
+  of browserautomatisering als omweg. Geen account aangemaakt zolang deze gate blokkeert.
+
+Releasegate en hervatten
+Draft laten; geen merge of productiepublicatie zolang nieuwe browser-/opslagproof
+ontbreekt. Na browserherstel: verifieer Preview-SHA en testproject vóór iedere write,
+gebruik maximaal één eigen tijdelijk account met bestaande toegestane testtoegang,
+controleer twee scores -> één write per Work -> neutrale volgende kaart, skip,
+zoeken/annuleren, pauze/hervatten en herladen. Fouten/races zijn lokaal gemockt.
+Controleer detail/menu op 320/375/390/430, aangrenzend 560/820 en desktop, beide
+talen/thema's en keyboardfocus; echte telefoon/touch apart labelen.
+Neem echte screenshots van cover/header en twee opeenvolgende neutrale boeken.
+Alleen bij groene vereiste CI, volledige hosted gates en onveranderde scope:
+controleer actuele main, Ready for review, normale merge en automatische productie-
+deploy. Controleer Ready, merge-SHA, lumisco.re en gerichte live UX zonder bestaande
+ratings te wijzigen. Geen migraties, Auth-/DNS-/envwijzigingen of kosten.
+
+Gegevensbehoudend herstel
+Bij releasegerelateerde regressie uitsluitend applicatierollback naar bovenstaande
+vorige werkende productiedeployment via de bestaande officiële Vercel-rollbackroute.
+Behoud ratings, Read-status, rondes en alle databasegegevens; geen databaseherstel.
+Vercel rollback kan automatische domeintoewijzing pauzeren: controleer dit, zet niet
+stilzwijgend aanvullende configuratie om. Bevestig domein/Ready en oude werkende UI.
+Ruim na tests uitsluitend eigen tijdelijke account/sessies/rijen/versleutelde
+credentials op; oorspronkelijke testgebruikers en hun actuele 68 ratings behouden
+(historische verwijzing naar 64 is achterhaald). Branchkoppeling niet wijzigen.
+
+Parkeerwerk: Bookmatch/PR11, herauthenticatie, Browse en overig vervolg ongemoeid.
+
+Gerichte hosted vervolgcontrole — 14 oktober 2026
+De browser is opnieuw bereikbaar; de eerdere algemene browserblokkade is vervallen.
+Op 46c35e6 zijn caption en coverlabel hosted bevestigd in NL/EN en Paper/Ink.
+Werkelijk gemeten 320/375/390/430/1280 CSS-pixels: geen horizontale overflow,
+overlap of buiten beeld liggende headeracties. Ook 560/682/820 en aangevraagde821
+(werkelijk822) gecontroleerd; mobiel menutarget44px. Escape herstelt zichtbare focus.
+Screenshots en ruwe geometrie staan buiten Git onder outputs/ux-fixes-20261014.
+
+Nieuwe concrete bevinding binnen de mobiele headerfix: muisklik op de zichtbare
+Smaaktest-menulink sloot het paneel maar liet de boek-URL staan, tweemaal bevestigd
+(ook scoped locator + navigatieverwachting). Enter op dezelfde link navigeerde wel.
+Een eerste hypothese over click-bubbling/unmount bleek bij lokale herhaling NIET
+de oorzaak; die proefwijziging is volledig teruggedraaid. De echte browser-hit-test
+op de zichtbare Smaaktest-link raakte de cover-IMG, niet de link: de header had
+z-index:auto en de cover lag vóór het menu. Screenshot bevestigt bedekking.
+Minimale correctie: position:relative en z-index:20 op detail-header, gelijk aan
+de bestaande site-headerlaag. Menu-, Escape-, buitenklik- en linkgedrag ongewijzigd.
+Geen aangepaste router, nieuwe feature, URL-, Auth- of configuratiewijziging.
+Gerichte regressieassertie toegevoegd; actuele lokale/hosted klikcontrole en exacte
+vervolg-SHA worden in het externe reviewpakket vastgelegd.
+Lokale echte hit-test na fix: A/correctTarget=true; dezelfde muisklik navigeert nu
+naar /nl/taste-test. 50 gerichte tests, TypeScript, bronlint, Vinext-productiebuild,
+secretscan (65 bestanden) en diffcontrole groen op de definitieve code.
+Nog steeds geen eigen ingelogde tijdelijke testsessie: twee hosted saves en hun
+neutrale vervolgkaarten blijven gate vóór merge. Bestaande ratings niet gebruiken.
