@@ -30,7 +30,7 @@ export async function proxy(request: NextRequest) {
     if (!name.startsWith('x-middleware-') && name !== 'set-cookie') response.headers.set(name, value);
   }
   const path = decision.kind === 'rewrite' ? decision.path : request.nextUrl.pathname;
-  if (['/login', '/forgot-password', '/update-password'].includes(path) || path.startsWith('/auth/')) {
+  if (['/account', '/login', '/forgot-password', '/update-password'].includes(path) || path.startsWith('/auth/')) {
     for (const [name, value] of Object.entries(PRIVATE_RESPONSE_HEADERS)) response.headers.set(name, value);
   }
   return response;

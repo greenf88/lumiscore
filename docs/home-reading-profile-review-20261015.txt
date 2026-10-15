@@ -1,0 +1,131 @@
+LumiScore — homepage, smaaktest en Mijn leesprofiel
+15 oktober 2026 — lokaal reviewpakket, niet gepubliceerd
+
+Basis en scope
+Basis: 9e28f0ff7fba00c371bdebe31a030b916778baee (actuele origin/main).
+Branch: feature/home-reading-profile-20261015, geïsoleerde worktree
+work/lumiscore-home-profile-20261015. Geen toepasselijke AGENTS.md gevonden.
+Commit 1: 4c8f83e38b1b8477df4e54f2954ff1727fa829d9.
+Definitieve accountcommit en exacte diff staan in extern REVIEW-PACKAGE.txt.
+PR20/PR21 behouden. Geen push, PR, release, migraties, hosted writes, kosten,
+Auth-/RLS-/environmentinstellingen of wijzigingen aan andere werkruimtes.
+
+Compactere bestaande pagina's
+De homepage had minimumhoogtes van 660px, verticale centrering en veel padding.
+Nu volgt de hero zijn inhoud, met topuitlijning. Geen negatieve margins.
+Alleen hero en de direct aansluitende Highest-rated-sectie zijn aangepast.
+Gemeten op 390×780: header → hero-inhoud 28px; laatste zichtbare hero-inhoud →
+volgende sectie 44px Ink / 45,15px Paper. Desktop 1280×900: 32px en 44px.
+Illustratie, inhoud, maximaal acht kaarten en drie persoonlijke aanbevelingen,
+gastrequestguard en vervolglijsten zijn behouden.
+
+Gastknop: Doorgaan als gast / Continue as guest, dunne teal-rand, oppervlaktekleur.
+Beide acties gemeten 331,2×48px, radius 6px, tussenruimte 14px.
+Bestemming /taste-test/preferences en lokale opslag zijn ongewijzigd.
+Resultaatknop: Bekijk je leesprofiel / View your reading profile, outlined,
+24px onder de 132px hoge 10/15/30-keuzes. Bestaande bestemming en bewijsgrens
+blijven intact: canOpenRoundResult vereist een bestaande ronde met ≥10 ratings.
+Nieuwe of lege ronde: geen resultaatknop. Bestaand geldig resultaat: wel.
+Actieve kaart, directe opslag, racebeveiliging en pauzelogica zijn niet gewijzigd.
+
+Mijn leesprofiel
+Er bestond een accountmenu, maar geen account-/profielpagina. Eén /account-route
+toegevoegd, bereikbaar via dat menu; Mijn boeken is niet gedupliceerd.
+Naam en e-mail komen uitsluitend uit getVerifiedServerUser(). Geen user-ID uit
+URL/parameters en geen nieuwe e-mailwijzigingsflow.
+Gast: HTTP307 naar de bijbehorende NL/EN-login met /account als terugkeerpad.
+Pagina is force-dynamic, noindex en niet opgenomen in de publieke sitemap.
+Alleen /account is toegevoegd aan de bestaande private/no-store-responseheaders.
+Authenticatie, sessieverversing en bestaande RLS zijn verder ongewijzigd.
+
+Telregels (unieke Works, geen optelbare verdeling):
+- Rated: eigen expliciete, geldige beoordelingen 1–10.
+- Read: unie van Read-status en Rated; beoordeeld betekent ook gelezen.
+- Want to read / Reading: eigen status na bestaande Rated→Read-canonicalisatie.
+- DNF telt niet als Read, tenzij het Work expliciet is beoordeeld.
+Een korte voetnoot maakt de overlap zichtbaar.
+
+Bestaande loadReaderRows haalt alleen work_id/rating en work_id/status op,
+met expliciete eigenaarfilter, stabiele sortering en volledige 1000-rijenpagina's.
+Geen boekhydratie, covers, N+1, catalogusdownload of aanbevelingsrequest.
+Classificatiebewijs wordt alleen voor eigen Rated-Works opgehaald, in batches
+van 200 en volledig gepagineerd op de bestaande samengestelde sleutel.
+Bestaande mapping, beoordeelde correcties, buildEffectiveWorkTraitVector en
+buildRatingResultProfile zijn hergebruikt; berekening en taxonomie zijn niet gewijzigd.
+TasteProfileSummary deelt dezelfde onderbouwde voorkeuren/archetypen met de
+uitslagpagina. Ontbrekende evidence wordt geen verzonnen profiel.
+Een laadfout toont een alert, geen nul-totalen alsof er geen gegevens bestaan.
+
+Navigatie: Mijn boeken, bestaande Leesvoorkeuren, Smaaktest en bestaande logout.
+Naam wijzigen blijft beschikbaar via het accountmenu.
+Geen persoonlijk reeksenoverzicht gevonden; geen fictieve bestemming toegevoegd.
+Luminator: geen vastgelegde criteria/implementatie gevonden. Open productbesluit;
+geen status, drempel of “nog X beoordelingen” geïmplementeerd.
+
+Verificatie
+71 gerichte controles geslaagd: 59 unit/contract/React-HTML/PostgreSQL-tests en
+12 opt-in echte lokale SSR-controles voor NL/EN (gast, eigenaar, leeg, veel, B, fout).
+PostgreSQL/PGlite voert bestaande schema's en RLS daadwerkelijk uit:
+1205 eigen ratings, 1209 Read, 8 Want, 5 Reading; volledige pagina's boven 1000.
+Een dense batch van 200 Works bevat 1200 evidence-rijen en wordt compleet gelezen.
+B ziet alleen zijn eigen rating; A-filter onder B geeft geen A-data; anon: 42501.
+Dit is geïsoleerd lokaal databasebewijs, geen hosted Supabase-Auth-bewijs.
+
+SSR bewijst: gastredirect zonder e-mail; A/B gescheiden; 0/0/0/0 bij leeg;
+1505 ratings en 1519 Read in de grote fixture; alert zonder tellers bij fout;
+private/no-store-headers en noindex.
+Eén verouderde My Books-test verwachtte <a> en een ingebouwd mobiel menu.
+Actuele main gebruikte al LocaleLink/MobileNavigation. Alleen deze relevante
+asserties zijn bijgewerkt; geen applicatiefix om een oude test tevreden te stellen.
+TypeScript, lint (geen waarschuwingen), productiebuild, Vercel-formaatbuild,
+clientsecretscan (67 bestanden) en diffcontrole zijn groen.
+Bestaande Vinext INEFFECTIVE_DYNAMIC_IMPORT-waarschuwingen blijven niet-fataal.
+
+Browserbewijs
+Echte componenten en SSR-router, met expliciet lokale synthetische adapters.
+NL/EN, Paper/Ink en werkelijk gemeten 320×740, 390×780 en 1280×900.
+Geen horizontale overflow. Accounttegels op 390px: 2×2, 167,2×116px.
+Keyboardfocus, accountmenu/Escape, bestaande links en lange naam/e-mail bekeken.
+Nieuwe knoppen en metadata voldoen op de gemeten effen oppervlakken aan ≥4,5:1:
+Paper muted 5,62 / teal 5,61; Ink muted 7,55 / teal 7,92.
+Extra synthetische 200%-tekststress op 320px: H1 60px, e-mail 28px, cijfers 88px.
+Geen afgesneden acties of overflow. Engelse gastacties met 32px tekst blijven
+beide 264,8×115,2px. Dit is lokale CSS-tekststress, geen echte browserzoom,
+OS-lettergrootte-, fysieke telefoon- of screenreaderproef.
+
+Verse lokale in-memory actieve ronde: score → 1/10 en nieuw boek; pauze,
+refresh en hervatten behouden 1/10; overslaan blijft 1/10 en cijfers zijn neutraal.
+Ongewijzigde race-/opslagfout-/10/15/30-logica is gericht hergetest.
+Geen echte gebruikersaccounts of ratings gebruikt.
+
+Harnasbeperkingen, eerlijk vastgelegd
+De eerste fixture-modusheader werd niet doorgegeven; alleen het lokale harnas
+is aangepast naar de bestaande authoritative requestPagePath. Definitieve tests
+bewijzen alle modi. Twee testpoorten deelden eerst een moduscookie, waardoor een
+hervatproef een signed-out-response kreeg. Cookies zijn nu per poort onderscheiden;
+een verse proef slaagt. Geen applicatie- of hosted Auth-fout geclaimd.
+Een viewportinstelling gold eerst voor een andere tab. Definitieve desktopbeelden
+zijn overschreven na bevestiging van daadwerkelijk 1280px.
+Alleen eigen devprocessen zijn gestopt/herstart; oorspronkelijke volumes behouden.
+
+Lokale beoordeling / herstel
+Start: node --experimental-strip-types scripts/home-profile-review-local.mjs
+http://127.0.0.1:3124/nl?review=guest — homepage
+http://127.0.0.1:3124/nl/account?review=reader — eigen synthetisch profiel
+http://127.0.0.1:3124/en/taste-test?review=completed — bestaande-resultaatknop
+review=guest/empty/many/b/error/long selecteert alleen lokale fixtures.
+--large-text gebruikt tijdelijk poort3125; die extra server is na de proef gestopt.
+Geen credentials, hosted verbinding of testbypass in de applicatie/build.
+Browser-JPEGs en meetgegevens: outputs/home-profile-20261015.
+Herstel: normale revert van de accountcommit, daarna eventueel de stylingcommit.
+Geen reset van main, databaseherstel of down-migratie.
+Resteert visuele beoordeling en afzonderlijk akkoord voor push/hosted/release.
+Nul migraties nodig. Geparkeerd werk blijft ongemoeid; geen masterlijst gemaakt.
+
+Toegepaste richtlijnen
+Supabase/Postgres: bestaande RLS plus eigenaarfilters, complete paginering.
+React: requestlokale data, parallelle onafhankelijke reads, minimale props,
+gedeelde presentatie en geen persoonlijke modulecache.
+Computer Use: geen authenticatiedialoogautomatisering; echte DOM/screenshots.
+https://supabase.com/docs/reference/javascript/range
+https://supabase.com/docs/guides/database/postgres/row-level-security

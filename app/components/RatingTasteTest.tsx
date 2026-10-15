@@ -149,8 +149,10 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
         <button type="button" disabled={pending} onClick={reload}>{t('directTaste.refresh')}</button></div>}
       {!data && !error && <p role="status">{t('directTaste.loading')}</p>}
       {data && !data.authenticated ? <><h1 id="taste-rating-title">{t('directTaste.label')}</h1>
-        <p>{t('directTaste.signInCopy')}</p><LocaleLink className="primary-cta" href="/login?next=%2Ftaste-test">{t('directTaste.signIn')}</LocaleLink>
-        <LocaleLink href="/taste-test/preferences">{t('directTaste.guest')}</LocaleLink></>
+        <p>{t('directTaste.signInCopy')}</p><div className="taste-entry-actions">
+          <LocaleLink className="primary-cta" href="/login?next=%2Ftaste-test">{t('directTaste.signIn')}</LocaleLink>
+          <LocaleLink className="taste-secondary-action" href="/taste-test/preferences">{t('directTaste.guest')}</LocaleLink>
+        </div></>
         : data && !data.available ? <p role="status">{t('directTaste.unavailable')}</p>
         : data?.authenticated && <>
           {(!round || round.complete) && <div className="taste-start-screen">
