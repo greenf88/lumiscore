@@ -160,7 +160,7 @@ export function LumiScoreAccountMenu({
           role="dialog"
           aria-label={t('header.account')}
         >
-          <LocaleLink className="account-preferences-link" href="/account">{locale === 'nl' ? 'Mijn leesprofiel' : 'My reading profile'}</LocaleLink>
+          <LocaleLink className="account-preferences-link ui-control ui-secondary" href="/account">{locale === 'nl' ? 'Mijn leesprofiel' : 'My reading profile'}</LocaleLink>
           {!displayName && <p className="account-name-prompt">{t('account.addNamePrompt')}</p>}
           <form className="account-name-form" onSubmit={(event) => void saveDisplayName(event)}>
             <label htmlFor={`${panelId}-name`}>{t('account.displayName')}</label>

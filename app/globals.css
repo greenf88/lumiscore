@@ -1293,3 +1293,189 @@ button, input, select, textarea { font-family: var(--sans); }
   .browse-book-grid { grid-template-columns: 1fr; }
   .browse-size-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Shared visual controls. Explicit action selectors; ordinary links stay links. */
+:root {
+  --control-surface: #173844;
+  --control-hover: #204853;
+  --control-border: #61878d;
+  --control-radius: 6px;
+  --control-selected: #264e59;
+}
+:root[data-theme='paper'] {
+  --control-surface: #fffdf8;
+  --control-hover: #f7faf7;
+  --control-border: #738c8c;
+  --control-selected: #e5efeb;
+}
+:is(.ui-control, .primary-cta, .auth-create, .want-button, .taste-next, .header-sign-in, .detail-sign-in, .view-all,
+  .reading-profile-navigation a, .reading-profile-navigation button,
+  .account-preferences-link, .header-account-panel button, .mobile-navigation-panel a,
+  .taste-direct-test button, .taste-direct-test .taste-result-link, .taste-secondary-action,
+  .browse-search button, .browse-filter-trigger, .browse-filter-actions button,
+  .browse-panel-heading button, .browse-filter-chip, .browse-pagination a,
+  .my-books-tabs button, .my-books-card-action button,
+  .collection-bulk-toggle, .collection-bulk-panel button, .collection-book-controls button,
+  .collection-quick-editor button, .collection-bulk-action-bar button,
+  .collection-filters a, .directory-switcher a, .reading-status-control select,
+  .panel-heading button, .status-sign-in,
+  .collection-editor button, .rating-options button, .rating-remove, .rating-save-button,
+  .taste-controls button, .taste-neither, .taste-result-actions button, .preference-actions button) {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--control-radius);
+  background: var(--control-surface);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: var(--type-body);
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+/* This second scope overrides legacy component rules without changing layout. */
+.taste-direct-test :is(.taste-start-choices button, .taste-score-buttons button,
+  .taste-skip-button, .taste-search-toggle, .taste-result-link, .taste-secondary-action),
+.reading-profile-page .reading-profile-navigation :is(a, button),
+.browse-filter-form .browse-clear {
+  background: var(--control-surface);
+  color: var(--text);
+  border-color: var(--control-border);
+  border-radius: var(--control-radius);
+}
+:is(.ui-primary, .primary-cta, .auth-submit, .taste-next,
+  .browse-search button, .browse-filter-actions .browse-apply,
+  .account-name-form button, .rating-save-button, .collection-bulk-action-bar .collection-bulk-done),
+.reading-profile-page .reading-profile-action.ui-primary,
+.taste-direct-test button.primary-cta {
+  background: var(--action-bg);
+  border-color: var(--action-bg);
+  color: #fff;
+}
+.reading-profile-totals > div, .browse-choice-tiles label, .preference-option, .taste-book-option {
+  background: var(--control-surface);
+  border-color: var(--control-border);
+  border-radius: var(--control-radius);
+}
+.browse-card .want-button { border-radius: var(--control-radius); }
+.collection-quick-editor .collection-rating-options { grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); }
+.collection-book-control-triggers span { font-size: 13px; letter-spacing: 0; text-transform: none; white-space: normal; }
+.collection-book-control-triggers strong { font-family: var(--sans); font-size: 14px; line-height: 1.4; white-space: normal; overflow-wrap: anywhere; }
+.collection-filters a[aria-current='page'], .directory-switcher a[aria-current='page'],
+.rating-options button[aria-pressed='true'], .collection-quick-editor [role='radio'][aria-checked='true'],
+.collection-bulk-filters button[aria-pressed='true'] {
+  background: var(--control-selected); border-color: var(--teal);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--teal); font-weight: 700;
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.preference-option:has(input:checked) { background: var(--control-selected); border-color: var(--teal); box-shadow: inset 0 0 0 1px var(--teal); }
+.preference-option:has(input:focus-visible) { outline: 3px solid var(--teal); outline-offset: 3px; }
+.taste-direct-test .taste-score-buttons button[aria-pressed='true'],
+.want-button[aria-pressed='true'], .my-books-tabs button[aria-selected='true'],
+.browse-choice-tiles label:has(input:checked), .collection-editor button[aria-pressed='true'] {
+  background: var(--control-selected);
+  color: var(--text);
+  border-color: var(--teal);
+  box-shadow: inset 0 0 0 1px var(--teal);
+  font-weight: 700;
+}
+.taste-direct-test .taste-score-buttons button[aria-pressed='true'] { text-decoration: underline; text-underline-offset: 4px; }
+:is(.ui-control, .primary-cta, .auth-create, .want-button, .taste-next, .header-sign-in, .detail-sign-in, .view-all,
+  .reading-profile-navigation a, .reading-profile-navigation button,
+  .account-preferences-link, .header-account-panel button, .mobile-navigation-panel a,
+  .taste-direct-test button, .taste-result-link, .browse-search button,
+  .browse-filter-trigger, .browse-filter-actions button, .browse-filter-chip,
+  .browse-pagination a, .my-books-tabs button, .collection-editor button,
+  .rating-options button, .rating-save-button):focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.ui-secondary, .auth-create, .want-button, .header-sign-in, .detail-sign-in, .view-all, .reading-profile-navigation a,
+    .reading-profile-navigation button, .account-preferences-link,
+    .header-account-panel button, .mobile-navigation-panel a, .taste-direct-test button,
+    .taste-direct-test .taste-result-link, .browse-filter-trigger,
+    .browse-filter-actions .browse-clear, .browse-pagination a,
+    .my-books-tabs button, .collection-editor button):not(:disabled):hover {
+    background: var(--control-hover);
+    border-color: var(--teal);
+  }
+  :is(.ui-primary, .primary-cta, .auth-submit, .taste-next,
+    .browse-search button, .browse-filter-actions .browse-apply,
+    .account-name-form button, .rating-save-button, .collection-bulk-action-bar .collection-bulk-done):not(:disabled):hover,
+  .reading-profile-page .reading-profile-action.ui-primary:hover,
+  .taste-direct-test button.primary-cta:not(:disabled):hover {
+    background: var(--teal-deep);
+    color: #fff;
+  }
+}
+.ui-control:active, .taste-direct-test button:not(:disabled):active { box-shadow: inset 0 0 0 2px var(--teal); }
+.ui-control:disabled, .taste-direct-test button:disabled, .header-account-panel button:disabled,
+.rating-options button:disabled, .rating-save-button:disabled { opacity: .55; cursor: not-allowed; }
+@media (hover: none) {
+  .primary-cta:hover { transform: none; box-shadow: none; }
+  .want-button:hover:not([aria-pressed='true']) { background: var(--control-surface); color: var(--text); border-color: var(--control-border); }
+}
+.mobile-navigation-panel { gap: 6px; width: min(260px, calc(100vw - 24px)); max-height: calc(100dvh - 96px); overflow-y: auto; }
+.mobile-navigation-panel a, .account-preferences-link.ui-control { display: flex; align-items: center; padding: 10px 12px; }
+.header-account-panel .account-preferences-link { margin-block: 10px; padding: 10px 12px; color: var(--text); font-size: 16px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.header-sign-in, .detail-sign-in { padding: 0 4px; font-size: var(--type-meta); }
+.language-switcher { border-radius: var(--control-radius); }
+.language-switcher a, .site-header .language-switcher a, .detail-header .language-switcher a {
+  min-width: 44px; min-height: 44px; background: var(--control-surface);
+}
+.language-switcher a[aria-current='page'] { background: var(--control-selected); text-decoration: underline; text-underline-offset: 4px; }
+.site-header .wordmark, .detail-header .wordmark { min-width: 44px; min-height: 44px; }
+.mobile-navigation-panel .mobile-navigation-search-link { display: none; }
+.recommendation-row { grid-template-columns: 46px minmax(0, 1fr); }
+
+/* One badge per actual cover, including Browse and all compact variants. */
+.book-cover { container-type: inline-size; }
+.book-cover .cover-rating-badge {
+  right: clamp(2px, 3cqw, 10px);
+  bottom: clamp(2px, 3cqw, 10px);
+  width: clamp(21px, 27cqw, 62px);
+  height: auto;
+  aspect-ratio: 1;
+  border: clamp(1px, .8cqw, 2px) solid #fffaf2;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px #07172035;
+  background: var(--gold);
+  color: #1d1a15;
+}
+.book-cover .cover-rating-badge strong {
+  font-family: var(--sans);
+  font-size: clamp(8px, 8.5cqw, 23px);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.book-cover .cover-rating-badge small {
+  margin-top: clamp(1px, .6cqw, 2px);
+  font-size: clamp(3px, 2.7cqw, 7px);
+  letter-spacing: 0;
+  font-weight: 700;
+  line-height: 1;
+}
+@media (max-width: 820px) {
+  .header-account-trigger, .mobile-search-button { width: 44px; min-width: 44px; }
+  .recommendation-row { grid-template-columns: 43px minmax(0, 1fr); }
+}
+@media (max-width: 359px) {
+  .site-header, .browse-page-shell .site-header { padding-inline: 6px; column-gap: 0; }
+  .site-header { grid-template-columns: 44px minmax(0, 1fr); }
+  .main-nav { gap: 0; }
+  .site-header .mobile-search-button { display: none; }
+  .site-header .header-sign-in, .detail-header .detail-sign-in { font-size: 13px; }
+  .mobile-navigation-panel .mobile-navigation-search-link { display: flex; }
+}
+@media (360px <= width < 390px) {
+  .site-header, .browse-page-shell .site-header { padding-inline: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-control, .mobile-navigation-panel a, .taste-direct-test button { transition: none; }
+}

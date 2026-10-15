@@ -17,7 +17,8 @@ test('SSR starts with closed filters, direct search/sort, and honest page-sized 
   assert.match(body, /Titel of auteur/); assert.match(body, /160 boeken in de catalogus/);
   assert.match(body, /value="highest" selected/);
   assert.equal((body.match(/type="search"/g)??[]).length,1);
-  assert.doesNotMatch(body, /VOLLEDIGE CATALOGUS|pagina voor pagina|class="score-badge"|class="book-year"/);
+  assert.doesNotMatch(body, /VOLLEDIGE CATALOGUS|pagina voor pagina|class="book-year"/);
+  assert.equal((body.match(/cover-rating-badge/g) ?? []).length, 16);
   assert.match(body, /3–4 beoordelaars/);
   assert.doesNotMatch(body, /returnTo=[^" ]*https/);
 });

@@ -40,6 +40,7 @@ import { useWantToRead } from './useWantToRead';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 import { MobileNavigation } from './MobileNavigation';
+import { CoverScoreBadge } from './CoverScoreBadge';
 import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/navigation/book-return';
 
 type LumiScoreBookDetailProps = {
@@ -254,7 +255,7 @@ export function LumiScoreBookDetail({
         <LumiScoreWordmark />
         <div className="detail-header-actions">
           <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
-          <MobileNavigation />
+          <MobileNavigation authenticated={authState.authenticated} />
           <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
           <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
@@ -265,14 +266,14 @@ export function LumiScoreBookDetail({
         <div className="detail-cover-gallery" role="group" aria-label={t('detail.bookCovers')}>
           <figure className="detail-cover-figure">
             <div className="detail-cover-wrap">
-              <span className="score-badge detail-score-badge"><strong>{score}</strong><small>LumiScore</small></span>
-              <BookCover book={book} presentation="detail" label={t('detail.frontCoverOf', { title: book.title })} />
+              <BookCover book={book} presentation="detail" publicScoreDisplay={score} label={t('detail.frontCoverOf', { title: book.title })} />
             </div>
           </figure>
           {backCover && (
             <figure className="detail-cover-figure">
               <div className="detail-cover-wrap detail-back-cover-wrap">
                 <div className="book-cover detail-back-cover">
+                  <CoverScoreBadge score={score} presentation="detail" />
                   <Image
                     src={backCover.url}
                     alt={t('detail.backCoverOf', { title: book.title })}
