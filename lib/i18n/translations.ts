@@ -1,6 +1,15 @@
 import type { Locale } from './config.ts';
 
 const en = {
+  'quickCollection.entry': 'Rate the books you know', 'quickCollection.stop': 'Stop',
+  'quickCollection.progress': '{rated} rated · {remaining} left to view',
+  'quickCollection.existing': '{count} previously rated — kept unchanged', 'quickCollection.viewed': 'Books viewed in this round',
+  'quickCollection.skipCopy': 'Not read it, or cannot remember? Feel free to skip this book.',
+  'quickCollection.done': 'That’s this round', 'quickCollection.empty': 'No books available yet',
+  'quickCollection.result': 'You rated {count} books in this round.',
+  'quickCollection.view': 'View your collection', 'quickCollection.revisit': 'View skipped books',
+  'quickCollection.localUnavailable': 'Skipped books cannot be remembered on this browser. Saved ratings remain in your account.',
+  'quickCollection.error': 'We could not confirm this action. This book stays here. Check your progress, then try again. Existing ratings will not be overwritten.',
   'directTaste.label': 'Taste test', 'directTaste.question': 'How many books would you like to rate?',
   'directTaste.books': 'books', 'directTaste.startChoice': 'Rate {count} books',
   'directTaste.pause': 'Pause', 'directTaste.resume': 'Resume',
@@ -244,6 +253,15 @@ export type TranslationKey = keyof typeof en;
 export type TranslationDictionary = Record<TranslationKey, string>;
 
 const nl: TranslationDictionary = {
+  'quickCollection.entry': 'Beoordeel de boeken die je kent', 'quickCollection.stop': 'Stoppen',
+  'quickCollection.progress': '{rated} beoordeeld · nog {remaining} te bekijken',
+  'quickCollection.existing': '{count} eerder beoordeeld — ongewijzigd behouden', 'quickCollection.viewed': 'Bekeken boeken in deze ronde',
+  'quickCollection.skipCopy': 'Niet gelezen of weet je het niet meer? Sla dit boek gerust over.',
+  'quickCollection.done': 'Dit was deze ronde', 'quickCollection.empty': 'Er zijn nog geen boeken beschikbaar',
+  'quickCollection.result': 'Je hebt in deze ronde {count} boeken beoordeeld.',
+  'quickCollection.view': 'Bekijk je collectie', 'quickCollection.revisit': 'Bekijk overgeslagen boeken',
+  'quickCollection.localUnavailable': 'Deze browser kan overgeslagen boeken niet onthouden. Opgeslagen beoordelingen blijven in je account.',
+  'quickCollection.error': 'We konden deze actie niet bevestigen. Dit boek blijft staan. Controleer je voortgang en probeer daarna opnieuw. Bestaande beoordelingen worden niet overschreven.',
   'directTaste.label': 'Smaaktest', 'directTaste.question': 'Hoeveel boeken wil je beoordelen?',
   'directTaste.books': 'boeken', 'directTaste.startChoice': 'Beoordeel {count} boeken',
   'directTaste.pause': 'Pauzeren', 'directTaste.resume': 'Hervatten',

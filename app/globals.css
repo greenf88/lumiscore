@@ -1504,3 +1504,15 @@ button, input, select, textarea { font-family: var(--sans); }
 @media (prefers-reduced-motion: reduce) {
   .ui-control, .mobile-navigation-panel a, .taste-direct-test button { transition: none; }
 }
+.collection-rate-entry { margin: 12px 0 16px; }
+.collection-quick-rating { min-height: calc(100svh - 80px); }
+.collection-quick-rating .taste-direct-progress small { display: block; font-size: 13px; color: var(--muted); }
+.collection-quick-rating .taste-round-heading { align-items: center; gap: 12px; }
+.collection-quick-rating .taste-round-heading .eyebrow { overflow-wrap: anywhere; }
+.collection-quick-rating .taste-book-identity small { display: block; font: 13px/1.4 var(--sans); color: var(--muted); margin-top: 4px; }
+.collection-quick-rating .collection-session-note { margin: 0; font: 13px/1.4 var(--sans); color: var(--muted); }
+.collection-rating-complete { display: grid; gap: 18px; padding-block: 24px; }
+.collection-rating-complete .ui-control, .collection-rate-entry { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; text-align: center; }
+.collection-rating-complete h1 { font-size: var(--type-section); }
+.collection-quick-rating .taste-round-heading a { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; }
+.collection-quick-rating [aria-disabled='true'] { opacity: .6; cursor: wait; }

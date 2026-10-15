@@ -6,16 +6,15 @@ import { useEffect, useRef, useState } from 'react';
 import type { Book } from '@/app/data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { NEW_ROUND_GOALS, type RatingRoundState, type RoundAction } from '@/lib/taste-test/rating-round';
-import { MIN_RATING, MAX_RATING } from '@/lib/ratings/model';
+import { DirectRatingScores } from './DirectRatingScores';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCover } from './LumiScoreHome';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
-import { canOpenRoundResult, createRoundActionGate, isPendingWorkScore, roundProgress, type PendingWorkScore } from '@/lib/taste-test/direct-rating';
+import { canOpenRoundResult, createRoundActionGate, roundProgress, type PendingWorkScore } from '@/lib/taste-test/direct-rating';
 
 type Response = { authenticated: boolean; available: boolean; state: RatingRoundState | null; book: Book | null };
-const scores = Array.from({ length: MAX_RATING - MIN_RATING + 1 }, (_, i) => i + MIN_RATING);
 
 export function RatingTasteTest({ authState, swipePrototype }: { authState: HeaderAuthState; swipePrototype: boolean }) {
   const { locale, t } = useLumiScoreLocale();
@@ -191,12 +190,8 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                   <div className="taste-rating-actions">
                     {swipePrototype && <div><button type="button" disabled={pending} onClick={() => setPrototypeIntent('skip')}>{locale === 'nl' ? 'Onbekend / overslaan' : 'Unknown / skip'}</button>
                       <button type="button" disabled={pending} onClick={() => setPrototypeIntent('read')}>{locale === 'nl' ? 'Gelezen — kies score' : 'Read — choose score'}</button></div>}
-                    {(!swipePrototype || prototypeIntent === 'read') && <fieldset disabled={pending || !workId}><legend>{t('directTaste.yourRating')}</legend>
-                    <div className="taste-score-buttons">{scores.map(n => <button type="button" key={n}
-                      aria-label={t('directTaste.rate', { score: n })} aria-pressed={isPendingWorkScore(selectedScore, workId, n, pending)}
-                      onKeyDown={e => { if (e.repeat) e.preventDefault(); }}
-                      onClick={e => { if (e.detail <= 1 && workId) void act('rate', workId, n); }}>{n}</button>)}</div>
-                  </fieldset>}
+                    {(!swipePrototype || prototypeIntent === 'read') && <DirectRatingScores workId={workId ?? ''} pending={pending}
+                      selection={selectedScore} onRate={score => {if (workId) void act('rate', workId, score);}} />}
                     {(!swipePrototype || prototypeIntent === 'skip') && <button className="taste-skip-button" type="button" disabled={pending || !workId}
                       onClick={e => { if (e.detail <= 1 && workId) void act('skip', workId); }}>{t('directTaste.skip')}</button>}
                   </div>

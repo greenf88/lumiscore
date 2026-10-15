@@ -1,0 +1,118 @@
+LumiScore — La Nuit voorstel + Suzanne Vermeer snelle beoordeling
+15 oktober 2026 — uitsluitend lokaal, geen publicatie
+
+Basis en scheiding
+Origin/main vers opgehaald:62f346ffa4f8d3e4d190de87fe21b9afa089e5b6 (PR25 live).
+Geïsoleerde worktree:work/lumiscore-collection-quick-rating-20261015.
+Branch:feature/collection-quick-rating-20261015. Bestaande werkruimtes behouden.
+Commit42cf7af81c889c8e5d67fef6562755c7c66f8c0b bevat uitsluitend het La Nuit-voorstel
+en de expliciete dry-run-regressietest. De volgende commit bevat de collectie-UX.
+Exacte feature-SHA en diff staan in outputs/collection-quick-rating-20261015.
+
+La Nuit: onderbouwd, NIET toegepast
+Work276 /OL14856842W /Elie Wiesel. Begrensde read-only productiereadback bevestigt
+acht evidence-rijen:classic,nonfiction,fantasy,science_fiction,romance,thriller_mystery
+en speculative uit zowel Open Library als de foutieve fantasy-science-fiction seed.
+Exact OL Work-JSON opnieuw gelezen:revision73,authorOL20891A,autobiografische
+beschrijving met tegenstrijdige genresubjects. De mapper vertaalt die aangeboden
+labels; geen bewijs dat alleen de uitleg de fout veroorzaakte. De seedfout is
+afzonderlijk aantoonbaar; het ontstaan van de OL-labelvervuiling is niet bewezen.
+Primaire bevestiging van memoires:
+https://us.macmillan.com/books/9780374534752/night/
+https://eliewieselfoundation.org/about-night/
+Bronmetadata:https://openlibrary.org/works/OL14856842W.json
+Voorstel:verwijder uitsluitend fantasy/science_fiction/speculative/romance/
+thriller_mystery via bestaande centrale reviewed-correction; behoud bestaande
+nonfiction en periode. Seed hoort non-fiction te zijn. Geen extra traits of
+vertrouwensscore verzonnen. Exact voorstel:catalog/review-proposals/la-nuit-20261015.json.
+Test past het voorstel uitsluitend als expliciete parameter toe; runtimecorrectie
+blijft afwezig, seed onveranderd en huidige presentatiehold behouden. Geen datawrite.
+1955 conflicteert met primaire publicatiechronologie (1956 Yiddish/1958 French);
+jaar/Work-editie-identiteit apart beoordelen, nu geen jaarcorrectie. Geen bredere audit.
+Activatie/code-release of precieze toekomstige datareconciliatie vraagt afzonderlijk
+reviewbesluit; raw evidence bewaren, alleen exacte Work276-rijen, snapshot/precondities.
+
+Collectieflow
+/nl|en/collection/suzanne-vermeer blijft het overzicht. Eén groene instap, alleen
+op deze bestaande collectie. Gast gebruikt bestaande login met exacte terugkeer-
+bestemming /nl|en/collection/suzanne-vermeer/rate. Ratingroute is private/noindex.
+Leest bestaande collection loader, volgorde/subgroepen/bundels ongewijzigd. Eén Work
+per kaart, deduplicatie op echte Work-ID, geen hardcoded aantal. Een read-only
+cataloguscontrole vond huidig54lidmaatschappen/54uniekeWorks (collectie11); dit aantal
+wordt nergens voor UI/voortgang gebruikt. Covers/badge en nieuwe DirectRatingScores
+worden gedeeld met de smaaktest; bestaande smaaktestronde/resultaatlogica ongewijzigd.
+Eén cijfer = bestaande PUT /api/ratings/:workId. Nieuwe optionele onlyIfUnrated
+conflictpolicy gebruikt bestaande unieke(user_id,work_id)-constraint atomisch met
+ignoreDuplicates; normale bestaande ratingbewerking blijft hetzelfde. Verified
+server-user blijft autoriteit; expectedUserId voorkomt accountwissel tussen read
+en write. Zelfde ratingtabel en bestaande Read-trigger, geen extra status-write.
+Voor elke poging:private GET actuele leden/eigen ratings/identiteit. Alleen na
+bevestigde canonicalrating boekwissel; pendingguard/cooldown500ms/Work-gebonden
+feedback verhinderen dubbele acties en sticky score. Geen automatische write-retry.
+Bij fout blijft kaart staan; expliciete refresh/retry leest eerst opgeslagen waarheid.
+Een ambigue opslag kan al geslaagd zijn:refresh slaat dat boek daarna over zonder
+opnieuw schrijven. Het lokale rondetotaal telt alleen expliciet bevestigde nieuwe
+inserts; een niet-bevestigde creatie wordt conservatief als reeds opgeslagen getoond.
+Overslaan verandert alleen lokale sessie, geen rating/status. Stop bewaart direct
+opgeslagen keuzes en gaat naar overzicht. Hervatten leest leden/ratings opnieuw.
+Nieuwe ronde kan bewust overgeslagen boeken terughalen; bestaande ratings blijven
+uitgesloten. Geen verplichte minimumscore of aantal; leeg/alles-rated/alles-skipped
+toont eerlijk nul nieuwe ratings waar van toepassing. Voortgangsbalk=bekeken,
+tekst houdt nieuw beoordeeld, eerder beoordeeld en nog te bekijken gescheiden.
+
+Lokale voortgang en privacy
+Versioned localStorage namespace per verifiedgebruiker +collectie; alleen Work-IDs,
+geen scores/credentials. Storage is nooit rating-/statusbewijs. Reconcile snijdt
+weggevallen leden en ongeldige IDs weg; nieuwratedlijst wordt met serverratings
+gekruist. Andere gebruiker/collectie/version krijgt eigen/lege sessie. Geen cross-
+device synchronisatie van skips; wissen/blokkeren van browseropslag kan skips doen
+terugkomen. Geblokkeerde opslag meldt dat, echte ratings blijven behouden. Bij
+stoppen midden in een onbekend netwerkantwoord blijven serverratings leidend;
+lokale rondeteller kan conservatief lager zijn. Geen schemawijziging nodig.
+
+Verificatie
+171 gerichte tests groen (collectiemodel, ratings, lokale PGlite conflictsemantiek,
+smaaktest, taalroutes, La Nuit dry-run en nieuwe UI/API-contracten). Plus2 bestaande
+score-hover/headerregressies groen na aanpassen van de assertie voor de gedeelde
+scorecomponent. TypeScript/lint/vinextbuild/Vitebuild/clientsecretscan/diffcheck groen.
+Lint sluit gegenereerde dist/.next/.wrangler caches uit; configuratie ongewijzigd.
+Breder200-testsignaal:196pass/4fail. Dezelfde vier fouten afzonderlijk gereproduceerd
+op ongewijzigde basis (dec838e tree identiek aan62f346f):oude bronasserties in
+bulk-progress-integration,collections/integration en i18n/i18n. Niet stilzwijgend
+groen verklaard of als nieuwe regressie aangemerkt; geparkeerd buiten dit pakket.
+Buildwarnings van Vinext optimizer/dynamic imports bestaand; geen buildfout.
+Loopbackrunner heeft credentials gestript en envFile=false. Werkelijke SSR/UI,
+maar synthetische catalogus/Auth en mocked API-opslag. Geen remoteAuth/RLS/bewijs.
+Browser:NL/EN,Paper/Ink,mobiel390x844/320x568,desktop1280x900; twee saves eenmaal,
+neutrale vervolgkaart, reload, skip/stop/resume, opslagfout, accountisolatie, nul bij
+alle skips, lege/allesbeoordeeld-state. Keyboardfocus solid. Knoppen320x56844x44,
+geen overflow. Lange titel volledig zichtbaar. Geen fysieke telefoon/realzoomclaim.
+Lokaal verloren saveantwoord getest:kaart blijft, expliciete read-reconcile geeft
+geen extra PUT; huidige score/originele7 blijven behouden. B heeft geen ratings.
+PGlite test modelleert bestaande unieke constraint en illustratieve Read-insert-
+trigger; dit is geen bewijs van huidige hosted RLS/daadwerkelijke productietrigger.
+Fixtures/runner nergens in appimports/build, fixturemarkers niet gevonden in dist.
+Eerste devcache buiten node_modules veroorzaakte bekende dubbele CJS-export; lokale
+runner gebruikt nu eerder bewezen cachepad onder .wrangler/node_modules; hersteld.
+Eerdere verkeerde fixturemode-overgang verholpen (query heeft voorrang op cookie);
+definitief bewijs gebruikt final-* / empty-confirmed / all-rated stages. Ruwe eerste
+observaties apart bewaard; ongeldige oude other-user/empty observaties uitgesloten.
+
+Review en herstel
+Start:node scripts/collection-rating-review-local.mjs
+http://127.0.0.1:3132/nl/collection/suzanne-vermeer/rate?review=reader
+Uitsluitend lokale synthetische preview. ?review=b/guest/empty/all/error/slow/ambiguous
+zijn ALLEEN runner-opties; geen hosted bypass, geen openbare fixtures.
+Screenshots en logs:outputs/collection-quick-rating-20261015. Vier hoofdscreenshots:
+mobile-nl-paper.jpg,mobile-nl-ink.jpg,desktop-en-paper.jpg,desktop-en-ink.jpg.
+Extra:320px,long-title,zero-skip,error,raw geometrie,exacte mocked-saveverzoeken.
+Herstel:featurecommit reverten (of niet opnemen) herstelt vorige smaaktest/UI/API;
+La Nuit voorstelcommit apart behouden/reverten zonder runtime-effect. Geen ratings,
+statuses, accounts of voortgang uit database terugdraaien. Lokale skipsleutel wordt
+bij verwijderen feature genegeerd; niets aan bestaande userdata wissen.
+Nog geen push/PR/merge/deployment/migratie/configuratie- of productiedatawijziging.
+Geen hosted testaccounts of credentials aangemaakt; geen hosted cleanup nodig.
+Lokale fixturegeheugen reset bij eigen reviewserverherstart, zonder gebruikersdata.
+Voor release:afzonderlijk akkoord op exacte commit, dan toegestane hosted Preview/
+opslag-/RLSverificatie met uitsluitend eigen tijdelijk testaccount. Geparkeerd werk
+en gezamenlijke smaakberekening behouden en niet uitgebreid.
