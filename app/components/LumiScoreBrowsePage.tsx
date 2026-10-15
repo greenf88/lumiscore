@@ -5,11 +5,13 @@ import { LocaleLink } from './LumiScoreLocale';
 import { useCallback, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
-import { EditorialCatalogControls } from './EditorialCatalogControls';
+import { BrowseCatalogControls } from './BrowseCatalogControls';
+import { browseFilterGroupCount } from '@/lib/catalog/browse-controls';
 import { updateBrowseReturnPath } from '@/lib/navigation/browse-return';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
+import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import type { EditorialPage } from '@/lib/supabase/editorial-catalog';
 
 type LumiScoreBrowsePageProps = {
@@ -67,6 +69,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         onQueryChange={setQuery}
         authState={authState}
         returnTo={returnTo}
+        searchTargetId="browse-query"
       />
       <section className="browse-page" aria-labelledby="browse-title">
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
@@ -75,20 +78,15 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         </nav>
         <div className="browse-heading">
           <div>
-            <span className="eyebrow">{t('browse.eyebrow')}</span>
             <h1 id="browse-title">{t('browse.heading')}</h1>
-            <p>{t('browse.copy')}</p>
+            {data.available && browseFilterGroupCount(filters) === 0 && <p>{t('browse.catalogCount', {
+              count: data.total.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US'),
+            })}</p>}
+            {!data.available && <p>{t('home.catalogUnavailable')}</p>}
           </div>
-          <strong>
-            {data.available
-              ? t('browse.catalogCount', {
-                  count: data.total.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US'),
-                })
-              : t('home.catalogUnavailable')}
-          </strong>
         </div>
 
-        <EditorialCatalogControls key={returnTo} state={filters} facets={data.facets} selectionCount={data.selectionCount} route="/browse" categories={data.categories} selectedAuthor={data.selectedAuthor} discoveryAvailable={data.discoveryAvailable} />
+        <BrowseCatalogControls key={returnTo} state={filters} facets={data.facets} selectionCount={data.selectionCount} categories={data.categories} selectedAuthor={data.selectedAuthor} discoveryAvailable={data.discoveryAvailable} resultCount={data.available ? data.total : null} />
 
         {!data.available ? (
           <div className="empty-results" role="status">
@@ -102,7 +100,8 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
               <BookCard
                 key={book.id}
                 book={book}
-                wanted={wanted.has(book.id)}
+                variant="browse"
+                wanted={wanted.has(getGuestWantedStorageId(book))}
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
                 resolveMissingCover={false}

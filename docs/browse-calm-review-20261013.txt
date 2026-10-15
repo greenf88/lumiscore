@@ -1,0 +1,239 @@
+LumiScore Browse — lokaal reviewpakket, 13 oktober 2026
+
+Basis: dd7b11089e863e855cf74e1ec68f1c7aa7d8008f (origin/main, vers opgehaald).
+Branch: feature/browse-calm-ux-20261013.
+Worktree: work/lumiscore-browse-calm-20261013, nieuw en geïsoleerd.
+Exacte lokale wijzigings-SHA: na commit vastgelegd in
+C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/browse-calm-20261013/REVIEW-PACKAGE.txt.
+PR19 is al gemerged; diens smaakteststijl is de referentie, niet de testconfiguratie.
+Geen push, PR, merge, deployment, migratie of externe configuratiewijziging.
+
+Nieuwe hiërarchie
+- Boeken ontdekken / Discover books, actuele ongefilterde catalogusteller uit de
+  bestaande loader, één ruime zoekbalk met eigen Enter-/zoekactie.
+- Compacte Filters-knop en sortering buiten het paneel. Inhoudelijke filters
+  tellen per groep: zoekterm, schrijver, categorieën, selectie en editietaal.
+  Meerdere categorieën/edities zijn niet meerdere groepen. Sortering, pagina en
+  paginagrootte tellen niet mee. Hoogste score is een server-beperkte subset:
+  die teller heet resultaten, niet het totale aantal catalogusboeken.
+- Inline toegankelijk uitklappaneel, geen modal/dependency. Eigen region/heading,
+  aria-expanded/controls, focus bij openen, Escape/annuleren/sluiten terug naar
+  de trigger. Het paneel wordt bij sluiten ontkoppeld: niet-toegepaste velden
+  worden weggegooid. De URL en resultaten veranderen pas bij echte toepassing.
+- Alle bestaande filters behouden: schrijverzoeking, bestaande publieke
+  categorieën, Alle boeken/LumiScore Selectie met dynamisch aantal, NL/EN-edities,
+  32/64/128 onder Weergave. Geen leeg categorieveld; onbekende toegepaste IDs
+  blijven veilig verwijderbaar zonder nieuwe taxonomie te verzinnen.
+- Verwijderbare chips veranderen alleen hun eigen filter, behouden de overige
+  context en gaan naar pagina1. Alles wissen behoudt sortering/paginagrootte.
+- Search, sorteer- en filterformulieren gebruiken native GET-navigatie op de
+  gelokaliseerde Browse-route, zonder verborgen paginanummer. Iedere wijziging
+  gaat dus naar pagina1. De bestaande URL-normalisatie/returnTo-validatie blijft.
+
+Kaarten en afbakening
+- Eén expliciete Browse-variant van de bestaande BookCard/BookCover, standaard
+  variant elders ongewijzigd. Rustige cover, serif titel, sans auteur, één scorerij
+  en aparte leeswensbutton. Jaar blijft op detail; geen tweede lege scorebadge.
+- formatPublicRatingDisplay blijft leidend: publieke privacy-B-band en minimale
+  bewijslast ongewijzigd. Geen exacte aantallen uit niet-publieke data.
+- Twee kolommen vanaf360px tot mobiel600px, één onder360px; desktop auto-fill
+  met minimum190px kaartbreedte. Dunne coverrand, geen nieuwe zware kaartschaduw.
+  Lange tekst loopt door; score-/actierijen blijven binnen de grid uitgelijnd.
+- Browserproef vond een bestaande Browse-specifieke leeswenskoppeling met book.id
+  terwijl de bestaande opslag work-ID gebruikt. Alleen deze prop hersteld met
+  getGuestWantedStorageId(book). Geen opslagroute/statussemantiek veranderd.
+- AuthorFilter krijgt alleen optionele compact-presentatie; standaardgedrag in
+  Search blijft. Geen wijziging van Search-layout of bestaande resultaatpagina's.
+
+Behoud van dataflow en performance
+- app/browse/page.tsx, lib/supabase/editorial-catalog.ts, editorial-query.ts,
+  alle API's, SQL/migraties, auth, RLS, algoritmen en scoreberekening ongewijzigd.
+- Bestaande catalog_discovery_page/serverpaginering en deterministische sortering,
+  maximum128, batchratings en opgeslagen covers behouden; geen volledige browser-
+  catalogusdownload, extra cataloguscountquery of N+1-verrijking geïntroduceerd.
+- Resultaataantal komt van dezelfde gefilterde serverrespons als de kaarten.
+  Geen menging van selectietotalen en geen claim van gemeten prestatiewinst.
+
+Bewijs
+- 75 gerichte unit-/contracttests groen: URL/chips/normalisatie, Browse,
+  returnTo/open-redirectgrenzen, bestaande privacybanden, i18n en bestaande
+  overzicht-/smaaktestcomponentcontracten. Zes nieuwe helpertests.
+- Acht nieuwe opt-in server-HTML-tests groen op localhost: standaard, 32/64/128
+  en niet-overlappende pagina's, gecombineerde filters/tellers, hoogste-score-
+  subset, lege uitkomst versus loaderfout NL/EN, gelokaliseerde boekreturncontext.
+- Twee oudere Browse-tekstasserties liepen nog achter op de al bestaande
+  LocaleLink/expliciete-href-implementatie. Gericht geactualiseerd, niet om een
+  functionele regressie te verbergen. Nieuwe controles blijven BookCard/native
+  links, batchverrijking en de juiste leeswens-ID afdwingen.
+- TypeScript, source lint, Vinext-productiebuild, lokaal Vercel-buildformaat,
+  secretscan en diffcontrole zijn uitgevoerd; laatste status/exacte SHA in het
+  externe REVIEW-PACKAGE.txt. Geen nieuwe dependency of lockfilewijziging.
+- Browser -> echte native formulieren/locale-router -> SSR -> synthetische
+  loader -> echte BookCard/UI. Onafhankelijke HTML-readbacks bevestigen aantallen
+  en boekreturncontext. Dit bewijst UI-integratie, NIET een hosted databaseproef.
+
+Uitgevoerde browsercontroles
+- Standaard32 kaarten, filters dicht; Paper/Ink en NL/EN.
+- Openen, categorie wijzigen, Annuleren: URL/32 kaarten gelijk. Opnieuw openen
+  herstelt de toegepaste waarde, niet het weggegooide concept. Escape en Enter
+  werken; focus keert terug met zichtbare outline.
+- Schrijver zoeken/kiezen Ada, Fantasy, Selectie en NL-edities plus64/page:
+  toepassen geeft27 resultaten, badge4, vier chips, paneel dicht.
+- Sorteren naar Nieuwste buiten het paneel houdt deze filters/64 en pagina1.
+  Fantasy-chip verwijderen geeft54 resultaten; browser terug/vooruit en reload
+  herstellen respectievelijk27/54 en dezelfde instellingen.
+- Alles wissen verwijdert inhoudelijke filters maar behoudt64/Nieuwste. Pagina2
+  geeft64 kaarten; boek openen/terug behoudt NL, pagina2,64 en Nieuwste.
+- Zoeken op ongeschreven met Enter vanafpagina2 geeft één lange-titelkaart,
+  pagina1 en behoudt sortering/64; één resultaat/groep netjes vertaald NL/EN.
+-128/page via het paneel toont128 kaarten zonder inhoudelijke filterbadge.
+  Hoogste score buiten paneel toont servergestuurde subset, eerste score9.2,
+  teller54 resultaten, geen extra inhoudelijke badge (synthetische fixture).
+- Leeswens apart van link: aria-pressed verandert, blijft na reload/hydratatie
+  bewaard en alleen de eigen lokale synthetische keuze is weer uitgezet.
+  Geen geneste buttons in boeklinks, geen hosted status-/ratingwrites.
+- Gemeten viewports:320x640 één kolom,375x667 en390x844 twee kolommen,
+ 1280x900 vijf kolommen. Geen horizontale overflow; gecontroleerde controles
+  minimaal44px hoog. Lange auteur/titel, coverbeeld én coverfallback zichtbaar.
+
+Preview en screenshots
+Start indien nodig: node --experimental-strip-types scripts/browse-review-local.mjs
+http://127.0.0.1:3122/nl/browse (ook /en/browse).
+Opt-in HTML: BROWSE_REVIEW_ORIGIN=http://127.0.0.1:3122,
+node --experimental-strip-types --test scripts/test-browse-review-html.mjs.
+Dit proces bindt alleen loopback, leest geen env-bestanden en vervangt uitsluitend
+in zijn eigen Vite-runtime de loaders. De fixture wordt niet door app-routes
+geïmporteerd; eigen markers zijn niet aangetroffen in de productieclientbuilds.
+Geen gegevens, credentials of koppelingen uit eerdere branches gekopieerd.
+
+JPEG's buiten Git in outputs/browse-calm-20261013:
+- browse-paper-mobile.jpg / browse-ink-mobile.jpg (390x844, NL, standaard).
+- browse-filter-panel-desktop.jpg (1280x1000, NL Ink, volledige paneelbediening).
+- browse-active-mobile.jpg (390x844, NL Ink,27 resultaten/vier filtergroepen).
+- browse-desktop-en.jpg / browse-desktop-paper-en.jpg (1280x900, EN).
+- browse-small-320-en.jpg en browse-long-title-mobile.jpg (lange titel/fallback).
+
+Beperkingen en herstel
+- Synthetische in-memory catalogus van160 Works, geen productie-/hosted-data en
+  geen bewijs van echte databaseprestaties, browserzoom, telefoon of screenreader.
+  Kleine schermen zijn echte CSS-viewport-emulatie, geen fysieke apparaatproef.
+- Eerste lokale RSC-cachepad gaf CommonJS-parsefout; opgelost binnen eigen
+  fixturecache, zonder appconfig te wijzigen. Vercel-build liep eerst tegen
+  sandbox-readlink-EPERM aan; met normale lokale filesystemtoegang geslaagd.
+  Eén testtab liep tijdens gelijktijdige HMR/build vast: alleen eigen tab/server
+  herstart; ander browserwerk en bestaande servers bleven behouden.
+- Eerst alleen visuele beoordeling. Hosted Preview/push en latere productie-
+  publicatie vereisen afzonderlijk akkoord. Nul migraties nodig.
+- Herstel: applicatiecommit terugdraaien bovenop dan actuele main; geen reset
+  van andere releases, databaseherstel of verwijdering van ratings/status/voortgang.
+  Vorige Browse blijft hetzelfde URL-contract en dezelfde opslag/back-end gebruiken.
+- Bookmatch, herauthenticatie en ander geparkeerd werk onaangeroerd.
+
+ACTUELE VERFIJNING — 15 oktober 2026 (vervangt eerdere UI/defaultbeschrijving)
+De bestaande branch feature/browse-calm-ux-20261013 is hervat, niet dubbel gebouwd.
+Actuele origin/main: 2b1985336eba95791cfded6f228b67de208f7879 (PR20 live).
+Deze main is normaal lokaal geïntegreerd in 4a40433d98e0d659a7c2e4cab8643ca43a44d2b4;
+de eerdere Browse-commit aca818b blijft behouden. Definitieve wijzigings-SHA staat
+na lokale commit in het externe outputs/browse-calm-20261013/REVIEW-PACKAGE.txt.
+Geen push/PR/merge naar main, publicatie, hosted writes, configuratie of nieuwe SQL.
+
+UI en defaults
+- Eén gezamenlijke Titel of auteur / Title or author, ook op desktop. Bestaand
+  Header gebruikt uitsluitend op Browse het bestaande paginazoekveld; mobiel
+  zoekicoon focust dit veld. Logo, menu, taal, thema, account en footer blijven.
+- Geen aparte auteurselector/UI. Legacy author-ID blijft in query en verborgen
+  toegepaste velden bewaard; verwijderbare chip toont bestaande auteur. Search
+  behoudt zijn oorspronkelijke AuthorFilter, zonder de nu overbodige compact-prop.
+- Browse-route default alle boeken, hoogste betrouwbare score,16 boeken per pagina.
+  Search behoudt32/A-Z. Expliciet sort=az moet nu ook in href/returnTo blijven:
+  normalisatie mag dit niet wissen omdat Browse niet meer impliciet A-Z is.
+- Selectie twee native radiotegels, huidig dynamisch aantal alleen indien bekend.
+ 16/32/64/128 als native radiotegels: single-select, pijltjestoetsen, stabiele
+  toegankelijke namen, zichtbare focus. Geen submit vóór Toepassen.
+- Toepassen en Filters wissen / Apply en Clear filters: gelijke breedte, hoogte
+  en verticale positie; teal primair, outlined secundair. Wissen gebruikt een
+  apart leeg native GET-formulier en verwijdert werkelijk alle URL-filters,
+  pagina/maat/sortering: terug naar route-defaults. Annuleren/Escape bewaren URL.
+- Compacte titel/teller/Books-Collections, geen FULL CATALOG of dubbele uitleg.
+  Op320px werd een kleine headeroverlap gemeten; alleen Browse-headerpadding/gap
+  onder360px aangepast. Geen tekst of aanraakdoel verkleind.
+
+Databasegrens / eerlijke beperking
+De reeds bestaande catalog_discovery_page uit privacy-B SQL houdt de VOLLEDIGE
+gefilterde catalogus in ranked: lumiscore DESC NULLS LAST, lower(title),id, vóór
+LIMIT/OFFSET. De score blijft via bestaande drie-distinct-beoordelaarsaggregate.
+Er is dus geen nieuw score-algoritme, drempel of taxonomie nodig. De oude visuele
+fixture filterde bij highest ten onrechte scoreloze boeken weg; nu overeenkomstig
+de al bestaande privacy-B SQL hersteld. Dit is geen productie-algoritmewijziging.
+De bestaande RPC accepteert uitsluitend32/64/128. Geen migratie toegestaan:
+editorialRpcArgs vraagt voor twee16-pagina's hetzelfde32-ID-venster op;
+editorialWindow kiest de juiste helft VÓÓR boek-/cover-/ratingverrijking.
+Standaard maximaal16 volledige boeken/covers/status-IDs; geen128-boekenfetch,
+geen gehele clientcatalogus en geen client-/lokale paginascoring. Maximaal32 kale
+IDs worden uit de RPC ontvangen; exact16 database-IDs ophalen is zonder wijziging
+van die functie niet bewezen/mogelijk met dit bestaande contract. Deze begrensde
+ID-overfetch is expliciet, niet als exact16 DB-rijen voorgesteld. Bestaande globale
+rankingkosten blijven; geen prestatiewinst of hosted performance geclaimd.
+UI-clamping/pageCount en laatste halve vensters getest, geen dubbele pagina-IDs.
+
+Gericht bewijs
+-76 unit-/contract-/React-HTML-tests groen, inclusief relevante PR20-regressies.
+-1 echte PostgreSQL/PGlite-test op10.134 synthetische Works: bestaande SQL sorteert
+  drie publiek beoordeelde boeken vóór onbekende, gelijke score/titel viaID,
+  vier opeenvolgende16-pagina's komen overeen met DB-ranking, geen dubbelen,
+  laatste pagina634 heeft6IDs, exact-countprivacy en anon raw-ratings-blokkade.
+  Eerste nieuwe testassertie nam ongegarandeerde aggregate-rowvolgorde aan;
+  alleen testlookup naar Work-ID gecorrigeerd, geen productiefunctie gewijzigd.
+-10 opt-in echte SSR/HTML-tests groen: defaults16/highest,32/64/128, gezamenlijke
+  auteurzoekopdracht, legacy auteur/category/selection/edition, full highest-total,
+  lege resultaten versus echte loaderfout, boekreturncontext NL/EN.
+- Browser via echte lokale app/router/native formulieren met160 synthetische Works:
+  tegels64/Selectie/Fantasy/NL veranderen niets vóór Toepassen; daarna53resultaten,
+  correcte3chips/64/highest. Wissen wordt kale /nl/browse met16/highest/geen chips.
+ 16-pagina2 heeft geen overlap en detail/terug behoudt2/16/highest. Pijltoets16->32
+  selecteert zonder submit en geeft solid focus; Toepassen vanafpagina2 reset1.
+ 64/128 tonen64/128; scoreloze staart begint pas na54scoreboeken in fixture.
+  Eén zoekveld vindt Ada Vermeer; expliciet128 behouden, impliciet16 ook bij zoeken.
+  Legacy author=2/page2/32/az toont21resultaten en James North-chip; Annuleren gooit
+  concept64 weg; chipverwijdering behoudt32/az; back/forward herstelt auteurcontext.
+  Lange titel op320px breekt af zonder overflow; geen autorisatie-/ratingwrites.
+- Gemeten320/375/390/430/682/1280 CSS-pixels: geen overflow of headeroverlap na fix,
+ 2x2-maattegels onder360px, anders4naastelkaar; gelijke76pxhoogte. Acties identieke
+  breedte/top/hoogte:56px, op320NL beide63.2px door labelomloop. Eén zichtbaar zoekveld.
+  NL/EN Paper/Ink en desktop daadwerkelijk bekeken; geen fysieke telefoon/zoom-
+  of screenreadertest geclaimd. Bronconsole gecontroleerd binnen lokale review.
+-TypeScript, bronlint en productiebuild groen. Clientsecretscan128bestanden groen
+  (dist/client plus bestaand .vercel/output/static); geen credentials geladen.
+  Definitieve laatste checkstatus in extern reviewpakket; geen deployment uitgevoerd.
+  Beide lokale buildformaten geslaagd; bestaande Vinext dynamic-import-chunkwarnings
+  blijven buildwaarschuwingen, geen aangetoonde Browse-regressie. Tijdens gelijktijdige
+  build/dev/HMR verscheen één fetchfout van een virtuele Vite/RSC-module. Alleen eigen
+  fixtureproces gestopt/herstart; verse browsercontrole hieronder/extern vastgelegd.
+React-review: alleen paneel-open als clientstate, native radiogroepen/formulieren,
+requestlokale pure windowberekening, geen gedeelde persoonlijke mutable cache of
+nieuwe dependency. Branch behouden, andere werkruimtes/onderzoek/secrets onaangeraakt.
+
+Preview / screenshots / herstel
+http://127.0.0.1:3122/nl/browse (ook /en/browse), eigen loopbackserver/no secrets.
+Echte JPEG's onder outputs/browse-calm-20261013, prefix browse-refined-:
+standard-nl-paper-390, standard-nl-ink-390, panel-nl-ink-desktop,
+panel-actions-nl-ink-390, standard-en-ink-320, long-title-en-paper-320,
+standard-en-paper-desktop en panel-en-paper-desktop. Gemeten geometrie:
+browse-refined-measurements-20261015.json. Mobiele paneelshots zijn normale scroll,
+desktopshot toont gehele relevante filtersectie inclusief beide acties.
+Alleen lokale beoordeling; een hosted Preview vereist apart push-/Preview-akkoord.
+Herstel vóór publicatie: normale revert van deze lokale verfijningscommit bovenop
+de geïntegreerde branch. Hele Browse-pakket later applicatie-only terugdraaien
+bovenop dan-actuele main; PR20 behouden. Geen reset van andere releases, database-
+herstel, downmigratie of verlies van gebruikersratings/status/voortgang.
+Officiële referenties voor begrensde paginering/volgorde:
+https://supabase.com/docs/reference/javascript/range
+https://supabase.com/docs/guides/database/pagination
+De daadwerkelijke bestaande SQL en lokale PostgreSQL-proef zijn leidend voor
+dit scalar-JSON-RPC-contract; .range op JSON is geen vervanging van SQL-paginering.
+Definitieve verse browser na gestopte builds en eigen serverherstart: standaard
+16/highest, Filters opent met16geselecteerd en beide juiste actielabels, sluiten
+werkt; nieuwe tabconsole error/warn leeg. Lokale preview op3122 blijft beschikbaar.
+Oude HMR-netwerkfout niet weggepoetst uit bewijs en niet als productieregressie
+voorgesteld. Geen verdere codewijzigingen nodig. Ook lege/ongeldige sorteerwaarden
+vallen veilig terug op de Browse-default; expliciet geldige A-Z/newest blijven intact.

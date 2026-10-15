@@ -1,4 +1,4 @@
-export const CATALOG_BROWSE_PAGE_SIZES = [32, 64, 128] as const;
+export const CATALOG_BROWSE_PAGE_SIZES = [16, 32, 64, 128] as const;
 export type CatalogBrowsePageSize = (typeof CATALOG_BROWSE_PAGE_SIZES)[number];
 export const CATALOG_BROWSE_PAGE_SIZE: CatalogBrowsePageSize = 32;
 
@@ -21,16 +21,16 @@ export function normalizeCatalogBrowsePage(value: unknown): number {
   return Number.isSafeInteger(page) && page > 0 ? page : 1;
 }
 
-export function normalizeCatalogBrowsePageSize(value: unknown): CatalogBrowsePageSize {
+export function normalizeCatalogBrowsePageSize(value: unknown, fallback: CatalogBrowsePageSize = CATALOG_BROWSE_PAGE_SIZE): CatalogBrowsePageSize {
   const candidate = Array.isArray(value) ? value[0] : value;
   const pageSize = typeof candidate === 'string' && /^\d+$/.test(candidate)
     ? Number(candidate)
     : typeof candidate === 'number'
       ? candidate
-      : CATALOG_BROWSE_PAGE_SIZE;
+      : fallback;
   return CATALOG_BROWSE_PAGE_SIZES.includes(pageSize as CatalogBrowsePageSize)
     ? pageSize as CatalogBrowsePageSize
-    : CATALOG_BROWSE_PAGE_SIZE;
+    : fallback;
 }
 
 export function getCatalogBrowsePageAfterPageSizeChange(
@@ -46,11 +46,11 @@ export function getCatalogBrowsePageAfterPageSizeChange(
     : requestedPage;
 }
 
-export function normalizeCatalogBrowseSort(value: unknown): CatalogBrowseSort {
+export function normalizeCatalogBrowseSort(value: unknown, fallback: CatalogBrowseSort = 'az'): CatalogBrowseSort {
   const candidate = Array.isArray(value) ? value[0] : value;
   return CATALOG_BROWSE_SORTS.includes(candidate as CatalogBrowseSort)
     ? candidate as CatalogBrowseSort
-    : 'az';
+    : fallback;
 }
 
 export function getCatalogBrowseOrder(sort: CatalogBrowseSort): CatalogBrowseOrder[] {

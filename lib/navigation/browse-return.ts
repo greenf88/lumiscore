@@ -86,7 +86,7 @@ function canonicalizeBrowseParams(params: URLSearchParams): string {
 
   if (page && page !== '1') canonical.set('page', page);
   if (pageSize) canonical.set('pageSize', pageSize);
-  if (sort && sort !== 'az') canonical.set('sort', sort);
+  if (sort) canonical.set('sort', sort);
   for (const key of ['q', 'author']) if (params.has(key)) canonical.set(key, params.get(key)!);
 
   if (params.has('selection')) canonical.set('selection', params.get('selection')!);
@@ -111,7 +111,7 @@ export function updateBrowseReturnPath(
   const params = new URLSearchParams(safePath.split('?')[1] ?? '');
 
   if (next.page !== undefined) params.set('page', String(next.page));
-  if (next.pageSize !== undefined) params.set('pageSize', String(next.pageSize));
+  if (next.pageSize !== undefined) { params.set('pageSize', String(next.pageSize)); params.delete('page'); }
   if (next.sort !== undefined) params.set('sort', next.sort);
 
   return canonicalizeBrowseParams(params);

@@ -3,7 +3,7 @@ import { LumiScoreBrowsePage } from '@/app/components/LumiScoreBrowsePage';
 import { browseHasQuery } from '@/lib/seo/page-metadata';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
-import { editorialQuery, editorialHref, type CatalogParams } from '@/lib/catalog/editorial-query';
+import { browseQuery, editorialHref, type CatalogParams } from '@/lib/catalog/editorial-query';
 import { unavailableEditorialPage } from '@/lib/supabase/editorial-catalog';
 type BrowsePageProps = { searchParams: Promise<CatalogParams> };
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     import('@/lib/supabase/auth').then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),
   ]);
-  const state = editorialQuery(params);
+  const state = browseQuery(params);
   let data = unavailableEditorialPage(state);
   try {
     const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');
