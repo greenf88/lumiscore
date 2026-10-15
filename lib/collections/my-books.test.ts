@@ -64,7 +64,7 @@ test('each My Books tab exposes only its matching reading status', () => {
 
 test('header exposes active English and Dutch My Books navigation', () => {
   assert.match(header, /<LocaleLink className="my-books-nav-link" href="\/my-books">/);
-  assert.match(header, /<MobileNavigation \/>/);
+  assert.match(header, /<MobileNavigation authenticated=\{authState.authenticated\} \/>/);
   const mobile = read('../../app/components/MobileNavigation.tsx');
   assert.match(mobile, /mobile-navigation-panel/);
   assert.match(mobile, /<LocaleLink href="\/my-books">/);

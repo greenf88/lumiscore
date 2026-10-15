@@ -1,0 +1,89 @@
+LumiScore — consistente visuele afwerking — lokaal reviewpakket, 15 oktober 2026
+
+Basis en isolatie
+Branch: style/consistent-controls-covers-20261015.
+Basis: origin/main 17dd95c7e3ace2d0cd32acfd409962ed77090a2b; opnieuw remote bevestigd.
+Deze basis bevat PR22/PR23, inclusief de gezamenlijke smaakberekening/accountadapter.
+Geïsoleerde worktree lumiscore-visual-finish-20261015. Geen andere broncodewerkruimte
+of bestaand ongecommitteerd werk gewijzigd. Bestaande dependencies hergebruikt.
+Referentie: zes door Rick aangeleverde foto's; lichte tegel/knopvulling uit 1–4,
+ronde amberbadge met lichte rand uit 5, ontbrekende Books-badge uit 6.
+
+Wijzigingen
+Gedeelde, expliciet begrensde control-selectors en thematokens in globals.css.
+Primaire acties behouden de teal merkkleur; secundaire acties en keuze-/aantaltegels
+krijgen een lichter oppervlak: Paper #fffdf8, Ink #173844. Radius 6px, Inter,
+gelijke minimale aanraakdoelen, focus-visible, disabled en fine-pointer-hover.
+Selectie gebruikt ook lijngewicht/underline/checkmark, niet uitsluitend kleur.
+Gewone tekstlinks en boeklinks worden niet globaal tot knoppen gemaakt.
+Smaaktest bijwerken is primair; Mijn leesprofiel staat als hoofdkeuze in het
+mobiele menu én als duidelijke knop in het bestaande accountmenu. Gasten houden
+hun bestaande aanmeldroute en krijgen geen nieuwe persoonlijke menu-ingang.
+Taalkeuzes en logo hebben 44px-aanraakdoelen. Onder 360px gaat Zoeken naar het
+bestaande mobiele menu; geen navigatiefunctie verdwijnt en de header blijft passen.
+Collectiescore-editors gebruiken zoveel 44px-kolommen als werkelijk passen;
+vijf vaste kolommen overlapten op smalle kaarten na de target-vergroting.
+
+BookCover bezit nu zelf één CoverScoreBadge, verankerd aan de zichtbare cover.
+Browse sloeg de badge eerder expliciet over; dat is verwijderd. De losse Browse-
+scorebadge en compacte externe mini-score zijn vervangen door deze coverbadge.
+Kaart, compact, smaaktest, detail en achterkant delen dezelfde ronde presentatie.
+Cover-relative afmetingen, lichte rand, bestaande amber-thematoken, Inter-cijfers.
+Bestanden, coverresolutie/fallback en beeldverhouding blijven ongewijzigd.
+Privacy B blijft via de bestaande formatter gelden: alleen een publiceerbare
+score met geldige beoordelaarsband; anders —. Geen exacte beoordelaarsaantallen.
+Detail geeft zijn bestaande actuele, privacy-gefilterde ratingdisplay door;
+de badge valt na een ratingwijziging niet terug op een oude Book-prop.
+
+Verificatie
+75 gerichte tests geslaagd, waaronder 2 nieuwe regressietests voor echte React-
+cover/card-HTML, alle presentatieformaten, publieke/afgeschermde scores, de live
+detaildisplay, linkbehoud en gedeelde controls. Bestaande directe-rating-, pause-,
+privacy-, account-, My Books-, Browse-, cover- en gedeeld-profieltests hergebruikt.
+Een bestaande accounttest gebruikt een geïsoleerde synthetische PostgreSQL-engine;
+geen hosted databasewrites, Auth-wijzigingen of productiegegevens gebruikt.
+TypeScript, lint, vinext-productiebuild, Vite-build, diffcontrole en secretscan groen.
+Ook de Vercel/Nitro-presetbuild slaagt lokaal. De aanvankelijke sandbox-readlink-
+blokkade is opgelost door uitsluitend deze lokale build buiten de sandbox te
+draaien; geen ACL, projectinstelling of beveiligingscontrole gewijzigd.
+Exacte commit staat in het externe REVIEW-PACKAGE.txt.
+Bestaande Vinext dynamic-import/routeclassificatie- en test-HMR-portwaarschuwingen;
+geen lintwaarschuwingen of falende tests in de definitieve controle.
+
+Browserbewijs
+Echte lokale browserweergave van bestaande SSR-routes/componenten, met uitsluitend
+synthetische loader/API-adapters via scripts/home-profile-review-local.mjs
+--visual-finish. Alleen loopback 127.0.0.1:3128; geen testbypass in applicatieroutes.
+Homepage, Books/Browse, zoeken, Collections/collectie-editor, Mijn boeken,
+boekdetail, profiel, smaaktest en lege aanmeldformulieren gericht bekeken.
+NL/EN en Paper/Ink; mobiele layout en 1280px desktop. Responsive profiel/header
+op daadwerkelijk gemeten 320/375/390/430/682/1280 CSS-pixels, geen horizontale
+overflow. Gastheader heeft geen overlap; /account leidt voor gasten naar login.
+Kleinste actieve smaaktestcontrole: 320x568, tien scoreknoppen 44x44, Overslaan
+en Zoeken onder viewportgrens. Keyboard Tab toont zichtbare focus op score 2.
+Per gecontroleerde cover één ronde badge, gelijke breedte/hoogte, binnen de
+rechter-/onderrand. Zowel echte lokale SVG-afbeeldingen als coverfallback bekeken.
+Gemeten normale tekstcontrastvoorbeelden minimaal 5,16:1; uiteindelijke amberbadge
+Paper 5,59:1 en Ink 7,85:1. Dit is geen volledige toegankelijkheidscertificering.
+Consolecontrole zonder applicatiefouten op de gecontroleerde pagina's.
+
+Bewijsmap buiten Git
+C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/visual-finish-20261015/
+browser-observations.json: gemeten viewports, posities, thema's en contrasten.
+tests.log, build.log, build-vercel.log, build-vercel-preset.log, lint.log,
+scan-client-secrets.log en representatieve JPG-screenshots van profiel, menu,
+Books, homepage, collecties, detail, login en smaaktest in beide thema's.
+De screenshots bevatten uitsluitend lokale synthetische gegevens. Ze bewijzen
+vormgeving, niet echte hosted authenticatie, opslag of telefoon/browserbalken.
+Geen oorspronkelijke coverbestanden gewijzigd; geen nieuwe scherpte-/snelheidsclaim.
+
+Grenzen en herstel
+Nul migraties. Geen wijziging van smaakmodel, taxonomie, aanbevelingsrangschikking,
+ratingopslag, accounttotalen, database, RLS, Auth, DNS of projectconfiguratie.
+Geen accounts aangemaakt, bestaande beoordelingen/statussen/voortgang ongemoeid.
+Geen push, PR, merge of deployment. Bookmatch/PR11, herauthenticatie en overige
+geparkeerde werkzaamheden blijven geparkeerd.
+Na review: eventueel apart akkoord voor push/Preview en later publicatie.
+Herstel is het terugdraaien van uitsluitend deze visuele commit op een aparte
+branch, opnieuw testen/bouwen. Geen databaseherstel of migratie nodig. De
+gezamenlijke smaaklogica uit de basis blijft in beide versies behouden.

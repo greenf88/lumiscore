@@ -5,7 +5,7 @@ import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const largeText=process.argv.includes('--large-text'),port=largeText?3127:3126;
+const largeText=process.argv.includes('--large-text'),visualFinish=process.argv.includes('--visual-finish'),port=visualFinish?3128:largeText?3127:3126;
 for(const key of Object.keys(process.env))if(/SUPABASE|DATABASE|SECRET|TOKEN|GOOGLE_BOOKS/.test(key))delete process.env[key];
 const fixture=JSON.stringify(root.replaceAll('\\','/')+'test-support/reading-profile/fixture.ts');
 const auth=`import {cookies} from 'next/headers';import {requestPagePath} from '@/lib/i18n/server';import {fixtureUser,fixtureClient} from ${fixture};
@@ -20,9 +20,20 @@ const modules={
  'lib/supabase/taste-test.ts':`import {books} from ${fixture};export async function loadHomepagePersonalization(){return {authenticated:true,hasEvidence:true,ratingCount:10,tasteTestAnsweredCount:10,recommendations:books.slice(0,3).map(book=>({book,matchScore:null,matchLabel:null,matchConfidence:'low',explanation:'Lokale synthetische visuele fixture.',coverageLevel:'partial',metadataConfidence:.7,collaborativeExplanation:''}))}}`,
  'lib/supabase/collections.ts':'export async function loadHomepageSeriesContinuations(){return []}',
 };
+if(visualFinish){
+ const browse=JSON.stringify(root.replaceAll('\\','/')+'test-support/browse/fixture.ts');
+ modules['lib/supabase/editorial-catalog.ts']=`export {loadEditorialCatalog,unavailableEditorialPage} from ${browse};`;
+ modules['lib/supabase/books.ts']=`export {books,loadHighestRatedCatalog,loadCatalogBooksByIds,loadCatalogBooksByIdsWithStoredCovers} from ${fixture};import {loadCatalogBook as profileBook} from ${fixture};import {loadCatalogBook as browseBook} from ${browse};export async function loadCatalogBook(id){return await profileBook(id)??await browseBook(id)}`;
+ modules['lib/supabase/ratings.ts']=`export async function loadBookRatingState(){return {authenticated:false,userEmail:null,userRating:null,lumiscore:null,ratingCount:null}}`;
+ modules['lib/supabase/book-status.ts']=`import {books} from ${fixture};export async function loadUserBookStatuses(){return {authenticated:true,statuses:new Map()}};export async function loadMyBooksPageData(){return {authenticated:true,available:true,items:books.slice(0,4).map(book=>({book,status:'read',rating:null}))}}`;
+ modules['lib/books/public-description.ts']='export async function loadPublicBookDescription(){return null}';
+ modules['lib/supabase/taste-test.ts']+=`export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}`;
+ modules['lib/supabase/collections.ts']=`import {books} from ${fixture};export async function loadHomepageSeriesContinuations(){return []};export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(){return null};export async function loadCollectionsDirectory(){return {total:1,collections:[{collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series'},cataloguedBookCount:4,representativeBooks:books.slice(0,3)}]}}`;
+ modules['lib/supabase/collections.ts']+=`export async function loadCollectionPageData(){return {collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series',description:null,expectedMainSeriesTotal:null},books:books.slice(0,4).map((book,i)=>({book,workId:book.workId,sequenceNumber:i+1,publicationOrder:i+1,subgroup:null})),authenticated:true,statuses:{},userRatings:{},ratedWorkIds:[],highlightedUnreadWorkId:null}}`;
+}
 const json=(res,data,status=200)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
 let round=null,position=0;
-const server=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/profile-review-vite',css:{postcss:{plugins:[tailwindcss()]}},resolve:{alias:{'@':root}},plugins:[{
+const server=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/profile-review-'+port+'-vite',css:{postcss:{plugins:[tailwindcss()]}},resolve:{alias:{'@':root}},plugins:[{
  name:'loopback-profile-review',enforce:'pre',load(id){return modules[id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0]]??null;},
  transform(code,id){
   if(largeText&&id.replaceAll('\\','/').split('?')[0]===root.replaceAll('\\','/')+'app/globals.css')return code+`
@@ -43,7 +54,7 @@ const server=await createServer({root,configFile:false,envFile:false,cacheDir:ro
   const mode=url.searchParams.get('review')??new RegExp('profile-review-'+port+'=([a-z]+)').exec(req.headers.cookie??'')?.[1]??'reader';
   req.headers['x-local-profile-review']=mode;
   if(url.searchParams.has('review'))res.setHeader('Set-Cookie',`profile-review-${port}=${mode}; Path=/; HttpOnly; SameSite=Lax`);
-  if(url.pathname==='/profile-review-cover.svg'){res.writeHead(200,{'Content-Type':'image/svg+xml'});return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#23464d"/><circle cx="120" cy="130" r="64" fill="#d1a963"/><text x="16" y="38" fill="#f7f3eb" font-family="Georgia" font-size="18">Een nieuwe horizon</text></svg>');}
+  if(['/profile-review-cover.svg','/browse-review-cover.svg'].includes(url.pathname)){res.writeHead(200,{'Content-Type':'image/svg+xml'});return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#23464d"/><circle cx="120" cy="130" r="64" fill="#d1a963"/><text x="16" y="38" fill="#f7f3eb" font-family="Georgia" font-size="18">Een nieuwe horizon</text></svg>');}
   if(url.pathname==='/api/book-status')return json(res,{authenticated:mode!=='guest',statuses:{}});
   if(url.pathname==='/api/account/reading-preferences')return json(res,{onboardingDismissed:true});
   if(url.pathname==='/api/taste-test/result'){const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');return json(res,f.profileResult());}

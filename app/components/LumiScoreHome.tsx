@@ -33,6 +33,7 @@ import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 import { MobileNavigation } from './MobileNavigation';
+import { CoverScoreBadge } from './CoverScoreBadge';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { useWantToRead } from './useWantToRead';
@@ -110,6 +111,8 @@ type BookCoverProps = {
   presentation?: CoverPresentation;
   label?: string;
   resolveMissing?: boolean;
+  /** Already privacy-filtered live display (e.g. the detail rating state). */
+  publicScoreDisplay?: string;
 };
 
 function BookCoverForIdentity({
@@ -118,8 +121,10 @@ function BookCoverForIdentity({
   presentation = small ? 'compact' : 'card',
   label,
   resolveMissing = true,
+  publicScoreDisplay,
 }: BookCoverProps) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
+  const scoreDisplay = publicScoreDisplay ?? formatPublicRatingDisplay(book.score, book.ratingsCount, locale, book.ratingBand).score;
   const [coverUrls, setCoverUrls] = useState(() =>
     getInitialBookCoverUrls(book),
   );
@@ -164,14 +169,14 @@ function BookCoverForIdentity({
   return (
     <div
       className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
+      data-cover-presentation={presentation}
       role={label ? 'img' : undefined}
-      aria-label={label}
-      aria-hidden={label ? undefined : true}
+      aria-label={label ? `${label} · LumiScore ${scoreDisplay}` : undefined}
     >
-      <span className="cover-kicker">{t('common.lumiEdition')}</span>
-      <span className="cover-title">{book.title}</span>
-      <span className="cover-mark">✦</span>
-      <span className="cover-author">{book.author}</span>
+      <span className="cover-kicker" aria-hidden="true">{t('common.lumiEdition')}</span>
+      <span className="cover-title" aria-hidden="true">{book.title}</span>
+      <span className="cover-mark" aria-hidden="true">✦</span>
+      <span className="cover-author" aria-hidden="true">{book.author}</span>
       {displayedCoverUrl && (
         <picture key={displayedCoverUrl}>
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
@@ -200,6 +205,7 @@ function BookCoverForIdentity({
         />
         </picture>
       )}
+      <CoverScoreBadge score={scoreDisplay} presentation={presentation} />
     </div>
   );
 }
@@ -264,7 +270,7 @@ export function Header({
         <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
         <LocaleLink className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</LocaleLink>
         <LocaleLink className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</LocaleLink>
-        <MobileNavigation />
+        <MobileNavigation authenticated={authState.authenticated} />
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={searchTargetId ? undefined : mobileSearchOpen} onClick={() => {
           if (searchTargetId) { document.getElementById(searchTargetId)?.focus(); return; }
           setMobileSearchOpen((open) => !open);
@@ -298,7 +304,6 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
         {matchText && <span className="match-line"><i /> {matchText}</span>}
         {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
       </span>
-      <span className="mini-score"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>
     </>
   );
 
@@ -433,7 +438,6 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
       <div className="card-cover-wrap">
         {label && <span className="discovery-card-label">{label}</span>}
         {rank !== undefined && <span className="card-rank">#{rank}</span>}
-        {variant !== 'browse' && <span className="score-badge"><strong>{ratingDisplay.score}</strong><small>LumiScore</small></span>}
         <BookCover book={book} resolveMissing={resolveMissingCover} />
       </div>
       <div className="book-card-body">
@@ -447,7 +451,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
         <div className="book-meta">
           {variant === 'browse' ? ratingDisplay.score === '—'
             ? <span>{t('browse.noReliableScore')}</span>
-            : <><span className="browse-score" aria-label={`LumiScore ${ratingDisplay.score}`}>{ratingDisplay.score}</span><span>{ratingDisplay.count}</span></>
+            : <span>{ratingDisplay.count}</span>
             : <span>{ratingDisplay.count}</span>}
         </div>
       </div>
