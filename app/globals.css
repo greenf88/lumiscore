@@ -1146,6 +1146,22 @@ button, input, select, textarea { font-family: var(--sans); }
 .taste-secondary-action, .taste-direct-test .taste-result-link { color: var(--teal); background: var(--bg); box-shadow: none; }
 .taste-direct-test .taste-result-link { margin-top: 24px; text-decoration: none; }
 .taste-entry-actions a:focus-visible, .taste-direct-test .taste-result-link:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+.reading-profile-page { width: min(100%, 660px); margin-inline: auto; padding: 28px max(22px, env(safe-area-inset-right)) 48px max(22px, env(safe-area-inset-left)); }
+.reading-profile-page h1 { margin: 12px 0 20px; font: 500 clamp(30px, 7.8vw, 40px)/1.25 var(--serif); letter-spacing: -.015em; overflow-wrap: anywhere; }
+.reading-profile-name { margin: 0 0 6px; font-size: 18px; }
+.reading-profile-email { margin: 0; font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.reading-profile-totals { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 28px 0 12px; }
+.reading-profile-totals > div { min-width: 0; padding: 20px 10px; min-height: 116px; display: flex; flex-direction: column-reverse; justify-content: center; align-items: center; gap: 10px; text-align: center; border: 1px solid var(--teal); border-radius: 6px; }
+.reading-profile-totals dt { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.reading-profile-totals dd { margin: 0; font: 500 clamp(32px, 8vw, 44px)/1.15 var(--serif); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; max-width: 100%; }
+.reading-profile-count-note { margin: 0 0 32px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.reading-profile-page .taste-profile { margin-bottom: 16px; }
+.reading-profile-page .taste-profile h2 { font: 500 clamp(24px, 6vw, 30px)/1.3 var(--serif); margin-block: 12px; overflow-wrap: anywhere; }
+.reading-profile-action { min-height: 48px; display: flex; justify-content: center; align-items: center; padding: 12px; border: 1px solid var(--teal); border-radius: 6px; color: var(--teal); text-align: center; line-height: 1.4; }
+.reading-profile-navigation { display: grid; gap: 12px; margin-top: 32px; }
+.reading-profile-navigation a, .reading-profile-navigation button { display: flex; align-items: center; justify-content: space-between; min-height: 48px; width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; color: var(--text); background: transparent; font: inherit; overflow-wrap: anywhere; text-align: start; }
+.reading-profile-navigation button { cursor: pointer; }
+.reading-profile-page a:focus-visible, .reading-profile-page button:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 .taste-direct-test .taste-action-error { margin-bottom: 16px; padding: 12px; border: 1px solid var(--danger); border-radius: 6px; }
 .taste-direct-test .taste-action-error p, .taste-direct-test .taste-exhausted p { line-height: 1.5; margin: 0 0 12px; }
 .taste-direct-test .taste-paused { padding-block: 24px; }

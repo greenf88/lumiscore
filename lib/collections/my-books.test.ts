@@ -63,8 +63,11 @@ test('each My Books tab exposes only its matching reading status', () => {
 });
 
 test('header exposes active English and Dutch My Books navigation', () => {
-  assert.match(header, /<a className="my-books-nav-link" href="\/my-books">/);
-  assert.match(header, /mobile-navigation-panel/);
+  assert.match(header, /<LocaleLink className="my-books-nav-link" href="\/my-books">/);
+  assert.match(header, /<MobileNavigation \/>/);
+  const mobile = read('../../app/components/MobileNavigation.tsx');
+  assert.match(mobile, /mobile-navigation-panel/);
+  assert.match(mobile, /<LocaleLink href="\/my-books">/);
   assert.match(translations, /'header\.myBooks': 'My books'/);
   assert.match(translations, /'header\.myBooks': 'Mijn boeken'/);
   assert.doesNotMatch(header, /nav-unavailable|header\.myLists/);

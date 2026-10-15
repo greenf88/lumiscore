@@ -11,6 +11,7 @@ const dutchPages: Record<string, [string, string]> = {
   '/search': ['Boeken zoeken — LumiScore', 'Zoek boeken en auteurs in de LumiScore-catalogus.'],
   '/recommendations': ['Aanbevelingen — LumiScore', 'Boeken die bij jouw leessmaak passen.'],
   '/my-books': ['Mijn boeken — LumiScore', 'Je eigen leeslijst en boekbeoordelingen.'],
+  '/account': ['Mijn leesprofiel — LumiScore', 'Je eigen leesprofiel en leesvoorkeuren.'],
   '/login': ['Inloggen — LumiScore', 'Log in op LumiScore.'],
   '/forgot-password': ['Wachtwoord vergeten — LumiScore', 'Herstel je LumiScore-wachtwoord.'],
   '/update-password': ['Wachtwoord wijzigen — LumiScore', 'Kies een nieuw LumiScore-wachtwoord.'],

@@ -4,18 +4,13 @@ import { LocaleLink } from './LumiScoreLocale';
 import { useEffect, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type { RatingResult } from '@/lib/supabase/rating-result';
-import { getTraitLabel } from '@/lib/taste-test/traits';
-import { topSupportedAffinities } from '@/lib/taste-test/result-presentation';
+import { TasteProfileSummary } from './TasteProfileSummary';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCard, recommendationMatchLabel } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 const EMPTY_BOOKS: never[] = [];
-const ARCHETYPES = {
-  worldbuilder:['Wereldbouwer','Worldbuilder'],sleuth:['Speurneus','Sleuth'],
-  explorer:['Ontdekkingsreiziger','Explorer'],connector:['Verhalenverbinder','Story connector'],
-};
 export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
   const {locale} = useLumiScoreLocale(), nl=locale==='nl';
   const [loaded,setLoaded] = useState<{locale:string;result:RatingResult} | null>(null);
@@ -44,19 +39,8 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
   const {locale}=useLumiScoreLocale(), nl=locale==='nl', {profile}=result;
   const books=useMemo(()=>result.recommendations.length ? result.recommendations.map(x=>x.book) : EMPTY_BOOKS,[result.recommendations]);
   const {wanted,statuses,toggleWanted}=useWantToRead(true,books);
-  const preferences=topSupportedAffinities(profile);
   return <section className="featured-section taste-result" aria-labelledby="taste-result-title">
-    <div className="taste-profile">
-      <span className="eyebrow">{nl?'Jouw leessmaak':'Your reading taste'}</span>
-      <h1 id="taste-result-title">{profile.archetype
-        ? <><span className="taste-profile-spark" aria-hidden="true">✦</span>{nl ? `Jij bent een ${ARCHETYPES[profile.archetype][0].toLocaleLowerCase('nl')}` : `You are ${profile.archetype==='explorer'?'an':'a'} ${ARCHETYPES[profile.archetype][1].toLocaleLowerCase('en')}`}</>
-        : nl?'Nog even ontdekken':'Keep discovering'}</h1>
-      {!profile.archetype && <p>{nl?'Beoordeel meer boeken om je smaak te vinden.':'Rate more books to find your reading taste.'}</p>}
-      {preferences.length>0 && <ul className="taste-preferences">{preferences.map(x=><li key={x.trait}>
-        <span>{getTraitLabel(locale,x.trait)}</span>
-        <span className="taste-preference-track" aria-hidden="true"><span style={{width:`${x.score}%`}} /></span>
-      </li>)}</ul>}
-    </div>
+    <TasteProfileSummary profile={profile} headingId="taste-result-title" />
     <h2>{nl?'Boeken voor jou':'Books for you'}</h2>
     {result.recommendations.length===0 ? <p role="status">{nl?'Nu geen passende boeken beschikbaar.':'No suitable books available right now.'}</p>
     : <div className="book-grid">{result.recommendations.map(x=><BookCard key={x.book.workId}
