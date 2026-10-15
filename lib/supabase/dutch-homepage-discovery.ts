@@ -13,8 +13,8 @@ import { hasUsableInitialBookCover } from '../books/book-cover-state.ts';
 import { REVIEWED_DUTCH_LANGUAGE_ISBN13 } from '../books/language.ts';
 import { getReviewedWorkTraitCorrection } from '../recommendations/reviewed-work-trait-corrections.ts';
 import { buildEffectiveWorkTraitVector } from '../recommendations/work-trait-evidence.ts';
-import { cosineTasteSimilarity, emptyTasteVector } from '../taste-test/traits.ts';
-import { buildTasteProfile, type RatingEvidence } from '../taste-test/profile.ts';
+import { cosineTasteSimilarity } from '../taste-test/traits.ts';
+import { reliableProfileTraits } from '../recommendations/work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
 import { loadCatalogBooksByIdsWithStoredCovers } from './books.ts';
 import { supabase } from './client.ts';
@@ -96,7 +96,7 @@ export async function loadDutchHomepageDiscovery(
   ];
   const [eligiblePopularWorkIds, reader] = await Promise.all([
     loadVerifiedBestsellerWorkIds(),
-    loadHomepageReaderContext(),
+    loadHomepageReaderContext(locale),
   ]);
   const excludedWorkIds = new Set<string>();
   const similarityByWorkId = new Map<string, number>();
@@ -108,13 +108,12 @@ export async function loadDutchHomepageDiscovery(
       if (status === 'read' || status === 'dnf') excludedWorkIds.add(workId);
     }
 
-    const ratingIds = reader.ratings.map(({ work_id }) => String(work_id));
     const evidenceByWorkId = await loadWorkTraitEvidenceBatched(
       reader.client,
-      [...new Set([...publicCandidateIds, ...ratingIds])],
+      publicCandidateIds,
     );
     const effectiveByWorkId = new Map(
-      [...new Set([...publicCandidateIds, ...ratingIds])].map((workId) => [
+      [...new Set(publicCandidateIds)].map((workId) => [
         workId,
         buildEffectiveWorkTraitVector(
           evidenceByWorkId.get(workId) ?? [],
@@ -122,17 +121,12 @@ export async function loadDutchHomepageDiscovery(
         ),
       ] as const),
     );
-    const ratingEvidence: RatingEvidence[] = reader.ratings.map((rating) => ({
-      workId: String(rating.work_id),
-      rating: rating.rating,
-      traits: effectiveByWorkId.get(String(rating.work_id))?.traits ?? emptyTasteVector(),
-    }));
-    const profile = buildTasteProfile(reader.answers, ratingEvidence, locale);
+    const profile = reader.profile!;
     profileConfidence = profile.confidence;
     for (const workId of publicCandidateIds) {
       const candidate = effectiveByWorkId.get(workId);
       if (!candidate || candidate.coverageLevel === 'none' || candidate.coverageLevel === 'era_only') continue;
-      similarityByWorkId.set(workId, Math.max(0, cosineTasteSimilarity(profile.vector, candidate.traits)));
+      similarityByWorkId.set(workId, Math.max(0, cosineTasteSimilarity(profile.vector, reliableProfileTraits(candidate))));
     }
   }
 

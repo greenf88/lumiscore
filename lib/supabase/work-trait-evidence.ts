@@ -97,16 +97,20 @@ export async function loadWorkTraitEvidenceBatched(
     { length: Math.ceil(ids.length / 200) },
     (_, index) => ids.slice(index * 200, (index + 1) * 200),
   );
-  const results = await Promise.all(batches.map((batch) => client
-    .from('work_trait_evidence')
-    .select(EVIDENCE_SELECT)
-    .in('work_id', batch)
-    .eq('mapping_version', TASTE_TRAIT_MAPPING_VERSION)));
-  const failure = results.find(({ error }) => error);
-  if (failure?.error) throw failure.error;
+  const results = await Promise.all(batches.map(async(batch) => {
+    const rows:EvidenceRow[]=[];
+    for(let offset=0;;offset+=1000){
+      const {data,error}=await client.from('work_trait_evidence').select(EVIDENCE_SELECT)
+        .in('work_id',batch).eq('mapping_version',TASTE_TRAIT_MAPPING_VERSION)
+        .order('work_id').order('trait').order('source').order('source_key').range(offset,offset+999);
+      if(error)throw error;if(!Array.isArray(data))throw new Error('Trait evidence unavailable.');
+      rows.push(...data as unknown as EvidenceRow[]);if(data.length<1000)break;
+    }
+    return rows;
+  }));
 
   const grouped = new Map<string, WorkTraitEvidence[]>();
-  for (const row of results.flatMap(({ data }) => data ?? []) as EvidenceRow[]) {
+  for (const row of results.flat()) {
     const evidence = parseEvidenceRow(row);
     if (!evidence) continue;
     const current = grouped.get(evidence.workId) ?? [];

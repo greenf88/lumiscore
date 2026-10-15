@@ -186,7 +186,7 @@ test('era-only overlap has no user-facing personal indicator', () => {
     profile: classicProfile,
     ratedWorkIds: new Set(),
   })[0];
-  assert.equal(result.personalMatch, 1);
+  assert.equal(result.personalMatch, 0);
   assert.equal(result.matchConfidence, 'low');
   assert.equal(result.matchScore, null);
   assert.equal(result.matchLabel, null);
@@ -212,7 +212,7 @@ test('era-only metadata receives zero personal ranking contribution', () => {
     ratedWorkIds: new Set(),
   })[0];
 
-  assert.equal(withOverlap.personalMatch, 1);
+  assert.equal(withOverlap.personalMatch, 0);
   assert.equal(withoutOverlap.personalMatch, 0);
   assert.equal(withOverlap.rankingScore, withoutOverlap.rankingScore);
 });
@@ -229,7 +229,8 @@ test('candidate and user evidence both influence match confidence', () => {
 test('only rich metadata plus sufficient user evidence receives an exact percentage', () => {
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: .84, candidateCoverage: 'rich', metadataConfidence: .9, userConfidence: 'MEDIUM',
-  }), { matchScore: 86, matchLabel: null, matchConfidence: 'medium' });
+  }), { matchScore: null, matchLabel: 'Strong match', matchConfidence: 'medium' });
+  assert.equal(getMatchPresentation({personalSimilarity:.84,candidateCoverage:'rich',metadataConfidence:.9,userConfidence:'HIGH'}).matchScore,88);
   assert.deepEqual(getMatchPresentation({
     personalSimilarity: .84, candidateCoverage: 'rich', metadataConfidence: .9, userConfidence: 'LOW',
   }), { matchScore: null, matchLabel: 'Strong match', matchConfidence: 'low' });
@@ -311,7 +312,7 @@ test('quality and exploration affect ranking but never inflate personal match', 
   const highQuality = candidate('22', 'High quality', 'B', { science_fiction: 1 }, 10, 100);
   const [first, second] = recommendBooks({
     candidates: [lowQuality, highQuality],
-    profile: { ...duneProfile, confidence: 'MEDIUM' },
+    profile: { ...duneProfile, confidence: 'HIGH' },
     ratedWorkIds: new Set(),
     limit: 2,
   });
@@ -319,12 +320,12 @@ test('quality and exploration affect ranking but never inflate personal match', 
   assert.notEqual(first.rankingScore, second.rankingScore);
   assert.equal(first.matchScore, calculateDisplayedMatchScore({
     personalSimilarity: first.personalMatch,
-    userConfidence: 'MEDIUM',
+    userConfidence: 'HIGH',
   }));
   assert.notEqual(first.rankingScore, first.personalMatch);
 });
 
-test('displayed exact percentages remain monotonic after final ranking', () => {
+test('ranking cannot overwrite a book match to make percentages monotonic', () => {
   const profile = {
     ...duneProfile,
     vector: tasteVector({ science_fiction: 1 }),
@@ -348,7 +349,11 @@ test('displayed exact percentages remain monotonic after final ranking', () => {
 
   assert.equal(results[0].book.workId, '9300');
   assert.ok(results[0].personalMatch < results[1].personalMatch);
-  assert.ok(results[0].matchScore! >= results[1].matchScore!);
+  assert.ok(results[0].matchScore! < results[1].matchScore!);
+  for(const result of results){
+    const original=candidate(result.book.workId!,result.book.title,result.book.author,result.book.workId==='9300'?{science_fiction:.9,romance:.4359}:{science_fiction:.95,romance:.3122});
+    assert.equal(result.matchScore,calculatePersonalMatch({profile,candidate:original,workId:result.book.workId!}).matchScore);
+  }
 });
 
 test('diversity reranking avoids filling the first results with one author', () => {

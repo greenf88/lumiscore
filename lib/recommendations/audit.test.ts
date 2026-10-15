@@ -58,7 +58,7 @@ test('developer audit reports deterministic ranking and presentation details', (
   assert.equal(report.metadataConfidence, .9);
   assert.equal(
     report.userFacingMatchDisplay,
-    `Your Match ${recommendation.matchScore}%`,
+    recommendation.matchLabel,
   );
   assert.ok(report.topOverlappingTraits.length > 0);
   assert.ok(

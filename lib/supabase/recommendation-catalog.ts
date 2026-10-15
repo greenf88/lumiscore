@@ -7,6 +7,7 @@ import {
 } from '../recommendations/reviewed-work-trait-corrections.ts';
 import {
   buildEffectiveWorkTraitVector,
+  reliableProfileTraits,
   type EffectiveWorkTraits,
 } from '../recommendations/work-trait-evidence.ts';
 import { TASTE_TEST_ANCHORS } from '../taste-test/config.ts';
@@ -57,7 +58,7 @@ export async function loadRecommendationCatalog(
     if (!book.workId) return [];
     const effective = traitsById.get(book.workId);
     if (!effective || effective.coverageLevel === 'none') return [];
-    return [{ book, traits: effective.traits,
+    return [{ book, traits: reliableProfileTraits(effective),
       metadataConfidence: effective.metadataConfidence,
       coverageLevel: effective.coverageLevel,
       seriesKey: TASTE_TEST_ANCHORS[book.workId]?.seriesKey }];

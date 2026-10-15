@@ -5,6 +5,7 @@ import {
   type TasteTrait,
   type TasteVector,
 } from '../taste-test/traits.ts';
+import { PROFILE_POLICY } from '../taste-test/profile-policy.ts';
 
 export const TASTE_TRAIT_MAPPING_VERSION = 'taste_traits_v1';
 
@@ -305,4 +306,18 @@ export function isMeaningfullyCovered(result: EffectiveWorkTraits): boolean {
 
 export function mayShowPreciseMatch(result: EffectiveWorkTraits): boolean {
   return result.coverageLevel === 'rich' && result.metadataConfidence >= .8;
+}
+
+// Shared allowlist/confidence gate for every personal profile and book match.
+// A selected source/confidence is metadata evidence, not human validation.
+export function reliableProfileTraits(effective: EffectiveWorkTraits | undefined): TasteVector {
+  const vector=emptyTasteVector();if(!effective)return vector;
+  for(const trait of TASTE_TRAITS){
+    const row=effective.evidenceByTrait[trait];
+    const reviewed=effective.reviewedCorrection?.addTraits.some(x=>x.trait===trait&&x.weight>0);
+    if(effective.traits[trait]>0&&(reviewed||(row&&row.mappingVersion===TASTE_TRAIT_MAPPING_VERSION
+      &&WORK_TRAIT_EVIDENCE_SOURCES.includes(row.source)&&row.confidence>=PROFILE_POLICY.minimumTraitConfidence)))vector[trait]=effective.traits[trait];
+  }
+  const mass=TASTE_TRAITS.reduce((sum,t)=>sum+vector[t],0);
+  return mass?Object.fromEntries(TASTE_TRAITS.map(t=>[t,vector[t]/mass])) as TasteVector:vector;
 }

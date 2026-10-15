@@ -207,7 +207,7 @@ test('candidate evidence is loaded in bounded batches instead of N+1 queries', a
         in: (_column: string, ids: number[]) => {
           batches.push(ids);
           return {
-            eq: async () => ({ data: [], error: null }),
+            eq(){return this;},order(){return this;},range: async () => ({ data: [], error: null }),
           };
         },
       }),

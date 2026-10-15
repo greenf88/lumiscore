@@ -37,8 +37,8 @@ test('Dutch and English public header and Taste Test copy are both available', (
   assert.equal(translate('nl', 'taste.readingTaste'), 'Jouw leessmaak');
   assert.equal(translate('en', 'taste.readingTaste'), 'Your reading taste');
   assert.deepEqual(getTasteProfileConfidenceCopy('LOW', 'nl'), {
-    label: 'Eerste profiel',
-    description: 'We leren je leessmaak nog kennen.',
+    label: 'Beperkte onderbouwing',
+    description: 'Nog weinig onderbouwde voorkeuren; dit voorspelt geen nauwkeurigheid.',
   });
 });
 
