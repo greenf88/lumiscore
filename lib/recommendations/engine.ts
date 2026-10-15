@@ -2,7 +2,7 @@ import type { Book } from '../../app/data/books.ts';
 import type { TasteProfile } from '../taste-test/profile.ts';
 import {contentTasteVector} from '../taste-test/profile.ts';
 import { cosineTasteSimilarity, type TasteVector } from '../taste-test/traits.ts';
-import { buildRecommendationExplanation } from './explanations.ts';
+import { buildRecommendationReason } from './explanations.ts';
 import type { WorkTraitCoverageLevel } from './work-trait-evidence.ts';
 import type { Locale } from '../i18n/config.ts';
 import {
@@ -18,7 +18,6 @@ import { translate } from '../i18n/translations.ts';
 import type { ReadingPeriod } from '../preferences/reading-periods.ts';
 import {
   calculateEraPreferenceBoost,
-  getEraPreferenceExplanation,
 } from './era-preference.ts';
 
 export type MatchConfidence = 'high' | 'medium' | 'low';
@@ -159,20 +158,23 @@ export function calculatePersonalMatch(input: {
     metadataConfidence: input.candidate.metadataConfidence,
     userConfidence: input.profile.confidence,
   });
+  const reason = buildRecommendationReason({
+    profile: input.profile,
+    candidate: input.candidate.traits,
+    workId: input.workId,
+    coverageLevel: input.candidate.coverageLevel,
+    metadataConfidence: input.candidate.metadataConfidence,
+    locale: input.locale,
+  });
 
   return {
     ...presentation,
+    // Keep numeric similarity/ranking; suppress unsupported confident presentation.
+    ...(!reason.supported ? {matchScore:null,matchLabel:null,matchConfidence:'low' as const} : {}),
     personalSimilarity,
     coverageLevel: input.candidate.coverageLevel,
     metadataConfidence: input.candidate.metadataConfidence,
-    explanation: buildRecommendationExplanation({
-      profile: input.profile.vector,
-      candidate: input.candidate.traits,
-      workId: input.workId,
-      coverageLevel: input.candidate.coverageLevel,
-      metadataConfidence: input.candidate.metadataConfidence,
-      locale: input.locale,
-    }),
+    explanation: reason.explanation,
   };
 }
 
@@ -245,7 +247,7 @@ export function recommendBooks(input: {
         matchConfidence: personalMatch.matchConfidence,
         coverageLevel,
         metadataConfidence,
-        explanation: personalMatch.explanation || getEraPreferenceExplanation(input.locale ?? 'en', eraPreferenceBoost),
+        explanation: personalMatch.explanation,
         collaborativeExplanation: collaborativeSignal
           ? translate(input.locale ?? 'en', 'recommendation.collaborative')
           : '',

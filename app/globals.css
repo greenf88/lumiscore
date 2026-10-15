@@ -964,7 +964,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-book-card .collection-quick-editor { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
 .my-books-card { max-width: none; }
 .section-more { display: flex; justify-content: center; margin-top: 28px; }
-.recommendation-panel .recommendation-reason { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.recommendation-panel .recommendation-reason { overflow: visible; display: block; -webkit-line-clamp: unset; overflow-wrap: anywhere; font-size: var(--type-small); line-height: 1.45; }
 .hero-inner:not(:has(.recommendation-panel)) { grid-template-columns: 1fr; }
 .taste-rating-test h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 44px); line-height: 1.1; }
 .taste-round-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-block: 20px; }
@@ -1438,10 +1438,11 @@ button, input, select, textarea { font-family: var(--sans); }
 .book-cover .cover-rating-badge {
   right: clamp(2px, 3cqw, 10px);
   bottom: clamp(2px, 3cqw, 10px);
-  width: clamp(21px, 27cqw, 62px);
+  /* Diameter, type and border are 1.25 × the shared PR24 presentation. */
+  width: clamp(26.25px, 33.75cqw, 77.5px);
   height: auto;
   aspect-ratio: 1;
-  border: clamp(1px, .8cqw, 2px) solid #fffaf2;
+  border: clamp(1.25px, 1cqw, 2.5px) solid #fffaf2;
   border-radius: 50%;
   box-shadow: 0 2px 6px #07172035;
   background: var(--gold);
@@ -1449,18 +1450,42 @@ button, input, select, textarea { font-family: var(--sans); }
 }
 .book-cover .cover-rating-badge strong {
   font-family: var(--sans);
-  font-size: clamp(8px, 8.5cqw, 23px);
+  font-size: clamp(10px, 10.625cqw, 28.75px);
   font-weight: 600;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .book-cover .cover-rating-badge small {
-  margin-top: clamp(1px, .6cqw, 2px);
-  font-size: clamp(3px, 2.7cqw, 7px);
+  margin-top: clamp(1.25px, .75cqw, 2.5px);
+  font-size: clamp(3.75px, 3.375cqw, 8.75px);
   letter-spacing: 0;
   font-weight: 700;
   line-height: 1;
 }
+.recommendation-panel .view-all.ui-primary {
+  margin: 20px;
+  padding: 12px 16px;
+  gap: 12px;
+  justify-content: center;
+  background: var(--action-bg);
+  border-color: var(--action-bg);
+  color: #fff;
+}
+@media (hover: hover) and (pointer: fine) {
+  .recommendation-panel .view-all.ui-primary:hover { background: var(--teal-deep); color: #fff; }
+}
+.book-description .description-source {
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: var(--type-small);
+  line-height: 1.5;
+}
+.description-source a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.description-source a:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.book-description .description-toggle { width: fit-content; border-bottom: 0; text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 820px) {
   .header-account-trigger, .mobile-search-button { width: 44px; min-width: 44px; }
   .recommendation-row { grid-template-columns: 43px minmax(0, 1fr); }

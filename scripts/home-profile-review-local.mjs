@@ -5,7 +5,7 @@ import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
-const largeText=process.argv.includes('--large-text'),visualFinish=process.argv.includes('--visual-finish'),port=visualFinish?3128:largeText?3127:3126;
+const refinements=process.argv.includes('--cover-refinements'),largeText=process.argv.includes('--large-text'),visualFinish=process.argv.includes('--visual-finish')||refinements,port=refinements?3130:visualFinish?3128:largeText?3127:3126;
 for(const key of Object.keys(process.env))if(/SUPABASE|DATABASE|SECRET|TOKEN|GOOGLE_BOOKS/.test(key))delete process.env[key];
 const fixture=JSON.stringify(root.replaceAll('\\','/')+'test-support/reading-profile/fixture.ts');
 const auth=`import {cookies} from 'next/headers';import {requestPagePath} from '@/lib/i18n/server';import {fixtureUser,fixtureClient} from ${fixture};
@@ -30,6 +30,11 @@ if(visualFinish){
  modules['lib/supabase/taste-test.ts']+=`export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}`;
  modules['lib/supabase/collections.ts']=`import {books} from ${fixture};export async function loadHomepageSeriesContinuations(){return []};export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(){return null};export async function loadCollectionsDirectory(){return {total:1,collections:[{collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series'},cataloguedBookCount:4,representativeBooks:books.slice(0,3)}]}}`;
  modules['lib/supabase/collections.ts']+=`export async function loadCollectionPageData(){return {collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series',description:null,expectedMainSeriesTotal:null},books:books.slice(0,4).map((book,i)=>({book,workId:book.workId,sequenceNumber:i+1,publicationOrder:i+1,subgroup:null})),authenticated:true,statuses:{},userRatings:{},ratedWorkIds:[],highlightedUnreadWorkId:null}}`;
+}
+if(refinements){
+ const review=JSON.stringify(root.replaceAll('\\','/')+'test-support/reading-profile/cover-reasons-fixture.ts');
+ modules['lib/supabase/taste-test.ts']=`export {loadHomepagePersonalization} from ${review};export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}`;
+ modules['lib/books/public-description.ts']=`export {loadPublicBookDescription} from ${review};`;
 }
 const json=(res,data,status=200)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
 let round=null,position=0;

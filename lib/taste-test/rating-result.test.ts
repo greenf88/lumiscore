@@ -29,7 +29,7 @@ test('twenty unique recommendations exclude rated/read/unavailable; reasons are 
   const input={profile,candidates:[...candidates,...candidates],evidence,excludedIds:new Set(['1','2','3','4','5','6']),availableIds:new Set(evidence.keys()),locale:'en' as const};
   const result=recommendRatingResult(input);
   assert.equal(result.length,20);assert.equal(new Set(result.map(x=>x.book.workId)).size,20);
-  assert.ok(result.every(x=>!input.excludedIds.has(x.book.workId!) && x.matchScore===null && /5 books/.test(x.explanation)));
+  assert.ok(result.every(x=>!input.excludedIds.has(x.book.workId!) && x.matchScore===null && /Fantasy/.test(x.explanation) && !/5 books/.test(x.explanation)));
   assert.equal(recommendRatingResult({...input,availableIds:new Set()}).length,0);
   assert.equal(recommendRatingResult({...input,availableIds:new Set(['7','8'])}).length,2);
   assert.match(recommendRatingResult({...input,profile:buildRatingResultProfile([],evidence)})[0].explanation,/exploratory/);

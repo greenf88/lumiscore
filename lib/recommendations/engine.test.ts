@@ -312,7 +312,7 @@ test('quality and exploration affect ranking but never inflate personal match', 
   const highQuality = candidate('22', 'High quality', 'B', { science_fiction: 1 }, 10, 100);
   const [first, second] = recommendBooks({
     candidates: [lowQuality, highQuality],
-    profile: { ...duneProfile, confidence: 'HIGH' },
+    profile: buildTasteProfile({}, Array.from({length:12},(_,i)=>({workId:String(100+i),rating:9,traits:tasteVector({science_fiction:1})}))),
     ratedWorkIds: new Set(),
     limit: 2,
   });
@@ -327,7 +327,7 @@ test('quality and exploration affect ranking but never inflate personal match', 
 
 test('ranking cannot overwrite a book match to make percentages monotonic', () => {
   const profile = {
-    ...duneProfile,
+    ...buildTasteProfile({}, Array.from({length:12},(_,i)=>({workId:String(100+i),rating:9,traits:tasteVector({science_fiction:1})}))),
     vector: tasteVector({ science_fiction: 1 }),
     confidence: 'HIGH' as const,
   };
@@ -372,7 +372,7 @@ test('diversity reranking avoids filling the first results with one author', () 
 
 test('explanations contain only meaningful traits that genuinely overlap', () => {
   const profile = {
-    ...duneProfile,
+    ...buildTasteProfile({}, Array.from({length:5},(_,i)=>({workId:String(100+i),rating:9,traits:tasteVector({science_fiction:1,worldbuilding:.8,literary:.9})}))),
     vector: tasteVector({
       science_fiction: 1,
       worldbuilding: .8,
@@ -394,9 +394,8 @@ test('explanations contain only meaningful traits that genuinely overlap', () =>
     'science_fiction',
     'worldbuilding',
   ]);
-  assert.match(result.explanation, /science fiction/);
-  assert.match(result.explanation, /immersive worlds/);
-  assert.doesNotMatch(result.explanation, /relationship-driven|literary/);
+  assert.match(result.explanation, /science fiction/i);
+  assert.doesNotMatch(result.explanation, /immersive worlds|relationship-driven|literary/);
 });
 
 test('recommendations fabricate no explanation when trustworthy overlap is absent', () => {
@@ -407,7 +406,7 @@ test('recommendations fabricate no explanation when trustworthy overlap is absen
   });
 
   assert.equal(result.personalMatch, 0);
-  assert.equal(result.explanation, '');
+  assert.match(result.explanation, /exploratory/);
 });
 
 test('insufficient candidate metadata suppresses explanations', () => {
@@ -421,7 +420,7 @@ test('insufficient candidate metadata suppresses explanations', () => {
     ratedWorkIds: new Set(),
   })[0];
 
-  assert.equal(result.explanation, '');
+  assert.match(result.explanation, /exploratory/);
 });
 
 test('Taste Test anchor identity has no ranking bonus', async () => {
@@ -497,8 +496,8 @@ test('detail match explanation is localized and grounded in real overlap', () =>
   const english = calculatePersonalMatch({ profile, candidate: detailCandidate, workId: '9902', locale: 'en' });
   const dutch = calculatePersonalMatch({ profile, candidate: detailCandidate, workId: '9902', locale: 'nl' });
 
-  assert.match(english.explanation, /science fiction|immersive worlds/);
-  assert.match(dutch.explanation, /sciencefiction|meeslepende werelden/);
+  assert.match(english.explanation, /science fiction|immersive world/i);
+  assert.match(dutch.explanation, /sciencefiction|meeslepende wereld/i);
   assert.doesNotMatch(dutch.explanation, /romantiek|non-fictie/);
 });
 
@@ -516,5 +515,5 @@ test('insufficient book metadata never fabricates a detail match', () => {
 
   assert.equal(result.matchScore, null);
   assert.equal(result.matchLabel, null);
-  assert.equal(result.explanation, '');
+  assert.match(result.explanation, /exploratory/);
 });

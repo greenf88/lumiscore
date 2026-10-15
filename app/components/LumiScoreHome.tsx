@@ -372,7 +372,7 @@ const RecommendationPanel = memo(function RecommendationPanel({ personalization 
           ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
           : <p className="recommendation-empty">{t('home.noPersonalEvidence')}</p>}
       </div>
-      {!personalization.unavailable && <LocaleLink className="view-all" href="/recommendations">{t('home.seeMore')} <span>→</span></LocaleLink>}
+      {!personalization.unavailable && <LocaleLink className="view-all ui-control ui-primary" href="/recommendations">{t('home.seeMore')} <span aria-hidden="true">→</span></LocaleLink>}
     </aside>
   );
 });

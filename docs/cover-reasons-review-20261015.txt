@@ -1,0 +1,103 @@
+LumiScore — coverbadge, attributie en boekgebonden redenen — lokaal reviewpakket
+15 oktober 2026
+
+Basis: actuele origin/main760e2bb68f9e30738fd61389e3b31aaaebf4c662 (PR24 live).
+Branch:style/cover-attribution-reasons-20261015.
+Geïsoleerde worktree:lumiscore-cover-reasons-20261015; ander broncodewerk behouden.
+Geen dubbele implementatie van PR24 of de gezamenlijke smaakberekening uit PR23.
+
+Afzonderlijke commits
+1.30150081b36a7537c18b856c8c4a6a5b31381c53: grotere gedeelde coverbadge,
+  compacte bronregel en groene See more met20px ruimte rondom.
+2.De volgende lokale commit bevat de bewijsgebonden uitleg, tests en dit verslag.
+  Exacte definitieve SHA staat in het naastgelegen externe REVIEW-PACKAGE.txt.
+  De gedeelde profielberekening zelf is niet gewijzigd; zo blijft deze uitbreiding
+  afzonderlijk reviewbaar ten opzichte van PR23 en van de visuele commit.
+
+Presentatie
+Diameter, cijfer, merklabel en rand van CoverScoreBadge worden via de bestaande
+gedeelde CSS1,25x geschaald; positie rechtsonder blijft binnen de zichtbare cover.
+Geen wijziging van ratingbuttons, bestanden, scorewaarden of publicatieregels.
+43px-miniatuur:badge21→26,25px. Kaart-/desktopmetingen:factor1,2498–1,25 na
+rekening houden met de contentbox (containerunits gebruiken niet de paddingbox).
+Detailmaximum62→77,5px. Eén badge per cover, ook voor de neutrale —.
+Merklabel blijft bij43px-thumbnails vanzelf klein; de badge is geen interactiedoel.
+
+Bron:13px/gedempt, direct onder tekst/Read more. Brede summary-onderlijn weg;
+keyboardfocus behouden. Bestaande publicDescriptionSource blijft de enige
+provider-/URL-bron: exact OL Work/Edition of Google Books/ISBN. Geen andere bron
+automatisch Open Library genoemd; geen attributie bij ontbrekende beschrijving.
+Geen uitspraak of wijziging over rechten/licenties van beschrijvingen.
+See more behoudt /recommendations en pijl; gedeelde primaire tokens,20px marge.
+
+Eén onderbouwde reden
+Het huidige gedeelde TasteProfile levert vector én affinities. Er komt geen tweede
+profielberekening, extra query, AI-request, willekeur of nieuwe taxonomie bij.
+De sterkste positieve niet-periode-overlap moet de bestaande0,02-bijdrage halen,
+met kandidaat rich/partial en metadataConfidence≥0,6. Gebruikersbewijs gebruikt
+de bestaande PROFILE_POLICY:≥3 positief beoordeelde unieke Works (rating≥7), of
+≥3 expliciete positieve smaaktestkeuzes voor dat kenmerk; netto profielwaarde>0.
+Eén korte kenmerkgebonden NL/EN-zin. Deterministische tie-break op TASTE_TRAITS;
+gelijke invoer geeft gelijke tekst, ongeacht de volgorde van affinities.
+Niet ondersteund:één verkennende zin, geen matchpercentage/Strong match.
+Home, boekdetail en resultaatadapter delen dezelfde calculatePersonalMatch/reason;
+de vroegere aparte resultaattekst met aantallen is niet langer een tweede uitlegpad.
+De compact-paneeltekst wordt niet meer na twee regels midden in de boodschap geknipt.
+
+La Nuit — afzonderlijk onopgelost dataprobleem, niet stilzwijgend geherclassificeerd
+Twee begrensde read-only productiequeries:OL14856842W LIMIT2, daarna work276
+evidence LIMIT40. Er zijn8 openbare metadatarijen teruggekomen; geen lezersdata.
+Work276=La Nuit, Elie Wiesel,1955. Repo-seed open-library-seeds-expanded.ts:161
+geeft fantasy-science-fiction. Actuele reviewed_seed geeft speculative1/confidence
+0,95. OL-rows bevatten fantasy/nonfiction/romance/science_fiction/speculative/
+thriller_mystery bij0,85. Raw labels mengen Holocaust/autobiografie met fantasy,
+sciencefiction en thrillers. Daarmee is dit kandidaatmetadata, niet enkel herhaling
+van een gebruikersprofiel. Verified_at/sourceconfidence betekent geen menselijk
+gevalideerde inhoud. Er is geen bestaande reviewed correction voor276.
+Synthetische reproductie met deze vector geeft vóór de wijziging:
+“Matches your preference for thrillers and mysteries and speculative ideas.”
+Na de wijziging:verkennend, geen sterke match/percentage; similarity blijft gelijk.
+Het oorspronkelijke screenshotprofiel is niet opgevraagd of gereconstrueerd.
+Een expliciete PRESENTATIE-hold op276 voorkomt nu ongefundeerde inhoudsclaims;
+geen vervangende classificatie, uitsluiting of wijziging in de score/rangschikking.
+Datareconciliatie blijft apart nodig. De vervuilde kenmerken kunnen de bestaande
+rangschikking/profielen nog beïnvloeden. Hold pas na bewezen datareview verwijderen.
+Compact bewijs:outputs/cover-reasons-20261015/la-nuit-evidence.json en reproduction.
+
+Verificatie
+153 gerichte tests groen:aanbevelingen, gedeeld profiel/resultaat, beschrijvingen,
+exacte bronlinks, ontbrekende scores, HTML van alle coverpresentaties en regressies.
+TypeScript, ESLint, vinext-productiebuild, Vite-build, secretscan en diffcontrole groen.
+12 synthetische vergelijkingsscenario's/240 resultaten hebben exact dezelfde
+volgorde, personalSimilarity, rankingScore, finalRankingScore, era-/collaborative
+velden als de oude engine; geen claim van verbeterde aanbevelingskwaliteit.
+Nieuwe contractasserties vervangen uitsluitend de bewust gewijzigde oude tekst-
+verwachtingen (meerdere redenen/aantallen/lege tekst/zwak maar precies percentage).
+Vite/Vinext geeft bestaande optimizer/HMR/dynamic-import-waarschuwingen; geen
+test-, TypeScript- of lintfouten. Eén fout pad bij de eerste buildaanroep is
+gecorrigeerd door het bestaande npm-buildscript te gebruiken; echte builds slagen.
+
+Browser:echte appcomponenten/SSR, uitsluitend loopback synthetische adapters,
+zonder credentials of remote opslag. NL/EN,Paper/Ink,320x568/390x844/1280x900.
+Kleine covers, kaartcovers, detail en smaaktest:één badge binnen de cover, geen
+horizontale overflow. Scorebuttons320x568 blijven44x44, twee rijen; onderrand
+laatste scores388px, Overslaan440px. Grotere badge gebruikt geen layoutruimte.
+Bronnen OL/Google/missing apart gecontroleerd. Geen externe source bezocht of
+formulier ingediend; geen echte telefoon-, hosted Auth- of schrijftest geclaimd.
+De kleine coverbestanden zijn niet gewijzigd; screenshots gebruiken lokale SVG's.
+
+Review: http://127.0.0.1:3130/nl (synthetisch, niet voor openbare publicatie).
+Screenshots en ruwe geometrie:outputs/cover-reasons-20261015 naast REVIEW-PACKAGE.txt.
+recommendations-nl-ink-mobile.jpg / recommendations-nl-paper-mobile.jpg;
+recommendations-en-ink-desktop.jpg / recommendations-en-paper-desktop.jpg;
+source-en-paper-mobile.jpg / source-nl-ink-mobile.jpg;
+taste-badge-nl-ink-320.jpg / taste-badge-en-paper-320.jpg.
+
+Grenzen en herstel
+Uitsluitend lokaal gecommit. Geen push, PR, merge, deployment, migratie, productie-
+datawrite, Auth/RLS- of environmentwijziging. Geen eigen hosted accounts aangemaakt;
+geen accounts/ratings/status/voortgang gewijzigd. Lokale mockronde bestaat alleen
+in het geheugen van de reviewserver. Geparkeerd werk blijft ongemoeid.
+Herstel:revert tweede commit voor de uitleg/presentatiegate en daarna desgewenst
+3015008 voor visuele verfijningen, op een aparte branch; gericht testen/bouwen.
+Basis760e2bb blijft de vorige liveversie. Geen gegevensherstel nodig.
