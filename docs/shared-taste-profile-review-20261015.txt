@@ -53,6 +53,9 @@ onbekende boekkenmerken verdringen geen bestaande gastvoorkeuren.
 Zonder gastantwoorden is de vector uitsluitend uit beschikbare ratingkenmerken.
 Ingelogde voorkeurentest gebruikt de serverberekening inclusief ratings, niet meer
 alleen haar lokale antwoorden. Een laadfout wordt geen schijnbaar leeg leesprofiel.
+Ook boekdetail markeert een mislukte profielread expliciet unavailable en toont
+een korte NL/EN-statusmelding, niet de tekst alsof iemand nog geen profiel heeft.
+Echte React-HTML-regressie en fouttransporttest controleren dit onderscheid.
 
 Loaders / privacy / ranking
 loadReaderTasteProfile deelt complete, expliciet owner-gefilterde rating/statusreads,

@@ -64,6 +64,7 @@ export type BookDetailMatchCandidate = {
 };
 
 export type BookDetailPersonalization = {
+  unavailable?: boolean;
   authenticated: boolean;
   hasEvidence: boolean;
   candidate: BookDetailMatchCandidate | null;

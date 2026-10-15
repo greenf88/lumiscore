@@ -126,7 +126,9 @@ export function LumiScoreBookDetail({
     : personalMatch?.matchLabel
       ? t(MATCH_LABEL_KEYS[personalMatch.matchLabel])
       : '—';
-  const matchCopy = !hasTasteEvidence
+  const matchCopy = personalization.unavailable
+    ? locale==='nl'?'Je leesprofiel kon niet laden. Probeer later opnieuw.':'Your reading profile could not load. Please try again later.'
+    : !hasTasteEvidence
     ? t('detail.unlockMatch')
     : !personalization.candidate ||
         personalization.candidate.coverageLevel === 'none' ||
@@ -339,7 +341,7 @@ export function LumiScoreBookDetail({
             <section className="detail-score-panel detail-match-panel" aria-labelledby="match-heading">
               <span id="match-heading">{t('detail.yourMatch')}</span>
               <strong>{matchValue}</strong>
-              {matchCopy && <p>{matchCopy}</p>}
+              {matchCopy && <p role={personalization.unavailable?'status':undefined}>{matchCopy}</p>}
             </section>
           </div>
 

@@ -4,6 +4,11 @@ import {readFile} from 'node:fs/promises';
 import {fixture,asUser,a,b} from '../test-support/taste-results/fixture.mjs';
 import {loadReaderTasteProfile} from '../lib/supabase/reader-taste-profile.ts';
 
+test('failed owner read is a failure, never an empty or guest-only profile',async()=>{
+ const rejected={from(){const q={select(){return q;},eq(){return q;},in(){return q;},order(){return q;},range(){return q;},then(resolve){return Promise.resolve(resolve({data:null,error:new Error('SYNTHETIC_READ_FAILED')}));}};return q;}};
+ await assert.rejects(()=>loadReaderTasteProfile(rejected,a,'nl'),/SYNTHETIC_READ_FAILED/);
+});
+
 test('actual local PostgreSQL/RLS: complete owner data and dense evidence pages, updates/deletes and isolation',async()=>{
  const db=await fixture(),calls=[];
  try{
