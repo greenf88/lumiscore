@@ -63,9 +63,11 @@ test('Browse exposes an accessible native page-size control and keeps page size 
 
   const controls = await readFile(new URL('../../app/components/BrowseCatalogControls.tsx', import.meta.url), 'utf8');
   assert.match(browseSource, /<BrowseCatalogControls/);
-  assert.match(controls, /<label>\{t\('browse\.pageSize'\)\}/);
-  assert.match(controls, /<select name="pageSize"/);
-  assert.match(controls, /\[32, 64, 128\]\.map/);
+  assert.match(controls, /<legend>\{t\('browse\.pageSize'\)\}/);
+  assert.match(controls, /type="radio" name="pageSize"/);
+  assert.match(controls, /\[16, 32, 64, 128\]\.map/);
+  assert.doesNotMatch(controls, /AuthorFilter|<select name="pageSize"/);
+  assert.match(controls, /form="browse-clear-form"/);
   assert.match(controls, /method="get"/);
   assert.match(browseSource, /updateBrowseReturnPath\(returnTo/);
 });
@@ -103,13 +105,15 @@ test('128-card Browse pages keep ratings and stored-cover reads batched', async 
 });
 
 test('Browse is reachable in desktop and mobile navigation and search has a browse escape', async () => {
-  const [homeSource, searchSource] = await Promise.all([
+  const [homeSource, searchSource, menuSource] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/MobileNavigation.tsx', import.meta.url), 'utf8'),
   ]);
   assert.match(homeSource, /<LocaleLink href="\/browse">\{t\('header\.browse'\)\}<\/LocaleLink>/);
-  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/browse"/);
-  assert.match(homeSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/collections"/);
+  assert.match(homeSource, /<MobileNavigation/);
+  assert.match(menuSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/browse"/);
+  assert.match(menuSource, /mobile-navigation-panel[\s\S]*?<LocaleLink href="\/collections"/);
   assert.match(searchSource, /className="empty-results-action" href="\/browse"/);
 });
 

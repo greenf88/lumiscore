@@ -26,7 +26,7 @@ test('browse works without a search query and defaults to deterministic A-Z orde
 
 test('browse page ranges are database-sized and never overlap', () => {
   assert.equal(CATALOG_BROWSE_PAGE_SIZE, 32);
-  assert.deepEqual(CATALOG_BROWSE_PAGE_SIZES, [32, 64, 128]);
+  assert.deepEqual(CATALOG_BROWSE_PAGE_SIZES, [16, 32, 64, 128]);
   assert.deepEqual(getCatalogBrowseRange(1), { from: 0, to: 31 });
   assert.deepEqual(getCatalogBrowseRange(2), { from: 32, to: 63 });
   assert.deepEqual(getCatalogBrowseRange(2, 128), { from: 128, to: 255 });

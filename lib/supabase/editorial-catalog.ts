@@ -3,6 +3,7 @@ import { editorialRpcArgs, type EditorialQuery } from '@/lib/catalog/editorial-q
 import type { Locale } from '@/lib/i18n/config';
 import type { PublicCategory, AuthorOption } from '@/lib/catalog/discovery';
 import { loadPublicCategories } from './categories';
+import { editorialWindow } from '@/lib/catalog/editorial-window';
 export type EditorialPage = CatalogBrowsePage & {
   available: boolean;
   facets: Record<string, number>;
@@ -27,14 +28,14 @@ export async function loadEditorialCatalog(state: EditorialQuery, locale: Locale
   }
   const { data, error } = response;
   if (error) throw error;
-  const ids = (data.workIds as number[]).map(String);
+  const { ids, total, page, pageCount } = editorialWindow(state, data);
   // Keep existing edition ranking, stored-cover validation and genuine rating summaries.
   const books = hydrateBooks ? await loadCatalogBooksByIdsWithStoredCovers(ids, undefined, locale) : [];
   const byId = new Map(books.map(book => [book.workId, book]));
   return {
     books: ids.flatMap(id => byId.has(id) ? [byId.get(id)!] : []),
-    total: Number(data.total), page: Number(data.page), pageSize: state.pageSize,
-    pageCount: Number(data.pageCount), sort: state.sort,
+    total, page, pageSize: state.pageSize,
+    pageCount, sort: state.sort,
     facets: data.facets ?? {}, selectionCount: Number.isSafeInteger(data.selectionCount) ? data.selectionCount : null, available: true,
     categories, selectedAuthor, discoveryAvailable,
   };

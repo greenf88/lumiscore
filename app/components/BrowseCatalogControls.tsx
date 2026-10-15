@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { editorialHref, selectionSlug, type EditorialQuery } from '@/lib/catalog/editorial-query';
-import { browseFilterChips, browseFilterGroupCount, clearBrowseFilters } from '@/lib/catalog/browse-controls';
+import { selectionSlug, type EditorialQuery } from '@/lib/catalog/editorial-query';
+import { browseFilterChips, browseFilterGroupCount } from '@/lib/catalog/browse-controls';
 import type { AuthorOption, PublicCategory } from '@/lib/catalog/discovery';
 import { localizedHref } from '@/lib/i18n/paths';
-import { AuthorFilter } from './AuthorFilter';
 import { LocaleLink, useLumiScoreLocale } from './LumiScoreLocale';
 
 type Props = {
@@ -38,7 +37,7 @@ export function BrowseCatalogControls({ state, categories, facets, selectedAutho
   const panel = useRef<HTMLDivElement>(null);
   const count = browseFilterGroupCount(state);
   const chips = browseFilterChips(state, categories, selectedAuthor, locale);
-  const clearHref = editorialHref('/browse', clearBrowseFilters(state));
+  const clearHref = '/browse';
   const action = localizedHref('/browse', locale);
   const close = () => { setOpen(false); trigger.current?.focus(); };
   useEffect(() => {
@@ -70,7 +69,7 @@ export function BrowseCatalogControls({ state, categories, facets, selectedAutho
         </select>
         <noscript><button type="submit">{t('browse.sortCompact')}</button></noscript>
       </form>
-      {(count > 0 || state.sort === 'highest') && resultCount !== null && <p className="browse-result-count" role="status">
+      {count > 0 && resultCount !== null && <p className="browse-result-count" role="status">
         {t(resultCount === 1 ? 'browse.resultCountOne' : 'browse.resultCount', { count: resultCount.toLocaleString(nl ? 'nl-NL' : 'en-US') })}
       </p>}
     </div>
@@ -82,8 +81,22 @@ export function BrowseCatalogControls({ state, categories, facets, selectedAutho
       <form action={action} method="get" className="browse-filter-form">
         <input type="hidden" name="q" value={state.query} />
         <input type="hidden" name="sort" value={state.sort} />
-        {discoveryAvailable ? <AuthorFilter selected={selectedAuthor} id={state.author} nl={nl} compact />
-          : <><input type="hidden" name="author" value={state.author} /><p role="status">{t('browse.authorUnavailable')}</p></>}
+        {state.author && <input type="hidden" name="author" value={state.author} />}
+        <fieldset className="browse-selection"><legend>{t('browse.selection')}</legend>
+          <div className="browse-choice-tiles browse-selection-tiles">
+            <label><input type="radio" name="selection" value="" aria-label={t('browse.allBooks')} defaultChecked={!state.selection} /><span>{t('browse.allBooks')}</span></label>
+            <label><input type="radio" name="selection" value={selectionSlug} aria-label={t('browse.curatedSelection')} defaultChecked={Boolean(state.selection)} />
+              <span>{t('browse.curatedSelection')}{selectionCount === null ? null : <small>{selectionCount.toLocaleString(nl ? 'nl-NL' : 'en-US')}</small>}</span></label>
+          </div>
+        </fieldset>
+        <fieldset className="browse-display-options"><legend>{t('browse.pageSize')}</legend>
+          <div className="browse-choice-tiles browse-size-tiles">
+            {[16, 32, 64, 128].map(size => <label key={size}>
+              <input type="radio" name="pageSize" value={size} aria-label={String(size)} defaultChecked={state.pageSize === size} />
+              <span>{size}</span>
+            </label>)}
+          </div>
+        </fieldset>
         {categories.length > 0 ? <fieldset className="browse-category-options">
           <legend>{t('browse.categories')}</legend>
           <div>{categories.map(category => <label key={category.id}>
@@ -93,29 +106,19 @@ export function BrowseCatalogControls({ state, categories, facets, selectedAutho
         </fieldset> : null}
         {state.categories.filter(id => !categories.some(category => category.id === id))
           .map(id => <input type="hidden" name="category" value={id} key={id} />)}
-        <label className="browse-selection">{t('browse.selection')}
-          <select name="selection" defaultValue={state.selection}>
-            <option value="">{t('browse.allBooks')}</option>
-            <option value={selectionSlug}>{t('browse.curatedSelection')}{selectionCount === null ? '' : ` (${selectionCount.toLocaleString(nl ? 'nl-NL' : 'en-US')})`}</option>
-          </select>
-        </label>
         <fieldset className="browse-edition-options"><legend>{t('browse.editions')}</legend>
           {(['nl', 'en'] as const).map(code => <label key={code}>
             <input type="checkbox" name="language" value={code} defaultChecked={state.languages.includes(code)} />
             {code === 'nl' ? 'Nederlands' : 'English'}
           </label>)}
         </fieldset>
-        <fieldset className="browse-display-options"><legend>{t('browse.display')}</legend>
-          <label>{t('browse.pageSize')}<select name="pageSize" defaultValue={state.pageSize}>
-            {[32, 64, 128].map(size => <option key={size} value={size}>{size}</option>)}
-          </select></label>
-        </fieldset>
         <div className="browse-filter-actions">
           <button type="submit" className="browse-apply">{t('browse.applyFilters')}</button>
-          <button type="button" className="browse-text-action" onClick={close}>{t('browse.cancel')}</button>
-          {count > 0 && <LocaleLink href={clearHref} className="browse-text-action">{t('browse.clearFilters')}</LocaleLink>}
+          <button type="submit" form="browse-clear-form" className="browse-clear">{t('browse.clearFilters')}</button>
         </div>
       </form>
+      <form id="browse-clear-form" action={action} method="get" />
+      <button type="button" className="browse-text-action browse-cancel" onClick={close}>{t('browse.cancel')}</button>
     </div>}
 
     {chips.length > 0 && <nav className="browse-active-filters" aria-label={t('browse.activeFilters')}>

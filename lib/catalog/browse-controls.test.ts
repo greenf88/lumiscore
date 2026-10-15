@@ -33,10 +33,10 @@ test('each chip removes only its own applied filter and resets pagination while 
   assert.match(chips[1].label, /Auteur A/);
 });
 
-test('clear all preserves display and sort, removes every content group, and does not mutate original state', () => {
+test('clear all restores all/highest/16, removes every content group, and does not mutate original state', () => {
   const cleared = clearBrowseFilters(state);
   assert.equal(browseFilterGroupCount(cleared), 0); assert.equal(cleared.page, 1);
-  assert.equal(cleared.sort, 'highest'); assert.equal(cleared.pageSize, 128);
+  assert.equal(cleared.sort, 'highest'); assert.equal(cleared.pageSize, 16);
   assert.equal(state.categories.length, 2); assert.equal(state.page, 4);
   assert.ok(getSafeBrowseReturnPath(editorialHref('/browse', cleared)));
 });
@@ -56,7 +56,7 @@ test('chip values use URL encoding and cannot create external return destination
 });
 
 test('new Browse copy is complete in NL/EN with no changes to public rating thresholds', () => {
-  assert.equal(translate('nl', 'browse.searchPlaceholder'), 'Zoek op titel of auteur');
+  assert.equal(translate('nl', 'browse.searchPlaceholder'), 'Titel of auteur');
   assert.equal(translate('en', 'browse.heading'), 'Discover books');
   assert.equal(translate('nl', 'browse.noReliableScore'), 'Nog geen betrouwbare score');
   assert.equal(translate('en', 'browse.noReliableScore'), 'Not enough ratings');

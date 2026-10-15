@@ -34,7 +34,7 @@ test('Browse links retain 64 and 128 as explicit page sizes', () => {
 });
 
 test('explicit default page size remains bookmarkable while implicit defaults stay canonical', () => {
-  assert.equal(getSafeBrowseReturnPath('/browse?page=1&pageSize=32&sort=az'), '/browse?pageSize=32');
+  assert.equal(getSafeBrowseReturnPath('/browse?page=1&pageSize=32&sort=az'), '/browse?pageSize=32&sort=az');
   assert.equal(updateBrowseReturnPath('/browse?page=2', { page: 1 }), '/browse');
 });
 

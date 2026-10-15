@@ -10,7 +10,7 @@ import { getCatalogBrowseOrder } from '../books/catalog-browse.ts';
 import { overviewScrollKey } from '../navigation/overview-scroll.ts';
 
 test('scroll origin survives canonical query ordering and explicit defaults added on detail return', () => {
-  assert.equal(overviewScrollKey('/browse','?category=fiction_fantasy'), overviewScrollKey('/browse','?page=1&pageSize=32&sort=az&q=&selection=&category=fiction_fantasy'));
+  assert.equal(overviewScrollKey('/browse','?category=fiction_fantasy'), overviewScrollKey('/browse','?page=1&pageSize=16&sort=highest&q=&selection=&category=fiction_fantasy'));
   assert.equal(overviewScrollKey('/recommendations',''), overviewScrollKey('/recommendations','?limit=20'));
   assert.notEqual(overviewScrollKey('/browse','?sort=highest'),overviewScrollKey('/browse','?sort=az'));
 });

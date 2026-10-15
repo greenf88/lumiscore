@@ -29,10 +29,9 @@ export async function loadEditorialCatalog(state: EditorialQuery): Promise<Edito
   let rows = books.filter(book => (!state.query || `${book.title} ${book.author}`.toLocaleLowerCase().includes(state.query.toLocaleLowerCase()))
     && (!state.author || authorId(book) === state.author) && (!state.selection || selected(book))
     && (!state.languages.length || state.languages.some(value => languages(book).includes(value)))
-    && (!state.categories.length || state.categories.includes(category(book)))
-    && (state.sort !== 'highest' || book.score !== null));
+    && (!state.categories.length || state.categories.includes(category(book))));
   rows = rows.toSorted((a, b) => (state.sort === 'newest' ? b.firstPublishYear! - a.firstPublishYear!
-    : state.sort === 'highest' ? b.score! - a.score! : 0) || a.title.localeCompare(b.title) || Number(a.workId) - Number(b.workId));
+    : state.sort === 'highest' ? (b.score ?? -1) - (a.score ?? -1) : 0) || a.title.toLocaleLowerCase().localeCompare(b.title.toLocaleLowerCase()) || Number(a.workId) - Number(b.workId));
   const total = rows.length, pageCount = Math.max(1, Math.ceil(total / state.pageSize)), page = Math.min(state.page, pageCount);
   return { books: rows.slice((page - 1) * state.pageSize, page * state.pageSize), total, page, pageSize: state.pageSize,
     pageCount, sort: state.sort, available: true, categories, selectedAuthor: authors.find(a => a.id === state.author) ?? null,

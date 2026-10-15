@@ -11,15 +11,17 @@ async function html(path) {
 const ids = body => [...body.matchAll(/<article class="book-card browse-card" id="browse-synthetic-(\d+)"/g)].map(m => m[1]);
 test('SSR starts with closed filters, direct search/sort, and honest page-sized cards', async () => {
   const body = await html('/nl/browse');
-  assert.equal(ids(body).length, 32);
+  assert.equal(ids(body).length, 16);
   assert.match(body, /aria-expanded="false" aria-controls="browse-filter-panel"/);
   assert.doesNotMatch(body, /role="region" aria-labelledby="browse-filter-title"/);
-  assert.match(body, /Zoek op titel of auteur/); assert.match(body, /160 boeken in de catalogus/);
+  assert.match(body, /Titel of auteur/); assert.match(body, /160 boeken in de catalogus/);
+  assert.match(body, /value="highest" selected/);
+  assert.equal((body.match(/type="search"/g)??[]).length,1);
   assert.doesNotMatch(body, /VOLLEDIGE CATALOGUS|pagina voor pagina|class="score-badge"|class="book-year"/);
-  assert.match(body, /Nog geen betrouwbare score/); assert.match(body, /3–4 beoordelaars/);
+  assert.match(body, /3–4 beoordelaars/);
   assert.doesNotMatch(body, /returnTo=[^" ]*https/);
 });
-for (const size of [32, 64, 128]) test(`SSR ${size}-page sizing and non-overlap retain existing URL context`, async () => {
+for (const size of [16, 32, 64, 128]) test(`SSR ${size}-page sizing and non-overlap retain existing URL context`, async () => {
   const first = ids(await html(`/en/browse?pageSize=${size}`));
   const next = ids(await html(`/en/browse?pageSize=${size}&page=2`));
   assert.equal(first.length, size); assert.equal(next.length, Math.min(size, 160 - size));
@@ -30,14 +32,21 @@ for (const size of [32, 64, 128]) test(`SSR ${size}-page sizing and non-overlap 
 });
 test('combined author/category/selection/edition totals come from filtered data, not global catalog', async () => {
   const body = await html('/nl/browse?author=1&category=fiction_fantasy&selection=lumiscore-selectie-1000&language=nl');
-  assert.equal(ids(body).length, 27); assert.match(body, /27 resultaten/);
+  assert.equal(ids(body).length, 16); assert.match(body, /27 resultaten/);
   assert.doesNotMatch(body, /160 boeken in de catalogus/);
   assert.match(body, /4 actieve filtergroepen/); assert.match(body, /Verwijder filter: Schrijver: Ada Vermeer/);
 });
-test('highest-score eligible subset is labelled as results without adding a content-filter badge', async () => {
+test('highest score includes unscored books AFTER scored books without a hidden selection or false total', async () => {
   const body = await html('/en/browse?sort=highest&pageSize=128');
-  assert.equal(ids(body).length, 54); assert.match(body, /54 results/);
-  assert.doesNotMatch(body, /54 books in the catalog|class="browse-filter-count"/);
+  assert.equal(ids(body).length, 128); assert.match(body, /160 books in the catalog/);
+  assert.doesNotMatch(body, /class="browse-filter-count"/);
+  assert.match(body, /Not enough ratings/);
+});
+test('single shared title/author search works for author names; explicit A-Z stays A-Z in detail return',async()=>{
+  const body=await html('/en/browse?q=Ada%20Vermeer&sort=az');
+  assert.equal(ids(body).length,16); assert.match(body,/54 results/);
+  assert.match(body,/sort%3Daz/);
+  assert.equal((body.match(/type="search"/g)??[]).length,1);
 });
 test('empty results and actual loader failure stay distinct in NL/EN', async () => {
   for (const locale of ['nl', 'en']) {

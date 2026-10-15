@@ -8,7 +8,7 @@ export function browseFilterGroupCount(state: EditorialQuery): number {
 }
 
 export function clearBrowseFilters(state: EditorialQuery): EditorialQuery {
-  return { ...state, page: 1, query: '', author: '', categories: [], languages: [], selection: '' };
+  return { ...state, page: 1, pageSize: 16, sort: 'highest', query: '', author: '', categories: [], languages: [], selection: '' };
 }
 
 /** Links go through the existing normalized URL contract, never an arbitrary return URL. */

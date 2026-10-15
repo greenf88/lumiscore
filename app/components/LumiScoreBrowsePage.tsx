@@ -69,6 +69,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         onQueryChange={setQuery}
         authState={authState}
         returnTo={returnTo}
+        searchTargetId="browse-query"
       />
       <section className="browse-page" aria-labelledby="browse-title">
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
@@ -78,7 +79,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         <div className="browse-heading">
           <div>
             <h1 id="browse-title">{t('browse.heading')}</h1>
-            {data.available && browseFilterGroupCount(filters) === 0 && filters.sort !== 'highest' && <p>{t('browse.catalogCount', {
+            {data.available && browseFilterGroupCount(filters) === 0 && <p>{t('browse.catalogCount', {
               count: data.total.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US'),
             })}</p>}
             {!data.available && <p>{t('home.catalogUnavailable')}</p>}

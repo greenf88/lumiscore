@@ -242,12 +242,14 @@ export function Header({
   onQueryChange,
   authState,
   returnTo,
+  searchTargetId,
 }: {
   onThemeToggle: () => void;
   query: string;
   onQueryChange: (value: string) => void;
   authState: HeaderAuthState;
   returnTo: string;
+  searchTargetId?: string;
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { locale, t } = useLumiScoreLocale();
@@ -255,7 +257,7 @@ export function Header({
   return (
     <header className="site-header">
       <LumiScoreWordmark />
-      <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>
+      {!searchTargetId && <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>}
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
         <LocaleLink href="/browse">{t('header.browse')}</LocaleLink>
         <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
@@ -263,12 +265,15 @@ export function Header({
         <LocaleLink className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</LocaleLink>
         <LocaleLink className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</LocaleLink>
         <MobileNavigation />
-        <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={mobileSearchOpen} onClick={() => setMobileSearchOpen((open) => !open)}><span className="search-icon" aria-hidden="true" /></button>
+        <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={searchTargetId ? undefined : mobileSearchOpen} onClick={() => {
+          if (searchTargetId) { document.getElementById(searchTargetId)?.focus(); return; }
+          setMobileSearchOpen((open) => !open);
+        }}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
         <LanguageSwitcher />
         <LumiScoreAccountMenu authState={authState} returnTo={returnTo} />
       </nav>
-      {mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
+      {!searchTargetId && mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
     </header>
   );
 }
