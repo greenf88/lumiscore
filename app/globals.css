@@ -16,6 +16,8 @@
   --teal: #72b6bb;
   --teal-deep: #42646b;
   --gold: #e2a24c;
+  /* Brand badge colour is identical in Paper and Ink, unlike gold text accents. */
+  --score-badge-bg: #e2a24c;
   --header: rgba(7, 23, 32, 0.92);
   --panel: rgba(12, 37, 47, 0.93);
   --panel-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
@@ -276,7 +278,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .card-cover-wrap .cover-title { font-size: clamp(12px, 1.02vw, 17px); }
 .card-cover-wrap .cover-mark { font-size: clamp(20px, 2vw, 32px); }
 .card-cover-wrap .cover-author { font-size: clamp(5px, 0.42vw, 7px); }
-.score-badge { position: absolute; z-index: 5; right: 12px; bottom: 12px; display: flex; width: clamp(42px, 3.3vw, 48px); height: clamp(42px, 3.3vw, 48px); flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--surface); border-radius: 50%; background: var(--gold); color: #1d1a15; box-shadow: 0 7px 18px rgba(0,0,0,.24); pointer-events: none; }
+.score-badge { position: absolute; z-index: 5; right: 12px; bottom: 12px; display: flex; width: clamp(42px, 3.3vw, 48px); height: clamp(42px, 3.3vw, 48px); flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--surface); border-radius: 50%; background: var(--score-badge-bg); color: #1d1a15; box-shadow: 0 7px 18px rgba(0,0,0,.24); pointer-events: none; }
 .score-badge strong { font-family: var(--serif); font-size: 17px; line-height: 1; }
 .score-badge small { margin-top: 2px; font-size: 5px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
 .book-card-body { display: flex; flex: 1; flex-direction: column; padding: 17px 17px 0; }
@@ -493,6 +495,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .reading-status-control.is-compact .reading-status-error { margin: 0; }
 .collection-page-shell { min-height: 100vh; }
 .collection-hero { width: min(980px, calc(100% - 48px)); margin: 0 auto; padding: 62px 0 42px; border-bottom: 1px solid var(--border); }
+.collection-hero > .detail-back-link { display: flex; width: fit-content; margin: 0 0 12px; }
 .collection-hero h1 { margin: 16px 0 14px; font-family: var(--serif); font-size: clamp(48px, 7vw, 78px); font-weight: 400; line-height: 1; letter-spacing: -.05em; overflow-wrap: anywhere; }
 .collection-hero > p { max-width: 66ch; margin: 0; color: var(--muted); font-family: var(--serif); font-size: 17px; line-height: 1.6; }
 .collection-progress { max-width: 560px; display: grid; grid-template-columns: 1fr auto; gap: 9px 18px; margin-top: 28px; }
@@ -956,12 +959,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .card-editorial-note { position: relative; z-index: 1; margin: 8px 17px; color: var(--muted); font-size: 11px; }
 .card-editorial-note p { margin: 8px 0; line-height: 1.5; }
 .card-editorial-note a { display: inline-flex; min-height: 44px; align-items: center; }
-.collection-book-list.book-grid { width: min(1380px, calc(100% - 48px)); gap: 20px; }
+.collection-book-list.book-grid { width: min(1380px, calc(100% - 48px)); grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); align-items: start; gap: 20px; }
+/* Controls need five 44px targets, so use fewer, wider collection cards. */
+.collection-book-card { height: auto; }
+.collection-book-card .book-card-main-link { flex: none; display: grid; grid-template-columns: minmax(0, .42fr) minmax(0, .58fr); align-items: start; }
+.collection-book-card .card-cover-wrap { padding: 12px 0 12px 12px; background: transparent; }
+.collection-book-card .book-card-body { min-width: 0; padding: 12px; }
+.collection-book-card h3 { min-height: 0; }
+.collection-book-card .book-meta { margin-top: 12px; }
 .collection-book-card .collection-card-context { padding: 8px 17px; display: grid; gap: 5px; font-size: 10px; color: var(--teal); }
 .collection-book-card.is-selected, .collection-book-card.is-highlighted { border-color: var(--teal); }
 .collection-book-card .collection-book-select { position: relative; z-index: 2; padding: 8px 17px; }
 .collection-book-card .collection-book-controls { pointer-events: auto; }
-.collection-book-card .collection-quick-editor { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
+.collection-book-card .collection-quick-editor { position: static; width: 100%; padding: 8px; margin-top: 8px; box-shadow: none; }
 .my-books-card { max-width: none; }
 .section-more { display: flex; justify-content: center; margin-top: 28px; }
 .recommendation-panel .recommendation-reason { overflow: visible; display: block; -webkit-line-clamp: unset; overflow-wrap: anywhere; font-size: var(--type-small); line-height: 1.45; }
@@ -1087,7 +1097,7 @@ button, input, select, textarea { font-family: var(--sans); }
   .my-books-grid { max-width: none; }
   .collection-book-list.book-grid { width: calc(100% - 28px); gap: 12px; }
   .card-editorial-note { margin-inline: 12px; }
-  .collection-book-card .collection-book-control-triggers { grid-template-columns: 1fr; }
+  .collection-book-card .collection-book-control-triggers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Scoped taste-test presentation; shared header/footer and book cards stay intact. */
@@ -1361,7 +1371,7 @@ button, input, select, textarea { font-family: var(--sans); }
   border-radius: var(--control-radius);
 }
 .browse-card .want-button { border-radius: var(--control-radius); }
-.collection-quick-editor .collection-rating-options { grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); }
+.collection-quick-editor .collection-rating-options { grid-template-columns: repeat(5, minmax(44px, 1fr)); }
 .collection-book-control-triggers span { font-size: 13px; letter-spacing: 0; text-transform: none; white-space: normal; }
 .collection-book-control-triggers strong { font-family: var(--sans); font-size: 14px; line-height: 1.4; white-space: normal; overflow-wrap: anywhere; }
 .collection-filters a[aria-current='page'], .directory-switcher a[aria-current='page'],
@@ -1445,7 +1455,7 @@ button, input, select, textarea { font-family: var(--sans); }
   border: clamp(1.25px, 1cqw, 2.5px) solid #fffaf2;
   border-radius: 50%;
   box-shadow: 0 2px 6px #07172035;
-  background: var(--gold);
+  background: var(--score-badge-bg);
   color: #1d1a15;
 }
 .book-cover .cover-rating-badge strong {
@@ -1516,3 +1526,8 @@ button, input, select, textarea { font-family: var(--sans); }
 .collection-rating-complete h1 { font-size: var(--type-section); }
 .collection-quick-rating .taste-round-heading a { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; }
 .collection-quick-rating [aria-disabled='true'] { opacity: .6; cursor: wait; }
+@media (max-width: 359px) {
+  /* Keep five 44px targets plus gaps inside the card, even with a scrollbar. */
+  .collection-book-card .book-card-action { padding-inline: 8px; }
+  .collection-book-card .collection-quick-editor { padding: 6px; }
+}

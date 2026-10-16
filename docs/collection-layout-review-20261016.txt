@@ -1,0 +1,50 @@
+LumiScore — badge en collectiekaart-afwerking — lokale review16oktober2026
+
+Basis origin/main:9b0850e885d7f121f26532dfd0e1195039793fe6 (PR26 live).
+Branch:fix/collection-layout-badge-20261016, afzonderlijke worktree; ander werk behouden.
+Geen push/PR/merge/deployment of hosted data-/configuratie-/Auth-/schemawijziging.
+La Nuit blijft niet toegepast. Gezamenlijke smaaklogica onveranderd.
+
+Drie gerichte fixes
+1. De ronde gedeelde coverbadge gebruikt de oorspronkelijke merk-amber#e2a24c in
+   beide thema's. Paper-gold#c9832d blijft voor bestaande andere accenten; alleen
+   badge krijgt eigen vaste token. Diameter/plaatsing/scorepublicatieregels behouden.
+2. Collectiekaarten gebruiken beschikbare breedte: cover naast boekgegevens,
+   minimaal320px per kolom (of100% wanneer smaller), daardoor één per rij op mobiel.
+   Scorekeuze altijd1–5/6–10 in twee rijen, targets>=44px. Smalle320px-kaart heeft
+   kleinere binnenpadding, niet kleinere scoreknoppen. height:auto/align-items:start
+   voorkomt dat de buurkaart rekt wanneer een scorepaneel wordt geopend.
+3. Teruglink krijgt eigen block/flex-regel met12px margin; gemeten afstand tot het
+   collectie-label16px. Geen negatieve margins of globale navigatiewijzigingen.
+
+Gericht bewijs
+27tests groen: gedeelde cover/scoreprivacy-presentaties, aangepaste layoutasserties,
+collectiemodus, atomic-no-overwrite en smaaktestscore/race-regressies.
+TypeScript/lint/vinext-productiebuild/Vercel-productiebuild/clientsecretscan groen.
+Pnpm automatische dependencycheck weigerde veilig herinrichting van een gedeelde
+node_modules-junction; niets verwijderd/vervangen. Directe bestaande Node-binaries
+gebruikt, zonder install/lockfilewijziging. Test-Vite gaf bestaande HMR-poortwaarschuwing;
+geen testfailure. Logs/check-results.json in extern reviewpakket.
+
+Browser: NL/EN,Paper/Ink,390x844 en desktop1440x1000; extra320x700.
+320:5scorekolommen, minimum44.31x44px, laatste knop binnen groep, geen horizontale
+overflow. Desktop:4kolommen; open kaart317.35→488.95px, alle buurhoogtes exact gelijk
+aan vóór openen. Alle tien cijfers staan in2rijen. Lange titel blijft leesbaar.
+Amber gemetenrgb(226,162,76) in beide thema's. KeyboardArrowRight focust8 zonder save,
+Escape sluit en retourneert focus. Eén lokale synthetische save990101=8 werkt;
+bestaande synthetische990100=7 blijft behouden. Geen hosted schrijftest opnieuw nodig:
+alle applicatiehandlers/opslaglogica ongewijzigd; eerder PR26-hostedbewijs hergebruikt.
+
+Preview http://127.0.0.1:3134/nl/collection/suzanne-vermeer?review=reader
+Start:COLLECTION_REVIEW_PORT=3134 node scripts/collection-rating-review-local.mjs.
+Loopback-only, expliciete mocks; geen echte login/database. Runner staat nu een eigen
+poort toe en modelleert ook de bestaande optionele expectedUserId bij gewone edits.
+Fixturebestanden niet door app/build geïmporteerd. Geen fysieke iPhone-/browserbalktest
+geclaimd. Screenshots gebruiken herkenbaar gelabelde lokale testcovers, geen nieuw
+catalogusmateriaal of claims over echte coverscherpte.
+Extern bewijs:outputs/collection-layout-fixes-20261016/browser-proof.json,
+header-nl-paper-390.jpg,scores-nl-paper-390.jpg,scores-nl-ink-390.jpg,
+scores-en-paper-desktop.jpg,scores-en-ink-390.jpg.
+
+Herstel: deze aparte UI-commit niet releasen of reverten. Alleen CSS en lokale
+review/testbestanden gewijzigd; geen gegevensherstel nodig. Productie blijft PR26.
