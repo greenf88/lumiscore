@@ -38,11 +38,14 @@ export async function PUT(request: NextRequest, { params }: RatingRouteProps) {
   }
 
   try {
-    const state = await saveBookRating(workId, rating);
+    const onlyIfUnrated = typeof body === 'object' && body !== null && 'onlyIfUnrated' in body && body.onlyIfUnrated === true;
+    const expectedUserId = typeof body === 'object' && body !== null && 'expectedUserId' in body && typeof body.expectedUserId === 'string' ? body.expectedUserId : undefined;
+    const state = await saveBookRating(workId, rating, {onlyIfUnrated, expectedUserId});
     return state
       ? json({ state })
       : json({ error: 'Sign in to rate this book.' }, 401);
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message === 'RATING_SESSION_CHANGED') return json({error: 'Session changed. Refresh progress.'}, 409);
     return json({ error: 'Your rating could not be saved.' }, 500);
   }
 }

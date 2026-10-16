@@ -26,6 +26,7 @@ import {
   type CollectionBulkFilter,
 } from '@/lib/collections/bulk-progress';
 import { useLumiScoreLocale } from './LumiScoreLocale';
+import { QUICK_RATING_COLLECTION } from '@/lib/collections/quick-rating';
 
 const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
   want_to_read: 'collection.wantToRead',
@@ -253,6 +254,10 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         <LocaleLink className="detail-back-link" href="/">← {t('collection.backToBooks')}</LocaleLink>
         <span className="eyebrow">{typeLabel.toUpperCase()}</span>
         <h1>{collection.name}</h1>
+        {collection.slug === QUICK_RATING_COLLECTION && <LocaleLink className="ui-control ui-primary collection-rate-entry"
+          href={authenticated ? `${returnTo}/rate` : `/login?next=${encodeURIComponent(localizedHref(`${returnTo}/rate`, locale))}`}>
+          {t('quickCollection.entry')}
+        </LocaleLink>}
         <p className="collection-book-count">
           {t(
             books.length === 1

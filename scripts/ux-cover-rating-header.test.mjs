@@ -32,7 +32,9 @@ test('rating hover is gated to a real hover pointer; focus-visible remains indep
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) \{\s*\.taste-direct-test button:hover/);
   assert.match(css, /\.taste-direct-test button:focus-visible[^}]*outline: 2px solid var\(--teal\)/);
   const source = await read('app/components/RatingTasteTest.tsx');
-  assert.match(source, /isPendingWorkScore\(selectedScore, workId, n, pending\)/);
+  assert.match(source, /<DirectRatingScores workId=\{workId/);
+  const scores = await read('app/components/DirectRatingScores.tsx');
+  assert.match(scores, /isPendingWorkScore\(selection, workId, score, pending\)/);
   assert.match(source, /workId: chosenWork, score: rating/);
   assert.match(source, /setData\(next\); setSelectedScore\(null\)/);
 });

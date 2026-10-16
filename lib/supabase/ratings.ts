@@ -8,6 +8,7 @@ import { createServerSupabaseClient } from './server.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { supabase as publicSupabase } from './client.ts';
 import { ratingSummaryMap, type PublicRatingSummaryRow } from '../ratings/card-summaries.ts';
+import { insertUnrated } from '../ratings/insert-unrated.ts';
 
 async function loadPublicSummary(
   supabase: SupabaseClient,
@@ -57,7 +58,8 @@ export async function loadBookRatingState(workId: string): Promise<BookRatingSta
 export async function saveBookRating(
   workId: string,
   rating: number,
-): Promise<BookRatingState | null> {
+  options: { onlyIfUnrated?: boolean; expectedUserId?: string } = {},
+): Promise<(BookRatingState & { created?: boolean }) | null> {
   const parsedRating = parseRating(rating);
   if (parsedRating === null) throw new Error('INVALID_RATING');
 
@@ -65,6 +67,14 @@ export async function saveBookRating(
   const user = await getVerifiedUser(supabase);
   if (!user) return null;
 
+  // Existing rating route/constraints/Read trigger. The optional quick-mode
+  // conflict policy must NEVER overwrite a rating made in another tab/session.
+  if (options.onlyIfUnrated) {
+    if (options.expectedUserId !== user.id) throw new Error('RATING_SESSION_CHANGED');
+    const {rating: canonical, created} = await insertUnrated(supabase, user.id, workId, parsedRating);
+    return {authenticated: true, userEmail: user.email ?? null, userRating: canonical,
+      created, ...(await loadPublicSummary(supabase, workId))};
+  }
   const { error } = await supabase.from('ratings').upsert(
     {
       user_id: user.id,

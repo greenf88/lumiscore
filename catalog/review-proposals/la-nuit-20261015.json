@@ -1,0 +1,38 @@
+{
+  "status": "prepared-not-applied",
+  "workId": "276",
+  "title": "La Nuit",
+  "author": "Elie Wiesel",
+  "openLibraryWorkId": "OL14856842W",
+  "checkedAt": "2026-10-15",
+  "sourceRevision": 73,
+  "sources": [
+    {"url": "https://openlibrary.org/works/OL14856842W.json", "finding": "Exact Work key and author OL20891A; autobiographical description, but conflicting fantasy, science-fiction, romance and thriller subjects."},
+    {"url": "https://us.macmillan.com/books/9780374534752/night/", "finding": "Publisher identifies Night as a memoir/autobiographical account."},
+    {"url": "https://eliewieselfoundation.org/about-night/", "finding": "Author foundation identifies Night as memoir; Yiddish 1956, French adaptation 1958, English 1960."}
+  ],
+  "productionReadback": {
+    "mappingVersion": "taste_traits_v1",
+    "rowCount": 8,
+    "traits": ["classic", "fantasy", "nonfiction", "romance", "science_fiction", "speculative", "speculative", "thriller_mystery"],
+    "seedCategory": "fantasy-science-fiction",
+    "storedFirstPublishYear": 1955
+  },
+  "proposedCorrection": {
+    "workId": "276",
+    "removeTraits": ["fantasy", "science_fiction", "speculative", "romance", "thriller_mystery"],
+    "addTraits": [],
+    "reason": "Publisher and author foundation identify Night/La Nuit as memoir. Conflicting Open Library genres and the speculative seed are not reliable work-specific evidence. Retain the existing nonfiction trait; do not infer extra traits.",
+    "reviewedAt": "2026-10-15T00:00:00.000Z"
+  },
+  "seedCorrection": {"oldCategory": "fantasy-science-fiction", "proposedCategory": "non-fiction", "activated": false},
+  "publicationYear": {"change": "none", "reason": "1955 conflicts with primary publication chronology; exact Work/edition identity needs separate bibliographic review. Both current and supported dates remain classic under existing policy."},
+  "releasePlan": [
+    "Review this exact identity and removal-only correction.",
+    "In a separately approved code change, register the correction in the existing shared reviewed-work-trait-corrections allowlist and correct the seed category; verify all shared profile consumers use that same correction.",
+    "Keep raw imported evidence for provenance. A future narrowly approved data reconciliation must snapshot exactly Work276 rows and preconditions, not bulk re-enrich the catalogue.",
+    "Retest shared profiles, ranking and reasons; retain the existing La Nuit presentation hold until an explicit review accepts its removal.",
+    "Rollback code via revert; any separately approved data write needs its own exact-row snapshot restore. No ratings/status/progress changes."
+  ],
+  "notDone": ["No runtime correction registered", "No seed changed", "No production data written", "No publication year changed", "No presentation hold removed", "No new personality or taxonomy labels"]
+}
