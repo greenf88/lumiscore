@@ -3,7 +3,8 @@ import {createServer} from 'vite';
 import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../',import.meta.url)),port=3132;
+const root=fileURLToPath(new URL('../',import.meta.url)),port=Number(process.env.COLLECTION_REVIEW_PORT??3132);
+if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid local review port');
 for(const key of Object.keys(process.env))if(/SUPABASE|DATABASE|SECRET|TOKEN|GOOGLE_BOOKS/.test(key))delete process.env[key];
 const fixture=JSON.stringify(root.replaceAll('\\','/')+'test-support/collection-quick-rating/fixture.ts');
 const context=`import {cookies} from 'next/headers';import {requestPagePath} from '@/lib/i18n/server';export async function reviewMode(){return new URL(await requestPagePath(),'http://local').searchParams.get('review')??(await cookies()).get('collection-review-mode')?.value??'reader'}`;
@@ -27,7 +28,7 @@ const server=await createServer({root,configFile:false,envFile:false,cacheDir:ro
   }
   if(url.pathname.startsWith('/api/ratings/')&&req.method==='PUT'){
    const f=await vite.ssrLoadModule('/test-support/collection-quick-rating/fixture.ts');let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>2048)return json(res,{},413);}
-   const body=JSON.parse(raw),result=await f.save(mode,url.pathname.split('/').at(-1),body.rating,body.onlyIfUnrated===true,body.expectedUserId);return json(res,result.body,result.status);
+   const body=JSON.parse(raw),result=await f.save(mode,url.pathname.split('/').at(-1),body.rating,body.onlyIfUnrated===true,body.expectedUserId??f.userFor(mode));return json(res,result.body,result.status);
   }
   if(url.pathname==='/__review/state'){const f=await vite.ssrLoadModule('/test-support/collection-quick-rating/fixture.ts');return json(res,f.metrics());}
   next();

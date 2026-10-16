@@ -41,11 +41,23 @@ test('visual tokens and account entry preserve semantics without broad link styl
  assert.match(css,/--control-surface: #fffdf8/);
  assert.match(css,/\.book-cover \.cover-rating-badge/);
  assert.match(css,/\.book-cover \{ container-type: inline-size/);
- assert.match(css,/\.collection-quick-editor \.collection-rating-options \{ grid-template-columns: repeat\(auto-fit, minmax\(44px, 1fr\)\)/);
+ assert.match(css,/\.collection-quick-editor \.collection-rating-options \{ grid-template-columns: repeat\(5, minmax\(44px, 1fr\)\)/);
  assert.match(css,/\.reading-profile-page \.reading-profile-action\.ui-primary/);
  const nav=await read('app/components/MobileNavigation.tsx');
  assert.match(nav,/authenticated && <LocaleLink className="ui-control ui-secondary" href="\/account"/);
  const profile=await read('app/components/LumiScoreReadingProfile.tsx');
  assert.match(profile,/reading-profile-action ui-control ui-primary/);
  assert.match(profile,/href="\/taste-test"/);
+});
+
+test('collection cards reserve width for two score rows and do not stretch with an open neighbour',async()=>{
+ const css=await readFile(root+'app/globals.css','utf8');
+ assert.match(css,/--score-badge-bg: #e2a24c;/);
+ assert.equal((css.match(/--score-badge-bg:/g)??[]).length,1); // No theme-specific recolouring.
+ assert.match(css,/\.book-cover \.cover-rating-badge \{[^}]*background: var\(--score-badge-bg\)/);
+ assert.match(css,/\.collection-book-list\.book-grid \{[^}]*minmax\(min\(100%, 320px\), 1fr\)[^}]*align-items: start/);
+ assert.match(css,/\.collection-book-card \{ height: auto;/);
+ assert.match(css,/\.collection-book-card \.book-card-main-link \{[^}]*grid-template-columns: minmax\(0, \.42fr\) minmax\(0, \.58fr\)/);
+ assert.match(css,/\.collection-hero > \.detail-back-link \{ display: flex; width: fit-content; margin: 0 0 12px;/);
+ assert.doesNotMatch(css,/\.collection-quick-editor \.collection-rating-options \{[^}]*auto-fit/);
 });
