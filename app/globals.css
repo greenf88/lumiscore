@@ -76,7 +76,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   z-index: 20;
   height: 76px;
   display: grid;
-  grid-template-columns: minmax(160px, .65fr) minmax(260px, 480px) auto;
+  /* Reserve the navigation's intrinsic width; the search field absorbs pressure. */
+  grid-template-columns: minmax(160px, .65fr) minmax(0, 480px) max-content;
   align-items: center;
   gap: clamp(12px, 1.4vw, 24px);
   padding: 0 clamp(20px, 3vw, 56px);
@@ -88,6 +89,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .wordmark { min-height: 44px; justify-self: start; display: inline-flex; align-items: center; gap: 11px; font-family: var(--logo-serif); font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
 .wordmark > span:last-child > span { color: var(--gold); }
+.header-search { min-width: 0; }
 .logo-mark { position: relative; display: inline-flex; width: 29px; height: 29px; align-items: flex-end; gap: 2px; }
 .logo-mark i { display: block; width: 7px; border: 1px solid #4f9ba0; border-radius: 1px 1px 3px 3px; transform-origin: bottom; }
 :root[data-theme='paper'] .logo-mark i { border-color: #42646b; }
@@ -1081,7 +1083,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .collection-directory-card h2 { line-height: 1.25; letter-spacing: -.01em; }
 .rating-feedback, .reading-status-error, .account-name-status.is-error, .collection-book-row.status-dnf .collection-book-status, .collection-control-message, .collection-bulk-feedback p[role='alert'], .auth-error { color: var(--danger); }
 @media (min-width: 761px) and (max-width: 1350px) {
-  .site-header { grid-template-columns: auto minmax(160px, 1fr) auto; gap: 12px; padding-inline: 20px; }
+  .site-header { grid-template-columns: auto minmax(0, 1fr) max-content; gap: 12px; padding-inline: 20px; }
   .main-nav { gap: 10px; font-size: var(--type-meta); }
 }
 /* Keep the full wordmark and taste link clear between phone and desktop layouts. */

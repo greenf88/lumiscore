@@ -3,6 +3,13 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL('../' + path, import.meta.url), 'utf8');
 
+test('desktop header reserves intrinsic navigation space and lets search shrink at both desktop breakpoints', async () => {
+  const css = await read('app/globals.css');
+  assert.match(css, /grid-template-columns: minmax\(160px, \.65fr\) minmax\(0, 480px\) max-content/);
+  assert.match(css, /\.header-search \{ min-width: 0; \}/);
+  assert.match(css, /@media \(min-width: 761px\) and \(max-width: 1350px\) \{\s*\.site-header \{ grid-template-columns: auto minmax\(0, 1fr\) max-content/);
+});
+
 test('front caption is absent in both locales while the meaningful cover label and badge remain', async () => {
   const source = await read('app/components/LumiScoreBookDetail.tsx');
   assert.doesNotMatch(source, /<figcaption>\{t\('detail.frontCover'\)\}/);
