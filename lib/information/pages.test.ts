@@ -120,7 +120,10 @@ test('information navigation is complete on desktop footer and mobile menu', asy
   assert.match(translations, /'footer\.contact': 'Contact'/);
   assert.doesNotMatch(translations, /'footer\.help'/);
   assert.doesNotMatch(translations, /'footer\.helpComing'/);
-  assert.match(home, /mobile-navigation-panel[\s\S]*href="\/over-ons"[\s\S]*href="\/contact"/);
+  assert.match(home, /<MobileNavigation authenticated=\{authState.authenticated\}/);
+  const mobile = await readFile(new URL('../../app/components/MobileNavigation.tsx', import.meta.url), 'utf8');
+  assert.match(mobile, /mobile-navigation-panel[\s\S]*href="\/over-ons"[\s\S]*href="\/contact"/);
+  for (const path of Object.values(EXPECTED_PATHS)) assert.ok(mobile.includes(`href="${path}"`));
   assert.match(styles, /\.information-page-shell[^}]*var\(--bg\)/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.information-page/);
   assert.match(route, /\.catch\(\(\) => \(\{ authenticated: false \}\)\)/);

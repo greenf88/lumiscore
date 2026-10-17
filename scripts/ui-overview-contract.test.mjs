@@ -51,8 +51,9 @@ test('rating UI directly saves an explicit score, with skip/search and no langua
   const taste=await read('app/components/RatingTasteTest.tsx');
   assert.match(taste,/NEW_ROUND_GOALS\.map/);
   assert.doesNotMatch(taste,/<select|setLanguage|window\.location\.reload/);
-  assert.match(taste,/aria-pressed=\{pending && selectedScore === n\}/);
-  assert.match(taste,/act\('rate', workId, n\)/);
+  const scores=await read('app/components/DirectRatingScores.tsx');
+  assert.match(scores,/aria-pressed=\{isPendingWorkScore\(selection, workId, score, pending\)\}/);
+  assert.match(taste,/<DirectRatingScores[\s\S]*?selection=\{selectedScore\}[\s\S]*?act\('rate', workId, score\)/);
   assert.match(taste,/act\('skip', workId\)/);
   assert.doesNotMatch(taste,/Save rating|setScore\(/);
   assert.match(taste,/setSaved\(action === 'rate'\)/);

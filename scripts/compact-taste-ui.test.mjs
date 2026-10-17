@@ -9,7 +9,10 @@ test('active scoring uses one-click score buttons and a distinct search button o
   assert.match(source, /taste-book-identity[\s\S]*<BookCover[\s\S]*<h2 ref=\{bookHeading\}/);
   assert.doesNotMatch(source, /<BookCardIdentity/);
   assert.doesNotMatch(source, /Save rating|setScore\(|taste-save-skip/);
-  assert.match(source, /act\('rate', workId, n\)/);
+  assert.match(source, /<DirectRatingScores[\s\S]*?onRate=\{score => \{if \(workId\) void act\('rate', workId, score\)/);
+  const scores = await read('app/components/DirectRatingScores.tsx');
+  assert.match(scores, /disabled=\{pending \|\| !workId\}/);
+  assert.match(scores, /onClick=\{event => \{if \(event.detail <= 1\) onRate\(score\)/);
   assert.match(source, /className="taste-search-toggle"/);
   assert.match(css, /\.taste-book-identity \{[^}]*display: flex/);
   assert.match(css, /\.taste-book-identity \.book-cover \{[^}]*100svh[^}]*100dvh/);

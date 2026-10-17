@@ -3,7 +3,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { createClient } from '@supabase/supabase-js';
 import { loadWorkTraitEvidenceBatched } from '../lib/supabase/work-trait-evidence.ts';
 import { loadPublicRatingSummariesBatched } from '../lib/supabase/public-rating-summaries.ts';
-import { buildEffectiveWorkTraitVector } from '../lib/recommendations/work-trait-evidence.ts';
+import { buildEffectiveWorkTraitVector, reliableProfileTraits } from '../lib/recommendations/work-trait-evidence.ts';
 import { getReviewedWorkTraitCorrection } from '../lib/recommendations/reviewed-work-trait-corrections.ts';
 import { TASTE_TEST_ANCHORS } from '../lib/taste-test/config.ts';
 import { applyRatingSummaries } from '../lib/ratings/card-summaries.ts';
@@ -27,7 +27,7 @@ export async function legacyCatalog(client) {
     evidence.get(String(row.id))??[],getReviewedWorkTraitCorrection(String(row.id)))]));
   const candidates=applyRatingSummaries(books,summaries).flatMap(book=>{
     const effective=traitsById.get(book.workId);
-    return effective.coverageLevel==='none'?[]:[{book,traits:effective.traits,metadataConfidence:effective.metadataConfidence,
+    return effective.coverageLevel==='none'?[]:[{book,traits:reliableProfileTraits(effective),metadataConfidence:effective.metadataConfidence,
       coverageLevel:effective.coverageLevel,seriesKey:TASTE_TEST_ANCHORS[book.workId]?.seriesKey}];
   });
   return {candidates,traitsById};

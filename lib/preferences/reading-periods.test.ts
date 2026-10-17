@@ -59,7 +59,7 @@ test('onboarding uses exact bilingual copy and accessible native controls', asyn
   assert.match(component, /<fieldset className="preference-fieldset">/);
   assert.match(component, /type="checkbox"/);
   assert.doesNotMatch(component, /birth|type="radio"|2010 or later|2010 of later|user-scalable|userId|user_id/i);
-  assert.equal(component.match(/window\.location\.assign\(next\)/g)?.length, 2);
+  assert.equal(component.match(/window\.location\.assign\(localizedHref\(next, locale\)\)/g)?.length, 2);
 });
 
 test('preference controls retain 44px touch targets and collapse at mobile width', async () => {

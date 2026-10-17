@@ -8,9 +8,12 @@ test('completion navigation is after response validation, never in failure handl
 });
 test('compact result shows labels and existing scores only as decorative bars; no report or counts', async () => {
   const source = await read('app/components/TasteRatingResult.tsx');
+  const summary = await read('app/components/TasteProfileSummary.tsx');
   assert.match(source, /window.scrollTo\(\{top:0,behavior:'instant'\}\)/);
-  assert.match(source, /topSupportedAffinities\(profile\)/);
-  assert.match(source, /taste-preference-track" aria-hidden="true"/);
+  assert.match(source, /<TasteProfileSummary profile=\{profile\} headingId="taste-result-title"/);
+  assert.match(summary, /topSupportedAffinities\(profile\)/);
+  assert.match(summary, /taste-preference-track" aria-hidden="true"/);
+  assert.doesNotMatch(summary, /x\.(books|positiveBooks)|\/100|<meter|taste-facets/);
   assert.doesNotMatch(source, /profile\.(ratingCount|classifiedCount|missingCount|provisional)|x\.(books|positiveBooks)|\/100|<meter|ARCHETYPE_COPY|taste-facets/);
   assert.match(source, /'Boeken voor jou':'Books for you'/);
   assert.match(source, /'Verfijn je smaak':'Refine your taste'/);

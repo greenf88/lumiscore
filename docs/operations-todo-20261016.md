@@ -13,7 +13,10 @@ historical LumiScore Master To-do.
 - [x] Prepare credential-free CI workflow with pinned actions.
 - [x] Implement public NL/EN HTTP/SEO smoke checks.
 - [x] Select 100 pilot Works: 80 gaps, 19 controls and contradictory Work 276.
-- [x] Run local validation; 10 new tests pass, TypeScript/lint/both builds pass. Full suite retains the same 15 failures and 14 skips as unmodified main.
+- [x] Run the initial local validation and reproduce the existing test failures on unmodified main.
+- [x] Repair outdated test contracts for shared components, localized navigation, the owner-profile loader and evidence-filtered recommendation fixtures.
+- [x] Keep the historical PR8 migration test scoped to its original thirteen-version baseline and two release files.
+- [x] Fetch Git history in CI so byte tests can inspect the exact reviewed migration blob.
 - [x] Recheck 24 exact cover lookups; 2 resolved cache recoveries verified.
 - [ ] Investigate the remaining 22 Works without a resolved cache source.
 - [x] Collect all 100 exact-Work source records; 78 contain descriptions.
@@ -24,8 +27,8 @@ historical LumiScore Master To-do.
 - [x] Prepare three NL content drafts using existing editorial lists and Collections.
 - [x] Define the product-event contract and measurement priorities; no events collected yet.
 - [ ] Implement/activate product-event collection and dashboard.
-- [ ] Publish code/CI and a review PR through the authorized GitHub account greenf88.
-- [ ] Verify GitHub CI actually runs remotely.
+- [x] Publish code/CI and review PR #28 through the authorized GitHub account greenf88.
+- [x] Verify GitHub CI actually runs remotely; inspect the final result on PR #28 before merge.
 - [x] Sign in through the secure browser flow and verify LumiScore project/deployment access. The connector API scope remains a separate limitation.
 - [ ] Evaluate semantic search after classification evidence is satisfactory.
 - [ ] Evaluate trained collaborative ranking after sufficient independent overlap.
@@ -35,15 +38,20 @@ activation is implied by completing source collection or writing proposals.
 
 ## Integration checkpoint — 17 October 2026
 
-Secure browser sign-in now verifies both Vercel and GitHub. The Vercel LumiScore
-project shows production Ready at main87345e0. The connector API has separately
-returned scope403; successful browser access does not prove that API access changed.
-GitHub publishing through greenf88 is explicitly authorized; a bot is not required.
-Use the connected GitHub API for publication because git CLI has no push credentials.
+The GitHub authorization was repaired and verified with actual branch writes and
+PR #28 creation. Vercel project metadata and deployment listing are accessible
+through the connector using the explicit LumiScore project ID. A redundant team
+scope selector returns 403, so it is not used for that project. The operations
+preview at commit 3feb813 is Ready. GitHub publishing through greenf88 is
+explicitly authorized; a bot is not required. Use the connected GitHub API for
+publication because git CLI has no push credentials.
 
-## Existing test debt
+## Test maintenance
 
-A full run of unmodified historical base9b0850e independently reproduced the same 15 failures as this
-branch. Most visible failures assert historical source structure; one test file
-fails at file level. These require separate diagnosis, not silently weakening CI
-or claiming all tests are green. Existing application/migration tests were not edited.
+The initial fifteen local failures were reproduced on unmodified historical
+main. The first remote run also lacked two historical Git blobs because checkout
+was shallow. Repairs follow the current shared component/owner-loader boundaries,
+use supported evidence for localized explanations and apply the current reliable
+trait filter in the legacy catalog test fixture. No runtime ranker, migration
+bytes, privacy thresholds or production data change. Tests remain mandatory;
+the final full-suite and build results are recorded on PR #28.

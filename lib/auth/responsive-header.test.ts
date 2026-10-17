@@ -14,7 +14,7 @@ test('shared header prevents wrapping and preserves compact mobile controls', as
   assert.match(css, /\.site-header \.language-switcher a \{ min-width: 27px;/);
   assert.match(css, /\.detail-header \.wordmark > span:last-child \{ display: none;/);
   assert.match(css, /\.detail-header-actions \{ min-width: 0; gap: 3px;/);
-  assert.match(css, /\.detail-taste-test-link::before \{ content: '✦';/);
+  assert.match(css, /\.detail-taste-test-link \{[^}]*display: inline-flex[^}]*min-height: 44px/);
   assert.match(css, /\.want-button \{[^}]*min-height: 44px/);
   assert.match(css, /\.mobile-navigation-trigger \{[^}]*min-height: 44px/);
   assert.match(css, /\.hamburger-icon i \{[^}]*background: currentColor/);

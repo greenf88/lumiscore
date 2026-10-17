@@ -6,7 +6,7 @@ test('production delta is exactly the reviewed feature and forward permissions v
   const currentHashes = JSON.parse(await readFile(new URL('../test-support/discovery/migration-hashes.json', import.meta.url), 'utf8'));
   // The PR8 release proposal is immutable; later migrations require a new plan.
   const allFiles = Object.keys(currentHashes).sort();
-  const files = allFiles.filter(n=>n!=='20261004164419_flexible_taste_rounds.sql');
+  const files = allFiles.filter(n => n <= permissionsMigration);
   const hashes = Object.fromEntries(files.map(n=>[n,currentHashes[n]]));
   const previous = files.filter(n => !releaseMigrations.includes(n)).map(n => n.slice(0, 14));
   assert.equal(previous.length, 13);
