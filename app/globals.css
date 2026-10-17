@@ -1446,10 +1446,13 @@ button, input, select, textarea { font-family: var(--sans); }
 .recommendation-row { grid-template-columns: 46px minmax(0, 1fr); }
 
 /* One badge per actual cover, including Browse and all compact variants. */
-.book-cover { container-type: inline-size; }
+.book-cover { container-type: inline-size; overflow: visible; }
+.book-cover-image, .detail-back-cover > img { border-radius: inherit; }
 .book-cover .cover-rating-badge {
-  right: clamp(2px, 3cqw, 10px);
-  bottom: clamp(2px, 3cqw, 10px);
+  /* Keep the seal across the lower-right cover edge, as on the original cover. */
+  right: 0;
+  bottom: 0;
+  transform: translate(25%, 25%);
   /* Diameter, type and border are 1.25 × the shared PR24 presentation. */
   width: clamp(26.25px, 33.75cqw, 77.5px);
   height: auto;
