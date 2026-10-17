@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { getInitialBookCoverUrls } from './book-cover-state.ts';
-import { getReviewedCoverOverride } from './reviewed-cover-overrides.ts';
+import { getReviewedCoverOverride, REVIEWED_COVER_OVERRIDES } from './reviewed-cover-overrides.ts';
 
 const festival = {
   id: 'work-1296',
@@ -24,6 +24,20 @@ test('reviewed cover identity cannot leak to another work or ISBN', () => {
   assert.equal(getReviewedCoverOverride({ ...festival, workId: '1297' }), null);
   assert.equal(getReviewedCoverOverride({ ...festival, isbn13: '9789044936438' }), null);
   assert.equal(getReviewedCoverOverride({ ...festival, title: 'Another Festival' }), null);
+  assert.equal(getReviewedCoverOverride({ ...festival, author: 'Another author' }), null);
+});
+
+test('reviewed native covers render immediately without provider resolution and stay identity-bound', () => {
+  const native = REVIEWED_COVER_OVERRIDES.filter(({ workId }) => Number(workId) >= 1260 && Number(workId) <= 1281);
+  assert.equal(native.length, 22);
+  assert.equal(new Set(native.map(({ workId }) => workId)).size, 22);
+  for (const entry of native) {
+    const book = { ...entry, id: `work-${entry.workId}`, coverUrls: [] };
+    assert.deepEqual(getInitialBookCoverUrls(book), [entry.coverUrl]);
+    assert.equal(getReviewedCoverOverride({ ...book, isbn13: '9780000000002' }), null);
+    assert.equal(getReviewedCoverOverride({ ...book, author: 'Different author' }), null);
+    assert.equal(getReviewedCoverOverride({ ...book, title: 'Different title' }), null);
+  }
 });
 
 test('existing resolved cover candidates retain priority over a reviewed fallback', () => {
