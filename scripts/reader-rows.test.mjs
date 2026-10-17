@@ -63,15 +63,17 @@ test('failure on a private continuation page rejects the entire result, not a pa
 });
 test('homepage consumes the owner pager and displays an unavailable state instead of a fabricated empty profile',async()=>{
   const server=await readFile(new URL('../lib/supabase/taste-test.ts',import.meta.url),'utf8');
-  assert.match(server,/loadReaderRows<RatingRow>\(client, 'ratings'/);
-  assert.match(server,/loadReaderRows<StatusRow>\(client, 'user_book_status'/);
-  assert.match(server,/if \(responsesResult.error\) throw responsesResult.error/);
+  assert.match(server,/loadReaderTasteProfile\(client,\s*user.id,\s*locale\)/);
+  const owner=await readFile(new URL('../lib/supabase/reader-taste-profile.ts',import.meta.url),'utf8');
+  assert.match(owner,/loadReaderRows<ReaderRatingRow>\(client,\s*'ratings'/);
+  assert.match(owner,/loadReaderRows<ReaderStatusRow>\(client,\s*'user_book_status'/);
+  assert.match(owner,/if\s*\(responses.error\)\s*throw responses.error/);
   assert.match(server,/return \{ unavailable:true/);
   const ui=await readFile(new URL('../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
   assert.match(ui,/if \(personalization.unavailable\) return/);
   assert.match(ui,/This is not an empty profile/);
   for(const route of ['app/page.tsx','app/recommendations/page.tsx']) {
     const page=await readFile(new URL('../'+route,import.meta.url),'utf8');
-    assert.match(page,/\.catch\(\(\): HomepagePersonalization => \(\{\s*unavailable:\s*true/);
+    assert.match(page,/\.catch\((?:async\s+)?\(\):\s*(?:Promise<HomepagePersonalization>|HomepagePersonalization)\s*=>\s*\(\{\s*unavailable:\s*true/);
   }
 });

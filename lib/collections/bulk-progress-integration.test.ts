@@ -91,7 +91,7 @@ test('bulk mode is explicit, status-only, optimistic and reconciliation-aware', 
   assert.match(page, /payload\.code === 'rated_work_conflict'/);
   assert.match(page, /api\/book-status\?workIds=/);
   assert.doesNotMatch(bulk, /rating-options|onRating|score/);
-  assert.match(page, /resolveMissing=\{!bulkActive\}/);
+  assert.match(page, /<BookCard[^>]*resolveMissingCover=\{!bulkActive\}/);
 });
 
 test('bulk controls provide live feedback, alerts, sticky safe-area UI and 44px targets', () => {

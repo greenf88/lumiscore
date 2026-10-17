@@ -59,11 +59,13 @@ test('taste summaries and recommendation explanations use localized trait labels
     metadataConfidence: .9,
     coverageLevel: 'rich',
   };
-  const english = recommendBooks({ candidates: [candidate], profile: englishProfile, ratedWorkIds: new Set(), locale: 'en' })[0];
-  const dutch = recommendBooks({ candidates: [candidate], profile: dutchProfile, ratedWorkIds: new Set(), locale: 'nl' })[0];
+  // Book-specific explanations now require repeated supporting evidence.
+  const ratings = Array.from({ length: 5 }, (_, i) => ({ workId: String(100 + i), rating: 9, traits: candidate.traits }));
+  const english = recommendBooks({ candidates: [candidate], profile: buildTasteProfile(answers, ratings, 'en'), ratedWorkIds: new Set(), locale: 'en' })[0];
+  const dutch = recommendBooks({ candidates: [candidate], profile: buildTasteProfile(answers, ratings, 'nl'), ratedWorkIds: new Set(), locale: 'nl' })[0];
 
-  assert.match(english.explanation, /science fiction|immersive worlds/);
-  assert.match(dutch.explanation, /sciencefiction|meeslepende werelden/);
+  assert.match(english.explanation, /science fiction|immersive world/i);
+  assert.match(dutch.explanation, /sciencefiction|meeslepende wereld/i);
   assert.equal(english.rankingScore, dutch.rankingScore);
   assert.equal(english.personalMatch, dutch.personalMatch);
   assert.equal(english.matchScore, dutch.matchScore);

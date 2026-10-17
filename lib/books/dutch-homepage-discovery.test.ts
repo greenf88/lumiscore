@@ -165,7 +165,10 @@ test('homepage discovery stays batched, server-only and does not fetch external 
   assert.match(loader, /\.from\('editions'\)[\s\S]*\.in\('isbn_13', isbn13s\)/);
   assert.match(loader, /loadCatalogBooksByIdsWithStoredCovers\(/);
   assert.match(loader, /loadWorkTraitEvidenceBatched\(/);
-  assert.match(page, /measureServerOperation\(\s*'homepage\.dutch_discovery',\s*'mixed'/);
+  // The compact homepage deliberately delegates Dutch discovery to Browse.
+  assert.doesNotMatch(page, /loadDutchHomepageDiscovery\(/);
+  assert.match(page, /emptyDutchDiscovery/);
+  assert.match(page, /dutchDiscovery=\{dutchDiscovery\}/);
   assert.match(component, /detailReturnContext=\{\{ kind: 'home' \}\}/);
   assert.match(styles, /\.dutch-discovery-grid \{ grid-template-columns: repeat\(3/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.dutch-discovery-grid \{ grid-template-columns: repeat\(2/);
@@ -181,9 +184,11 @@ test('authenticated profile reads are explicitly user scoped and guests make no 
   const guestReturn = contextBlock.slice(contextBlock.indexOf('if (!user)'), contextBlock.indexOf('const ['));
 
   assert.doesNotMatch(guestReturn, /\.from\(/);
-  assert.match(contextBlock, /taste_test_responses'[\s\S]*\.eq\('user_id', user\.id\)/);
-  assert.match(contextBlock, /loadReaderRows<RatingRow>\(client, 'ratings', 'work_id,rating', user\.id\)/);
-  assert.match(contextBlock, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  assert.match(contextBlock, /loadReaderTasteProfile\(client,\s*user\.id,\s*locale\)/);
+  const owner = await readFile(new URL('../supabase/reader-taste-profile.ts', import.meta.url), 'utf8');
+  assert.match(owner, /taste_test_responses'[\s\S]*\.eq\('user_id',\s*userId\)/);
+  assert.match(owner, /loadReaderRows<ReaderRatingRow>\(client,\s*'ratings',\s*'work_id,rating,updated_at',\s*userId\)/);
+  assert.match(owner, /loadReaderRows<ReaderStatusRow>\(client,\s*'user_book_status',\s*'work_id,status',\s*userId\)/);
   const pager = await readFile(new URL('../supabase/reader-rows.ts', import.meta.url), 'utf8');
   assert.match(pager, /\.eq\('user_id', userId\)\.order\('work_id'\)\.range\(offset, offset \+ 999\)/);
   assert.match(pager, /if \(error\) throw error/);

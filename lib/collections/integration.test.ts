@@ -48,7 +48,8 @@ test('book detail uses real collection membership and a plain collection link', 
 
 test('collection book links carry the selected collection as typed return context', () => {
   assert.match(collectionPage, /bookReturnContext = \{ kind: 'collection', slug: collection\.slug \}/);
-  assert.match(collectionPage, /getBookHref\(item\.book, bookReturnContext\)/);
+  assert.match(collectionPage, /<BookCard[^>]*book=\{item\.book\}[^>]*detailReturnContext=\{bookReturnContext\}/);
+  assert.match(home, /explicitHref \?\? getBookHref\(book, detailReturnContext\)/);
   assert.match(collectionPage, /getBookHref\(actionBook\.book, bookReturnContext\)/);
 });
 
@@ -91,7 +92,9 @@ test('private progress queries are explicitly scoped to the verified user', () =
 });
 
 test('recommendation loader adds read-without-rating IDs to exclusions only', () => {
-  assert.match(personalization, /loadReaderRows<StatusRow>\(client, 'user_book_status', 'work_id,status', user\.id\)/);
+  assert.match(personalization, /loadReaderTasteProfile\(client,\s*user\.id,\s*locale\)/);
+  const owner = read('../supabase/reader-taste-profile.ts');
+  assert.match(owner, /loadReaderRows<ReaderStatusRow>\(client,\s*'user_book_status',\s*'work_id,status',\s*userId\)/);
   const readerRows = read('../supabase/reader-rows.ts');
   assert.match(readerRows, /\.eq\('user_id', userId\)/);
   assert.match(readerRows, /\.order\('work_id'/);
