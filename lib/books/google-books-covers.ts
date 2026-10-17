@@ -1,5 +1,6 @@
 import { normalizeIsbn13 } from './covers.ts';
 import { readServerEnvironment } from '../server-environment.ts';
+import { classifyGoogleBooksFailure, googleBooksBackoffMs } from './google-books-failure.ts';
 import {
   resolvedCover,
   unresolvedCover,
@@ -34,7 +35,6 @@ const SUCCESS_TTL_MS = 30 * 24 * 60 * 60 * 1_000;
 const FAILURE_TTL_MS = 24 * 60 * 60 * 1_000;
 const TEMPORARY_FAILURE_TTL_MS = 5 * 60 * 1_000;
 const MAX_CACHE_ENTRIES = 2_000;
-const RATE_LIMIT_BACKOFF_MS = 5 * 60 * 1_000;
 const SERVICE_UNAVAILABLE_RETRY_DELAYS_MS = [100, 250] as const;
 let unavailableUntil = 0;
 const coverCache = new Map<
@@ -134,6 +134,7 @@ async function fetchGoogleBooksCover(
       });
       if (
         response.status === 503 &&
+        !response.headers.has('retry-after') &&
         attempt < SERVICE_UNAVAILABLE_RETRY_DELAYS_MS.length
       ) {
         await response.body?.cancel();
@@ -142,21 +143,42 @@ async function fetchGoogleBooksCover(
         );
         continue;
       }
-      if (response.status === 403 || response.status === 429) {
-        unavailableUntil = Date.now() + RATE_LIMIT_BACKOFF_MS;
-        return unresolvedCover('google_books', isbn13, 'temporary_failure');
-      }
       if (!response.ok) {
+        const retryAfterMs = googleBooksBackoffMs(response.headers.get('retry-after'));
+        if (response.status === 403 || response.status === 429
+          || (response.status === 503 && response.headers.has('retry-after'))) {
+          unavailableUntil = Date.now() + retryAfterMs;
+        }
+        console.warn('[LumiScore cover provider]', {
+          provider: 'google_books',
+          status: response.status,
+          category: await classifyGoogleBooksFailure(response),
+          keyConfigured: Boolean(apiKey),
+          retryAfterMs,
+        });
         return unresolvedCover('google_books', isbn13, 'temporary_failure');
       }
-      const coverUrl = selectVerifiedGoogleBooksCover(
-        (await response.json()) as GoogleBooksResponse,
-        isbn13,
-      );
+      let metadata: GoogleBooksResponse;
+      try {
+        metadata = (await response.json()) as GoogleBooksResponse;
+      } catch {
+        console.warn('[LumiScore cover provider]', {
+          provider: 'google_books', status: response.status,
+          category: 'invalid_response', keyConfigured: Boolean(apiKey),
+        });
+        return unresolvedCover('google_books', isbn13, 'temporary_failure');
+      }
+      const coverUrl = selectVerifiedGoogleBooksCover(metadata, isbn13);
       return coverUrl
         ? resolvedCover('google_books', isbn13, coverUrl)
         : unresolvedCover('google_books', isbn13, 'confirmed_missing');
-    } catch {
+    } catch (error) {
+      console.warn('[LumiScore cover provider]', {
+        provider: 'google_books',
+        category: error instanceof Error && ['AbortError', 'TimeoutError'].includes(error.name)
+          ? 'timeout' : 'network_error',
+        keyConfigured: Boolean(apiKey),
+      });
       return unresolvedCover('google_books', isbn13, 'temporary_failure');
     }
   }
