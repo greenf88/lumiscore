@@ -140,7 +140,7 @@ function BookCoverForIdentity({
 
   const requestResolvedCovers = useCallback(() => {
     if (
-      !resolveMissing ||
+        !resolveMissing || book.strictEditionLanguage ||
       resolvedRequested.current ||
       (!book.openLibraryWorkId && !book.isbn13)
     ) return;

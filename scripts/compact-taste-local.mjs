@@ -13,7 +13,7 @@ const before = process.argv.includes('--before');
 const resultReview = process.argv.includes('--result-review');
 const missingEvidence = process.argv.includes('--missing-evidence');
 const directReview = process.argv.includes('--direct-review');
-let failNext = false, delayMs = 0, exhausted = false;
+let failNext = false, delayMs = 0, exhausted = false, metadataBlocked = false;
 let failFinalSave = process.argv.includes('--fail-final-save');
 const baseline = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:app/globals.css'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
 const baselineTranslations = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:lib/i18n/translations.ts'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
@@ -44,7 +44,7 @@ const journal = [];
 const requests = [];
 const response = () => ({ authenticated: true, available: true, state: {
   round, currentWorkId: !round || round.complete || exhausted ? null : books[position % books.length].workId, exhausted },
-  book: !round || round.complete || exhausted ? null : books[position % books.length] });
+  book: !round || round.complete || exhausted || metadataBlocked ? null : books[position % books.length], selectionBlocked: metadataBlocked });
 const json = (res, data, status = 200) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(data));
@@ -82,9 +82,11 @@ const server = await createServer({
           position = 9; round = { id: 'dddddddd-0000-4000-8000-000000000009', number: 9, language: 'nl', goal: 10, complete: false, ratedCount: 9, offeredCount: 10 };
         }
         if (control.exhausted && round) exhausted = true;
+        metadataBlocked = Boolean(control.metadataBlocked);
         return json(res, { syntheticUIOnly: true });
       }
-      if (url.pathname === '/api/catalog/search') return json(res, { results: directReview
+      if (url.pathname === '/api/taste-test/candidates' && metadataBlocked) return json(res, { results: [], eligibleCount: 0 });
+      if (url.pathname === '/api/catalog/search' || url.pathname === '/api/taste-test/candidates') return json(res, { results: directReview
         ? books.filter(b => `${b.title} ${b.author}`.toLowerCase().includes((url.searchParams.get('q') ?? '').toLowerCase())) : books });
       if (url.pathname === '/api/book-status') return json(res, { statuses: {} });
       if (url.pathname === '/api/taste-test/result') {

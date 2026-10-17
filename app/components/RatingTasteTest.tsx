@@ -14,7 +14,7 @@ import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
 import { canOpenRoundResult, createRoundActionGate, roundProgress, type PendingWorkScore } from '@/lib/taste-test/direct-rating';
 
-type Response = { authenticated: boolean; available: boolean; state: RatingRoundState | null; book: Book | null };
+type Response = { authenticated: boolean; available: boolean; state: RatingRoundState | null; book: Book | null; selectionBlocked?: boolean };
 
 export function RatingTasteTest({ authState, swipePrototype }: { authState: HeaderAuthState; swipePrototype: boolean }) {
   const { locale, t } = useLumiScoreLocale();
@@ -30,6 +30,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Book[]>([]);
   const [searchError, setSearchError] = useState(false);
+  const [searchAvailable, setSearchAvailable] = useState<number | null>(null);
   const gate = useRef<ReturnType<typeof createRoundActionGate> | null>(null);
   if (gate.current === null) { gate.current = createRoundActionGate(); }
   const revision = useRef(0);
@@ -75,10 +76,10 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     if (!searchOpen || pending || paused || query.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      fetch(`/api/catalog/search?q=${encodeURIComponent(query)}`, { signal: controller.signal }).then(async r => {
+      fetch(`/api/taste-test/candidates?q=${encodeURIComponent(query)}`, { signal: controller.signal, cache: 'no-store' }).then(async r => {
         if (!r.ok) throw new Error();
-        const result = await r.json() as { results?: Book[] };
-        if (!controller.signal.aborted) { setResults(result.results ?? []); setSearchError(false); }
+        const result = await r.json() as { results?: Book[]; eligibleCount?: number };
+        if (!controller.signal.aborted) { setResults(result.results ?? []); setSearchAvailable(result.eligibleCount ?? null); setSearchError(false); }
       }).catch(() => { if (!controller.signal.aborted) setSearchError(true); });
     }, 250);
     return () => { clearTimeout(timer); controller.abort(); };
@@ -107,7 +108,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
       }
       focusNext.current = true;
       returnFromSearch.current = action === 'choose';
-      setData(next); setSelectedScore(null); setPrototypeIntent(null); setPaused(false); setSearchOpen(false); setResults([]); setQuery('');
+      setData(next); setSelectedScore(null); setPrototypeIntent(null); setPaused(false); setSearchOpen(false); setResults([]); setQuery(''); setSearchAvailable(null);
       setSaved(action === 'rate');
       if (action === 'rate') {
         try { sessionStorage.setItem('lumiscore-rating-changed', '1'); } catch { /* Optional. */ }
@@ -134,7 +135,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   };
   const closeSearch = () => {
     if (gate.current?.isBusy()) return;
-    setSearchOpen(false); setQuery(''); setResults([]); setSearchError(false);
+    setSearchOpen(false); setQuery(''); setResults([]); setSearchError(false); setSearchAvailable(null);
     searchButton.current?.focus({ preventScroll: true });
   };
 
@@ -170,6 +171,8 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
               <div role="progressbar" aria-label={t('directTaste.ratedBooks')} aria-valuemin={0}
                 aria-valuemax={progress.goal} aria-valuenow={progress.rated}><span style={{ width: `${progress.percent}%` }} /></div>
             </div>
+            {round.language !== locale && <p className="taste-round-language">{locale === 'nl'
+              ? 'Boektaal van je lopende ronde: Engels.' : 'Book language of your current round: Dutch.'}</p>}
             {paused ? <div className="taste-paused"><p role="status">{t('directTaste.paused')}</p>
               <button className="primary-cta" type="button" disabled={pending} onClick={() => act('resume')}>{t('directTaste.resume')}</button></div>
               : <>
@@ -196,8 +199,12 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                       onClick={e => { if (e.detail <= 1 && workId) void act('skip', workId); }}>{t('directTaste.skip')}</button>}
                   </div>
                 </article>}
-                {(data.state?.exhausted || !book) && <div className="taste-exhausted" role="status"><p>{t('directTaste.exhausted')}</p>
-                  <button type="button" disabled={pending} onClick={() => act('resume')}>{t('directTaste.checkInventory')}</button></div>}
+                {(data.state?.exhausted || !book) && <div className="taste-exhausted" role="status"><p>{data.selectionBlocked
+                  ? locale === 'nl' ? 'Dit boek heeft nog onvoldoende gecontroleerde gegevens voor deze smaaktest. Zoek hieronder een geschikt gelezen boek. Je beoordelingen en voortgang blijven bewaard.'
+                    : 'This book does not yet have enough verified metadata for this taste test. Find an eligible book you have read below. Your ratings and progress are preserved.'
+                  : t('directTaste.exhausted')}</p>
+                  <p>{locale === 'nl' ? 'Eerdere overgeslagen boeken kunnen met de huidige opslag nog niet opnieuw worden aangeboden. Je kunt wel een ander geschikt boek zoeken.'
+                    : 'Previously skipped books cannot yet be offered again with the current storage. You can search for another eligible book.'}</p></div>}
                 <button ref={searchButton} className="taste-search-toggle" type="button" disabled={pending}
                   aria-expanded={searchOpen} aria-controls="taste-search-panel" onClick={() => {
                     if (gate.current?.isBusy()) return;
@@ -206,9 +213,12 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                 {searchOpen && <div id="taste-search-panel" className="taste-book-search" onKeyDown={e => { if (e.key === 'Escape') closeSearch(); }}>
                   <label htmlFor="taste-book-query">{t('directTaste.searchLabel')}</label>
                   <input ref={searchInput} id="taste-book-query" value={query} maxLength={100} disabled={pending}
-                    onChange={e => { setQuery(e.target.value); setResults([]); setSearchError(false); }} />
+                    onChange={e => { setQuery(e.target.value); setResults([]); setSearchError(false); setSearchAvailable(null); }} />
                   <button type="button" disabled={pending} onClick={closeSearch}>{t('directTaste.closeSearch')}</button>
                   {searchError && <p role="status">{t('directTaste.searchError')}</p>}
+                  {searchAvailable !== null && results.length === 0 && !searchError && <p role="status">{locale === 'nl'
+                    ? searchAvailable === 0 ? 'Er zijn nu geen andere boeken met voldoende bewijs beschikbaar in de taal van deze ronde. Je voortgang blijft bewaard.' : 'Geen geschikt boek gevonden. Probeer een andere titel of auteur.'
+                    : searchAvailable === 0 ? 'No other books currently have enough evidence in this round’s language. Your progress is preserved.' : 'No eligible book found. Try another title or author.'}</p>}
                   <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== workId).map(b => <li key={b.workId}>
                     <button type="button" disabled={pending} onClick={() => act('choose', b.workId!)}>{b.title} — {b.author}</button>
                   </li>)}</ul>

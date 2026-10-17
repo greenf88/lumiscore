@@ -5,16 +5,24 @@ import { parseRoundAction, type RatingRoundState } from '@/lib/taste-test/rating
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { readServerEnvironment } from '@/lib/server-environment';
 import { isProductionBackedReview } from '@/lib/supabase/review-target';
+import { loadTasteEligibility, loadStrictRecommendationBooks } from '@/lib/supabase/taste-safety';
 function reviewUsesProduction() {
   return isProductionBackedReview({ deploymentEnvironment: process.env.VERCEL_ENV, nodeEnvironment: process.env.NODE_ENV,
     supabaseUrl: readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') });
 }
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
-async function present(state: RatingRoundState, request: Request) {
+async function present(state: RatingRoundState, request: Request, client: Awaited<ReturnType<typeof getVerifiedServerUser>>['client']) {
   const { locale } = await resolveRequestLocale(request);
+  const language = state.round?.language ?? locale;
   const { loadCatalogBooksByIdsWithStoredCovers } = await import('@/lib/supabase/books');
-  const books = state.currentWorkId ? await loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale) : [];
-  return { authenticated: true, available: true, state, book: books[0] ?? null };
+  const ids = state.currentWorkId ? [state.currentWorkId] : [];
+  const [checks, books] = await Promise.all([
+    loadTasteEligibility(client, ids, language), loadCatalogBooksByIdsWithStoredCovers(ids, undefined, language),
+  ]);
+  const check = state.currentWorkId ? checks.get(state.currentWorkId) : undefined;
+  const strict = check?.eligible ? await loadStrictRecommendationBooks(client, books, language) : [];
+  return { authenticated: true, available: true, state, book: strict[0] ?? null, language,
+    selectionBlocked: Boolean(state.currentWorkId && !strict[0]), selectionReasons: check?.reasons ?? [] };
 }
 export async function GET(request: Request) {
   try {
@@ -24,7 +32,7 @@ export async function GET(request: Request) {
     const { data, error } = await client.rpc('taste_rating_state');
     if (error?.code === 'PGRST202') return json({ authenticated: true, available: false, reason: 'migration-required' });
     if (error) throw error;
-    return json(await present(data as RatingRoundState, request));
+    return json(await present(data as RatingRoundState, request, client));
   } catch { return json({ error: 'Taste round unavailable.' }, 503); }
 }
 export async function POST(request: NextRequest) {
@@ -37,6 +45,14 @@ export async function POST(request: NextRequest) {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return json({ error: 'Sign in to save explicit ratings.' }, 401);
     if (reviewUsesProduction()) return json({ error: 'separate-test-database-required' }, 503);
+    if ((action.action === 'rate' || action.action === 'choose') && action.workId) {
+      const saved = await client.rpc('taste_rating_state');
+      if (saved.error) throw saved.error;
+      const state = saved.data as RatingRoundState;
+      const language = state.round?.language ?? action.language;
+      const checks = await loadTasteEligibility(client, [action.workId], language);
+      if (!checks.get(action.workId)?.eligible) return json({ error: 'book-not-eligible' }, 409);
+    }
     const { data, error } = await client.rpc('taste_rating_advance_v2', {
       p_action: action.action, p_round_id: action.roundId ?? null, p_work_id: action.workId ? Number(action.workId) : null,
       p_score: action.score ?? null, p_language: action.language, p_goal: action.goal ?? 20,
@@ -45,6 +61,6 @@ export async function POST(request: NextRequest) {
     if (error?.code === '22023') return json({ error: 'stale-or-invalid-action' }, 409);
     if (error?.code === 'PGRST202') return json({ error: 'migration-required' }, 503);
     if (error) throw error;
-    return json(await present(data as RatingRoundState, request));
+    return json(await present(data as RatingRoundState, request, client));
   } catch { return json({ error: 'Action could not be confirmed. Refresh to see saved progress.' }, 503); }
 }
