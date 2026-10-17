@@ -1,0 +1,111 @@
+LumiScore — veilige smaaktestselectie / edities / reeksvoorrang — lokale review
+17 oktober 2026. Niet releasegereed: voorraad- en opslagbeperking hieronder.
+
+BASIS EN SCOPE
+Geïsoleerde branch fix/taste-eligibility-editions-series-20261017 vanaf actuele
+origin/main 29458ca83a2a792bcd26198ac0cedc9e7cf11fa0 (PR36 inbegrepen).
+Applicatiecommit: 66d71ccbd6ad642e135621221599749a6af1e10d.
+Geen toepasselijke AGENTS.md. Bestaande worktrees/ongecommit werk blijven intact.
+Gedeelde buildTasteProfile/reliableProfileTraits en publicatie-/ratingsregels
+hergebruikt; geen nieuwe profielberekening, pilotlabels of cataloguscorrecties.
+Geen migratie, configuratie-, Auth-, RLS-, productie- of testprojectwrite.
+Alle echte SQL-schrijftests zijn disposable PGlite-fixtures zonder credentials.
+
+BEVESTIGDE OORZAAK EN NOG NIET OPGELOST
+Actuele gehoste functie-definities en bestaande migraties komen overeen:
+taste_rating_offers heeft primary key(user_id,work_id). Zowel automatisch kiezen
+als choose sluit IEDERE eerdere aanbieding uit, niet alleen de actuele ronde.
+Een eerdere skip kan daarom met de bestaande RPC nooit opnieuw worden aangeboden.
+Het SQL-selectiepad controleert wel een NL/EN-editie maar niet inhoud/reekspositie.
+Er is geen betrouwbare algemene standalone-registratie. Afwezigheid is geen bewijs.
+
+De lokale proef met 90 NL-fixtures voltooit drie rondes van tien: 30 ratings,
+6 skips, 36 unieke aanbiedingen; herladen/hervatten met EN-interface behoudt NL.
+Met 40 fixtures en vijf skips per ronde: ronde1 10/10, ronde2 10/10,
+ronde3 uitgeput op 5/10; 25 ratings/Read-statussen blijven behouden.
+Tien eerdere en vijf huidige skips blijven afzonderlijk aantoonbaar. Een
+expliciete choose van een eerdere skip wordt door de bestaande SQL afgewezen.
+Dit diagnosebewijs is GEEN bewijs dat de databasebeperking is gerepareerd.
+
+Volledige oplossing vereist een afzonderlijk goedgekeurde round-scoped
+offeridentiteit + selectie-/choose-RPC-aanpassing en bewuste heraanbiedactie,
+met behoud van ratings en alle historische offers. Niet uitgevoerd in deze scope.
+De pure selectTasteInventory-policy test die gewenste semantiek, maar vervangt
+de atomaire databaseopslag niet. Er is geen nepwerkende herbekijk-knop toegevoegd.
+Ook de automatische DB-selector zelf is niet veranderd. Een ongeschikt huidig
+boek wordt afgeschermd, niet stilzwijgend als gebruikersskip weggeschreven.
+
+WEL LOKAAL GEREPAREERD
+- Eén evidence-gate voor identiteit, inhoud, expliciete zelfstandigheid of
+  gecontroleerde eerste hoofddeelpositie, alle collectielinks en editietaal.
+  Auteurscollecties bewijzen geen zelfstandigheid; een tweede onzekere/vervolg-
+  koppeling kan niet worden omzeild. Periode/confidence alleen is onvoldoende.
+- API-presentatie, rate/choose en private zoekingang passen die gate toe.
+  Zoekresultaten worden volledig gefilterd vóór de limiet van twintig.
+  Eigen historie/ratings en edities zijn gepagineerd, inclusief >1000-testgevallen.
+- UI toont eerlijke onvoldoende-bewijs/voorraadmelding en bruikbare zoekingang.
+  Geen eindeloze voorraad-resume-knop. Bewaarde rondetaal blijft zichtbaar bij
+  interface-taalwissel. Opslaggate, scorefeedback en atomaire RPC blijven intact.
+- Strikte expliciete Edition.language: geen ISBN-prefix/auteur/titel-inferentie,
+  geen anderstalige fallback. Titels/ISBN/OLID volgen de gekozen editie.
+  Alleen exact gebonden bestaande covers/overrides/edition-OLID-kandidaten;
+  geen Work-coverresolverfallback. Ontbrekend beeld blijft neutraal.
+  Edition-ID/taal vernieuwen de coverstate; een foutief Work-OLID wordt geweigerd.
+- Homepage, gastaanbevelingen en resultaat gebruiken dezelfde editiepresentatie.
+  Homepage/gast volgen de gekozen sitetaal; resultaat volgt de bewaarde rondetaal.
+- Eén gedeelde reeksvoorrang: starter exact9/10, alleen volgend ongelezen én
+  onbeoordeeld hoofddeel, geverifieerde bestaande leesvolgorde, passende editie.
+  Ontbrekende positie/vertaling wordt niet overgeslagen. Auteursoverzichten tellen
+  niet als reeks. Volgorde: cijfer aflopend, ratingdatum aflopend, slug oplopend,
+  Work-ID oplopend. Reden noemt echt cijfer; geen fictieve matchscore/percentage.
+
+CATALOGUSWERKLIJST / CONCRETE BEPERKING
+Read-only capture 20:34:05–20:43:15 UTC, 21 keysetpagina's; 10.134 unieke Works,
+10.293 edities. Eindtelling en volledige Work-ID-digest gereconcilieerd.
+Geen transactioneel snapshot: metadata kon binnen het venster wijzigen.
+Veilig geschikt vóór persoonlijke uitsluitingen: NL2, EN5. Dus in geen taal
+voldoende voor een ronde van10. Dit is ontbrekend bewijs, geen oordeel dat alle
+overige boeken inhoudelijk ongeschikt zijn. Geen kwaliteitsgrenzen versoepeld.
+9.952 Works missen voldoende reeks/standalone-bewijs, 9.093 bruikbaar inhoudelijk
+bewijs. Redenen overlappen. NL: 7.536 missen taalbewijs; EN: 3.835.
+
+Volledige CSV/JSON, hashes, invulinstructie, reviews en batches staan in:
+C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/taste-eligibility-20261017/
+Zie operations/taste-inventory-manifest-20261017.json voor exacte hashes.
+Prioriteit zonder dubbeltelling: huidig aanbod1 / overige reeksstarters57 /
+overige beoordeelde Works214 / resterend9.862. Batches maximaal50.
+Onbekende oorspronkelijke taal/werkvorm/doelgroep staan expliciet UNKNOWN;
+alle NL/EN-edities en overige/ontbrekende talen blijven in JSON bewaard.
+Bestaande velden, voorstellen en gecontroleerde bronfeiten blijven afzonderlijk.
+Twee Jamie-boeken hebben afzonderlijke SOURCE_SUPPORTED-notities; geen human
+metadata-signoff of toegepaste correctie. 1462 mist taal/labels, 1533 heeft al
+Cooking-bewijs. Exacte ISBN-brug + auteursbronnen staan in jamie-source-review.json.
+Geen algemene Jamie Oliver-uitsluiting. Beide boeken blijven in de catalogus.
+De 200-Work-taxonomiepilot is niet overgenomen of aangepast.
+Offline export-builder/mergehelper bewaart eerdere reviews exact per Work-ID,
+weigert duplicaten en archiveert verdwenen identiteiten apart; past niets toe.
+CSV: 10.134 regels,26 kolommen, formulebescherming, lossless artifact-modelcheck.
+ISO-capturetijd wordt bij CSV-serialisatie uit JSON hersteld omdat de artifact-
+import die anders als lokale datum formatteert. JSON blijft de ruwe bronreferentie.
+
+VERIFICATIE
+163 gerichte tests groen, waaronder drie NL-rondes, voorraaduitputting,
+geen dubbele telling/overschrijving, eerste/vervolg/prequel/meerdere links,
+9/10 versus8, ontbrekende vertalingen, covers en gepagineerde eigengeschiedenis.
+TypeScript, bron-lint, Vinext-build, Vercel-target-build, client-secretscan en
+diffcontrole groen. Lint sluit gegenereerde dist/.next/.wrangler-bestanden uit;
+geen lintconfig aangepast. Bekende bundlerwaarschuwingen, geen buildfouten.
+Lokale echte UI in browser gecontroleerd op390px: NL/EN, Ink/Paper, veilige
+blokkade/lege zoekstaat, pauze/hervatten en rondetaal/voortgang behouden.
+Screenshots zijn synthetische lokale UI-fixtures, GEEN hosted opslagbewijs of
+fysieke telefooncontrole. Geen nieuwe login/accounts/testprojectwijzigingen.
+Geen volledige nieuwe audit of controle van alle10.293 daadwerkelijke coverbeelden.
+
+HERSTEL / REVIEWSTATUS
+Alleen lokaal. Geen push, PR, merge, publicatie of externe configuratiewijziging.
+Voor terugname van appwijzigingen: revert uitsluitend applicatiecommit66d71cc
+op deze branch. Geen data-rollback, SQL of wissen van historie nodig.
+De export/reviewcommit kan onafhankelijk behouden blijven.
+Niet publiceren als voltooide smaaktestreparatie: eerst metadatareview en apart
+releasebesluit over de noodzakelijke opslag-/selectorwijziging. Geen verborgen
+migratie of productiecorrectie voorbereid voor automatische uitvoering.
