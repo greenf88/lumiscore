@@ -12,6 +12,11 @@ export function topSupportedAffinities(profile: RatingResultProfile): Affinity[]
     .sort((a, b) => b.score! - a.score! || a.trait.localeCompare(b.trait,'en')).slice(0, 3);
 }
 
+/** Hide an empty explanation panel without changing evidence or reliability. */
+export function hasSupportedTasteSummary(profile: RatingResultProfile): boolean {
+  return Boolean(profile.archetype || topSupportedAffinities(profile).length);
+}
+
 // Call only after a successful, parsed save response. Neither a skip, a retry
 // returning an already-complete round, nor a failed save completes a new rating.
 export function shouldOpenCompletedResult(action: RoundAction['action'], before: RatingRoundState | null,

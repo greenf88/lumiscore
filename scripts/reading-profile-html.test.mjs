@@ -19,7 +19,8 @@ test('real React account HTML: owner-only props, empty/error evidence, NL/EN and
    assert.match(html,new RegExp(`href="/${locale}/my-books"`));assert.match(html,new RegExp(`href="/${locale}/taste-test"`));
    assert.match(html,/action="\/auth\/sign-out" method="post"/);assert.match(html,locale==='nl'?/Mijn leesprofiel/:/My reading profile/);
    assert.equal((html.match(/<dt>/g)??[]).length,4);assert.doesNotMatch(html,/Luminator|personality|Mijn reeksen/);
-   assert.match(html,locale==='nl'?/Nog even ontdekken/:/Keep discovering/);
+   assert.doesNotMatch(html,/Nog even ontdekken|Keep discovering|missen nog inhoudelijke kenmerken|lack usable content traits|class="taste-profile"/);
+   assert.match(html,locale==='nl'?/Jouw leessmaak/:/Your reading taste/);
    const empty=render({...data,totals:{read:0,rated:0,wantToRead:0,reading:0}});assert.match(empty,locale==='nl'?/Ontdek je leessmaak/:/Discover your reading taste/);
    const failed=render(null);assert.match(failed,/role="alert"/);assert.doesNotMatch(failed,/<dd>0<\/dd>/);
   }

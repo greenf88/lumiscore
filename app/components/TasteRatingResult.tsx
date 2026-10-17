@@ -10,6 +10,7 @@ import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCard, recommendationMatchLabel } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
+import { hasSupportedTasteSummary } from '@/lib/taste-test/result-presentation';
 const EMPTY_BOOKS: never[] = [];
 export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
   const {locale} = useLumiScoreLocale(), nl=locale==='nl';
@@ -39,9 +40,11 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
   const {locale}=useLumiScoreLocale(), nl=locale==='nl', {profile}=result;
   const books=useMemo(()=>result.recommendations.length ? result.recommendations.map(x=>x.book) : EMPTY_BOOKS,[result.recommendations]);
   const {wanted,statuses,toggleWanted}=useWantToRead(true,books);
+  const hasSummary=hasSupportedTasteSummary(profile);
   return <section className="featured-section taste-result" aria-labelledby="taste-result-title">
-    <TasteProfileSummary profile={profile} headingId="taste-result-title" />
-    <h2>{nl?'Boeken voor jou':'Books for you'}</h2>
+    {hasSummary ? <><TasteProfileSummary profile={profile} headingId="taste-result-title" />
+      <h2>{nl?'Boeken voor jou':'Books for you'}</h2></>
+      : <h1 id="taste-result-title">{nl?'Meer boeken voor jou':'More books for you'}</h1>}
     {result.recommendations.length===0 ? <p role="status">{nl?'Nu geen passende boeken beschikbaar.':'No suitable books available right now.'}</p>
     : <div className="book-grid">{result.recommendations.map(x=><BookCard key={x.book.workId}
       book={x.book} wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}

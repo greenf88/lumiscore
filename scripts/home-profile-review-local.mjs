@@ -62,7 +62,7 @@ const server=await createServer({root,configFile:false,envFile:false,cacheDir:ro
   if(['/profile-review-cover.svg','/browse-review-cover.svg'].includes(url.pathname)){res.writeHead(200,{'Content-Type':'image/svg+xml'});return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#23464d"/><circle cx="120" cy="130" r="64" fill="#d1a963"/><text x="16" y="38" fill="#f7f3eb" font-family="Georgia" font-size="18">Een nieuwe horizon</text></svg>');}
   if(url.pathname==='/api/book-status')return json(res,{authenticated:mode!=='guest',statuses:{}});
   if(url.pathname==='/api/account/reading-preferences')return json(res,{onboardingDismissed:true});
-  if(url.pathname==='/api/taste-test/result'){const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');return json(res,f.profileResult());}
+  if(url.pathname==='/api/taste-test/result'){const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');return json(res,f.profileResult(mode));}
   if(url.pathname==='/api/taste-test/rounds'){
    const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');
    if(req.method==='POST'){let text='';for await(const chunk of req){text+=chunk;if(text.length>2048)return json(res,{},413);}const action=JSON.parse(text);

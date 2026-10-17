@@ -109,3 +109,20 @@ De export/reviewcommit kan onafhankelijk behouden blijven.
 Niet publiceren als voltooide smaaktestreparatie: eerst metadatareview en apart
 releasebesluit over de noodzakelijke opslag-/selectorwijziging. Geen verborgen
 migratie of productiecorrectie voorbereid voor automatische uitvoering.
+
+LOKALE PRESENTATIEVERFIJNING — zelfde branch, afzonderlijke vervolgcommit
+De zichtbare kop Nog even ontdekken / Keep discovering en de zin over ontbrekende
+inhoudelijke kenmerken zijn verwijderd uit de gedeelde publieke UI-component.
+Lege profielvlakken renderen niet meer. Onderbouwde voorkeuren blijven onder de
+neutrale kop Jouw leessmaak / Your reading taste, zonder nieuw lezerstype.
+De bestaande boekenlijst blijft intact; zonder profielblok gebruikt zij H1
+Meer boeken voor jou / More books for you. Account-ARIA blijft geldig als het
+uitlegvlak wegvalt; bestaande normale documentflow herstelt de tussenruimte.
+Geen wijziging aan profielberekening, ontbrekende-kenmerkenregistratie,
+bewijsgrenzen, matchclaims, ratings, aanbevelingsselectie of catalogus.
+32 gerichte controles groen:16 React/presentatie/modeltests en16 echte lokale
+SSR-routecontroles. TypeScript, lint en productiebuild groen. Browser: uitslag
+en account op390px, NL/EN, Paper/Ink; lege en ondersteunde voorkeurstaat.
+Screenshots: outputs/taste-eligibility-20261017/copy-refinement buiten de repo.
+Synthetische lokale adapters; geen hosted/telefooncontrole of databasewrites.
+De eerdere voorraad-/databasebeperking en publicatiestop blijven ongewijzigd.
