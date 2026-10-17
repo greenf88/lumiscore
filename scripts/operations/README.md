@@ -32,6 +32,12 @@ scan and diff checks without privileged credentials. It becomes active only when
 the workflow is present on the relevant remote branch. Git integration remains
 responsible for Vercel builds/deployments; no duplicate deployment pipeline.
 
+`node scripts/operations/verify-profile-ssr.mjs` starts the existing loopback-only
+synthetic adapter and runs the fourteen opt-in NL/EN profile SSR checks. CI runs
+this separately, so the unit suite's fourteen opt-in skips are exercised as well.
+These checks prove rendering, private response headers and synthetic owner-state
+handling, not real production authentication or database/session security.
+
 ## Classification pilot
 
 `pilot-selection.sql` deterministically selects 80 Works without non-period evidence,

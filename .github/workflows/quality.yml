@@ -31,6 +31,9 @@ jobs:
         run: pnpm exec tsc --noEmit
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm lint
+      - name: Verify synthetic NL/EN profile SSR
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/operations/verify-profile-ssr.mjs
       - id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm build:vercel
