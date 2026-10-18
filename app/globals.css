@@ -168,8 +168,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero-eyebrow i { width: 24px; height: 1px; background: var(--gold); }
 .hero-copy h1 { margin: 18px 0 17px; font-family: var(--serif); font-size: clamp(58px, 6vw, 88px); font-weight: 400; line-height: 0.96; letter-spacing: -0.055em; }
 .hero-copy h1 em { color: var(--gold); font-weight: 400; }
-.hero-primary { margin: 0 0 28px; color: color-mix(in srgb, var(--text) 78%, var(--muted)); font-size: 17px; letter-spacing: 0.01em; }
-.hero-paper-copy, .paper-features, .learn-link { display: none; }
+.hero-introduction { max-width: 530px; margin: 0 0 28px; color: color-mix(in srgb, var(--text) 78%, var(--muted)); font-size: 17px; line-height: 1.6; letter-spacing: 0.01em; }
+.paper-features, .learn-link { display: none; }
 .primary-cta { display: inline-flex; align-items: center; gap: 32px; min-height: 48px; padding: 0 21px; border-radius: 4px; background: var(--teal-deep); color: #fff; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18); font-size: 13px; font-weight: 750; transition: transform 170ms ease, background-color 170ms ease; }
 .primary-cta:hover { transform: translateY(-2px); background: var(--teal); }
 .primary-cta span { font-size: 18px; font-weight: 400; }
@@ -221,8 +221,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .cover-road { background: linear-gradient(180deg, #989185, #2f302d 70%); }
 .cover-matter { background: repeating-linear-gradient(105deg, rgba(255,255,255,.16) 0 1px, transparent 1px 8px), linear-gradient(135deg, #152541, #17121d); }
 
-:root[data-theme='paper'] .hero-primary, :root[data-theme='paper'] .hero-stats { display: none; }
-:root[data-theme='paper'] .hero-paper-copy { display: block; max-width: 530px; margin: 0 0 27px; color: var(--muted); font-size: 16px; line-height: 1.65; }
+:root[data-theme='paper'] .hero-stats { display: none; }
+:root[data-theme='paper'] .hero-introduction { color: var(--muted); font-size: 16px; line-height: 1.65; }
 :root[data-theme='paper'] .paper-features { display: flex; gap: 32px; margin-top: 35px; }
 :root[data-theme='paper'] .paper-features > div { display: flex; align-items: center; gap: 10px; }
 :root[data-theme='paper'] .paper-features i { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid var(--border); border-radius: 50%; color: var(--gold); font-style: normal; font-size: 12px; }
@@ -715,7 +715,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .hero-inner { width: calc(100% - 32px); padding: 28px 0 24px; gap: 32px; }
   .hero-copy { padding-right: 0; }
   .hero-copy h1 { margin-top: 15px; font-size: clamp(48px, 15vw, 64px); }
-  .hero-primary, :root[data-theme='paper'] .hero-paper-copy { max-width: 330px; font-size: 14px; line-height: 1.6; }
+  .hero-introduction, :root[data-theme='paper'] .hero-introduction { max-width: 330px; font-size: 14px; line-height: 1.6; }
   .primary-cta { width: 100%; justify-content: space-between; }
   .hero-stats { margin-top: 35px; justify-content: space-between; }
   .hero-stats div { min-width: 0; padding: 0 12px; }

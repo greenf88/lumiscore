@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 // An isolated header fixture, not a real session or hosted Auth connection.
 const headerFixture = process.argv.includes('--header-authenticated');
-const port = headerFixture ? 3121 : 3120;
+const portOption=process.argv.find(arg=>arg.startsWith('--port='))?.slice(7);
+if(portOption && (!/^\d{4,5}$/.test(portOption)||Number(portOption)<1024||Number(portOption)>65535))throw Error('Invalid loopback review port');
+const port = portOption ? Number(portOption) : headerFixture ? 3121 : 3120;
 for (const key of Object.keys(process.env)) if (/SUPABASE|GOOGLE_BOOKS|DATABASE/.test(key)) delete process.env[key];
 const bookSource = `export const books = Array.from({length:80},(_,i)=>({id:'synthetic-'+i,source:'supabase',workId:String(i+1),editionId:String(i+1),title:'Synthetic book '+(i+1),author:'Synthetic author',firstPublishYear:2000,score:null,ratingsCount:null,match:null,cover:'orbit',openLibraryWorkId:'OL'+(i+1)+'W'}));`;
 const modules = {
@@ -22,7 +24,7 @@ const modules = {
   'lib/supabase/collections.ts': bookSource + `const collection={id:'1',slug:'synthetic-series',name:'Synthetic series',collectionType:'series',description:'Synthetic English series description.',expectedMainSeriesTotal:2};export async function loadCollectionsDirectory(){return {collections:[],total:0}};export async function loadCollectionPageData(slug){return slug!==collection.slug?null:{collection,books:books.slice(0,2).map((book,i)=>({book,workId:book.workId,sequenceNumber:i+1,publicationOrder:i+1,subgroup:null})),authenticated:false,statuses:{},ratedWorkIds:[],userRatings:{},progress:{read:0,cataloguedTotal:2,total:2,percentage:0},highlightedUnreadWorkId:null}};export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(id,slug){return slug===collection.slug?{slug,name:collection.name}:null};export async function loadHomepageSeriesContinuations(){return []}`,
   'lib/supabase/client.ts': `export const supabase={from(table){const rows=table==='works'?[{id:1},{id:2}]:[{slug:'synthetic-series'}];return {select(){return this},order(){return this},async range(start){return {data:start?[]:rows,error:null}}}}}`,
 };
-const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'node_modules/.vite-seo-critical',
+const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'node_modules/.vite-seo-critical-'+port,
   css:{postcss:{plugins:[tailwindcss()]}}, resolve:{alias:{'@':root}},
   plugins:[{name:'loopback-synthetic-seo-loaders',enforce:'pre',load(id){const relative=id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0];return modules[relative]??null}},vinext()],
   server:{host:'127.0.0.1',port,strictPort:true},

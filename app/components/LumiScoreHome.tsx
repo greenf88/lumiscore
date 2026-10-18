@@ -388,14 +388,13 @@ const Hero = memo(function Hero({ catalogStats, personalization }: { catalogStat
         <div className="hero-copy">
           <span className="eyebrow hero-eyebrow"><i /> {t('home.nextFiveStar')}</span>
           <h1>{t('home.heroStart')}<br /><em>{t('home.heroEmphasis')}</em></h1>
-          <p className="hero-primary">{t('home.heroPrimary')}</p>
-          <p className="hero-paper-copy">{t('home.heroCopy')}</p>
+          <p className="hero-introduction">{t('home.heroCopy')}</p>
           <LocaleLink className="primary-cta" href="/taste-test">{t('home.tasteTestCta')} <span>→</span></LocaleLink>
           <div className="paper-features">
             <div><i>✦</i><span><strong>{t('home.smartRecommendations')}</strong><small>{t('home.personalizedForYou')}</small></span></div>
             <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
           </div>
-          <LocaleLink className="learn-link" href="#how-it-works">{t('home.learn')} <span>→</span></LocaleLink>
+          <LocaleLink className="learn-link" href="/zo-werkt-het">{t('home.learn')} <span>→</span></LocaleLink>
           <dl className="hero-stats">
             <div><dt>{catalogStats.books === null ? '—' : catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
             <div><dt><LocaleLink href="/categories" aria-label={`${catalogStats.categories ?? '—'} ${t('home.categories')}`}>{catalogStats.categories ?? '—'}</LocaleLink></dt><dd><LocaleLink href="/categories">{t('home.categories')}</LocaleLink></dd></div>

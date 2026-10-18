@@ -1,0 +1,153 @@
+LumiScore — homepagepositionering en bestaande uitlegpagina
+Lokaal reviewpakket, 18 oktober 2026
+
+Basis en isolatie
+Remote main opnieuw opgehaald: c2a27d6cc338049d4b84088e8e06f5fa317399c8.
+Branch: seo/home-ratings-positioning-20261018.
+Worktree: work/lumiscore-seo-positioning-20261018.
+De Madonna-release blijft behouden. Andere werkruimtes niet gewijzigd.
+Geen catalogusherstel, taxonomie-, smaakberekenings- of opslagwerk meegenomen.
+
+Eerdere sitenaamopdracht
+Originele lokale commit a56437f3ee36c64e7fc999f832b46670295bc662 bestaat,
+maar staat niet op remote main. Ongewijzigd hergebruikt als afzonderlijke
+prerequisite-commit e44b3af op de actuele basis; oorspronkelijke branch behouden.
+Een WebSite-entiteit: LumiScore, https://lumisco.re/, stabiele #website-ID.
+Informatiepagina's verwijzen naar diezelfde entiteit; geen tweede WebSite.
+OG-sitenaam LumiScore in beide talen; geen AggregateRating voor de website.
+De bestaande root-308 naar /en blijft behouden. Geen NL-only site gemaakt.
+
+Positionering en zichtbare inhoud
+Homepage: boekbeoordelingen 1–10 en persoonlijke aanbevelingen duidelijker.
+Bestaande H1 en primaire smaaktestactie ongewijzigd.
+Eén compacte intro voor Paper én Ink, niet twee thema-verborgen SEO-alinea's.
+Geen nieuwe blokken boven de boeken, geen extra verzoeken of afhankelijkheden.
+Bestaande secundaire uitleglink gaat naar /zo-werkt-het in de gekozen taal,
+in plaats van het korte homepage-anker. Geen tweede uitlegpagina aangemaakt.
+
+Homepage EN — oude metadata, read-only live bevestigd
+Titel: LumiScore — Find your next great read
+Beschrijving: Smart book recommendations, trusted reader ratings, and matches made for your taste.
+Nieuwe titel: Book Ratings & Personal Recommendations | LumiScore
+Nieuwe beschrijving: Rate books from 1 to 10, explore reader ratings and discover recommendations based on your reading taste. Keep track of your books and series with LumiScore.
+Nieuwe intro: Rate books from 1 to 10, discover your reading taste and find your next great read. Track the books you’ve read and continue your favourite series.
+
+Homepage NL — oude metadata, read-only live bevestigd
+Titel: LumiScore — Vind je volgende boek
+Beschrijving: Ontdek boeken, lezersbeoordelingen en aanbevelingen die bij jouw smaak passen.
+Nieuwe titel: Boeken beoordelen & persoonlijke leestips | LumiScore
+Nieuwe beschrijving: Beoordeel boeken van 1 tot 10, ontdek lezersscores en krijg tips op basis van je leessmaak. Houd je gelezen boeken en leesreeksen bij met LumiScore.
+Nieuwe intro: Beoordeel boeken van 1 tot 10, ontdek je leessmaak en vind je volgende favoriete boek. Houd bij wat je hebt gelezen en welke delen van je favoriete reeksen je nog wilt lezen.
+
+Uitleg EN — /en/zo-werkt-het
+Oude titel: How LumiScore works | Book scores, reading status and series
+Oude beschrijving: Discover how LumiScore works: rate books, track your reading status and progress, and find the next volume in a book series.
+Nieuwe titel: How LumiScore works | Rate books & find personal recommendations
+Nieuwe beschrijving: Learn how to rate books from 1 to 10, when public reader scores appear, and how your reading profile, personal matches and series progress work.
+
+Uitleg NL — /nl/zo-werkt-het
+Oude titel: Zo werkt LumiScore | Boekscores, leesstatus en reeksen
+Oude beschrijving: Ontdek hoe LumiScore werkt: beoordeel boeken, houd je leesstatus bij, volg je voortgang en vind het volgende deel van een boekenreeks.
+Nieuwe titel: Zo werkt LumiScore | Boeken beoordelen & persoonlijke leestips
+Nieuwe beschrijving: Lees hoe je boeken beoordeelt van 1 tot 10, wanneer de publieke LumiScore verschijnt en hoe je leesprofiel, persoonlijke matches en reeksvoortgang werken.
+
+Onderbouwing van de vijf antwoorden
+1. lib/ratings/model.ts en bestaande boekdetail-/smaaktestbediening:
+   alleen gehele scores 1–10; één Work-rating per gebruiker; ook boekdetail
+   slaat direct via het cijfer op; smaaktest gaat pas na succes verder.
+2. Bestaande lokale SQL 20261007080316_public_rating_threshold_three.sql:
+   AVG, afgerond op 1 decimaal; >=3 DISTINCT user_id; openbare aantallen als
+   3–4 / 5–9 / 10–19 / 20–49 / 50+. Lager bewijs geeft geen score.
+   lib/supabase/ratings.ts gebruikt deze V2; card-summaries.ts handhaaft de gate.
+   Alleen broncode gelezen, geen databaseverbinding of migratie uitgevoerd.
+3. lib/recommendations/engine.ts en explanations.ts: match op smaakvector en
+   onderbouwde boekkenmerken. Weinig bewijs geeft voorlopige/geen cijferweergave.
+   Geen claim dat een matchpercentage een voorspelde kans of garantie is.
+4. lib/taste-test/profile.ts en bestaand gedeeld profiel: hogere én lagere
+   ratings, unieke Works, bewijs-/dekkingsregels. Geen tweede profielberekening.
+5. lib/collections/model.ts, bestaande leesstatus- en ratingkoppeling:
+   beoordeeld telt ook als gelezen. Volgende deel vereist ondersteunde volgorde;
+   voortgang is niet automatisch bewijs dat elke publicatie gecatalogiseerd is.
+Geen publieke geschreven reviews geclaimd; geen fictieve aantallen/resultaten.
+
+Gewijzigde bestanden in deze nieuwe positioneringscommit
+app/page.tsx — EN-home metadata via centrale copy.
+lib/seo/home-positioning.ts — exacte NL/EN metadata en intro.
+lib/seo/localized-metadata.ts — NL-home metadata.
+lib/i18n/translations.ts — dezelfde introcopy voor NL/EN.
+app/components/LumiScoreHome.tsx — één zichtbare intro en echte uitleglink.
+app/globals.css — uitsluitend bestaande hero-introstijlen samengevoegd.
+lib/information/pages.ts — vijf korte antwoorden en relevante links, NL/EN.
+lib/information/pages.test.ts — bestaande smaaktestroute toegestaan als link.
+lib/seo/home-positioning.test.ts — gerichte metadata/copy/scorecontracttests.
+scripts/seo-critical-local.mjs — unieke lokale cache per poort voorkomt
+  botsingen met bestaande worktrees; geen productieconfiguratie.
+scripts/test-site-name-html.mjs — nieuwe home-verwachtingen en aparte bewijsmap,
+  zodat eerder sitenaambewijs niet wordt overschreven.
+scripts/test-home-positioning-html.mjs — oorspronkelijke HTML en sitemap.
+docs/home-positioning-review-20261018.txt — dit verslag.
+De acht eerdere sitenaambestanden blijven herkenbaar in prerequisite e44b3af.
+
+Verificatie
+54 relevante unit-/regressietests groen: SEO, i18n, informatiepagina's en
+ratingpresentatie. Daarvan vier nieuwe positioneringstests.
+22 hergebruikte oorspronkelijke-HTML-controles en 5 nieuwe HTML-/sitemapchecks
+groen. Eén aanvankelijke nieuwe H1-test had de onjuiste NL-verwachting
+'favoriete boek'; gecorrigeerd naar de bestaande H1, niet de UI aangepast.
+TypeScript, lint, Vinext- en Vite-productiebuild, secretscan en diffcontrole groen.
+React-checklist: geen extra state, hooks, fetches, afhankelijkheden of zwaar
+clientwerk; één semantische alinea; bestaande links, focus en CTA behouden.
+Bekende niet-fatale Vinext-import-/pluginwaarschuwingen, geen buildfouten.
+
+Technische SEO
+Nieuwe titels/beschrijvingen en vijf antwoorden staan in oorspronkelijke
+server-HTML; gerenderde browseruitvoer afzonderlijk gecontroleerd.
+Eén canonical per pagina, reciproque /en en /nl-NL plus x-default naar EN;
+OG-sitenaam LumiScore, één gedeelde WebSite-node, JSON-LD geldig geparsed.
+Vier URL's elk eenmaal in lokale sitemap. Bestaande sitemapgenerator ongewijzigd.
+Root/legacy-boekredirects 308, query-/returncontext en robots/API-bescherming
+groen. Bestaande noindex voor login en queryvarianten blijft intact.
+Private routes en platform-Preview-noindex niet gewijzigd; geen deployment om
+dat opnieuw te claimen. Geen handmatig indexverzoek naar Google verzonden.
+Read-only huidige productie: vier pagina's HTTP200, index/follow, juiste
+canonicals en og:site_name; oude metadata bewaard in production-baseline.json.
+Dit zijn toegankelijkheidssignalen, geen claim dat Google alle URL's indexeert.
+
+Browserbewijs
+Loopback http://127.0.0.1:3146/nl en /en; uitleg op /{taal}/zo-werkt-het.
+Echte router, metadata, pagina's, CSS en componenten met lokale loaderfixtures.
+Geen Auth, tokens, database of echte schrijftests. Catalogusaantallen/covers
+op screenshots zijn lokale demo-/fixturegegevens, geen nieuwe productiecijfers.
+NL/EN x Paper/Ink x mobiel390/desktop1280 gecontroleerd; screenshots per
+combinatie in outputs/seo-positioning-20261018. Extra NL-controle op320px.
+Geen horizontale overflow; één intro in beide thema's; CTA44px hoog;
+geen vaste herohoogte of negatieve marges toegevoegd. Uitleglink doorgeklikt;
+keyboardfocus zichtbaar (focus-visible, solid outline), Enter opent de juiste
+gelokaliseerde uitlegpagina. Geen focusstijlen gewijzigd.
+Geen fysieke telefooncontrole. Geen Search Console-resultaten gemeten.
+
+Handmatige Search Console-nacontrole — pas NA een latere goedgekeurde publicatie
+1. Inspecteer https://lumisco.re/en, https://lumisco.re/nl,
+   https://lumisco.re/en/zo-werkt-het en https://lumisco.re/nl/zo-werkt-het.
+   Controleer crawltoegang, door Google gekozen canonical, laatst gecrawlde
+   versie en live test met de nieuwe metadata/tekst. Vraag alleen zo nodig
+   herindexering aan. Geen oude /book-links of returnTo-varianten opnieuw melden.
+2. Controleer dat https://lumisco.re/sitemap.xml als Succesvol staat; geen nieuwe
+   sitemap of dubbele taalpagina's toevoegen voor deze copywijziging.
+3. Vergelijk in Prestaties → Zoekresultaten gelijke perioden vóór/na publicatie,
+   bijvoorbeeld 28dagen na voldoende hercrawltijd versus de voorgaande28dagen.
+   Gebruik dezelfde Web-/apparaatfilters en splits per pagina, zoekterm en land.
+   Volg book ratings website, rate books, boeken beoordelen en persoonlijke
+   boekentips plus werkelijke varianten. Noteer vertoningen, klikken, CTR en
+   gemiddelde positie; laat weinig volume/seizoenseffecten zichtbaar.
+4. Geen meettoegang gebruikt, geen nulmeting of verbeterde positie geclaimd.
+   Google kiest titel/snippet/sitenaam uiteindelijk zelf; hercrawlen kan nodig
+   zijn. Deze wijziging belooft geen rankings of oorzakelijk SEO-resultaat.
+Bronnen: https://support.google.com/webmasters/answer/7576553?hl=nl
+https://developers.google.com/search/docs/appearance/site-names
+
+Grenzen en herstel
+Alleen lokaal. Geen push, PR, merge, publicatie, database-, DNS-, Auth- of
+environmentwijziging. Geen extra kosten. Andere lokale pakketten onaangeraakt.
+Herstel: draai uitsluitend de positioneringscommit terug; de aparte eerdere
+sitenaamcommit kan behouden blijven. Geen gegevensherstel of migratie nodig.

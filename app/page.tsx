@@ -9,9 +9,11 @@ import type { HomepagePersonalization } from '@/lib/supabase/taste-test';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
+import { HOME_POSITIONING } from '@/lib/seo/home-positioning';
 
 export async function generateMetadata() { return createLocalizedPageMetadata({
-  title: 'LumiScore — Find your next great read',
+  title: HOME_POSITIONING.en.title,
+  description: HOME_POSITIONING.en.description,
   canonicalPath: '/',
 }); }
 

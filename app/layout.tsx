@@ -4,6 +4,7 @@ import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { resolveRequestLocale, requestPagePath } from '@/lib/i18n/server';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
+import { serializeWebsiteJsonLd } from '@/lib/seo/site-identity';
 import './globals.css';
 import { OverviewScrollMemory } from './components/OverviewScrollMemory';
 
@@ -49,6 +50,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeWebsiteJsonLd() }} />
         <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/lora-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />

@@ -1,0 +1,87 @@
+LumiScore sitenaam — lokale review, 18 oktober 2026
+
+Branch: fix/site-name-identity-20261018
+Basis: actuele opgehaalde origin/main a79c2189a46bc0df0399dcf8dccf35d7418c315f.
+Nieuwe geïsoleerde worktree, geen ander lopend werk overgenomen of gewijzigd.
+Alleen lokaal; geen push/PR/merge/deployment, Search Console-verzoek, database-,
+DNS-, Auth- of environmentwijziging. Geen nieuwe dependency.
+
+Bevestigde actuele oorzaak
+Openbare productie-HTML vóór wijziging: / geeft HTTP308 naar /en. /en en /nl
+geven HTTP200 met og:site_name=LumiScore, maar zonder WebSite-JSON-LD.
+De informatiepagina's hadden een ingebedde WebSite met respectievelijk
+https://lumisco.re/en#website en https://lumisco.re/nl#website. Dat zijn twee
+taalafhankelijke website-identiteiten in plaats van één domeinidentiteit.
+Geen bestaande Organization-JSON-LD in de doorzochte applicatie gevonden;
+geen verzonnen juridische organisatiegegevens toegevoegd.
+
+Wijziging
+- lib/seo/site-identity.ts: één gedeelde merknaam en WebSite-entiteit:
+  @id https://lumisco.re/#website; name LumiScore; url https://lumisco.re/;
+  inLanguage en/nl. De bestaande centrale site-origin blijft de oorsprong van
+  absolute URL's; geen nieuwe instelling. In de geteste/live configuratie exact
+  het gevraagde apex-domein. Geen alternatieve domeinnaam als gewenste sitenaam.
+- app/layout.tsx: die entiteit één keer server-side in head, op beide homepages
+  en andere pagina's. Niet afhankelijk van JavaScript of een ingelogde gebruiker.
+- lib/information/pages.ts: de twee ingebedde WebSite-definities vervangen door
+  een isPartOf-referentie naar dezelfde gedeelde @id. Gelokaliseerde WebPage-
+  beschrijving, paginanaam, taal en breadcrumb-bestemming blijven behouden.
+- lib/seo/page-metadata.ts: og:site_name gebruikt dezelfde merkconstante, nog
+  steeds uitsluitend via de bestaande Metadata API. De waarde was al juist.
+- Geen pagina-/boektitels, vertalingen, canonicals, hreflang, zichtbare URL's,
+  logo's, robotsregels, sitemap, taalkeuze, proxy of deploymentconfig aangepast.
+
+Root en Google-richtlijn
+Actuele officiële richtlijn gelezen:
+https://developers.google.com/search/docs/appearance/site-names
+Het betreft de sitenaam boven de titel, niet de titel of het zichtbare domein.
+Google ondersteunt één naam per domein, en een crawlbare redirectbestemming.
+Daarom blijft / → /en (308) behouden. De toegankelijke bestemming /en bevat nu
+lokaal dezelfde root-WebSite-entiteit als /nl. Geen homepage uitsluitend NL
+gemaakt en geen nieuwe indexeerbare rootvariant geïntroduceerd.
+Google bepaalt de uiteindelijke naam; schema is een voorkeur, geen garantie.
+Na eventuele latere publicatie kan hercrawlen/herverwerken nodig zijn. Tijdens
+deze lokale opdracht geen indexering of hercrawl aangevraagd.
+
+Controles
+- 27 gerichte unit-/bestaande controles groen: metadata, informatiepagina's,
+  taalpaden, gedeelde website-identiteit, sitemapbeleid en robots/canonical-
+  eigenaarschap. Aanvankelijke TS-onzekerheid in alleen de nieuwe test hersteld;
+  daarna typecontrole opnieuw uitgevoerd.
+- 22 echte lokale server-HTML-controles groen: beide homepages, twee boekroutes
+  per taal, vier informatiepagina's per taal, Browse, queryvariant en login.
+  Per document één WebSite, juiste root-ID/url/name, één og:site_name, gelokaliseerde
+  paginatitels/beschrijvingen, canonicals/hreflang en bestaande index/noindexregels.
+  Tegengestelde cookies/taalheaders wijzigen de URL-locale niet.
+- Root, oude boeklinks, meervoudige boekalias, query-/returnTo-context en trailing
+  slash lokaal: dezelfde 308-bestemmingen, zonder lus; doelen geven HTTP200.
+- Openbare live baseline: http://lumisco.re/ → https://lumisco.re/ (308);
+  https://www.lumisco.re/ → https://lumisco.re/ (308); oude boeklink1906 behoudt
+  returnTo bij de 308 naar /en/book/1906. Deze routing is niet gewijzigd.
+- Browser na hydration en NL→EN: één WebSite en één og:site_name=LumiScore;
+  root-ID identiek, documenttaal/paginatitel/canonical/hreflang blijven lokaal.
+- Exacte JSON-LD uit gerenderde homepage-HTML in Schema Markup Validator getest:
+  WebSite https://lumisco.re/#website, 0 fouten en 0 waarschuwingen. Geen Rich
+  Results Test gebruikt, omdat Google sitenames daar niet ondersteunt.
+- TypeScript, lint, diffcontrole en Vinext-productiebuild groen. Geen database
+  of Auth nodig voor deze afgebakende metadatawijziging.
+
+Reproduceerbaar zonder gegevens/configuratie
+node scripts/seo-critical-local.mjs --port=3144
+node --experimental-strip-types scripts/test-site-name-html.mjs
+De bestaande synthetische loaderharness test echte router/layout/SSR/metadata
+zonder credentials of databaseverbinding. De optionele poortkeuze is alleen
+toegevoegd om andere lokale previews niet te storen; oude standaard3120/3121
+ongewijzigd. Dit is geen hosted verificatie of test van persoonlijke gegevens.
+
+Bewijs:
+C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/site-name-20261018/
+  en-home.html, nl-home.html, en-site-schema.html, nl-site-schema.html
+  source-html-results.json, schema-validator-website.png
+
+Resterend
+Productie is nog ongewijzigd en Google kan deze lokale code nog niet crawlen.
+Een latere afzonderlijk goedgekeurde release en controle van de uiteindelijke
+productie-HTML zijn nodig vóór eventueel Search Console-hercrawlverzoek.
+Herstel bij latere release: alleen deze codecommit terugdraaien, met behoud van
+latere wijzigingen. Geen gegevensherstel of migratie nodig.
