@@ -11,6 +11,7 @@ export async function loadPublicBookDescription(book: Book, locale: Locale, fetc
     ...init, signal: init?.signal ? AbortSignal.any([budget, init.signal]) : budget,
   });
   const result = await resolveBookDescription({
+    workId: book.workId, editionId: book.editionId, author: book.author,
     openLibraryWorkId: book.openLibraryWorkId,
     openLibraryEditionId: book.openLibraryEditionId,
     isbn13: book.isbn13, editionLanguage: book.editionLanguage, editionTitle:book.editionTitle,
