@@ -196,3 +196,31 @@ Windows-sandbox readlink-EPERM, met dezelfde code buiten sandbox succesvol.
 Secretscan142 clientbestanden (dist+Vercel-output): geen serversecrets gebundeld.
 Hosted bewijs, definitieve SHA, CI en eventuele concrete login/voorraadbeperking
 staan na afronding in de PR en outputs/taste-eligibility-preview-20261018.
+
+LOKALE OPSLAGCORRECTIE EN METADATA-AANVULLING — 18 oktober 2026
+Afzonderlijk toegestaan: uitsluitend lokaal voorbereiden en disposable testen.
+Opslagcommit9b050ea538a8ec6ddfcb85a60e344d1d41d93048: rondegebonden offers,
+veilige v1/v2-bridge, expliciete eerdere-skip-opt-in, behoud van ratings en historie.
+SQL staat alleen in docs/proposals, NIET in supabase/migrations. De app toont de
+nieuwe actie uitsluitend na de read-only v3-capability; huidige hosted opslag
+wordt niet als gerepareerd voorgesteld. Lege private inventaris bevat geen seeds
+en vereist afzonderlijk goedgekeurd bewijs uit dezelfde policy vóór toepassing.
+Zie docs/proposals/taste-storage-review-20261018.txt voor lokale tests en herstel.
+
+Gerichte editievoorstellen, geen classificatieaanpassing:8 Nederlandse edities en
+5 exacte Engelse NULL-taalvelden, met primaire uitgevers-/bibliotheek-/editiebronnen.
+Status SOURCE_SUPPORTED_REVIEW_REQUIRED,0humanapproved/0applied. Volledige capture
+en bestaande reviews per Work-ID zijn onveranderd. Theoretische doorrekening met
+de ONGEWIJZIGDE gate: NL2/EN5 -> NL10/EN10, alleen ALS alle voorstellen na review
+mogen worden toegepast, nog vóór persoonlijke ratings/Read/skips. Geen bewijs
+voor15/30 of drie echte rondes. Onzekere zelfstandigheid en reeksconflicten blijven
+geblokkeerd. Zie docs/proposals/taste-metadata-review-20261018.txt en batch-JSON.
+
+Volledige suite765:749pass,0fail,16 bestaande opt-in skips. Daarna twee extra
+SQL-herstelcases: definitieve gerichte set16/16 groen. TypeScript, lint, Vinext-
+en Vercel-target-build, secretscan142clientbestanden en diffcontrole groen.
+Geen hosted opslag- of fysieke telefooncontrole toegevoegd; geldige eerdere
+layoutcontroles hergebruikt. Echte parallelle PostgreSQL-/PostgREST-verificatie,
+bronreview en een eventueel later database-/releasebesluit blijven noodzakelijk.
+PR38 en Preview NIET bijgewerkt: code blijft d9ce672. Geen push, databasewrites,
+migraties, merge of publicatie. Bestaande gegevens en geparkeerd werk behouden.
