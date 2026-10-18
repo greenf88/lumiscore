@@ -16,6 +16,7 @@ export type BookDescriptionLookup = {
   openLibraryEditionId?: string | null;
   isbn13?: string | null;
   editionLanguage?: string | null;
+  editionTitle?: string | null;
   editionCandidates?: ReadonlyArray<{
     openLibraryEditionId?: string | null;
     isbn13?: string | null;
@@ -188,7 +189,7 @@ function resolveOpenLibraryEditionDescription(
   locale: Locale,
   fetchImplementation: typeof fetch,
 ): Promise<BookDescriptionResolution> {
-  return cachedResolution(`open_library_edition:${editionId}:${locale}`, async () => {
+  return cachedResolution(`edition_description_v2:${editionId}:${workId}:${locale}`, async () => {
     const url = new URL(`/books/${editionId}.json`, OPEN_LIBRARY_BASE_URL);
     const response = await fetchJsonWithRetry<OpenLibraryEditionResponse>(url, fetchImplementation);
     if (response.state !== 'ok') return { state: response.state, description: null };
@@ -198,33 +199,12 @@ function resolveOpenLibraryEditionDescription(
     if (workId && !parentWorkIds.includes(workId)) {
       return { state: 'confirmed_missing', description: null };
     }
-    if (!openLibraryLanguages(response.data.languages).includes(locale)) {
+    if (response.data.languages?.length!==1 || !openLibraryLanguages(response.data.languages).includes(locale)) {
       return { state: 'confirmed_missing', description: null };
     }
     const text = normalizeBookDescription(response.data.description);
     return text
       ? resolvedDescription(text, 'open_library', editionId, locale)
-      : { state: 'confirmed_missing', description: null };
-  });
-}
-
-function resolveOpenLibraryDescription(
-  workId: string,
-  locale: Locale,
-  allowUnlabelledEnglish: boolean,
-  fetchImplementation: typeof fetch,
-): Promise<BookDescriptionResolution> {
-  return cachedResolution(`open_library:${workId}:${locale}:${allowUnlabelledEnglish}`, async () => {
-    const url = new URL(`/works/${workId}.json`, OPEN_LIBRARY_BASE_URL);
-    const response = await fetchJsonWithRetry<OpenLibraryWorkResponse>(url, fetchImplementation);
-    if (response.state !== 'ok') return { state: response.state, description: null };
-    const languages = openLibraryLanguages(response.data.languages);
-    if (!languages.includes(locale) && !(locale === 'en' && languages.length === 0 && allowUnlabelledEnglish)) {
-      return { state: 'confirmed_missing', description: null };
-    }
-    const text = normalizeBookDescription(response.data.description);
-    return text
-      ? resolvedDescription(text, 'open_library', workId, locale)
       : { state: 'confirmed_missing', description: null };
   });
 }
@@ -285,21 +265,8 @@ export async function resolveBookDescription(
         other.editionId === candidate.editionId && other.isbn13 === candidate.isbn13) === index)
     .slice(0, 3);
   // Site-language intent wins over an available edition in another language.
-  const descriptionLanguage = locale;
+  const descriptionLanguage:Locale = locale==='nl' && localeFromLanguage(lookup.editionLanguage)==='en' ? 'en' : locale;
   const states: Array<DescriptionResolutionState | null> = [];
-
-  // Preserve the established exact-work Open Library priority for English.
-  // Dutch mode needs edition/ISBN language evidence before accepting copy.
-  if (workId && descriptionLanguage === 'en') {
-    const openLibrary = await resolveOpenLibraryDescription(
-      workId,
-      descriptionLanguage,
-      true,
-      fetchImplementation,
-    );
-    if (openLibrary.description) return openLibrary;
-    states.push(openLibrary.state);
-  }
 
   for (const candidate of candidates) {
     if (candidate.locale && candidate.locale !== descriptionLanguage) continue;

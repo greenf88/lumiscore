@@ -1,4 +1,4 @@
-import type { Book } from '../../app/data/books.ts';
+import {withRecommendationEditionCovers} from '../books/edition-cover-evidence.ts';
 import type {
   PersonalMatchResult,
   PersonalizedRecommendation,
@@ -20,7 +20,7 @@ import type { TasteProfile } from '../taste-test/profile.ts';
 import type { TasteVector } from '../taste-test/traits.ts';
 import type { WorkTraitCoverageLevel } from '../recommendations/work-trait-evidence.ts';
 import { getVerifiedServerUser } from './auth.ts';
-import { loadCatalogBooksByIds, mapCatalogWorks } from './books.ts';
+import { mapCatalogWorks } from './books.ts';
 import { loadRecommendationCatalog as loadPublicRecommendationCatalog, type RecommendationCatalog } from './recommendation-catalog.ts';
 import { createServerSupabaseClient } from './server.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
@@ -33,12 +33,15 @@ import { loadReaderTasteProfile,type ReaderRatingRow } from './reader-taste-prof
 import type { ReaderEraPreferences } from '../preferences/reading-periods.ts';
 import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
 import { cache } from 'react';
+import { loadStrictRecommendationBooks } from './taste-safety.ts';
+import { loadSeriesPriorities } from './series-priority.ts';
+import { prioritizeSeriesRecommendations } from '../recommendations/series-priority.ts';
 
 const GUEST_RECOMMENDATION_CATALOG_TTL_MS = 5 * 60 * 1_000;
-let guestRecommendationCatalogCache: {
+const guestRecommendationCatalogCache = new Map<Locale,{
   expiresAt: number;
   result: Promise<RecommendationCatalog>;
-} | null = null;
+}>();
 
 export type TasteTestServerState = {
   authenticated: boolean;
@@ -119,55 +122,27 @@ export const loadHomepageReaderContext = cache(async (locale:Locale='en'): Promi
 
 async function loadRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  locale:Locale='en',
 ): Promise<RecommendationCatalog> {
-  return loadPublicRecommendationCatalog(client, mapCatalogWorks);
+  return loadPublicRecommendationCatalog(client, rows=>mapCatalogWorks(rows,locale));
 }
 
 function loadGuestRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  locale:Locale,
 ): Promise<RecommendationCatalog> {
-  if (
-    guestRecommendationCatalogCache &&
-    guestRecommendationCatalogCache.expiresAt > Date.now()
-  ) {
-    return guestRecommendationCatalogCache.result;
-  }
+  const cached=guestRecommendationCatalogCache.get(locale);
+  if(cached && cached.expiresAt>Date.now())return cached.result;
 
-  const result = loadRecommendationCatalog(client).catch((error: unknown) => {
-    guestRecommendationCatalogCache = null;
+  const result = loadRecommendationCatalog(client,locale).catch((error: unknown) => {
+    guestRecommendationCatalogCache.delete(locale);
     throw error;
   });
-  guestRecommendationCatalogCache = {
+  guestRecommendationCatalogCache.set(locale,{
     expiresAt: Date.now() + GUEST_RECOMMENDATION_CATALOG_TTL_MS,
     result,
-  };
+  });
   return result;
-}
-
-async function hydratePublicRecommendations(
-  recommendations: readonly PersonalizedRecommendation[],
-): Promise<PersonalizedRecommendation[]> {
-  const recommendationBooks = recommendations.length
-    ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) =>
-        book.workId ? [book.workId] : []))
-    : [];
-  const recommendationBooksById = new Map(
-    recommendationBooks.flatMap((book): Array<[string, Book]> =>
-      book.workId ? [[book.workId, book]] : []),
-  );
-
-  return recommendations.map((recommendation) => ({
-    book: recommendation.book.workId
-      ? recommendationBooksById.get(recommendation.book.workId) ?? recommendation.book
-      : recommendation.book,
-    matchScore: recommendation.matchScore,
-    matchLabel: recommendation.matchLabel,
-    matchConfidence: recommendation.matchConfidence,
-    explanation: recommendation.explanation,
-    coverageLevel: recommendation.coverageLevel,
-    metadataConfidence: recommendation.metadataConfidence,
-    collaborativeExplanation: recommendation.collaborativeExplanation,
-  }));
 }
 
 export async function loadTasteTestServerState(locale:Locale='en'): Promise<TasteTestServerState> {
@@ -260,16 +235,22 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
     if (!reader.authenticated) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
     const [catalog, collaborativeSignals] = await Promise.all([
-      loadRecommendationCatalog(reader.client),
+      loadRecommendationCatalog(reader.client,locale),
       loadCollaborativeRecommendationSignals(reader.client),
     ]);
     const { ratings } = reader;
+    const [strictBooks, series] = await Promise.all([
+      loadStrictRecommendationBooks(reader.client,catalog.candidates.map(c=>c.book),locale),
+      loadSeriesPriorities(reader.client,ratings,[...reader.statuses].map(([work_id,status])=>({work_id,status})),locale),
+    ]);
+    const strictById = new Map(strictBooks.map(book=>[book.workId,book]));
+    const strictCandidates = catalog.candidates.flatMap(c=>strictById.has(c.book.workId)?[{...c,book:strictById.get(c.book.workId)!}]:[]);
     const ratedIds = ratings.map(({ work_id }) => String(work_id));
     const profile = reader.profile!;
     const hasEvidence = profile.selectedCount > 0 || profile.meaningfulRatingCount > 0;
     const recommendations = hasEvidence
       ? recommendBooks({
-        candidates: catalog.candidates,
+        candidates: strictCandidates,
         profile,
         ratedWorkIds: new Set(ratedIds),
         excludedWorkIds: new Set([
@@ -288,7 +269,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
       ratingCount: profile.ratingCount,
       tasteTestAnsweredCount: profile.answeredCount,
       hasEvidence,
-      recommendations: await hydratePublicRecommendations(recommendations),
+      recommendations: await withRecommendationEditionCovers(prioritizeSeriesRecommendations(recommendations,series,locale,limit)),
     };
   } catch {
     return { unavailable:true, authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
@@ -301,10 +282,12 @@ export async function loadGuestHomepagePersonalization(
   limit = 20,
 ): Promise<HomepagePersonalization> {
   const client = await createServerSupabaseClient();
-  const catalog = await loadGuestRecommendationCatalog(client);
+  const catalog = await loadGuestRecommendationCatalog(client,locale);
+  const strictBooks=await loadStrictRecommendationBooks(client,catalog.candidates.map(c=>c.book),locale);
+  const byId=new Map(strictBooks.map(book=>[book.workId,book]));
   const { profile, recommendations } = recommendGuestBooks({
     answers,
-    candidates: catalog.candidates,
+    candidates: catalog.candidates.flatMap(c=>byId.has(c.book.workId)?[{...c,book:byId.get(c.book.workId)!}]:[]),
     locale,
     limit,
   });
@@ -315,6 +298,6 @@ export async function loadGuestHomepagePersonalization(
     ratingCount: 0,
     tasteTestAnsweredCount: profile.answeredCount,
     hasEvidence,
-    recommendations: await hydratePublicRecommendations(recommendations),
+    recommendations:await withRecommendationEditionCovers(recommendations),
   };
 }

@@ -1,3 +1,4 @@
+import { resolveRequestLocale } from '@/lib/i18n/server';
 import { NextResponse } from 'next/server';
 import { isCatalogWorkId } from '@/lib/books/book-detail';
 import { createGuestWantToReadItems } from '@/lib/collections/my-books';
@@ -14,6 +15,7 @@ function requestedWorkIds(request: Request): string[] {
 }
 
 export async function GET(request: Request) {
+  const {locale}=await resolveRequestLocale(request);
   const workIds = requestedWorkIds(request);
   if (workIds.length === 0) {
     return NextResponse.json({ books: [] }, {
@@ -25,7 +27,7 @@ export async function GET(request: Request) {
     const books = await measureServerOperation(
       'catalog.books_api',
       'public',
-      () => loadCatalogBooksByIdsWithStoredCovers(workIds),
+      () => loadCatalogBooksByIdsWithStoredCovers(workIds,undefined,locale),
     );
     const orderedBooks = createGuestWantToReadItems(books, workIds)
       .map((item) => item.book);

@@ -1,0 +1,106 @@
+LumiScore — lokale opslagcorrectie, 18 oktober 2026
+Basis: d9ce672c8d0df930ed4b0099748119189632262d, bestaande PR38-worktree.
+Status: LOKAAL VOORBEREID, NIET TOEGEPAST OF RELEASEGEREED.
+
+OORZAAK
+De bestaande offersleutel (user_id,work_id) en de globale historische uitsluiting
+maken elke eerdere skip permanent. De oude v2 UPDATE mist bovendien round_id.
+Alleen de sleutel verruimen zou historische skip/ratingbeslissingen beschadigen.
+
+LOKAAL PAKKET
+docs/proposals/taste-storage-v3-20261018.sql is bewust GEEN migratiebestand.
+Geen automatische toepassing, seeds, backfill of databaseverbinding toegevoegd.
+- Nieuwe offeridentiteit (user_id,round_id,work_id), zonder rijen te verwijderen.
+- Alle rating/skip/choose-mutaties gebonden aan eigenaar, actuele ronde en Work.
+- Dezelfde transactionele reader-lock als v1/v2, unieke rating en actief-offerindex.
+- Identieke retries schrijven niets opnieuw; afwijkende retries worden geweigerd.
+- Ratings worden nooit overschreven; de bestaande rating-naar-Read-trigger blijft.
+- Herbekijken vereist een expliciete actie na uitputting. Binnen dezelfde ronde
+  komen offers niet terug. Alleen eerdere skips, nooit ratings/Read, mogen terug.
+- Bestaande v1/v2-ingangen worden naar de veilige implementatie doorgeleid;
+  de oude onbeperkte UPDATE mag na de sleutelwijziging NIET blijven bestaan.
+- Start na afronding vereist de laatst bekende ronde-ID. De lokale client stuurt
+  die nu mee; oudere clients krijgen bij ontbrekende context een veilige fout,
+  geen gewiste voortgang of ongemerkt extra afgeronde ronde.
+
+GEEN VERSOEPELING VAN BEWIJS
+Een private, INITIEEL LEGE inventaris bindt afzonderlijk goedgekeurde geschiktheid
+aan taal, editie, policyversie en exact catalogus-/trait-/reeks-/editiesnapshot.
+Clientlijsten mogen niet bepalen welke Works de SECURITY DEFINER-functie kiest.
+De inventaris heeft FORCE RLS en geen directe anon/authenticated-rechten; private
+snapshothelpers zijn niet aanroepbaar. Publieke v3-functies zijn owner-only en
+alleen authenticated. Er worden geen eigen ratings of gebruikersnamen gedeeld.
+Bij wijziging van onderliggende metadata vervalt de snapshot en blokkeert opslag
+zonder rating/progress-write. De bestaande TS tasteEligibility blijft leidend;
+SQL doet alleen exacte versheidscontrole, geen tweede smaakberekening.
+Policy-/reviewed-definition-codewijzigingen vereisen een nieuwe policyversie en
+opnieuw goedgekeurde inventaris, niet stilzwijgend hergebruik van oude approvals.
+SOURCE_SUPPORTED is GEEN goedkeuring en mag de inventaris niet vullen.
+
+APPKOPPELING / ACHTERWAARTSE COMPATIBILITEIT
+Read-only state_v3-handshake; uitsluitend PGRST202 valt terug op bestaande state.
+Geen fallback bij een rechten-, transport- of andere SQL-fout. De huidige hosted
+opslag meldt geen capability, dus de herbekijkknop verschijnt daar NIET.
+Na toekomstige afzonderlijke databasegoedkeuring: bewuste herbekijkknop, bestaand
+actie-slot en NL/EN-meldingen; zoeken respecteert bewaarde rondetaal, Read-status,
+ratings en eigen volledige geschiedenis. Eerdere skips pas na serveropt-in.
+Paginering van geschiedenis heeft nu de stabiele samengestelde sortering
+work_id,round_id, ook bij >1000 aanbiedingen van hetzelfde Work.
+Geen UI-knop die vooruitloopt op niet-beschikbare opslag.
+
+REPRODUCEERBAAR LOKAAL BEWIJS
+node --experimental-strip-types --test scripts/taste-storage-proposal.test.mjs
+Alle writes gebeuren in een verse in-process PGlite-instantie zonder netwerk,
+omgeving of credentials. SYNTHETIC-FIXTURE-inventaris is uitsluitend testseed.
+De bestaande migraties worden ongewijzigd gelezen, niet op een project toegepast.
+Bewijs: bytegelijk behoud van bestaande ratings, statussen, offers/timestamps en
+actieve ronde; drie rondes 10/10; derde ronde eerst eerlijk uitgeput op5/10,
+daarna bewuste heraanbieding van eerdere skips tot10/10; 30 ratings/Read-statussen.
+Idempotente queued dubbele save, conflicterende retry, oude ronde, andere eigenaar,
+anon, foutcijfer, bestaande rating, ongoedgekeurde of gewijzigde editie geweigerd.
+Skip schrijft geen rating/status, herladen behoudt taal en voortgang.
+De PGlite-aanroepen zijn geserialiseerd. Dit bewijst GEEN parallelle transacties
+op meerdere echte PostgreSQL-backends, PostgREST-schema-cache of hosted sessie.
+Die gerichte controles blijven vereist vóór een latere opslagpublicatie.
+Aanvullend: expliciete zoekkeuze na opt-in wijzigt alleen deze ronde; de oude
+v1-ingang blijft veilig doorgeleid. Alle evidencegroepen verversen de inventaris-
+snapshot; een opzettelijk mislukte voorsteltransactie herstelt oud schema en data.
+
+CHECKRESULTATEN
+Volledige suite:765 tests,749 pass,0 fail,16 bestaande opt-in skips.
+Daarna twee extra SQL-cases toegevoegd: de definitieve gerichte set heeft16/16
+passes (9 SQL-,3 paginering-/edities-,4 metadatareviewtests). Geen nieuwe skip.
+11 state-handshake/actie-/metadata-unittests en22 rating/eligibility/cover-
+regressies waren eveneens groen; overlappende tellingen niet optellen.
+TypeScript en volledige bron-lint groen, laatste gewijzigde bestanden opnieuw
+gelint. Vinext-productiebuild en Vercel-target-build groen. De Vercel-trace had
+eerst dezelfde Windows-sandbox readlink-EPERM als eerder; dezelfde lokale code
+buiten sandbox bouwt succesvol, zonder configuratie of deployment te wijzigen.
+Client-secretscan142 bestanden: geen serversecretwaarden/-identifiers gebundeld.
+Diffcontrole groen. Bestaand NL/EN en Paper/Ink-layoutbewijs hergebruikt; geen
+nieuwe hosted of fysieke telefooncontrole geclaimd. De nieuwe knop is gedekt
+door de capability-/actietests, geen nieuw browserscreenshot in deze lokale stap.
+
+LATERE UITVOERVOLGORDE — GEEN TOESTEMMING VOOR UITVOERING NU
+1. Review van SQL, actuele schema/FK/rollen, lockduur en policyversie.
+2. Onafhankelijke bronreview, verse identiteit/ISBN/editiereconciliatie en een
+   reproduceerbare goedgekeurde inventaris uit dezelfde TS-policy. GEEN handmatig
+   goedgekeurd label op een pending voorstel zetten om voorraad te vullen.
+3. Afzonderlijk akkoord voor een echte migratie en metadata/inventaris-import.
+   De lege inventaris mag niet als werkende productievoorraad worden uitgerold.
+4. Eerst wegwerpproject/test: echte gelijktijdige RPC's, schema-cache, bestaande
+   voortgang en clientcompatibiliteit controleren. Daarna pas hosted UI-opslag.
+5. Afzonderlijk releasebesluit. Huidige Preview/PR38 blijft ongewijzigd.
+
+HERSTEL
+NU: lokale appcommit gericht terugnemen; voorstelbestanden zijn inert. Geen
+gegevensherstel nodig, want geen echte database is gewijzigd.
+NA EEN EVENTUELE LATERE DB-TOEPASSING: forward-compatible herstel, geen destructieve
+downmigration. Bewaar de samengestelde sleutel, rondehistorie en veilige v1/v2-
+bridge. Zet de herbekijkactie zo nodig uit via een gerichte herstelpatch en toon
+een eerlijke voorraad-/onbeschikbaarmelding. Herstel nooit de oude v2 UPDATE.
+De oude (user_id,work_id)-sleutel kan niet terug zodra een Work in meer rondes
+staat zonder historie te verliezen. Dat is expliciet geen toegestane rollback.
+Een oudere app zonder completed-round-context kan veilig409 krijgen bij een nieuwe
+ronde; behoud daarom de geteste compatibele client in een later herstelartefact.
+Geen ratings, leesstatussen of rondes verwijderen om een rollback passend te maken.

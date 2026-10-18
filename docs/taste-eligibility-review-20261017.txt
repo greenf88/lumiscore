@@ -1,0 +1,363 @@
+LumiScore — veilige smaaktestselectie / edities / reeksvoorrang — lokale review
+17 oktober 2026. Niet releasegereed: voorraad- en opslagbeperking hieronder.
+
+BASIS EN SCOPE
+Geïsoleerde branch fix/taste-eligibility-editions-series-20261017 vanaf actuele
+origin/main 29458ca83a2a792bcd26198ac0cedc9e7cf11fa0 (PR36 inbegrepen).
+Applicatiecommit: 66d71ccbd6ad642e135621221599749a6af1e10d.
+Geen toepasselijke AGENTS.md. Bestaande worktrees/ongecommit werk blijven intact.
+Gedeelde buildTasteProfile/reliableProfileTraits en publicatie-/ratingsregels
+hergebruikt; geen nieuwe profielberekening, pilotlabels of cataloguscorrecties.
+Geen migratie, configuratie-, Auth-, RLS-, productie- of testprojectwrite.
+Alle echte SQL-schrijftests zijn disposable PGlite-fixtures zonder credentials.
+
+BEVESTIGDE OORZAAK EN NOG NIET OPGELOST
+Actuele gehoste functie-definities en bestaande migraties komen overeen:
+taste_rating_offers heeft primary key(user_id,work_id). Zowel automatisch kiezen
+als choose sluit IEDERE eerdere aanbieding uit, niet alleen de actuele ronde.
+Een eerdere skip kan daarom met de bestaande RPC nooit opnieuw worden aangeboden.
+Het SQL-selectiepad controleert wel een NL/EN-editie maar niet inhoud/reekspositie.
+Er is geen betrouwbare algemene standalone-registratie. Afwezigheid is geen bewijs.
+
+De lokale proef met 90 NL-fixtures voltooit drie rondes van tien: 30 ratings,
+6 skips, 36 unieke aanbiedingen; herladen/hervatten met EN-interface behoudt NL.
+Met 40 fixtures en vijf skips per ronde: ronde1 10/10, ronde2 10/10,
+ronde3 uitgeput op 5/10; 25 ratings/Read-statussen blijven behouden.
+Tien eerdere en vijf huidige skips blijven afzonderlijk aantoonbaar. Een
+expliciete choose van een eerdere skip wordt door de bestaande SQL afgewezen.
+Dit diagnosebewijs is GEEN bewijs dat de databasebeperking is gerepareerd.
+
+Volledige oplossing vereist een afzonderlijk goedgekeurde round-scoped
+offeridentiteit + selectie-/choose-RPC-aanpassing en bewuste heraanbiedactie,
+met behoud van ratings en alle historische offers. Niet uitgevoerd in deze scope.
+De pure selectTasteInventory-policy test die gewenste semantiek, maar vervangt
+de atomaire databaseopslag niet. Er is geen nepwerkende herbekijk-knop toegevoegd.
+Ook de automatische DB-selector zelf is niet veranderd. Een ongeschikt huidig
+boek wordt afgeschermd, niet stilzwijgend als gebruikersskip weggeschreven.
+
+WEL LOKAAL GEREPAREERD
+- Eén evidence-gate voor identiteit, inhoud, expliciete zelfstandigheid of
+  gecontroleerde eerste hoofddeelpositie, alle collectielinks en editietaal.
+  Auteurscollecties bewijzen geen zelfstandigheid; een tweede onzekere/vervolg-
+  koppeling kan niet worden omzeild. Periode/confidence alleen is onvoldoende.
+- API-presentatie, rate/choose en private zoekingang passen die gate toe.
+  Zoekresultaten worden volledig gefilterd vóór de limiet van twintig.
+  Eigen historie/ratings en edities zijn gepagineerd, inclusief >1000-testgevallen.
+- UI toont eerlijke onvoldoende-bewijs/voorraadmelding en bruikbare zoekingang.
+  Geen eindeloze voorraad-resume-knop. Bewaarde rondetaal blijft zichtbaar bij
+  interface-taalwissel. Opslaggate, scorefeedback en atomaire RPC blijven intact.
+- Strikte expliciete Edition.language: geen ISBN-prefix/auteur/titel-inferentie,
+  geen anderstalige fallback. Titels/ISBN/OLID volgen de gekozen editie.
+  Alleen exact gebonden bestaande covers/overrides/edition-OLID-kandidaten;
+  geen Work-coverresolverfallback. Ontbrekend beeld blijft neutraal.
+  Edition-ID/taal vernieuwen de coverstate; een foutief Work-OLID wordt geweigerd.
+- Homepage, gastaanbevelingen en resultaat gebruiken dezelfde editiepresentatie.
+  Homepage/gast volgen de gekozen sitetaal; resultaat volgt de bewaarde rondetaal.
+- Eén gedeelde reeksvoorrang: starter exact9/10, alleen volgend ongelezen én
+  onbeoordeeld hoofddeel, geverifieerde bestaande leesvolgorde, passende editie.
+  Ontbrekende positie/vertaling wordt niet overgeslagen. Auteursoverzichten tellen
+  niet als reeks. Volgorde: cijfer aflopend, ratingdatum aflopend, slug oplopend,
+  Work-ID oplopend. Reden noemt echt cijfer; geen fictieve matchscore/percentage.
+
+CATALOGUSWERKLIJST / CONCRETE BEPERKING
+Read-only capture 20:34:05–20:43:15 UTC, 21 keysetpagina's; 10.134 unieke Works,
+10.293 edities. Eindtelling en volledige Work-ID-digest gereconcilieerd.
+Geen transactioneel snapshot: metadata kon binnen het venster wijzigen.
+Veilig geschikt vóór persoonlijke uitsluitingen: NL2, EN5. Dus in geen taal
+voldoende voor een ronde van10. Dit is ontbrekend bewijs, geen oordeel dat alle
+overige boeken inhoudelijk ongeschikt zijn. Geen kwaliteitsgrenzen versoepeld.
+9.952 Works missen voldoende reeks/standalone-bewijs, 9.093 bruikbaar inhoudelijk
+bewijs. Redenen overlappen. NL: 7.536 missen taalbewijs; EN: 3.835.
+
+Volledige CSV/JSON, hashes, invulinstructie, reviews en batches staan in:
+C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/taste-eligibility-20261017/
+Zie operations/taste-inventory-manifest-20261017.json voor exacte hashes.
+Prioriteit zonder dubbeltelling: huidig aanbod1 / overige reeksstarters57 /
+overige beoordeelde Works214 / resterend9.862. Batches maximaal50.
+Onbekende oorspronkelijke taal/werkvorm/doelgroep staan expliciet UNKNOWN;
+alle NL/EN-edities en overige/ontbrekende talen blijven in JSON bewaard.
+Bestaande velden, voorstellen en gecontroleerde bronfeiten blijven afzonderlijk.
+Twee Jamie-boeken hebben afzonderlijke SOURCE_SUPPORTED-notities; geen human
+metadata-signoff of toegepaste correctie. 1462 mist taal/labels, 1533 heeft al
+Cooking-bewijs. Exacte ISBN-brug + auteursbronnen staan in jamie-source-review.json.
+Geen algemene Jamie Oliver-uitsluiting. Beide boeken blijven in de catalogus.
+De 200-Work-taxonomiepilot is niet overgenomen of aangepast.
+Offline export-builder/mergehelper bewaart eerdere reviews exact per Work-ID,
+weigert duplicaten en archiveert verdwenen identiteiten apart; past niets toe.
+CSV: 10.134 regels,26 kolommen, formulebescherming, lossless artifact-modelcheck.
+ISO-capturetijd wordt bij CSV-serialisatie uit JSON hersteld omdat de artifact-
+import die anders als lokale datum formatteert. JSON blijft de ruwe bronreferentie.
+
+VERIFICATIE
+163 gerichte tests groen, waaronder drie NL-rondes, voorraaduitputting,
+geen dubbele telling/overschrijving, eerste/vervolg/prequel/meerdere links,
+9/10 versus8, ontbrekende vertalingen, covers en gepagineerde eigengeschiedenis.
+TypeScript, bron-lint, Vinext-build, Vercel-target-build, client-secretscan en
+diffcontrole groen. Lint sluit gegenereerde dist/.next/.wrangler-bestanden uit;
+geen lintconfig aangepast. Bekende bundlerwaarschuwingen, geen buildfouten.
+Lokale echte UI in browser gecontroleerd op390px: NL/EN, Ink/Paper, veilige
+blokkade/lege zoekstaat, pauze/hervatten en rondetaal/voortgang behouden.
+Screenshots zijn synthetische lokale UI-fixtures, GEEN hosted opslagbewijs of
+fysieke telefooncontrole. Geen nieuwe login/accounts/testprojectwijzigingen.
+Geen volledige nieuwe audit of controle van alle10.293 daadwerkelijke coverbeelden.
+
+HERSTEL / REVIEWSTATUS
+Alleen lokaal. Geen push, PR, merge, publicatie of externe configuratiewijziging.
+Voor terugname van appwijzigingen: revert uitsluitend applicatiecommit66d71cc
+op deze branch. Geen data-rollback, SQL of wissen van historie nodig.
+De export/reviewcommit kan onafhankelijk behouden blijven.
+Niet publiceren als voltooide smaaktestreparatie: eerst metadatareview en apart
+releasebesluit over de noodzakelijke opslag-/selectorwijziging. Geen verborgen
+migratie of productiecorrectie voorbereid voor automatische uitvoering.
+
+LOKALE PRESENTATIEVERFIJNING — zelfde branch, afzonderlijke vervolgcommit
+De zichtbare kop Nog even ontdekken / Keep discovering en de zin over ontbrekende
+inhoudelijke kenmerken zijn verwijderd uit de gedeelde publieke UI-component.
+Lege profielvlakken renderen niet meer. Onderbouwde voorkeuren blijven onder de
+neutrale kop Jouw leessmaak / Your reading taste, zonder nieuw lezerstype.
+De bestaande boekenlijst blijft intact; zonder profielblok gebruikt zij H1
+Meer boeken voor jou / More books for you. Account-ARIA blijft geldig als het
+uitlegvlak wegvalt; bestaande normale documentflow herstelt de tussenruimte.
+Geen wijziging aan profielberekening, ontbrekende-kenmerkenregistratie,
+bewijsgrenzen, matchclaims, ratings, aanbevelingsselectie of catalogus.
+32 gerichte controles groen:16 React/presentatie/modeltests en16 echte lokale
+SSR-routecontroles. TypeScript, lint en productiebuild groen. Browser: uitslag
+en account op390px, NL/EN, Paper/Ink; lege en ondersteunde voorkeurstaat.
+Screenshots: outputs/taste-eligibility-20261017/copy-refinement buiten de repo.
+Synthetische lokale adapters; geen hosted/telefooncontrole of databasewrites.
+De eerdere voorraad-/databasebeperking en publicatiestop blijven ongewijzigd.
+
+HERVAT VOOR HOSTED REVIEW — 18 oktober 2026
+Origin/main opnieuw opgehaald en zonder conflicten gecombineerd: basis nu
+5fbd35ed7eafd82ba34c1c45a1fc82e8bc652416 (PR37 tekst/presentatie behouden).
+De eerdere presentatiecommit zit al op main; die is geen nieuwe feature-diff.
+De bestaande branch/worktree is hergebruikt; geen dubbele implementatie.
+
+Boekdetailheader gerepareerd: dezelfde volgorde als de homepage voor de rechter
+bediening (thema, taal, account). Accountmenu nu laatste element en dus rechts
+verankerd; geen absolute verplaatsing van het icoon of globale CSS-workaround.
+Gedeelde menucomponent, navigatie, labels en bestaande aanmeldcontext behouden.
+Nieuwe regressietest controleert de volgorde en rechter paneelverankering.
+Echte lokale browser met expliciet synthetisch profiel: 24 combinaties van
+NL/EN, Paper/Ink en 320/375/390/430/682/1024px groen; paneel volledig in beeld,
+geen horizontale overflow. Op320px alle headeracties minimaal44x44px; paneellink
+ontvangt pointerevents en Escape sluit menu met focus terug op de accountknop.
+Vier390px-screenshots en geometrie staan buiten Git in
+outputs/taste-eligibility-preview-20261018. Geen fysieke telefooncontrole.
+
+Verificatie na integratie: 38 gerichte regressie-/beleids-/SQL-diagnosetests
+en16 echte lokale NL/EN-SSR-tests groen; TypeScript en bron-lint groen.
+Volledige suite en Vercel-build worden afzonderlijk vastgelegd bij PR/Preview.
+Lokale build-/testadapters worden niet gebruikt in de hosted applicatie.
+Geen rating-, account-, catalogus-, Auth-, RLS- of configuratiewrites uitgevoerd.
+
+De twee expliciete beperkingen zijn NIET door een groene diagnosetest opgelost:
+1. Eerdere skips worden door de bestaande database globaal uitgesloten.
+   Definitief herstel vereist rondegebonden offeridentiteit en atomaire
+   selectie-/choose-RPC-aanpassing; geen historie wissen of clientworkaround.
+2. Capture17oktober bevat voor de strikte gate slechts NL2/EN5 Works.
+   Een ronde van10 is daarmee niet volledig te bewijzen. Meer brongecontroleerde
+   metadata is nodig; onbekende zelfstandigheid is niet stilzwijgend toegelaten.
+Deze opdracht maakt uitsluitend een Draft/hosted review mogelijk. Geen merge,
+productiepublicatie, migraties of cataloguscorrecties. De Preview is geen bewijs
+van een volledig herstelde of releasegereed geteste smaaktestronde.
+
+Herstel op de reviewbranch: revert de afzonderlijke headerfix om alleen het
+headergedrag terug te nemen; de featurebranch kan zonder gegevensrollback worden
+verlaten. Productie blijft ongewijzigd op5fbd35e. Voor een latere feature-release
+blijven opslag-/voorraadbewijs en een afzonderlijk releasebesluit noodzakelijk.
+
+PREVIEWKOPPELING / REGRESSIEVERVOLG
+Draft PR38 aangemaakt; eerste deployment Ready op b1ff96e. De build meldde
+ontbrekende publieke Supabase-URL. Rick gaf daarop afzonderlijk akkoord voor
+uitsluitend deze branch en één rebuild. Testproject via Supabase bevestigd als
+hlvujbrmfdlrfxdjwsmb / lumiscore-pr8-discovery-test / ACTIVE_HEALTHY.
+Uitsluitend NEXT_PUBLIC_SUPABASE_URL en NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+toegevoegd als Config voor Previewbranch fix/taste-eligibility-editions-series-20261017.
+Bijbehorende actieve moderne publishable key, geen service-role/secret gebruikt.
+Productie, algemene Preview-variabelen, andere branches en Auth ongewijzigd.
+De definitieve codepush verzorgt de ene noodzakelijke rebuild; geen extra
+handmatige redeploy. Na review alleen deze twee branche-overrides verwijderen.
+
+Volledige lokale suite vond twee achterhaalde contractfixtures, geen verborgen
+groene totaalclaim: 731 pass,2 fail,16 expliciet overgeslagen van749 tests.
+Het oude UI-contract verwachtte het algemene cataloguszoekendpoint; dit is
+gericht bijgewerkt naar de beveiligde smaaktestzoekingang met extra read-only-
+en rondetaalasserties. De gedeelde-adapterfixture miste collection_books en
+volledige editierecords. Deze expliciet synthetisch aangevuld; echte editiepolicy
+blijft actief en aanbevolen editie-taal wordt nu ook geassert. Alleen de
+covercachetransportmock blijft lokaal, zonder netwerk/credentials.
+Beide betrokken testbestanden opnieuw:6/6 groen. Overige731 passes hergebruikt;
+de nieuwe volledige remote CI is bepalend voor de definitieve branchstatus.
+Geen runtimecode versoepeld om tests groen te krijgen.
+
+TypeScript/lint en beide builds groen; de lokale Vercel-bundelaar had eerst een
+Windows-sandbox readlink-EPERM, met dezelfde code buiten sandbox succesvol.
+Secretscan142 clientbestanden (dist+Vercel-output): geen serversecrets gebundeld.
+Hosted bewijs, definitieve SHA, CI en eventuele concrete login/voorraadbeperking
+staan na afronding in de PR en outputs/taste-eligibility-preview-20261018.
+
+LOKALE OPSLAGCORRECTIE EN METADATA-AANVULLING — 18 oktober 2026
+Afzonderlijk toegestaan: uitsluitend lokaal voorbereiden en disposable testen.
+Opslagcommit9b050ea538a8ec6ddfcb85a60e344d1d41d93048: rondegebonden offers,
+veilige v1/v2-bridge, expliciete eerdere-skip-opt-in, behoud van ratings en historie.
+SQL staat alleen in docs/proposals, NIET in supabase/migrations. De app toont de
+nieuwe actie uitsluitend na de read-only v3-capability; huidige hosted opslag
+wordt niet als gerepareerd voorgesteld. Lege private inventaris bevat geen seeds
+en vereist afzonderlijk goedgekeurd bewijs uit dezelfde policy vóór toepassing.
+Zie docs/proposals/taste-storage-review-20261018.txt voor lokale tests en herstel.
+
+Gerichte editievoorstellen, geen classificatieaanpassing:8 Nederlandse edities en
+5 exacte Engelse NULL-taalvelden, met primaire uitgevers-/bibliotheek-/editiebronnen.
+Status SOURCE_SUPPORTED_REVIEW_REQUIRED,0humanapproved/0applied. Volledige capture
+en bestaande reviews per Work-ID zijn onveranderd. Theoretische doorrekening met
+de ONGEWIJZIGDE gate: NL2/EN5 -> NL10/EN10, alleen ALS alle voorstellen na review
+mogen worden toegepast, nog vóór persoonlijke ratings/Read/skips. Geen bewijs
+voor15/30 of drie echte rondes. Onzekere zelfstandigheid en reeksconflicten blijven
+geblokkeerd. Zie docs/proposals/taste-metadata-review-20261018.txt en batch-JSON.
+
+Volledige suite765:749pass,0fail,16 bestaande opt-in skips. Daarna twee extra
+SQL-herstelcases: definitieve gerichte set16/16 groen. TypeScript, lint, Vinext-
+en Vercel-target-build, secretscan142clientbestanden en diffcontrole groen.
+Geen hosted opslag- of fysieke telefooncontrole toegevoegd; geldige eerdere
+layoutcontroles hergebruikt. Echte parallelle PostgreSQL-/PostgREST-verificatie,
+bronreview en een eventueel later database-/releasebesluit blijven noodzakelijk.
+PR38 en Preview NIET bijgewerkt: code blijft d9ce672. Geen push, databasewrites,
+migraties, merge of publicatie. Bestaande gegevens en geparkeerd werk behouden.
+
+VERVOLG MET TESTGOEDKEURING — 18 oktober 2026
+Bovenstaande is historisch lokaal bewijs. Rick gaf daarna expliciet akkoord
+voor uitsluitend testproject hlvujbrmfdlrfxdjwsmb, begrensde catalogusaanvulling,
+één tijdelijk account, echte opslagcontrole, cleanup en Preview-update. Geen
+productie-, Auth-configuratie- of mergegoedkeuring voor dit pakket.
+Opslagvoorstel daar toegepast als taste_storage_v3_test_review_20261018;
+geen automatische productiemigratie aan de codebase toegevoegd.
+
+Bronhercontrole: acht NL-edities en vijf EN-taalvelden ondersteund. Importproef
+vond vier bestaande synthetische eerste-reeksplaatsen. Die blijven behouden;
+geen constraint versoepeld, placeholder gewijzigd of dubbele testreeks bedacht.
+Alleen de vier conflictvrije Works toegevoegd op nieuwe gegenereerde IDs:
+OL5784622W, OL3261155W, OL7924103W, OL5738148W, zeven edities (4NL/3EN).
+Bestaande categories/evidence ongewijzigd overgenomen, inclusief bron/confidence/
+verified_at; dit is geen nieuwe menselijke classificatiecertificering. De vier
+andere voorstellen blijven niet toegepast. Productievoorstellen blijven pending.
+Offline builder scripts/build-taste-test-catalog-plan.ts bewaakt capturehash,
+identiteit, grens van de veilige subset en afwezigheid van bestaande-row-updates.
+Werkende lokale repetitie gebruikt ongewijzigde fixture/migraties en dezelfde SQL.
+Verse echte catalogussnapshots door ONGEWIJZIGDE tasteEligibility beoordeeld:
+private inventaris NL4/EN3, exacte editie/snapshot, uitsluitend testreview.
+
+Echte koppeling vond nog één concrete fout: works.subjects bestaat niet in het
+werkelijke schema. Deze select verwijderd, labels uit bestaande evidence en
+categories behouden. Gerichte regressietest voorkomt terugkeer; geen gate verruimd.
+
+Deze kleine testvoorraad kan twee echte saves bewijzen, NIET volledige rondes
+10/15/30 of heraanbieding over drie echte rondes. Daarvoor blijft lokaal SQL-bewijs
+beschikbaar; productievoorraad en apart database-/releasebesluit blijven vereist.
+Exact hosted resultaat, deployment/code-SHA, snapshots en cleanupbewijs worden
+na uitvoering buiten Git vastgelegd in outputs/taste-storage-test-20261018 en
+de bestaande Draft-PR38. Geen credentials of toegangstokens in verslag/PR/Git.
+Forward-compatible herstel uit het opslagverslag blijft gelden: behoud nieuwe
+ronde-identiteit en v1/v2-bridge; nooit historie verwijderen of oude UPDATE herstellen.
+
+EDITIETAAL, TITEL, BESCHRIJVING EN COVER — LOKALE REVIEW 18 oktober 2026
+Scope: vervolg op dezelfde branch fix/taste-eligibility-editions-series-20261017,
+vanaf 7c9a0ff275c64872cb6a45096dbe491b29b7ac23. Geen push, databasewrite,
+migratie, account, Auth-/configwijziging of deployment in deze vervolgopdracht.
+De eerdere hosted opslagproef en testcatalogus zijn niet opnieuw gewijzigd.
+
+Oorzaken en oplossing
+- De mapper hield de oorspronkelijke Work-titel, terwijl editie en cover apart
+  gekozen werden. Sommige selects lieten de editietitel helemaal weg. De bestaande
+  strict-edition-selector is nu gedeeld door catalogus, zoeken, aanbevelingen,
+  collecties, smaaktest en detail; geen tweede selectie- of smaakberekening.
+- NL kiest eerst expliciet NL, anders expliciet EN met label Engelse editie.
+  EN accepteert uitsluitend EN. Titelwoorden, schrift, auteur en ISBN-prefix
+  bepalen nooit de taal. Officiële EN-titels met buitenlandse woorden blijven geldig.
+- Eén geselecteerde editie levert ID, taal, titel, ISBN en covercontext. Complete
+  editiepagina's worden in batches gelezen; een REST-limiet verbergt geen latere NL-editie.
+- Oude Work-/ISBN-covercaches en een geslaagde ISBN-afbeeldingsaanvraag gelden
+  niet als editie/imagebewijs. Bestaande exact gereviewde covers blijven bruikbaar;
+  anders controleert één gebundelde publieke bronlookup de exacte editie, parent
+  Work, titel, taal en ISBN en gebruikt alleen de daaraan gekoppelde cover-ID's.
+  Geen bewijs of bronuitval: juiste editietitel met bestaande neutrale fallback.
+  Geen nieuwe covers, geen originele bestanden gewijzigd, geen permanente DB-cachewrite.
+- Geen toegestane editie: automatisch niet aanbieden; directe Work-link blijft
+  bestaan met een vertaalde beschikbaarheidsmelding, zonder verboden editiecover.
+- Een ongetaalde Work-synopsis werd voorheen als Engels aangenomen. Dat is vervallen.
+  Beschrijvingen vereisen exact editie-/ISBN-taalbewijs; NL toont alleen NL of bij
+  expliciete EN-fallback een gelabelde EN-beschrijving. Anders de korte melding.
+  Bronvermelding en bestaande opschoning blijven behouden; geen automatische vertaling.
+- API's en locale-caches geven de interface-taal door. Een hervatte ronde behoudt
+  zijn opgeslagen selectietaal en Work-voortgang, maar presenteert opnieuw voor
+  de huidige interface-taal. Onbruikbaar geworden kaarten blijven geblokkeerd;
+  ratings worden niet naar een Edition verplaatst of opnieuw aangemaakt.
+- Coverstate omvat editie/titel/taal/URL's. Zoeken en clientstate tonen geen oude
+  taalkaart tijdens wisselen. Ook de gastvoorkeuren en collectie-ratingflow gebruiken
+  de gedeelde presentatie. Collectievoortgang telt onveranderd alle Work-memberships.
+- Gevonden mobiele covercropping: bij beperkte breedte schaalt de hoogte nu mee
+  met de breedte. Op 320px coverframe 79,51x120,46px (ratio .66), scores 44x48px.
+
+Exacte regressies (alleen publieke bibliografische metadata read-only gelezen)
+1. Work1410 OL19964025W / Edition1462 OL28188774M / ISBN9783462046601:
+   zowel catalogus als Open Library zeggen ten onrechte dut bij de Duitse editie
+   Der Mann, der nie krank war. Dit is NIET door de codefix opgelost. Geen drieboek-
+   uitzondering of taalheuristiek toegevoegd. Correctie naar ger en een afzonderlijk
+   te verifiëren NL-editie staan uitsluitend in het inerte bronvoorstel hieronder.
+2. Work1342 OL24343547W / Edition1367 OL61048815M / ISBN9789022341674:
+   titel Waar de zon de sneeuw raakt, dut, cover15157931. Bestaande editiedata juist;
+   Franse Work-titel Je revenais des autres wordt niet meer als editietitel getoond.
+3. Work1456 OL17641518W / Edition1523 OL26326058M / ISBN9781910701874:
+   officiële titel Homo Deus, eng, cover8001570; Hebreeuwse Work-titel blijft in
+   de catalogus behouden maar wordt niet met de Engelse editiecover vermengd.
+Afzonderlijke review: docs/proposals/edition-language-corrections-20261018.json.
+Uitgeversbewijs bij Grunberg betreft een andere e-book-ISBN; exact hardcover-ISBN
+en taal zijn aanvullend ondersteund door een boekhandelbron. Google Books gaf429.
+NL-kandidaat ISBN9789038894836 heeft nog geen vastgestelde catalogus-Edition-ID
+of gereviewde cover. Geen metadata- of classificatievoorstel toegepast.
+
+Verificatie en grenzen
+Gerichte tests: selectie NL/EN/verboden/onzeker/meertalig, broncoverbinding,
+geen-cover, parentconflict, caches EN-NL-EN, beschrijvingen en Work-identiteit.
+Echte catalogus/search/detail-loaders draaien in een geïsoleerd read-only transport;
+PostgreSQL-fixtures bewaken volledige editiepagina's en ongewijzigde aanbevelingsinput.
+Oude tekstuele testcontracten zijn aangepast aan de expliciete locale en gedeelde
+batchloader; geen bewijsregels afgezwakt om tests groen te maken.
+Definitieve gerichte regressies:42/42 groen, inclusief echte loader-imports en
+covergeometriecontract. PostgreSQL-aanbevelings-/MyBooks-controle:20/20 groen.
+Brede run:778 tests,761 pass,16 bestaande opt-in skips en één oude CSS-assertie
+die nog letterlijk de vroegere vaste hoogte eiste. Die assertie is vervangen
+door dezelfde 100-180px ruimtebegroting in proportionele breedte, met behoud
+van de 44x48px score-eis; betrokken42 tests daarna opnieuw groen. Dus geen
+onopgeloste testfout, maar ook geen claim van één volledig groene778-run.
+Exacte logs, commit-SHA's en diff staan in het lokale outputverslag bij oplevering.
+TypeScript, bronlint (gegenereerde .wrangler-cache expliciet uitgesloten), Vinext-
+en Vercel-target-productiebuild en secretscan zijn groen. De Vercel-bundelaar
+vereiste wegens de bestaande Windows-junction dezelfde build buiten de sandbox.
+
+Echte browserscreenshots van de gedeelde componenten: 320/390px en 1280px,
+NL/EN, Paper/Ink, geladen publieke coverbestanden, taalwissel en detailfallback.
+Lokale UI-capture gebruikt vastgelegde publieke brondata, geen Auth of opslag.
+Dit is GEEN hosted verificatie, volledige live registratie-/opslagflow of fysieke
+telefooncontrole. Alle scores in screenshots zijn de neutrale niet-gepubliceerde badge.
+Output: outputs/edition-presentation-20261018; builds/tests onder
+outputs/taste-storage-test-20261018/edition-*.
+Lokale broncapture: http://127.0.0.1:3136/nl/review?view=detail&work=1342
+Starten: node --experimental-strip-types scripts/edition-presentation-local.mjs
+Uitsluitend loopback3136, geen .env/keys, alle API- en mutatieverzoeken geweigerd.
+De parameter proposal=1 is uitsluitend een als zodanig gemarkeerde lokale WHAT-IF;
+hij demonstreert het NIET toegepaste Grunberg-taalvoorstel. Geen publieke appbypass.
+
+Nog te beslissen vóór een later releasebesluit
+- Grunberg-taalcorrectie apart reviewen/toepassen; tot die tijd blijft dit concrete
+  NL-regressiegeval een datablokkade. Ook bronmetadata kan fout zijn: gelijke dut-
+  velden zijn geen onafhankelijke inhoudelijke bevestiging van een Duitse editie.
+- De eerder goedgekeurde private testinventaris NL4/EN3 is nog van de vorige
+  eligibilitysnapshot. Vóór hosted schrijftests inventaris/policy opnieuw beoordelen;
+  deze opdracht verandert geen SQL, voorraad, approvals of betrouwbaarheidsgate.
+- Geen claim dat de volledige catalogus qua taal of cover handmatig is gereviewd.
+  Ontbrekende broncoverbewijzen leveren bewust meer neutrale covers op.
+Herstel: neem uitsluitend deze lokale presentatiecommit terug, niet de eerdere
+opslagcorrectie. Data en rondehistorie blijven behouden; broncache vervalt bij
+serverherstart/nieuw proces. Het inerte catalogusvoorstel kan onafhankelijk worden
+behouden/verwijderd. Geen destructieve rollback en geen oude v2-UPDATE herstellen.

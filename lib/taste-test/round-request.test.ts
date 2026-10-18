@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildRoundRequest } from './round-request.ts';
-import type { RatingRoundState } from './rating-round.ts';
+import { canRevisitEarlierSkips, parseRoundAction, type RatingRoundState } from './rating-round.ts';
 const state: RatingRoundState = { round: { id: '00000000-0000-4000-8000-000000000001', number: 1, language: 'nl', goal: 20, ratedCount: 3, offeredCount: 4, complete: false }, currentWorkId: '10134', exhausted: false };
 test('new 10/15/30 rounds use the active site language', () => {
   for (const goal of [10,15,30]) for (const locale of ['en','nl'] as const)
@@ -21,4 +21,19 @@ test('rating needs an explicit score; skip cannot silently rate', () => {
   assert.throws(() => buildRoundRequest('skip', state, 'en', 10, '10134', 8));
   assert.throws(() => buildRoundRequest('resume', null, 'en', 10));
   assert.throws(() => buildRoundRequest('start', null, 'en', 20));
+});
+test('start after completion carries its previous round identity without changing saved state', () => {
+  const completed = { ...state, round: { ...state.round!, complete: true } };
+  assert.equal(buildRoundRequest('start', completed, 'en', 15).roundId, state.round!.id);
+  assert.equal(buildRoundRequest('start', completed, 'en', 15).language, 'en');
+  assert.equal(parseRoundAction({ action: 'start', language: 'en', goal: 10, roundId: 'invalid' }), null);
+});
+test('revisit is deliberate, round/language scoped and never offered for old storage or a current offer', () => {
+  const exhausted = { ...state, currentWorkId: null, exhausted: true, storageVersion: 3, canRevisit: true };
+  assert.equal(canRevisitEarlierSkips(exhausted), true);
+  for (const next of [state, { ...exhausted, storageVersion: undefined }, { ...exhausted, currentWorkId: '2' },
+    { ...exhausted, canRevisit: false }, { ...exhausted, round: { ...state.round!, complete: true } }])
+    assert.equal(canRevisitEarlierSkips(next), false);
+  const request = buildRoundRequest('revisit', exhausted, 'en', 30);
+  assert.deepEqual(request, { action: 'revisit', language: 'nl', roundId: state.round!.id });
 });

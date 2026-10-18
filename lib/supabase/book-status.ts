@@ -1,3 +1,4 @@
+import type {Locale} from '../i18n/config.ts';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { cache } from 'react';
 import {
@@ -12,6 +13,7 @@ import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
 import type { MyBooksItem } from '../collections/my-books.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { loadCatalogBooksByIds } from './books.ts';
+import { withEditionCoverEvidence } from '../books/edition-cover-evidence.ts';
 
 type StatusRow = { work_id: number | string; status: string };
 type RatingRow = { work_id: number | string; rating?: number | string | null };
@@ -164,7 +166,7 @@ export async function migrateGuestWantToRead(
   };
 }
 
-export async function loadMyBooksPageData(): Promise<MyBooksPageData> {
+export async function loadMyBooksPageData(locale:Locale='en'): Promise<MyBooksPageData> {
   const { client, user } = await getVerifiedServerUser();
   if (!user) return { authenticated: false, available: true, items: [] };
 
@@ -176,7 +178,7 @@ export async function loadMyBooksPageData(): Promise<MyBooksPageData> {
   const rows = ((data ?? []) as MyBooksStatusRow[]).filter(
     (row): row is MyBooksStatusRow & { status: ReadingStatus } => isReadingStatus(row.status),
   );
-  const books = await loadCatalogBooksByIds(rows.map((row) => String(row.work_id)));
+  const books = await withEditionCoverEvidence(await loadCatalogBooksByIds(rows.map((row) => String(row.work_id)),undefined,locale));
   const booksByWorkId = new Map(books.flatMap((book) =>
     book.workId ? [[book.workId, book] as const] : [],
   ));

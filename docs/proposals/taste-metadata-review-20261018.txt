@@ -1,0 +1,92 @@
+LumiScore — gerichte metadata-aanvulling, 18 oktober 2026
+Status: SOURCE_SUPPORTED_REVIEW_REQUIRED. Geen goedgekeurde of toegepaste rijen.
+Opslagvoorbereiding afzonderlijk:9b050ea538a8ec6ddfcb85a60e344d1d41d93048.
+Gezamenlijke smaakberekening, confidence-/publicatieregels en pilot ongewijzigd.
+
+BRON EN INTEGRITEIT
+De volledige capture van17oktober blijft exact behouden, inclusief reviews per
+Work-ID en eerdere Jamie-notities. Geen nieuwe volledige audit/capture uitgevoerd.
+10.134 Works /10.293 edities, venster20:34:05–20:43:15UTC, geen atomair snapshot.
+SHA256 catalog-metadata-review.json:
+b6ab453eb81f99428602d1e4011f8f8bf78b0d847b8e5ef706f6fdf0e71825d9.
+Offline controle weigert een gewijzigde capture, dubbele/mismatched Work-ID,
+gewijzigde Work-identiteit, verkeerde editie/ISBN/OLID/titel, niet-NULL taal,
+ontbrekende expliciete taalbron of ongeldig ISBN-checksum. Er is geen apply-mode,
+DB-client of omgeving/credentialgebruik. De tool kan niets goedkeuren.
+
+BEGRENSDE BATCH
+docs/proposals/taste-metadata-batch-20261018.json bevat acht Works:
+25 Het spel der tronen /48 Mannen die vrouwen haten /65 De reiziger /
+135 Het oog van de wereld /146 Het gouden kompas /171 De reisgenoten /
+197 Het laatste rijk /672 Vijftig tinten grijs.
+Voorstel: acht nieuwe afzonderlijke Nederlandse edities met expliciete taal,
+titel, ISBN, bron, uitgever en formaat. Bestaande Engelse edities worden NIET
+omgedoopt, met een Nederlands ISBN overschreven of van een andere cover voorzien.
+De exacte bronnen/veldlocaties en onzekerheden staan per Work in het JSON-bestand.
+Geen paginatelling, synopsis of overige auteurs-/genreclaims overgenomen.
+
+Daarnaast vijf zeer gerichte NULL->eng-taalvoorstellen voor al bestaande edities:
+Work25/Edition25/OL24283280M;65/65/OL20130983M;135/135/OL11347826M;
+171/171/OL20784407M;197/197/OL24945060M.
+De exacte bestaande Open Library-editie-JSON is read-only opgehaald. Alle vijf
+vermelden languages:[{key:'/languages/eng'}], de juiste Work-link, hetzelfde ISBN
+en dezelfde titel. Geen afleiding uit ISBN-prefix, auteursnaam of interfacetaal.
+Vóór eventuele toepassing opnieuw uitlezen; alleen een nog NULL taal corrigeren
+bij dezelfde identiteit en bron. Geen bestaande niet-NULL taal vervangen.
+
+REVIEWGRENZEN / GEEN KLASSIFICATIES VERZINNEN
+Alle records blijven pending, humanApproval=null. De bronnen ondersteunen feiten,
+maar dit is geen onafhankelijke menselijke sign-off of toestemming tot import.
+Outlander NL: primaire uitgeverspagina via geïndexeerde bron beschikbaar; de
+directe pagina kon niet worden opgehaald. Volledige bronhercontrole vóór toepassing.
+Niet de filmeditie9789022576960 gebruikt, maar paperback9789022574492.
+De reisgenoten: uitgever ondersteunt taal/ISBN en eerste-deelvermelding voor
+dezelfde titel; exacte vertaalde Work-bridge blijft expliciet reviewpunt.
+Bij Eye of the World verschilt de paginatelling per bron en noemt de uitgever
+15 boeken. Dit wijzigt NIET de bestaande gecontroleerde14-hoofddelendefinitie.
+Nieuwe proloog Raven is geen vervanging door een los prequelboek.
+Mannen die vrouwen haten: paginatelling verschilt, geen overname daarvan.
+Bij uitgeverslijsten worden vervolg-/adjacent-series-, omnibus-, retelling- en
+adaptatie-ISBN's niet als starter gebruikt. Alleen paperback/ebook in deze batch.
+
+Bewust NIET voorgesteld:
+- Work146 EN-editie: eng is aantoonbaar, maar de titel noemt Trilogy. Mogelijke
+  bundelvorm blijft onzeker; geen taalreparatie of voorraadwinst hiervoor geteld.
+- Work205 The Man in the High Castle: geen positief standalonebewijs gevonden;
+  blijft geblokkeerd. Huidig aanbod wordt niet stilzwijgend als skip geregistreerd.
+- Work134: conflict in bestaande reeksomvang blijft open, geen grens versoepeld.
+- Work1296 Festival: auteurscollectie bewijst geen zelfstandigheid.
+Geen smaakkenmerken/confidences, standalone-vlaggen, classificaties, reeksleden,
+reeksposities of publicatiegrenzen gewijzigd. La Nuit en200-Work-pilot ongemoeid.
+
+LOKALE DOORREKENING, GEEN NIEUWE CATALOGUSTELLING
+Node22+ en bestaande dependencies:
+node --experimental-strip-types scripts/check-taste-metadata-proposals.ts PATH/catalog-metadata-review.json
+De tool maakt alleen klonen in geheugen en voert dezelfde tasteEligibility uit.
+Capture zonder voorstellen: NL2/EN5 geschikte unieke Works.
+ALS alle dertien editie-aanpassingen na onafhankelijke review mogen worden
+toegepast: theoretisch NL10/EN10 vóór persoonlijke uitsluitingen. Approved0,
+applied0; de echte catalogus is door dit werk NIET gewijzigd of opnieuw geteld.
+Tien is GEEN robuuste voorraad voor tien antwoorden: één gelezen/rated/skip kan
+een ronde al doen uitputten;15/30 en drie echte opeenvolgende rondes zijn daarmee
+niet bewezen. De drie-rondentest gebruikt uitsluitend synthetische fixtures.
+Verdere gerichte bronreview blijft nodig; geen opvulling met onzekere boeken.
+NL-covers zijn niet opnieuw visueel gecontroleerd of aangemaakt. Zonder een
+bewezen editiegebonden cover blijft de bestaande neutrale fallback gelden.
+
+BEWIJS EN HERSTEL
+749 passes/0fail/16 bestaande skips in de volledige suite; daarna definitieve
+gerichte set16/16 incl.9 opslagtests en4 metadatareviewtests groen. TypeScript,
+lint, beide productiebuilds, client-secretscan en diffcontrole groen. Zie het
+afzonderlijke opslagverslag voor exacte overlap en platformbeperkingen.
+Doorrekening buiten Git: outputs/taste-eligibility-preview-20261018/
+metadata-proposal-check.json. Bestaande CSV/JSON en reviewvoortgang niet overschreven.
+Geen nieuwe UI-/telefoon-/hosted-opslagclaim voor deze lokale stap.
+Terugname: alleen deze metadatareviewcommit terugnemen; er is geen import of
+databasewijziging terug te draaien. Opslagvoorstel blijft afzonderlijk reviewbaar.
+
+HOSTED STATUS
+PR38/Ready Preview blijft op d9ce672c8d0df930ed4b0099748119189632262d,
+https://lumiscore-9ufwpuppt-rgkgroeneveld-9102.vercel.app/nl/taste-test.
+Geen push, merge, deployment, migratie, catalogus-/Auth-/RLS-/configuratie- of
+bestaande gebruikerswrite. Geen accounts of tijdelijke toegang aangemaakt.

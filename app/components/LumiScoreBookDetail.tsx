@@ -15,6 +15,7 @@ import {
 } from '@/lib/ratings/model';
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { BookCover, ThemeToggle } from './LumiScoreHome';
+import {EditionPresentationLabel} from './EditionPresentationLabel';
 import { LumiScoreBookDescription } from './LumiScoreBookDescription';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
@@ -256,9 +257,9 @@ export function LumiScoreBookDetail({
         <div className="detail-header-actions">
           <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
           <MobileNavigation authenticated={authState.authenticated} />
-          <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
-          <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
+          <LanguageSwitcher />
+          <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
         </div>
       </header>
 
@@ -297,7 +298,7 @@ export function LumiScoreBookDetail({
                   ? 'detail.backToCollections'
                   : 'detail.backToBooks')}
           </LocaleLink>
-          <h1>{book.title}</h1>
+          <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
 
@@ -346,7 +347,7 @@ export function LumiScoreBookDetail({
             </section>
           </div>
 
-          {book.workId && <LumiScoreBookDescription description={description} />}
+          {book.workId && <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />}
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus

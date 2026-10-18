@@ -10,13 +10,13 @@ type CollectionPageProps = { params: Promise<{ slug: string }> };
 
 export const dynamic = 'force-dynamic';
 
-const load = cache(async (slug: string) => {
+const load = cache(async (slug: string,locale:'nl'|'en') => {
   try {
     const { loadCollectionPageData } = await import('@/lib/supabase/collections');
     return await measureServerOperation(
       'collection.page',
       'mixed',
-      () => loadCollectionPageData(slug),
+      () => loadCollectionPageData(slug,locale),
     );
   } catch (error) {
     console.error('Collection page load failed.', error);
@@ -26,8 +26,8 @@ const load = cache(async (slug: string) => {
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const data = await load(slug);
   const { locale } = await resolveRequestLocale();
+  const data = await load(slug,locale);
   if (!data) return createLocalizedPageMetadata({ title: 'Collection not found — LumiScore', canonicalPath: `/collection/${encodeURIComponent(slug)}`, noIndex: true });
   return createLocalizedPageMetadata({
     title: `${data.collection.name} — LumiScore`,
@@ -38,9 +38,9 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
   const { slug } = await params;
-  const data = await load(slug);
-  if (!data) notFound();
   const { locale } = await resolveRequestLocale();
+  const data = await load(slug,locale);
+  if (!data) notFound();
   return (
     <>
       <LumiScoreCollectionPage data={locale === 'nl' ? { ...data, collection: { ...data.collection, description: `Ontdek de boeken van ${data.collection.name} en houd je leesvoortgang bij.` } } : data} />

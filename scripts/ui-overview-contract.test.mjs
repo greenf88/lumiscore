@@ -25,7 +25,7 @@ test('home has only a compact authenticated recommendation preview and no guest 
   const home=await read('app/components/LumiScoreHome.tsx');
   assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
   assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
-  assert.match(page,/loadHighestRatedCatalog\(8\)/);
+  assert.match(page,/loadHighestRatedCatalog\(8,locale\)/);
   assert.equal((page.match(/loadHomepagePersonalization\(locale, 3\)/g) ?? []).length, 1);
   assert.match(home,/personalization\.recommendations\.slice\(0, 3\)/);
   assert.match(home,/loading="lazy"/);
@@ -57,6 +57,12 @@ test('rating UI directly saves an explicit score, with skip/search and no langua
   assert.match(taste,/act\('skip', workId\)/);
   assert.doesNotMatch(taste,/Save rating|setScore\(/);
   assert.match(taste,/setSaved\(action === 'rate'\)/);
-  assert.match(taste,/\/api\/catalog\/search/);
+  assert.match(taste,/\/api\/taste-test\/candidates/);
+  assert.doesNotMatch(taste,/\/api\/catalog\/search/);
+  const candidates=await read('app/api/taste-test/candidates/route.ts');
+  assert.match(candidates,/getVerifiedServerUser/);
+  assert.match(candidates,/loadTasteEligibility/);
+  assert.match(candidates,/round\.language/);
+  assert.doesNotMatch(candidates,/\.upsert\(|\.insert\(|\.delete\(/);
   assert.match(taste,/href="\/taste-test\/result"/);
 });
