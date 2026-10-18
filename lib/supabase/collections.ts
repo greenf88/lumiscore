@@ -1,3 +1,4 @@
+import type { Locale } from '../i18n/config.ts';
 import type { Book } from '../../app/data/books.ts';
 import {
   calculateCollectionProgress,
@@ -18,7 +19,6 @@ import {
 } from '../collections/directory.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import {
-  loadCatalogBooksByIds,
   loadCatalogBooksByIdsWithStoredCovers,
 } from './books.ts';
 import { supabase } from './client.ts';
@@ -151,7 +151,7 @@ function sortCollectionBooks(
   });
 }
 
-export async function loadCollectionsDirectory(): Promise<CollectionsDirectoryData> {
+export async function loadCollectionsDirectory(locale:Locale='en'): Promise<CollectionsDirectoryData> {
   const [collectionsResult, membershipsResult] = await Promise.all([
     supabase
       .from('collections')
@@ -185,7 +185,7 @@ export async function loadCollectionsDirectory(): Promise<CollectionsDirectoryDa
   ];
   const representativeBooks = await loadCatalogBooksByIdsWithStoredCovers(
     representativeWorkIds,
-    new Map(),
+    new Map(), locale,
   );
   const booksByWorkId = new Map(
     representativeBooks.flatMap((book): Array<[string, Book]> =>
@@ -204,7 +204,7 @@ export async function loadCollectionsDirectory(): Promise<CollectionsDirectoryDa
   };
 }
 
-export async function loadCollectionPageData(slug: string): Promise<CollectionPageData | null> {
+export async function loadCollectionPageData(slug: string,locale:Locale='en'): Promise<CollectionPageData | null> {
   const collectionResult = await supabase
     .from('collections')
     .select('id,slug,name,collection_type,description,expected_main_series_total')
@@ -230,7 +230,7 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
     measureServerOperation(
       'collection.catalog',
       'public',
-      () => loadCatalogBooksByIdsWithStoredCovers(workIds),
+      () => loadCatalogBooksByIdsWithStoredCovers(workIds,undefined,locale),
     ),
     authPromise.then(async ({ client, user }) => {
       const [statusesResult, ratingsResult] = await Promise.all([
@@ -268,15 +268,17 @@ export async function loadCollectionPageData(slug: string): Promise<CollectionPa
   const statuses = statusRecord((statusesResult.data ?? []) as StatusRow[]);
   for (const workId of ratedWorkIds) statuses[workId] = 'read';
   const statusMap = new Map(Object.entries(statuses));
+  // Language filtering affects cards, never the owner's Work-based progress.
+  const progressBooks=memberships.map(row=>mapMembership(row,booksById.get(String(row.work_id))??placeholderBook(String(row.work_id))));
   const ratedWorkIdSet = new Set(ratedWorkIds);
   const progress = collection.collectionType === 'series'
     ? calculateSeriesProgress(
-      books,
+      progressBooks,
       statusMap,
       collection.expectedMainSeriesTotal,
       ratedWorkIdSet,
     )
-    : calculateCollectionProgress(books, statusMap, ratedWorkIdSet);
+    : calculateCollectionProgress(progressBooks, statusMap, ratedWorkIdSet);
   const highlighted = collection.collectionType === 'author_collection'
     ? selectHighestRatedUnread(books, statusMap)
     : null;
@@ -434,6 +436,7 @@ function latestInteraction(
 
 export async function loadHomepageSeriesContinuations(
   limit = 3,
+  locale:Locale='en',
 ): Promise<HomepageSeriesContinuation[]> {
   const { client, user } = await getVerifiedServerUser();
   if (!user) return [];
@@ -507,7 +510,7 @@ export async function loadHomepageSeriesContinuations(
   if (selected.length === 0) return [];
   const actionWorkIds = selected.flatMap(({ progress }) =>
     progress.actionBook ? [progress.actionBook.workId] : []);
-  const actionBooks = await loadCatalogBooksByIds(actionWorkIds);
+  const actionBooks = await loadCatalogBooksByIdsWithStoredCovers(actionWorkIds,undefined,locale);
   const booksByWorkId = new Map(actionBooks.flatMap((book) =>
     book.workId ? [[book.workId, book] as const] : []));
 

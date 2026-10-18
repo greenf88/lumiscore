@@ -1,3 +1,4 @@
+import { withRecommendationEditionCovers } from '../books/edition-cover-evidence.ts';
 import type { Book } from '../../app/data/books.ts';
 import type {
   PersonalMatchResult,
@@ -35,10 +36,10 @@ import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
 import { cache } from 'react';
 
 const GUEST_RECOMMENDATION_CATALOG_TTL_MS = 5 * 60 * 1_000;
-let guestRecommendationCatalogCache: {
+const guestRecommendationCatalogCache = new Map<Locale, {
   expiresAt: number;
   result: Promise<RecommendationCatalog>;
-} | null = null;
+}>();
 
 export type TasteTestServerState = {
   authenticated: boolean;
@@ -119,44 +120,41 @@ export const loadHomepageReaderContext = cache(async (locale:Locale='en'): Promi
 
 async function loadRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  locale: Locale,
 ): Promise<RecommendationCatalog> {
-  return loadPublicRecommendationCatalog(client, mapCatalogWorks);
+  return loadPublicRecommendationCatalog(client, rows => mapCatalogWorks(rows, locale));
 }
 
 function loadGuestRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  locale: Locale,
 ): Promise<RecommendationCatalog> {
-  if (
-    guestRecommendationCatalogCache &&
-    guestRecommendationCatalogCache.expiresAt > Date.now()
-  ) {
-    return guestRecommendationCatalogCache.result;
-  }
-
-  const result = loadRecommendationCatalog(client).catch((error: unknown) => {
-    guestRecommendationCatalogCache = null;
+  const cached = guestRecommendationCatalogCache.get(locale);
+  if (cached && cached.expiresAt > Date.now()) return cached.result;
+  const result = loadRecommendationCatalog(client, locale).catch((error: unknown) => {
+    guestRecommendationCatalogCache.delete(locale);
     throw error;
   });
-  guestRecommendationCatalogCache = {
-    expiresAt: Date.now() + GUEST_RECOMMENDATION_CATALOG_TTL_MS,
-    result,
-  };
+  guestRecommendationCatalogCache.set(locale, {
+    expiresAt: Date.now() + GUEST_RECOMMENDATION_CATALOG_TTL_MS, result,
+  });
   return result;
 }
 
 async function hydratePublicRecommendations(
   recommendations: readonly PersonalizedRecommendation[],
+  locale: Locale,
 ): Promise<PersonalizedRecommendation[]> {
   const recommendationBooks = recommendations.length
     ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) =>
-        book.workId ? [book.workId] : []))
+        book.workId ? [book.workId] : []), undefined, locale)
     : [];
   const recommendationBooksById = new Map(
     recommendationBooks.flatMap((book): Array<[string, Book]> =>
       book.workId ? [[book.workId, book]] : []),
   );
 
-  return recommendations.map((recommendation) => ({
+  return withRecommendationEditionCovers(recommendations.map((recommendation) => ({
     book: recommendation.book.workId
       ? recommendationBooksById.get(recommendation.book.workId) ?? recommendation.book
       : recommendation.book,
@@ -167,7 +165,7 @@ async function hydratePublicRecommendations(
     coverageLevel: recommendation.coverageLevel,
     metadataConfidence: recommendation.metadataConfidence,
     collaborativeExplanation: recommendation.collaborativeExplanation,
-  }));
+  })));
 }
 
 export async function loadTasteTestServerState(locale:Locale='en'): Promise<TasteTestServerState> {
@@ -260,7 +258,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
     if (!reader.authenticated) return { authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
 
     const [catalog, collaborativeSignals] = await Promise.all([
-      loadRecommendationCatalog(reader.client),
+      loadRecommendationCatalog(reader.client, locale),
       loadCollaborativeRecommendationSignals(reader.client),
     ]);
     const { ratings } = reader;
@@ -288,7 +286,7 @@ export async function loadHomepagePersonalization(locale: Locale = 'en', limit =
       ratingCount: profile.ratingCount,
       tasteTestAnsweredCount: profile.answeredCount,
       hasEvidence,
-      recommendations: await hydratePublicRecommendations(recommendations),
+      recommendations: await hydratePublicRecommendations(recommendations, locale),
     };
   } catch {
     return { unavailable:true, authenticated: false, ratingCount: 0, tasteTestAnsweredCount: 0, hasEvidence: false, recommendations: [] };
@@ -301,7 +299,7 @@ export async function loadGuestHomepagePersonalization(
   limit = 20,
 ): Promise<HomepagePersonalization> {
   const client = await createServerSupabaseClient();
-  const catalog = await loadGuestRecommendationCatalog(client);
+  const catalog = await loadGuestRecommendationCatalog(client, locale);
   const { profile, recommendations } = recommendGuestBooks({
     answers,
     candidates: catalog.candidates,
@@ -315,6 +313,6 @@ export async function loadGuestHomepagePersonalization(
     ratingCount: 0,
     tasteTestAnsweredCount: profile.answeredCount,
     hasEvidence,
-    recommendations: await hydratePublicRecommendations(recommendations),
+    recommendations: await hydratePublicRecommendations(recommendations, locale),
   };
 }

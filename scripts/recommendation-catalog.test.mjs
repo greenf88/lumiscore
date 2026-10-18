@@ -17,7 +17,8 @@ test('real PostgreSQL synthetic catalog: sparse loader preserves candidates, ran
     assert.equal(after.candidates.length,1283);
     assert.equal(f.metrics.evidenceRows,3942);
     assert.equal(beforeMetrics.works,10134);assert.equal(f.metrics.works,1292);
-    assert.equal(beforeMetrics.requests,164);assert.equal(f.metrics.requests,24);
+    assert.equal(beforeMetrics.requests,164);assert.equal(f.metrics.requests,31);
+    assert.equal(f.metrics.queries.filter(q=>q.table==='editions').length,7,'complete editions fetched in bounded batches, not per Work');
     assert.ok(f.metrics.decodedBytes<beforeMetrics.decodedBytes/3);
     // Reviewed correction-only Works are fetched even without stored evidence.
     assert.ok(after.traitsById.has('6'));assert.equal(after.traitsById.get('6').coverageLevel,'none');

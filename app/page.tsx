@@ -15,7 +15,7 @@ export async function generateMetadata() { return createLocalizedPageMetadata({
   canonicalPath: '/',
 }); }
 
-async function loadHomepageBooks() {
+async function loadHomepageBooks(locale:'nl'|'en') {
   logServerEnvironmentPresence();
 
   if (
@@ -32,7 +32,7 @@ async function loadHomepageBooks() {
     const catalog = await measureServerOperation(
       'homepage.catalog',
       'public',
-      () => loadHighestRatedCatalog(8),
+      () => loadHighestRatedCatalog(8,locale),
     );
     return { ...catalog, unavailable: false };
   } catch (error) {
@@ -65,7 +65,7 @@ export default async function Home() {
     .then(({ loadHeaderAuthState }) => measureServerOperation('homepage.auth', 'private', loadHeaderAuthState))
     .catch(() => ({ authenticated: false }));
   const [catalog, dutchDiscovery, personalization, authState, seriesContinuations, categories] = await Promise.all([
-    loadHomepageBooks(),
+    loadHomepageBooks(locale),
     emptyDutchDiscovery,
     import('@/lib/supabase/taste-test')
       .then(async ({ loadHomepagePersonalization }) => {
@@ -91,7 +91,7 @@ export default async function Home() {
       .then(async ({ loadHomepageSeriesContinuations }) => (await authPromise).authenticated ? measureServerOperation(
         'homepage.series_continuations',
         'private',
-        () => loadHomepageSeriesContinuations(3),
+        () => loadHomepageSeriesContinuations(3,locale),
       ) : [])
       .catch(() => []),
     import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),

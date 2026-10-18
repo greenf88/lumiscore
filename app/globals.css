@@ -1,5 +1,7 @@
 @import 'tailwindcss/index.css';
 
+.edition-language-label { display: block; color: var(--muted); font: 400 var(--type-small)/1.4 var(--sans); margin: 4px 0 8px; }
+
 /* Self-hosted Latin subsets cover Dutch/English and their punctuation. */
 @font-face { font-family: Inter; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/inter-latin.woff2') format('woff2'); }
 @font-face { font-family: Lora; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/lora-latin.woff2') format('woff2'); }
@@ -1133,7 +1135,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .taste-direct-progress [role='progressbar'] > span { display: block; height: 100%; background: var(--teal); border-radius: inherit; }
 .taste-direct-test .taste-rating-card { margin: 0; padding: 14px; gap: 18px; box-shadow: none; background: color-mix(in srgb, var(--surface) 45%, var(--bg)); }
 .taste-direct-test .taste-book-identity { align-items: center; gap: 16px; }
-.taste-direct-test .taste-book-identity .book-cover { height: clamp(100px, calc(100svh - 540px), 180px); width: auto; aspect-ratio: .66; max-width: 35%; }
+.taste-direct-test .taste-book-identity .book-cover { width: clamp(66px, calc((100svh - 540px) * .66), 118.8px); height: auto; aspect-ratio: .66; max-width: 35%; }
 .taste-direct-test .taste-book-identity h2 { font-family: var(--serif); font-size: var(--type-book); font-weight: 500; line-height: 1.25; margin: 0; overflow-wrap: anywhere; }
 .taste-direct-test .taste-book-identity h2:focus { outline: none; }
 .taste-direct-test .taste-book-identity .book-card-body > p { display: block; overflow: visible; margin-top: 8px; font-size: 14px; line-height: 1.4; }
@@ -1182,14 +1184,14 @@ button, input, select, textarea { font-family: var(--sans); }
   .taste-direct-test .taste-rating-card { padding: 10px; }
   .taste-direct-test .taste-score-buttons { gap: 6px; }
   .taste-direct-test .taste-book-identity { gap: 12px; }
-  .taste-direct-test .taste-long-identity .book-cover { height: 88px; margin-right: 10px; }
+  .taste-direct-test .taste-long-identity .book-cover { width: 58.08px; height: auto; margin-right: 10px; }
 }
 @media (max-height: 650px) and (max-width: 600px) {
   .featured-section.taste-direct-test { padding-top: 12px; }
   .taste-direct-test .taste-round-heading { margin-bottom: 6px; }
   .taste-direct-test .taste-direct-progress { margin-bottom: 12px; gap: 8px; }
   .taste-direct-test .taste-rating-card { gap: 12px; }
-  .taste-direct-test .taste-book-identity .book-cover { height: 100px; }
+  .taste-direct-test .taste-book-identity .book-cover { width: 66px; height: auto; }
   .taste-direct-test fieldset { margin-bottom: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1202,7 +1204,7 @@ button, input, select, textarea { font-family: var(--sans); }
   .taste-direct-test .taste-rating-card { gap: 8px; }
   .taste-direct-test .taste-long-identity h2 { line-height: 1.15; }
   .taste-direct-test .taste-long-identity .book-card-body > p { font-size: 13px; line-height: 1.35; }
-  .taste-direct-test .taste-book-identity.taste-long-identity .book-cover { height: 88px; }
+  .taste-direct-test .taste-book-identity.taste-long-identity .book-cover { width: 58.08px; height: auto; }
   .taste-direct-test legend { margin-bottom: 6px; }
   .taste-direct-test fieldset { margin-bottom: 8px; }
   .taste-direct-test .taste-score-buttons button, .taste-direct-test .taste-skip-button { min-height: 44px; }

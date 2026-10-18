@@ -1,4 +1,5 @@
 'use client';
+import {EditionPresentationLabel} from './EditionPresentationLabel';
 import {useEffect, useRef, useState} from 'react';
 import type {CollectionPageData} from '@/lib/supabase/collections';
 import type {HeaderAuthState} from '@/lib/auth/header';
@@ -11,7 +12,7 @@ import {BookCover} from './LumiScoreHome';
 import {LocaleLink, useLumiScoreLocale} from './LumiScoreLocale';
 
 export function CollectionQuickRating({initial, userId, authState}: {initial: CollectionPageData; userId: string; authState: HeaderAuthState}) {
-  const {t} = useLumiScoreLocale();
+  const {t,locale} = useLumiScoreLocale();
   const [data, setData] = useState(initial), [session, setSession] = useState<QuickRatingSession | null>(null);
   const [pending, setPending] = useState(false), [error, setError] = useState(false), [saved, setSaved] = useState(false);
   const [selection, setSelection] = useState<PendingWorkScore>(null), [storageUnavailable, setStorageUnavailable] = useState(false);
@@ -40,7 +41,7 @@ export function CollectionQuickRating({initial, userId, authState}: {initial: Co
     setSession(next);
   };
   const fresh = async () => {
-    const response = await fetch(`/api/collections/${encodeURIComponent(data.collection.slug)}/rating-session`, {cache: 'no-store'});
+    const response = await fetch(`/api/collections/${encodeURIComponent(data.collection.slug)}/rating-session?locale=${locale}`, {cache: 'no-store'});
     if (!response.ok) throw new Error('PROGRESS_UNAVAILABLE');
     const snapshot = await response.json() as {data: CollectionPageData; userId: string};
     if (snapshot.userId !== userId || snapshot.data.collection.id !== data.collection.id || !snapshot.data.authenticated) throw new Error('SESSION_CHANGED');
@@ -102,7 +103,7 @@ export function CollectionQuickRating({initial, userId, authState}: {initial: Co
         </div>
         <article className="book-card taste-rating-card" key={workId}>
           <div className={`taste-book-identity${item.book.title.length > 90 || item.book.author.length > 60 ? ' taste-long-identity' : ''}`}><BookCover book={item.book} presentation="taste" resolveMissing={false} />
-            <div className="book-card-body"><h2 ref={heading} tabIndex={-1}>{item.book.title}</h2><p>{item.book.author}</p>{item.book.firstPublishYear && <small>{t('common.firstPublished', {year: item.book.firstPublishYear})}</small>}</div></div>
+            <div className="book-card-body"><h2 ref={heading} tabIndex={-1}>{item.book.title}</h2><p>{item.book.author}</p><EditionPresentationLabel book={item.book}/>{item.book.firstPublishYear && <small>{t('common.firstPublished', {year: item.book.firstPublishYear})}</small>}</div></div>
           <div className="taste-rating-actions"><DirectRatingScores workId={item.workId} pending={pending} selection={selection} onRate={rate} />
             <button type="button" className="taste-skip-button" disabled={pending} onClick={skip}>{t('directTaste.skip')}</button><p className="collection-session-note">{t('quickCollection.skipCopy')}</p></div>
         </article>

@@ -42,6 +42,10 @@ export type Book = {
   editionTitle?: string | null;
   editionPublisher?: string | null;
   editionLanguage?: string | null;
+  /** Edition-bound presentation: never resolve a fallback by Work identity. */
+  strictEditionLanguage?: 'en' | 'nl';
+  editionAvailable?: boolean;
+  englishEditionFallback?: boolean;
   coverUrls?: string[];
   backCover?: VerifiedBookCoverAsset | null;
   descriptionCandidates?: BookDescriptionEditionCandidate[];

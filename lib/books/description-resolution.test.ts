@@ -59,7 +59,7 @@ test('normalizes empty trusted-source payloads to no description', () => {
   );
 });
 
-test('uses only the exact Open Library work and keeps it ahead of Google Books', async () => {
+test('unlabelled Work descriptions are never assumed English', async () => {
   clearBookDescriptionCacheForTests();
   const requestedUrls: string[] = [];
   const resolution = await resolveBookDescription(
@@ -70,11 +70,9 @@ test('uses only the exact Open Library work and keeps it ahead of Google Books',
     },
   );
 
-  assert.equal(resolution.description?.source, 'open_library');
-  assert.equal(resolution.description?.sourceKey, 'OL893415W');
-  assert.equal(resolution.description?.text, 'Exact work description.');
+  assert.equal(resolution.description, null);
   assert.equal(requestedUrls.length, 1);
-  assert.match(requestedUrls[0], /\/works\/OL893415W\.json$/);
+  assert.ok(requestedUrls.every(url=>!url.includes('/works/')));
 });
 
 test('accepts a Google Books description only for an exact valid ISBN-13', async () => {
@@ -103,7 +101,7 @@ test('accepts a Google Books description only for an exact valid ISBN-13', async
   assert.equal(resolution.description?.text, 'Verified Google description.');
 });
 
-test('falls back from a missing exact Open Library work description to exact Google ISBN', async () => {
+test('ignores unlabelled Work copy and uses an exact language-labelled Google ISBN', async () => {
   clearBookDescriptionCacheForTests();
   let calls = 0;
   const resolution = await resolveBookDescription(
@@ -129,7 +127,7 @@ test('falls back from a missing exact Open Library work description to exact Goo
     },
   );
 
-  assert.equal(calls, 2);
+  assert.equal(calls, 1);
   assert.equal(resolution.description?.source, 'google_books');
   assert.equal(resolution.description?.text, 'Exact fallback description.');
 });
@@ -364,10 +362,10 @@ test('deduplicates and caches repeated source requests in the server process', a
   let calls = 0;
   const fetchImplementation = async () => {
     calls += 1;
-    return jsonResponse({ description: 'Cached description.' });
+    return jsonResponse({works:[{key:'/works/OL42W'}],languages:[{key:'/languages/eng'}],description: 'Cached description.' });
   };
 
-  const lookup = { openLibraryWorkId: 'OL42W', isbn13: null };
+  const lookup = { openLibraryWorkId: 'OL42W',openLibraryEditionId:'OL42M',editionLanguage:'eng', isbn13: null };
   const [first, second] = await Promise.all([
     resolveBookDescription(lookup, fetchImplementation),
     resolveBookDescription(lookup, fetchImplementation),
@@ -389,9 +387,9 @@ test('temporary source failures expire instead of becoming permanent missing res
     calls += 1;
     return calls <= 3
       ? jsonResponse({ error: 'temporary upstream failure' }, 503)
-      : jsonResponse({ description: 'Recovered exact Work description.' });
+      : jsonResponse({works:[{key:'/works/OL4242W'}],languages:[{key:'/languages/eng'}], description: 'Recovered exact Work description.' });
   };
-  const lookup = { openLibraryWorkId: 'OL4242W', isbn13: null };
+  const lookup = { openLibraryWorkId: 'OL4242W',openLibraryEditionId:'OL4242M',editionLanguage:'eng', isbn13: null };
 
   const first = await resolveBookDescription(lookup, fetchImplementation);
   const cachedTemporary = await resolveBookDescription(lookup, fetchImplementation);
@@ -427,7 +425,8 @@ test('book detail receives server copy without a robots-blocked hydration reques
   ]);
 
   assert.doesNotMatch(component, /fetch\(|useEffect|\/api\//);
-  assert.match(component, /description\?\.language === locale/);
+  assert.match(component, /description\?\.language ===/);
+  assert.match(component,/englishEditionFallback/);
   assert.match(component, /publicDescriptionSource/);
   assert.match(component, /geverifieerde Nederlandse beschrijving/);
   assert.match(route, /isLocale\(requestedLocale\)/);

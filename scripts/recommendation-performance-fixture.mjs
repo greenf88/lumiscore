@@ -40,10 +40,10 @@ export async function createRecommendationFixture({works=10134,evidenceWorks=128
     insert into fixture_works select n,jsonb_build_object('id',n,'title','Synthetic book '||n,
       'first_publish_year',1900+n%126,'open_library_id',null,'source_type','lumiscore_native','work_type','novel',
       'author_id',1+n%5650,'cover_id',null,'authors',jsonb_build_object('id',1+n%5650,'name','Synthetic author '||(1+n%5650)),
-      'editions',jsonb_build_array(jsonb_build_object('id',n,'open_library_edition_id',null,'isbn_13',null,'language',case when n%7=0 then 'nl' else 'en' end)))
+      'editions',jsonb_build_array(jsonb_build_object('id',n,'work_id',n,'title','Synthetic book '||n,'open_library_edition_id',null,'isbn_13',null,'language',case when n%7=0 then 'nl' else 'en' end)))
       from generate_series(1,${works}) n;
     update fixture_works set payload=jsonb_set(payload,'{editions}',payload->'editions'||
-      jsonb_build_array(jsonb_build_object('id',${works}+id,'open_library_edition_id',null,'isbn_13',null,'language','nl')))
+      jsonb_build_array(jsonb_build_object('id',${works}+id,'work_id',id,'title','Synthetic book '||id,'open_library_edition_id',null,'isbn_13',null,'language','nl')))
       where id<=least(159,${works});
     insert into fixture_evidence
       select n,trait,'open_library','synthetic-'||k,jsonb_build_object('work_id',n,'trait',trait,'source','open_library',
@@ -70,14 +70,16 @@ export async function createRecommendationFixture({works=10134,evidenceWorks=128
         const idFilter=url.searchParams.get(table==='works'?'id':'work_id');
         if(idFilter) {params.push(idFilter.slice(4,-1).split(',').map(Number));conditions.push(`${table==='works'?'id':'work_id'}=any($${params.length}::bigint[])`);}
         const where=conditions.length?`where ${conditions.join(' and ')}`:'';
-        const target=table==='works'?'fixture_works':'fixture_evidence';
+        const target=table==='works'?'fixture_works':table==='editions'
+          ? `(select (edition->>'id')::bigint as id,(edition->>'work_id')::bigint as work_id,edition as payload from fixture_works cross join lateral jsonb_array_elements(payload->'editions') edition) edition_rows`
+          : 'fixture_evidence';
         const offset=Number(url.searchParams.get('offset')??0),limit=Math.min(1000,Number(url.searchParams.get('limit')??1000));
-        const order=table==='works'?'id':'work_id,trait,source,source_key';
+        const order=table==='works'||table==='editions'?'id':'work_id,trait,source,source_key';
         const query=`select payload from ${target} ${where} order by ${order} limit ${limit} offset ${offset}`;
         metrics.queries.push({table,offset,limit});
         rows=(await db.query(query,params)).rows.map(row=>row.payload);
         total=Number((await db.query(`select count(*) as n from ${target} ${where}`,params)).rows[0].n);
-        if(table==='works') metrics.works+=rows.length;else metrics.evidenceRows+=rows.length;
+        if(table==='works') metrics.works+=rows.length;else if(table!=='editions') metrics.evidenceRows+=rows.length;
       }
       const body=JSON.stringify(rows);metrics.decodedBytes+=Buffer.byteLength(body);
       const headers={'Content-Type':'application/json'};

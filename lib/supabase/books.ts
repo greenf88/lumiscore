@@ -1,23 +1,8 @@
 import type { Book } from '@/app/data/books';
-import {
-  getOpenLibraryCoverIdUrl,
-  getOpenLibraryCoverUrl,
-  getOpenLibraryOlidCoverUrl,
-  hasOpenLibraryCoverIdentity,
-  normalizeIsbn13,
-  normalizeOpenLibraryId,
-  uniqueCoverUrls,
-} from '@/lib/books/covers';
-import {
-  getPreferredEditionLanguages,
-  getWorkFirstPublishYear,
-  isSuspiciousRepresentativeEdition,
-  rankEditionsForCover,
-  rankRepresentativeEditions,
-  selectRepresentativeEdition,
-  type EditionCandidate,
-  type EditionRankingContext,
-} from '@/lib/books/edition-ranking';
+import { normalizeIsbn13, normalizeOpenLibraryId } from '@/lib/books/covers';
+import { selectStrictEdition, withStrictEdition, unavailableEdition, type StrictEditionRow } from '@/lib/books/strict-edition';
+import { withEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
+import { getWorkFirstPublishYear } from '@/lib/books/edition-ranking';
 import type { Locale } from '@/lib/i18n/config';
 import {
   DUTCH_LANGUAGE_DATABASE_CODES,
@@ -31,7 +16,6 @@ import {
   type PublicRatingSummary,
 } from '@/lib/ratings/card-summaries';
 import {
-  getVerifiedStoredCoverUrls,
   loadStoredCoverResolutionsBatched,
   type StoredCoverResolution,
 } from '@/lib/supabase/cover-resolutions';
@@ -47,12 +31,19 @@ import {
   type CatalogBrowseSort,
 } from '@/lib/books/catalog-browse';
 import { supabase } from './client';
+import {loadEditionRows} from './edition-rows.ts';
 import {
   loadPublicRatingSummaries,
   loadPublicRatingSummariesBatched,
 } from './public-rating-summaries';
 
 type DatabaseRow = Record<string, unknown>;
+async function completeEditions(works:DatabaseRow[]):Promise<DatabaseRow[]>{
+  const rows=await loadEditionRows(supabase,works.flatMap(w=>getWorkId(w)?[getWorkId(w)!]:[]));
+  const byWork=new Map<string,StrictEditionRow[]>();
+  for(const row of rows){const key=String(row.work_id);byWork.set(key,[...(byWork.get(key)??[]),row]);}
+  return works.map(work=>({...work,editions:byWork.get(getWorkId(work)!)??[]}));
+}
 
 const ISBN_13_COLUMNS = ['isbn13', 'isbn_13', 'isbn-13'] as const;
 const AUTHOR_ID_COLUMNS = ['author_id', 'primary_author_id', 'author'] as const;
@@ -84,7 +75,7 @@ const HOMEPAGE_CATALOG_SELECT = [
   'author_id',
   'cover_id',
   'authors(id,name)',
-  'editions(id,open_library_edition_id,isbn_13,language)',
+  'editions(id,work_id,open_library_edition_id,isbn_10,isbn_13,language,publisher,title)',
 ].join(',');
 const BOOK_DETAIL_SELECT = [
   'id',
@@ -165,106 +156,12 @@ function readOpenLibraryId(
   return null;
 }
 
-function readCoverIds(row: DatabaseRow): number[] {
-  const values = ['cover_id', 'cover_i', 'covers'].flatMap((column) => {
-    const value = row[column];
-    return Array.isArray(value) ? value : [value];
-  });
-
-  return values
-    .map((value) => Number(value))
-    .filter(
-      (value) => Number.isSafeInteger(value) && value > 0,
-    );
-}
-
-type RankedEditionRow = EditionCandidate & { row: DatabaseRow };
-
-function toRankedEditionRow(edition: DatabaseRow): RankedEditionRow {
-  const language = readString(edition, ['language', 'language_code']);
-  return {
-    row: edition,
-    id: readString(edition, ['id']),
-    openLibraryEditionId: readOpenLibraryId(
-      edition,
-      OPEN_LIBRARY_EDITION_ID_COLUMNS,
-      'edition',
-    ),
-    title: readString(edition, ['title']),
-    subtitle: readString(edition, ['subtitle']),
-    physicalFormat: readString(edition, ['physical_format', 'format']),
-    languageCodes: language ? [language] : [],
-    isbn10: readString(edition, ['isbn_10', 'isbn10']),
-    isbn13: readIsbn13(edition),
-    publishDate: readString(edition, ['publish_date', 'published_at']),
-    publishers: readString(edition, ['publisher']),
-    coverIds: readCoverIds(edition),
-  };
-}
-
-function getEditionRankingContext(
-  work: DatabaseRow,
-  title: string,
-  locale: Locale = 'en',
-): EditionRankingContext {
-  const sourceType = readString(work, ['source_type']);
-  return {
-    workTitle: title,
-    workType: readString(work, ['work_type']),
-    firstPublishYear: getWorkFirstPublishYear(
-      readNumber(work, ['first_publish_year', 'first_published_year']),
-    ),
-    preferredLanguages: getPreferredEditionLanguages(locale, sourceType),
-  };
-}
-
-function getStoredCoverCandidates(
-  work: DatabaseRow,
-  editions: DatabaseRow[],
-  context: EditionRankingContext,
-): string[] {
-  const preferredEditions = rankEditionsForCover(
-    editions.map(toRankedEditionRow),
-    context,
-  ).map((edition) => edition.row);
-  const editionOpenLibraryIds = preferredEditions.map((edition) =>
-    readOpenLibraryId(
-      edition,
-      OPEN_LIBRARY_EDITION_ID_COLUMNS,
-      'edition',
-    ),
-  );
-  const storedCoverIds = [
-    ...preferredEditions.flatMap(readCoverIds),
-    ...readCoverIds(work),
-  ];
-  const mayUseOpenLibraryIsbnCandidate = hasOpenLibraryCoverIdentity({
-    workId: readOpenLibraryId(
-      work,
-      OPEN_LIBRARY_WORK_ID_COLUMNS,
-      'work',
-    ),
-    editionIds: editionOpenLibraryIds,
-    coverIds: storedCoverIds,
-  });
-
-  return uniqueCoverUrls([
-    ...(mayUseOpenLibraryIsbnCandidate
-      ? preferredEditions.map((edition) =>
-          getOpenLibraryCoverUrl(readIsbn13(edition)),
-        )
-      : []),
-    ...preferredEditions.map((edition) =>
-      getOpenLibraryOlidCoverUrl(
-        readOpenLibraryId(
-          edition,
-          OPEN_LIBRARY_EDITION_ID_COLUMNS,
-          'edition',
-        ),
-      ),
-    ),
-    ...storedCoverIds.map(getOpenLibraryCoverIdUrl),
-  ]);
+function strictEditions(rows:DatabaseRow[]):StrictEditionRow[]{
+  return rows.flatMap(row=>{const id=readString(row,['id']);return id?[{
+    id,work_id:readString(row,WORK_ID_COLUMNS)??undefined,title:readString(row,['title']),language:readString(row,['language','language_code']),
+    isbn_10:readString(row,['isbn_10','isbn10']),isbn_13:readIsbn13(row),publisher:readString(row,['publisher']),
+    open_library_edition_id:readOpenLibraryId(row,OPEN_LIBRARY_EDITION_ID_COLUMNS,'edition'),
+  }]:[];});
 }
 
 function getWorkId(work: DatabaseRow): string | null {
@@ -355,62 +252,18 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const editionRankingContext = getEditionRankingContext(work, title, locale);
-  const edition =
-    selectRepresentativeEdition(
-      relatedEditions.map(toRankedEditionRow),
-      editionRankingContext,
-    )?.row ?? null;
-  const openLibraryWorkId = readOpenLibraryId(
-    work,
-    OPEN_LIBRARY_WORK_ID_COLUMNS,
-    'work',
-  );
-  const openLibraryEditionId = edition
-    ? readOpenLibraryId(
-        edition,
-        OPEN_LIBRARY_EDITION_ID_COLUMNS,
-        'edition',
-      )
-    : null;
-
-  return {
-    id: `work-${workId}`,
-    source: 'supabase',
-    workId,
-    editionId: edition ? readString(edition, ['id']) : null,
-    sourceType: readString(work, ['source_type']),
-    openLibraryWorkId,
-    openLibraryEditionId,
-    title,
-    author: author
-      ? readString(author, ['name', 'author_name']) ?? 'Unknown author'
-      : 'Unknown author',
-    firstPublishYear: getWorkFirstPublishYear(
-      readNumber(work, ['first_publish_year', 'first_published_year']),
-    ),
-    isbn10: edition ? readString(edition, ['isbn_10', 'isbn10']) : null,
-    isbn13: edition ? readIsbn13(edition) : null,
-    editionTitle: edition ? readString(edition, ['title']) : null,
-    editionPublisher: edition ? readString(edition, ['publisher']) : null,
-    editionLanguage: edition
-      ? readString(edition, ['language', 'language_code'])
-      : null,
-    coverUrls: getStoredCoverCandidates(
-      work,
-      relatedEditions,
-      editionRankingContext,
-    ),
-    score: null,
-    ratingsCount: null,
-    match: null,
-    cover: COVER_STYLES[index % COVER_STYLES.length],
-  };
+  const edition=selectStrictEdition(strictEditions(relatedEditions),locale,title);
+  const base:Book={id:`work-${workId}`,source:'supabase',workId,
+    sourceType:readString(work,['source_type']),openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
+    title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
+    firstPublishYear:getWorkFirstPublishYear(readNumber(work,['first_publish_year','first_published_year'])),
+    score:null,ratingsCount:null,match:null,cover:COVER_STYLES[index%COVER_STYLES.length]};
+  return withStrictEdition(base,edition,locale);
 }
 
-export function mapCatalogWorks(rows: unknown): Book[] {
+export function mapCatalogWorks(rows: unknown, locale:Locale='en'): Book[] {
   return asRows(rows)
-    .map((work, index) => mapCatalogBook(work, [], [], index))
+    .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
 }
 
@@ -436,7 +289,7 @@ export async function loadCatalogBooksByIds(
     .in('id', ids);
   if (result.error) throw result.error;
 
-  const catalogBooks = asRows(result.data)
+  const catalogBooks = (await completeEditions(asRows(result.data)))
     .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
   const summaries = prefetchedSummaries ?? await loadPublicRatingSummariesBatched(
@@ -455,30 +308,17 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
     loadCatalogBooksByIds(workIds, prefetchedSummaries, locale),
     loadStoredCoverResolutionsBatched(workIds),
   ]);
-  return applyStoredCoverResolutions(books, storedCovers.entries);
+  return withEditionCoverEvidence(applyStoredCoverResolutions(books, storedCovers.entries));
 }
 
 function applyStoredCoverResolutions(
   books: readonly Book[],
   entries: readonly StoredCoverResolution[],
 ): Book[] {
-  const storedCoversByWorkId = new Map<string, StoredCoverResolution[]>();
-  for (const entry of entries) {
-    const entries = storedCoversByWorkId.get(entry.workId) ?? [];
-    entries.push(entry);
-    storedCoversByWorkId.set(entry.workId, entries);
-  }
-
-  return books.map((book) => ({
-    ...book,
-    coverUrls: uniqueCoverUrls([
-      ...(book.coverUrls ?? []),
-      ...getVerifiedStoredCoverUrls(
-        storedCoversByWorkId.get(book.workId ?? '') ?? [],
-        book,
-      ),
-    ]),
-  }));
+  // Legacy cache is Work/ISBN keyed, not verified edition/image evidence.
+  // Never append it to an edition-bound presentation.
+  void entries;
+  return [...books];
 }
 
 export type CatalogBrowsePage = {
@@ -533,7 +373,7 @@ export async function loadCatalogBrowsePage(
     if (result.error) throw result.error;
   }
 
-  const catalogBooks = asRows(result.data)
+  const catalogBooks = (await completeEditions(asRows(result.data)))
     .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
   const workIds = catalogBooks.flatMap((book) =>
@@ -544,10 +384,8 @@ export async function loadCatalogBrowsePage(
   ]);
 
   return {
-    books: applyStoredCoverResolutions(
-      applyRatingSummaries(catalogBooks, summaries),
-      storedCovers.entries,
-    ),
+    books: await withEditionCoverEvidence(applyStoredCoverResolutions(
+      applyRatingSummaries(catalogBooks, summaries), storedCovers.entries)),
     total,
     page,
     pageSize,
@@ -556,15 +394,15 @@ export async function loadCatalogBrowsePage(
   };
 }
 
-export async function loadHomepageCatalog(limit = 18): Promise<{
+export async function loadHomepageCatalog(limit = 18, locale:Locale='en'): Promise<{
   books: Book[];
   total: number;
 }> {
   const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
   const { works, authors, editions, total } = await loadCatalogRows(safeLimit);
 
-  const catalogBooks = works
-    .map((work, index) => mapCatalogBook(work, authors, editions, index))
+  const catalogBooks = (await completeEditions(works))
+    .map((work, index) => mapCatalogBook(work, authors, editions, index,locale))
     .filter((book): book is Book => book !== null)
     .sort((left, right) =>
       left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }),
@@ -602,30 +440,13 @@ export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
     const workId = String(row.work_id ?? '').trim();
     return workId ? [workId] : [];
   }))];
-  const books = await loadCatalogBooksByIds(workIds);
+  const books = await loadCatalogBooksByIds(workIds,undefined,'nl');
   const storedCovers = await loadStoredCoverResolutionsBatched(workIds);
-  const storedCoversByWorkId = new Map<string, typeof storedCovers.entries>();
-  for (const entry of storedCovers.entries) {
-    const entries = storedCoversByWorkId.get(entry.workId) ?? [];
-    entries.push(entry);
-    storedCoversByWorkId.set(entry.workId, entries);
-  }
-
-  return books
-    .filter(isDutchLanguageBook)
-    .map((book) => ({
-      ...book,
-      coverUrls: uniqueCoverUrls([
-        ...(book.coverUrls ?? []),
-        ...getVerifiedStoredCoverUrls(
-          storedCoversByWorkId.get(book.workId ?? '') ?? [],
-          book,
-        ),
-      ]),
-    }));
+  void storedCovers;
+  return withEditionCoverEvidence(books.filter(isDutchLanguageBook));
 }
 
-export async function loadHighestRatedCatalog(limit = 8): Promise<{
+export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en'): Promise<{
   books: Book[];
   total: number;
 }> {
@@ -640,7 +461,7 @@ export async function loadHighestRatedCatalog(limit = 8): Promise<{
   const summaries = ratingSummaryMap(summaryResponse.data as PublicRatingSummaryRow[]);
   const books = await loadCatalogBooksByIds(
     ids,
-    summaries,
+    summaries, locale,
   );
   const booksById = new Map(
     books.flatMap((book): Array<[string, Book]> =>
@@ -648,10 +469,10 @@ export async function loadHighestRatedCatalog(limit = 8): Promise<{
   );
 
   return {
-    books: ids.flatMap((workId) => {
+    books: await withEditionCoverEvidence(ids.flatMap((workId) => {
       const book = booksById.get(workId);
       return book && book.score !== null && Boolean(book.ratingBand) ? [book] : [];
-    }),
+    })),
     total,
   };
 }
@@ -667,31 +488,14 @@ export async function loadCatalogBook(
     .maybeSingle();
 
   if (result.error) throw result.error;
-  const work = asRow(result.data);
-  if (!work) return null;
-  const book = mapCatalogBook(work, [], [], 0, locale);
-  if (!book) return null;
-
-  const context = getEditionRankingContext(work, book.title, locale);
-  const descriptionCandidates = rankRepresentativeEditions(
-    getRelatedEditions(work, []).map(toRankedEditionRow),
-    context,
-  )
-    .filter((candidate) => !isSuspiciousRepresentativeEdition(candidate, context))
-    .flatMap((candidate) => {
-      const openLibraryEditionId = candidate.openLibraryEditionId ?? null;
-      const isbn13 = readIsbn13(candidate.row);
-      const editionLanguage = readString(candidate.row, ['language', 'language_code']);
-      return openLibraryEditionId || isbn13
-        ? [{ openLibraryEditionId, isbn13, editionLanguage }]
-        : [];
-    })
-    .filter((candidate, index, candidates) =>
-      candidates.findIndex((other) =>
-        other.openLibraryEditionId === candidate.openLibraryEditionId &&
-        other.isbn13 === candidate.isbn13 &&
-        other.editionLanguage === candidate.editionLanguage) === index)
-    .slice(0, 3);
-
-  return { ...book, descriptionCandidates };
+  const rawWork = asRow(result.data);
+  if (!rawWork) return null;
+  const work=(await completeEditions([rawWork]))[0];
+  const book=mapCatalogBook(work,[],[],0,locale);
+  if(book)return (await withEditionCoverEvidence([book]))[0];
+  const title=readString(work,['title'])??'';
+  return unavailableEdition({id:`work-${workId}`,source:'supabase',workId,title,
+    author:readString(getRelatedAuthor(work,[])??{},['name'])??'Unknown author',
+    openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
+    cover:'orbit',score:null,ratingsCount:null,match:null},locale);
 }

@@ -76,7 +76,7 @@ test('header exposes active English and Dutch My Books navigation', () => {
 test('logged-out My Books renders the local guest experience without an auth gate', () => {
   assert.match(route, /loadMyBooksPageData/);
   assert.match(page, /!data\.authenticated/);
-  assert.match(page, /<GuestMyBooks \/>/);
+  assert.match(page, /<GuestMyBooks key=\{locale\} \/>/);
   assert.match(page, /href="\/login\?next=%2Fmy-books"/);
   assert.match(page, /myBooks\.guestSignInCopy/);
   assert.doesNotMatch(page, /className="my-books-gate"/);
@@ -94,7 +94,7 @@ test('guest Want to Read books preserve local order, de-duplicate and skip stale
 
 test('guest catalog metadata and ratings are loaded in one batched request', () => {
   assert.match(page, /\/api\/catalog\/books\?workIds=/);
-  assert.match(guestCatalogRoute, /loadCatalogBooksByIdsWithStoredCovers\(workIds\)/);
+  assert.match(guestCatalogRoute, /loadCatalogBooksByIdsWithStoredCovers\(workIds,undefined,locale\)/);
   assert.match(guestCatalogRoute, /createGuestWantToReadItems\(books, workIds\)/);
   assert.doesNotMatch(guestCatalogRoute, /for \([^)]*workIds[^)]*\)[\s\S]{0,100}await/);
 });

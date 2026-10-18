@@ -1,3 +1,4 @@
+import {resolveRequestLocale} from '@/lib/i18n/server';
 import {NextResponse} from 'next/server';
 import {PRIVATE_RESPONSE_HEADERS} from '@/lib/auth/request';
 import {getVerifiedServerUser} from '@/lib/supabase/auth';
@@ -11,7 +12,8 @@ export async function GET(_request: Request, {params}: {params: Promise<{slug: s
   try {
     const {user} = await getVerifiedServerUser();
     if (!user) return json({error: 'Sign in required.'}, 401);
-    const data = await loadCollectionPageData(slug);
+    const {locale}=await resolveRequestLocale(_request);
+    const data = await loadCollectionPageData(slug,locale);
     return data ? json({data, userId: user.id}) : json({error: 'Not found.'}, 404);
   } catch {return json({error: 'Progress could not be checked.'}, 503);}
 }

@@ -7,6 +7,8 @@ import {
   type CatalogSearchResult,
 } from '@/lib/books/catalog-search';
 import { applyRatingSummaries } from '@/lib/ratings/card-summaries';
+import { withEditionCoverEvidence } from '../books/edition-cover-evidence.ts';
+import type { Locale } from '../i18n/config.ts';
 import { mapCatalogWorks } from './books';
 import { supabase } from './client';
 import { loadPublicRatingSummaries } from './public-rating-summaries';
@@ -21,7 +23,7 @@ const SEARCH_SELECT = [
   'work_type',
   'author_id',
   'authors(id,name)',
-  'editions(id,open_library_edition_id,isbn_13,title)',
+  'editions(id,work_id,open_library_edition_id,isbn_13,title,language,publisher)',
 ].join(',');
 
 function escapeIlikePattern(query: string): string {
@@ -31,6 +33,7 @@ function escapeIlikePattern(query: string): string {
 export async function searchCatalog(
   query: string,
   limit = CATALOG_SEARCH_LIMIT,
+  locale:Locale='en',
 ): Promise<CatalogSearchResult[]> {
   const normalizedQuery = normalizeCatalogSearchQuery(query);
   if (normalizedQuery.length < 2) return [];
@@ -100,7 +103,7 @@ export async function searchCatalog(
       ...(titleResult.data ?? []),
       ...(authorWorksResult.data ?? []),
       ...(aliasWorksResult.data ?? []),
-    ]),
+    ],locale),
     normalizedQuery,
     Math.min(CATALOG_SEARCH_MAX_LIMIT, Math.max(1, Math.trunc(limit))),
     aliasesByWorkId,
@@ -110,5 +113,5 @@ export async function searchCatalog(
     books.flatMap((book) => (book.workId ? [book.workId] : [])),
   );
 
-  return applyRatingSummaries(books, summaries);
+  return withEditionCoverEvidence(applyRatingSummaries(books, summaries));
 }
