@@ -46,7 +46,7 @@ export async function loadStrictRecommendationBooks(client: SupabaseClient, book
   });
 }
 type SafetyRow = {
-  id: number; title: string; work_type: string | null; subjects: string[] | null;
+  id: number; title: string; work_type: string | null; subjects?: string[] | null;
   open_library_id: string | null; native_identity_key: string | null;
   authors: {name:string} | {name:string}[] | null; editions: StrictEditionRow[];
   work_catalog_categories: {category_id:string}[];
@@ -65,7 +65,7 @@ export function identityFromSafetyRow(row: SafetyRow): TasteIdentity {
 }
 export async function loadTasteIdentities(client: SupabaseClient, ids: readonly string[]) {
   const rows=await paged<SafetyRow>(client,'works',
-    'id,title,work_type,subjects,open_library_id,native_identity_key,authors(name),editions('+editionSelect+'),work_catalog_categories(category_id),collection_books(sequence_number,subgroup,collections(id,slug,name,collection_type,expected_main_series_total))',
+    'id,title,work_type,open_library_id,native_identity_key,authors(name),editions('+editionSelect+'),work_catalog_categories(category_id),collection_books(sequence_number,subgroup,collections(id,slug,name,collection_type,expected_main_series_total))',
     'id',[...new Set(ids)]);
   return rows.map(identityFromSafetyRow);
 }

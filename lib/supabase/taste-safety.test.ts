@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { loadOwnOfferHistory, loadStrictRecommendationBooks } from './taste-safety.ts';
+import { loadOwnOfferHistory, loadStrictRecommendationBooks, loadTasteIdentities } from './taste-safety.ts';
 import type { Book } from '../../app/data/books.ts';
 
 function client(rows: Record<string, unknown>[], fail = false) {
@@ -34,4 +34,13 @@ test('edition pagination does not miss the matching edition beyond the first RES
   const x = client(rows), book: Book = { id: '1', workId: '1', source: 'supabase', title: 'Fixture', author: 'Fixture', score: null, match: null, ratingsCount: null, cover: 'orbit' };
   const selected = await loadStrictRecommendationBooks(x.db, [book], 'nl', []);
   assert.equal(selected[0].editionId, '1001'); assert.deepEqual(x.calls.map(c => c.offset), [0, 1000]);
+});
+test('real works schema has no subjects column; content labels still come from evidence rows', async () => {
+  let selected = '';
+  const chain = { select(value: string) { selected = value; return chain; }, order() { return chain; }, in() { return chain; },
+    async range() { return { data: [{ id: 1, title: 'Fixture', work_type: null, open_library_id: 'OL1W', native_identity_key: null,
+      authors: { name: 'Synthetic' }, editions: [], work_catalog_categories: [{ category_id: 'fantasy-science-fiction' }], collection_books: [] }], error: null }; } };
+  const result = await loadTasteIdentities({ from: () => chain } as unknown as SupabaseClient, ['1']);
+  assert.doesNotMatch(selected, /\bsubjects\b/); assert.equal(result[0].identityKey, 'OL1W');
+  assert.deepEqual(result[0].labels, ['fantasy-science-fiction']);
 });

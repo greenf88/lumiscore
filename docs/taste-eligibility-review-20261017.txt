@@ -224,3 +224,38 @@ layoutcontroles hergebruikt. Echte parallelle PostgreSQL-/PostgREST-verificatie,
 bronreview en een eventueel later database-/releasebesluit blijven noodzakelijk.
 PR38 en Preview NIET bijgewerkt: code blijft d9ce672. Geen push, databasewrites,
 migraties, merge of publicatie. Bestaande gegevens en geparkeerd werk behouden.
+
+VERVOLG MET TESTGOEDKEURING — 18 oktober 2026
+Bovenstaande is historisch lokaal bewijs. Rick gaf daarna expliciet akkoord
+voor uitsluitend testproject hlvujbrmfdlrfxdjwsmb, begrensde catalogusaanvulling,
+één tijdelijk account, echte opslagcontrole, cleanup en Preview-update. Geen
+productie-, Auth-configuratie- of mergegoedkeuring voor dit pakket.
+Opslagvoorstel daar toegepast als taste_storage_v3_test_review_20261018;
+geen automatische productiemigratie aan de codebase toegevoegd.
+
+Bronhercontrole: acht NL-edities en vijf EN-taalvelden ondersteund. Importproef
+vond vier bestaande synthetische eerste-reeksplaatsen. Die blijven behouden;
+geen constraint versoepeld, placeholder gewijzigd of dubbele testreeks bedacht.
+Alleen de vier conflictvrije Works toegevoegd op nieuwe gegenereerde IDs:
+OL5784622W, OL3261155W, OL7924103W, OL5738148W, zeven edities (4NL/3EN).
+Bestaande categories/evidence ongewijzigd overgenomen, inclusief bron/confidence/
+verified_at; dit is geen nieuwe menselijke classificatiecertificering. De vier
+andere voorstellen blijven niet toegepast. Productievoorstellen blijven pending.
+Offline builder scripts/build-taste-test-catalog-plan.ts bewaakt capturehash,
+identiteit, grens van de veilige subset en afwezigheid van bestaande-row-updates.
+Werkende lokale repetitie gebruikt ongewijzigde fixture/migraties en dezelfde SQL.
+Verse echte catalogussnapshots door ONGEWIJZIGDE tasteEligibility beoordeeld:
+private inventaris NL4/EN3, exacte editie/snapshot, uitsluitend testreview.
+
+Echte koppeling vond nog één concrete fout: works.subjects bestaat niet in het
+werkelijke schema. Deze select verwijderd, labels uit bestaande evidence en
+categories behouden. Gerichte regressietest voorkomt terugkeer; geen gate verruimd.
+
+Deze kleine testvoorraad kan twee echte saves bewijzen, NIET volledige rondes
+10/15/30 of heraanbieding over drie echte rondes. Daarvoor blijft lokaal SQL-bewijs
+beschikbaar; productievoorraad en apart database-/releasebesluit blijven vereist.
+Exact hosted resultaat, deployment/code-SHA, snapshots en cleanupbewijs worden
+na uitvoering buiten Git vastgelegd in outputs/taste-storage-test-20261018 en
+de bestaande Draft-PR38. Geen credentials of toegangstokens in verslag/PR/Git.
+Forward-compatible herstel uit het opslagverslag blijft gelden: behoud nieuwe
+ronde-identiteit en v1/v2-bridge; nooit historie verwijderen of oude UPDATE herstellen.
