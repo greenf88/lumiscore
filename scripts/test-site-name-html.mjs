@@ -5,9 +5,12 @@ import test from 'node:test';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {inspectServerHtml} from '../lib/seo/server-html.ts';
 import {buildWebsiteJsonLd} from '../lib/seo/site-identity.ts';
+import {HOME_POSITIONING} from '../lib/seo/home-positioning.ts';
 const origin=process.argv.find(arg=>arg.startsWith('--origin='))?.slice(9)??'http://127.0.0.1:3144';
 if(!/^http:\/\/127\.0\.0\.1:\d{4,5}$/.test(origin))throw Error('Loopback-only verification');
-const output=new URL('../../../outputs/site-name-20261018/',import.meta.url);
+const outputName=process.argv.find(arg=>arg.startsWith('--output='))?.slice(9)??'site-name-20261018';
+if(!/^[a-z0-9-]+$/.test(outputName))throw Error('Invalid local evidence folder');
+const output=new URL(`../../../outputs/${outputName}/`,import.meta.url);
 await mkdir(output,{recursive:true});
 const results=[];
 const read=async path=>{
@@ -38,8 +41,8 @@ for(const locale of ['en','nl'])for(const path of ['', '/book/1','/book/2','/ove
   else for(const [language,prefix] of [['en','en'],['nl-NL','nl'],['x-default','en']])
    assert.ok(alternates.some(tag=>tag.includes(`hreflang="${language}"`)&&tag.includes(`href="https://lumisco.re/${prefix}${path}"`)));
   if(path===''){
-   assert.deepEqual(tags.metadata.description,[locale==='nl'?'Ontdek boeken, lezersbeoordelingen en aanbevelingen die bij jouw smaak passen.':'Smart book recommendations, trusted reader ratings, and matches made for your taste.']);
-   assert.deepEqual(tags.metadata['og:title'],[locale==='nl'?'LumiScore — Vind je volgende boek':'LumiScore — Find your next great read']);
+   assert.deepEqual(tags.metadata.description,[HOME_POSITIONING[locale].description]);
+   assert.deepEqual(tags.metadata['og:title'],[HOME_POSITIONING[locale].title]);
    await writeFile(new URL(`${locale}-home.html`,output),html);
    await writeFile(new URL(`${locale}-site-schema.html`,output),scripts.map(m=>m[0]).join('\n'));
   }

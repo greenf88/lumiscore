@@ -1,4 +1,5 @@
 import type { Locale } from './config.ts';
+import { HOME_POSITIONING } from '../seo/home-positioning.ts';
 
 const en = {
   'quickCollection.entry': 'Rate the books you know', 'quickCollection.stop': 'Stop',
@@ -49,7 +50,7 @@ const en = {
   'home.browseAll': 'Browse all books', 'home.nextFiveStar': 'Your next five-star read',
   'home.heroStart': 'Find your next', 'home.heroEmphasis': 'great read',
   'home.heroPrimary': 'Smart recommendations. Real reader matches.',
-  'home.heroCopy': "LumiScore combines your reading taste with real reader ratings to help you discover books you'll enjoy.",
+  'home.heroCopy': HOME_POSITIONING.en.introduction,
   'home.findNext': 'Find your next book', 'home.smartRecommendations': 'Smart recommendations',
   'home.tasteTestCta': 'Take the taste test',
   'home.personalizedForYou': 'Personalized for you', 'home.trustedReaders': 'Trusted by readers',
@@ -301,7 +302,7 @@ const nl: TranslationDictionary = {
   'home.browseAll': 'Bekijk alle boeken', 'home.nextFiveStar': 'Jouw volgende vijfsterrenboek',
   'home.heroStart': 'Vind je volgende', 'home.heroEmphasis': 'boek',
   'home.heroPrimary': 'Slimme aanbevelingen. Echte matches van lezers.',
-  'home.heroCopy': 'LumiScore combineert jouw leessmaak met echte lezersbeoordelingen om boeken te vinden die bij je passen.',
+  'home.heroCopy': HOME_POSITIONING.nl.introduction,
   'home.findNext': 'Vind je volgende boek', 'home.smartRecommendations': 'Slimme aanbevelingen',
   'home.tasteTestCta': 'Doe de smaaktest',
   'home.personalizedForYou': 'Persoonlijk voor jou', 'home.trustedReaders': 'Vertrouwd door lezers',

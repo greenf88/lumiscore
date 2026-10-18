@@ -71,6 +71,7 @@ test('information links are real internal routes and mail links use the approved
   const allowedInternalPaths = new Set([
     '/browse',
     '/collections',
+    '/taste-test',
     '/over-ons',
     '/zo-werkt-het',
     '/voor-uitgevers',

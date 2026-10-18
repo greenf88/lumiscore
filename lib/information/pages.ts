@@ -101,62 +101,48 @@ const nl: Record<InformationPageKey, InformationPageContent> = {
     path: '/zo-werkt-het',
     eyebrow: 'ZO WERKT HET',
     title: 'Zo werkt LumiScore',
-    lead: 'Van één duidelijke boekscore tot het bijhouden van complete boekenreeksen: zo helpt LumiScore je bij het kiezen en lezen van je volgende boek.',
-    seoTitle: 'Zo werkt LumiScore | Boekscores, leesstatus en reeksen',
-    seoDescription: 'Ontdek hoe LumiScore werkt: beoordeel boeken, houd je leesstatus bij, volg je voortgang en vind het volgende deel van een boekenreeks.',
+    lead: 'Beoordeel boeken van 1 tot 10, ontdek wat bij je leessmaak past en houd je boeken en reeksen bij. Dit betekenen de scores en persoonlijke leestips op LumiScore.',
+    seoTitle: 'Zo werkt LumiScore | Boeken beoordelen & persoonlijke leestips',
+    seoDescription: 'Lees hoe je boeken beoordeelt van 1 tot 10, wanneer de publieke LumiScore verschijnt en hoe je leesprofiel, persoonlijke matches en reeksvoortgang werken.',
     schemaType: 'WebPage',
     breadcrumbHome: 'Home',
     sections: [
       {
-        heading: '1. Eén duidelijke, eerlijke LumiScore',
+        heading: 'Hoe beoordeel je een boek van 1 tot 10?',
         paragraphs: [
-          ['Bij ieder boek staat één herkenbare LumiScore, opgebouwd uit beoordelingen van lezers.'],
-          ['De score kan niet worden gekocht of door een uitgever worden aangepast. Commerciële informatie en eventuele recensies van professionele critici blijven gescheiden van het oordeel van lezers. Zo zie je direct wat de lezersgemeenschap werkelijk van een boek vindt.'],
-          ['Hoe meer lezers hun beoordeling geven, hoe representatiever de LumiScore wordt.'],
+          ['Log in en zoek een boek dat je hebt gelezen. Tik op een heel cijfer van 1 tot 10 om je beoordeling op te slaan. In de smaaktest verschijnt pas na succesvolle opslag het volgende boek.'],
+          ['Je hebt één beoordeling per boek, ook als je een andere editie bekijkt. Je kunt je eigen cijfer op de boekpagina aanpassen. Niet gelezen? Sla het boek in de smaaktest over; overslaan telt niet als beoordeling.'],
+          [link('Zoek een boek om te beoordelen', '/browse'), ' of ', link('begin met de smaaktest', '/taste-test'), '.'],
         ],
       },
       {
-        heading: '2. Houd je boeken bij',
+        heading: 'Hoe ontstaat de publieke LumiScore?',
         paragraphs: [
-          ['Met een gratis account kun je ieder boek een persoonlijke status geven:'],
-        ],
-        bullets: ['Wil ik lezen', 'Aan het lezen', 'Gelezen', 'Niet uitgelezen'],
-        afterBullets: [
-          ['Geef je een boek een beoordeling, dan wordt het automatisch als gelezen geregistreerd. Zo bouw je zonder extra administratie je eigen leesgeschiedenis op.'],
+          ['De publieke LumiScore is het gemiddelde van de opgeslagen lezersbeoordelingen, afgerond op één decimaal. De score verschijnt pas vanaf drie verschillende beoordelaars. Daaronder staat een streepje met ‘Onvoldoende beoordelingen’.'],
+          ['We tonen een bandbreedte voor het aantal beoordelaars, bijvoorbeeld 3–4, in plaats van het exacte aantal. Een score op basis van weinig lezers is nog gevoelig voor een nieuw oordeel: het is een eerste indruk, geen vaststaand kwaliteitsoordeel.'],
         ],
       },
       {
-        heading: '3. Maak je boekenreeks af',
+        heading: 'Wat is het verschil tussen een lezersscore en jouw match?',
         paragraphs: [
-          ['LumiScore verzamelt de boeken uit een reeks in de juiste volgorde. Je ziet in één overzicht:'],
-        ],
-        bullets: [
-          'welke delen je al hebt gelezen;',
-          'welk boek je momenteel leest;',
-          'welke delen je nog mist;',
-          'welk boek het logische volgende deel is;',
-          'hoeveel van de reeks je hebt voltooid.',
-        ],
-        afterBullets: [
-          ['Ben je al in een boek begonnen? Dan helpt LumiScore je verder met ‘Ga verder met lezen’. Heb je een deel afgerond? Dan verschijnt het volgende ongelezen boek in de reeks.'],
-          ['Zo hoef je nooit meer zelf uit te zoeken waar je bent gebleven.'],
+          ['De LumiScore vat de beoordelingen van lezers samen. Jouw persoonlijke match vergelijkt daarentegen je leessmaak met de onderbouwde kenmerken van dat boek. Een hoog gewaardeerd boek hoeft dus niet jouw beste match te zijn.'],
+          ['Bij beperkte onderbouwing blijft een match voorlopig of verschijnt er geen matchcijfer. Een match is geen voorspelde kans dat je het boek leuk vindt en geen garantie.'],
         ],
       },
       {
-        heading: '4. Ontdek je volgende boek',
+        heading: 'Hoe helpen je beoordelingen bij je leesprofiel?',
         paragraphs: [
-          [
-            'Blader door ',
-            link('boeken', '/browse'),
-            ' en ',
-            link('collecties', '/collections'),
-            ', zoek op titel of auteur en bekijk welke boeken door andere lezers hoog worden gewaardeerd.',
-          ],
-          [
-            'Je kunt LumiScore zonder account gebruiken om boeken en reeksen te bekijken. Met een account krijg je daarnaast je persoonlijke leesstatus, voortgang en vervolgsuggesties. ',
-            link('Log in of maak een account aan', '/login?next=%2Fzo-werkt-het'),
-            ' wanneer je die persoonlijke functies wilt gebruiken.',
-          ],
+          ['Je hogere én lagere beoordelingen helpen LumiScore je voorkeuren te herkennen. Alleen voldoende onderbouwde boekkenmerken dragen bij aan een inhoudelijke voorkeur. Je leesprofiel en aanbevelingen gebruiken dezelfde smaakberekening.'],
+          ['Met weinig bewijs zijn leestips verkennend. Meer beoordelingen kunnen het profiel verfijnen, maar niet ieder boek levert meteen een duidelijke voorkeur op.'],
+          [link('Ontdek je leessmaak met de smaaktest', '/taste-test'), '. Je opgeslagen beoordelingen blijven gekoppeld aan je account.'],
+        ],
+      },
+      {
+        heading: 'Hoe houd je gelezen boeken en reeksvoortgang bij?',
+        paragraphs: [
+          ['Met een account geef je boeken de status Wil ik lezen, Aan het lezen, Gelezen of Niet uitgelezen. Een beoordeeld boek telt ook als gelezen. In Mijn boeken vind je je eigen overzicht.'],
+          ['Bij een reeks zie je welke opgenomen delen je hebt gelezen. Een volgende-leessuggestie verschijnt wanneer de bekende reeksvolgorde dit ondersteunt. Een voltooiingspercentage betekent niet automatisch dat alle ooit verschenen delen in de catalogus staan.'],
+          [link('Bekijk boekenreeksen en collecties', '/collections'), '. Je kunt zonder account rondkijken; ', link('log in of maak een account aan', '/login?next=%2Fzo-werkt-het'), ' om je eigen voortgang te bewaren.'],
         ],
       },
     ],
@@ -305,58 +291,48 @@ const en: Record<InformationPageKey, InformationPageContent> = {
     path: '/zo-werkt-het',
     eyebrow: 'HOW IT WORKS',
     title: 'How LumiScore works',
-    lead: 'From one clear book score to tracking complete series, LumiScore helps you choose and read your next book.',
-    seoTitle: 'How LumiScore works | Book scores, reading status and series',
-    seoDescription: 'Discover how LumiScore works: rate books, track your reading status and progress, and find the next volume in a book series.',
+    lead: 'Rate books from 1 to 10, discover what suits your reading taste and track your books and series. Here is what reader ratings and personal recommendations mean on LumiScore.',
+    seoTitle: 'How LumiScore works | Rate books & find personal recommendations',
+    seoDescription: 'Learn how to rate books from 1 to 10, when public reader scores appear, and how your reading profile, personal matches and series progress work.',
     schemaType: 'WebPage',
     breadcrumbHome: 'Home',
     sections: [
       {
-        heading: '1. One clear, honest LumiScore',
+        heading: 'How do you rate a book from 1 to 10?',
         paragraphs: [
-          ['Every book has one recognisable LumiScore, built from reader ratings.'],
-          ['The score cannot be bought or adjusted by a publisher. Commercial information and any reviews from professional critics remain separate from the reader verdict, so you can immediately see what the reading community genuinely thinks of a book.'],
-          ['The more readers submit a rating, the more representative the LumiScore becomes.'],
+          ['Sign in and find a book you have read. Tap a whole number from 1 to 10 to save your rating. In the taste test, the next book appears only after a successful save.'],
+          ['You have one rating per book, even when you view a different edition. You can change your own score on the book page. Not read it? Skip it in the taste test; skipping does not count as a rating.'],
+          [link('Find a book to rate', '/browse'), ' or ', link('start the taste test', '/taste-test'), '.'],
         ],
       },
       {
-        heading: '2. Keep track of your books',
-        paragraphs: [['With a free account, you can give every book a personal status:']],
-        bullets: ['Want to read', 'Reading', 'Read', 'Did not finish'],
-        afterBullets: [
-          ['When you rate a book, it is automatically marked as read. This builds your reading history without extra admin.'],
-        ],
-      },
-      {
-        heading: '3. Complete your book series',
-        paragraphs: [['LumiScore brings the books in a series together in the correct order. In one overview, you can see:']],
-        bullets: [
-          'which volumes you have read;',
-          'which book you are currently reading;',
-          'which volumes you are missing;',
-          'which book is the logical next volume;',
-          'how much of the series you have completed.',
-        ],
-        afterBullets: [
-          ['Already started a book? LumiScore helps you pick it up again with “Continue reading”. Once you finish a volume, the next unread book in the series appears.'],
-          ['You never have to work out where you left off again.'],
-        ],
-      },
-      {
-        heading: '4. Discover your next book',
+        heading: 'How is the public LumiScore calculated?',
         paragraphs: [
-          [
-            'Browse ',
-            link('books', '/browse'),
-            ' and ',
-            link('collections', '/collections'),
-            ', search by title or author, and see which books other readers rate highly.',
-          ],
-          [
-            'You can use LumiScore without an account to browse books and series. An account also gives you personal reading statuses, progress and suggestions for what to read next. ',
-            link('Sign in or create an account', '/login?next=%2Fzo-werkt-het'),
-            ' when you want to use those personal features.',
-          ],
+          ['The public LumiScore is the average of saved reader ratings, rounded to one decimal place. It appears only after at least three different readers have rated the book. Below that threshold, you see a dash and “Insufficient ratings”.'],
+          ['We show a range for the number of readers, such as 3–4, rather than the exact count. A score based on a few readers is still sensitive to each new rating: it is an early impression, not a settled verdict on quality.'],
+        ],
+      },
+      {
+        heading: 'What is the difference between a reader score and your match?',
+        paragraphs: [
+          ['The LumiScore summarises reader ratings. Your personal match instead compares your reading taste with the supported traits of that book. A highly rated book is not necessarily your best match.'],
+          ['With limited evidence, a match stays provisional or no match number is shown. A match is not a predicted probability that you will enjoy a book, or a guarantee.'],
+        ],
+      },
+      {
+        heading: 'How do ratings help your reading profile?',
+        paragraphs: [
+          ['Both higher and lower ratings help LumiScore recognise your preferences. Only sufficiently supported book traits contribute to a content preference. Your reading profile and recommendations use the same taste calculation.'],
+          ['With little evidence, recommendations are exploratory. More ratings can refine your profile, but not every book immediately establishes a clear preference.'],
+          [link('Discover your reading taste with the taste test', '/taste-test'), '. Your saved ratings stay linked to your account.'],
+        ],
+      },
+      {
+        heading: 'How do you track books read and series progress?',
+        paragraphs: [
+          ['With an account, mark books as Want to read, Reading, Read or Did not finish. Rated books also count as read. My books brings your own reading list together.'],
+          ['A series shows which listed volumes you have read. A next-read suggestion appears when the known series order supports it. A completion percentage does not automatically mean the catalog contains every volume ever published.'],
+          [link('Explore book series and collections', '/collections'), '. You can browse without an account; ', link('sign in or create an account', '/login?next=%2Fzo-werkt-het'), ' to keep your own progress.'],
         ],
       },
     ],

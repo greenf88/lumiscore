@@ -1,9 +1,10 @@
 import 'server-only';
 import { resolveRequestLocale } from '../i18n/server';
 import { createPageMetadata } from './page-metadata';
+import { HOME_POSITIONING } from './home-positioning';
 
 const dutchPages: Record<string, [string, string]> = {
-  '/': ['LumiScore — Vind je volgende boek', 'Ontdek boeken, lezersbeoordelingen en aanbevelingen die bij jouw smaak passen.'],
+  '/': [HOME_POSITIONING.nl.title, HOME_POSITIONING.nl.description],
   '/browse': ['Boeken ontdekken — LumiScore', 'Verken de LumiScore-catalogus en vind je volgende boek.'],
   '/collections': ['Collecties ontdekken — LumiScore', 'Ontdek series, universums en auteurscollecties op LumiScore.'],
   '/categories': ['Categorieën — LumiScore', 'Ontdek boeken per categorie in de LumiScore-catalogus.'],
