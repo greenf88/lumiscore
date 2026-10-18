@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { topSupportedAffinities, shouldOpenCompletedResult } from './result-presentation.ts';
+import { topSupportedAffinities, shouldOpenCompletedResult, hasSupportedTasteSummary } from './result-presentation.ts';
 import { buildRatingResultProfile } from './rating-result.ts';
 import { buildEffectiveWorkTraitVector, evidenceRowsForTraits } from '../recommendations/work-trait-evidence.ts';
 import type { RatingRoundState } from './rating-round.ts';
@@ -18,12 +18,16 @@ test('presentation preserves scores and calculation; at most three supported pos
   assert.ok(preferences.every(x => profile.affinities.includes(x) && x.score! >= 60));
   assert.deepEqual(preferences.map(x => x.score), [...preferences.map(x => x.score)].sort((a, b) => b! - a!));
   assert.equal(JSON.stringify(profile), before);
+  assert.equal(hasSupportedTasteSummary(profile), true);
 });
 test('missing, sparse, neutral and negative evidence never becomes invented preferences or types', () => {
   for (const [count, score, traits] of [[2, 10, evidence], [10, 1, evidence], [10, 5, evidence], [10, 10, new Map()]] as const) {
     const profile = buildRatingResultProfile(Array.from({length: count}, (_, i) => ({workId: String(i + 1), rating: score})), traits);
     assert.equal(profile.archetype, null);
     assert.deepEqual(topSupportedAffinities(profile), []);
+    const before=JSON.stringify(profile);
+    assert.equal(hasSupportedTasteSummary(profile), false);
+    assert.equal(JSON.stringify(profile), before);
   }
 });
 const state = (count: number, goal: number, complete = false): RatingRoundState => ({
