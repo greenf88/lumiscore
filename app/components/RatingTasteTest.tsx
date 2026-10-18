@@ -5,7 +5,7 @@ import { localizedHref } from '@/lib/i18n/paths';
 import { useEffect, useRef, useState } from 'react';
 import type { Book } from '@/app/data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
-import { NEW_ROUND_GOALS, type RatingRoundState, type RoundAction } from '@/lib/taste-test/rating-round';
+import { canRevisitEarlierSkips, NEW_ROUND_GOALS, type RatingRoundState, type RoundAction } from '@/lib/taste-test/rating-round';
 import { DirectRatingScores } from './DirectRatingScores';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCover } from './LumiScoreHome';
@@ -203,8 +203,10 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                   ? locale === 'nl' ? 'Dit boek heeft nog onvoldoende gecontroleerde gegevens voor deze smaaktest. Zoek hieronder een geschikt gelezen boek. Je beoordelingen en voortgang blijven bewaard.'
                     : 'This book does not yet have enough verified metadata for this taste test. Find an eligible book you have read below. Your ratings and progress are preserved.'
                   : t('directTaste.exhausted')}</p>
-                  <p>{locale === 'nl' ? 'Eerdere overgeslagen boeken kunnen met de huidige opslag nog niet opnieuw worden aangeboden. Je kunt wel een ander geschikt boek zoeken.'
-                    : 'Previously skipped books cannot yet be offered again with the current storage. You can search for another eligible book.'}</p></div>}
+                  {canRevisitEarlierSkips(data.state) ? <button className="taste-secondary-action" type="button" disabled={pending}
+                    onClick={() => act('revisit')}>{locale === 'nl' ? 'Eerdere skips opnieuw bekijken' : 'Review earlier skips'}</button>
+                    : data.state?.storageVersion !== 3 && <p>{locale === 'nl' ? 'Eerdere overgeslagen boeken kunnen met de huidige opslag nog niet opnieuw worden aangeboden. Je kunt wel een ander geschikt boek zoeken.'
+                      : 'Previously skipped books cannot yet be offered again with the current storage. You can search for another eligible book.'}</p>}</div>}
                 <button ref={searchButton} className="taste-search-toggle" type="button" disabled={pending}
                   aria-expanded={searchOpen} aria-controls="taste-search-panel" onClick={() => {
                     if (gate.current?.isBusy()) return;

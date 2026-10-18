@@ -1,11 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { getVerifiedServerUser } from '@/lib/supabase/auth';
 import { isSameOriginRequest, PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
-import { parseRoundAction, type RatingRoundState } from '@/lib/taste-test/rating-round';
+import { canRevisitEarlierSkips, parseRoundAction, type RatingRoundState } from '@/lib/taste-test/rating-round';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { readServerEnvironment } from '@/lib/server-environment';
 import { isProductionBackedReview } from '@/lib/supabase/review-target';
 import { loadTasteEligibility, loadStrictRecommendationBooks } from '@/lib/supabase/taste-safety';
+import { readTasteRoundState } from '@/lib/supabase/taste-round-storage';
 function reviewUsesProduction() {
   return isProductionBackedReview({ deploymentEnvironment: process.env.VERCEL_ENV, nodeEnvironment: process.env.NODE_ENV,
     supabaseUrl: readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') });
@@ -29,11 +30,13 @@ export async function GET(request: Request) {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return json({ authenticated: false, available: true, state: null, book: null });
     if (reviewUsesProduction()) return json({ authenticated: true, available: false, reason: 'separate-test-database-required' });
-    const { data, error } = await client.rpc('taste_rating_state');
-    if (error?.code === 'PGRST202') return json({ authenticated: true, available: false, reason: 'migration-required' });
-    if (error) throw error;
-    return json(await present(data as RatingRoundState, request, client));
-  } catch { return json({ error: 'Taste round unavailable.' }, 503); }
+    const state = await readTasteRoundState(client);
+    return json(await present(state, request, client));
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'PGRST202')
+      return json({ authenticated: true, available: false, reason: 'migration-required' });
+    return json({ error: 'Taste round unavailable.' }, 503);
+  }
 }
 export async function POST(request: NextRequest) {
   if (!isSameOriginRequest(request)) return json({ error: 'Forbidden.' }, 403);
@@ -45,13 +48,15 @@ export async function POST(request: NextRequest) {
     const { client, user } = await getVerifiedServerUser();
     if (!user) return json({ error: 'Sign in to save explicit ratings.' }, 401);
     if (reviewUsesProduction()) return json({ error: 'separate-test-database-required' }, 503);
-    if ((action.action === 'rate' || action.action === 'choose') && action.workId) {
-      const saved = await client.rpc('taste_rating_state');
-      if (saved.error) throw saved.error;
-      const state = saved.data as RatingRoundState;
+    if (action.action === 'revisit' || ((action.action === 'rate' || action.action === 'choose') && action.workId)) {
+      const state = await readTasteRoundState(client);
+      if (action.action === 'revisit' && (!canRevisitEarlierSkips(state) || action.roundId !== state.round?.id))
+        return json({ error: 'revisit-unavailable' }, 409);
       const language = state.round?.language ?? action.language;
-      const checks = await loadTasteEligibility(client, [action.workId], language);
-      if (!checks.get(action.workId)?.eligible) return json({ error: 'book-not-eligible' }, 409);
+      if (action.workId) {
+        const checks = await loadTasteEligibility(client, [action.workId], language);
+        if (!checks.get(action.workId)?.eligible) return json({ error: 'book-not-eligible' }, 409);
+      }
     }
     const { data, error } = await client.rpc('taste_rating_advance_v2', {
       p_action: action.action, p_round_id: action.roundId ?? null, p_work_id: action.workId ? Number(action.workId) : null,

@@ -9,11 +9,12 @@ import { tasteEligibility, type TasteIdentity, type TasteMembership, type OfferH
 import { loadStoredCoverResolutionsBatched } from './cover-resolutions.ts';
 
 const editionSelect = 'id,work_id,title,language,isbn_10,isbn_13,open_library_edition_id,publisher';
-async function paged<T>(client: SupabaseClient, table: string, select: string, key: string, ids?: readonly string[], userId?: string) {
+async function paged<T>(client: SupabaseClient, table: string, select: string, key: string, ids?: readonly string[], userId?: string, tieKey?: string) {
   const rows: T[] = [];
   const batches = ids ? Array.from({length:Math.ceil(ids.length/200)},(_,i)=>ids.slice(i*200,(i+1)*200)) : [null];
   for (const batch of batches) for (let offset=0;;offset+=1000) {
     let q=client.from(table).select(select).order(key);
+    if(tieKey)q=q.order(tieKey);
     if(batch)q=q.in(table==='works'?'id':'work_id',batch);
     if(userId)q=q.eq('user_id',userId);
     const {data,error}=await q.range(offset,offset+999);
@@ -79,7 +80,7 @@ export async function loadTasteEligibility(client: SupabaseClient, ids: readonly
   }));
 }
 export async function loadOwnOfferHistory(client: SupabaseClient, userId: string): Promise<OfferHistory[]> {
-  const rows=await paged<{work_id:number;round_id:string;decision:OfferHistory['decision']}>(client,'taste_rating_offers','work_id,round_id,decision','work_id',undefined,userId);
+  const rows=await paged<{work_id:number;round_id:string;decision:OfferHistory['decision']}>(client,'taste_rating_offers','work_id,round_id,decision','work_id',undefined,userId,'round_id');
   return rows.map(r=>({workId:String(r.work_id),roundId:r.round_id,decision:r.decision}));
 }
 export async function loadSeriesMemberships(client: SupabaseClient): Promise<Map<string,TasteMembership[]>> {

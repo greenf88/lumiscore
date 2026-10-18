@@ -6,7 +6,8 @@ export function buildRoundRequest(action: RoundAction['action'], state: RatingRo
   const request = {
     action, language: action === 'start' ? locale : state?.round?.language ?? locale,
     ...(action === 'start' ? { goal } : action === 'extend' ? { goal: extensionGoal } : {}),
-    ...(action !== 'start' ? { roundId: state?.round?.id } : {}),
+    // Completed-round context prevents replayed starts from creating extra rounds.
+    ...(state?.round ? { roundId: state.round.id } : {}),
     ...(workId !== undefined ? { workId } : {}),
     ...(score !== undefined ? { score } : {}),
   };
