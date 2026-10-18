@@ -1,5 +1,6 @@
 import type { Locale } from '../i18n/config.ts';
 import { absoluteLumiScoreUrl } from '../seo/site-origin.ts';
+import { LUMISCORE_WEBSITE_ID } from '../seo/site-identity.ts';
 
 export const INFORMATION_PAGE_KEYS = [
   'about',
@@ -479,10 +480,7 @@ export function buildInformationPageJsonLd(page: InformationPageContent) {
       description: page.seoDescription,
       inLanguage: page.locale === 'nl' ? 'nl-NL' : 'en',
       isPartOf: {
-        '@type': 'WebSite',
-        '@id': `${homeUrl}#website`,
-        url: homeUrl,
-        name: 'LumiScore',
+        '@id': LUMISCORE_WEBSITE_ID,
       },
     },
     {

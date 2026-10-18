@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 // An isolated header fixture, not a real session or hosted Auth connection.
 const headerFixture = process.argv.includes('--header-authenticated');
-const port = headerFixture ? 3121 : 3120;
+const portOption=process.argv.find(arg=>arg.startsWith('--port='))?.slice(7);
+if(portOption && (!/^\d{4,5}$/.test(portOption)||Number(portOption)<1024||Number(portOption)>65535))throw Error('Invalid loopback review port');
+const port = portOption ? Number(portOption) : headerFixture ? 3121 : 3120;
 for (const key of Object.keys(process.env)) if (/SUPABASE|GOOGLE_BOOKS|DATABASE/.test(key)) delete process.env[key];
 const bookSource = `export const books = Array.from({length:80},(_,i)=>({id:'synthetic-'+i,source:'supabase',workId:String(i+1),editionId:String(i+1),title:'Synthetic book '+(i+1),author:'Synthetic author',firstPublishYear:2000,score:null,ratingsCount:null,match:null,cover:'orbit',openLibraryWorkId:'OL'+(i+1)+'W'}));`;
 const modules = {
