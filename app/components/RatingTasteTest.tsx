@@ -8,6 +8,7 @@ import type { HeaderAuthState } from '@/lib/auth/header';
 import { canRevisitEarlierSkips, NEW_ROUND_GOALS, type RatingRoundState, type RoundAction } from '@/lib/taste-test/rating-round';
 import { DirectRatingScores } from './DirectRatingScores';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
+import {EditionPresentationLabel} from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
@@ -41,7 +42,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const focusNext = useRef(false);
   const returnFromSearch = useRef(false);
   const round = data?.state?.round;
-  const book = data?.book;
+  const book = data?.book?.strictEditionLanguage && data.book.strictEditionLanguage!==locale ? null : data?.book;
   const workId = book?.workId;
   const progress = roundProgress(data?.state ?? null);
   const active = Boolean(round && !round.complete && !paused);
@@ -76,14 +77,14 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     if (!searchOpen || pending || paused || query.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      fetch(`/api/taste-test/candidates?q=${encodeURIComponent(query)}`, { signal: controller.signal, cache: 'no-store' }).then(async r => {
+      fetch(`/api/taste-test/candidates?q=${encodeURIComponent(query)}&locale=${locale}`, { signal: controller.signal, cache: 'no-store' }).then(async r => {
         if (!r.ok) throw new Error();
         const result = await r.json() as { results?: Book[]; eligibleCount?: number };
         if (!controller.signal.aborted) { setResults(result.results ?? []); setSearchAvailable(result.eligibleCount ?? null); setSearchError(false); }
       }).catch(() => { if (!controller.signal.aborted) setSearchError(true); });
     }, 250);
     return () => { clearTimeout(timer); controller.abort(); };
-  }, [query, searchOpen, pending, paused]);
+  }, [query, searchOpen, pending, paused,locale]);
 
   const act = (action: RoundAction['action'], chosenWork?: string, rating?: number, goal = 10) => {
     if (!gate.current || gate.current.isBusy()) return;
@@ -188,7 +189,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                     const dx = e.clientX - start.x;
                     if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(e.clientY - start.y) * 2) setPrototypeIntent(dx > 0 ? 'read' : 'skip'); }}>
                   <div className={`taste-book-identity${book.title.length > 90 || book.author.length > 60 ? ' taste-long-identity' : ''}`}><BookCover book={book} presentation="taste" resolveMissing={false} />
-                    <div className="book-card-body"><h2 ref={bookHeading} tabIndex={-1}>{book.title}</h2><p>{book.author}</p></div>
+                    <div className="book-card-body"><h2 ref={bookHeading} tabIndex={-1}>{book.title}</h2><p>{book.author}</p><EditionPresentationLabel book={book}/></div>
                   </div>
                   <div className="taste-rating-actions">
                     {swipePrototype && <div><button type="button" disabled={pending} onClick={() => setPrototypeIntent('skip')}>{locale === 'nl' ? 'Onbekend / overslaan' : 'Unknown / skip'}</button>
@@ -221,7 +222,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                   {searchAvailable !== null && results.length === 0 && !searchError && <p role="status">{locale === 'nl'
                     ? searchAvailable === 0 ? 'Er zijn nu geen andere boeken met voldoende bewijs beschikbaar in de taal van deze ronde. Je voortgang blijft bewaard.' : 'Geen geschikt boek gevonden. Probeer een andere titel of auteur.'
                     : searchAvailable === 0 ? 'No other books currently have enough evidence in this round’s language. Your progress is preserved.' : 'No eligible book found. Try another title or author.'}</p>}
-                  <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== workId).map(b => <li key={b.workId}>
+                    <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== workId && b.strictEditionLanguage === locale).map(b => <li key={b.workId}>
                     <button type="button" disabled={pending} onClick={() => act('choose', b.workId!)}>{b.title} — {b.author}</button>
                   </li>)}</ul>
                 </div>}

@@ -1,3 +1,4 @@
+import {resolveRequestLocale} from '@/lib/i18n/server';
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { LumiScoreCollectionsPage } from '@/app/components/LumiScoreCollectionsPage';
@@ -11,10 +12,10 @@ type CollectionsPageProps = {
 
 export const dynamic = 'force-dynamic';
 
-const load = cache(async (): Promise<CollectionsDirectoryData & { available: boolean }> => {
+const load = cache(async (locale:'en'|'nl'): Promise<CollectionsDirectoryData & { available: boolean }> => {
   try {
     const { loadCollectionsDirectory } = await import('@/lib/supabase/collections');
-    return { ...(await loadCollectionsDirectory()), available: true };
+    return { ...(await loadCollectionsDirectory(locale)), available: true };
   } catch (error) {
     console.error('Collections directory load failed.', error);
     return { collections: [], total: 0, available: false };
@@ -39,9 +40,10 @@ export async function generateMetadata({
 }
 
 export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
+  const {locale}=await resolveRequestLocale();
   const [filter, data, authState] = await Promise.all([
     readFilter(searchParams),
-    load(),
+    load(locale),
     import('@/lib/supabase/auth')
       .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
       .catch(() => ({ authenticated: false })),

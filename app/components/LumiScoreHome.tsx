@@ -1,5 +1,6 @@
 'use client';
 
+import {EditionPresentationLabel} from './EditionPresentationLabel';
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
@@ -299,7 +300,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     <>
       <BookCover book={book} small resolveMissing={false} />
       <span className="recommendation-copy">
-        <strong>{book.title}</strong>
+        <strong>{book.title}</strong><EditionPresentationLabel book={book}/>
         <span>{book.author}</span>
         {matchText && <span className="match-line"><i /> {matchText}</span>}
         {recommendation?.explanation && <span className="recommendation-reason">{recommendation.explanation}</span>}
@@ -444,7 +445,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
         {variant !== 'browse' && <span className="book-year">{book.firstPublishYear != null
           ? t('common.firstPublished', { year: book.firstPublishYear })
           : t('common.publicationUnavailable')}</span>}
-        <h3>{book.title}</h3>
+        <h3>{book.title}</h3><EditionPresentationLabel book={book}/>
         <p>{book.author}</p>
         {variant !== 'browse' && book.genre && <span className="book-genre">{book.genre}</span>}
         {matchLabel && <span className="book-match">{matchLabel}</span>}
@@ -715,6 +716,7 @@ export function LumiScoreHome({
   catalogUnavailable: boolean;
   seriesContinuations: HomepageSeriesContinuation[];
 }) {
+  const {locale}=useLumiScoreLocale();
   const catalogBooks = initialBooks;
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -729,7 +731,7 @@ export function LumiScoreHome({
     setQuery(value);
     const normalizedQuery = normalizeCatalogSearchQuery(value);
     const cachedResults = catalogSearchCache.get(
-      normalizedQuery.toLocaleLowerCase('en-US'),
+      `${locale}:${normalizedQuery.toLocaleLowerCase('en-US')}`,
     );
 
     if (cachedResults) {
@@ -741,18 +743,18 @@ export function LumiScoreHome({
       setSearchResults([]);
       setSearchStatus('idle');
     }
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const normalizedQuery = normalizeCatalogSearchQuery(query);
     if (!isCatalogSearchQuery(normalizedQuery)) return;
 
-    const searchCacheKey = normalizedQuery.toLocaleLowerCase('en-US');
+    const searchCacheKey = `${locale}:${normalizedQuery.toLocaleLowerCase('en-US')}`;
     if (catalogSearchCache.has(searchCacheKey)) return;
 
     const controller = new AbortController();
     const timeout = window.setTimeout(() => {
-      void fetch(`/api/catalog/search?q=${encodeURIComponent(normalizedQuery)}`, {
+      void fetch(`/api/catalog/search?q=${encodeURIComponent(normalizedQuery)}&locale=${locale}`, {
         signal: controller.signal,
       })
         .then(async (response) => {
@@ -780,7 +782,7 @@ export function LumiScoreHome({
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [query]);
+  }, [query,locale]);
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
@@ -807,7 +809,7 @@ export function LumiScoreHome({
       {seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}
-      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
+      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
       <DutchDiscoveryBooks discovery={dutchDiscovery} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />

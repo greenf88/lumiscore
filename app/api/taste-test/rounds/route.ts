@@ -18,10 +18,10 @@ async function present(state: RatingRoundState, request: Request, client: Awaite
   const { loadCatalogBooksByIdsWithStoredCovers } = await import('@/lib/supabase/books');
   const ids = state.currentWorkId ? [state.currentWorkId] : [];
   const [checks, books] = await Promise.all([
-    loadTasteEligibility(client, ids, language), loadCatalogBooksByIdsWithStoredCovers(ids, undefined, language),
+    loadTasteEligibility(client, ids, language), loadCatalogBooksByIdsWithStoredCovers(ids, undefined, locale),
   ]);
   const check = state.currentWorkId ? checks.get(state.currentWorkId) : undefined;
-  const strict = check?.eligible ? await loadStrictRecommendationBooks(client, books, language) : [];
+  const strict = check?.eligible ? await loadStrictRecommendationBooks(client, books, locale) : [];
   return { authenticated: true, available: true, state, book: strict[0] ?? null, language,
     selectionBlocked: Boolean(state.currentWorkId && !strict[0]), selectionReasons: check?.reasons ?? [] };
 }

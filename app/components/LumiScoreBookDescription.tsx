@@ -4,15 +4,16 @@ import { splitBookDescriptionParagraphs } from '@/lib/books/description-text';
 import { publicDescriptionSource } from '@/lib/books/description-source';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 
-export function LumiScoreBookDescription({ description }: { description: VerifiedBookDescription | null }) {
+export function LumiScoreBookDescription({ description, englishEditionFallback=false }: { description: VerifiedBookDescription | null; englishEditionFallback?:boolean }) {
   const { locale, t } = useLumiScoreLocale();
   const source = description ? publicDescriptionSource(description) : null;
-  const paragraphs = description?.language === locale && source ? splitBookDescriptionParagraphs(description.text) : [];
+  const paragraphs = description?.language === (locale==='nl' && englishEditionFallback?'en':locale) && source ? splitBookDescriptionParagraphs(description.text) : [];
   const isLong = paragraphs.length > 2 && (description!.text.length > 500 || paragraphs.length > 4);
   const visible = paragraphs.slice(0, isLong ? 2 : paragraphs.length);
   return <section className="book-description" aria-labelledby="book-description-heading">
     <h2 id="book-description-heading">{t('description.about')}</h2>
     {paragraphs.length ? <>
+      {locale==='nl' && englishEditionFallback && <p className="edition-language-label">Engelse beschrijving bij de Engelse editie</p>}
       {visible.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
       {isLong && <details><summary className="description-toggle">{t('description.readMore')}</summary>
         {paragraphs.slice(2).map((paragraph, index) => <p key={index}>{paragraph}</p>)}

@@ -166,7 +166,7 @@ test('EN locale prefers English and never lets Portuguese beat it', () => {
   })?.id, 'eng');
 });
 
-test('native works retain Dutch-first edition preference', () => {
-  assert.deepEqual(getPreferredEditionLanguages('en', 'lumiscore_native'), ['nld', 'eng']);
+test('native works obey the same NL/EN edition preference as all other Works', () => {
+  assert.deepEqual(getPreferredEditionLanguages('en', 'lumiscore_native'), ['eng']);
   assert.deepEqual(getPreferredEditionLanguages('nl', 'lumiscore_native'), ['nld', 'eng']);
 });

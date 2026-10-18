@@ -5,6 +5,7 @@ import { normalizeVerifiedBookDescription } from './description-text.ts';
 
 /** Public bibliographic sources only. No personal data, own API call or DB write. */
 export async function loadPublicBookDescription(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<VerifiedBookDescription | null> {
+  if(book.editionAvailable===false)return null;
   const budget = AbortSignal.timeout(4_000);
   const boundedFetch: typeof fetch = (input, init) => fetchImplementation(input, {
     ...init, signal: init?.signal ? AbortSignal.any([budget, init.signal]) : budget,
@@ -12,9 +13,10 @@ export async function loadPublicBookDescription(book: Book, locale: Locale, fetc
   const result = await resolveBookDescription({
     openLibraryWorkId: book.openLibraryWorkId,
     openLibraryEditionId: book.openLibraryEditionId,
-    isbn13: book.isbn13, editionLanguage: book.editionLanguage,
+    isbn13: book.isbn13, editionLanguage: book.editionLanguage, editionTitle:book.editionTitle,
     editionCandidates: book.descriptionCandidates, locale,
   }, boundedFetch);
   const description = normalizeVerifiedBookDescription(result.description);
-  return description?.language === locale ? description : null;
+  const allowed=book.englishEditionFallback && locale==='nl' ? 'en' : locale;
+  return description?.language === allowed ? description : null;
 }

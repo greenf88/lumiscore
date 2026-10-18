@@ -4,7 +4,7 @@ import { getReviewedCoverOverride } from './reviewed-cover-overrides.ts';
 
 type BookCoverIdentityFields = Pick<
   Book,
-  'id' | 'workId' | 'openLibraryWorkId' | 'isbn13' | 'editionId' | 'strictEditionLanguage'
+  'id' | 'workId' | 'openLibraryWorkId' | 'isbn13' | 'editionId' | 'strictEditionLanguage' | 'editionLanguage' | 'editionTitle' | 'coverUrls'
 >;
 
 type BookCoverInitialFields = Pick<
@@ -24,6 +24,7 @@ export function getBookCoverIdentity(book: BookCoverIdentityFields): string {
     identityPart(book.id),
     identityPart(book.editionId),
     identityPart(book.strictEditionLanguage),
+    identityPart(book.editionLanguage), identityPart(book.editionTitle), book.coverUrls ?? [],
   ]);
 }
 

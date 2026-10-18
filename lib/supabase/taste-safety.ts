@@ -7,6 +7,7 @@ import { getReviewedWorkTraitCorrection } from '../recommendations/reviewed-work
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 import { tasteEligibility, type TasteIdentity, type TasteMembership, type OfferHistory } from '../taste-test/eligibility.ts';
 import { loadStoredCoverResolutionsBatched } from './cover-resolutions.ts';
+import {loadEditionRows} from './edition-rows.ts';
 
 const editionSelect = 'id,work_id,title,language,isbn_10,isbn_13,open_library_edition_id,publisher';
 async function paged<T>(client: SupabaseClient, table: string, select: string, key: string, ids?: readonly string[], userId?: string, tieKey?: string) {
@@ -35,13 +36,15 @@ export async function loadStrictRecommendationBooks(client: SupabaseClient, book
     const responses=await Promise.all(batches.map(batch=>loadStoredCoverResolutionsBatched(batch)));
     return responses.flatMap(r=>r.entries.map(e=>({work_id:e.workId,state:e.state,source_key:e.sourceKey,cover_url:e.coverUrl})));
   };
-  const [editions,covers]=await Promise.all([paged<StrictEditionRow>(client,'editions',editionSelect,'id',ids),cached()]);
+  const [editions,covers]=await Promise.all([loadEditionRows(client,ids),cached()]);
   const byWork=new Map<string,StrictEditionRow[]>();
   const coversByWork=new Map<string,StoredEditionCover[]>();
   for(const e of editions){const id=String(e.work_id);byWork.set(id,[...(byWork.get(id)??[]),e]);}
   for(const c of covers){const id=String(c.work_id);coversByWork.set(id,[...(coversByWork.get(id)??[]),c]);}
   return books.flatMap(book=>{
     const edition=selectStrictEdition(byWork.get(book.workId!)??[],language,book.title);
+    if(edition && book.strictEditionLanguage===language && book.editionAvailable &&
+      book.editionId===String(edition.id) && book.editionTitle===edition.title?.trim() && book.editionLanguage===edition.language)return [book];
     const strict=withStrictEdition(book,edition,language,coversByWork.get(book.workId!)??[]);return strict?[strict]:[];
   });
 }

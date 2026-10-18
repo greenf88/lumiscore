@@ -20,7 +20,7 @@ export default async function CollectionRatingPage({params}: {params: Promise<{s
   const {locale} = await resolveRequestLocale();
   const {user} = await getVerifiedServerUser();
   if (!user) redirect(localizedHref(`/login?next=${encodeURIComponent(localizedHref(`/collection/${slug}/rate`, locale))}`, locale));
-  const [data, authState] = await Promise.all([loadCollectionPageData(slug), loadHeaderAuthState()]);
+  const [data, authState] = await Promise.all([loadCollectionPageData(slug,locale), loadHeaderAuthState()]);
   if (!data) notFound();
-  return <CollectionQuickRating initial={data} userId={user.id} authState={authState} />;
+  return <CollectionQuickRating key={locale} initial={data} userId={user.id} authState={authState} />;
 }

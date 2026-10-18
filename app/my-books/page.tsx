@@ -1,3 +1,4 @@
+import {resolveRequestLocale} from '@/lib/i18n/server';
 import { cache } from 'react';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { LumiScoreMyBooks } from '@/app/components/LumiScoreMyBooks';
@@ -12,10 +13,10 @@ export async function generateMetadata() { return createLocalizedPageMetadata({
   noIndex: true,
 }); }
 
-const load = cache(async (): Promise<MyBooksPageData> => {
+const load = cache(async (locale:'nl'|'en'): Promise<MyBooksPageData> => {
   try {
     const { loadMyBooksPageData } = await import('@/lib/supabase/book-status');
-    return await loadMyBooksPageData();
+    return await loadMyBooksPageData(locale);
   } catch (error) {
     console.error('My Books load failed.', error);
     const { loadHeaderAuthState } = await import('@/lib/supabase/auth');
@@ -25,10 +26,11 @@ const load = cache(async (): Promise<MyBooksPageData> => {
 });
 
 export default async function MyBooksPage() {
-  const data = await load();
+  const {locale}=await resolveRequestLocale();
+  const data = await load(locale);
   return (
     <>
-      <LumiScoreMyBooks data={data} />
+      <LumiScoreMyBooks key={locale} data={data} />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import {withRecommendationEditionCovers} from '../books/edition-cover-evidence.ts';
 import { createServerSupabaseClient } from './server.ts';
 import { loadRecommendationCatalog } from './recommendation-catalog.ts';
 import { mapCatalogWorks } from './books.ts';
@@ -16,15 +17,15 @@ export async function loadRatingResult(locale: Locale) {
   if (!user) return { kind:'signed-out' as const };
   const [reader,roundResult,catalog] = await Promise.all([
     loadReaderTasteProfile(client,user.id,locale),
-    client.rpc('taste_rating_state'), loadRecommendationCatalog(client,mapCatalogWorks),
+    client.rpc('taste_rating_state'), loadRecommendationCatalog(client,rows=>mapCatalogWorks(rows,locale)),
   ]);
   const {ratings,statuses,profile}=reader;
   if (roundResult.error) throw roundResult.error;
   const round = roundResult.data?.round;
   const language: Locale = round?.language === 'nl' ? 'nl' : round?.language === 'en' ? 'en' : locale;
   const [strictBooks,series] = await Promise.all([
-    loadStrictRecommendationBooks(client,catalog.candidates.map(c=>c.book),language),
-    loadSeriesPriorities(client,ratings,statuses,language),
+    loadStrictRecommendationBooks(client,catalog.candidates.map(c=>c.book),locale),
+    loadSeriesPriorities(client,ratings,statuses,locale),
   ]);
   const availableIds = new Set(strictBooks.flatMap(book => book.workId ? [book.workId] : []));
   const strictById=new Map(strictBooks.map(book=>[book.workId,book]));
@@ -34,6 +35,6 @@ export async function loadRatingResult(locale: Locale) {
     availableIds,locale});
   return { kind:'result' as const, profile, roundRatedCount:round?.ratedCount ?? 0, language,
     partial:round?.ratedCount < (round?.goal ?? 20), exhausted:roundResult.data?.exhausted === true,
-    recommendations:prioritizeSeriesRecommendations(recommendations,series,locale) };
+    recommendations:await withRecommendationEditionCovers(prioritizeSeriesRecommendations(recommendations,series,locale)) };
 }
 export type RatingResult = Awaited<ReturnType<typeof loadRatingResult>>;

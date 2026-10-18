@@ -259,3 +259,105 @@ na uitvoering buiten Git vastgelegd in outputs/taste-storage-test-20261018 en
 de bestaande Draft-PR38. Geen credentials of toegangstokens in verslag/PR/Git.
 Forward-compatible herstel uit het opslagverslag blijft gelden: behoud nieuwe
 ronde-identiteit en v1/v2-bridge; nooit historie verwijderen of oude UPDATE herstellen.
+
+EDITIETAAL, TITEL, BESCHRIJVING EN COVER — LOKALE REVIEW 18 oktober 2026
+Scope: vervolg op dezelfde branch fix/taste-eligibility-editions-series-20261017,
+vanaf 7c9a0ff275c64872cb6a45096dbe491b29b7ac23. Geen push, databasewrite,
+migratie, account, Auth-/configwijziging of deployment in deze vervolgopdracht.
+De eerdere hosted opslagproef en testcatalogus zijn niet opnieuw gewijzigd.
+
+Oorzaken en oplossing
+- De mapper hield de oorspronkelijke Work-titel, terwijl editie en cover apart
+  gekozen werden. Sommige selects lieten de editietitel helemaal weg. De bestaande
+  strict-edition-selector is nu gedeeld door catalogus, zoeken, aanbevelingen,
+  collecties, smaaktest en detail; geen tweede selectie- of smaakberekening.
+- NL kiest eerst expliciet NL, anders expliciet EN met label Engelse editie.
+  EN accepteert uitsluitend EN. Titelwoorden, schrift, auteur en ISBN-prefix
+  bepalen nooit de taal. Officiële EN-titels met buitenlandse woorden blijven geldig.
+- Eén geselecteerde editie levert ID, taal, titel, ISBN en covercontext. Complete
+  editiepagina's worden in batches gelezen; een REST-limiet verbergt geen latere NL-editie.
+- Oude Work-/ISBN-covercaches en een geslaagde ISBN-afbeeldingsaanvraag gelden
+  niet als editie/imagebewijs. Bestaande exact gereviewde covers blijven bruikbaar;
+  anders controleert één gebundelde publieke bronlookup de exacte editie, parent
+  Work, titel, taal en ISBN en gebruikt alleen de daaraan gekoppelde cover-ID's.
+  Geen bewijs of bronuitval: juiste editietitel met bestaande neutrale fallback.
+  Geen nieuwe covers, geen originele bestanden gewijzigd, geen permanente DB-cachewrite.
+- Geen toegestane editie: automatisch niet aanbieden; directe Work-link blijft
+  bestaan met een vertaalde beschikbaarheidsmelding, zonder verboden editiecover.
+- Een ongetaalde Work-synopsis werd voorheen als Engels aangenomen. Dat is vervallen.
+  Beschrijvingen vereisen exact editie-/ISBN-taalbewijs; NL toont alleen NL of bij
+  expliciete EN-fallback een gelabelde EN-beschrijving. Anders de korte melding.
+  Bronvermelding en bestaande opschoning blijven behouden; geen automatische vertaling.
+- API's en locale-caches geven de interface-taal door. Een hervatte ronde behoudt
+  zijn opgeslagen selectietaal en Work-voortgang, maar presenteert opnieuw voor
+  de huidige interface-taal. Onbruikbaar geworden kaarten blijven geblokkeerd;
+  ratings worden niet naar een Edition verplaatst of opnieuw aangemaakt.
+- Coverstate omvat editie/titel/taal/URL's. Zoeken en clientstate tonen geen oude
+  taalkaart tijdens wisselen. Ook de gastvoorkeuren en collectie-ratingflow gebruiken
+  de gedeelde presentatie. Collectievoortgang telt onveranderd alle Work-memberships.
+- Gevonden mobiele covercropping: bij beperkte breedte schaalt de hoogte nu mee
+  met de breedte. Op 320px coverframe 79,51x120,46px (ratio .66), scores 44x48px.
+
+Exacte regressies (alleen publieke bibliografische metadata read-only gelezen)
+1. Work1410 OL19964025W / Edition1462 OL28188774M / ISBN9783462046601:
+   zowel catalogus als Open Library zeggen ten onrechte dut bij de Duitse editie
+   Der Mann, der nie krank war. Dit is NIET door de codefix opgelost. Geen drieboek-
+   uitzondering of taalheuristiek toegevoegd. Correctie naar ger en een afzonderlijk
+   te verifiëren NL-editie staan uitsluitend in het inerte bronvoorstel hieronder.
+2. Work1342 OL24343547W / Edition1367 OL61048815M / ISBN9789022341674:
+   titel Waar de zon de sneeuw raakt, dut, cover15157931. Bestaande editiedata juist;
+   Franse Work-titel Je revenais des autres wordt niet meer als editietitel getoond.
+3. Work1456 OL17641518W / Edition1523 OL26326058M / ISBN9781910701874:
+   officiële titel Homo Deus, eng, cover8001570; Hebreeuwse Work-titel blijft in
+   de catalogus behouden maar wordt niet met de Engelse editiecover vermengd.
+Afzonderlijke review: docs/proposals/edition-language-corrections-20261018.json.
+Uitgeversbewijs bij Grunberg betreft een andere e-book-ISBN; exact hardcover-ISBN
+en taal zijn aanvullend ondersteund door een boekhandelbron. Google Books gaf429.
+NL-kandidaat ISBN9789038894836 heeft nog geen vastgestelde catalogus-Edition-ID
+of gereviewde cover. Geen metadata- of classificatievoorstel toegepast.
+
+Verificatie en grenzen
+Gerichte tests: selectie NL/EN/verboden/onzeker/meertalig, broncoverbinding,
+geen-cover, parentconflict, caches EN-NL-EN, beschrijvingen en Work-identiteit.
+Echte catalogus/search/detail-loaders draaien in een geïsoleerd read-only transport;
+PostgreSQL-fixtures bewaken volledige editiepagina's en ongewijzigde aanbevelingsinput.
+Oude tekstuele testcontracten zijn aangepast aan de expliciete locale en gedeelde
+batchloader; geen bewijsregels afgezwakt om tests groen te maken.
+Definitieve gerichte regressies:42/42 groen, inclusief echte loader-imports en
+covergeometriecontract. PostgreSQL-aanbevelings-/MyBooks-controle:20/20 groen.
+Brede run:778 tests,761 pass,16 bestaande opt-in skips en één oude CSS-assertie
+die nog letterlijk de vroegere vaste hoogte eiste. Die assertie is vervangen
+door dezelfde 100-180px ruimtebegroting in proportionele breedte, met behoud
+van de 44x48px score-eis; betrokken42 tests daarna opnieuw groen. Dus geen
+onopgeloste testfout, maar ook geen claim van één volledig groene778-run.
+Exacte logs, commit-SHA's en diff staan in het lokale outputverslag bij oplevering.
+TypeScript, bronlint (gegenereerde .wrangler-cache expliciet uitgesloten), Vinext-
+en Vercel-target-productiebuild en secretscan zijn groen. De Vercel-bundelaar
+vereiste wegens de bestaande Windows-junction dezelfde build buiten de sandbox.
+
+Echte browserscreenshots van de gedeelde componenten: 320/390px en 1280px,
+NL/EN, Paper/Ink, geladen publieke coverbestanden, taalwissel en detailfallback.
+Lokale UI-capture gebruikt vastgelegde publieke brondata, geen Auth of opslag.
+Dit is GEEN hosted verificatie, volledige live registratie-/opslagflow of fysieke
+telefooncontrole. Alle scores in screenshots zijn de neutrale niet-gepubliceerde badge.
+Output: outputs/edition-presentation-20261018; builds/tests onder
+outputs/taste-storage-test-20261018/edition-*.
+Lokale broncapture: http://127.0.0.1:3136/nl/review?view=detail&work=1342
+Starten: node --experimental-strip-types scripts/edition-presentation-local.mjs
+Uitsluitend loopback3136, geen .env/keys, alle API- en mutatieverzoeken geweigerd.
+De parameter proposal=1 is uitsluitend een als zodanig gemarkeerde lokale WHAT-IF;
+hij demonstreert het NIET toegepaste Grunberg-taalvoorstel. Geen publieke appbypass.
+
+Nog te beslissen vóór een later releasebesluit
+- Grunberg-taalcorrectie apart reviewen/toepassen; tot die tijd blijft dit concrete
+  NL-regressiegeval een datablokkade. Ook bronmetadata kan fout zijn: gelijke dut-
+  velden zijn geen onafhankelijke inhoudelijke bevestiging van een Duitse editie.
+- De eerder goedgekeurde private testinventaris NL4/EN3 is nog van de vorige
+  eligibilitysnapshot. Vóór hosted schrijftests inventaris/policy opnieuw beoordelen;
+  deze opdracht verandert geen SQL, voorraad, approvals of betrouwbaarheidsgate.
+- Geen claim dat de volledige catalogus qua taal of cover handmatig is gereviewd.
+  Ontbrekende broncoverbewijzen leveren bewust meer neutrale covers op.
+Herstel: neem uitsluitend deze lokale presentatiecommit terug, niet de eerdere
+opslagcorrectie. Data en rondehistorie blijven behouden; broncache vervalt bij
+serverherstart/nieuw proces. Het inerte catalogusvoorstel kan onafhankelijk worden
+behouden/verwijderd. Geen destructieve rollback en geen oude v2-UPDATE herstellen.

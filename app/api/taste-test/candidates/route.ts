@@ -1,3 +1,5 @@
+import {resolveRequestLocale} from '@/lib/i18n/server';
+import {withEditionCoverEvidence} from '@/lib/books/edition-cover-evidence';
 import { NextResponse } from 'next/server';
 import { getVerifiedServerUser } from '@/lib/supabase/auth';
 import { PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
@@ -18,8 +20,9 @@ export async function GET(request: Request) {
     const round = saved.round;
     if (!round || round.complete) return json({ results: [] });
     const language = round.language;
+    const {locale}=await resolveRequestLocale(request);
     const [catalog, history, ratings, statuses] = await Promise.all([
-      loadRecommendationCatalog(client, mapCatalogWorks), loadOwnOfferHistory(client, user.id),
+      loadRecommendationCatalog(client, rows=>mapCatalogWorks(rows,locale)), loadOwnOfferHistory(client, user.id),
       loadReaderRows<{work_id:number|string}>(client, 'ratings', 'work_id', user.id),
       loadReaderRows<{work_id:number|string;status:string}>(client, 'user_book_status', 'work_id,status', user.id),
     ]);
@@ -34,10 +37,10 @@ export async function GET(request: Request) {
       const exclusion = classifyTasteExclusion(id, round.id, ratedOrRead, history, checks.get(id)?.eligible === true);
       return exclusion === null || (revisit && exclusion === 'skipped-earlier');
     }).map(c => c.book);
-    const books = await loadStrictRecommendationBooks(client, eligible, language);
+    const books = await loadStrictRecommendationBooks(client, eligible, locale);
     const query = new URL(request.url).searchParams.get('q')?.slice(0, 100).trim().toLocaleLowerCase(language) ?? '';
     const results = query.length < 2 ? [] : books.filter(b => `${b.title} ${b.author}`.toLocaleLowerCase(language).includes(query))
       .sort((a, b) => Number(a.workId) - Number(b.workId)).slice(0, 20);
-    return json({ results, language, eligibleCount: books.length, earlierSkipsCanBeReoffered: revisit });
+    return json({ results:await withEditionCoverEvidence(results), language, eligibleCount: books.length, earlierSkipsCanBeReoffered: revisit });
   } catch { return json({ error: 'Search unavailable.' }, 503); }
 }

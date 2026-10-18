@@ -25,7 +25,7 @@ test('home has only a compact authenticated recommendation preview and no guest 
   const home=await read('app/components/LumiScoreHome.tsx');
   assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
   assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
-  assert.match(page,/loadHighestRatedCatalog\(8\)/);
+  assert.match(page,/loadHighestRatedCatalog\(8,locale\)/);
   assert.equal((page.match(/loadHomepagePersonalization\(locale, 3\)/g) ?? []).length, 1);
   assert.match(home,/personalization\.recommendations\.slice\(0, 3\)/);
   assert.match(home,/loading="lazy"/);

@@ -17,7 +17,7 @@ test('strict edition language is explicit, never inferred from title, ISBN or or
 test('selected edition owns displayed title and cover candidates; Work/French covers never return', () => {
   const strict = withStrictEdition(book, edition('nld'), 'nl', [
     { state: 'resolved', source_key: 'OL1W', cover_url: 'https://example.invalid/work-fr.jpg' },
-    { state: 'resolved', source_key: 'OL1M', cover_url: 'https://example.invalid/edition-nl.jpg' },
+    { state: 'resolved', source_key: 'OL1M', cover_url: 'https://example.invalid/edition-nl.jpg',editionVerified:true },
   ])!;
   assert.equal(strict.title, 'Nederlandse editietitel'); assert.equal(strict.editionId, '1');
   assert.equal(getInitialBookCoverUrls(strict)[0], 'https://example.invalid/edition-nl.jpg');

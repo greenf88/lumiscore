@@ -90,7 +90,7 @@ export function getPreferredEditionLanguages(
   locale: 'en' | 'nl',
   sourceType?: string | null,
 ): readonly string[] {
-  if (sourceType === 'lumiscore_native') return ['nld', 'eng'];
+  void sourceType; // Native origin is not an exception to the interface language.
   return locale === 'nl' ? ['nld', 'eng'] : ['eng'];
 }
 
