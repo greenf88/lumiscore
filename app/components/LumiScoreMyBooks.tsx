@@ -90,7 +90,7 @@ type GuestMyBooksState = {
 };
 
 function GuestMyBooks() {
-  const { t } = useLumiScoreLocale();
+  const { t,locale } = useLumiScoreLocale();
   const [state, setState] = useState<GuestMyBooksState>({
     available: true,
     items: [],
@@ -113,7 +113,7 @@ function GuestMyBooks() {
       if (active) setState((current) => ({ ...current, loading: true }));
       try {
         const response = await fetch(
-          `/api/catalog/books?workIds=${encodeURIComponent(workIds.join(','))}`,
+          `/api/catalog/books?workIds=${encodeURIComponent(workIds.join(','))}&locale=${locale}`,
           { signal: controller.signal },
         );
         if (!response.ok) throw new Error('Guest books could not be loaded.');
@@ -140,7 +140,7 @@ function GuestMyBooks() {
       controller.abort();
       window.removeEventListener('storage', handleStorage);
     };
-  }, []);
+  }, [locale]);
 
   const removeBook = (book: Book) => {
     toggleWanted(book);
@@ -187,7 +187,7 @@ function GuestMyBooks() {
 }
 
 export function LumiScoreMyBooks({ data }: { data: MyBooksPageData }) {
-  const { t } = useLumiScoreLocale();
+  const { t, locale } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<ReadingStatus>('want_to_read');
   const [items, setItems] = useState(data.items);
@@ -240,7 +240,7 @@ export function LumiScoreMyBooks({ data }: { data: MyBooksPageData }) {
         </div>
 
         {!data.authenticated ? (
-          <GuestMyBooks />
+          <GuestMyBooks key={locale} />
         ) : !data.available ? (
           <div className="my-books-empty" role="status">
             <h2>{t('myBooks.unavailable')}</h2>

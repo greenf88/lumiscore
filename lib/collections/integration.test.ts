@@ -66,7 +66,7 @@ test('collection pages use reviewed totals and denominator-free fallback copy', 
 test('homepage continuation is private, bounded, and hidden without useful results', () => {
   assert.match(collections, /selectSeriesContinuations\(candidates, Math\.min\(3, limit\)\)/);
   assert.match(collections, /if \(!user\) return \[\]/);
-  assert.match(homePage, /loadHomepageSeriesContinuations\(3\)/);
+  assert.match(homePage, /loadHomepageSeriesContinuations\(3,locale\)/);
   assert.match(home, /seriesContinuations\.length > 0/);
   assert.match(home, /continuations\.map/);
   assert.match(home, /collection\.continueReading/);
@@ -105,8 +105,8 @@ test('recommendation loader adds read-without-rating IDs to exclusions only', ()
 });
 
 test('collection queries are batched instead of one query per book', () => {
-  assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(workIds\)/);
+  assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(workIds,undefined,locale\)/);
   assert.match(collections, /\.in\('work_id', workIds\.map\(Number\)\)/);
-  assert.match(collections, /loadCatalogBooksByIds\(actionWorkIds\)/);
+  assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(actionWorkIds,undefined,locale\)/);
   assert.doesNotMatch(collections, /for \([^)]*books[^)]*\)[\s\S]{0,120}await/);
 });

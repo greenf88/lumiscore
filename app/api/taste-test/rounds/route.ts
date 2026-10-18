@@ -12,9 +12,12 @@ function reviewUsesProduction() {
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
 async function present(state: RatingRoundState, request: Request) {
   const { locale } = await resolveRequestLocale(request);
-  const { loadCatalogBooksByIdsWithStoredCovers } = await import('@/lib/supabase/books');
+  const { loadCatalogBooksByIdsWithStoredCovers, loadCatalogBook } = await import('@/lib/supabase/books');
   const books = state.currentWorkId ? await loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale) : [];
-  return { authenticated: true, available: true, state, book: books[0] ?? null };
+  // Preserve the offered Work and every stored counter. An unavailable edition
+  // remains skippable/searchable without presenting an unsuitable title or cover.
+  const book = books[0] ?? (state.currentWorkId ? await loadCatalogBook(state.currentWorkId, locale) : null);
+  return { authenticated: true, available: true, state, book };
 }
 export async function GET(request: Request) {
   try {

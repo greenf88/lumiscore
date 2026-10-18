@@ -14,6 +14,7 @@ import { TASTE_TEST_ANCHORS } from '../taste-test/config.ts';
 import { applyRatingSummaries } from '../ratings/card-summaries.ts';
 import { loadPublicRatingSummariesBatched } from './public-rating-summaries.ts';
 import { loadRecommendationWorkTraitEvidence } from './work-trait-evidence.ts';
+import {loadEditionRows} from './edition-rows.ts';
 
 export type WorkFeatureRow = { id: number | string };
 export type RecommendationCatalog = {
@@ -23,7 +24,7 @@ export type RecommendationCatalog = {
 export const RECOMMENDATION_CATALOG_SELECT = [
   'id', 'title', 'first_publish_year', 'open_library_id', 'source_type',
   'work_type', 'author_id', 'cover_id', 'authors(id,name)',
-  'editions(id,open_library_edition_id,isbn_13,language)',
+  'editions(id,work_id,title,open_library_edition_id,isbn_13,language,publisher)',
 ].join(',');
 
 export async function loadRecommendationCatalog(
@@ -45,7 +46,10 @@ export async function loadRecommendationCatalog(
   if (failure?.error) throw failure.error;
   const rows = (results.flatMap(({ data }) => data ?? []) as unknown as WorkFeatureRow[])
     .sort((left, right) => Number(left.id) - Number(right.id));
-  const books = mapWorks(rows);
+  const editions=await loadEditionRows(client,ids.map(String));
+  const editionsByWork=new Map<string,typeof editions>();
+  for(const edition of editions){const key=String(edition.work_id);editionsByWork.set(key,[...(editionsByWork.get(key)??[]),edition]);}
+  const books = mapWorks(rows.map(row=>({...row,editions:editionsByWork.get(String(row.id))??[]})));
   const summaries = await loadPublicRatingSummariesBatched(client,
     books.flatMap(({ workId }) => workId ? [workId] : []));
   const traitsById = new Map(rows.map(({ id }) => {

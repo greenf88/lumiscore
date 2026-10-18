@@ -37,7 +37,9 @@ test('active rounds show Pause; only paused rounds show Resume, and successful r
 
 test('polished scoring keeps a readable cover rather than a thumbnail on short screens', async () => {
   const css = await read('app/globals.css');
-  assert.match(css, /\.taste-direct-test \.taste-book-identity \.book-cover \{[^}]*clamp\(100px, calc\(100svh - 540px\), 180px\)/);
+  // Same 100–180px height budget, expressed as proportional width so max-width
+  // can shrink both dimensions rather than cropping a narrow, fixed-height cover.
+  assert.match(css, /\.taste-direct-test \.taste-book-identity \.book-cover \{[^}]*width: clamp\(66px, calc\(\(100svh - 540px\) \* \.66\), 118\.8px\); height: auto; aspect-ratio: \.66; max-width: 35%/);
   assert.match(css, /\.taste-direct-test \.taste-book-identity h2 \{[^}]*overflow-wrap: anywhere/);
   assert.match(css, /\.taste-direct-test \.taste-score-buttons button \{[^}]*min-width: 44px; min-height: 48px/);
   assert.doesNotMatch(css, /\.taste-book-identity \.book-cover \{[^}]*clamp\(32px/);

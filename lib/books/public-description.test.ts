@@ -5,7 +5,7 @@ import { loadPublicBookDescription } from './public-description.ts';
 import { clearBookDescriptionCacheForTests } from './description-resolution.ts';
 import { publicDescriptionSource } from './description-source.ts';
 
-const book = { workId: '1', openLibraryWorkId: 'OL893415W', editionLanguage: 'eng' } as Book;
+const book = { workId: '1', openLibraryWorkId: 'OL893415W', editionLanguage: 'eng',openLibraryEditionId:'OL123M' } as Book;
 
 test('SSR loader resolves sanitized public text once, with locale-separated cache and an abort budget', async () => {
   clearBookDescriptionCacheForTests();
@@ -14,16 +14,16 @@ test('SSR loader resolves sanitized public text once, with locale-separated cach
     calls++;
     assert.equal(new URL(String(input)).origin, 'https://openlibrary.org');
     assert.ok(init?.signal instanceof AbortSignal);
-    return new Response(JSON.stringify({ description: '<p>Public synopsis.</p><script>private()</script>' }));
+    return new Response(JSON.stringify({works:[{key:'/works/OL893415W'}],languages:[{key:'/languages/eng'}], description: '<p>Public synopsis.</p><script>private()</script>' }));
   };
   const first = await loadPublicBookDescription(book, 'en', fetcher);
   assert.equal(first?.text, 'Public synopsis.');
   assert.equal(first?.language, 'en');
-  assert.deepEqual(publicDescriptionSource(first!), { name: 'Open Library', href: 'https://openlibrary.org/works/OL893415W' });
+  assert.deepEqual(publicDescriptionSource(first!), { name: 'Open Library', href: 'https://openlibrary.org/books/OL123M' });
   assert.equal((await loadPublicBookDescription(book, 'en', fetcher))?.text, first?.text);
   assert.equal(calls, 1);
   assert.equal(await loadPublicBookDescription(book, 'nl', fetcher), null);
-  assert.equal(calls, 1, 'do not infer synopsis language from work edition languages');
+  assert.equal(calls, 1, 'cached English copy does not authorize display on an NL page without a fallback edition');
 });
 
 test('Dutch SSR copy requires an exact Dutch edition linked to the Work', async () => {

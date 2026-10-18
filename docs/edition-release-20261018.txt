@@ -1,0 +1,55 @@
+LumiScore — afgesplitste editiepresentatie, 18 oktober 2026
+
+Basis en grens
+Basis main: 5fbd35ed7eafd82ba34c1c45a1fc82e8bc652416.
+Branch: fix/edition-presentation-release-20261018.
+Gedeelde editiepresentatie uit ce50ad4 overgenomen en geïntegreerd op main.
+PR38 707625d blijft afzonderlijk: geen v3-opslag, eligibility-inventaris,
+revisit-contract, nieuwe reeksprioritering of overige catalogusvoorstellen.
+Deze release wijzigt geen schema, Auth/RLS, rating of rondehistorie.
+
+Presentatie
+NL kiest aantoonbaar NL, anders gelabeld EN; EN alleen aantoonbaar EN.
+Eén editie bepaalt ID, titel, taal, ISBN en cover. Open Library coverbewijs
+bindt exact editie, parent Work, titel, taal en ISBN; geen Work-/ISBN-imagegok.
+Bij ontbrekend bewijs blijft de neutrale cover zichtbaar. Bronuitval kan
+daardoor meer neutrale covers geven. Beschrijvingen vereisen exact taalbewijs;
+ontbrekende/onzekere taal krijgt de bestaande vertaalde melding.
+Taalgebonden cache- en componentidentiteit voorkomt achterblijvende covers.
+Directe Work-links blijven bestaan bij ontbrekende geschikte vertaling.
+Een reeds aangeboden ongeschikte editie behoudt Work en voortgang, kan worden
+overgeslagen of opgezocht, maar presenteert geen verboden cover/titel/ratingkeuze.
+
+Enige toegestane cataloguswrite
+docs/proposals/grunberg-language-release-20261018.sql: editie1462/Work1410,
+OL28188774M, ISBN9783462046601, dut naar ger. Identiteits/preimage-guard en
+korte transactie. Geen nieuwe Nederlandse editie; geen andere correcties.
+Da Costa1342/1367 en Harari1456/1523 hebben al juiste editiegegevens.
+Bronreview en testprojectcases uit het bestaande editie-reviewbewijs hergebruikt.
+
+Controles vóór push
+12 gerichte editie-/loader-/afsplitsingstests groen; 16 profiel-SSR-controles
+groen; TypeScript en lint groen; Vinext- en Vercel-targetproductiebuild groen.
+Windows-junction vereiste voor Vercel-build dezelfde opdracht buiten sandbox.
+Secretscan142 clientbestanden groen; geen geconfigureerde serversecrets.
+Volledige suite en verplichte CI/deployment worden in het releasebewijs
+vastgelegd vóór merge. Geen claim van echte telefooncontrole of nieuwe
+hosted schrijftest: de bestaande POST/RPC-contracten zijn bytegelijk aan main.
+
+Herstel
+Vorige productie: dpl_CHy65A1DaWaStWnRGQfnKFD4V9dn, Ready, main5fbd35e,
+lumiscore-ojz4o2gtk-rgkgroeneveld-9102.vercel.app, gekoppeld aan lumisco.re.
+Bij applicatieregressie dit vorige werkende deployment herstellen via de
+bestaande Vercel-productieprocedure; geen databasebackup terugzetten.
+Behoud de correcte ger-metadata bij appherstel. Herstel van de foutieve dut
+waarde is niet nodig en zou bewust verkeerde catalogusinformatie terugbrengen.
+Nieuwe processen wissen de uitsluitend in-memory broncache.
+
+Releasevolgorde
+Exacte diff/scope → CI en Ready Preview → drie publieke regressiegevallen
+NL/EN/Paper/Ink → actuele main/HEAD controleren → één guarded metadatawrite
+→ gerichte PR Ready/merge → automatische productie Ready en domeinkoppeling
+→ live boeklinks, taalwissel, API en aanmeld/smaaktestroute read-only controleren.
+Definitieve SHA/PR/deployment/screenshots: bestaand outputs/edition-presentation-
+20261018-releasebewijs. Ratings/voortgang worden niet getest door productie-
+gebruikersgegevens te wijzigen.

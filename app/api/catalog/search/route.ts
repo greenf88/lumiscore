@@ -1,3 +1,4 @@
+import { resolveRequestLocale } from '@/lib/i18n/server';
 import { NextResponse } from 'next/server';
 import {
   CATALOG_SEARCH_LIMIT,
@@ -7,6 +8,7 @@ import {
 import { measureServerOperation } from '@/lib/performance/server-timing';
 
 export async function GET(request: Request) {
+  const {locale}=await resolveRequestLocale(request);
   const query = normalizeCatalogSearchQuery(
     new URL(request.url).searchParams.get('q') ?? '',
   );
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
     const results = await measureServerOperation(
       'catalog.search_api',
       'public',
-      () => searchCatalog(query, CATALOG_SEARCH_LIMIT),
+      () => searchCatalog(query, CATALOG_SEARCH_LIMIT,locale),
     );
 
     return NextResponse.json(
