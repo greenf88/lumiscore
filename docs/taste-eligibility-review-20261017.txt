@@ -126,3 +126,43 @@ en account op390px, NL/EN, Paper/Ink; lege en ondersteunde voorkeurstaat.
 Screenshots: outputs/taste-eligibility-20261017/copy-refinement buiten de repo.
 Synthetische lokale adapters; geen hosted/telefooncontrole of databasewrites.
 De eerdere voorraad-/databasebeperking en publicatiestop blijven ongewijzigd.
+
+HERVAT VOOR HOSTED REVIEW — 18 oktober 2026
+Origin/main opnieuw opgehaald en zonder conflicten gecombineerd: basis nu
+5fbd35ed7eafd82ba34c1c45a1fc82e8bc652416 (PR37 tekst/presentatie behouden).
+De eerdere presentatiecommit zit al op main; die is geen nieuwe feature-diff.
+De bestaande branch/worktree is hergebruikt; geen dubbele implementatie.
+
+Boekdetailheader gerepareerd: dezelfde volgorde als de homepage voor de rechter
+bediening (thema, taal, account). Accountmenu nu laatste element en dus rechts
+verankerd; geen absolute verplaatsing van het icoon of globale CSS-workaround.
+Gedeelde menucomponent, navigatie, labels en bestaande aanmeldcontext behouden.
+Nieuwe regressietest controleert de volgorde en rechter paneelverankering.
+Echte lokale browser met expliciet synthetisch profiel: 24 combinaties van
+NL/EN, Paper/Ink en 320/375/390/430/682/1024px groen; paneel volledig in beeld,
+geen horizontale overflow. Op320px alle headeracties minimaal44x44px; paneellink
+ontvangt pointerevents en Escape sluit menu met focus terug op de accountknop.
+Vier390px-screenshots en geometrie staan buiten Git in
+outputs/taste-eligibility-preview-20261018. Geen fysieke telefooncontrole.
+
+Verificatie na integratie: 38 gerichte regressie-/beleids-/SQL-diagnosetests
+en16 echte lokale NL/EN-SSR-tests groen; TypeScript en bron-lint groen.
+Volledige suite en Vercel-build worden afzonderlijk vastgelegd bij PR/Preview.
+Lokale build-/testadapters worden niet gebruikt in de hosted applicatie.
+Geen rating-, account-, catalogus-, Auth-, RLS- of configuratiewrites uitgevoerd.
+
+De twee expliciete beperkingen zijn NIET door een groene diagnosetest opgelost:
+1. Eerdere skips worden door de bestaande database globaal uitgesloten.
+   Definitief herstel vereist rondegebonden offeridentiteit en atomaire
+   selectie-/choose-RPC-aanpassing; geen historie wissen of clientworkaround.
+2. Capture17oktober bevat voor de strikte gate slechts NL2/EN5 Works.
+   Een ronde van10 is daarmee niet volledig te bewijzen. Meer brongecontroleerde
+   metadata is nodig; onbekende zelfstandigheid is niet stilzwijgend toegelaten.
+Deze opdracht maakt uitsluitend een Draft/hosted review mogelijk. Geen merge,
+productiepublicatie, migraties of cataloguscorrecties. De Preview is geen bewijs
+van een volledig herstelde of releasegereed geteste smaaktestronde.
+
+Herstel op de reviewbranch: revert de afzonderlijke headerfix om alleen het
+headergedrag terug te nemen; de featurebranch kan zonder gegevensrollback worden
+verlaten. Productie blijft ongewijzigd op5fbd35e. Voor een latere feature-release
+blijven opslag-/voorraadbewijs en een afzonderlijk releasebesluit noodzakelijk.

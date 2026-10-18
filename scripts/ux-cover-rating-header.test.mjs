@@ -52,3 +52,15 @@ test('detail header establishes the same raised stacking layer as the shared hea
   assert.match(css, /\.mobile-navigation-panel \{[^}]*z-index: 32/);
   // Actual pointer hit-testing and click navigation are verified in the browser.
 });
+
+test('book detail keeps the account last on the right, with its panel anchored to that edge', async () => {
+  const detail = await read('app/components/LumiScoreBookDetail.tsx');
+  const header = detail.split('<header className="detail-header">')[1]?.split('</header>')[0];
+  assert.ok(header);
+  assert.ok(header.indexOf('<ThemeToggle') < header.indexOf('<LanguageSwitcher'));
+  assert.ok(header.indexOf('<LanguageSwitcher') < header.indexOf('<LumiScoreAccountMenu'));
+  assert.match(header, /<LumiScoreAccountMenu authState=\{authState\} returnTo=\{detailPath\} variant="detail" \/>\s*<\/div>/);
+  const css = await read('app/globals.css');
+  assert.match(css, /\.header-account \{ position: relative;/);
+  assert.match(css, /\.header-account-panel \{[^}]*right: 0;[^}]*width: min\(280px, calc\(100vw - 24px\)\)/);
+});
