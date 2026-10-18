@@ -21,7 +21,7 @@ export function LumiScoreReadingProfile({authState,email,data}:{authState:Header
           </div>)}
         </dl>
         <p className="reading-profile-count-note">{nl?'Beoordeelde boeken tellen ook als gelezen.':'Rated books also count as read.'}</p>
-        <section aria-labelledby="account-taste-title">
+        <section aria-label={nl?'Jouw leessmaak':'Your reading taste'}>
           <TasteProfileSummary profile={data.profile} headingId="account-taste-title" level={2} />
           <LocaleLink className="reading-profile-action ui-control ui-primary" href="/taste-test">{nl?(data.profile.ratingCount?'Smaaktest bijwerken':'Ontdek je leessmaak'):(data.profile.ratingCount?'Update your taste test':'Discover your reading taste')}</LocaleLink>
         </section>
