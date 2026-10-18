@@ -1,0 +1,51 @@
+LumiScore — alleen tekst/presentatie — release 18 oktober 2026
+
+Basis: actuele origin/main 29458ca83a2a792bcd26198ac0cedc9e7cf11fa0.
+Branch: fix/taste-copy-presentation-only-20261018.
+Uitsluitend de tien presentatie-/testbestanden uit lokale patch6e411f5 overgenomen.
+Die bestanden zijn byte-inhoudelijk gelijk aan de beoordeelde lokale versie.
+Geen merge/cherry-pick van de onvoltooide smaaktestbranch of zijn eerdere commits.
+Die werkruimte blijft behouden op6e411f559a99df344f6f60bb6bedf785b841f963.
+
+Scope
+Verwijder Nog even ontdekken / Keep discovering en de ontbrekende-kenmerkenzin.
+Verwijder leeg uitlegvlak. Onderbouwde voorkeuren blijven onder Jouw leessmaak /
+Your reading taste. Bestaande boeken blijven onder Meer boeken voor jou /
+More books for you wanneer geen ondersteund profielblok overblijft.
+Toegankelijke accountsectienaam blijft aanwezig; normale documentflow bewaakt
+tussenruimte. Geen CSS-redesign of sterkere matchclaims.
+
+Expliciet NIET inbegrepen
+Selectie/eligibility, editie-/coverselectie, reeksvoorrang, skiphistorie,
+metadata-export, nieuwe zoek-API of nieuwe opslagvalidatie.
+Geen profielberekening, bronnen, taxonomy, classificaties, ratings of drempels
+gewijzigd. Geen backend-, database-, Auth-, RLS-, configuratie- of migratiewijziging.
+Lokale synthetische reviewadapters staan alleen in test-support/scripts;
+geen publieke reviewquery of testbypass in applicatieroutes.
+
+Bewijs
+32 gerichte tests op deze onafhankelijke branch groen:16 React/model/presentatie,
+16 echte loopback SSR-routechecks (NL/EN, gast, leeg, rijk en partieel profiel).
+TypeScript, bron-lint, Vercel-target productiebuild, clientsecretscan (72 bestanden)
+en diffcontrole groen. Live CI en deployments afzonderlijk controleren.
+NL/EN, Paper/Ink,390px-browserscreenshots uit de identieke lokale presentatiepatch
+hergebruikt; dat is synthetische lokale UI, geen fysieke telefooncontrole.
+Geen bestaande ratings of accounts nodig voor tekst-/presentatieverificatie.
+
+Herstelpunt vóór publicatie
+Productiecommit29458ca83a2a792bcd26198ac0cedc9e7cf11fa0.
+Deployment dpl_5ReBaUHs3UerUmFdBgPr5acHjgxb, Ready/Production/Current en lumisco.re
+op 18 oktober opnieuw in de geauthenticeerde Vercel-dashboardweergave bevestigd.
+URL: https://lumiscore-p7wey89dr-rgkgroeneveld-9102.vercel.app
+Gegevensbehoudend herstel via revert van uitsluitend deze presentatiecommit en
+normale Git-productieflow; bij acute nood bestaande werkende deployment terugzetten.
+Geen databaseherstel nodig. Een Vercel-rollback pauzeert automatische domeintoewijzing;
+controleer/herstel die daarna via de bestaande promote-procedure.
+
+Publicatie
+Push deze afzonderlijke branch, gerichte PR, groene vereiste quality/Vercelchecks.
+Controleer actuele main vóór merge; merge met verwachte exacte release-HEAD.
+Automatische productieflow, daarna Ready/SHA/lumisco.re en NL/EN-gastenroutes
+controleren. Deploymentbescherming intact; geen omgeving koppelen of uitbreiden.
+PR-, merge- en deploymentbewijs wordt buiten Git vastgelegd na de release,
+zodat geen tweede productiedeployment alleen voor bewijsproza nodig is.
