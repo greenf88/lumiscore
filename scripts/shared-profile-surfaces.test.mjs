@@ -15,7 +15,7 @@ test('actual result/account/home/detail adapters agree, retain guest answers and
  }
  const books=[5001,5002,5003].map(id=>({id:'work-'+id,workId:String(id),source:'supabase',title:'Synthetic '+id,author:'Synthetic '+id,cover:'fallback',score:null,ratingsCount:null,match:null}));
  const fixture={owner:'synthetic-a',books,catalog:{traitsById:effective,candidates:books.map(book=>({...effective.get(book.workId),book,traits:reliableProfileTraits(effective.get(book.workId))}))}};
- const data={ratings:[...Array.from({length:15},(_,i)=>({user_id:'synthetic-a',work_id:i+1,rating:10})),{user_id:'synthetic-b',work_id:5001,rating:1}],user_book_status:[{user_id:'synthetic-a',work_id:99,status:'read'}],taste_test_responses:[{user_id:'synthetic-a',quiz_version:'taste_test_v1',question_key:'fantasy-or-science-fiction',choice:'right'}],work_trait_evidence:rows,editions:books.flatMap((b,i)=>['en','nl'].map((language,j)=>({id:i*2+j+1,work_id:Number(b.workId),language})))};
+ const data={ratings:[...Array.from({length:15},(_,i)=>({user_id:'synthetic-a',work_id:i+1,rating:10})),{user_id:'synthetic-b',work_id:5001,rating:1}],user_book_status:[{user_id:'synthetic-a',work_id:99,status:'read'}],taste_test_responses:[{user_id:'synthetic-a',quiz_version:'taste_test_v1',question_key:'fantasy-or-science-fiction',choice:'right'}],work_trait_evidence:rows,collection_books:[],editions:books.flatMap((b,i)=>['en','nl'].map((language,j)=>({id:i*2+j+1,work_id:Number(b.workId),title:b.title,language,isbn_13:null,open_library_edition_id:null})))};
  fixture.client={auth:{async getUser(){return {data:{user:{id:fixture.owner}},error:null};}},async rpc(name){assert.equal(name,'taste_rating_state');return {data:{round:null},error:null};},from(table){assert.ok(Object.hasOwn(data,table));const filters=[];let order=[],range=null;
   const q={select(){return q;},eq(k,v){filters.push(r=>String(r[k])===String(v));return q;},in(k,ids){filters.push(r=>ids.map(String).includes(String(r[k])));return q;},or(value){const language=value.includes('.nl')?'nl':'en';filters.push(r=>r.language===language);return q;},order(k){order.push(k);return q;},range(lo,hi){range=[lo,hi];return q;},async then(resolve){let result=data[table].filter(r=>!r.user_id||r.user_id===fixture.owner).filter(r=>filters.every(f=>f(r)));result.sort((a,b)=>{for(const k of order){const c=typeof a[k]==='number'?a[k]-b[k]:String(a[k]).localeCompare(String(b[k]),'en');if(c)return c;}return 0;});if(range)result=result.slice(range[0],range[1]+1);return resolve({data:result,error:null});}};return q;}};
  globalThis[marker]=fixture;
@@ -27,6 +27,7 @@ test('actual result/account/home/detail adapters agree, retain guest answers and
   'lib/supabase/recommendation-catalog.ts':`export async function loadRecommendationCatalog(){return globalThis.${marker}.catalog}`,
   'lib/supabase/collaborative.ts':'export async function loadCollaborativeRecommendationSignals(){return new Map()}',
   'lib/supabase/reading-preferences.ts':'export async function loadReaderEraPreferences(){return null}',
+  'lib/supabase/cover-resolutions.ts':'export async function loadStoredCoverResolutionsBatched(){return {available:true,entries:[]}}',
  };
  const vite=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/shared-surfaces-vite',resolve:{alias:{'@':root}},plugins:[{name:'synthetic-transport-only',enforce:'pre',load(id){return modules[id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0]]??null;}}],server:{middlewareMode:true,hmr:false}});
  try{
@@ -38,6 +39,8 @@ test('actual result/account/home/detail adapters agree, retain guest answers and
    assert.equal(context.profile.ratingCount,owner==='synthetic-a'?15:1);assert.equal(context.profile.selectedCount,owner==='synthetic-a'?1:0);
    assert.equal(reading.totals.rated,context.profile.ratingCount);assert.equal(reading.totals.read,owner==='synthetic-a'?16:1);
    assert.equal(recommendations.unavailable,undefined);
+   if(owner==='synthetic-a')assert.ok(recommendations.recommendations.length>0,'real strict-edition adapter must not silently filter every candidate');
+   for(const recommendation of [...recommendations.recommendations,...rated.recommendations])assert.equal(recommendation.book.strictEditionLanguage,locale);
    for(const book of books){const detail=await home.loadBookDetailPersonalization(book.workId,locale),fromHome=recommendations.recommendations.find(r=>r.book.workId===book.workId),fromResult=rated.recommendations.find(r=>r.book.workId===book.workId);
     assert.equal(detail.authenticated,true);if(fromHome){assert.equal(fromHome.matchScore,detail.match.matchScore);assert.equal(fromHome.matchConfidence,detail.match.matchConfidence);}if(fromResult){assert.equal(fromResult.matchScore,detail.match.matchScore);assert.equal(fromResult.matchConfidence,detail.match.matchConfidence);}
    }

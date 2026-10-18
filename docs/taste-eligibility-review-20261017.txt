@@ -166,3 +166,33 @@ Herstel op de reviewbranch: revert de afzonderlijke headerfix om alleen het
 headergedrag terug te nemen; de featurebranch kan zonder gegevensrollback worden
 verlaten. Productie blijft ongewijzigd op5fbd35e. Voor een latere feature-release
 blijven opslag-/voorraadbewijs en een afzonderlijk releasebesluit noodzakelijk.
+
+PREVIEWKOPPELING / REGRESSIEVERVOLG
+Draft PR38 aangemaakt; eerste deployment Ready op b1ff96e. De build meldde
+ontbrekende publieke Supabase-URL. Rick gaf daarop afzonderlijk akkoord voor
+uitsluitend deze branch en één rebuild. Testproject via Supabase bevestigd als
+hlvujbrmfdlrfxdjwsmb / lumiscore-pr8-discovery-test / ACTIVE_HEALTHY.
+Uitsluitend NEXT_PUBLIC_SUPABASE_URL en NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+toegevoegd als Config voor Previewbranch fix/taste-eligibility-editions-series-20261017.
+Bijbehorende actieve moderne publishable key, geen service-role/secret gebruikt.
+Productie, algemene Preview-variabelen, andere branches en Auth ongewijzigd.
+De definitieve codepush verzorgt de ene noodzakelijke rebuild; geen extra
+handmatige redeploy. Na review alleen deze twee branche-overrides verwijderen.
+
+Volledige lokale suite vond twee achterhaalde contractfixtures, geen verborgen
+groene totaalclaim: 731 pass,2 fail,16 expliciet overgeslagen van749 tests.
+Het oude UI-contract verwachtte het algemene cataloguszoekendpoint; dit is
+gericht bijgewerkt naar de beveiligde smaaktestzoekingang met extra read-only-
+en rondetaalasserties. De gedeelde-adapterfixture miste collection_books en
+volledige editierecords. Deze expliciet synthetisch aangevuld; echte editiepolicy
+blijft actief en aanbevolen editie-taal wordt nu ook geassert. Alleen de
+covercachetransportmock blijft lokaal, zonder netwerk/credentials.
+Beide betrokken testbestanden opnieuw:6/6 groen. Overige731 passes hergebruikt;
+de nieuwe volledige remote CI is bepalend voor de definitieve branchstatus.
+Geen runtimecode versoepeld om tests groen te krijgen.
+
+TypeScript/lint en beide builds groen; de lokale Vercel-bundelaar had eerst een
+Windows-sandbox readlink-EPERM, met dezelfde code buiten sandbox succesvol.
+Secretscan142 clientbestanden (dist+Vercel-output): geen serversecrets gebundeld.
+Hosted bewijs, definitieve SHA, CI en eventuele concrete login/voorraadbeperking
+staan na afronding in de PR en outputs/taste-eligibility-preview-20261018.
