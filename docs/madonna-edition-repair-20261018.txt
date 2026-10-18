@@ -1,0 +1,83 @@
+Madonna — lokale editie-assets, 18 oktober 2026
+
+Basis: origin/main a79c2189a46bc0df0399dcf8dccf35d7418c315f, opnieuw opgehaald.
+Branch: fix/madonna-edition-assets-20261018.
+Geïsoleerde worktree: work/lumiscore-madonna-20261018.
+
+Read-only productiecontrole:
+Work 1305 = Madonna, Suzanne Vermeer, lumiscore_native, short_story.
+Editie 1305 = Madonna, nld, ISBN 9789044970791, A.W. Bruna Uitgevers.
+Geen Open Library Work-/Edition-ID. Collectie 11: suzanne-vermeer.
+De reeds door Rick uitgevoerde nld-correctie is bevestigd; niet opnieuw toegepast.
+Geen database-, account-, rating-, leesstatus- of voortgangsmutaties uitgevoerd.
+
+Bronreview:
+https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/madonna/
+Uitgever koppelt ISBN 9789044970791 expliciet aan het e-book (14 pagina's,
+5 juni 2013) en noemt 'Een verhaal uit de bundel De bestemming'.
+Het luisterboek heeft een ANDER ISBN, 9789046172841, en wordt niet gebruikt.
+Exacte cover uit de e-bookpresentatie van deze bron:
+https://www.awbruna.nl/wp-content/uploads/sites/51/external/b6bd674d8e0e6381e637a31d0b0022af-364x0-c-default.jpg?t=1685223028
+Browser: geladen beeld 364 x 552, titel en auteur visueel gecontroleerd.
+
+Wijziging:
+- Bestaande gecontroleerde coverregistratie uitgebreid, exact Work/titel/auteur/ISBN.
+- Bestaande beschrijvingsresolver uitgebreid met expliciet gereviewde uitgeversbron.
+  Eén korte eigen Nederlandse samenvatting, geen volledige uitgeverstekst.
+  Exact Work 1305, Edition 1305, titel, auteur, ISBN en nld vereist.
+- SSR en bestaande description-API gebruiken dezelfde resolver en bronregistratie.
+  Bronlink is allowlisted; geen willekeurige externe URL uit invoer.
+- Bestaande compacte bronpresentatie toont 'Bron: A.W. Bruna Uitgevers'.
+- Geen UI-layout, publicatieregels, taxonomie, short_story of scoring gewijzigd.
+- EN blijft onbeschikbaar: geen vertaling of Nederlandse cover als Engelse editie.
+
+Bewijs:
+55 relevante unit-/regressietests geslaagd (coverstate, editievoorkeur, taal,
+beschrijvingen, gereviewde covers en Suzanne Vermeer-identiteiten).
+Daarvan 5 nieuwe gerichte Madonna-tests voor exacte identiteit, SSR/API,
+verkeerde taal/ISBN/identiteit, EN-uitsluiting en veilige bronvermelding.
+4 oorspronkelijke server-HTML-controles geslaagd: NL/EN boek + NL/EN collectie.
+TypeScript --noEmit, ESLint, Vinext-productiebuild en Vite-productiebuild geslaagd.
+Secretscan: 72 clientbestanden, geen geheime sleutels/waarden; geslaagd.
+git diff --check geslaagd.
+Builds melden bestaande niet-fatale Vinext/import-/pluginwaarschuwingen.
+
+Browser:
+Echte router, SSR en ongewijzigde boek-/collectie-/cover-/badgecomponenten.
+Uitsluitend loopback, met publiek uit productie gelezen Madonna-identiteit als
+loadercapture; geen Supabase-configuratie, accounts of schrijftoegang.
+De collectiefixture bevat ALLEEN deze ene Work; 1/0 boeken op de screenshots
+zijn nadrukkelijk geen claim over de volledige productiecollectie.
+De beschrijvingsresolver en editie-/coverselectie zijn NIET gemockt.
+Cover komt daadwerkelijk van de officiële uitgever.
+Gecontroleerd: NL/EN, EN→NL→EN, Paper/Ink, 320/390 CSS-px, desktop.
+Geen horizontale overflow bij 320/390; één badge rechtsonder, binnen kaart,
+verhouding behouden. Coverlabel blijft toegankelijk; afbeelding zelf decoratief.
+Geen fysieke telefoon- of hosted releasecontrole geclaimd.
+
+Screenshots:
+outputs/madonna-repair-20261018/nl-book-paper-390.png
+outputs/madonna-repair-20261018/nl-book-ink-390.png
+outputs/madonna-repair-20261018/nl-book-ink-320.png
+outputs/madonna-repair-20261018/nl-book-paper-desktop.png
+outputs/madonna-repair-20261018/nl-book-ink-desktop.png
+outputs/madonna-repair-20261018/nl-collection-paper-390.png
+outputs/madonna-repair-20261018/nl-collection-paper-card-390.png
+outputs/madonna-repair-20261018/nl-collection-ink-390.png
+outputs/madonna-repair-20261018/nl-collection-ink-320.png
+outputs/madonna-repair-20261018/nl-collection-paper-desktop.png
+outputs/madonna-repair-20261018/en-book-unavailable-320.png
+
+Reproductie:
+node scripts/madonna-review-local.mjs
+http://127.0.0.1:3145/nl/book/1305
+http://127.0.0.1:3145/nl/collection/suzanne-vermeer
+node --test scripts/test-madonna-server-html.mjs
+node --experimental-strip-types --test lib/books/madonna-reviewed-assets.test.ts lib/books/public-description.test.ts lib/books/description-resolution.test.ts lib/books/reviewed-cover-overrides.test.ts lib/books/book-cover-state.test.ts lib/books/edition-ranking.test.ts lib/books/language.test.ts lib/catalog/suzanne-vermeer-reviewed-identities.test.ts
+
+Herstel en grenzen:
+Alleen lokaal; niets gepusht, gemerged, gedeployed of in productie geschreven.
+Herstel = deze afzonderlijke codecommit terugdraaien; geen dataherstel nodig.
+De nld-correctie blijft behouden. Externe coverbeschikbaarheid blijft afhankelijk
+van de uitgever; bij bronuitval blijft de bestaande neutrale coverfallback werken.
+Eerdere lokale SEO-, catalogus-, Browse- en opslagpakketten niet meegenomen.

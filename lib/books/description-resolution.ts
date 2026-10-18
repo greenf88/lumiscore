@@ -5,6 +5,7 @@ import { normalizeEditionLanguage } from './edition-ranking.ts';
 import { normalizeVerifiedIsbn13 } from './google-books-covers.ts';
 import type { Locale } from '../i18n/config.ts';
 import { readServerEnvironment } from '../server-environment.ts';
+import { getReviewedDescription } from './reviewed-descriptions.ts';
 
 export type DescriptionResolutionState =
   | 'resolved'
@@ -12,6 +13,9 @@ export type DescriptionResolutionState =
   | 'temporary_failure';
 
 export type BookDescriptionLookup = {
+  workId?: string | null;
+  editionId?: string | null;
+  author?: string | null;
   openLibraryWorkId?: string | null;
   openLibraryEditionId?: string | null;
   isbn13?: string | null;
@@ -243,6 +247,8 @@ export async function resolveBookDescription(
   lookup: BookDescriptionLookup,
   fetchImplementation: typeof fetch = fetch,
 ): Promise<BookDescriptionResolution> {
+  const reviewed = getReviewedDescription(lookup, lookup.locale ?? 'en');
+  if (reviewed) return { state: 'resolved', description: reviewed };
   const workId = normalizeOpenLibraryId(lookup.openLibraryWorkId, 'work');
   const locale = lookup.locale ?? 'en';
   const candidates = [

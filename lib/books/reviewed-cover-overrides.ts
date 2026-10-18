@@ -13,6 +13,16 @@ export type ReviewedCoverOverride = {
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
   {
+    workId: '1305',
+    title: 'Madonna',
+    author: 'Suzanne Vermeer',
+    isbn13: '9789044970791',
+    coverUrl: 'https://www.awbruna.nl/wp-content/uploads/sites/51/external/b6bd674d8e0e6381e637a31d0b0022af-364x0-c-default.jpg?t=1685223028',
+    source: 'official_publisher',
+    evidenceUrl: 'https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/madonna/',
+    reviewedAt: '2026-10-18',
+  },
+  {
     workId: '1296',
     title: 'Festival',
     author: 'Suzanne Vermeer',

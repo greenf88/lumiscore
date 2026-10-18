@@ -28,6 +28,7 @@ export async function GET(request: Request, { params }: DescriptionRouteProps) {
   }
 
   const resolution = await resolveBookDescription({
+    workId: book.workId, editionId: book.editionId, author: book.author, editionTitle: book.editionTitle,
     openLibraryWorkId: book.openLibraryWorkId,
     openLibraryEditionId: book.openLibraryEditionId,
     isbn13: book.isbn13,

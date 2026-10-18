@@ -9,7 +9,7 @@ export type VerifiedBookCoverAsset = {
 
 export type VerifiedBookDescription = {
   text: string;
-  source: 'open_library' | 'google_books';
+  source: 'open_library' | 'google_books' | 'official_publisher';
   sourceKey: string;
   verifiedAt: string;
   language?: 'en' | 'nl' | null;

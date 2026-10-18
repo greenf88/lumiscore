@@ -1,4 +1,5 @@
 import type { VerifiedBookDescription } from '@/app/data/books';
+import { reviewedDescriptionSource } from './reviewed-descriptions.ts';
 
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
   amp: '&',
@@ -82,7 +83,8 @@ export function normalizeVerifiedBookDescription(
 
   if (
     !text ||
-    (source !== 'open_library' && source !== 'google_books') ||
+    (source !== 'open_library' && source !== 'google_books' &&
+      !(source === 'official_publisher' && reviewedDescriptionSource(sourceKey))) ||
     !sourceKey ||
     !verifiedAt
   ) {
