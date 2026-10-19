@@ -168,7 +168,7 @@ test('homepage discovery stays batched, server-only and does not fetch external 
   // The compact homepage deliberately delegates Dutch discovery to Browse.
   assert.doesNotMatch(page, /loadDutchHomepageDiscovery\(/);
   assert.match(page, /emptyDutchDiscovery/);
-  assert.match(page, /dutchDiscovery=\{dutchDiscovery\}/);
+  assert.match(page, /dutchDiscovery=\{emptyDutchDiscovery\}/);
   assert.match(component, /detailReturnContext=\{\{ kind: 'home' \}\}/);
   assert.match(styles, /\.dutch-discovery-grid \{ grid-template-columns: repeat\(3/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.dutch-discovery-grid \{ grid-template-columns: repeat\(2/);
