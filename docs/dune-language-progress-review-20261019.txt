@@ -1,0 +1,38 @@
+Dune/collectiepresentatie — afzonderlijk lokaal pakket, 19 oktober 2026
+
+Actuele basis: 8f337dd4ee98fbfd5af45918ffb480b9bc5e0fd6.
+Geïsoleerde branch fix/week-report-followup-20261019; homepagefix aparte commit.
+
+Codepad vastgesteld: collection_books verzamelt alle memberships; geen paginering
+in loadCollectionPageData. loadCatalogBooksByIdsWithStoredCovers laadt Works+
+complete edities, selectStrictEdition kiest expliciete NL (anders gelabeldEN)
+of alleenEN, filtreert ongeschikte presentaties; boekkaarten renderen die selectie.
+Geen schriftfilter, geen buitenlandse cover-/editiefallback toegevoegd.
+
+Bewezen codefout: server berekent progressBooks over alle memberships met
+neutrale placeholders voor onbeschikbare presentaties; client negeerde deze
+scope en berekende read/complete/percentage opnieuw over gefilterde kaarten.
+Fix: server levert dezelfde volledige progressBooks-scope mee; client gebruikt
+die bij dezelfde bestaande calculateSeriesProgress/calculateCollectionProgress.
+Interactieve kaarten/bulkselectie blijven beperkt tot geschikte zichtbare boeken.
+Een onbeschikbaar volgend deel wordt niet stilzwijgend overgeslagen naar een
+later zichtbaar deel. Geen wijziging van opgeslagen leesstatus of reeksvolgorde.
+Bij verschil: korte NL/EN-melding met zichtbare/gekoppelde aantallen en melding
+dat leesvoortgang behouden blijft. Geen verboden titels/covers gepresenteerd.
+
+Gerichte twee tests groen: zes memberships, zichtbare1/3/4/6, read2 en rating5:
+voorheen client0gelezen, nu2van6/33%. Native browser met echte componenten en
+lokale synthetische data: vier kaarten,2van6, beschikbaarheidsmelding. NL/EN,
+Paper/Ink, desktop en390px, geen horizontale overflow. Screenshots in
+outputs/week-followup-20261019/02-dune; géén hosted/Auth/opslag/Dune-databewijs.
+
+Nog NIET bewezen: exacte zes actuele Dune-Work-ID's en de ontbrekende twee in
+NL/EN. Productie-SELECT is door beveiligingscontrole geblokkeerd; niet omzeild.
+Daarom de hypothese ontbrekende edities nog niet als werkelijke Dune-oorzaak
+geclaimd. Exact read-only onderzoek voorbereid in
+scripts/operations/dune-edition-trace.sql. Dune ontbreekt op het bestaande
+testproject; geen collectie of bibliografie gekopieerd/gecreëerd.
+
+Geen cataloguskoppeling, editie, volgorde, rating, status of gebruikersgegevens
+gewijzigd; geen productiedata-correctievoorstel zonder de ontbrekende bronreview.
+Herstel: revert uitsluitend deze collectiecommit; geen gegevensrollback.

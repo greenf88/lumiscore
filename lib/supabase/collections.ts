@@ -54,6 +54,8 @@ type RatingRow = {
 export type CollectionPageData = {
   collection: CollectionSummary;
   books: CollectionBook[];
+  /** All stored memberships for Work-based progress, including unavailable editions. */
+  progressBooks?: CollectionBook[];
   authenticated: boolean;
   statuses: Record<string, ReadingStatus>;
   ratedWorkIds: string[];
@@ -286,6 +288,7 @@ export async function loadCollectionPageData(slug: string,locale:Locale='en'): P
   return {
     collection,
     books,
+    progressBooks,
     authenticated: Boolean(user),
     statuses,
     ratedWorkIds,
