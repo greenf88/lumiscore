@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { localizedHref } from '../i18n/paths.ts';
 import {
   INFORMATION_PAGE_KEYS,
   getInformationPageContent,
@@ -13,6 +14,7 @@ const EXPECTED_PATHS = {
   howItWorks: '/zo-werkt-het',
   publishers: '/voor-uitgevers',
   contact: '/contact',
+  imdbComparison: '/imdb-for-books',
 } as const;
 
 function linksFrom(parts: InformationTextPart[] | undefined) {
@@ -38,11 +40,11 @@ test('Dutch and English pages have unique SEO metadata and stable canonicals', (
     const pages = INFORMATION_PAGE_KEYS.map((key) =>
       getInformationPageContent(key, locale),
     );
-    assert.equal(new Set(pages.map((page) => page.path)).size, 4);
-    assert.equal(new Set(pages.map((page) => page.seoTitle)).size, 4);
-    assert.equal(new Set(pages.map((page) => page.seoDescription)).size, 4);
+    assert.equal(new Set(pages.map((page) => page.path)).size, INFORMATION_PAGE_KEYS.length);
+    assert.equal(new Set(pages.map((page) => page.seoTitle)).size, INFORMATION_PAGE_KEYS.length);
+    assert.equal(new Set(pages.map((page) => page.seoDescription)).size, INFORMATION_PAGE_KEYS.length);
     for (const page of pages) {
-      assert.equal(page.path, EXPECTED_PATHS[page.key]);
+      assert.equal(localizedHref(page.path, locale), localizedHref(EXPECTED_PATHS[page.key], locale));
       assert.ok(page.title.length > 0);
       assert.ok(page.lead.length > 0);
       assert.match(page.seoTitle, /LumiScore/);
@@ -76,6 +78,7 @@ test('information links are real internal routes and mail links use the approved
     '/zo-werkt-het',
     '/voor-uitgevers',
     '/login?next=%2Fzo-werkt-het',
+    '/imdb-for-books',
   ]);
 
   for (const locale of ['nl', 'en'] as const) {
@@ -113,7 +116,8 @@ test('information navigation is complete on desktop footer and mobile menu', asy
     readFile(new URL('../../app/components/LumiScoreInformationRoute.tsx', import.meta.url), 'utf8'),
   ]);
 
-  for (const path of Object.values(EXPECTED_PATHS)) {
+  const globalNavigationPaths = Object.values(EXPECTED_PATHS).filter(path => path !== '/imdb-for-books');
+  for (const path of globalNavigationPaths) {
     assert.match(home, new RegExp(`href="${path}"`, 'g'));
   }
   assert.match(translations, /'footer\.about': 'About us'/);
@@ -124,7 +128,7 @@ test('information navigation is complete on desktop footer and mobile menu', asy
   assert.match(home, /<MobileNavigation authenticated=\{authState.authenticated\}/);
   const mobile = await readFile(new URL('../../app/components/MobileNavigation.tsx', import.meta.url), 'utf8');
   assert.match(mobile, /mobile-navigation-panel[\s\S]*href="\/over-ons"[\s\S]*href="\/contact"/);
-  for (const path of Object.values(EXPECTED_PATHS)) assert.ok(mobile.includes(`href="${path}"`));
+  for (const path of globalNavigationPaths) assert.ok(mobile.includes(`href="${path}"`));
   assert.match(styles, /\.information-page-shell[^}]*var\(--bg\)/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.information-page/);
   assert.match(route, /\.catch\(\(\) => \(\{ authenticated: false \}\)\)/);

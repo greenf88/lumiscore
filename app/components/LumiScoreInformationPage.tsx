@@ -42,11 +42,14 @@ export function LumiScoreInformationPage({
         authState={authState}
         returnTo={content.path}
       />
-      <article className="information-page" aria-labelledby="information-page-title">
+      <article className={`information-page${content.layout === 'compact' ? ' information-page-compact' : ''}`} aria-labelledby="information-page-title">
         <header className="information-hero">
           <span className="eyebrow">{content.eyebrow}</span>
           <h1 id="information-page-title">{content.title}</h1>
           <p>{content.lead}</p>
+          {content.actions && <div className="information-actions">
+            {content.actions.map(action => <LocaleLink key={action.href} href={action.href} className={`ui-control ui-${action.variant}`}>{action.text}</LocaleLink>)}
+          </div>}
         </header>
         <div className="information-content">
           {content.sections.map((section) => (
@@ -75,6 +78,11 @@ export function LumiScoreInformationPage({
               )}
             </section>
           ))}
+          {content.faq && <section className="information-section information-faq" aria-labelledby="information-faq-title">
+            <h2 id="information-faq-title">{content.faq.heading}</h2>
+            {content.faq.items.map(item => <div key={item.question} className="information-faq-item"><h3>{item.question}</h3><p>{item.answer}</p></div>)}
+          </section>}
+          {content.disclaimer && <p className="information-disclaimer">{content.disclaimer}</p>}
         </div>
       </article>
       <Footer onThemeToggle={toggleTheme} />

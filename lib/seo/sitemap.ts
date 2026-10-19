@@ -16,6 +16,7 @@ export function buildPublicSitemapPaths(
     '/taste-test',
     '/over-ons',
     '/zo-werkt-het',
+    '/imdb-for-books',
     '/voor-uitgevers',
     '/contact',
     ...collectionSlugs

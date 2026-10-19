@@ -1,0 +1,129 @@
+LumiScore — IMDb voor boeken / IMDb for books
+Lokale review, 19 oktober 2026
+
+Basis en afbakening
+Remote main: 8f337dd4ee98fbfd5af45918ffb480b9bc5e0fd6.
+Branch: seo/imdb-books-comparison-20261019.
+Geen push, PR, merge of deployment. Geen database-, account-, DNS-, Auth- of
+platformconfiguratiewijzigingen. PR38, PR42, kenmerkaudit en productmetingen
+blijven buiten dit pakket. Bestaand sitenaam- en homepage-SEO-werk behouden.
+De nog niet gemergede streamingcode van PR42 is niet overgenomen; de nieuwe
+homepageverwijzing staat buiten de hero en catalogussecties, na ValueStrip.
+Een virtuele samenvoegcontrole met PR42-head
+22387fe61bdabfb2d0795cc97a3d4479af1d7974 gaf geen tekstconflicten;
+geen branch is samengevoegd en geen PR42-code is opgenomen.
+
+Gewijzigde/toegevoegde bestanden
+app/imdb-for-books/page.tsx — gedeelde route.
+lib/information/imdb-comparison.ts — definitieve NL/EN-copy en metadata.
+lib/information/pages.ts — contentregistratie en uitlegpagina-link.
+app/components/LumiScoreInformationPage.tsx — optionele compacte acties/FAQ.
+app/components/LumiScoreHome.tsx — alleen bescheiden contextlink.
+app/globals.css — uitsluitend scoped vergelijking/acties/contextlink.
+lib/i18n/paths.ts — equivalenten van de twee nieuwe slugs.
+lib/seo/sitemap.ts — één nieuwe pagina met beide gelokaliseerde URL's.
+lib/information/imdb-comparison.test.ts, lib/information/pages.test.ts en
+lib/seo/sitemap.test.ts — gerichte regressiecontroles.
+test-support/imdb-comparison/serve.mjs en server-html.test.mjs — lokale QA.
+docs/imdb-books-review-20261019.txt — dit reviewverslag.
+
+Resultaat en definitieve teksten
+NL: http://127.0.0.1:3152/nl/imdb-voor-boeken
+EN: http://127.0.0.1:3152/en/imdb-for-books
+De definitieve NL/EN-teksten, metadata, acties en vier zichtbare antwoorden staan
+in lib/information/imdb-comparison.ts en worden ongewijzigd servergerenderd.
+NL-title: IMDb voor boeken? Ontdek LumiScore
+NL-H1: Zoek je een IMDb voor boeken?
+NL-description: Beoordeel boeken van 1 tot 10, ontdek lezersscores en houd je
+leesreeksen bij. Maak kennis met LumiScore, een onafhankelijk platform voor lezers.
+EN-title: Looking for an IMDb for Books? Meet LumiScore
+EN-H1: Looking for an IMDb for books?
+EN-description: Rate books from 1 to 10, explore reader ratings and track your
+reading series. Meet LumiScore, an independent platform for readers.
+
+Inhoud en ontwerp
+Direct antwoord, compacte secties, één groene catalogusactie en een lichte
+smaaktestactie. De vergelijking betreft cijfers en overzicht, niet alle IMDb-
+functies. Eén bescheiden onafhankelijkheidsvermelding per pagina. Geen claims
+over geschreven reviews, import, Top 250, posities of zoekvolumes.
+Geen boekvoorbeelden: de eerste inhoud en knoppen vereisen geen catalogusquery.
+Homepage en bestaande uitlegpagina krijgen ieder één contextuele verwijzing;
+geen nieuwe navigatierij of groot homepage-tekstblok.
+
+Productfeiten gecontroleerd
+- Hele cijfers 1–10 volgens lib/ratings/model.ts en bestaande ratingbediening.
+- Publieke score: gemiddelde op één decimaal, vanaf drie verschillende lezers;
+  daaronder een streepje, aantallen in bestaande bandbreedtes. Zie migratie
+  20261007080316_public_rating_threshold_three.sql en ratingtests.
+- Persoonlijke match is bewijsgebonden en geen publieke kwaliteitsscore of kans.
+- Rondkijken zonder account; accountbeoordelingen en accountvoortgang na login.
+  Gastvoorkeuren worden niet als opgeslagen accountbeoordelingen voorgesteld.
+- Reeksuitleg beperkt zich tot opgenomen delen en ondersteunde bekende volgorde.
+Geen opslag-, score-, selectie- of voortgangslogica gewijzigd.
+
+Technische SEO
+Eén interne inhoudsroute met twee canonieke taal-URL's. Verkeerde taal-slugs en
+trailing slashes verwijzen via één 308 naar de juiste taalversie; queries blijven
+behouden. Bestaande boekredirects blijven werken.
+Beide pagina's: HTTP200, één H1/title/description, self-canonical, wederkerige
+en/nl-NL-hreflang inclusief zichzelf en bestaande x-default naar EN. nl-NL volgt
+de bestaande siteconventie. Taalwissel wijst naar de inhoudelijke tegenhanger.
+Beide URL's eenmaal in de bestaande sitemap. OG-site_name blijft LumiScore.
+Gedeelde WebPage en BreadcrumbList verwijzen naar https://lumisco.re/#website;
+één bestaande WebSite-entiteit, geen FAQPage/AggregateRating/IMDb-sameAs.
+Indexeerbare productie-metadata behouden. Bestaande deployment/preview-noindex,
+privéregels en domeinroot-routering niet aangepast. Hosted headers zijn binnen
+deze uitsluitend lokale opdracht niet opnieuw bewezen.
+
+Controles
+- 35 gerichte informatie-/taal-/SEOtests groen.
+- Volledige unitrun: 758 tests, 742 geslaagd, 16 bestaande opt-in skips, 0 fouten.
+- Vier echte lokale SSR/HTTPtests groen: NL/EN-bron-HTML, redirects, bestaande
+  contextlinks en daadwerkelijke sitemaproute (lege lokale catalogusadapter).
+- TypeScript, lint, Vinext-productiebuild en Vercel/Nitro-productiebuild groen.
+  Nitro-bestandstracering vereiste lokale toegang buiten de Windows-sandbox;
+  dezelfde ongewijzigde build slaagde daarna. Geen platforminstelling gewijzigd.
+- Client-secretscan groen: 142 clientbestanden, geen geheime identifiers/waarden.
+- Diffcontrole groen.
+- Echte lokale browser: NL/EN × Paper/Ink × 390px/1280px; aanvullend 320px
+  reflow in beide talen. Geen horizontale overflow. Acties 48 CSS-pixels hoog,
+  duidelijke keyboardfocus, werkende thema- en wederkerige taalwissel.
+- Nieuwe smaaktestknop gevolgd: correcte lokale gastkeuze aanmelden/doorgaan
+  als gast. Geen account aangemaakt, geen beoordeling of andere write uitgevoerd.
+- Geen fysieke telefoon-, 200%-browserzoom- of ingelogde opslagtest geclaimd.
+  De tekstpagina heeft geen persoonlijke data. Geen nieuwe browserconsolefouten.
+
+Bewijs
+Map: C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/imdb-books-20261019
+Screenshots: nl-paper-390.png, nl-ink-390.png, en-paper-390-keyboard.png,
+en-ink-390.png, nl-paper-desktop.png, nl-ink-desktop.png,
+en-paper-desktop.png, en-ink-desktop.png, nl-paper-full.png, en-ink-full.png,
+home-context-link.png. browser-checks.json bevat geometrie/actiestijlen.
+Build- en unitlogs staan naast die map met prefix imdb-books-20261019-.
+Lokale server: node test-support/imdb-comparison/serve.mjs
+Lokale SSR-tests: node --experimental-strip-types --test
+  test-support/imdb-comparison/server-html.test.mjs
+De loopback-review vervangt uitsluitend Auth/data-loaders door lege gastadapters;
+renderer, router, copy en sitemaproute zijn echt. Geen fictieve boeken/ratings.
+Deze testondersteuning wordt niet door applicatieroutes geïmporteerd.
+
+Zoekmachines en meten na een afzonderlijk publicatieakkoord
+Geen IndexNow-integratie of verificatiesleutel aangetroffen; niets nieuws gebouwd.
+Geen Search Console/Bing-accountmetingen uitgevoerd. Bestaande Speed Insights
+meet prestaties, niet bewezen cataloguskliks/smaakteststart/succesvolle ratings.
+Geen nieuw analytics- of toestemmingssysteem toegevoegd.
+1. Inspecteer beide nieuwe URL's in Google Search Console en Bing Webmaster
+   Tools; vraag na publicatie alleen waar nodig indexering aan.
+2. Controleer de bestaande sitemap en beide gelokaliseerde entries.
+3. Vergelijk vertoningen, klikken en positie per pagina, zoekterm en land.
+   Search Console-vertoningen zijn geen totale marktvraag of zoekvolume.
+4. Volg doorklik naar boeken, smaakteststart en succesvolle beoordeling alleen
+   voor zover bestaande toegestane metingen dit werkelijk ondersteunen.
+5. Evalueer na vier weken en daarna na acht tot twaalf weken; geen automatische
+   planning aangemaakt. Google/Bing bepalen verwerking en ranking.
+
+Herstel en grenzen
+Na eventuele latere release: revert uitsluitend de commit van deze branch en
+bouw via de bestaande publicatieflow. Geen gegevensherstel of migratie nodig.
+Tot die tijd kan dit lokale pakket zonder wijzigingen aan andere worktrees
+apart worden beoordeeld. Deze review bewijst geen hosted of productie-uitrol.

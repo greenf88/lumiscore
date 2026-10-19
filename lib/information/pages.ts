@@ -1,12 +1,14 @@
 import type { Locale } from '../i18n/config.ts';
 import { absoluteLumiScoreUrl } from '../seo/site-origin.ts';
 import { LUMISCORE_WEBSITE_ID } from '../seo/site-identity.ts';
+import { IMDB_COMPARISON_CONTENT } from './imdb-comparison.ts';
 
 export const INFORMATION_PAGE_KEYS = [
   'about',
   'howItWorks',
   'publishers',
   'contact',
+  'imdbComparison',
 ] as const;
 
 export type InformationPageKey = (typeof INFORMATION_PAGE_KEYS)[number];
@@ -42,6 +44,10 @@ export type InformationPageContent = {
   schemaType: 'AboutPage' | 'WebPage' | 'ContactPage';
   breadcrumbHome: string;
   sections: InformationSection[];
+  layout?: 'compact';
+  actions?: Array<{ text: string; href: string; variant: 'primary' | 'secondary' }>;
+  faq?: { heading: string; items: Array<{ question: string; answer: string }> };
+  disclaimer?: string;
 };
 
 const link = (text: string, href: string): InformationTextLink => ({
@@ -51,6 +57,7 @@ const link = (text: string, href: string): InformationTextLink => ({
 });
 
 const nl: Record<InformationPageKey, InformationPageContent> = {
+  imdbComparison: IMDB_COMPARISON_CONTENT.nl,
   about: {
     key: 'about',
     locale: 'nl',
@@ -143,6 +150,7 @@ const nl: Record<InformationPageKey, InformationPageContent> = {
           ['Met een account geef je boeken de status Wil ik lezen, Aan het lezen, Gelezen of Niet uitgelezen. Een beoordeeld boek telt ook als gelezen. In Mijn boeken vind je je eigen overzicht.'],
           ['Bij een reeks zie je welke opgenomen delen je hebt gelezen. Een volgende-leessuggestie verschijnt wanneer de bekende reeksvolgorde dit ondersteunt. Een voltooiingspercentage betekent niet automatisch dat alle ooit verschenen delen in de catalogus staan.'],
           [link('Bekijk boekenreeksen en collecties', '/collections'), '. Je kunt zonder account rondkijken; ', link('log in of maak een account aan', '/login?next=%2Fzo-werkt-het'), ' om je eigen voortgang te bewaren.'],
+          ['Zoek je vooral cijfers en overzicht? Lees ', link('LumiScore als IMDb voor boeken', '/imdb-for-books'), '.'],
         ],
       },
     ],
@@ -241,6 +249,7 @@ const nl: Record<InformationPageKey, InformationPageContent> = {
 };
 
 const en: Record<InformationPageKey, InformationPageContent> = {
+  imdbComparison: IMDB_COMPARISON_CONTENT.en,
   about: {
     key: 'about',
     locale: 'en',
@@ -333,6 +342,7 @@ const en: Record<InformationPageKey, InformationPageContent> = {
           ['With an account, mark books as Want to read, Reading, Read or Did not finish. Rated books also count as read. My books brings your own reading list together.'],
           ['A series shows which listed volumes you have read. A next-read suggestion appears when the known series order supports it. A completion percentage does not automatically mean the catalog contains every volume ever published.'],
           [link('Explore book series and collections', '/collections'), '. You can browse without an account; ', link('sign in or create an account', '/login?next=%2Fzo-werkt-het'), ' to keep your own progress.'],
+          ['Mainly looking for ratings and an overview? Read ', link('LumiScore as an IMDb for books', '/imdb-for-books'), '.'],
         ],
       },
     ],

@@ -389,6 +389,23 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .information-section .information-after-list { margin-top: 22px; }
 .information-section p a { color: var(--teal); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--teal) 45%, transparent); text-underline-offset: 4px; }
 .information-section p a:hover { color: var(--text); text-decoration-color: var(--text); }
+.information-page-compact { max-width: 900px; padding-block: clamp(32px, 5vw, 60px) 64px; }
+.information-page-compact .information-hero { padding-bottom: 28px; }
+.information-page-compact .information-section { padding-block: 24px; }
+.information-page-compact .information-section h2 { margin-bottom: 14px; }
+.information-page-compact .information-section p { margin-bottom: 12px; }
+.information-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.information-actions .ui-control { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; text-align: center; text-decoration: none; }
+.information-faq-item + .information-faq-item { margin-top: 20px; }
+.information-faq-item h3 { margin: 0 0 6px; font-size: var(--type-body); line-height: 1.5; }
+.information-disclaimer { color: var(--muted); font-size: var(--type-small); line-height: 1.6; margin: 20px 0 0; }
+.home-comparison-note { margin: 16px 24px 0; font-size: var(--type-small); line-height: 1.6; text-align: center; }
+.home-comparison-note a { color: var(--teal); text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 560px) {
+  .information-page.information-page-compact { width: calc(100% - 40px); padding-block: 32px 48px; }
+  .information-page-compact .information-hero h1 { font-size: clamp(32px, 9vw, 44px); }
+  .information-actions .ui-control { flex: 1 1 100%; }
+}
 .information-email { width: fit-content; min-height: 48px; max-width: 100%; display: inline-flex; align-items: center; gap: 26px; margin-top: 22px; padding: 0 17px; border: 1px solid color-mix(in srgb, var(--teal) 62%, var(--border)); border-radius: 3px; color: var(--text); font-size: 13px; font-weight: 800; letter-spacing: .02em; overflow-wrap: anywhere; transition: border-color 160ms ease, background-color 160ms ease; }
 .information-email:hover { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 8%, transparent); }
 .information-email span { color: var(--gold); font-size: 18px; }

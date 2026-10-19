@@ -3,6 +3,18 @@ import { DEFAULT_LOCALE, isLocale, type Locale } from './config.ts';
 export const LOCALE_REQUEST_HEADER = 'x-lumiscore-route-locale';
 export const PATH_REQUEST_HEADER = 'x-lumiscore-route-path';
 
+// One content route, with a canonical slug per language. Other routes stay intact.
+export const IMDB_COMPARISON_PATHS = { en: '/imdb-for-books', nl: '/imdb-voor-boeken' } as const;
+
+function comparisonPath(path: string, locale: Locale): string {
+  const suffixAt = path.search(/[?#]/);
+  const pathname = suffixAt < 0 ? path : path.slice(0, suffixAt);
+  const suffix = suffixAt < 0 ? '' : path.slice(suffixAt);
+  return (Object.values(IMDB_COMPARISON_PATHS) as readonly string[]).includes(pathname)
+    ? IMDB_COMPARISON_PATHS[locale] + suffix
+    : path;
+}
+
 export function splitLocalePath(path: string): { locale: Locale | null; path: string } {
   const match = /^\/(en|nl)(?=\/|\?|#|$)/.exec(path);
   return match && isLocale(match[1])
@@ -21,7 +33,7 @@ export function localizedHref(href: string, locale: Locale = DEFAULT_LOCALE): st
   if (!href.startsWith('/') || href.startsWith('//') || /[\\\u0000-\u0020\u007f]/u.test(href)) return href;
   const { path } = splitLocalePath(href);
   if (isLanguageNeutralPath(path)) return path;
-  return `/${locale}${path.replace(/^\/(?=[?#]|$)/, '')}`;
+  return `/${locale}${comparisonPath(path, locale).replace(/^\/(?=[?#]|$)/, '')}`;
 }
 
 export function languageAlternates(path: string) {
@@ -42,5 +54,7 @@ export function languageRoute(pathname: string):
   if (!parsed.locale || path !== parsed.path || (pathname.length > 1 && pathname.endsWith('/'))) {
     return { kind: 'redirect', path: localizedHref(path.replace(/\/$/, '') || '/', parsed.locale ?? DEFAULT_LOCALE) };
   }
-  return { kind: 'rewrite', path: parsed.path, locale: parsed.locale };
+  const translated = comparisonPath(path, parsed.locale);
+  if (translated !== path) return { kind: 'redirect', path: localizedHref(translated, parsed.locale) };
+  return { kind: 'rewrite', path: comparisonPath(parsed.path, 'en'), locale: parsed.locale };
 }
