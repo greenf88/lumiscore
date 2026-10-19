@@ -11,6 +11,9 @@ import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { HOME_POSITIONING } from '@/lib/seo/home-positioning';
 
+// The streamed response can contain verified owner state. Never share it publicly.
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() { return createLocalizedPageMetadata({
   title: HOME_POSITIONING.en.title,
   description: HOME_POSITIONING.en.description,
@@ -34,7 +37,7 @@ async function loadHomepageBooks(locale:'nl'|'en') {
     const catalog = await measureServerOperation(
       'homepage.catalog',
       'public',
-      () => loadHighestRatedCatalog(8,locale),
+      () => loadHighestRatedCatalog(8,locale,true),
     );
     return { ...catalog, unavailable: false };
   } catch (error) {
@@ -66,10 +69,13 @@ export default async function Home() {
   const authPromise = import('@/lib/supabase/auth')
     .then(({ loadHeaderAuthState }) => measureServerOperation('homepage.auth', 'private', loadHeaderAuthState))
     .catch(() => ({ authenticated: false }));
-  const [catalog, dutchDiscovery, personalization, authState, seriesContinuations, categories] = await Promise.all([
+  // Start independent work now, but do not hold the stable hero/navigation behind
+  // external edition-cover evidence or the owner's recommendation calculation.
+  const catalogPromise = Promise.all([
     loadHomepageBooks(locale),
-    emptyDutchDiscovery,
-    import('@/lib/supabase/taste-test')
+    import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),
+  ]).then(([catalog, categories]) => ({...catalog, categoryCount: categories?.length ?? null}));
+  const personalizationPromise = import('@/lib/supabase/taste-test')
       .then(async ({ loadHomepagePersonalization }) => {
         if (!(await authPromise).authenticated) return emptyPersonalization;
         const personal = await measureServerOperation(
@@ -87,30 +93,29 @@ export default async function Home() {
         tasteTestAnsweredCount: 0,
         hasEvidence: false,
         recommendations: [],
-      })),
-    authPromise,
-    import('@/lib/supabase/collections')
+      }));
+  const seriesPromise = import('@/lib/supabase/collections')
       .then(async ({ loadHomepageSeriesContinuations }) => (await authPromise).authenticated ? measureServerOperation(
         'homepage.series_continuations',
         'private',
         () => loadHomepageSeriesContinuations(3,locale),
       ) : [])
-      .catch(() => []),
-    import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),
-  ]);
+      .catch(() => []);
+  const authState = await authPromise;
   return (
     <>
       <LumiScoreHome
-        initialBooks={catalog.books}
+        initialBooks={[]}
         catalogStats={{
-          books: catalog.total,
-          categories: categories?.length ?? null,
+          books: null,
+          categories: null,
         }}
-        personalization={personalization}
+        personalization={emptyPersonalization}
         authState={authState}
-        dutchDiscovery={dutchDiscovery}
-        catalogUnavailable={catalog.unavailable}
-        seriesContinuations={seriesContinuations}
+        dutchDiscovery={emptyDutchDiscovery}
+        catalogUnavailable={false}
+        seriesContinuations={[]}
+        deferred={{catalog:catalogPromise, personalization:personalizationPromise, series:seriesPromise}}
       />
     </>
   );

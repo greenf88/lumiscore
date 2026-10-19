@@ -16,7 +16,7 @@ const load = cache(async (slug: string,locale:'nl'|'en') => {
     return await measureServerOperation(
       'collection.page',
       'mixed',
-      () => loadCollectionPageData(slug,locale),
+      () => loadCollectionPageData(slug,locale,true),
     );
   } catch (error) {
     console.error('Collection page load failed.', error);

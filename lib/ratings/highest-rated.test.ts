@@ -67,7 +67,7 @@ test('homepage uses the global aggregate ranking and Highest rated label', async
     readFile(new URL('../supabase/books.ts', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(page, /loadHighestRatedCatalog\(8,locale\)/);
+  assert.match(page, /loadHighestRatedCatalog\(8,locale,true\)/);
   assert.match(home, /t\('home\.highestRated'\)/);
   assert.doesNotMatch(home, /Featured today/);
   assert.match(catalog, /loadPublicRatingSummariesBatched/);

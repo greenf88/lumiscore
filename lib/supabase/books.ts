@@ -1,7 +1,7 @@
 import type { Book } from '@/app/data/books';
 import { normalizeIsbn13, normalizeOpenLibraryId } from '@/lib/books/covers';
 import { selectStrictEdition, withStrictEdition, unavailableEdition, type StrictEditionRow } from '@/lib/books/strict-edition';
-import { withEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
+import { withEditionCoverEvidence, deferEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
 import { getWorkFirstPublishYear } from '@/lib/books/edition-ranking';
 import type { Locale } from '@/lib/i18n/config';
 import {
@@ -15,10 +15,6 @@ import {
   type PublicRatingSummaryRow,
   type PublicRatingSummary,
 } from '@/lib/ratings/card-summaries';
-import {
-  loadStoredCoverResolutionsBatched,
-  type StoredCoverResolution,
-} from '@/lib/supabase/cover-resolutions';
 import { highestRatedPageArgs, readHighestRatedPage } from '@/lib/ratings/highest-rated-page';
 import {
   CATALOG_BROWSE_PAGE_SIZE,
@@ -75,7 +71,6 @@ const HOMEPAGE_CATALOG_SELECT = [
   'author_id',
   'cover_id',
   'authors(id,name)',
-  'editions(id,work_id,open_library_edition_id,isbn_10,isbn_13,language,publisher,title)',
 ].join(',');
 const BOOK_DETAIL_SELECT = [
   'id',
@@ -87,7 +82,6 @@ const BOOK_DETAIL_SELECT = [
   'author_id',
   'cover_id',
   'authors(id,name)',
-  'editions(id,open_library_edition_id,isbn_10,isbn_13,language,publisher,title)',
 ].join(',');
 
 function asRow(value: unknown): DatabaseRow | null {
@@ -289,13 +283,13 @@ export async function loadCatalogBooksByIds(
     .in('id', ids);
   if (result.error) throw result.error;
 
-  const catalogBooks = (await completeEditions(asRows(result.data)))
+  const [works, summaries] = await Promise.all([
+    completeEditions(asRows(result.data)),
+    prefetchedSummaries ?? loadPublicRatingSummariesBatched(supabase, ids.map(String)),
+  ]);
+  const catalogBooks = works
     .map((work, index) => mapCatalogBook(work, [], [], index, locale))
     .filter((book): book is Book => book !== null);
-  const summaries = prefetchedSummaries ?? await loadPublicRatingSummariesBatched(
-    supabase,
-    catalogBooks.flatMap((book) => (book.workId ? [book.workId] : [])),
-  );
   return applyRatingSummaries(catalogBooks, summaries);
 }
 
@@ -303,22 +297,12 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
   workIds: readonly string[],
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
   locale: Locale = 'en',
+  streamCovers = false,
 ): Promise<Book[]> {
-  const [books, storedCovers] = await Promise.all([
-    loadCatalogBooksByIds(workIds, prefetchedSummaries, locale),
-    loadStoredCoverResolutionsBatched(workIds),
-  ]);
-  return withEditionCoverEvidence(applyStoredCoverResolutions(books, storedCovers.entries));
-}
-
-function applyStoredCoverResolutions(
-  books: readonly Book[],
-  entries: readonly StoredCoverResolution[],
-): Book[] {
-  // Legacy cache is Work/ISBN keyed, not verified edition/image evidence.
-  // Never append it to an edition-bound presentation.
-  void entries;
-  return [...books];
+  const books = await loadCatalogBooksByIds(workIds, prefetchedSummaries, locale);
+  // Legacy Work/ISBN cache is not edition evidence and was deliberately discarded.
+  // Do not read an unused privileged cache before displaying a public book card.
+  return streamCovers ? deferEditionCoverEvidence(books) : withEditionCoverEvidence(books);
 }
 
 export type CatalogBrowsePage = {
@@ -378,14 +362,10 @@ export async function loadCatalogBrowsePage(
     .filter((book): book is Book => book !== null);
   const workIds = catalogBooks.flatMap((book) =>
     book.workId ? [book.workId] : []);
-  const [summaries, storedCovers] = await Promise.all([
-    loadPublicRatingSummariesBatched(supabase, workIds),
-    loadStoredCoverResolutionsBatched(workIds),
-  ]);
+  const summaries = await loadPublicRatingSummariesBatched(supabase, workIds);
 
   return {
-    books: await withEditionCoverEvidence(applyStoredCoverResolutions(
-      applyRatingSummaries(catalogBooks, summaries), storedCovers.entries)),
+    books: await withEditionCoverEvidence(applyRatingSummaries(catalogBooks, summaries)),
     total,
     page,
     pageSize,
@@ -441,12 +421,10 @@ export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
     return workId ? [workId] : [];
   }))];
   const books = await loadCatalogBooksByIds(workIds,undefined,'nl');
-  const storedCovers = await loadStoredCoverResolutionsBatched(workIds);
-  void storedCovers;
   return withEditionCoverEvidence(books.filter(isDutchLanguageBook));
 }
 
-export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en'): Promise<{
+export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en', streamCovers = false): Promise<{
   books: Book[];
   total: number;
 }> {
@@ -468,11 +446,12 @@ export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en'): Pr
       book.workId ? [[book.workId, book]] : []),
   );
 
-  return {
-    books: await withEditionCoverEvidence(ids.flatMap((workId) => {
+  const rankedBooks = ids.flatMap((workId) => {
       const book = booksById.get(workId);
       return book && book.score !== null && Boolean(book.ratingBand) ? [book] : [];
-    })),
+    });
+  return {
+    books: streamCovers ? deferEditionCoverEvidence(rankedBooks) : await withEditionCoverEvidence(rankedBooks),
     total,
   };
 }

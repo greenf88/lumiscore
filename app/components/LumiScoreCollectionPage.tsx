@@ -50,6 +50,9 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
   const [bulkError, setBulkError] = useState('');
   const statusMap = useMemo(() => new Map(Object.entries(statuses)), [statuses]);
   const ratedWorkIds = ratedIds;
+  // Presentation language must not erase the owner's membership-based progress.
+  const progressBooks = data.progressBooks ?? books;
+  const unavailableEditionCount = Math.max(0, progressBooks.length - books.length);
   const visibleWorkIds = useMemo(() => filterCollectionWorkIds(
     books,
     statuses,
@@ -59,14 +62,14 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
   const visibleWorkIdSet = useMemo(() => new Set(visibleWorkIds), [visibleWorkIds]);
   const seriesProgress = collection.collectionType === 'series'
     ? calculateSeriesProgress(
-      books,
+      progressBooks,
       statusMap,
       collection.expectedMainSeriesTotal,
       ratedWorkIds,
     )
     : null;
   const progress = seriesProgress ?? calculateCollectionProgress(
-    books,
+    progressBooks,
     statusMap,
     ratedWorkIds,
   );
@@ -266,6 +269,9 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
             { count: books.length },
           )}
         </p>
+        {unavailableEditionCount > 0 && <p className="collection-edition-availability">{locale==='nl'
+          ? `${books.length} van ${progressBooks.length} gekoppelde boeken beschikbaar in deze taal. Voor ${unavailableEditionCount} boeken ontbreekt een passende Nederlandse of Engelse editie. Je leesvoortgang blijft behouden.`
+          : `${books.length} of ${progressBooks.length} linked books available in this language. ${unavailableEditionCount} books have no suitable English edition. Your reading progress is retained.`}</p>}
         {collection.description && <p>{collection.description}</p>}
         {authenticated ? (
           <>

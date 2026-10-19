@@ -7,7 +7,10 @@ test('production catalog failures never fall back to demo ratings', async () => 
 
   assert.match(source, /process\.env\.NODE_ENV === 'production'/);
   assert.match(source, /\{ books: \[\], total: null, unavailable: true \}/);
-  assert.match(source, /catalogUnavailable=\{catalog\.unavailable\}/);
+  assert.match(source, /deferred=\{\{catalog:catalogPromise/);
+  const component = await readFile(new URL('../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8');
+  assert.match(component, /catalogUnavailable=\{catalog\.unavailable\}/);
+  assert.match(component, /const catalog=use\(data\)/);
 });
 
 test('minimum launch SEO assets use the single Vinext metadata owner', async () => {

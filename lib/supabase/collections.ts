@@ -54,6 +54,8 @@ type RatingRow = {
 export type CollectionPageData = {
   collection: CollectionSummary;
   books: CollectionBook[];
+  /** All stored memberships for Work-based progress, including unavailable editions. */
+  progressBooks?: CollectionBook[];
   authenticated: boolean;
   statuses: Record<string, ReadingStatus>;
   ratedWorkIds: string[];
@@ -204,7 +206,7 @@ export async function loadCollectionsDirectory(locale:Locale='en'): Promise<Coll
   };
 }
 
-export async function loadCollectionPageData(slug: string,locale:Locale='en'): Promise<CollectionPageData | null> {
+export async function loadCollectionPageData(slug: string,locale:Locale='en',streamCovers=false): Promise<CollectionPageData | null> {
   const collectionResult = await supabase
     .from('collections')
     .select('id,slug,name,collection_type,description,expected_main_series_total')
@@ -230,7 +232,7 @@ export async function loadCollectionPageData(slug: string,locale:Locale='en'): P
     measureServerOperation(
       'collection.catalog',
       'public',
-      () => loadCatalogBooksByIdsWithStoredCovers(workIds,undefined,locale),
+      () => loadCatalogBooksByIdsWithStoredCovers(workIds,undefined,locale,streamCovers),
     ),
     authPromise.then(async ({ client, user }) => {
       const [statusesResult, ratingsResult] = await Promise.all([
@@ -286,6 +288,7 @@ export async function loadCollectionPageData(slug: string,locale:Locale='en'): P
   return {
     collection,
     books,
+    progressBooks,
     authenticated: Boolean(user),
     statuses,
     ratedWorkIds,

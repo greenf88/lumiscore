@@ -5,7 +5,7 @@ import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
@@ -211,10 +211,18 @@ function BookCoverForIdentity({
   );
 }
 
+function StreamedBookCover(props: BookCoverProps) {
+  const coverUrls = use(props.book.editionCoverUrls!);
+  const book = { ...props.book, coverUrls };
+  return <BookCoverForIdentity key={getBookCoverIdentity(book)} {...props} book={book} />;
+}
+
 export const BookCover = memo(function BookCover(props: BookCoverProps) {
   const coverIdentity = getBookCoverIdentity(props.book);
-
-  return <BookCoverForIdentity key={coverIdentity} {...props} />;
+  const initial = <BookCoverForIdentity key={coverIdentity} {...props} />;
+  return props.book.editionCoverUrls
+    ? <Suspense fallback={initial}><StreamedBookCover key={coverIdentity} {...props} /></Suspense>
+    : initial;
 });
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
@@ -378,7 +386,26 @@ const RecommendationPanel = memo(function RecommendationPanel({ personalization 
   );
 });
 
-const Hero = memo(function Hero({ catalogStats, personalization }: { catalogStats: CatalogStats; personalization: HomepagePersonalization }) {
+type DeferredHomepage = {
+  catalog: Promise<{books:Book[];total:number|null;unavailable:boolean;categoryCount:number|null}>;
+  personalization: Promise<HomepagePersonalization>;
+  series: Promise<HomepageSeriesContinuation[]>;
+};
+
+function HeroStats({stats}: {stats:CatalogStats}) {
+  const {locale,t}=useLumiScoreLocale();
+  return <dl className="hero-stats">
+    <div><dt>{stats.books===null?'—':stats.books.toLocaleString(locale==='nl'?'nl-NL':'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
+    <div><dt><LocaleLink href="/categories" aria-label={`${stats.categories??'—'} ${t('home.categories')}`}>{stats.categories??'—'}</LocaleLink></dt><dd><LocaleLink href="/categories">{t('home.categories')}</LocaleLink></dd></div>
+  </dl>;
+}
+function DeferredHeroStats({data}: {data:DeferredHomepage['catalog']}) {
+  const catalog=use(data);return <HeroStats stats={{books:catalog.total,categories:catalog.categoryCount}}/>;
+}
+function DeferredRecommendationPanel({data}: {data:DeferredHomepage['personalization']}) {
+  const personal=use(data);return personal.authenticated?<RecommendationPanel personalization={personal}/>:null;
+}
+const Hero = memo(function Hero({ catalogStats, personalization, deferred, authenticated }: { catalogStats: CatalogStats; personalization: HomepagePersonalization; deferred?:DeferredHomepage;authenticated:boolean }) {
   const { locale, t } = useLumiScoreLocale();
   return (
     <section className="hero" id="top">
@@ -395,12 +422,9 @@ const Hero = memo(function Hero({ catalogStats, personalization }: { catalogStat
             <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
           </div>
           <LocaleLink className="learn-link" href="/zo-werkt-het">{t('home.learn')} <span>→</span></LocaleLink>
-          <dl className="hero-stats">
-            <div><dt>{catalogStats.books === null ? '—' : catalogStats.books.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')}</dt><dd>{t('home.curatedBooks')}</dd></div>
-            <div><dt><LocaleLink href="/categories" aria-label={`${catalogStats.categories ?? '—'} ${t('home.categories')}`}>{catalogStats.categories ?? '—'}</LocaleLink></dt><dd><LocaleLink href="/categories">{t('home.categories')}</LocaleLink></dd></div>
-          </dl>
+          {deferred?<Suspense fallback={<HeroStats stats={catalogStats}/>}><DeferredHeroStats data={deferred.catalog}/></Suspense>:<HeroStats stats={catalogStats}/>}
         </div>
-        {personalization.authenticated && <RecommendationPanel personalization={personalization} />}
+        {deferred && authenticated ? <Suspense fallback={<aside className="recommendation-panel" aria-busy="true"><p role="status">{locale==='nl'?'Jouw boeken worden geladen…':'Loading your books…'}</p></aside>}><DeferredRecommendationPanel data={deferred.personalization}/></Suspense> : personalization.authenticated && <RecommendationPanel personalization={personalization} />}
       </div>
     </section>
   );
@@ -698,6 +722,20 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
 
 type CatalogStats = { books: number | null; categories: number | null };
 
+function DeferredFeatured({data,query,searchResults,searchStatus,authenticated}: {data:DeferredHomepage['catalog'];query:string;searchResults:Book[];searchStatus:SearchStatus;authenticated:boolean}) {
+  const catalog=use(data);
+  const tracked=useMemo(()=>[...catalog.books,...searchResults],[catalog.books,searchResults]);
+  const {wanted,statuses,toggleWanted}=useWantToRead(authenticated,tracked);
+  return <FeaturedBooks books={catalog.books} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalog.unavailable}/>;
+}
+function DeferredSeries({data}: {data:DeferredHomepage['series']}) {
+  const series=use(data);return series.length?<ContinueSeries continuations={series}/>:null;
+}
+function FeaturedPending() {
+  const {t}=useLumiScoreLocale();
+  return <section className="featured-section homepage-books-pending" aria-busy="true" aria-labelledby="featured-pending-title"><div className="section-heading"><div><span className="eyebrow">{t('home.chosenByReaders')}</span><h2 id="featured-pending-title">{t('home.highestRated')}</h2></div></div><p role="status">{t('home.searchingCatalog')}</p></section>;
+}
+
 export function LumiScoreHome({
   initialBooks,
   dutchDiscovery,
@@ -706,6 +744,7 @@ export function LumiScoreHome({
   authState,
   catalogUnavailable,
   seriesContinuations,
+  deferred,
 }: {
   initialBooks: Book[];
   dutchDiscovery: DutchHomepageDiscovery;
@@ -714,6 +753,7 @@ export function LumiScoreHome({
   authState: HeaderAuthState;
   catalogUnavailable: boolean;
   seriesContinuations: HomepageSeriesContinuation[];
+  deferred?: DeferredHomepage;
 }) {
   const {locale}=useLumiScoreLocale();
   const catalogBooks = initialBooks;
@@ -804,11 +844,11 @@ export function LumiScoreHome({
   return (
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
-      <Hero catalogStats={catalogStats} personalization={personalization} />
-      {seriesContinuations.length > 0 && (
+      <Hero catalogStats={catalogStats} personalization={personalization} deferred={deferred} authenticated={authState.authenticated} />
+      {deferred?<Suspense fallback={null}><DeferredSeries data={deferred.series}/></Suspense>:seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}
-      <FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />
+      {deferred?<Suspense fallback={<FeaturedPending/>}><DeferredFeatured data={deferred.catalog} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} authenticated={authState.authenticated}/></Suspense>:<FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />}
       <DutchDiscoveryBooks discovery={dutchDiscovery} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
       <Footer onThemeToggle={toggleTheme} />

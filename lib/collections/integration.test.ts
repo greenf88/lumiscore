@@ -105,7 +105,7 @@ test('recommendation loader adds read-without-rating IDs to exclusions only', ()
 });
 
 test('collection queries are batched instead of one query per book', () => {
-  assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(workIds,undefined,locale\)/);
+  assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(workIds,undefined,locale,streamCovers\)/);
   assert.match(collections, /\.in\('work_id', workIds\.map\(Number\)\)/);
   assert.match(collections, /loadCatalogBooksByIdsWithStoredCovers\(actionWorkIds,undefined,locale\)/);
   assert.doesNotMatch(collections, /for \([^)]*books[^)]*\)[\s\S]{0,120}await/);
