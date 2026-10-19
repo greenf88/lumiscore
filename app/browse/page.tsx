@@ -24,7 +24,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   let data = unavailableEditorialPage(state);
   try {
     const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');
-    data = await loadEditorialCatalog(state, locale);
+    data = await loadEditorialCatalog(state, locale, true, true);
   } catch (error) { console.error('Browse editorial catalog load failed.', error); }
   const current = { ...state, page: data.page };
   return <LumiScoreBrowsePage data={data} authState={authState}

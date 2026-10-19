@@ -1,0 +1,115 @@
+Homepageprestatie — afzonderlijk lokaal pakket, 19 oktober 2026
+Basis: remote main 8f337dd4ee98fbfd5af45918ffb480b9bc5e0fd6.
+Actieve Ready-productie dezelfde SHA, dpl_qQmYmc8YnAF85bxqSQdL687zuFHv,
+alias lumisco.re read-only bevestigd. PR38 blijft Draft op707625d, niet gemerged.
+
+Vooraf productie: drie sequentiële uitgelogde requests per taal, Windows Node
+fetch, ongethrotteld, geen cookies/cachepurge. NL headers3984/4023/378ms;
+EN1191/647/378ms. Eerste hero/CTA-markup kwam vrijwel tegelijk met de volledige
+HTML. Alle x-vercel-cache MISS. Geen garantie dat het eerste verzoek een echte
+koude instance was; client-/edge-/servercachetoestand niet geforceerd.
+Headers meten netwerk+edge+server, niet zuivere database- of computetijd.
+
+Codeoorzaak van blokkering: Home wachtte op één Promise.all voor publieke
+catalogus, owner-personalisatie, reeksen en categorieën vóór enige hero-HTML.
+Publieke catalogus haalt maximaal8 gerangschikte IDs, scores, Works en volledige
+edities op; daarna externe editiecoververificatie met3500ms timeout en process-
+lokale24h cache/60s negatieve cache. Een externe misser kan de stabiele hero dus
+ophouden. De zes HTTPsamples bewijzen die wisselende wachttijd, maar schrijven
+geen exact percentage van productievertraging aan één database/API toe.
+
+Fix: catalogus, personalisatie en reeksen starten parallel en streamen via
+afzonderlijke Suspense-grenzen. Header/hero/CTA wachten alleen op de bestaande
+geverifieerde header-auth; geen vreemde accountknippering of gedeelde private
+cache. Bestaande parent blijft gemount: zoek-/thema-/navigatiestate wordt niet
+vervangen door een tweede volledige homepage. Gast roept geen persoonlijke
+loader aan. Max8/3, Work-ratings, strictEdition, coververificatie, algoritme en
+bewijsgrenzen blijven ongewijzigd. Gereserveerde ruimte beperkt layoutverschuiving;
+geen preload van extra catalogus, geen nieuw API-/afbeeldingsformaat/config.
+
+Vergelijking: echte lokale Vinext-router/UI, dezelfde3500ms openbare fixture-
+loader, vóór/bijgewerkt vanuit exact dezelfde basis, geen DB/Auth/testaccount.
+HTTP: warmup per taal/variant uitgesloten, daarna3samples. Hero NL vóór
+3592/3629/3599ms, na124/57/111ms. EN vóór3614/3653/3644ms, na63/54/141ms.
+Boekinhoud na de wijziging nog steeds circa3564–3614ms: niet stilzwijgend
+weggelaten of met ongecontroleerde covers vervangen.
+Browser1280x720 Ink, ongethrotteld,2herhalingen per taal/variant na initialisatie:
+NL FCP/LCP vóór3912/3984ms; na FCP436/380ms en LCP436/380ms.
+EN FCP vóór4072/4056ms; na464/584ms; LCP vóór4072/4056, na464/800ms.
+Geobserveerde CLS0–0.00043. Native PerformanceObservers uitsluitend in lokale
+testadapter; niet in applicatiecode. Geen gemeten productiewinst claimen.
+
+Beperkingen: live browsertool laat performanceAPI niet rechtstreeks lezen;
+geen live LCP/CLS of precieze menu-hydratietijd bewezen. Native CTA-link is vroeg
+aanwezig, maar DOM-aanwezigheid is geen bewijs van complete JS-interactiviteit.
+Geen bestaande toegestane ingelogde testsessie aangetroffen/gebruikt; geen nieuwe
+accounts of ratings. Geen fysieke telefoon-/mobielnetwerkcontrole. Geen p95/RUM.
+Afbeeldings-/fontbestanden en hydratieruntime bleven gelijk; extra optimalisatie
+daarvan is niet door deze beperkte meting onderbouwd. Hosted nameting is pas na later akkoord
+en deployment mogelijk. Geen productiepublicatie of configuratiewijziging.
+
+Bewijsmap buiten Git: outputs/week-followup-20261019/01-homepage.
+Herstel lokaal: revert uitsluitend deze homepagecommit; geen dataherstel nodig.
+
+Aanvullende EN/Paper-controle, zelfde1280x720, twee warme herhalingen met native
+lokale performanceprobe en een marker nadat de bestaande header-useEffect is
+gehydrateerd: vóór4240/4260ms, na709/686ms. FCP/LCP vóór3980/4024ms,
+na452/444ms; CLS0. Dit is een begrensde lokale hydratietijd, geen volledige
+productie-TTI/INP. React-themaactie werkt; echte390px browserweergaven NL/EN,
+Paper/Ink, CTA44px en geen overflow gecontroleerd. Geen fysieke telefoon.
+Streaming response expliciet force-dynamic omdat ownerprops privé zijn.
+Vier verouderde broncode-asserties uit de eerste volledige run gericht aangepast;
+de bestaande rating-/rankerbytes en uitsluiting van PR38 blijven streng getest.
+
+Gerichte prestatiereparatie — vervolg op PR42, 19 oktober avond
+Actuele remote main én Ready-productie nog 8f337dd, custom alias lumisco.re.
+PR43 en PR38 niet overgenomen. Bestaande PR42-basis 22387fe.
+Nieuwe oorzaak in gedeelde loader: ook kaarttekst/links wachtten op optionele
+externe editiecover-evidence (bestaande timeout3500ms). Reeds gecontroleerde
+covers deden die aanvraag eveneens. Bovendien werd Work/ISBN-covercache gelezen
+en vervolgens bewust weggegooid: niet bruikbaar als editiegebonden bewijs.
+Works-query haalde edities twee keer op; rating- en editiequeries liepen serieel.
+Browse-categorieën blokkeerden de onafhankelijke discovery-RPC.
+
+Fix: SSR-home/Browse/collectie opt-in op dezelfde batch-coverresolver met afzonderlijke
+Suspense per cover. Echte boektitel, auteur, score, taal/Work-ID en boeklink verschijnen
+zonder die bron te hoeven afwachten. Bestaande neutrale cover houdt dezelfde geometrie;
+alleen bewezen afbeelding vervangt hem later. Geen client-API, extra bron, ISBN-gok,
+nieuwe cache/config/dependency of zwakkere identiteitsregel. Reeds bewezen cover slaat
+optionele aanvraag over. JSON-API's en smaaktest hebben standaard awaited covers:
+geen Promise of gewijzigde opslagroute in hun JSON. Ongebruikte cache-reads verwijderd,
+edities één keer volledig/batched opgehaald, onafhankelijke queries parallel gestart.
+Catalogusfout blijft onbeschikbaar, niet een lege succesvolle catalogus.
+De bronnenrequest kan nog3500ms duren; deze wijziging versnelt niet de bron zelf.
+Boekdetail behoudt serverbeschrijving en de bestaande4000ms totale bronbudgetgrens.
+
+Nieuwe productie-baseline: Windows Node24 fetch, guest,3sequentiële GETs/route/taal,
+geen purge/throttle. Eerste bezoek niet gegarandeerd koud. TTFB median(range)ms:
+NL home496(357–551), Browse370(362–1628), boek1381 150(149–417), Dune367(254–531).
+EN home350(344–525), Browse359(352–608), boek1381 144(141–789), Dune257(209–376).
+HTML in deze productie zonder streaming kwam bijna tegelijk met TTFB. Alle200/no-store.
+Eerder gemeten3984/4023ms-home en nieuwe log homepage.catalog1719.2ms tonen variatie;
+geen bewijs dat één bron ieder traag verzoek verklaart. Gast-auth in logs0.7–5.2ms.
+Browser EN klik→bestemming inclusief toolobservatie: Browse4086–4608ms,
+boek1045–2487ms, terug2968–6137ms. Dit is geen zuivere rendering/LCP-meting;
+lokale parallelle checks/tooloverhead kunnen deze observatie beïnvloeden.
+
+Lokale vergelijking exact dezelfde real-router/React-kaarten,3500ms bronfixture,
+geen DB/Auth/netwerkclaim.3samples/variant/taal na compile-warmup:
+kaart-DOM beschikbaar NL median3569→131ms(range3567–3581→130–171);
+EN3580→137ms(3572–3582→134–145). Dit is geen kaart-painttijd.
+Hero al vroeg door PR42; totale response blijft circa3.55s omdat bewijs doorloopt.
+LCP NL236→316ms, EN256→316ms: kaarten veel eerder, LCP niet verbeterd in deze proef.
+CLS0–0.00043; header-effect vóór352–512ms, na348–554ms. Geen productiewinstclaim.
+Native performanceprobe uitsluitend loopback testadapter, nooit in releasecode.
+
+Checks: gerichte edition/cover/streaming/collection/API/privacytests, TypeScript,
+lint en Vinext-build groen. Vercelbuild Windows sandbox readlink EPERM; dezelfde
+build buiten sandbox groen zonder code- of configuratiewijziging. Zie apart eindbewijs
+voor exacte checkaantallen, hosted Preview, finale SHA en nametingen.
+Geen productie-/database-/account-/Auth-/RLS-writes of cachepurge. Geen ingelogde
+toegestane testsessie beschikbaar. Fysieke telefoon/mobielnetwerk en live LCP/CLS
+zijn niet gemeten. Bestaande editiegegevens van Dune niet hersteld.
+Bewijs buiten Git: outputs/performance-repair-20261019.
+Herstel: eigen nieuwe prestatiecommit terugnemen; originele PR42-streaming en
+collectievoortgang apart intact laten. Geen gegevensrollback of configherstel nodig.
