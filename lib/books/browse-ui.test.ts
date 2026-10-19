@@ -35,7 +35,7 @@ test('public browse route loads catalog books without requiring a search query o
     new URL('../../app/browse/page.tsx', import.meta.url),
     'utf8',
   );
-  assert.match(page, /loadEditorialCatalog\(state, locale\)/);
+  assert.match(page, /loadEditorialCatalog\(state, locale, true, true\)/);
   assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\}/);
   assert.match(page, /editorialHref\('\/browse', current\)/);
   assert.doesNotMatch(page, /redirect\(|notFound\(/);
@@ -72,7 +72,7 @@ test('Browse exposes an accessible native page-size control and keeps page size 
   assert.match(browseSource, /updateBrowseReturnPath\(returnTo/);
 });
 
-test('128-card Browse pages keep ratings and stored-cover reads batched', async () => {
+test('128-card Browse pages keep ratings batched without unused legacy Work-cover reads', async () => {
   const [booksSource, browseSource, homeSource, statusRoute, statusLoader] = await Promise.all([
     readFile(new URL('../supabase/books.ts', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreBrowsePage.tsx', import.meta.url), 'utf8'),
@@ -85,7 +85,8 @@ test('128-card Browse pages keep ratings and stored-cover reads batched', async 
     booksSource.indexOf('export async function loadHomepageCatalog'),
   );
 
-  assert.match(loader, /Promise\.all\(\[[\s\S]*?loadPublicRatingSummariesBatched\(supabase, workIds\)[\s\S]*?loadStoredCoverResolutionsBatched\(workIds\)/);
+  assert.match(loader, /loadPublicRatingSummariesBatched\(supabase, workIds\)/);
+  assert.doesNotMatch(booksSource, /loadStoredCoverResolutionsBatched|applyStoredCoverResolutions/);
   assert.doesNotMatch(loader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
   assert.match(homeSource, /loading="lazy"/);
@@ -96,10 +97,10 @@ test('128-card Browse pages keep ratings and stored-cover reads batched', async 
   assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 2);
   assert.match(editorialLoader, /rpc\('catalog_discovery_page'/);
   assert.match(editorialLoader, /response\.error\?\.code === 'PGRST202' && !state\.author && state\.sort !== 'highest'/);
-  assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale\)/);
-  const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('function applyStoredCoverResolutions('));
+  assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale, streamCovers\)/);
+  const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('export type CatalogBrowsePage'));
   assert.match(byIdsLoader, /loadPublicRatingSummariesBatched\(/);
-  assert.match(byIdsLoader, /loadStoredCoverResolutionsBatched\(workIds\)/);
+  assert.match(byIdsLoader, /streamCovers \? deferEditionCoverEvidence\(books\) : withEditionCoverEvidence\(books\)/);
   assert.doesNotMatch(byIdsLoader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
   assert.match(searchUi, /resolveMissingCover=\{false\}/);
 });

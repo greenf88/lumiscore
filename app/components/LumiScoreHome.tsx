@@ -211,10 +211,18 @@ function BookCoverForIdentity({
   );
 }
 
+function StreamedBookCover(props: BookCoverProps) {
+  const coverUrls = use(props.book.editionCoverUrls!);
+  const book = { ...props.book, coverUrls };
+  return <BookCoverForIdentity key={getBookCoverIdentity(book)} {...props} book={book} />;
+}
+
 export const BookCover = memo(function BookCover(props: BookCoverProps) {
   const coverIdentity = getBookCoverIdentity(props.book);
-
-  return <BookCoverForIdentity key={coverIdentity} {...props} />;
+  const initial = <BookCoverForIdentity key={coverIdentity} {...props} />;
+  return props.book.editionCoverUrls
+    ? <Suspense fallback={initial}><StreamedBookCover key={coverIdentity} {...props} /></Suspense>
+    : initial;
 });
 
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {

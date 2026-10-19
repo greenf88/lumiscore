@@ -12,15 +12,16 @@ export type EditorialPage = CatalogBrowsePage & {
   selectedAuthor: AuthorOption | null;
   discoveryAvailable: boolean;
 };
-export async function loadEditorialCatalog(state: EditorialQuery, locale: Locale, hydrateBooks = true): Promise<EditorialPage> {
+export async function loadEditorialCatalog(state: EditorialQuery, locale: Locale, hydrateBooks = true, streamCovers = false): Promise<EditorialPage> {
   const [{ supabase }, { loadCatalogBooksByIdsWithStoredCovers }] = await Promise.all([
     import('./client'), import('./books'),
   ]);
-  const [categories, selectedAuthor] = await Promise.all([
+  const [categories, selectedAuthor, initialResponse] = await Promise.all([
     loadPublicCategories(), state.author ? supabase.from('authors').select('id,name').eq('id', state.author).maybeSingle()
       .then(({ data, error }) => { if (error) throw error; return data ? { id: String(data.id), name: String(data.name) } : null; }) : null,
+    supabase.rpc('catalog_discovery_page', { ...editorialRpcArgs(state), p_author_id: state.author ? Number(state.author) : null }),
   ]);
-  let response = await supabase.rpc('catalog_discovery_page', { ...editorialRpcArgs(state), p_author_id: state.author ? Number(state.author) : null });
+  let response = initialResponse;
   const discoveryAvailable = !response.error;
   // A review preview may use a backend awaiting the reviewed migration. Never silently ignore a filter.
   if (response.error?.code === 'PGRST202' && !state.author && state.sort !== 'highest') {
@@ -30,7 +31,7 @@ export async function loadEditorialCatalog(state: EditorialQuery, locale: Locale
   if (error) throw error;
   const { ids, total, page, pageCount } = editorialWindow(state, data);
   // Keep existing edition ranking, stored-cover validation and genuine rating summaries.
-  const books = hydrateBooks ? await loadCatalogBooksByIdsWithStoredCovers(ids, undefined, locale) : [];
+  const books = hydrateBooks ? await loadCatalogBooksByIdsWithStoredCovers(ids, undefined, locale, streamCovers) : [];
   const byId = new Map(books.map(book => [book.workId, book]));
   return {
     books: ids.flatMap(id => byId.has(id) ? [byId.get(id)!] : []),

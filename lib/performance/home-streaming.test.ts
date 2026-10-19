@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 test('homepage streams unchanged strict-edition loaders without a new shared/private cache',async()=>{
  const page=await readFile(new URL('../../app/page.tsx',import.meta.url),'utf8');
  const ui=await readFile(new URL('../../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
- assert.match(page,/loadHighestRatedCatalog\(8,locale\)/);
+ assert.match(page,/loadHighestRatedCatalog\(8,locale,true\)/);
  assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
  assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
  assert.match(page,/const authState = await authPromise/);

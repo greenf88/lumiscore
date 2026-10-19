@@ -60,3 +60,56 @@ Paper/Ink, CTA44px en geen overflow gecontroleerd. Geen fysieke telefoon.
 Streaming response expliciet force-dynamic omdat ownerprops privé zijn.
 Vier verouderde broncode-asserties uit de eerste volledige run gericht aangepast;
 de bestaande rating-/rankerbytes en uitsluiting van PR38 blijven streng getest.
+
+Gerichte prestatiereparatie — vervolg op PR42, 19 oktober avond
+Actuele remote main én Ready-productie nog 8f337dd, custom alias lumisco.re.
+PR43 en PR38 niet overgenomen. Bestaande PR42-basis 22387fe.
+Nieuwe oorzaak in gedeelde loader: ook kaarttekst/links wachtten op optionele
+externe editiecover-evidence (bestaande timeout3500ms). Reeds gecontroleerde
+covers deden die aanvraag eveneens. Bovendien werd Work/ISBN-covercache gelezen
+en vervolgens bewust weggegooid: niet bruikbaar als editiegebonden bewijs.
+Works-query haalde edities twee keer op; rating- en editiequeries liepen serieel.
+Browse-categorieën blokkeerden de onafhankelijke discovery-RPC.
+
+Fix: SSR-home/Browse/collectie opt-in op dezelfde batch-coverresolver met afzonderlijke
+Suspense per cover. Echte boektitel, auteur, score, taal/Work-ID en boeklink verschijnen
+zonder die bron te hoeven afwachten. Bestaande neutrale cover houdt dezelfde geometrie;
+alleen bewezen afbeelding vervangt hem later. Geen client-API, extra bron, ISBN-gok,
+nieuwe cache/config/dependency of zwakkere identiteitsregel. Reeds bewezen cover slaat
+optionele aanvraag over. JSON-API's en smaaktest hebben standaard awaited covers:
+geen Promise of gewijzigde opslagroute in hun JSON. Ongebruikte cache-reads verwijderd,
+edities één keer volledig/batched opgehaald, onafhankelijke queries parallel gestart.
+Catalogusfout blijft onbeschikbaar, niet een lege succesvolle catalogus.
+De bronnenrequest kan nog3500ms duren; deze wijziging versnelt niet de bron zelf.
+Boekdetail behoudt serverbeschrijving en de bestaande4000ms totale bronbudgetgrens.
+
+Nieuwe productie-baseline: Windows Node24 fetch, guest,3sequentiële GETs/route/taal,
+geen purge/throttle. Eerste bezoek niet gegarandeerd koud. TTFB median(range)ms:
+NL home496(357–551), Browse370(362–1628), boek1381 150(149–417), Dune367(254–531).
+EN home350(344–525), Browse359(352–608), boek1381 144(141–789), Dune257(209–376).
+HTML in deze productie zonder streaming kwam bijna tegelijk met TTFB. Alle200/no-store.
+Eerder gemeten3984/4023ms-home en nieuwe log homepage.catalog1719.2ms tonen variatie;
+geen bewijs dat één bron ieder traag verzoek verklaart. Gast-auth in logs0.7–5.2ms.
+Browser EN klik→bestemming inclusief toolobservatie: Browse4086–4608ms,
+boek1045–2487ms, terug2968–6137ms. Dit is geen zuivere rendering/LCP-meting;
+lokale parallelle checks/tooloverhead kunnen deze observatie beïnvloeden.
+
+Lokale vergelijking exact dezelfde real-router/React-kaarten,3500ms bronfixture,
+geen DB/Auth/netwerkclaim.3samples/variant/taal na compile-warmup:
+kaart-DOM beschikbaar NL median3569→131ms(range3567–3581→130–171);
+EN3580→137ms(3572–3582→134–145). Dit is geen kaart-painttijd.
+Hero al vroeg door PR42; totale response blijft circa3.55s omdat bewijs doorloopt.
+LCP NL236→316ms, EN256→316ms: kaarten veel eerder, LCP niet verbeterd in deze proef.
+CLS0–0.00043; header-effect vóór352–512ms, na348–554ms. Geen productiewinstclaim.
+Native performanceprobe uitsluitend loopback testadapter, nooit in releasecode.
+
+Checks: gerichte edition/cover/streaming/collection/API/privacytests, TypeScript,
+lint en Vinext-build groen. Vercelbuild Windows sandbox readlink EPERM; dezelfde
+build buiten sandbox groen zonder code- of configuratiewijziging. Zie apart eindbewijs
+voor exacte checkaantallen, hosted Preview, finale SHA en nametingen.
+Geen productie-/database-/account-/Auth-/RLS-writes of cachepurge. Geen ingelogde
+toegestane testsessie beschikbaar. Fysieke telefoon/mobielnetwerk en live LCP/CLS
+zijn niet gemeten. Bestaande editiegegevens van Dune niet hersteld.
+Bewijs buiten Git: outputs/performance-repair-20261019.
+Herstel: eigen nieuwe prestatiecommit terugnemen; originele PR42-streaming en
+collectievoortgang apart intact laten. Geen gegevensrollback of configherstel nodig.

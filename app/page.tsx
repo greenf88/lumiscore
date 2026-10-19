@@ -37,7 +37,7 @@ async function loadHomepageBooks(locale:'nl'|'en') {
     const catalog = await measureServerOperation(
       'homepage.catalog',
       'public',
-      () => loadHighestRatedCatalog(8,locale),
+      () => loadHighestRatedCatalog(8,locale,true),
     );
     return { ...catalog, unavailable: false };
   } catch (error) {

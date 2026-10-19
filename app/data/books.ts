@@ -47,6 +47,8 @@ export type Book = {
   editionAvailable?: boolean;
   englishEditionFallback?: boolean;
   coverUrls?: string[];
+  /** SSR only: verified cover evidence may stream after the real book card. Never emitted by JSON APIs. */
+  editionCoverUrls?: Promise<string[]>;
   backCover?: VerifiedBookCoverAsset | null;
   descriptionCandidates?: BookDescriptionEditionCandidate[];
   genre?: string;
