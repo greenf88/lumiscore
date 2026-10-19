@@ -44,9 +44,19 @@ geen live LCP/CLS of precieze menu-hydratietijd bewezen. Native CTA-link is vroe
 aanwezig, maar DOM-aanwezigheid is geen bewijs van complete JS-interactiviteit.
 Geen bestaande toegestane ingelogde testsessie aangetroffen/gebruikt; geen nieuwe
 accounts of ratings. Geen fysieke telefoon-/mobielnetwerkcontrole. Geen p95/RUM.
-Afbeeldingen/fonts/JS bleven inhoudelijk gelijk; hun extra optimalisatie is niet
-door deze beperkte meting onderbouwd. Hosted nameting is pas na later akkoord
+Afbeeldings-/fontbestanden en hydratieruntime bleven gelijk; extra optimalisatie
+daarvan is niet door deze beperkte meting onderbouwd. Hosted nameting is pas na later akkoord
 en deployment mogelijk. Geen productiepublicatie of configuratiewijziging.
 
 Bewijsmap buiten Git: outputs/week-followup-20261019/01-homepage.
 Herstel lokaal: revert uitsluitend deze homepagecommit; geen dataherstel nodig.
+
+Aanvullende EN/Paper-controle, zelfde1280x720, twee warme herhalingen met native
+lokale performanceprobe en een marker nadat de bestaande header-useEffect is
+gehydrateerd: vóór4240/4260ms, na709/686ms. FCP/LCP vóór3980/4024ms,
+na452/444ms; CLS0. Dit is een begrensde lokale hydratietijd, geen volledige
+productie-TTI/INP. React-themaactie werkt; echte390px browserweergaven NL/EN,
+Paper/Ink, CTA44px en geen overflow gecontroleerd. Geen fysieke telefoon.
+Streaming response expliciet force-dynamic omdat ownerprops privé zijn.
+Vier verouderde broncode-asserties uit de eerste volledige run gericht aangepast;
+de bestaande rating-/rankerbytes en uitsluiting van PR38 blijven streng getest.

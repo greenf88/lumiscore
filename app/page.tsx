@@ -11,6 +11,9 @@ import { measureServerOperation } from '@/lib/performance/server-timing';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { HOME_POSITIONING } from '@/lib/seo/home-positioning';
 
+// The streamed response can contain verified owner state. Never share it publicly.
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() { return createLocalizedPageMetadata({
   title: HOME_POSITIONING.en.title,
   description: HOME_POSITIONING.en.description,
