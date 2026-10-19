@@ -1,0 +1,32 @@
+Taste-test next-cover preload — Draft review, not production approved
+
+Basis: remote main f06a32b493afedcc2bd3ea145a0b212f08771bf7 (includes PR42 and PR43).
+Branch: perf/taste-cover-preload-20261019. Isolated worktree; PR38/pending taste storage/catalog work excluded.
+
+Evidence motivating change:11 public edition covers,13–25kB each,180–1781ms total retrieval. Five used2redirects to Internet Archive. Not the user's exact30book round; not a whole-catalog size audit.
+
+Flow:
+Current verified Work/edition shown → optional authenticated GET cover hint → one next verified edition's exact taste M image requested at low priority. No new card, score, offer or progress is committed by hint loading. Existing POST action gate and save callbacks remain unchanged: only a successful save advances UI. The database is still the sole next-Work authority; the hint can become stale due to concurrent actions/popularity changes and is never used as a saved-state replacement.
+Hint anchored to owner-authenticated round/current Work + UI locale; old responses discarded after Work/round/locale change, pause/search, unmount or5.5s deadline. At most one hint per active Work while mounted, bounded32key set; no image fallback/retry from preloading. StrictMode cancelled initialization may restart, not a save retry.
+
+Server:
+Private no-store response. Current verified session only, never userId from input, no service-role client. Read-only stable GET RPC with1.5s client timeout, optional/missing RPC returns cover:null without affecting saving. Preview-production separation guard reused.
+Read only one candidate, then existing edition-bound loader/cover evidence. No Work/ISBN image guesses; NL Dutch preferred or explicitly flagged English fallback, EN verified English only; missing/unknown edition/cover returns no hint. UI language is independently re-presented even if round selection language differs.
+
+Database dependency (NOT applied remotely):
+scripts/operations/taste-cover-lookahead.sql proposes two new functions: a private stable SECURITY DEFINER reader guarded by auth.uid() + exact own current offered Work, and a public stable SECURITY INVOKER wrapper. Explicit PUBLIC/anon/service_role EXECUTE revoked; authenticated only. No tables, RLS, existing RPCs, selection algorithms, ratings/statuses/offers or grants on existing objects changed.
+The advisory query mirrors existing advance_round_v2 WHERE/ORDER BY; a byte-normalized parity regression protects against silent divergence. Cannot reserve/advance a Work; works inside a READ ONLY transaction. No second authoritative selector.
+Shared-test application requires separate explicit approval requested in chat. Never apply to production in this task. Function creation fails rather than overwriting existing names.
+
+Local verification:
+63 focused tests passed: existing taste-test behavior, responsive cover variants, new hint validation/aborts/failures/native browser fetch binding, SQL parity,10,134Work disposable PostgreSQL owner isolation/rights/read-only semantics and actual next-Work match for two rates plus skip in NL/EN. Existing rating preserved. No remote credentials/accounts involved.
+TypeScript clean. ESLint clean, excluding only generated .wrangler fixture cache in local full check; changed sources clean without overrides. Standard CI on clean checkout remains unchanged. Production Vercel build/client secretscan/diff check passed.
+Real local browser using existing explicitly opted-in loopback fixture: next cover990002 GET observed before first rating POST; same URL requested once before display, browser cache reused after success. Slow1800ms save kept old book pending; rejected save left same book/0ratings; double-click accepted exactly one rating; second save produced2distinct ratings and neutral new score buttons. Pause/resume/search cancel preserved state, skip left2ratings; EN switch requested only EN hint/image, reload kept same Work/2ratings.390px no horizontal overflow. No physical phone test or full hosted storage proof claimed.
+Synthetic UI fixture is local-only --direct-review --cover-preload-review in scripts/compact-taste-local.mjs; no application bypass/fixtures/public files introduced. Uses in-memory SVG and ratings only.
+Detailed local proof outside git: outputs/taste-cover-check-20261019/preload-*.log, browser-*.json and local-*.png.
+
+Hosted review:
+Draft PR/Ready Preview to follow Git push. Use existing allowed config only; no new environment overrides or accounts created by this task. Full hosted preloading requires test RPC above, test-project branch URL/clientkey if absent, and existing authorized testlogin. Missing dependencies are a blocker to claiming hosted preload/storage success, not a reason to publish/test against production.
+
+Recovery:
+Before release nothing affects production. Disable hints by reverting this app commit; existing rating API needs no change. After separately authorized test application, remove only public.taste_rating_cover_lookahead(uuid,bigint), then taste_private.cover_lookahead(uuid,bigint), if cleanup is requested. Preserve all existing data. Missing functions fail softly (no preload), not failed ratings.

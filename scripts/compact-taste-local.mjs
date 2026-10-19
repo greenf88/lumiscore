@@ -13,6 +13,11 @@ const before = process.argv.includes('--before');
 const resultReview = process.argv.includes('--result-review');
 const missingEvidence = process.argv.includes('--missing-evidence');
 const directReview = process.argv.includes('--direct-review');
+const coverPreloadReview = process.argv.includes('--cover-preload-review');
+if (coverPreloadReview && !directReview) throw new Error('Cover preload fixture requires explicit direct-review opt-in.');
+const presentBook = (b, locale) => coverPreloadReview && b ? { ...b, strictEditionLanguage: locale, editionLanguage: locale,
+  editionId: b.workId, editionTitle: b.title, editionAvailable: true,
+  coverUrls: [`/compact-cover.svg?work=${b.workId}&locale=${locale}`] } : b;
 let failNext = false, delayMs = 0, exhausted = false;
 let failFinalSave = process.argv.includes('--fail-final-save');
 const baseline = before ? spawnSync('git', ['show', 'd5f0e7640551317526e4dc83ef6495e859cca5a5:app/globals.css'], { cwd: root, encoding: 'utf8', windowsHide: true }) : null;
@@ -42,9 +47,9 @@ if (resultReview) {
 }
 const journal = [];
 const requests = [];
-const response = () => ({ authenticated: true, available: true, state: {
+const response = (locale = round?.language ?? 'nl') => ({ authenticated: true, available: true, state: {
   round, currentWorkId: !round || round.complete || exhausted ? null : books[position % books.length].workId, exhausted },
-  book: !round || round.complete || exhausted ? null : books[position % books.length] });
+  book: !round || round.complete || exhausted ? null : presentBook(books[position % books.length], locale) });
 const json = (res, data, status = 200) => {
   res.writeHead(status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
   res.end(JSON.stringify(data));
@@ -65,9 +70,10 @@ const server = await createServer({
     vite.middlewares.use(async (req, res, next) => {
       const url = new URL(req.url, `http://127.0.0.1:${port}`);
       // Bounded local diagnostic: paths only, never bodies, cookies or headers.
-      if (url.pathname !== '/__evidence' && requests.length < 2000) requests.push({ method: req.method, path: url.pathname });
+      if (url.pathname !== '/__evidence' && requests.length < 2000) requests.push({ method: req.method, path: url.pathname,
+        ...(coverPreloadReview ? { at: Date.now(), work: url.searchParams.get('work'), locale: url.searchParams.get('locale') } : {}) });
       if (url.pathname === '/compact-cover.svg') {
-        res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
+        res.writeHead(200, { 'Content-Type': 'image/svg+xml', ...(coverPreloadReview ? { 'Cache-Control': 'public, max-age=3600' } : {}) });
         return res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 100"><rect width="66" height="100" fill="#214956"/><circle cx="43" cy="36" r="20" fill="#dab071"/><path d="M0 90L34 38L66 84V100H0" fill="#12262f"/></svg>');
       }
       if (url.pathname === '/__evidence' && req.method === 'GET') return json(res, { syntheticUIOnly: true, round, ratings: [...ratings], journal, requests });
@@ -87,6 +93,14 @@ const server = await createServer({
       if (url.pathname === '/api/catalog/search') return json(res, { results: directReview
         ? books.filter(b => `${b.title} ${b.author}`.toLowerCase().includes((url.searchParams.get('q') ?? '').toLowerCase())) : books });
       if (url.pathname === '/api/book-status') return json(res, { statuses: {} });
+      if (coverPreloadReview && url.pathname === '/api/taste-test/rounds/cover' && req.method === 'GET') {
+        const locale = url.searchParams.get('locale') === 'en' ? 'en' : 'nl';
+        const next = books.slice(position + 1).find(b => !decided.has(b.workId));
+        return json(res, { cover: round && !round.complete && !exhausted && next
+          && url.searchParams.get('roundId') === round.id && url.searchParams.get('workId') === books[position]?.workId ? {
+          roundId: round.id, fromWorkId: books[position].workId, workId: next.workId, editionId: next.workId, locale,
+          src: `/compact-cover.svg?work=${next.workId}&locale=${locale}` } : null });
+      }
       if (url.pathname === '/api/taste-test/result') {
         const resultEvidence = missingEvidence ? new Map() : evidence;
         const profile = buildRatingResultProfile([...ratings].map(([workId, rating]) => ({ workId, rating })), resultEvidence);
@@ -98,7 +112,7 @@ const server = await createServer({
         });
       }
       if (url.pathname === '/api/taste-test/rounds') {
-        if (req.method === 'GET') return json(res, response());
+        if (req.method === 'GET') return json(res, response(url.searchParams.get('locale') === 'en' ? 'en' : 'nl'));
         if (req.method !== 'POST') return json(res, {}, 405);
         let body = ''; for await (const chunk of req) { body += chunk; if (body.length > 4096) return json(res, {}, 413); }
         let action; try { action = parseRoundAction(JSON.parse(body)); } catch { return json(res, {}, 400); }
@@ -127,7 +141,7 @@ const server = await createServer({
           while (position < books.length && decided.has(books[position].workId)) position++;
           exhausted = position >= books.length;
         }
-        return json(res, response());
+        return json(res, response(url.searchParams.get('locale') === 'en' ? 'en' : 'nl'));
       }
       if (url.pathname.startsWith('/api/')) return json(res, { localFixture: true }, 404);
       next();
