@@ -16,6 +16,7 @@ test('sitemap paths include all current public books and collections without dup
       '/taste-test',
       '/over-ons',
       '/zo-werkt-het',
+      '/imdb-for-books',
       '/voor-uitgevers',
       '/contact',
       '/collection/dune',

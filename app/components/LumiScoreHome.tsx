@@ -851,6 +851,7 @@ export function LumiScoreHome({
       {deferred?<Suspense fallback={<FeaturedPending/>}><DeferredFeatured data={deferred.catalog} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} authenticated={authState.authenticated}/></Suspense>:<FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />}
       <DutchDiscoveryBooks discovery={dutchDiscovery} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
+      <p className="home-comparison-note"><LocaleLink href="/imdb-for-books">{locale === 'nl' ? 'Een IMDb voor boeken? Ontdek wat LumiScore biedt.' : 'Looking for an IMDb for books? See what LumiScore offers.'}</LocaleLink></p>
       <Footer onThemeToggle={toggleTheme} />
     </main>
   );
