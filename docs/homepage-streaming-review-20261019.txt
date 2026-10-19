@@ -1,0 +1,52 @@
+Homepageprestatie — afzonderlijk lokaal pakket, 19 oktober 2026
+Basis: remote main 8f337dd4ee98fbfd5af45918ffb480b9bc5e0fd6.
+Actieve Ready-productie dezelfde SHA, dpl_qQmYmc8YnAF85bxqSQdL687zuFHv,
+alias lumisco.re read-only bevestigd. PR38 blijft Draft op707625d, niet gemerged.
+
+Vooraf productie: drie sequentiële uitgelogde requests per taal, Windows Node
+fetch, ongethrotteld, geen cookies/cachepurge. NL headers3984/4023/378ms;
+EN1191/647/378ms. Eerste hero/CTA-markup kwam vrijwel tegelijk met de volledige
+HTML. Alle x-vercel-cache MISS. Geen garantie dat het eerste verzoek een echte
+koude instance was; client-/edge-/servercachetoestand niet geforceerd.
+Headers meten netwerk+edge+server, niet zuivere database- of computetijd.
+
+Codeoorzaak van blokkering: Home wachtte op één Promise.all voor publieke
+catalogus, owner-personalisatie, reeksen en categorieën vóór enige hero-HTML.
+Publieke catalogus haalt maximaal8 gerangschikte IDs, scores, Works en volledige
+edities op; daarna externe editiecoververificatie met3500ms timeout en process-
+lokale24h cache/60s negatieve cache. Een externe misser kan de stabiele hero dus
+ophouden. De zes HTTPsamples bewijzen die wisselende wachttijd, maar schrijven
+geen exact percentage van productievertraging aan één database/API toe.
+
+Fix: catalogus, personalisatie en reeksen starten parallel en streamen via
+afzonderlijke Suspense-grenzen. Header/hero/CTA wachten alleen op de bestaande
+geverifieerde header-auth; geen vreemde accountknippering of gedeelde private
+cache. Bestaande parent blijft gemount: zoek-/thema-/navigatiestate wordt niet
+vervangen door een tweede volledige homepage. Gast roept geen persoonlijke
+loader aan. Max8/3, Work-ratings, strictEdition, coververificatie, algoritme en
+bewijsgrenzen blijven ongewijzigd. Gereserveerde ruimte beperkt layoutverschuiving;
+geen preload van extra catalogus, geen nieuw API-/afbeeldingsformaat/config.
+
+Vergelijking: echte lokale Vinext-router/UI, dezelfde3500ms openbare fixture-
+loader, vóór/bijgewerkt vanuit exact dezelfde basis, geen DB/Auth/testaccount.
+HTTP: warmup per taal/variant uitgesloten, daarna3samples. Hero NL vóór
+3592/3629/3599ms, na124/57/111ms. EN vóór3614/3653/3644ms, na63/54/141ms.
+Boekinhoud na de wijziging nog steeds circa3564–3614ms: niet stilzwijgend
+weggelaten of met ongecontroleerde covers vervangen.
+Browser1280x720 Ink, ongethrotteld,2herhalingen per taal/variant na initialisatie:
+NL FCP/LCP vóór3912/3984ms; na FCP436/380ms en LCP436/380ms.
+EN FCP vóór4072/4056ms; na464/584ms; LCP vóór4072/4056, na464/800ms.
+Geobserveerde CLS0–0.00043. Native PerformanceObservers uitsluitend in lokale
+testadapter; niet in applicatiecode. Geen gemeten productiewinst claimen.
+
+Beperkingen: live browsertool laat performanceAPI niet rechtstreeks lezen;
+geen live LCP/CLS of precieze menu-hydratietijd bewezen. Native CTA-link is vroeg
+aanwezig, maar DOM-aanwezigheid is geen bewijs van complete JS-interactiviteit.
+Geen bestaande toegestane ingelogde testsessie aangetroffen/gebruikt; geen nieuwe
+accounts of ratings. Geen fysieke telefoon-/mobielnetwerkcontrole. Geen p95/RUM.
+Afbeeldingen/fonts/JS bleven inhoudelijk gelijk; hun extra optimalisatie is niet
+door deze beperkte meting onderbouwd. Hosted nameting is pas na later akkoord
+en deployment mogelijk. Geen productiepublicatie of configuratiewijziging.
+
+Bewijsmap buiten Git: outputs/week-followup-20261019/01-homepage.
+Herstel lokaal: revert uitsluitend deze homepagecommit; geen dataherstel nodig.
