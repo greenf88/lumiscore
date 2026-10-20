@@ -21,16 +21,19 @@ test('applied base migration retains approved bytes and follow-up is exactly one
   assert.doesNotMatch(expectedSql,/\b(unique|concurrently|where|include|grant|revoke|policy|alter|drop|insert|update|delete)\b/i);
 });
 
-test('Browse and Search retain their shared persistent editorial RPC source',async()=>{
+test('Browse and Search retain public persistent RPC sources without private editorial access',async()=>{
   for(const route of ['browse','search']){
     const source=await fs.readFile(new URL(`../app/${route}/page.tsx`,import.meta.url),'utf8');
-    assert.match(source,/import\('\@\/lib\/supabase\/editorial-catalog'\)/);
-    assert.match(source,/await loadEditorialCatalog\(/);
+    assert.match(source,route==='browse'?/import\('\@\/lib\/supabase\/editorial-catalog'\)/:/import\('\@\/lib\/supabase\/search-catalog'\)/);
+    assert.match(source,route==='browse'?/await loadEditorialCatalog\(/:/await loadSearchCatalog\(/);
     assert.doesNotMatch(source,/catalog_private|editorial_records/);
   }
   const loader=await fs.readFile(new URL('../lib/supabase/editorial-catalog.ts',import.meta.url),'utf8');
   assert.match(loader,/supabase\.rpc\('catalog_editorial_page', editorialRpcArgs\(state\)\)/);
   assert.doesNotMatch(loader,/catalog_private|editorial_records/);
+  const search=await fs.readFile(new URL('../lib/supabase/search-catalog.ts',import.meta.url),'utf8');
+  assert.match(search,/supabase\.rpc\('catalog_discovery_page'/);
+  assert.doesNotMatch(search,/catalog_private|editorial_records/);
 });
 
 test('index repetition changes only the intended index; importer, rollback and identity semantics remain', {timeout:120000},async()=>{

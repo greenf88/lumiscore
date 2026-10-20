@@ -1,0 +1,181 @@
+LumiScore mobiele zoekroute — PR45, echte testcatalogus en prestaties
+20 oktober 2026. Draft; GEEN merge of productiepublicatie.
+
+Basis/scope
+- Actuele remote main opnieuw opgehaald: f06a32b493afedcc2bd3ea145a0b212f08771bf7.
+- Initiële goedgekeurde lokale wijziging: bf6b1312f4092c70a316af764483f2b1ce5d8e36.
+- Branch fix/mobile-search-results-20261020, afzonderlijke geïsoleerde worktree.
+- PR https://github.com/greenf88/lumiscore/pull/45 (Draft).
+- Main bevat al de releases42/43; geen wijzigingen uit die branches of PR44
+  meegenomen. PR44 blijft Draft op cc7609b, niet gewijzigd.
+- Geen catalogus-/schema-/account-/ratingwrites, geen productieconfig gewijzigd.
+
+Hosted blokkade (niet omzeild)
+- Officiële Vercel-CLI met expliciet project prj_44WeKduJU042ZAI85eAifSWwoY0i,
+  scope rgkgroeneveld-9102: env ls preview fix/mobile-search-results-20261020
+  meldt "No Environment Variables found".
+- Vereist maar afwezig: NEXT_PUBLIC_SUPABASE_URL en
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY voor uitsluitend deze Preview-branch.
+  Er is geen environmentwijziging uitgevoerd. Rick is concreet geïnformeerd;
+  gerichte toestemming voor uitsluitend twee publieke testwaarden/één rebuild
+  is gevraagd, niet verondersteld.
+- Initiële Git-Preview: https://lumiscore-mhhswg940-rgkgroeneveld-9102.vercel.app
+  Ready op bf6b131. Officiële vercel curl toegang werkt, maar appresponse is500:
+  {"error":true,"status":500,"unhandled":true}. Ready is hier alleen buildstatus.
+- Daarom GEEN geslaagde hosted kaarten, filters, back, mobiele thema’s of tijd
+  tot zichtbare kaarten geclaimd. Deployment Protection blijft ingeschakeld.
+- Connector voor environmentmetadata gaf403(scope); gemapte CLI met dezelfde
+  bevoegde project/scope slaagde. Geen alternatieve scope of beveiligingswijziging.
+
+Echte bestaande testcatalogus (read-only, geen aangevulde fixture)
+- Doel hlvujbrmfdlrfxdjwsmb; bestaande publieke publishable key gebruikt, geen
+  service-role/secret key. Alle netwerkmetingen begrensd tot publieke tabellen,
+  bestaande publieke discovery-/samenvattings-RPC’s en optionele publieke coverbron.
+- Publieke REST-counts:396Works,618Editions. De testcatalogus bevat onder andere
+  bestaande synthetische migratie-/testboeken. Dit zijn werkelijk opgeslagen
+  testgegevens, niet de lokale in-memory UI-fixture uit de eerste oplevering.
+- Work-titelzoekvraag *dun* en publieke auteurzoekvraag *vermeer* geven0rijen.
+  De echte loader geeft bij Dune en Suzanne Vermeer in NL/EN dus0resultaten.
+  Dit bewijst NIET hoe zes productie-Dune-boeken of Suzanne’s collectie sorteren.
+- Query de geeft5geschikte NL-Works/8opgehaalde Editions,4EN-Works/7Editions.
+  Query synthetic geeft300geschikte Works in beide talen;16kaarten per pagina,
+  pagina2 is niet overlappend. No-results-term zznoresults987654 geeft0.
+- Er is geen actuele productiecatalogustelling verricht. Dit kleine, deels
+  synthetische testdoel vertegenwoordigt niet de volledige productiecatalogus.
+
+Meetopzet en diagnose
+- De werkelijke search-catalog.ts loader is via Vite SSR geladen; echte SDK en
+  daadwerkelijke publieke test-DataAPI, zonder fake transport of testbypass.
+- Windows/Node24.20, gewone desktopverbinding, geen mobiele throttling of fysieke
+  telefoon. Eerste en herhaalde aanvragen in hetzelfde lokale proces; geen
+  server-/netwerkcacheflush. Loaderduur is NIET TTFB, browser-LCP of kaartzichtbaarheid.
+- Geteld: HTTP-aanvragen naar Supabase DataAPI, geen interne SQL-statements.
+- Baseline300treffers:9requests =1categorie +3ID-RPC +2Works +2Editions +1score.
+ 300Works en603Editions worden verwerkt voor16kaarten. Pagina2 herhaalde dit alles.
+  ID-vensters zijn128, metadata-batches200. Bestaande RPC filtert bibliografisch
+  maar levert geen strikte UI-editiepresentatie of globale relevantiesortering.
+- Blokkerende keten was: eerste IDs EN categorie/authorlabels afwachten → overige
+  IDs → batch1Works/edities → batch2Works/edities → strikte selectie/rangschikking/
+  telling/paginering → verse publieke scores → loaderresultaat.
+- Coverbron is alleen optioneel voor zichtbare edities zonder bestaande
+  geverifieerde cover. Bij de-query koud1OpenLibrary get_many-aanvraag, warm0;
+  bij synthetic0. Bestaande gecontroleerde covers slaan die bronstap over.
+  Geen beschrijvings-/cover-/scoreverrijking voor off-page boeken toegevoegd.
+
+Gerichte codecorrectie
+- Hoogstens twee200-ID-metadata-batches tegelijk (binnen elke batch Works en
+  Editions parallel), met deterministische samenvoeging. Geen N+1 per boek.
+- Categorie-/authorlabels lopen naast de volledige ID-/identiteitketen; ze
+  blokkeren niet langer het starten van vervolg-ID’s.
+- Eén vijfseconden-deadline over de volledige selectie, inclusief voortgezette
+  editiepagina’s. Geen nieuw tijdsbudget per batch. Fouten/timeouts blijven een
+  fout/verfijn-aanwijzing, geen nulresultaat of gedeeltelijk succes.
+- Bestaande10.000ID-grens behouden; geen onbegrensde catalogusloop. Alleen
+  matchende minimale identiteitmetadata, nooit de gehele catalogus naar de browser.
+- Per-instance openbare-identiteitscache15seconden: maximaal8selecties/5000Works
+  totaal, maximaal8coalesced pending keys. Geen foutcache/automatische retry.
+  Key bevat taal, query, categorieën, editietalen, auteur, selectie en DB-sortering.
+  Pagina/grootte delen dezelfde selectie; relevantie en paginering worden daarna
+  op diezelfde selectie uitgevoerd. Cache bewaart geen individuele ratings,
+  scores, matches, leesstatussen, sessies of persoonlijke response.
+- Publieke scores worden ELKE pagina-aanvraag opnieuw geladen voor alleen de
+  zichtbare Works; guards/tests weigeren score-/matchhoudende cache-invoer.
+  Metadata/telling kan maximaal15s oud zijn; kaarten en totaal blijven onderling
+  consistent. Geen CDN- of persoonlijke cache toegevoegd.
+- Bestaande openbare categorie-/editieloader kreeg alleen een optioneel signal;
+  andere routes houden hun bestaande gedrag. Geen DB/RPC/schema-aanpassing.
+
+Vergelijkbare lokale loader-metingen op echte testdata (milliseconden)
+                         voor   na     API-aanvragen voor→na
+ NL synthetic eerste     2344   1678   9→9   (300Works/603Editions beide)
+ NL synthetic herhaald    626    118   9→1   (0Works/0Editions bij cachehit)
+ EN synthetic eerste      401    551   9→9   (300Works/603Editions beide)
+ EN synthetic herhaald    444    113   9→1
+ NL pagina2 eerste        687     98   9→1
+ NL pagina2 herhaald      452    135   9→1
+ EN pagina2 eerste       1263    140   9→1
+ EN pagina2 herhaald      748    157   9→1
+- Herhaling/pagina2 samen n=6: mediaan657→127ms, bereik444–1263→98–157ms.
+- Eerste selectiemissers n=2: mediaan1373→1115ms; te weinig/variabel voor een
+  algemene cold-speedupclaim. EN-eerste bezoek is in deze vergelijking niet sneller.
+- Tijdens een tussentijdse meting duurde één Works-HTTP-request2958ms en de
+  selectie4458ms; geen bewijs dat dit volledig database-uitvoeringstijd was.
+  Koude netwerk-/DataAPI-variatie blijft een beperking.
+- Tellingen, pagina’s en publieke Work-ID’s voor/na zijn gelijk. Geen versoepelde
+  taalregel of na paginering leeggefilterde pagina. Cache van NL niet voor EN.
+
+Bewijs en controles
+-61gerichte lokale regressietests groen (incl4nieuwe cache/concurrencytests).
+ 1persistentiecontract en5echte server-HTML-tests uit de bestaande lokale fixture
+  groen; geen herhaling van eerdere visuele checks voor ongewijzigde UI geclaimd.
+- TypeScript, bronlint, productiebuild in Vercel-formaat en diffcontrole groen.
+  Clientsecretscan apart vastgelegd bij de build. Eigen fixturemarkers blijven
+  buiten de productie-uitvoer. Geen nieuwe publieke synthetische reviewroute.
+- CI voor initiële bf6b131: quality39393925788 SUCCESS. Nieuwe code vereist eigen
+  head-CI; actuele status/deployment worden in PR en eindbericht vermeld.
+- Artefacten buiten Git: outputs/mobile-search-20261020/
+  real-test-loader-baseline.json, real-test-large-baseline.json,
+  real-test-large-after-first.json (tussentijds, inclusief4458ms),
+  real-test-large-after.json (definitieve code), real-test-loader-after.json,
+  profile-real-test.mjs, performance-targeted-tests.log,
+  hosted-preparation-build.log, unconfigured-hosted.html.
+  Geen clientkeywaarde in dit document of de Git-diff.
+
+Mergeadvies en herstel
+- GEBLOKKEERD voor merge: hosted functionele/metingsverificatie ontbreekt door
+  branchconfiguratie. Ook ontbreken Dune/Suzanne op dit testdoel. Geen data
+  kopiëren of aanmaken zonder apart akkoord; dit pakket muteert geen catalogus.
+- Warm/pagina2 is aantoonbaar goedkoper op test. Een koude brede selectie blijft
+  alle passende minimale identiteitmetadata nodig hebben. Nog verder reduceren
+  met exacte telling/relevantie vergt een passende databasequery/API; zo’n
+  schema-/RPC-wijziging is niet uitgevoerd of automatisch meegenomen.
+- Na uitsluitend geautoriseerde branchkoppeling: één build, dan echte hosted
+  kaarten/filters/taal/thema/back en eerste/herhaalde kaartzichtbaarheid meten.
+  Niet op basis van alleen loadercijfers publiceren.
+- Herstel: eigen zoekcommit(s) gericht terugdraaien bovenop actuele main; geen
+  databaseherstel, gegevensverwijdering of terugdraaien van andere releases.
+
+Vervolg binnen expliciet PR45-akkoord (20 oktober)
+- De twee publieke testwaarden uitsluitend branchgebonden ingesteld. Geen
+  productie-/andere branchvariabelen, secrets, accounts of database aangepast.
+- Quality-CI van0486cbd:39396130286 SUCCESS. Nieuwe head moet eigen volledige
+  CI en hosted verificatie doorlopen; onderstaande nieuwe meting is lokaal.
+- Koude selectie:400Work-identiteiten per begrensd venster, complete edities in
+  maximaal twee parallelle200-ID-batches.300matches vergen nu8 in plaats van9
+  DataAPI-aanvragen. Zelfde300Works/603edities en correcte300resultaten/16kaarten.
+  Geen eerste16-truncatie: huidige ID-RPC bewijst geen strikte editie-identiteit
+  of globale relevantie. De resterende koude rijversterking is niet opgelost.
+- Privacybeperkte operationele servertellers geven cachetype, duur en aantallen;
+  geen zoektekst, Work-ID, score of persoonsgegevens. Scores blijven per pagina
+  opnieuw gelezen. Geen analytics-/meetopslag of publieke debugroute toegevoegd.
+- Eén nieuwe Git-build bundelt configuratie en code. Definitief hosted bewijs,
+  exacte head, Ready-URL, volledige CI en mergeadvies worden na die build in de
+  bestaande PR45 en outputs/mobile-search-20261020/hosted-final-review-20261020.txt
+  vastgelegd. Eerdere blokkadestatus hierboven is chronologisch, geen eindadvies.
+
+Vervolg koude selectie — expliciet testfunctie-akkoord
+- Alleen testproject hlvujbrmfdlrfxdjwsmb:nieuwe STABLE SECURITY INVOKER-functie
+  catalog_search_selection_v1,vaste lege search_path,publieke bibliografie/RLS.
+  Operationele SQL onder supabase/operations,geen automatische migratie of
+  productie-installatie. Bestaande functies/tabellen/beleid niet gewijzigd.
+- De database berekent de bestaande filterselectie eenmaal en kiest strikte
+  edities. Alleen compacte titel/auteur/alias/Work-/Edition-rangschikkingssleutels
+  gaan voor alle matches naar de server. Bestaande JS-relevantie en Intl-collatie
+  blijven exact behouden;daarna uitsluitend zichtbare pagina hydrateren.
+- Koud300matches:16volledige Works/16gekozen edities,geen300/603volle metadata-
+  download meer.300compacte sleutels blijven nodig,geen claim van slechts16
+  intern onderzochte databaserecords. Geen off-page cover/scoreverrijking.
+- Openbare pagina-identiteit gebruikt dezelfde begrensde15s-cache;key bevat
+  locale en exacte gekozen Work/Edition/titel/auteur. Scores iedere request vers.
+  Geen persoonlijke inhoud of scores in beide caches. Alleen PGRST202 (functie
+  afwezig) behoudt de begrensde legacyroute;andere fouten worden niet verborgen.
+- SQL/JS-pariteit lokaal getest over300Works met meerdere talen,formaten,
+  ontbrekende/ongeldige metadata,diakritische/Japanse titels,ISBN/OLID-normalisatie,
+  categorie/selectie,nieuwste/hoogste,relevantie en RLS.15gerichte tests groen.
+- Voor/na-fingerprints op test gelijk:396Works,618edities,19auteurs;geen eigen
+  catalogus-/gebruikerswrites. Geen account aangemaakt. Functie-advisorcontrole
+  heeft geen melding voor deze nieuwe zoekfunctie.
+- Definitieve nieuwe head/CI/Ready-Preview,meervoudige echte A/B- en hostedmetingen
+  en resterende beperkingen volgen in PR45 en het lokale eindverslag
+  outputs/mobile-search-20261020/projection-final-review-20261020.txt.
+  Eerdere4034ms-browseruitschieter blijft historisch bewijs,niet weggelaten.

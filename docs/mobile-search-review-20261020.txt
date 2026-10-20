@@ -1,0 +1,108 @@
+LumiScore — mobiele homepagezoekervaring — lokale review, 20 oktober 2026
+
+Basis en afbakening
+- Remote main bij aanvang: f06a32b493afedcc2bd3ea145a0b212f08771bf7.
+- Branch: fix/mobile-search-results-20261020, eigen geïsoleerde worktree.
+- Geen push, PR, merge, deployment, database-/catalogus-/gebruikerswrites,
+  migraties, Auth- of configuratiewijzigingen. Geen wijzigingen in PR42/43/44.
+  Reeds op main aanwezige prestatie- en SEO-releases blijven behouden.
+
+Oorzaak en presentatie
+- De homepage gebruikt een native GET-formulier naar /nl/search of /en/search.
+  Een algemene zoekopdracht is geen boekkeuze. Expliciete boeklinks blijven
+  boeklinks; er is geen automatische redirect bij meerdere resultaten toegevoegd.
+- /search gebruikte nog EditorialCatalogControls: het oude uitgeklapte formulier,
+  apart Author-veld en standaard32/A–Z. /browse had al compacte gedeelde bediening.
+- Search hergebruikt nu BrowseCatalogControls en de rustige Browse-kaarten:
+  titel, klein aantal, één titel/auteurveld, ingeklapte Filters, direct boeken.
+  Geen tweede globale zoekinput op deze pagina; het headerzoekicoon focust het veld.
+- Categorieën, selectie, editietalen, sortering en16/32/64/128 staan achter Filters.
+  Chips zijn verwijderbaar. Wissen behoudt q en wist de overige keuzes.
+  Toepassen/Wissen zijn even hoog (44px gemeten). Escape/Annuleren verwerpen
+  ongebruikte keuzes en herstellen focus. Bestaande author-URL’s blijven als
+  verborgen filter/chip compatibel, zonder een afzonderlijk zichtbaar Author-veld.
+- Geen zoekterm: gebruik de bestaande /browse-catalogus. Een zoekterm vraagt
+  minimaal twee tekens. Browse zonder zoekterm blijft16/hoogste score.
+
+Selectie, relevantie en aanvragen
+- Search normaliseert eigen defaults16/relevantie. Een expliciet gekozen A–Z,
+  nieuwste of hoogste score blijft inclusief URL/back-context behouden.
+- Bestaande catalog_discovery_page voert de bestaande zoek-/auteur-/categorie-/
+  selectie-/editietaalfilters uit. De bestaande RPC is niet globaal op relevantie
+  gesorteerd en kent geen strikte UI-editiepresentatie.
+- Daarom worden alleen de matchende kale IDs in128-vensters verzameld. Minimale
+  Work/auteuridentiteiten en complete edities komen gebatcht per200. De bestaande
+  strikte gedeelde editiepresentatie wordt vóór definitieve telling en paginering
+  toegepast. Daarna de bestaande titel/auteur/alias-relevantie; exacte Dune/Duin-
+  identiteit vóór minder directe overeenkomsten. Bestaande publicatieregels blijven.
+- Alleen de zichtbare pagina krijgt batchgewijs publieke ratings en de bestaande
+  uitgestelde, geverifieerde coverroute. Geen off-page beschrijvings-/cover-/rating-
+  verrijking, nieuwe autocompleteaanvraag of client-side catalogusdownload.
+  Onafhankelijke eerste catalogus-/categorie-/authaanvragen lopen parallel.
+- Zes treffers vergen één ID-RPC: gerichte unitcontrole op de collector.
+  Brede zoekvragen vragen noodzakelijk extra ID-/identiteitbatches voor correcte
+  globale relevantie en taaltelling. Hosted kosten/latentie hiervan zijn NIET gemeten.
+  Boven10.000 kale treffers verschijnt eerlijk een zoekfout/verfijn-aanwijzing;
+  geen stille truncatie, misleidende totalen of als leeg verhulde storing.
+- Grove facet-/selectietotalen uit de RPC worden op Search niet als exacte
+  taalgeschikte aantallen gepresenteerd. Hoofdaantal en kaarten delen één selectie.
+- Onbruikbare hoge paginanummers worden naar de laatste beschikbare pagina geklemd.
+  Rating-/statussemantiek, Work-ID, taalidentiteit en veilige returnTo blijven intact.
+  Geen nieuwe publieke of persoonlijke cache ingevoerd.
+
+Gerichte verificatie
+-57 gerichte tests groen: zoekrangschikking, editietaal/identiteit/coverfallback,
+  zoeken vóór paginering/telling, URL/radio/chips/defaults, veilige terugnavigatie,
+  gedeelde bediening en foutafhandeling.
+-1 bijgewerkt persistentiebroncontract groen: beide routes blijven publieke RPC’s
+  gebruiken, zonder toegang tot catalog_private/editorial_records.
+-5 echte lokale server-HTML-integratietests groen tegen de nieuwe zoekloader met
+  synthetisch publiek transport: NL/EN6 treffers, exact boek eerst, auteur160,
+ 16 per pagina, niet-overlappende pagina’s, clamping, categorie3, detail/back,
+  lege resultaten versus fout, expliciete32/64/128.
+- Brede bestaande suite:771 tests,753 pass,16 skip,2 verouderde bronregexen
+  verwachtten de oude loader-/normalizernaam. Beide contracten inhoudelijk
+  bijgewerkt en afzonderlijk opnieuw groen (in de57+1 hierboven).
+  Geen volledige tweede brede run na deze uitsluitend testaanpassingen geclaimd.
+- TypeScript en bronlint groen; productiebuild in Vercel-formaat groen.
+  Eerste Nitro-verpakking werd door Windows-sandbox EPERM readlink geblokkeerd;
+  dezelfde build met normale lokale bestandstoegang slaagde. Geen configpatch.
+- Clientsecretscan70 bestanden groen; eigen fixturemarkers ontbreken in de
+  productie-uitvoer. De opt-in loopbackrunner vervangt alleen lokaal transport
+  en nevenloaders; productie importeert geen synthetische boeken of bypass.
+- git diff --check groen. React-kwaliteit: bestaande componenten/native formulieren,
+  gelabelde buttons/inputs, focusherstel, serverselectie en beperkte clientprops.
+
+Echte browsercontrole (lokale fixture; geen fysieke telefoon)
+- NL/EN, Paper/Ink, nominale320×844,390×844 en1280×900.
+  Eerste kaart rond317CSS-px bij390 en315 bij320; zonder horizontale overflow.
+  Groot formulier standaard weg; bij320 één kaartkolom, bij390 twee.
+- Dune, gecombineerde auteurszoekvraag, lege resultaten, actieve categorie,
+  toepassen/wissen, ongewijzigde keuzes annuleren, keyboard/Enter/Escape/focus,
+  taalwissel, detailterugkeer en browser terug/vooruit zichtbaar gecontroleerd.
+- Algemene Enter vanaf de echte Header opent /search?q=Dune met zes resultaten;
+  gekozen Dune-kaart opent de juiste detailpagina met veilige zoekcontext.
+- Lokale homepagefixture is alleen een drager voor de bestaande Header. Geen
+  nieuwe claim over live suggesties, productieprestaties, gebruikersratings,
+  echte telefoon, screenreader of volledige live catalogus gemaakt.
+
+Lokale preview en bewijs
+- Start: node --experimental-strip-types scripts/mobile-search-review-local.mjs
+- Preview: http://127.0.0.1:3136/nl/search?q=Dune
+- EN: http://127.0.0.1:3136/en/search?q=Dune
+- Synthetische public-transportfixture; geen credentials of echte database nodig.
+- HTML-tests: SEARCH_REVIEW_ORIGIN=http://127.0.0.1:3136
+  node --experimental-strip-types --test scripts/test-mobile-search-html.mjs
+- Screenshots/logs buiten Git:
+  C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/mobile-search-20261020/
+  search-nl-paper-390.jpg, search-nl-ink-390.jpg, search-en-ink-320.jpg,
+  search-active-nl-paper-390.jpg, search-empty-en-ink-320.jpg,
+  search-en-paper-desktop.jpg, search-filters-en-paper-desktop.jpg.
+- Build- en testlogs: build.log, targeted-tests.log, persistence-contract-test.log,
+  html-tests.log en unit-tests.log (inclusief bovenstaande twee oude contractfouten).
+
+Herstel en volgende stap
+- Review lokaal. Hosted/live cataloguscontrole en database-latentie zijn nog niet
+  bewezen; niets publiceren op basis van uitsluitend deze synthetische fixture.
+- Herstel is de eigen applicatiecommit terugdraaien bovenop de dan actuele main.
+  Geen branch reset, andere releases terugdraaien, databaseherstel of datawijziging.

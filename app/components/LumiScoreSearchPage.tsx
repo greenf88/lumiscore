@@ -9,7 +9,9 @@ import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { useWantToRead } from './useWantToRead';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
-import { EditorialCatalogControls, EditorialPagination } from './EditorialCatalogControls';
+import { EditorialPagination } from './EditorialCatalogControls';
+import { BrowseCatalogControls } from './BrowseCatalogControls';
+import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import type { PublicCategory, AuthorOption } from '@/lib/catalog/discovery';
 
 type LumiScoreSearchPageProps = {
@@ -53,7 +55,7 @@ export function LumiScoreSearchPage({
     localStorage.setItem('lumiscore-theme', next);
   }, []);
 
-  const hasQuery = initialQuery.length >= 2 || filters.categories.length > 0 || Boolean(filters.selection) || Boolean(filters.author) || filters.languages.length > 0;
+  const hasQuery = initialQuery.length >= 2;
 
   return (
     <main className="site-shell search-page-shell">
@@ -63,6 +65,7 @@ export function LumiScoreSearchPage({
         onQueryChange={setQuery}
         authState={authState}
         returnTo={searchReturnTo}
+        searchTargetId="browse-query"
       />
       <section
         className="featured-section search-results-section"
@@ -70,26 +73,25 @@ export function LumiScoreSearchPage({
       >
         <div className="section-heading search-results-heading">
           <div>
-            <span className="eyebrow">{t('search.fullCatalog')}</span>
             <h1 id="search-results-title">
               {initialQuery.length >= 2 ? t('search.resultsFor', { query: initialQuery }) : t('search.title')}
             </h1>
           </div>
           <div className="section-tools">
             <span>
-              {hasQuery
+              {searchFailed ? t('home.searchUnavailable') : hasQuery
                 ? `${total.toLocaleString(locale === 'nl' ? 'nl-NL' : 'en-US')} ${t(total === 1 ? 'common.book' : 'common.books')}`
                 : t('search.enterTitle')}
             </span>
           </div>
         </div>
 
-        <EditorialCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" categories={categories} selectedAuthor={selectedAuthor} discoveryAvailable={discoveryAvailable} />
+        <BrowseCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" categories={categories} selectedAuthor={selectedAuthor} discoveryAvailable={discoveryAvailable} resultCount={null} />
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>
             <h2>{t('home.searchUnavailable')}</h2>
-            <p>{t('home.tryAgain')}</p>
+            <p>{t('home.tryAgain')} {locale === 'nl' ? 'Probeer ook een specifiekere titel of auteursnaam.' : 'Try a more specific title or author name.'}</p>
           </div>
         ) : !hasQuery ? (
           <div className="empty-results">
@@ -101,12 +103,13 @@ export function LumiScoreSearchPage({
             </LocaleLink>
           </div>
         ) : results.length > 0 ? (
-          <div className="book-grid">
+          <div className="book-grid browse-book-grid">
             {results.map((book) => (
               <BookCard
                 key={book.id}
                 book={book}
-                wanted={wanted.has(book.id)}
+                variant="browse"
+                wanted={wanted.has(getGuestWantedStorageId(book))}
                 status={book.workId ? statuses.get(book.workId) : null}
                 onToggle={toggleWanted}
                 resolveMissingCover={false}
