@@ -13,10 +13,13 @@ test('homepage general search stays results; explicit book choice stays a book; 
 });
 test('search loads matching identities once, paginates before rating/cover enrichment; errors stay errors',async()=>{
   const src=await read('lib/supabase/search-catalog.ts');
-  assert.ok(src.indexOf('mapCatalogWorks(result.data')<src.indexOf('const window = searchWindow'));
+  assert.match(src,/const selection = await readSelection[\s\S]*?const window = searchWindow\(selection.books/);
+  assert.match(src,/return \{ books: candidates, aliases: aliasesByWorkId/);
   assert.ok(src.indexOf('const window = searchWindow')<src.indexOf('const summaries = await'));
   assert.match(src,/loadPublicRatingSummariesBatched\(supabase, window.books/);
   assert.match(src,/deferEditionCoverEvidence\(applyRatingSummaries\(window.books/);
   assert.doesNotMatch(src,/searchCatalog\(|\.from\('ratings'\)|\.from\('user_/);
   assert.match(src,/if \(error\) throw error/);
+  assert.match(src,/AbortSignal.timeout\(5000\)/);
+  assert.match(src,/readSearchIdentityBatches<Book>/);
 });

@@ -32,11 +32,13 @@ export const supabase = {
       order(key: string) { rows = rows.toSorted((a,b) => String(a[key]).localeCompare(String(b[key]),'en',{numeric:true})); return q; },
       range(from: number,to: number) { rows = rows.slice(from,to+1); return q; },
       maybeSingle() { single = true; return q; },
+      abortSignal() { return q; },
       then(resolve: (r:unknown)=>unknown) { return Promise.resolve(resolve({data:single?rows[0]??null:rows,error:null})); },
     };
     return q;
   },
-  async rpc(name: string, args: Record<string, unknown>) {
+  rpc(name: string, args: Record<string, unknown>) {
+    const run=async()=>{
     if(name==='get_work_rating_summaries_v2') return {data:(args.target_work_ids as number[]).map(id=>({work_id:id,lumiscore:8.3,rating_count_band:'3–4',evidence_status:'available'})),error:null};
     if(name!=='catalog_discovery_page') throw Error('Unexpected fixture RPC');
     if(args.p_query==='fixture-load-error') return {data:null,error:{code:'TEST',message:'Synthetic query failure'}};
@@ -49,5 +51,7 @@ export const supabase = {
       .toSorted((a,b)=>(args.p_sort==='newest'?b.first_publish_year-a.first_publish_year:0)||a.title.localeCompare(b.title)||a.id-b.id);
     const size=Number(args.p_page_size),total=rows.length,page=Math.min(Number(args.p_page),Math.max(1,Math.ceil(total/size)));
     return {data:{workIds:rows.slice((page-1)*size,page*size).map(w=>w.id),total,page,selectionCount:111,facets:{fiction_fantasy:3,fiction_science_fiction:3}},error:null};
+    };
+    const task=run();return Object.assign(task,{abortSignal(){return task;}});
   },
 };
