@@ -134,3 +134,21 @@ Mergeadvies en herstel
   Niet op basis van alleen loadercijfers publiceren.
 - Herstel: eigen zoekcommit(s) gericht terugdraaien bovenop actuele main; geen
   databaseherstel, gegevensverwijdering of terugdraaien van andere releases.
+
+Vervolg binnen expliciet PR45-akkoord (20 oktober)
+- De twee publieke testwaarden uitsluitend branchgebonden ingesteld. Geen
+  productie-/andere branchvariabelen, secrets, accounts of database aangepast.
+- Quality-CI van0486cbd:39396130286 SUCCESS. Nieuwe head moet eigen volledige
+  CI en hosted verificatie doorlopen; onderstaande nieuwe meting is lokaal.
+- Koude selectie:400Work-identiteiten per begrensd venster, complete edities in
+  maximaal twee parallelle200-ID-batches.300matches vergen nu8 in plaats van9
+  DataAPI-aanvragen. Zelfde300Works/603edities en correcte300resultaten/16kaarten.
+  Geen eerste16-truncatie: huidige ID-RPC bewijst geen strikte editie-identiteit
+  of globale relevantie. De resterende koude rijversterking is niet opgelost.
+- Privacybeperkte operationele servertellers geven cachetype, duur en aantallen;
+  geen zoektekst, Work-ID, score of persoonsgegevens. Scores blijven per pagina
+  opnieuw gelezen. Geen analytics-/meetopslag of publieke debugroute toegevoegd.
+- Eén nieuwe Git-build bundelt configuratie en code. Definitief hosted bewijs,
+  exacte head, Ready-URL, volledige CI en mergeadvies worden na die build in de
+  bestaande PR45 en outputs/mobile-search-20261020/hosted-final-review-20261020.txt
+  vastgelegd. Eerdere blokkadestatus hierboven is chronologisch, geen eindadvies.

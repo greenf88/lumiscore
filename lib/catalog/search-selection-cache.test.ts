@@ -42,12 +42,12 @@ test('failed reads are not cached/retried; capacity bounds entries and total pub
   assert.equal(reads, 6);
 });
 
-test('identity batches overlap only two200-ID batches and retain deterministic input order', async () => {
+test('Work identity windows stay below400 and preserve order; edition batch limit remains200', async () => {
   let active = 0, peak = 0;
   const result = await readSearchIdentityBatches(Array.from({ length: 850 }, (_, i) => String(i)), async ids => {
-    active++; peak = Math.max(peak, active); assert.ok(ids.length <= 200);
+    active++; peak = Math.max(peak, active); assert.ok(ids.length <= 400);
     await Promise.resolve(); active--; return ids;
   });
-  assert.equal(peak, 2); assert.equal(result.length, 850); assert.equal(result[849], '849');
+  assert.equal(peak, 1); assert.equal(result.length, 850); assert.equal(result[849], '849');
   await assert.rejects(() => readSearchIdentityBatches(['1'], async () => { throw Error('failed batch'); }), /failed batch/);
 });

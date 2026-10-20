@@ -3,6 +3,7 @@ import type { EditorialQuery } from './editorial-query.ts';
 import type { Locale } from '../i18n/config.ts';
 import type { CatalogSearchAliases } from '../books/catalog-search.ts';
 import type { AuthorOption, PublicCategory } from './discovery.ts';
+import type { SearchCacheRead } from './search-observation.ts';
 
 export type PublicSearchSelection = {
   books: Book[];
@@ -24,11 +25,12 @@ export function createSearchSelectionCache(now = Date.now) {
   const ready = new Map<string, { value: PublicSearchSelection; expires: number }>();
   const pending = new Map<string, Promise<PublicSearchSelection>>();
   const weight = () => [...ready.values()].reduce((n, row) => n + row.value.books.length, 0);
-  return async (key: string, read: () => Promise<PublicSearchSelection>) => {
+  return async (key: string, read: () => Promise<PublicSearchSelection>, observe?: (state: SearchCacheRead) => void) => {
     for (const [id, row] of ready) if (row.expires <= now()) ready.delete(id);
     const hit = ready.get(key);
-    if (hit) return hit.value;
-    if (pending.has(key)) return pending.get(key)!;
+    if (hit) { observe?.('cache'); return hit.value; }
+    if (pending.has(key)) { observe?.('coalesced'); return pending.get(key)!; }
+    observe?.('fresh');
     const load = async () => {
       const value = await read();
       if (value.books.some(b => b.score !== null || b.match !== null || b.ratingsCount !== null)) {
@@ -47,12 +49,12 @@ export function createSearchSelectionCache(now = Date.now) {
   };
 }
 
-/** Bounded concurrency, no per-Work request loop. Results retain input order. */
+/** At most400 Work identities per window (<1000-row API cap).
+ * Caller loads complete editions in parallel200-ID batches. No per-Work loop. */
 export async function readSearchIdentityBatches<T>(ids: readonly string[], read: (ids: string[]) => Promise<T[]>) {
   const rows: T[] = [];
   for (let start = 0; start < ids.length; start += 400) {
-    const batches = [ids.slice(start, start + 200), ids.slice(start + 200, start + 400)].filter(b => b.length);
-    rows.push(...(await Promise.all(batches.map(read))).flat());
+    rows.push(...await read(ids.slice(start, start + 400)));
   }
   return rows;
 }
