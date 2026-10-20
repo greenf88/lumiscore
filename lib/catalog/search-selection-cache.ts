@@ -10,6 +10,7 @@ export type PublicSearchSelection = {
   aliases: CatalogSearchAliases;
   categories: PublicCategory[];
   selectedAuthor: AuthorOption | null;
+  projected?: boolean;
 };
 /** Page/size are deliberately absent: all pages share ONE eligible selection.
  * Locale, filters and database order must never cross cache boundaries. */

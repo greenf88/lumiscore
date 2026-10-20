@@ -15,9 +15,11 @@ test('search loads matching identities once, paginates before rating/cover enric
   const src=await read('lib/supabase/search-catalog.ts');
   assert.match(src,/const selection = await readSelection[\s\S]*?const window = searchWindow\(selection.books/);
   assert.match(src,/return \{ books: candidates, aliases: aliasesByWorkId/);
-  assert.ok(src.indexOf('const window = searchWindow')<src.indexOf('const summaries = await'));
+  assert.ok(src.indexOf('const window = searchWindow')<src.indexOf('const scoreRead ='));
   assert.match(src,/loadPublicRatingSummariesBatched\(supabase, window.books/);
-  assert.match(src,/deferEditionCoverEvidence\(applyRatingSummaries\(window.books/);
+  assert.match(src,/deferEditionCoverEvidence\(applyRatingSummaries\(books/);
+  assert.match(src,/validateProjectedPage\(keys, mapCatalogWorks/);
+  assert.match(src,/projection.error.code !== 'PGRST202'/);
   assert.doesNotMatch(src,/searchCatalog\(|\.from\('ratings'\)|\.from\('user_/);
   assert.match(src,/if \(error\) throw error/);
   assert.match(src,/AbortSignal.timeout\(5000\)/);

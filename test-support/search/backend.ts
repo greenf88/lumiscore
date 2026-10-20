@@ -39,6 +39,7 @@ export const supabase = {
   },
   rpc(name: string, args: Record<string, unknown>) {
     const run=async()=>{
+    if(name==='catalog_search_selection_v1')return {data:null,error:{code:'PGRST202',message:'Local legacy compatibility fixture'}};
     if(name==='get_work_rating_summaries_v2') return {data:(args.target_work_ids as number[]).map(id=>({work_id:id,lumiscore:8.3,rating_count_band:'3–4',evidence_status:'available'})),error:null};
     if(name!=='catalog_discovery_page') throw Error('Unexpected fixture RPC');
     if(args.p_query==='fixture-load-error') return {data:null,error:{code:'TEST',message:'Synthetic query failure'}};
