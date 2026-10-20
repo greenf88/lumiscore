@@ -12,11 +12,11 @@ export function clearBrowseFilters(state: EditorialQuery): EditorialQuery {
 }
 
 /** Links go through the existing normalized URL contract, never an arbitrary return URL. */
-export function browseFilterChips(state: EditorialQuery, categories: PublicCategory[], author: AuthorOption | null, locale: Locale) {
+export function browseFilterChips(state: EditorialQuery, categories: PublicCategory[], author: AuthorOption | null, locale: Locale, route: '/browse' | '/search' = '/browse') {
   const nl = locale === 'nl';
-  const href = (next: Partial<EditorialQuery>) => editorialHref('/browse', { ...state, ...next, page: 1 });
+  const href = (next: Partial<EditorialQuery>) => editorialHref(route, { ...state, ...next, page: 1 });
   return [
-    ...(state.query ? [{ key: 'q', label: `${nl ? 'Zoeken' : 'Search'}: ${state.query}`, href: href({ query: '' }) }] : []),
+    ...(state.query && route !== '/search' ? [{ key: 'q', label: `${nl ? 'Zoeken' : 'Search'}: ${state.query}`, href: href({ query: '' }) }] : []),
     ...(state.author ? [{ key: 'author', label: `${nl ? 'Schrijver' : 'Author'}: ${author?.name ?? `#${state.author}`}`, href: href({ author: '' }) }] : []),
     ...state.categories.map(id => ({ key: `category-${id}`, label: categories.find(c => c.id === id)?.[locale] ?? id,
       href: href({ categories: state.categories.filter(value => value !== id) }) })),

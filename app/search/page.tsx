@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { LumiScoreSearchPage } from '@/app/components/LumiScoreSearchPage';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
-import { editorialQuery, editorialHref } from '@/lib/catalog/editorial-query';
+import { searchQuery, editorialHref } from '@/lib/catalog/editorial-query';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { unavailableEditorialPage } from '@/lib/supabase/editorial-catalog';
 import {
@@ -39,7 +39,7 @@ export async function generateMetadata({
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const resolvedSearchParams = await searchParams;
   const query = readQuery(resolvedSearchParams);
-  const state = editorialQuery(resolvedSearchParams);
+  const state = searchQuery(resolvedSearchParams);
   const authStatePromise = import('@/lib/supabase/auth')
     .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
     .catch(() => ({ authenticated: false }));
@@ -48,8 +48,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let searchFailed = false;
 
   try {
-    const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');
-    data = await loadEditorialCatalog(state, locale);
+    const { loadSearchCatalog } = await import('@/lib/supabase/search-catalog');
+    data = await loadSearchCatalog(state, locale);
   } catch (error) {
     console.error('Search page catalog query failed.', error);
     searchFailed = true;

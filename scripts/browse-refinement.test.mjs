@@ -15,10 +15,12 @@ test('Browse uses native single-select tiles and a separate empty clear form, wi
   assert.equal(translate('en','browse.applyFilters'),'Apply');
 });
 
-test('only Browse reuses its page search; other headers retain the original global search',async()=>{
+test('Browse and Search reuse their page field; other headers retain the original global search',async()=>{
   const header=await readFile(new URL('../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
   const page=await readFile(new URL('../app/components/LumiScoreBrowsePage.tsx',import.meta.url),'utf8');
   assert.match(page,/searchTargetId="browse-query"/);
+  const search=await readFile(new URL('../app/components/LumiScoreSearchPage.tsx',import.meta.url),'utf8');
+  assert.match(search,/searchTargetId="browse-query"/);
   assert.match(header,/!searchTargetId && <div className="header-search"/);
   assert.match(header,/document\.getElementById\(searchTargetId\)\?\.focus\(\)/);
 });

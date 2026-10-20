@@ -20,7 +20,14 @@ export function editorialQuery(params: CatalogParams, defaults: { pageSize: Cata
     sort: normalizeCatalogBrowseSort(params.sort, defaults.sort),
   };
 }
-export type EditorialQuery = ReturnType<typeof editorialQuery>;
+export type EditorialQuery = ReturnType<typeof editorialQuery> & { relevance?: boolean };
+/** Search has its own defaults; Browse remains highest-score/16. */
+export function searchQuery(params: CatalogParams): EditorialQuery {
+  const query = normalizeCatalogSearchQuery(values(params.q)[0] ?? '');
+  const state = editorialQuery(params, { pageSize: 16, sort: query.length >= 2 ? 'az' : 'highest' });
+  const requested = values(params.sort)[0];
+  return { ...state, relevance: query.length >= 2 && !['az', 'newest', 'highest'].includes(requested ?? '') };
+}
 /** Browse-only defaults: Search and other existing consumers retain their defaults. */
 export function browseQuery(params: CatalogParams): EditorialQuery {
   return editorialQuery(params, { pageSize: 16, sort: 'highest' });
@@ -39,7 +46,8 @@ export function editorialHref(route: '/browse' | '/search', state: EditorialQuer
   if (state.author) params.set('author', state.author);
   if (state.page > 1) params.set('page', String(state.page));
   params.set('pageSize', String(state.pageSize));
-  if (route === '/browse' || state.sort !== 'az') params.set('sort', state.sort);
+  if (state.relevance) params.set('sort', 'relevance');
+  else if (route === '/browse' || state.sort !== 'az' || state.relevance !== undefined) params.set('sort', state.sort);
   for (const id of state.categories) params.append('category', id);
   for (const id of state.languages) params.append('language', id);
   if (state.selection) params.set('selection', state.selection);
