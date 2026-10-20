@@ -42,3 +42,29 @@ test('read-only lookahead matches two saves/skip, cannot advance/write or read a
     await db.exec('set role anon'); await assert.rejects(() => peek(db, { round: { id: 'aaaaaaaa-0000-4000-8000-000000000001' }, currentWorkId: '1' }), /permission denied/);
   } finally { await db.close(); }
 });
+test('existing v3 test inventory, read exclusion and explicit old-skip policy are respected without altering storage', async () => {
+  const db = await fixture();
+  try {
+    await db.exec(flexible); await db.exec(proposal); await asUser(db, a);
+    const s = await advance(db, 'start', null);
+    await db.exec('reset role');
+    // Disposable capability stub: not the parked storage implementation.
+    await db.exec(`alter table public.taste_rating_rounds add column revisit_prior_skips boolean not null default false;
+      create table taste_private.eligible_inventory_v1(work_id bigint, language text);
+      insert into taste_private.eligible_inventory_v1 values(2,'en'),(3,'en'),(4,'en'),(6,'en');
+      create function taste_private.inventory_current_v1(bigint,text) returns boolean language sql stable as $$select $1<>4$$;
+      create function taste_private.advance_round_v3(text,uuid,bigint,integer,text,integer) returns jsonb language sql as $$select null::jsonb$$;
+      create or replace function taste_private.advance_round_v2(p_action text,p_round_id uuid,p_work_id bigint,p_score integer,p_language text,p_goal integer) returns jsonb language sql as $$select taste_private.advance_round_v3($1,$2,$3,$4,$5,$6)$$;`);
+    await db.query("insert into public.user_book_status(user_id,work_id,status) values($1,2,'read') on conflict(user_id,work_id) do update set status='read'", [a]);
+    await asUser(db, a); await db.exec('begin read only');
+    assert.equal((await peek(db,s)).workId,'3'); await db.exec('commit');
+    await db.exec('reset role');
+    await db.query('update public.taste_rating_rounds set round_number=2 where id=$1',[s.round.id]);
+    const old = (await db.query('insert into public.taste_rating_rounds(user_id,round_number,language,completed_at) values($1,1,\'en\',now()) returning id',[a])).rows[0].id;
+    await db.query("insert into public.taste_rating_offers(user_id,round_id,work_id,decision) values($1,$2,3,'skipped')",[a,old]);
+    await asUser(db,a); assert.equal((await peek(db,s)).workId,'6','old skips cannot return without explicit permission');
+    await db.exec('reset role'); await db.query('update public.taste_rating_rounds set revisit_prior_skips=true where id=$1',[s.round.id]);
+    await asUser(db,a); assert.equal((await peek(db,s)).workId,'3');
+    assert.equal((await state(db)).round.ratedCount,0); assert.equal((await state(db)).currentWorkId,s.currentWorkId);
+  } finally { await db.close(); }
+});
