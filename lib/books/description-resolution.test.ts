@@ -425,7 +425,7 @@ test('book detail receives server copy without a robots-blocked hydration reques
   ]);
 
   assert.doesNotMatch(component, /fetch\(|useEffect|\/api\//);
-  assert.match(component, /description\?\.language ===/);
+  assert.match(component, /descriptionLanguageAllowed\(description, locale, englishEditionFallback\)/);
   assert.match(component,/englishEditionFallback/);
   assert.match(component, /publicDescriptionSource/);
   assert.match(component, /geverifieerde Nederlandse beschrijving/);

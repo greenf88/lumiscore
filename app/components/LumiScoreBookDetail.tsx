@@ -314,7 +314,9 @@ export function LumiScoreBookDetail({
                         : 'collection.partOfUniverse',
                     { name: collectionContext.collection.name },
                   )}
-                  {collectionContext.collection.collectionType === 'series' && collectionContext.position !== null
+                  {collectionContext.companion && collectionContext.position !== null
+                    ? ` · ${t('collection.companionPosition', { position: collectionContext.position })}`
+                    : collectionContext.collection.collectionType === 'series' && collectionContext.position !== null
                     ? ` · ${canShowSeriesDenominator(collectionContext.position, collectionContext.total)
                       ? t('collection.bookOf', { position: collectionContext.position, total: collectionContext.total })
                       : t('collection.bookPosition', { position: collectionContext.position })}`

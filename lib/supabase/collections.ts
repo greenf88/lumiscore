@@ -3,6 +3,7 @@ import type { Book } from '../../app/data/books.ts';
 import {
   calculateCollectionProgress,
   calculateSeriesProgress,
+  isCompanionMembership,
   selectHighestRatedUnread,
   selectSeriesContinuations,
   type CollectionBook,
@@ -65,6 +66,7 @@ export type CollectionPageData = {
 };
 
 export type BookCollectionContext = {
+  companion?: boolean;
   collection: CollectionSummary;
   position: number | null;
   total: number | null;
@@ -161,7 +163,7 @@ export async function loadCollectionsDirectory(locale:Locale='en'): Promise<Coll
       .order('name', { ascending: true }),
     supabase
       .from('collection_books')
-      .select('collection_id,work_id,sequence_number,publication_order')
+      .select('collection_id,work_id,sequence_number,publication_order,subgroup')
       .order('collection_id', { ascending: true }),
   ]);
   if (collectionsResult.error) throw collectionsResult.error;
@@ -173,6 +175,7 @@ export async function loadCollectionsDirectory(locale:Locale='en'): Promise<Coll
     (row): CollectionDirectoryMembership => ({
       collectionId: String(row.collection_id),
       workId: String(row.work_id),
+      subgroup: row.subgroup,
       sequenceNumber: row.sequence_number === null
         ? null
         : asNumber(row.sequence_number),
@@ -325,7 +328,7 @@ export async function loadBookCollectionContext(
   const authPromise = getVerifiedServerUser();
   const allMembershipsResult = await supabase
     .from('collection_books')
-    .select('work_id,sequence_number')
+    .select('work_id,sequence_number,publication_order,subgroup')
     .eq('collection_id', collection.id);
   if (allMembershipsResult.error) throw allMembershipsResult.error;
   const allMemberships = (allMembershipsResult.data ?? []) as MembershipRow[];
@@ -380,6 +383,7 @@ export async function loadBookCollectionContext(
   return {
     collection,
     position: primary.sequence_number === null ? null : asNumber(primary.sequence_number),
+    companion: isCompanionMembership(primary),
     total: denominatorProgress.total,
     progress,
   };

@@ -1,0 +1,72 @@
+LumiScore — Heretics of Dune / The Mirror of Infinite Endings
+Review date: 21 October 2026. Production writes: ZERO. No push, merge or deployment.
+
+BASE AND ISOLATION
+Branch: catalog/mirror-heretics-review-20261021
+Remote main checked again immediately before final review: a668d8fd9ff964175ba0b9a55db706d3f5f0b047.
+Existing worktrees/PRs were not modified. No dependencies, schema, Auth, RLS or environment settings changed.
+Local application process uses only the existing public TEST URL/publishable key; no key is committed.
+
+HERETICS: TEST APPLIED, PRODUCTION PROPOSAL SEPARATE
+Existing test Work 91021104 (same bibliographic Work as production Work 311, OL893502W).
+New test Edition 91021201: Heretics of Dune, ISBN 9780593201763, eng, OL29887746M, Ace, paperback, 2020-07-07.
+Official PRH page and exact Open Library edition corroborate identity; edition cover 14630302 loaded in browser.
+Existing hosted test Preview https://lumiscore-f0zkh878x-rgkgroeneveld-9102.vercel.app/en/collection/dune now renders SIX cards.
+This is an existing PR45 deployment (4f95cb9f4e56ca3b79f453fdbdf1f11d8e97dd6c), not a new deployment of this branch.
+EN detail shows Heretics of Dune, ENG, exact ISBN and English cover. NL keeps Ketters van Duin, existing Dutch ISBN 9789029043151 and neutral fallback when no reliable Dutch cover exists.
+NL collection also renders six. All six original memberships and all user data remain unchanged.
+Existing test Dune Work publication years are incomplete; this import does not fill unrelated Work fields.
+
+MIRROR: REUSE, NEVER DUPLICATE
+Production already has Work 10138 / author 735 / US Edition 10298 / OL45033863W / OL61433279M / original year 2026.
+Existing production companion membership in collection 60 stays intact. Existing main collection 30 contains the three main novels.
+TEST additions: author 735, Work 10138, US Edition 91021202 and Orion Edition 91021203, main-collection-32 optional membership at position/publication_order 4, subgroup companion, existing Fantasy category.
+US: ISBN 9781250462039, eng, Flatiron Books, 2026-09-22, cover 15201916 from exact OL edition.
+Orion: ISBN 9781399641777, eng, paperback, 2026-09-29; Van Ditmar is NL distribution, NOT a Dutch edition. Registry cover is bound to the exact ISBN/Work/title/author.
+Lotusbubble illustrator, distinct edition dates, distribution, audience and sources are retained in reviewed.json.
+No invented Dutch edition, no trait evidence added, no ratings/popularity created. Fantasy is supported; age guidance remains audience evidence, not a taste trait.
+Production schema has no edition publication-date field: dates remain in the reviewed import record; no migration.
+
+COMPANION MODEL AND CODE
+Use existing collection_books.subgroup, not a new schema or a fourth mandatory novel.
+Series progress and directory coverage ignore explicitly marked companions for main-series completion; all cards remain discoverable.
+Main trilogy denominator stays 3. Reading/rating the companion cannot make 1/3, 4/3 or change completed 3/3.
+Detail and collection card say Companion / publisher volume 4, never Book 4 of 3.
+Own short NL/EN summaries reuse the exact reviewed-description mechanism and official Macmillan attribution.
+An exact reviewed Dutch own summary may accompany the English fallback without certifying a Dutch edition. Unreviewed/provider-language fallback rules are unchanged.
+Orion cover uses existing reviewed-cover mechanism. US edition remains the default selection; UK rendering tested through shared strict-edition code, registry image also visually inspected.
+
+DATABASE VALIDATION
+prepare-mirror-heretics.mjs generates files only; no network connections.
+Both TEST imports applied and replayed successfully: no duplicates, no overwrites; edition IDs stable.
+All 13 original table fingerprints match the pre-import snapshot, including all ratings, statuses, rounds, offers, responses, trait evidence and original catalogue records.
+Final read-only taste inventory check: zero eligible inventory rows for Work 10138. This addition is not a first-book taste-test offer; no taste test or account was created to test it.
+See test-baseline.json, *.receipt.json, final-verification.json and regression-results.txt. No individual user records are included.
+
+APPLICATION CHECKS
+261 relevant Books/Collections/i18n/import tests PASS, including identity mismatch, strict language, cover selection, 3/3 completion, duplicate/conflict abort, idempotent production proposal in local PGlite.
+TypeScript, full lint, both production builds and client secret scan PASS. Build emits existing vinext ineffective-dynamic-import warnings, no build errors.
+Browser against actual test database: Mirror detail/collection/search/Browse, NL/EN, Paper/Ink, 390x844 and desktop; official title, fallback label, summary/source, neutral score badge, no overflow or browser error logs.
+Real local preview: http://localhost:3136/nl/book/10138 (localhost, not 127.0.0.1; current server listens on IPv6).
+No physical phone check. No authenticated progress mutation. The TEST parent collection lacks the original trilogy members; we did not copy unrelated books. Full 3/3 behaviour is a deterministic unit check, not a claim that the test collection has all four cards.
+Screenshots: ga-x20/outputs/mirror-nl-desktop-paper-20261021.jpg; mirror-nl-paper-mobile-20261021.jpg; mirror-en-paper-mobile-20261021.jpg; mirror-en-detail-ink-mobile-20261021.jpg; mirror-nl-collection-ink-mobile-20261021.jpg; mirror-orion-source-20261021.jpg; dune-en-six-test-20261021.jpg; heretics-en-test-20261021.jpg.
+Final Paper mobile check explicitly measured window.innerWidth=390, innerHeight=844, overflow=false for both languages; viewport reset afterwards.
+Mirror browser evidence contains the initial failed-description observations followed by fixed observations; only the latter describe final behaviour.
+
+EXACT PRODUCTION PROPOSAL — NOT EXECUTED, REQUIRES SEPARATE APPROVAL
+1. Release the companion-aware code first, after separate code release review; never add the parent companion membership to old progress code.
+2. Fresh read-only identity/duplicate checks and record all before/after IDs. Run mirror.production.proposed.sql through the existing reviewed import procedure on the explicitly selected production project only after approval.
+   Reuse Work 10138, author 735 and US Edition 10298. Add one English Orion edition (auto ID), add collection 30 -> Work 10138 at 4/4/subgroup companion. Existing Fantasy link is an idempotent no-op. Do not change collection 60 or main trilogy members/total.
+3. Heretics is independent: heretics.production.proposed.sql would add only the exact English edition to existing production Work 311 (auto ID), after separate approval.
+4. No existing Work, edition, user, score, status or progress update/delete. Guards abort changed identities/occupied positions. Test-only fixed IDs must never be copied into production.
+5. Verify book detail, collection cards, 3/3 denominator, languages and user-state aggregate preservation; store the actual inserted Edition IDs and whether insertion occurred.
+
+ROLLBACK (PREPARED, NOT EXECUTED)
+Data: remove only the newly added collection-30/Work-10138 exact companion membership if this import created it. Preserve the existing collection-60 membership, all three main members and total=3.
+If edition reversal is needed, remove only the new edition IDs recorded as INSERTED by this approved import, after exact ISBN/Work checks and checking dependent references; never delete existing Edition 10298, either Work or either author. If new references exist, keep the edition and review instead of cascading. No user-data rollback.
+Code: remove the new parent companion membership BEFORE restoring pre-change progress code; then revert this branch's code commit on a clean branch and run checks. Own summaries/cover override can be reverted independently of catalogue identities.
+Test data are intentionally retained for review. No accounts or credentials created; no cleanup of other people's data.
+
+SOCIAL DRAFT (NOT SENT OR SCHEDULED)
+Terug naar de wereld van Once Upon a Broken Heart: heb jij The Mirror of Infinite Endings al gelezen? Geef jouw oordeel op LumiScore: https://lumisco.re/nl/book/10138
+Destination already exists. Improved summary/parent-collection presentation is local only until separately approved release.

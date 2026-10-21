@@ -1,4 +1,5 @@
 import type { CollectionSummary, CollectionType } from './model.ts';
+import { isCompanionMembership } from './model.ts';
 
 export const COLLECTION_DIRECTORY_FILTERS = [
   'all',
@@ -14,6 +15,7 @@ export type CollectionDirectoryMembership = {
   workId: string;
   sequenceNumber: number | null;
   publicationOrder: number | null;
+  subgroup?: string | null;
 };
 
 export type CollectionDirectoryBaseItem = {
@@ -91,7 +93,7 @@ export function buildCollectionDirectoryBaseItems(
         collectionMemberships.map(({ workId }) => workId),
       )];
       const mainSeriesPositions = new Set(
-        collectionMemberships.flatMap(({ sequenceNumber }) =>
+        collectionMemberships.filter(member => !isCompanionMembership(member)).flatMap(({ sequenceNumber }) =>
           sequenceNumber !== null &&
           Number.isInteger(sequenceNumber) &&
           sequenceNumber > 0

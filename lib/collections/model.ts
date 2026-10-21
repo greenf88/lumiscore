@@ -49,6 +49,11 @@ export type SeriesContinuationCandidate = {
 
 const EMPTY_RATED_WORK_IDS: ReadonlySet<string> = new Set();
 
+/** Only explicit membership metadata, never a title/author inference. */
+export function isCompanionMembership(member: { subgroup?: string | null }): boolean {
+  return /^companion(?:$|\s|:)/i.test(member.subgroup?.trim() ?? '');
+}
+
 export function isReadingStatus(value: unknown): value is ReadingStatus {
   return READING_STATUSES.includes(value as ReadingStatus);
 }
@@ -111,6 +116,7 @@ export function calculateSeriesProgress(
   expectedMainSeriesTotal: number | null = null,
   ratedWorkIds: ReadonlySet<string> = EMPTY_RATED_WORK_IDS,
 ): SeriesProgress {
+  books = books.filter((book) => !isCompanionMembership(book));
   const collectionProgress = calculateCollectionProgress(books, statuses, ratedWorkIds);
   const total = safeExpectedSeriesTotal(books, expectedMainSeriesTotal);
   const progress: CollectionProgress = {
