@@ -39,6 +39,15 @@ test('Crawdads requires data correction; empty language is never admitted on tit
   const f=fixtures[0],en=f.editions[0];
   for(const locale of ['nl','en'] as const)assert.equal(selectStrictEdition([{...en,language:null}],locale,f.title),null);
 });
+test('Dune uses a reviewed exact-volume cover without a live lookup or expiring image token',()=>{
+  const f=fixtures[1],e=f.editions[0];
+  const cover=getReviewedCoverOverride({...f,...e,workId:f.workId,isbn13:e.isbn_13,editionLanguage:e.language,openLibraryEditionId:e.open_library_edition_id});
+  assert.equal(cover?.source,'reviewed_google_books');
+  const url=new URL(cover!.coverUrl);
+  assert.equal(url.searchParams.get('id'),'deRpPwAACAAJ');
+  assert.equal(url.searchParams.has('imgtk'),false);
+  assert.equal(getReviewedCoverOverride({...f,workId:f.workId,isbn13:e.isbn_13,editionLanguage:'nld',openLibraryEditionId:e.open_library_edition_id}),null);
+});
 test('three Work scores and bands have one public presentation across localized list/detail; synthetic only',()=>{
   for(const locale of ['nl','en'] as const)for(const available of [true,false]) {
     const books:Book[]=fixtures.map(f=>({...f,id:'work-'+f.workId,source:'supabase',cover:'orbit',score:null,ratingsCount:null,match:null}));
