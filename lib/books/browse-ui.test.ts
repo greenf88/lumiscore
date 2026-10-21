@@ -94,9 +94,11 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
   assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
   const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
   const searchUi = await readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8');
-  assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 2);
-  assert.match(editorialLoader, /rpc\('catalog_discovery_page'/);
-  assert.match(editorialLoader, /response\.error\?\.code === 'PGRST202' && !state\.author && state\.sort !== 'highest'/);
+  assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 1);
+  assert.match(editorialLoader, /rpc\('catalog_browse_page_v2', eligibleBrowseArgs\(state, locale\)/);
+  assert.match(editorialLoader, /alignEligibleBrowseBooks\(ids, books\)/);
+  assert.match(editorialLoader, /if \(error\) throw error/);
+  assert.doesNotMatch(editorialLoader, /catalog_editorial_page|catalog_discovery_page/);
   assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale, streamCovers\)/);
   const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('export type CatalogBrowsePage'));
   assert.match(byIdsLoader, /loadPublicRatingSummariesBatched\(/);
