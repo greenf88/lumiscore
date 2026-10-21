@@ -63,4 +63,51 @@ No merge/deployment to production authorized. Preview is test-only and must rema
 App recovery after a separately approved release: revert this branch's code commits while retaining later unrelated changes, redeploy previous working app if needed; never restore database/users/ratings from a snapshot.
 Only proposed production data operation is guarded one-edition language update above, separately approved and separately reversible. Test fixture may remain for review; remove only introduced fixture IDs after checking no references/later use, never bulk cleanup.
 Remove only the two Preview env overrides for gitBranch fix/technical-recovery-20261021 after review; do not remove global/production/other branch keys.
-Final preview/SHA/CI and campaign verdict will be appended once actually verified. No claim of physical phone testing.
+No claim of physical phone testing.
+
+HOSTED VERIFICATION — COMPLETED 21 OCTOBER
+Draft PR48: https://github.com/greenf88/lumiscore/pull/48.
+Verified application/audit SHA b98268875dc011153bcd70926d9be1fa60048bdd (application commit6d022fd).
+Ready Preview dpl_4uFvuzMSKQ6dtVFFwyXSaCWx4o88:
+https://lumiscore-7s94of4eo-rgkgroeneveld-9102.vercel.app/nl/toplijsten/dystopie-vanaf-1990
+Only this branch's public Supabase URL/publishable key point to hlvujbrmfdlrfxdjwsmb. No service role, global/production variables or protection changes. One necessary rebuild after setting the branch overrides.
+CI run39604671435 succeeded:800 tests,784 pass,16 optional skips; separate actual synthetic SSR16/16 pass; TypeScript, lint, Vercel production build, client secretscan, diff check all pass. This verifies hosted packaging despite the local Windows readlink limitation.
+Full detail: catalog/technical-recovery-20261021/hosted-verification.json. Screenshots in its screenshots/ directory.
+
+DYSTOPIA RESULTS (NL AND EN, LIST AND DETAIL)
+102 Hunger Games: NL De Hongerspelen/cover15120650; EN The Hunger Games/cover7890713. Both correct on list and detail.
+2718 Never Let Me Go: cover13160732, pass both locales.
+208 Parable of the Sower: A Novel: cover8768819, pass both locales.
+2600 Oryx and Crake: cover12869726, pass both locales.
+100 The Giver: cover244186, pass both locales.
+2717 Scythe: cover15152462, pass both locales.
+179 Divergent: cover7129729, pass both locales.
+2724 Unwind: cover2787713, pass both locales.
+2846 The Year of the Flood: cover12508446, pass both locales.
+199 The Testaments: cover12366818, pass both locales.
+All20 detail checks: correct matching list/detail title, same verified cover ID (M list/L detail), same neutral public score, loaded image natural dimensions, no horizontal overflow. The NL English fallback label remains. No ratings invented. Existing local public-score parity tests also cover actual scored summaries and publication thresholds.
+Guest mobile list click -> detail -> clean localized back link, direct opening, reload, EN->NL title/cover switch verified. Actual browser widths375 and1265 CSSpx; Paper/Ink screenshots. Browser viewport override was reset. No physical phone or mobile network throttling performed.
+Several descriptions still report temporary upstream failure or missing verified text, honestly and separately. These are not silently relabelled as zero book data. No claim that all descriptive/catalogue gaps are repaired.
+
+FANTASY / PRIORITY DATA RESULTS
+Full25-source selection checked against test:22 displayed per locale,19 loaded covers,3 neutral fallbacks. The preserved missing positions are A Wizard of Earthsea(audio-related edition), Frankenstein(bilingual edition) and Project Hail Mary(not present under its source identity in this test catalogue). Nothing replaced or removed to manufacture success.
+Neutral covers: existing test Dune fixture91021001 lacks verified cover/year; Works21 and26 have unresolved exact-edition cover gaps. Test Dune limitation is not a new production defect claim. Two existing reviewed publisher covers (25/304) load. Actual images confirmed after scrolling; lazy offscreen images were not mistaken for permanent failures.
+The Fifth Season30, Hitchhiker32, Three-Body117 and All Systems Red4316: all8 NL/EN details loaded correct covers, matching titles and neutral scores. Edition-specific title variants retained, not manually renamed to match a marketing title.
+Nee heb je test921101191: NL correct title and Dutch edition; EN honestly unavailable, no Dutch cover/synopsis presented as English. Both Nee and Souvenir lack a newly verified cover. Souvenir test91021031: own Dutch synopsis and exact A.W.Bruna attribution present in original server HTML; EN unavailable. Existing test year gap preserved rather than overwriting another fixture.
+
+HOSTED PERFORMANCE / SEO
+Three sequential requests per route, using official Vercel authenticated curl; no token logged. Server-stream H1 timings are pipe observations, not browser LCP. Runtime/source/browser caches were not forcibly cleared: no claim these are verified cold-cache timings.
+Preview list TTFB median(range): NL536ms(333–654), EN285ms(209–353). Total response NL567ms(364–682), EN318ms(217–363).
+Preview Hunger detail TTFB median(range): NL743ms(243–1317), EN267ms(188–410). Nee first response H1~319ms, complete1415ms: optional data completes after early identity. Souvenir own text response median208ms.
+Separate current production baseline: list TTFB NL272ms(258–324), EN235ms(210–445); Hunger detail NL206ms(203–400), EN255ms(215–395). Different data/deployment/cache conditions; these numbers do NOT demonstrate overall production speedup.
+Browser Preview first-card observation median(range): NL499ms(491–1034), EN473ms(447–586). Loaded-first-cover observation NL597ms(595–1142), EN565ms(557–683).
+Separate production browser main NL386ms(369–778), EN456ms(437–705). First NL cover still pending at1145ms on the first observation; two later loaded observations428/462ms. EN covers528ms median(526–762).
+Preview click-to-detail675ms / loaded-cover775ms; subsequent reload main462/526ms and cover713/644ms. Across initial20 detail visits one EN main observation3477ms:1.5s target is not universally met. Broad local10k search and uncached upstream calls remain explicit limits, not hidden behind loading text.
+HTTP200 on measured routes; original server HTML contains H1, book identity, actions and resolved Souvenir synopsis. JSON-LD syntax valid. Canonicals stay clean/localized and retain production hostname. Preview robots meta is index,follow, but X-Robots-Tag:noindex makes the Preview effectively noindex; production has index,follow and no noindex header. Existing reciprocal hreflang/sitemap policy unchanged. No indexing requests submitted.
+
+FINAL ADVICE
+Technical: the bounded streaming/paint/error-state code is ready for review with green CI and hosted evidence. Not a claim that the entire catalog or every slow first visit is fixed.
+Production data: only the separate one-edition Nee language proposal is requested next; source-backed, tested, guarded and idempotent. Do not apply any other historical corrections, PR38/44/46 work, audio or bilingual edition changes.
+Dystopia campaign: all ten selected books pass NL/EN list/detail cover/title/score checks on test. Suitable for a narrowly approved application release followed by live confirmation; NOT yet labelled live/campaign-published. Before a Facebook post, repeat the ten live list/detail checks on the released SHA and verify share metadata. No social approval/action is part of this task.
+Remaining: incomplete descriptions, the named cover/edition gaps, non-universal1.5s latency, unverified real-mobile/network and truly cold-cache behaviour. Google historical HTML remains unavailable; current200 does not explain historical exclusion or guarantee indexing.
+Desloppify follow-up scan was not run after its mid-cycle queue warning; no queue-driven broad refactor or artificial score improvement. Initial objective scan and manual triage are the evidence, not an unclaimed after-score.
