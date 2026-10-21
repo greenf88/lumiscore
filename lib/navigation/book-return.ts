@@ -1,7 +1,7 @@
 import { getSafeSearchReturnPath } from './search-return.ts';
 import { getSafeBrowseReturnPath } from './browse-return.ts';
 import { recommendationReturnPath } from '../catalog/discovery.ts';
-import { editorialTopLists } from '../catalog/top-lists.ts';
+import { editorialTopLists, getEditorialWorkSourceId } from '../catalog/top-lists.ts';
 
 const COLLECTION_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MAX_COLLECTION_SLUG_LENGTH = 120;
@@ -103,6 +103,7 @@ export async function resolveBookReturnNavigation(
   requestedReturnTo: unknown,
   workId: string,
   verifyCollectionMembership: VerifyCollectionMembership,
+  verifiedWorkSourceId?: string | null,
 ): Promise<BookReturnNavigation> {
   // A complete, validated search URL retains priority over other contexts.
   const searchPath = getSafeSearchReturnPath(requestedReturnTo);
@@ -114,7 +115,8 @@ export async function resolveBookReturnNavigation(
     return { kind: 'browse', href: '/browse' };
   }
 
-  const editorial = editorialTopLists.find(list => requestedReturnTo === '/toplijsten/'+list.slug && list.workIds.includes(workId));
+  const editorial = editorialTopLists.find(list => requestedReturnTo === '/toplijsten/'+list.slug &&
+    (verifiedWorkSourceId === undefined ? list.workIds.includes(workId) : list.workIds.some(id=>getEditorialWorkSourceId(id)===verifiedWorkSourceId)));
   if (editorial) return { kind: 'editorial', href: '/toplijsten/'+editorial.slug };
 
   const requestedSlug = parseSpecificCollectionPath(requestedReturnTo);

@@ -3,6 +3,7 @@ import { normalizeEditionLanguage } from './edition-ranking.ts';
 
 export type ReviewedCoverOverride = {
   workId: string;
+  openLibraryWorkId?: string;
   title: string;
   author: string;
   isbn13: string;
@@ -15,17 +16,24 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  {workId:'100',openLibraryWorkId:'OL1846076W',title:'The Giver',author:'Lois Lowry',isbn13:'9780385732550',editionLanguage:'eng',openLibraryEditionId:'OL7441983M',coverUrl:'https://covers.openlibrary.org/b/id/244186-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7441983M',reviewedAt:'2026-10-21'},
+  {workId:'2600',openLibraryWorkId:'OL675722W',title:'Oryx and Crake',author:'Margaret Atwood',isbn13:'9780385721677',editionLanguage:'eng',openLibraryEditionId:'OL39470791M',coverUrl:'https://covers.openlibrary.org/b/id/12869726-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL39470791M',reviewedAt:'2026-10-21'},
+  {workId:'179',openLibraryWorkId:'OL15719630W',title:'Divergent',author:'Veronica Roth',isbn13:'9780062024022',editionLanguage:'eng',openLibraryEditionId:'OL24914469M',coverUrl:'https://covers.openlibrary.org/b/id/7129729-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL24914469M',reviewedAt:'2026-10-21'},
+  {workId:'199',openLibraryWorkId:'OL20129837W',title:'The Testaments',author:'Margaret Atwood',isbn13:'9780385543781',editionLanguage:'eng',openLibraryEditionId:'OL27306829M',coverUrl:'https://covers.openlibrary.org/b/id/12366818-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL27306829M',reviewedAt:'2026-10-21'},
+  // Exact publisher ISBN pages; safe across databases with different numeric IDs.
+  {workId:'25',openLibraryWorkId:'OL257943W',title:'A Game of Thrones',author:'George R. R. Martin',isbn13:'9780553897845',editionLanguage:'eng',openLibraryEditionId:'OL24283280M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780553897845',source:'official_publisher',evidenceUrl:'https://penguinrandomhouselibrary.com/book/?isbn=9780553897845',reviewedAt:'2026-10-21'},
+  {workId:'304',openLibraryWorkId:'OL2707183W',title:"Assassin's Apprentice",author:'Robin Hobb',isbn13:'9780553897487',editionLanguage:'eng',openLibraryEditionId:'OL24298474M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780553897487',source:'official_publisher',evidenceUrl:'https://penguinrandomhouselibrary.com/book/?isbn=9780553897487',reviewedAt:'2026-10-21'},
   // Positive edition/image evidence, checked 2026-10-21. No unknown-language
   // edition is made eligible by this list. Full trace: catalog/editorial-parity-20261021.
-  {workId:'102',title:'The Hunger Games',author:'Suzanne Collins',isbn13:'9780439023481',editionLanguage:'eng',openLibraryEditionId:'OL22549594M',coverUrl:'https://covers.openlibrary.org/b/id/7890713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL22549594M',reviewedAt:'2026-10-21'},
-  {workId:'102',title:'De Hongerspelen',author:'Suzanne Collins',isbn13:'9789000399284',editionLanguage:'nld',openLibraryEditionId:'OL60075974M',coverUrl:'https://covers.openlibrary.org/b/id/15120650-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL60075974M',reviewedAt:'2026-10-21'},
-  {workId:'2718',title:'Never Let Me Go',author:'Kazuo Ishiguro',isbn13:'9781400078776',editionLanguage:'eng',openLibraryEditionId:'OL16198255M',coverUrl:'https://covers.openlibrary.org/b/id/13160732-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL16198255M',reviewedAt:'2026-10-21'},
-  {workId:'208',title:'Parable of the Sower: A Novel',author:'Octavia E. Butler',isbn13:'9781609807191',editionLanguage:'eng',openLibraryEditionId:'OL27288938M',coverUrl:'https://covers.openlibrary.org/b/id/8768819-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL27288938M',reviewedAt:'2026-10-21'},
-  {workId:'2717',title:'Scythe',author:'Neal Shusterman',isbn13:'9781481485265',editionLanguage:'eng',openLibraryEditionId:'OL46932981M',coverUrl:'https://covers.openlibrary.org/b/id/15152462-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46932981M',reviewedAt:'2026-10-21'},
-  {workId:'2724',title:'Unwind',author:'Neal Shusterman',isbn13:'9781416912040',editionLanguage:'eng',openLibraryEditionId:'OL11758843M',coverUrl:'https://covers.openlibrary.org/b/id/2787713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL11758843M',reviewedAt:'2026-10-21'},
-  {workId:'2846',title:'The Year of the Flood',author:'Margaret Atwood',isbn13:'9781408461426',editionLanguage:'eng',openLibraryEditionId:'OL36612602M',coverUrl:'https://covers.openlibrary.org/b/id/12508446-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL36612602M',reviewedAt:'2026-10-21'},
-  {workId:'1',title:'Project Hail Mary',author:'Andy Weir',isbn13:'9780593135204',editionLanguage:'eng',openLibraryEditionId:'OL30036715M',coverUrl:'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL30036715M',reviewedAt:'2026-10-21'},
-  {workId:'4316',title:'All Systems Red: The Murderbot Diaries',author:'Martha Wells',isbn13:'9780765397539',editionLanguage:'eng',openLibraryEditionId:'OL26500848M',coverUrl:'https://covers.openlibrary.org/b/id/9157148-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26500848M',reviewedAt:'2026-10-21'},
+  {workId:'102',openLibraryWorkId:'OL5735363W',title:'The Hunger Games',author:'Suzanne Collins',isbn13:'9780439023481',editionLanguage:'eng',openLibraryEditionId:'OL22549594M',coverUrl:'https://covers.openlibrary.org/b/id/7890713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL22549594M',reviewedAt:'2026-10-21'},
+  {workId:'102',openLibraryWorkId:'OL5735363W',title:'De Hongerspelen',author:'Suzanne Collins',isbn13:'9789000399284',editionLanguage:'nld',openLibraryEditionId:'OL60075974M',coverUrl:'https://covers.openlibrary.org/b/id/15120650-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL60075974M',reviewedAt:'2026-10-21'},
+  {workId:'2718',openLibraryWorkId:'OL59038W',title:'Never Let Me Go',author:'Kazuo Ishiguro',isbn13:'9781400078776',editionLanguage:'eng',openLibraryEditionId:'OL16198255M',coverUrl:'https://covers.openlibrary.org/b/id/13160732-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL16198255M',reviewedAt:'2026-10-21'},
+  {workId:'208',openLibraryWorkId:'OL35623W',title:'Parable of the Sower: A Novel',author:'Octavia E. Butler',isbn13:'9781609807191',editionLanguage:'eng',openLibraryEditionId:'OL27288938M',coverUrl:'https://covers.openlibrary.org/b/id/8768819-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL27288938M',reviewedAt:'2026-10-21'},
+  {workId:'2717',openLibraryWorkId:'OL17876096W',title:'Scythe',author:'Neal Shusterman',isbn13:'9781481485265',editionLanguage:'eng',openLibraryEditionId:'OL46932981M',coverUrl:'https://covers.openlibrary.org/b/id/15152462-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46932981M',reviewedAt:'2026-10-21'},
+  {workId:'2724',openLibraryWorkId:'OL1954412W',title:'Unwind',author:'Neal Shusterman',isbn13:'9781416912040',editionLanguage:'eng',openLibraryEditionId:'OL11758843M',coverUrl:'https://covers.openlibrary.org/b/id/2787713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL11758843M',reviewedAt:'2026-10-21'},
+  {workId:'2846',openLibraryWorkId:'OL675774W',title:'The Year of the Flood',author:'Margaret Atwood',isbn13:'9781408461426',editionLanguage:'eng',openLibraryEditionId:'OL36612602M',coverUrl:'https://covers.openlibrary.org/b/id/12508446-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL36612602M',reviewedAt:'2026-10-21'},
+  {workId:'1',openLibraryWorkId:'OL21745884W',title:'Project Hail Mary',author:'Andy Weir',isbn13:'9780593135204',editionLanguage:'eng',openLibraryEditionId:'OL30036715M',coverUrl:'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL30036715M',reviewedAt:'2026-10-21'},
+  {workId:'4316',openLibraryWorkId:'OL17914663W',title:'All Systems Red: The Murderbot Diaries',author:'Martha Wells',isbn13:'9780765397539',editionLanguage:'eng',openLibraryEditionId:'OL26500848M',coverUrl:'https://covers.openlibrary.org/b/id/9157148-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26500848M',reviewedAt:'2026-10-21'},
   {
     workId: '1305',
     title: 'Madonna',
@@ -277,6 +285,7 @@ function normalizeIdentityText(value: string | null | undefined): string {
 
 export function getReviewedCoverOverride(input: {
   workId?: string | null;
+  openLibraryWorkId?: string | null;
   title?: string | null;
   author?: string | null;
   isbn13?: string | null;
@@ -285,7 +294,7 @@ export function getReviewedCoverOverride(input: {
 }): ReviewedCoverOverride | null {
   const isbn13 = normalizeIsbn13(input.isbn13);
   return REVIEWED_COVER_OVERRIDES.find((entry) =>
-    entry.workId === input.workId?.trim() &&
+    (entry.openLibraryWorkId ? entry.openLibraryWorkId === input.openLibraryWorkId : entry.workId === input.workId?.trim()) &&
     entry.isbn13 === isbn13 &&
     (!entry.editionLanguage || entry.editionLanguage === normalizeEditionLanguage(input.editionLanguage ?? '')) &&
     (!entry.openLibraryEditionId || entry.openLibraryEditionId === input.openLibraryEditionId) &&

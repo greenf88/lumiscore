@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import { DiscoveryPageShell } from '@/app/components/DiscoveryPageShell';
 import { EditorialTopList } from '@/app/components/EditorialTopList';
-import { getEditorialTopList } from '@/lib/catalog/top-lists';
+import { getEditorialTopList, getEditorialWorkSourceId } from '@/lib/catalog/top-lists';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
-import { loadCatalogBooksByIds } from '@/lib/supabase/books';
+import { loadCatalogBooksBySourceIds } from '@/lib/supabase/books';
 import { deferEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
 export const dynamic = 'force-dynamic';
 type Props = { params: Promise<{ slug: string }> };
@@ -20,7 +20,7 @@ export default async function TopListPage({ params }: Props) {
   const { locale } = await resolveRequestLocale();
   const [authState, catalog] = await Promise.all([
     import('@/lib/supabase/auth').then(m=>m.loadHeaderAuthState()).catch(()=>({authenticated:false})),
-    loadCatalogBooksByIds(list.workIds, undefined, locale, true)
+    loadCatalogBooksBySourceIds(list.workIds.map(getEditorialWorkSourceId), locale)
       .then(books => ({books:deferEditionCoverEvidence(books),unavailable:false}))
       .catch(()=>({books:[],unavailable:true})),
   ]);

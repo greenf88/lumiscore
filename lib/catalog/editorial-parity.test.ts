@@ -42,9 +42,10 @@ test('unavailable edition retains Work identity and year, but cannot expose anot
 });
 test('editorial loader reuses exact edition mapper and public summaries, preserves order and streams optional covers',()=>{
   const page=read('app/toplijsten/[slug]/page.tsx'),client=read('app/components/EditorialTopList.tsx');
-  assert.match(page,/loadCatalogBooksByIds\(list.workIds, undefined, locale, true\)/);
+  assert.match(page,/loadCatalogBooksBySourceIds\(list.workIds.map\(getEditorialWorkSourceId\), locale\)/);
   assert.match(page,/deferEditionCoverEvidence\(books\)/);
-  assert.match(client,/list.workIds.map/);assert.match(client,/books.find\(book => book.workId === id\)/);
+  assert.match(client,/list.workIds.map/);assert.match(client,/books.find\(book => book.openLibraryWorkId === getEditorialWorkSourceId\(id\)\)/);
+  assert.match(client,/topListBookHref\(book.workId!,list.slug\)/);
   assert.doesNotMatch(client,/topListBook\(/);assert.doesNotMatch(read('lib/catalog/top-lists.ts'),/score:|coverUrls:/);
   assert.match(read('lib/supabase/books.ts'),/\[result, editions, summaries\] = await Promise.all/);
   const en={id:1319,work_id:102,title:base.title,language:'eng',isbn_13:'9780439023481',open_library_edition_id:'OL22549594M'};
@@ -82,8 +83,8 @@ test('temporary missing edition source is retried after one minute, not cached f
 });
 test('reviewed positive edition covers need no external metadata call on a cold render',async()=>{
   clearEditionCoverEvidenceCacheForTests();
-  const books=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library').map(entry=>withStrictEdition({...base,workId:entry.workId,title:entry.title,author:entry.author},{id:entry.openLibraryEditionId!,work_id:entry.workId,title:entry.title,language:entry.editionLanguage!,isbn_13:entry.isbn13,open_library_edition_id:entry.openLibraryEditionId!},entry.editionLanguage==='nld'?'nl':'en')!);
+  const books=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library').map(entry=>withStrictEdition({...base,workId:entry.workId,openLibraryWorkId:entry.openLibraryWorkId,title:entry.title,author:entry.author},{id:entry.openLibraryEditionId!,work_id:entry.workId,title:entry.title,language:entry.editionLanguage!,isbn_13:entry.isbn13,open_library_edition_id:entry.openLibraryEditionId!},entry.editionLanguage==='nld'?'nl':'en')!);
   let calls=0;
   const resolved=await withEditionCoverEvidence(books,async()=>{calls++;throw Error('No runtime source dependency expected');});
-  assert.equal(resolved.length,9);assert.equal(calls,0);assert.ok(resolved.every(book=>book.coverUrls?.length===1));
+  assert.equal(resolved.length,13);assert.equal(calls,0);assert.ok(resolved.every(book=>book.coverUrls?.length===1));
 });

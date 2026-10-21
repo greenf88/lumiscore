@@ -1,0 +1,83 @@
+LumiScore — Top25 fantasy/SF: testcorrecties en coveronderzoek, 21 oktober 2026
+
+Uitgevoerd uitsluitend op hlvujbrmfdlrfxdjwsmb (lumiscore-pr8-discovery-test).
+Geen productieaanvraag, productie-import, push, merge of deployment uitgevoerd.
+Geen app-, Auth-, schema-, configuratie-, rating-, status- of rondewijzigingen.
+De bestaande ongerelateerde wijziging in het eerdere reviewverslag is behouden.
+
+Exacte testuitvoering
+De20 oorspronkelijke Works/edities ontbreken op test, gecontroleerd op titel,
+Work-OLID, ISBN en editie-OLID. Vier gelijke productie-ID's zijn synthetische
+placeholders, NIET overschreven. Na apart gebruikersakkoord zijn20 Works en hun
+20 exacte edities toegevoegd onder vrije test-ID's, plus16 ontbrekende auteurs.
+Brandon Sanderson8800016/OL1394865A is hergebruikt. Geen classificaties of
+collectiekoppelingen toegevoegd. Productie->testmapping staat in fantasy-test-plan.json.
+Test-Work-ID=921100000+productie-ID; editie-ID=921200000+productie-editie-ID.
+Alle20 edities zijn binnen de gecontroleerde transactie van NULL naar eng gezet.
+
+Plan: catalog/editorial-parity-20261021/fantasy-test-dry-run.sql
+Eerst dry-run met standaard ROLLBACK, daarna dezelfde gecontroleerde transactie
+met COMMIT, daarna onafhankelijke SELECT-teruglezing van alle20 persistente edities.
+Een tweede dry-run maakte nul auteurs/Works/edities aan en wijzigde nul talen.
+Hashes/aantallen van alle bestaande bibliografische rijen buiten de eigen fixtures
+bleven gelijk. Geen gebruikersrijen gelezen. Geen triggers op deze drie tabellen.
+SQL noemt geen rating-, status- of smaaktestrondetabel. Bestaande gebruikersdata
+worden niet gekopieerd of aangeraakt; geen nieuw testaccount nodig.
+
+Scope: productie-Work-ID's
+6,17,18,19,21,23,24,25,26,27,30,32,117,140,146,171,185,218,288,304.
+Work14 (tweetalig) en22 (audio) ontbreken bewust uit import en correctie.
+Oryx/dystopiecorrecties en overige catalogusvoorstellen zijn niet meegenomen.
+
+NL/EN-controle op echte testteruglezing
+De echte gedeelde selectStrictEdition/withStrictEdition/editionSourceCoverUrls
+zijn op alle20 persistente testrecords uitgevoerd, in beide talen:40 controles.
+EN selecteert eng; NL selecteert dezelfde editie als expliciete Engelse fallback.
+Titel, editie-ID, Work-koppeling, ISBN en bron-OLID blijven samenhangend.
+Dit is gegevens-/gedeelde-codebewijs, GEEN nieuwe hosted browser- of telefooncheck.
+Er zijn geen test-ID's of fixturebypasses in publieke applicatiecode toegevoegd.
+
+Coveronderzoek
+De21 exacte OL-edities (20correcties+Dune) opnieuw opgehaald in één openbare batch.
+Alle20 gecorrigeerde bronedities bevestigen eng, hetzelfde Work en hetzelfde ISBN.
+16/20 hebben exact gekoppelde cover-ID's. Hun16 eerste L-afbeeldingen geven200,
+geldige JPEG-afmetingen en maximaal97096 bytes. Geen losse ISBN-imageguess gebruikt.
+
+Vier zonder OL-editiecover:
+21 Left Hand of Darkness, 9781417648436 / OL11760711M: geen betrouwbare afbeelding
+voor deze exacte editie gevonden. Neutrale fallback behouden; geen andere druk lenen.
+26 Lion, Witch, & Wardrobe, 9780848808235 / OL11558559M: bron bevestigt engels en
+exact ISBN, maar de cover op de editiepagina verwijst naar avatar_book.png.
+Dat is een placeholder, geen echte editiecover. Andere Narnia-edities niet overnemen.
+25 A Game of Thrones, 9780553897845 / OL24283280M: officiële PRH-pagina voor exact
+ISBN bevestigt ebookidentiteit en koppelt cover. Afbeelding297x450,55477 bytes.
+Bron https://penguinrandomhouselibrary.com/book/?isbn=9780553897845
+Cover https://images.penguinrandomhouse.com/cover/9780553897845
+304 Assassin's Apprentice, 9780553897487 / OL24298474M: officiële PRH-pagina voor
+exact ISBN bevestigt ebookidentiteit en koppelt cover. Afbeelding300x450,54427 bytes.
+Bron https://penguinrandomhouselibrary.com/book/?isbn=9780553897487
+Cover https://images.penguinrandomhouse.com/cover/9780553897487
+Deze twee uitgeverscovers zijn onderbouwde kandidaten; nog GEEN coveroverride,
+databasecover of nieuwe editie toegepast. Afbeeldingsbeschikbaarheid is geen
+juridische gebruiksrechtenbeoordeling. Geen volledige flapteksten opgeslagen.
+
+Dune8/OL7878673M: de exacte OL-bron mist nog steeds languages. Het aanwezige
+cover-ID bewijst op zichzelf de editietaal niet. Geen versoepeling of nieuwe
+Dune-correctie uitgevoerd. Bestaande juiste eng-testeditie blijft ongemoeid.
+
+Bewijs / controles
+fantasy-test-receipt.json: transactie,20 persistente teruglezingen, nul-writeherhaling.
+fantasy-test-cover-verification.json: minimale actuele bronnen,40 selectiecontroles,
+18 echte HTTP-afbeeldingscontroles en twee officiële coverkandidaten.
+23 gerichte tests geslaagd; gerichte lint en diffcontrole uitgevoerd.
+Alleen operationele scripts/bewijs toegevoegd, geen releasecode gewijzigd.
+Eerdere172 tests, TypeScript, lint en beide builds van ongewijzigde appcode blijven
+bestaand bewijs; geen nieuwe volledige build of productievisuele check geclaimd.
+
+Herstel / vervolg
+Testaanvulling blijft beschikbaar voor review. Herstel uitsluitend de20 eigen
+editietalen naar NULL met dezelfde exacte identiteitsguards; geen ratings of Works
+verwijderen. Voor later verwijderen van fixtures eerst afhankelijkheden controleren
+en alleen receipt-ID's gebruiken. Nooit Sanderson8800016 of placeholders verwijderen.
+Productie is niet gecorrigeerd. Voor een volledig presenteerbare fantasy-lijst
+blijven twee exacte covers, Dune-bewijs en de aparte audio/tweetalige gevallen open.

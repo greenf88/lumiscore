@@ -69,7 +69,8 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     ? returnToValue[0]
     : returnToValue;
   const { locale } = await resolveRequestLocale();
-  const returnNavigationPromise = resolveBookReturnNavigation(
+  const bookPromise = getBook(workId, locale);
+  const returnNavigationPromise = bookPromise.then(book=>resolveBookReturnNavigation(
     requestedReturnTo,
     workId,
     (requestedWorkId, slug) => import('@/lib/supabase/collections')
@@ -78,7 +79,8 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
         'public',
         () => loadVerifiedBookCollectionReturnTarget(requestedWorkId, slug),
       )),
-  ).catch((): BookReturnNavigation => ({ kind: 'browse', href: '/browse' }));
+    book?.openLibraryWorkId ?? null,
+  )).catch((): BookReturnNavigation => ({ kind: 'browse', href: '/browse' }));
   const ratingStatePromise = import('@/lib/supabase/ratings').then(
     ({ loadBookRatingState }) => measureServerOperation(
       'book.rating_state',
@@ -122,7 +124,6 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       loadHeaderAuthState,
     ))
     .catch(() => ({ authenticated: false }));
-  const bookPromise = getBook(workId, locale);
   const descriptionPromise = bookPromise.then(async book => book
     ? (await import('@/lib/books/public-description')).loadPublicBookDescription(book, locale) : null);
   const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation, description] = await Promise.all([

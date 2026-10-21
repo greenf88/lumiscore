@@ -305,6 +305,23 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
   return streamCovers ? deferEditionCoverEvidence(books) : withEditionCoverEvidence(books);
 }
 
+/** Bounded editorial identity lookup; all detail links and ratings retain the
+ * actual stored Work ID. Never substitute an unrelated same-number fixture. */
+export async function loadCatalogBooksBySourceIds(sourceIds:readonly string[],locale:Locale):Promise<Book[]>{
+  const ids=[...new Set(sourceIds)];
+  if(ids.length>100||ids.some(id=>!/^OL\d+W$/.test(id)))throw new Error('Invalid editorial source selection');
+  if(!ids.length)return [];
+  const result=await supabase.from('works').select(HOMEPAGE_CATALOG_SELECT).in('open_library_id',ids);
+  if(result.error)throw result.error;
+  const works=asRows(result.data);
+  const seen=new Set<string>();
+  for(const work of works){const key=readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work');if(!key||seen.has(key))throw new Error('Ambiguous editorial Work identity');seen.add(key);}
+  const workIds=works.flatMap(work=>getWorkId(work)?[getWorkId(work)!]:[]);
+  const [editions,summaries]=await Promise.all([loadEditionRows(supabase,workIds),loadPublicRatingSummariesBatched(supabase,workIds)]);
+  const books=works.map((work,index)=>mapCatalogBook(work,[],asRows(editions),index,locale)??mapUnavailableWork(work,locale)).filter((b):b is Book=>b!==null);
+  return applyRatingSummaries(books,summaries);
+}
+
 export type CatalogBrowsePage = {
   books: Book[];
   total: number;

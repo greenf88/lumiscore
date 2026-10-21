@@ -6,7 +6,7 @@ import { BookCard } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import { useLumiScoreLocale } from './LumiScoreLocale';
-import { editorialTopLists, getEditorialTopBook, topListBookHref } from '@/lib/catalog/top-lists';
+import { editorialTopLists, getEditorialTopBook, getEditorialWorkSourceId, topListBookHref } from '@/lib/catalog/top-lists';
 export function EditorialTopList({ list, books, unavailable = false, authenticated = false }: { list: typeof editorialTopLists[number]; books: Book[]; unavailable?: boolean; authenticated?: boolean }) {
   const { locale } = useLumiScoreLocale();
   const { wanted, statuses, toggleWanted } = useWantToRead(authenticated, books);
@@ -18,9 +18,9 @@ export function EditorialTopList({ list, books, unavailable = false, authenticat
     {unavailable && <p role="alert">{locale === 'nl' ? 'De catalogus kon niet laden. Vernieuw de pagina om opnieuw te proberen.' : 'The catalogue could not load. Refresh the page to try again.'}</p>}
     <ol className="book-grid editorial-books">{list.workIds.map((id,index)=>{
       const choice = getEditorialTopBook(id);
-      const href = topListBookHref(id,list.slug);
-      const book = books.find(book => book.workId === id);
+      const book = books.find(book => book.openLibraryWorkId === getEditorialWorkSourceId(id));
       if (!book) return null;
+      const href = topListBookHref(book.workId!,list.slug);
       return <li key={id} className="editorial-book"><BookCard book={book} rank={index+1} href={href}
         wanted={wanted.has(getGuestWantedStorageId(book))} status={statuses.get(id)} onToggle={toggleWanted} resolveMissingCover={false}>
         <details className="card-editorial-note"><summary>{locale === 'nl' ? 'Waarom dit boek?' : 'Why this book?'}</summary>
