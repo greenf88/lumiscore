@@ -130,7 +130,6 @@ function BookCoverForIdentity({
   );
   const [coverIndex, setCoverIndex] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
-  const [coverLoaded, setCoverLoaded] = useState(false);
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
@@ -157,7 +156,6 @@ function BookCoverForIdentity({
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = () => {
-    setCoverLoaded(false);
     if (variantIndex + 1 < imageAttempts.length) {
       setVariantIndex(variantIndex + 1);
     } else {
@@ -183,12 +181,12 @@ function BookCoverForIdentity({
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
           key={displayedCoverUrl}
-          className={`book-cover-image${coverLoaded ? ' is-loaded' : ''}`}
+          className="book-cover-image"
           src={displayedCoverUrl}
           alt={label ?? ''}
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
-          loading="lazy"
+          loading={presentation==='detail'?'eager':'lazy'}
           unoptimized
           onLoad={(event) => {
             if (
@@ -200,7 +198,6 @@ function BookCoverForIdentity({
               handleCoverFailure();
               return;
             }
-            setCoverLoaded(true);
           }}
           onError={handleCoverFailure}
         />

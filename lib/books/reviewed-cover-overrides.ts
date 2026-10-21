@@ -8,7 +8,7 @@ export type ReviewedCoverOverride = {
   author: string;
   isbn13: string;
   coverUrl: string;
-  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller' | 'reviewed_open_library';
+  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller' | 'reviewed_open_library' | 'reviewed_google_books';
   editionLanguage?: 'eng' | 'nld';
   openLibraryEditionId?: string;
   evidenceUrl: string;
@@ -16,6 +16,13 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // PR48 exact-edition evidence, not Work-ID eligibility/ranking exceptions.
+  // Bibliographic cross-checks and old/new data proposal: three-book-evidence.json.
+  {workId:'114',openLibraryWorkId:'OL18766691W',title:'Where the Crawdads Sing',author:'Delia Owens',isbn13:'9780735219090',editionLanguage:'eng',openLibraryEditionId:'OL26702293M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780735219090',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouseretail.com/book/?isbn=9780735219090',reviewedAt:'2026-10-21'},
+  {workId:'114',openLibraryWorkId:'OL18766691W',title:'Daar waar de rivierkreeften zingen',author:'Delia Owens',isbn13:'9789041716149',editionLanguage:'nld',coverUrl:'https://cdn.boekhub.overamstel.com/styles/bookcoverbig/public/contentfile/front/9789041716149_14753.jpg',source:'official_publisher',evidenceUrl:'https://www.rainbow.nl/boek/3146/delia-owens-daar-waar-de-rivierkreeften-zingen.html',reviewedAt:'2026-10-21'},
+  {workId:'8',openLibraryWorkId:'OL893414W',title:'Dune',author:'Frank Herbert',isbn13:'9780575073340',editionLanguage:'eng',openLibraryEditionId:'OL7878673M',coverUrl:'https://books.google.nl/books/content?id=deRpPwAACAAJ&printsec=frontcover&img=1&zoom=1',source:'reviewed_google_books',evidenceUrl:'https://books.google.com/books/about/Dune.html?id=deRpPwAACAAJ',reviewedAt:'2026-10-21'},
+  {workId:'1381',openLibraryWorkId:'OL1168007W',title:'Animal Farm',author:'George Orwell',isbn13:'9780451526342',editionLanguage:'eng',openLibraryEditionId:'OL7577246M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780451526342',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouseretail.com/book/?isbn=9780451526342',reviewedAt:'2026-10-21'},
+  {workId:'1381',openLibraryWorkId:'OL1168007W',title:'Dierenboerderij',author:'George Orwell',isbn13:'9789041330369',editionLanguage:'nld',openLibraryEditionId:'OL18430168M',coverUrl:'https://www.deslegte.com/images/cached/resample/webp/data/uploads/750/1202/cms_visual_1131312.jpg_1549013600000_750x1202_0.8_p-6f7ccaf8c8.webp',source:'reviewed_bookseller',evidenceUrl:'https://www.deslegte.com/dierenboerderij-371509/',reviewedAt:'2026-10-21'},
   {workId:'100',openLibraryWorkId:'OL1846076W',title:'The Giver',author:'Lois Lowry',isbn13:'9780385732550',editionLanguage:'eng',openLibraryEditionId:'OL7441983M',coverUrl:'https://covers.openlibrary.org/b/id/244186-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7441983M',reviewedAt:'2026-10-21'},
   {workId:'2600',openLibraryWorkId:'OL675722W',title:'Oryx and Crake',author:'Margaret Atwood',isbn13:'9780385721677',editionLanguage:'eng',openLibraryEditionId:'OL39470791M',coverUrl:'https://covers.openlibrary.org/b/id/12869726-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL39470791M',reviewedAt:'2026-10-21'},
   {workId:'179',openLibraryWorkId:'OL15719630W',title:'Divergent',author:'Veronica Roth',isbn13:'9780062024022',editionLanguage:'eng',openLibraryEditionId:'OL24914469M',coverUrl:'https://covers.openlibrary.org/b/id/7129729-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL24914469M',reviewedAt:'2026-10-21'},

@@ -1,10 +1,12 @@
 'use client';
+import { Suspense, use } from 'react';
 import type { VerifiedBookDescription } from '../data/books';
+import type { BookDescriptionResolution } from '@/lib/books/description-resolution';
 import { splitBookDescriptionParagraphs } from '@/lib/books/description-text';
 import { publicDescriptionSource } from '@/lib/books/description-source';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 
-export function LumiScoreBookDescription({ description, englishEditionFallback=false }: { description: VerifiedBookDescription | null; englishEditionFallback?:boolean }) {
+export function LumiScoreBookDescription({ description, englishEditionFallback=false, state='confirmed_missing' }: { description: VerifiedBookDescription | null; englishEditionFallback?:boolean; state?:BookDescriptionResolution['state'] | 'loading' }) {
   const { locale, t } = useLumiScoreLocale();
   const source = description ? publicDescriptionSource(description) : null;
   const paragraphs = description?.language === (locale==='nl' && englishEditionFallback?'en':locale) && source ? splitBookDescriptionParagraphs(description.text) : [];
@@ -19,6 +21,24 @@ export function LumiScoreBookDescription({ description, englishEditionFallback=f
         {paragraphs.slice(2).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
       </details>}
       <p className="description-source">{locale === 'nl' ? 'Bron' : 'Source'}: <a href={source!.href} rel="noreferrer" target="_blank">{source!.name}</a></p>
-    </> : <p>{locale === 'nl' ? 'Er is nog geen geverifieerde Nederlandse beschrijving beschikbaar.' : 'A verified English description is not available yet.'}</p>}
+    </> : <p role={state==='temporary_failure'?'status':undefined}>{state==='loading'
+      ? locale==='nl'?'De beschrijving wordt geladen.':'Loading the description.'
+      : state==='temporary_failure'
+        ? locale==='nl'?'De beschrijving kon tijdelijk niet worden geladen. Probeer later opnieuw.':'The description could not load right now. Please try again later.'
+        : locale==='nl'
+          ? englishEditionFallback?'Er is nog geen geverifieerde Engelse beschrijving bij deze editie beschikbaar.':'Er is nog geen geverifieerde Nederlandse beschrijving beschikbaar.'
+          : 'A verified English description is not available yet.'}</p>}
   </section>;
+}
+
+function ResolvedDescription({resolution,englishEditionFallback}:{resolution:Promise<BookDescriptionResolution>;englishEditionFallback?:boolean}) {
+  const result=use(resolution);
+  return <LumiScoreBookDescription {...result} englishEditionFallback={englishEditionFallback} />;
+}
+
+/** The complete response still includes the synopsis; optional sources never hold the title/actions. */
+export function StreamedBookDescription(props:{resolution:Promise<BookDescriptionResolution>;englishEditionFallback?:boolean}) {
+  return <Suspense fallback={<LumiScoreBookDescription description={null} state="loading" englishEditionFallback={props.englishEditionFallback} />}>
+    <ResolvedDescription {...props}/>
+  </Suspense>;
 }

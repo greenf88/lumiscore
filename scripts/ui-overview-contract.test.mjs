@@ -28,7 +28,7 @@ test('home has only a compact authenticated recommendation preview and no guest 
   assert.match(page,/loadHighestRatedCatalog\(8,locale,true\)/);
   assert.equal((page.match(/loadHomepagePersonalization\(locale, 3\)/g) ?? []).length, 1);
   assert.match(home,/personalization\.recommendations\.slice\(0, 3\)/);
-  assert.match(home,/loading="lazy"/);
+  assert.match(home,/loading=\{presentation==='detail'\?'eager':'lazy'\}/);
   assert.doesNotMatch(home,/<RecommendationsSection|loadGuestHomepagePersonalization|\/api\/recommendations\/guest/);
   assert.match(home,/personalization\.authenticated && <RecommendationPanel/);
   assert.match(home,/href="\/recommendations"/);

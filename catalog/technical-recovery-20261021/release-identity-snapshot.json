@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-21",
+  "project": "qvplwejffhjvxaypmjut",
+  "access": "Read-only SELECT of public edition identity metadata; no nextval/setval/DDL/DML executed",
+  "table": "public.editions",
+  "column": "id",
+  "identityGeneration": "BY DEFAULT",
+  "sequence": "public.editions_id_seq",
+  "increment": 1,
+  "cache": 1,
+  "cycle": false,
+  "lastValue": 10304,
+  "isCalled": true,
+  "maximumExistingId": 10304,
+  "userTriggers": [],
+  "conclusion": "Use existing generated identity via INSERT RETURNING. Never allocate max(id)+1, never rewind or silently repair the sequence. Recheck before future application."
+}

@@ -1,11 +1,25 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Book } from '@/app/data/books';
-import { loadPublicBookDescription } from './public-description.ts';
+import { loadPublicBookDescription, loadPublicBookDescriptionState } from './public-description.ts';
 import { clearBookDescriptionCacheForTests } from './description-resolution.ts';
 import { publicDescriptionSource } from './description-source.ts';
 
 const book = { workId: '1', openLibraryWorkId: 'OL893415W', editionLanguage: 'eng',openLibraryEditionId:'OL123M' } as Book;
+
+test('public UI distinguishes absence, source failure and unavailable edition; timeouts are not retried', async () => {
+  clearBookDescriptionCacheForTests();
+  let calls=0;
+  const timeout:typeof fetch=async()=>{calls++;throw new DOMException('Budget exhausted','TimeoutError')};
+  assert.deepEqual(await loadPublicBookDescriptionState(book,'en',timeout),{state:'temporary_failure',description:null});
+  assert.equal(calls,1);
+  assert.equal((await loadPublicBookDescriptionState(book,'en',timeout)).state,'temporary_failure');
+  assert.equal(calls,1,'short-lived failure cache deduplicates source calls, not permanent absence');
+  clearBookDescriptionCacheForTests();
+  assert.deepEqual(await loadPublicBookDescriptionState(book,'en',async()=>new Response('',{status:404})),{state:'confirmed_missing',description:null});
+  assert.deepEqual(await loadPublicBookDescriptionState({...book,editionAvailable:false},'en',timeout),{state:'confirmed_missing',description:null});
+  assert.equal(calls,1,'unavailable edition does not request a synopsis');
+});
 
 test('SSR loader resolves sanitized public text once, with locale-separated cache and an abort budget', async () => {
   clearBookDescriptionCacheForTests();

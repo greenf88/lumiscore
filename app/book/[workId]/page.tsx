@@ -29,7 +29,7 @@ const getBook = cache(async (workId: string, locale: 'en' | 'nl') => {
   return measureServerOperation(
     'book.catalog',
     'public',
-    () => loadCatalogBook(workId, locale),
+    () => loadCatalogBook(workId, locale, true),
   );
 });
 
@@ -51,7 +51,9 @@ export async function generateMetadata({
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
-  const cover = book.coverUrls?.[0];
+  // Metadata may finish after the visible shell. Reuse the very same verified
+  // cover promise as the card; never drop a late cover or perform a second lookup.
+  const cover = book.coverUrls?.[0] ?? (await book.editionCoverUrls)?.[0];
 
   return createLocalizedPageMetadata({
     title,
@@ -125,8 +127,9 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     ))
     .catch(() => ({ authenticated: false }));
   const descriptionPromise = bookPromise.then(async book => book
-    ? (await import('@/lib/books/public-description')).loadPublicBookDescription(book, locale) : null);
-  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation, description] = await Promise.all([
+    ? (await import('@/lib/books/public-description')).loadPublicBookDescriptionState(book, locale)
+    : {state:'confirmed_missing' as const,description:null});
+  const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
     bookPromise,
     ratingStatePromise,
     readingStatusPromise,
@@ -134,7 +137,6 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     personalizationPromise,
     authStatePromise,
     returnNavigationPromise,
-    descriptionPromise,
   ]);
   if (!book) notFound();
 
@@ -142,7 +144,8 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     <>
       <LumiScoreBookDetail
         book={book}
-        description={description}
+        description={null}
+        descriptionPromise={descriptionPromise}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

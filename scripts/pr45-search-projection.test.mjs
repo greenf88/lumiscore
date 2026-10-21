@@ -84,5 +84,23 @@ test('read-only SQL projection: JS edition parity, full counting, relevance, RLS
   }
   await assert.rejects(()=>db.query("select public.catalog_search_selection_v1('Synthetic','de')"),/Invalid public search/);
   assert.equal(await snapshot(),before,'read-only calls retain every local fixture row');
+  // Local-only scale fixture: 10,001 Works, never sent to a hosted catalogue.
+  await db.exec(`insert into public.works select i,'Scale book '||i,2000,1 from generate_series(1000,10699) i;
+    insert into public.editions select 200000+i,i,'Scale book '||i,case when i%3=0 then 'deu' when i%3=1 then 'nld' else 'eng' end,null,'OL'||(200000+i)||'M' from generate_series(1000,10699) i;`);
+  assert.equal((await db.query('select count(*)::int n from public.works')).rows[0].n,10001);
+  for(const locale of ['nl','en']){
+   const durations=[];let selection;
+   for(let run=0;run<3;run++){
+    const start=performance.now();
+    const data=(await db.query("select public.catalog_search_selection_v1('Scale',$1,'{}','',$2) as data",[locale,locale==='en'?['en']:['nl','en']])).rows[0].data;
+    durations.push(Math.round(performance.now()-start));selection=readSearchProjection(data,'Scale');
+   }
+   const expected=(await db.query("select count(*)::int n from public.editions where work_id between 1000 and 10699 and (language='eng' or ($1='nl' and language='nld'))",[locale])).rows[0].n;
+   const state=searchQuery({q:'Scale'}),first=searchWindow(selection.books,state,selection.aliases),second=searchWindow(selection.books,{...state,page:2},selection.aliases);
+   assert.equal(first.total,expected);assert.equal(first.books.length,16);assert.equal(second.books.length,16);
+   assert.ok(second.books.every(b=>!first.books.some(a=>a.workId===b.workId)));
+   assert.ok(selection.books.every(b=>!b.coverUrls?.length&&!('subjects' in b)&&!b.isbn13),'selection returns identity and a neutral UI style, not full catalogue metadata');
+   console.info(JSON.stringify({test:'local-10001-work-scale',locale,selected:expected,shown:16,rpcMs:durations,environment:'PGlite local synthetic; not hosted latency'}));
+  }
  }finally{await db.close();}
 });

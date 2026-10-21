@@ -29,7 +29,7 @@ test('Browse and Search retain public persistent RPC sources without private edi
     assert.doesNotMatch(source,/catalog_private|editorial_records/);
   }
   const loader=await fs.readFile(new URL('../lib/supabase/editorial-catalog.ts',import.meta.url),'utf8');
-  assert.match(loader,/supabase\.rpc\('catalog_editorial_page', editorialRpcArgs\(state\)\)/);
+  assert.match(loader,/supabase\.rpc\('catalog_browse_page_v2', eligibleBrowseArgs\(state, locale\)\)/);
   assert.doesNotMatch(loader,/catalog_private|editorial_records/);
   const search=await fs.readFile(new URL('../lib/supabase/search-catalog.ts',import.meta.url),'utf8');
   assert.match(search,/supabase\.rpc\('catalog_discovery_page'/);
