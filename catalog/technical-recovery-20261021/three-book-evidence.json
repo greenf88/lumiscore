@@ -1,0 +1,47 @@
+{
+  "reviewedAt": "2026-10-21",
+  "status": "test-only; production proposal requires separate approval",
+  "scope": "No new production Works, ratings, progress, taxonomy or user changes. Nee heb je excluded.",
+  "changes": [
+    {
+      "workId": 114, "editionId": 114, "testWorkId": 921100114, "testEditionId": 921200114,
+      "identity": {"title":"Where the Crawdads Sing","author":"Delia Owens","workOlid":"OL18766691W","editionOlid":"OL26702293M","isbn13":"9780735219090"},
+      "old": {"language":null}, "new":{"language":"eng"},
+      "sources": ["https://catalog.prospertx.gov/Record/17171","https://catalog.losgatosca.gov/Record/513603","https://www.penguinrandomhouseretail.com/book/?isbn=9780735219090"],
+      "evidence": "Public library records explicitly English for exact ISBN, author, Putnam 2018; publisher confirms hardcover identity and supplies exact cover. Language was absent, so strict selection correctly excluded this Work. No score-sort defect.",
+      "cover":"https://images.penguinrandomhouse.com/cover/9780735219090"
+    },
+    {
+      "workId":114,"editionId":null,"testWorkId":921100114,"testEditionId":921200115,
+      "old":null,"new":{"title":"Daar waar de rivierkreeften zingen","language":"nld","isbn13":"9789041716149","publisher":"Uitgeverij Rainbow","editionOlid":null},
+      "sources":["https://www.bibliotheek.nl/catalogus/titel.436196158.html/daar-waar-de-rivierkreeften-zingen/","https://www.rainbow.nl/boek/3146/delia-owens-daar-waar-de-rivierkreeften-zingen.html"],
+      "evidence":"National library explicitly Nederlands, translation by Mariette van Gelder of Where the crawdads sing (Putnam 2018); exact Rainbow ISBN. Publisher confirms title, author, paperback and 2024-08-27 edition date. No invented Open Library identifier. Same existing Work; both titles become searchable through existing edition-title matching, not a hardcoded search alias.",
+      "cover":"https://cdn.boekhub.overamstel.com/styles/bookcoverbig/public/contentfile/front/9789041716149_14753.jpg"
+    },
+    {
+      "workId":8,"editionId":8,"testWorkId":91021001,"testEditionId":91021001,
+      "identity":{"title":"Dune","author":"Frank Herbert","workOlid":"OL893414W","editionOlid":"OL7878673M","isbn13":"9780575073340","language":"eng"},
+      "old":{"acceptedCover":null},"new":{"acceptedCover":"https://covers.openlibrary.org/b/id/380097-L.jpg?default=false"},
+      "sources":["https://openlibrary.org/books/OL7878673M","https://www.booktopia.com.au/dune-frank-herbert/book/9780575073340.html","https://www.abebooks.com/DUNE-Herbert-Frank-Gollancz-London/31601850334/bd"],
+      "evidence":"Previously captured exact OL edition binds Work, ISBN and cover380097 but omits languages. Two independently indexed exact-ISBN bookseller bibliographic records explicitly English, hardcover, Gollancz2001. Existing DB eng is retained. Controlled cover registry combines this evidence, with unchanged exact Work/edition/title/author/ISBN/language guards. NL uses explicitly labelled English fallback; no verified Dutch edition added.",
+      "limits":"Fresh direct OL page required human verification; not solved/bypassed. Booktopia direct page403; indexed record and earlier exact OL source snapshot retained. Source snapshot: catalog/editorial-parity-20261021/campaign-source-recheck.json. No claim of new live OL language evidence."
+    },
+    {
+      "workId":1381,"editionId":1421,"testWorkId":921101381,"testEditionId":921201421,
+      "identity":{"title":"Dierenboerderij","author":"George Orwell","workOlid":"OL1168007W","editionOlid":"OL18430168M","isbn10":"9041330364","language":"dut"},
+      "old":{"isbn13":null},"new":{"isbn13":"9789041330369"},
+      "sources":["https://www.deslegte.com/dierenboerderij-371509/","https://openlibrary.org/books/OL18430168M/Dierenboerderij"],
+      "evidence":"Exact ISBN10/13 equivalence (checksum validated), title, Orwell,1997,155-page pocket. De Slegte provides exact cover. Retain existing dut and publisher imprint; do not treat OL's contradictory edition note '1984' as identity evidence. No translator/illustrator copied into main author field.",
+      "cover":"https://www.deslegte.com/images/cached/resample/webp/data/uploads/750/1202/cms_visual_1131312.jpg_1549013600000_750x1202_0.8_p-6f7ccaf8c8.webp"
+    },
+    {
+      "workId":1381,"editionId":null,"testWorkId":921101381,"testEditionId":921201422,
+      "old":null,"new":{"title":"Animal Farm","language":"eng","isbn10":"0451526341","isbn13":"9780451526342","publisher":"Signet","editionOlid":"OL7577246M"},
+      "sources":["https://www.penguinrandomhouseretail.com/book/?isbn=9780451526342","https://openlibrary.org/books/OL7577246M/Animal_Farm_%28Signet_Classics%29"],
+      "evidence":"Publisher explicitly paperback, Orwell, exact ISBN and current publisher cover. Bibliographic edition explicitly English and links to same WorkOL1168007W. Store official publisher title Animal Farm. Publisher currently lists2004-04-06; OL lists2004-01-06: no guessed date written. Existing stable shared ranking selects this fully identified printed edition ahead of OL10352481M; no forced preferred ID.",
+      "cover":"https://images.penguinrandomhouse.com/cover/9780451526342",
+      "separateUnchanged":"Existing edition1420 ISBN9780307261236 Listening Library remains untouched. Narrator evidence suggests audio; its exact medium needs further primary-source review. Do not use a print cover for that ISBN."
+    }
+  ],
+  "recovery":"Code: revert only PR48 follow-up commits, retain later work and all ratings. RPC: revert caller before dropping only catalog_browse_page_v2. Production data (not applied): guarded eng->NULL on edition114 and ISBN13->NULL on edition1421 only if exact identity/current proposed value still match; remove only editions introduced by the eventual approved import using its returned IDs, ISBN and Work guards after reference review. Test: retain fixtures for review; no broad cleanup or user/status writes."
+}

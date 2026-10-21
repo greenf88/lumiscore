@@ -86,5 +86,5 @@ test('reviewed positive edition covers need no external metadata call on a cold 
   const books=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library').map(entry=>withStrictEdition({...base,workId:entry.workId,openLibraryWorkId:entry.openLibraryWorkId,title:entry.title,author:entry.author},{id:entry.openLibraryEditionId!,work_id:entry.workId,title:entry.title,language:entry.editionLanguage!,isbn_13:entry.isbn13,open_library_edition_id:entry.openLibraryEditionId!},entry.editionLanguage==='nld'?'nl':'en')!);
   let calls=0;
   const resolved=await withEditionCoverEvidence(books,async()=>{calls++;throw Error('No runtime source dependency expected');});
-  assert.equal(resolved.length,13);assert.equal(calls,0);assert.ok(resolved.every(book=>book.coverUrls?.length===1));
+  assert.equal(resolved.length,books.length);assert.ok(resolved.length>=13);assert.equal(calls,0);assert.ok(resolved.every(book=>book.coverUrls?.length===1));
 });
