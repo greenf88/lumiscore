@@ -17,7 +17,7 @@ const modules = {
   'lib/supabase/book-status.ts': 'export async function loadUserBookStatuses(){return {authenticated:false,statuses:new Map()}};export async function loadMyBooksPageData(){return {authenticated:false,available:true,items:[]}}',
   'lib/supabase/taste-test.ts': 'export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}};export async function loadHomepagePersonalization(){return {authenticated:false,hasEvidence:false,recommendations:[],ratingCount:0,tasteTestAnsweredCount:0}}',
   'lib/supabase/collections.ts': 'export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(){return null};export async function loadHomepageSeriesContinuations(){return []}',
-  'lib/books/public-description.ts': "export async function loadPublicBookDescription(){return null}",
+  'lib/books/public-description.ts': "export async function loadPublicBookDescriptionState(){return {state:'confirmed_missing',description:null}}",
 };
 // Vinext's CommonJS transform excludes node_modules, including Vite's optimized RSC cache.
 const server = await createServer({ root, configFile: false, envFile: false, cacheDir: root + '.wrangler/node_modules/browse-review-vite',

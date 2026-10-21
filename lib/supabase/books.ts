@@ -476,6 +476,7 @@ export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en', str
 export async function loadCatalogBook(
   workId: string,
   locale: Locale = 'en',
+  streamCovers = false,
 ): Promise<Book | null> {
   const result = await supabase
     .from('works')
@@ -488,7 +489,7 @@ export async function loadCatalogBook(
   if (!rawWork) return null;
   const work=(await completeEditions([rawWork]))[0];
   const book=mapCatalogBook(work,[],[],0,locale);
-  if(book)return (await withEditionCoverEvidence([book]))[0];
+  if(book)return streamCovers ? deferEditionCoverEvidence([book])[0] : (await withEditionCoverEvidence([book]))[0];
   return mapUnavailableWork(work,locale);
 }
 

@@ -1,15 +1,23 @@
 import type { Book, VerifiedBookDescription } from '@/app/data/books';
 import type { Locale } from '../i18n/config.ts';
-import { resolveBookDescription } from './description-resolution.ts';
+import { resolveBookDescription, type BookDescriptionResolution } from './description-resolution.ts';
 import { normalizeVerifiedBookDescription } from './description-text.ts';
 
 /** Public bibliographic sources only. No personal data, own API call or DB write. */
 export async function loadPublicBookDescription(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<VerifiedBookDescription | null> {
-  if(book.editionAvailable===false)return null;
+  return (await loadPublicBookDescriptionState(book, locale, fetchImplementation)).description;
+}
+
+/** Preserve absence versus transport failure through to the public UI. */
+export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<BookDescriptionResolution> {
+  if(book.editionAvailable===false)return {state:'confirmed_missing',description:null};
   const budget = AbortSignal.timeout(4_000);
-  const boundedFetch: typeof fetch = (input, init) => fetchImplementation(input, {
-    ...init, signal: init?.signal ? AbortSignal.any([budget, init.signal]) : budget,
-  });
+  const boundedFetch: typeof fetch = (input, init) => {
+    budget.throwIfAborted();
+    return fetchImplementation(input, {
+      ...init, signal: init?.signal ? AbortSignal.any([budget, init.signal]) : budget,
+    });
+  };
   const result = await resolveBookDescription({
     workId: book.workId, editionId: book.editionId, author: book.author,
     openLibraryWorkId: book.openLibraryWorkId,
@@ -19,5 +27,5 @@ export async function loadPublicBookDescription(book: Book, locale: Locale, fetc
   }, boundedFetch);
   const description = normalizeVerifiedBookDescription(result.description);
   const allowed=book.englishEditionFallback && locale==='nl' ? 'en' : locale;
-  return description?.language === allowed ? description : null;
+  return description?.language === allowed ? {state:'resolved',description} : {state:result.state==='temporary_failure'?'temporary_failure':'confirmed_missing',description:null};
 }

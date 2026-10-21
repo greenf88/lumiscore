@@ -26,7 +26,7 @@ if(visualFinish){
  modules['lib/supabase/books.ts']=`export {books,loadHighestRatedCatalog,loadCatalogBooksByIds,loadCatalogBooksByIdsWithStoredCovers} from ${fixture};import {loadCatalogBook as profileBook} from ${fixture};import {loadCatalogBook as browseBook} from ${browse};export async function loadCatalogBook(id){return await profileBook(id)??await browseBook(id)}`;
  modules['lib/supabase/ratings.ts']=`export async function loadBookRatingState(){return {authenticated:false,userEmail:null,userRating:null,lumiscore:null,ratingCount:null}}`;
  modules['lib/supabase/book-status.ts']=`import {books} from ${fixture};export async function loadUserBookStatuses(){return {authenticated:true,statuses:new Map()}};export async function loadMyBooksPageData(){return {authenticated:true,available:true,items:books.slice(0,4).map(book=>({book,status:'read',rating:null}))}}`;
- modules['lib/books/public-description.ts']='export async function loadPublicBookDescription(){return null}';
+ modules['lib/books/public-description.ts']="export async function loadPublicBookDescriptionState(){return {state:'confirmed_missing',description:null}}";
  modules['lib/supabase/taste-test.ts']+=`export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}`;
  modules['lib/supabase/collections.ts']=`import {books} from ${fixture};export async function loadHomepageSeriesContinuations(){return []};export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(){return null};export async function loadCollectionsDirectory(){return {total:1,collections:[{collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series'},cataloguedBookCount:4,representativeBooks:books.slice(0,3)}]}}`;
  modules['lib/supabase/collections.ts']+=`export async function loadCollectionPageData(){return {collection:{id:'local-collection',slug:'local-horizon',name:'Een nieuwe horizon',collectionType:'series',description:null,expectedMainSeriesTotal:null},books:books.slice(0,4).map((book,i)=>({book,workId:book.workId,sequenceNumber:i+1,publicationOrder:i+1,subgroup:null})),authenticated:true,statuses:{},userRatings:{},ratedWorkIds:[],highlightedUnreadWorkId:null}}`;
@@ -34,7 +34,7 @@ if(visualFinish){
 if(refinements){
  const review=JSON.stringify(root.replaceAll('\\','/')+'test-support/reading-profile/cover-reasons-fixture.ts');
  modules['lib/supabase/taste-test.ts']=`export {loadHomepagePersonalization} from ${review};export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}`;
- modules['lib/books/public-description.ts']=`export {loadPublicBookDescription} from ${review};`;
+ modules['lib/books/public-description.ts']=`import {loadPublicBookDescription} from ${review}; export async function loadPublicBookDescriptionState(...args){const description=await loadPublicBookDescription(...args);return {state:description?'resolved':'confirmed_missing',description}}`;
 }
 const json=(res,data,status=200)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
 let round=null,position=0;

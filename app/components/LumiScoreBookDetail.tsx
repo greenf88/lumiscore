@@ -16,7 +16,8 @@ import {
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
 import { BookCover, ThemeToggle } from './LumiScoreHome';
 import {EditionPresentationLabel} from './EditionPresentationLabel';
-import { LumiScoreBookDescription } from './LumiScoreBookDescription';
+import { LumiScoreBookDescription, StreamedBookDescription } from './LumiScoreBookDescription';
+import type { BookDescriptionResolution } from '@/lib/books/description-resolution';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
@@ -47,6 +48,7 @@ import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/n
 type LumiScoreBookDetailProps = {
   book: Book;
   description: VerifiedBookDescription | null;
+  descriptionPromise?: Promise<BookDescriptionResolution>;
   initialRatingState: BookRatingState;
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
@@ -88,6 +90,7 @@ function GuestWantToRead({ book }: { book: Book }) {
 export function LumiScoreBookDetail({
   book,
   description,
+  descriptionPromise,
   initialRatingState,
   initialReadingStatus,
   collectionContext,
@@ -347,7 +350,9 @@ export function LumiScoreBookDetail({
             </section>
           </div>
 
-          {book.workId && <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />}
+          {book.workId && (descriptionPromise
+            ? <StreamedBookDescription key={`${book.workId}:${book.editionId}:${locale}`} resolution={descriptionPromise} englishEditionFallback={book.englishEditionFallback} />
+            : <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />)}
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus

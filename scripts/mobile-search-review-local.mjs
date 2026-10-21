@@ -15,7 +15,7 @@ const modules={
  'lib/supabase/book-status.ts':'export async function loadUserBookStatuses(){return {authenticated:false,statuses:new Map()}}',
  'lib/supabase/taste-test.ts':'export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}}',
  'lib/supabase/collections.ts':'export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(){return null}',
- 'lib/books/public-description.ts':'export async function loadPublicBookDescription(){return null}',
+ 'lib/books/public-description.ts':"export async function loadPublicBookDescriptionState(){return {state:'confirmed_missing',description:null}}",
  'app/page.tsx':`'use client';import {useState}from'react';import{Header,BookCard}from'./components/LumiScoreHome';export default function ReviewHome(){const[q,set]=useState('');return <main className="site-shell"><Header query={q} onQueryChange={set} onThemeToggle={()=>{}} authState={{authenticated:false}} returnTo="/"/><section className="browse-page"><h1>LumiScore — local search review</h1><p>Use the real header search and press Enter.</p><BookCard book={{id:'review-choice',workId:'991006',title:'Dune',author:'Frank Herbert',score:null,ratingsCount:null,match:null,cover:'orbit'}} wanted={false} onToggle={()=>{}} resolveMissingCover={false}/></section></main>}`,
 };
 const server=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/mobile-search-review',

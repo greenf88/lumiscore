@@ -138,7 +138,10 @@ async function fetchJsonWithRetry<T>(
         continue;
       }
       return { state: 'temporary_failure', data: null };
-    } catch {
+    } catch (error) {
+      // An exhausted request budget is not a transient HTTP response. Retrying
+      // an already-aborted source only delays the error state and cannot recover.
+      if (error instanceof Error && ['AbortError', 'TimeoutError'].includes(error.name)) break;
       if (attempt >= RETRY_DELAYS_MS.length) break;
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS_MS[attempt]));
     }

@@ -89,7 +89,7 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
   assert.doesNotMatch(booksSource, /loadStoredCoverResolutionsBatched|applyStoredCoverResolutions/);
   assert.doesNotMatch(loader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
-  assert.match(homeSource, /loading="lazy"/);
+  assert.match(homeSource, /loading=\{presentation==='detail'\?'eager':'lazy'\}/);
   assert.match(statusRoute, /\.slice\(0, 128\)/);
   assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
   const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
