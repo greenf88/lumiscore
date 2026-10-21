@@ -2,16 +2,32 @@
 -- Default ROLLBACK is deliberate. Only after separate approval: run unchanged
 -- dry-run, retain receipt, then replace the final ROLLBACK with COMMIT.
 -- Sources and exact old/new fields: three-book-evidence.json.
+-- New IDs use the EXISTING identity sequence, never max(id)+1 or setval.
+-- A rolled-back dry-run still consumes IDs. Keep gaps; use the COMMIT receipt.
 begin;
 set local lock_timeout='3s';
+set local statement_timeout='30s';
 lock table public.editions in share row exclusive mode;
 create temporary table pr48_before on commit drop as select e.id,to_jsonb(e) as row_data
   from public.editions e where e.id in (114,1421);
 create temporary table pr48_receipt(action text, edition_id bigint, work_id bigint, isbn text,
   before_row jsonb,after_row jsonb) on commit drop;
 do $checked$
-declare next_id bigint; current_id bigint;
+declare next_id bigint; current_id bigint; identity_sequence regclass;
+  sequence_value bigint; sequence_called boolean;
 begin
+  select pg_get_serial_sequence('public.editions','id')::regclass into identity_sequence;
+  if identity_sequence is null or not exists(select 1 from pg_attribute
+      where attrelid='public.editions'::regclass and attname='id' and attidentity in ('a','d'))
+    or not exists(select 1 from pg_sequence where seqrelid=identity_sequence
+      and seqincrement=1 and seqcache=1 and not seqcycle) then
+    raise exception 'Unexpected edition identity generator; stop without changing sequence settings';
+  end if;
+  execute format('select last_value,is_called from %s',identity_sequence)
+    into sequence_value,sequence_called;
+  if sequence_value + (case when sequence_called then 1 else 0 end) <= (select coalesce(max(id),0) from public.editions) then
+    raise exception 'Edition identity sequence is behind existing IDs; stop for separate review';
+  end if;
   if (select count(*) from public.works w join public.authors a on a.id=w.author_id where
     (w.id=114 and w.open_library_id='OL18766691W' and a.name='Delia Owens') or
     (w.id=1381 and w.open_library_id='OL1168007W' and a.name='George Orwell'))<>2 then
@@ -42,9 +58,8 @@ begin
       or (work_id=114 and lower(title)='daar waar de rivierkreeften zingen')) then
       raise exception 'Dutch Crawdads title already exists under another identity; review before adding';
     end if;
-    select coalesce(max(id),0)+1 into next_id from public.editions;
-    insert into public.editions(id,work_id,title,language,isbn_13,publisher)
-      values(next_id,114,'Daar waar de rivierkreeften zingen','nld','9789041716149','Uitgeverij Rainbow');
+    insert into public.editions(work_id,title,language,isbn_13,publisher)
+      values(114,'Daar waar de rivierkreeften zingen','nld','9789041716149','Uitgeverij Rainbow') returning id into next_id;
     insert into pr48_receipt(action,edition_id,work_id,isbn) values('added edition',next_id,114,'9789041716149');
   end if;
 
@@ -59,9 +74,8 @@ begin
     if exists(select 1 from public.editions where isbn_10='0451526341') then
       raise exception 'Animal Farm ISBN10 already exists under another identity; review before adding';
     end if;
-    select coalesce(max(id),0)+1 into next_id from public.editions;
-    insert into public.editions(id,work_id,title,language,isbn_10,isbn_13,publisher,open_library_edition_id)
-      values(next_id,1381,'Animal Farm','eng','0451526341','9780451526342','Signet','OL7577246M');
+    insert into public.editions(work_id,title,language,isbn_10,isbn_13,publisher,open_library_edition_id)
+      values(1381,'Animal Farm','eng','0451526341','9780451526342','Signet','OL7577246M') returning id into next_id;
     insert into pr48_receipt(action,edition_id,work_id,isbn) values('added edition',next_id,1381,'9780451526342');
   end if;
   if (select count(*) from public.editions where isbn_13='9789041716149')<>1
