@@ -32,6 +32,27 @@ test('only genuinely parameter-free Browse is indexable', () => {
   }
 });
 
+test('Vercel Preview noindex does not alter production indexing, privacy or locale links', () => {
+  const original = process.env.VERCEL_ENV;
+  try {
+    for (const environment of ['preview', 'production', 'development', undefined]) {
+      if (environment === undefined) delete process.env.VERCEL_ENV;
+      else process.env.VERCEL_ENV = environment;
+      const publicPage = createPageMetadata({ title: 'Book', canonicalPath: '/book/10138', locale: 'nl' });
+      const tags = inspectServerHtml(renderMetadataToHtml(publicPage));
+      assert.deepEqual(tags.robots, [environment === 'preview' ? 'noindex, follow' : 'index, follow']);
+      assert.deepEqual(tags.canonical, ['https://lumisco.re/nl/book/10138']);
+      assert.deepEqual(publicPage.alternates.languages, {en:'https://lumisco.re/en/book/10138','nl-NL':'https://lumisco.re/nl/book/10138','x-default':'https://lumisco.re/en/book/10138'});
+      const privatePage = createPageMetadata({ title: 'Account', canonicalPath: '/account', noIndex: true, follow: false, locale: 'nl' });
+      assert.deepEqual(privatePage.robots, {index:false, follow:false});
+      assert.deepEqual(privatePage.alternates.languages, {});
+    }
+  } finally {
+    if (original === undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV = original;
+  }
+});
+
 test('the HTML inspector ignores comments and serialized RSC/script metadata', () => {
   const html = '<head><meta name="robots" content="index, follow"><link rel="canonical" href="https://lumisco.re/"></head>';
   assert.deepEqual(inspectServerHtml(`${html}<script>const x=\'<meta name="robots" content="noindex">\'</script><!--<meta name="robots" content="noindex">-->`).robots, ['index, follow']);

@@ -74,9 +74,11 @@ Destination already exists. Improved summary/parent-collection presentation is l
 SUPPLEMENT — BOOK/COVER SEO AND POST-RELEASE INDEXING ACTION
 Added separately for Mirror only: reviewed US cover override (exact OL61433279M image 15201916), bilingual book-specific search description, server Book JSON-LD with verified edition ISBN/date/publisher and illustrator. No fabricated rating or new website entity.
 Labelled shared cover images now reuse their existing descriptive label as real HTML-alt text. No visual, rating or edition-selection change.
-287 targeted tests PASS; TypeScript, full lint, both builds and client-secretscan PASS.
+288 targeted tests PASS; TypeScript, full lint, both builds and client-secretscan PASS.
 Actual local server HTML PASS for NL/EN with and without returnTo: HTTP200, one H1/canonical/Book/WebSite, reciprocal language links, first-response cover/alt/schema, same OG/Twitter cover; both clean URLs occur in the existing sitemap.
 Schema.org Validator checked the actual server-generated Book code: zero errors and zero warnings. No protected Preview URL or credential was sent to it.
 Cover HEAD check: HTTP200, image/jpeg, Content-Length 62545 bytes, no X-Robots-Tag. This does not prove Google has indexed the external image.
 INDEXING-ACTION.txt is the concrete post-production-release action for the two clean book URLs. No index submission executed and no reminder/automatic submission system created. Google timing/results cannot be guaranteed.
 This supplement does not approve production import, merge or publication. Preview noindex/protection remains unchanged. Previous hosted progress limitation (missing original test trilogy) remains.
+Additional real HTTP check found SHA4250112 Preview had HTTP200, no X-Robots-Tag and index, follow in HTML. A follow-up minimal metadata guard now emits noindex, follow only for VERCEL_ENV=preview; canonical/language links and production/private policies are unchanged. No hosting/protection/environment setting modified.
+The actual built server was tested on loopback with a temporary Preview runtime flag: both languages, with and without returnTo, emit exactly one noindex, follow and retain all book/schema/image/sitemap checks. Production/development/default and private nofollow invariants have regression tests. No new database or index submission.

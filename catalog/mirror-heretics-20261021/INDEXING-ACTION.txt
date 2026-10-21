@@ -14,6 +14,7 @@ Technische aanvulling
 - Geen AggregateRating, review, bestsellerclaim of vierde verplicht hoofddeel aan structured data toegevoegd. Bestaande enkele WebSite-entiteit blijft behouden.
 - De bestaande gedeelde detailcover geeft zijn betekenisvolle label ook door als HTML-alt-tekst; layout en scorebadge zijn ongewijzigd.
 - De bestaande sitemap neemt Work 10138 automatisch op als beide schone taal-URL's. Geen volledige catalogus-/afbeeldingsverrijking voor een nieuwe image-sitemap.
+- Gevonden tijdens echte HTTP-controle: de Preview op SHA4250112 gaf geen X-Robots-Tag en had index, follow in de metatag. Daarom krijgt Vercel Preview via de bestaande metadatahelper expliciet noindex, follow. Productie-/privéregels en canonicals/taalalternates blijven ongewijzigd. Geen Deployment Protection- of environmentinstelling aangepast.
 
 Uitvoering NA een afzonderlijk goedgekeurde productie-release
 1. Controleer productie-SHA/deployment en beide definitieve URL's: HTTP200, server-H1/tekst/cover/Book-JSON-LD, self-canonical zonder query, wederkerige NL/EN-alternates.

@@ -7,6 +7,7 @@ if (!origin || !['localhost', '127.0.0.1', '[::1]'].includes(new URL(origin).hos
   throw Error('Set SEO_TEST_ORIGIN to the actual local test-catalogue server. No production requests.');
 }
 const results = [];
+const expectedRobots = process.env.SEO_EXPECT_PREVIEW === '1' ? 'noindex, follow' : 'index, follow';
 for (const locale of ['nl', 'en']) {
   for (const suffix of ['', '?returnTo=%2Fcollection%2Fonce-upon-a-broken-heart']) {
     const path = `/${locale}/book/10138${suffix}`;
@@ -17,7 +18,7 @@ for (const locale of ['nl', 'en']) {
     const canonical = `https://lumisco.re/${locale}/book/10138`;
     assert.equal(tags.lang, locale);
     assert.deepEqual(tags.canonical, [canonical]);
-    assert.deepEqual(tags.robots, ['index, follow']);
+    assert.deepEqual(tags.robots, [expectedRobots]);
     assert.deepEqual(tags.duplicates, []);
     assert.deepEqual(tags.h1, ['The Mirror of Infinite Endings']);
     assert.match(tags.metadata.description[0], /Lotusbubble/);
