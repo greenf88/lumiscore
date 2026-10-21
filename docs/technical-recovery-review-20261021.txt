@@ -1,0 +1,66 @@
+LumiScore technical recovery — 21 October 2026 — DRAFT / NO PRODUCTION APPLY
+
+BASE AND ISOLATION
+Base/main/live: 571108e181e2db406aac2886b3ee1eb08ac7f37d.
+Live deployment dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY, lumiscore-hjkx5knx1-rgkgroeneveld-9102.vercel.app, Ready, alias lumisco.re.
+Branch fix/technical-recovery-20261021, isolated worktree. Existing dirty editorial worktree untouched.
+PR42/43/45/47 are already merged; their streaming, SEO, search projection and editorial parity are retained.
+PR38 (707625d), PR44 (cc7609b), PR46 (39b6edb) remain separate Drafts. No integration of unfinished taste/storage/prefetch/companion code.
+Next16.2.6 / React19.2.6 APIs run on Vinext1.0.0-beta.3 / Vite8.0.13 / Nitro; local Node24.20.0, CI22.22.0, Vercel24.x.
+
+PROVEN CAUSES / CODE CHANGES
+1. Detail awaited optional external cover evidence and description before returning title/actions. It now opts into the existing edition-cover Suspense path and a separate description boundary. Completed original response still contains the synopsis; no client-only synopsis request is needed.
+2. Description resolver already distinguished missing data and temporary failure, but its public loader discarded that state. The UI now preserves missing/loading/temporary failure in NL/EN. Aborted source budgets are not retried. Existing 4s total budget, short failure cache and identity/language checks remain.
+3. Every cover had opacity:0 until React's load handler marked it loaded. Removed that hydration paint gate. Detail images are eager; overview images remain lazy. Exact-identity M/L/S fallback, natural-dimension validation, badge and public score thresholds remain shared and unchanged.
+4. Souvenir receives a short original Dutch synopsis with exact ISBN/title/author/language provenance. No fabricated English edition or description. Its already-correct clean canonical is unchanged.
+
+SHARED OWNERS
+Work mapping: lib/supabase/books.ts. Edition eligibility/identity: lib/books/strict-edition.ts.
+Verified source cover evidence: lib/books/edition-cover-evidence.ts, reviewed-cover-overrides.ts; image attempts: covers.ts and the shared BookCover.
+Synopsis: description-resolution.ts, public-description.ts, reviewed-descriptions.ts; attribution description-source.ts.
+Public scores: public-rating-summaries.ts + ratings/card-summaries.ts. No individual public ratings fetched.
+Personal data: request-scoped getVerifiedServerUser and existing own-row loaders. No personal data enters shared catalog/source caches.
+Search keeps the PR45 read-only identity projection; only selected page Works/editions are hydrated (16 by default), scores fetched freshly. Selection/visible identity cache is public-only, locale/filter keyed, 15s bounded; source caches bind exact edition and revalidate identity/language. No new shared user/session cache.
+
+ORIGINAL SEARCH CONSOLE EXPORT
+Located Downloads/lumisco.re-Coverage-Drilldown-2026-10-21.zip: Tabel.csv, Metadata.csv, Diagram.csv (not Diagram(1).csv).
+Validated 84 URLs, 82 book routes, 2 collection routes, 77 unique Works; 40 EN, 32 NL, 12 unprefixed. 12 returnTo variants overlap those groups.
+Table crawls 6–14 October. Diagram: 6 on Oct4, 1087 on Oct5–9, 84 on Oct10–12. No inference that disappearing exclusions became indexed. Google's historical HTML was not available.
+All 84 final live responses HTTP200; all 12 unprefixed paths redirect. 24 routes report no permitted edition; 59 report missing/uncertain description; 31 have no img in main (overlapping counts). Original HTML has H1 and bibliographic text. These figures do not prove loaded covers or indexing.
+Full per-URL evidence: catalog/technical-recovery-20261021/search-console-84-audit.json.
+Raw saved responses remain in local outputs/technical-recovery-20261021/server-html, not shipped.
+Audit concurrency2, timeout20s, max5 redirects, no automatic retries. Reparse uses saved responses, not another production crawl.
+Sitemap200: 20,568 URLs. Canonicals drop returnTo; localized canonicals and reciprocal routes retained. No mass noindex, new URL, forced English canonical, fake lastmod or invented structured-data rating.
+Missing edition pages retain Work identity with honest availability; they are not presented as eligible English editions. A description/score gap alone is not an automatic noindex rule.
+
+TARGETED CATALOGUE PROPOSALS — PRODUCTION NOT CHANGED
+Nee heb je: Work1191 / edition1191 / OL24326852W / OL32196483M / ISBN9789022585979. Production language NULL. Bureau ISBN explicitly lists Nederlands for that exact paperback; publisher copyright page confirms identity. Proposed only NULL -> nld, expected one change, repeat zero. Exact guarded SQL and rollback: nee-production-proposal.sql.
+Minimal isolated test seed: Work921101191 / edition921201191 / author921301191, no users/ratings/progress. Seed+correction executed twice safely, second pass no data changes by predicates. Existing test Souvenir Work91021031 / edition91021031 reused unchanged.
+Souvenir Work1284 / edition1284 already nld, ISBN9789044978834; official publisher specifies e-book, 21-04-2020. Own short Dutch synopsis implemented in code. Additional direct cover-source request refused by local network (connect EACCES); no cover inferred from an ISBN URL or a different paperback. Cover remains a separate verified-image gap.
+Kafka Work3259 / edition3418: only Dutch Kafka op het strand, ISBN9789045000947, is stored. English unavailable is accurate. Original Japanese Work title/name are retained bibliographic identity, not an English edition claim. New English edition/verified author display alias still needs source review, not fabricated here.
+God Emperor Work2176 / edition2385: eng ISBN9780575029767, correct title/1981; live cover loaded 322x500. Description absence was observed, not rewritten from memory.
+Carry on Work9976 / edition10135: eng ISBN9780590455770; original source synopsis is present. Stored Work year1992 needs a separate original-publication review, not silently replaced with an assumed year.
+Once Upon a Broken Heart: three main novels. Companion work stays PR46; no progress denominator change here.
+Historical 24-language proposal: two campaign fixes plus 20 fantasy fixes already applied; Oryx/Giver editions already added. Do not reapply or undo. Old Giver100 and HungerGames102 spare editions remain outside the necessary campaign set. Audio22 and bilingual14 remain excluded pending separate evidence.
+Fantasy gaps: exact editions of Works21 and26 have no reviewed usable cover. Do not borrow another translation's image. Full browser matrix to be appended after hosted review.
+
+DESLOPPIFY
+Official peteromallet/desloppify source commit3a7735d531a96b6a226bfbdc9fd662b14195f857, package1.0; Python3.12.14 in isolated outputs venv, tree-sitter0.26.0/language-pack1.6.3.
+OSNL0.2 read; internal review use, no redistribution of tool. Objective scan only, no hooks, setup, agent config, external LLM or code upload. npm offline; generated/dependency/other-worktree paths excluded, real source/tests included.
+Initial383 findings. Relevant confirmed complexity: large books.ts, compressed edition-cover-evidence.ts, branching description-resolution.ts. Narrow fault-handling fix only; broad reorganization deferred to avoid changing identity semantics for a score.
+False positives reviewed: cookie names/translated password messages are not credentials; CollectionQuickRating JSON.parse is already inside try/catch; JSON-LD is serialized by the existing escaping helper, layout theme script is static. Dynamic review fixtures misreported orphaned: kept, adapters updated for new loader contract.
+Source diagnostic logs contain provider status, not user data; retained. CLI malformed-input parsing and unrelated module-size warnings deferred. Test-health/subjective scores are not release gates; no subjective model review run.
+
+PERFORMANCE / CHECKS (HOSTED TO FOLLOW)
+Live 84-route baseline full response range approximately0.109–7.079s, same production SHA, guest HTTP requests. TTFB generally tracks full detail response due to blocking sources. Not browser LCP and not a verified cold-cache run.
+Controlled local comparison: identical synthetic book, 2000ms optional synopsis delay, Vinext dev compilation primed, IAB Windows actual375px viewport; three reloads each NL/EN. Before H1 DOM approx2.17–2.26s; after0.12–0.71s. Actual local LCP recorded; CLS0. Detailed browser measurements included separately. Source latency itself is not claimed fixed, and local figures are not hosted/production figures.
+Local10,001 Work PGlite fixture: NL6467 eligible, EN3233; exact totals/relevance and page1/page2 each16/no duplicates. Full catalog identity selection still scales with matching candidates. Observed NL RPC0.48–6.52s, EN1.53–1.56s under concurrent local checks: remaining broad-query latency; not production SLA. No full off-page cover/description hydration.
+Initial full run797 tests:778 pass,16 optional SSR skips,3 failures from changed lazy-image assertion(2) and overly strict new scale assertion(1). All three fixed; targeted27/27 pass. Separate profile SSR16/16 pass. TypeScript/lint pass. Standard production build pass. Client secretscan142 files pass.
+Local Vercel packaging stopped at filesystem EPERM readlink C:\Users\rickg; not retried via an access workaround. Hosted/CI packaging must confirm this layer. pnpm auto-install refused shared-node_modules removal; existing binaries invoked directly without changing dependencies or the shared folder.
+
+RECOVERY / RELEASE BOUNDARY
+No merge/deployment to production authorized. Preview is test-only and must remain effectively noindex. No Search Console/Bing requests or social posts.
+App recovery after a separately approved release: revert this branch's code commits while retaining later unrelated changes, redeploy previous working app if needed; never restore database/users/ratings from a snapshot.
+Only proposed production data operation is guarded one-edition language update above, separately approved and separately reversible. Test fixture may remain for review; remove only introduced fixture IDs after checking no references/later use, never bulk cleanup.
+Remove only the two Preview env overrides for gitBranch fix/technical-recovery-20261021 after review; do not remove global/production/other branch keys.
+Final preview/SHA/CI and campaign verdict will be appended once actually verified. No claim of physical phone testing.
