@@ -6,12 +6,28 @@ export type ReviewedCoverOverride = {
   author: string;
   isbn13: string;
   coverUrl: string;
-  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller';
+  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller' | 'reviewed_open_library';
   evidenceUrl: string;
   reviewedAt: string;
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  {
+    workId: '10138', title: 'The Mirror of Infinite Endings', author: 'Stephanie Garber',
+    isbn13: '9781250462039',
+    coverUrl: 'https://covers.openlibrary.org/b/id/15201916-L.jpg?default=false',
+    source: 'reviewed_open_library',
+    evidenceUrl: 'https://openlibrary.org/books/OL61433279M',
+    reviewedAt: '2026-10-21',
+  },
+  {
+    workId: '10138', title: 'The Mirror of Infinite Endings', author: 'Stephanie Garber',
+    isbn13: '9781399641777',
+    coverUrl: 'https://metadata.isbn.nl/ie_fcache/0000806365_The_Mirror_of_Infinite_Endings_2_710_130_0_0.jpg',
+    source: 'publisher_registry',
+    evidenceUrl: 'https://metadata.isbn.nl/2071834/04-the-mirror-of-infinite-endings.html',
+    reviewedAt: '2026-10-21',
+  },
   {
     workId: '1305',
     title: 'Madonna',

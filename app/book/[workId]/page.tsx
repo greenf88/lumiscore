@@ -14,6 +14,7 @@ import {
   type BookReturnNavigation,
 } from '@/lib/navigation/book-return';
 import { measureServerOperation } from '@/lib/performance/server-timing';
+import { getMirrorBookSeo, serializeMirrorBookJsonLd } from '@/lib/seo/mirror-book';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -50,8 +51,9 @@ export async function generateMetadata({
   }
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
-  const description = getBookMetadataDescription(book, locale);
-  const cover = book.coverUrls?.[0];
+  const reviewedSeo = getMirrorBookSeo(book, locale);
+  const description = reviewedSeo?.description ?? getBookMetadataDescription(book, locale);
+  const cover = reviewedSeo?.image ?? book.coverUrls?.[0];
 
   return createLocalizedPageMetadata({
     title,
@@ -136,9 +138,11 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     descriptionPromise,
   ]);
   if (!book) notFound();
+  const bookJsonLd = serializeMirrorBookJsonLd(book, locale);
 
   return (
     <>
+      {bookJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: bookJsonLd }} />}
       <LumiScoreBookDetail
         book={book}
         description={description}

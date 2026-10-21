@@ -7,6 +7,7 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   calculateCollectionProgress,
   calculateSeriesProgress,
+  isCompanionMembership,
   selectHighestRatedUnread,
   type ReadingStatus,
 } from '@/lib/collections/model';
@@ -336,7 +337,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           return (
             <BookCard book={item.book} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
               className={`collection-book-card${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}`}
-              label={collection.collectionType === 'series' && item.sequenceNumber !== null
+              label={isCompanionMembership(item) ? t('collection.companionPosition', { position: item.sequenceNumber ?? item.publicationOrder ?? '' }) : collection.collectionType === 'series' && item.sequenceNumber !== null
                 ? canShowSeriesDenominator(item.sequenceNumber,seriesTotal)
                   ? t('collection.bookOf',{position:item.sequenceNumber,total:seriesTotal})
                   : t('collection.bookPosition',{position:item.sequenceNumber}) : undefined}
