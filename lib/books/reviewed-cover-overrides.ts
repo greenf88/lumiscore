@@ -1,4 +1,5 @@
 import { normalizeIsbn13 } from './covers.ts';
+import { normalizeEditionLanguage } from './edition-ranking.ts';
 
 export type ReviewedCoverOverride = {
   workId: string;
@@ -6,12 +7,25 @@ export type ReviewedCoverOverride = {
   author: string;
   isbn13: string;
   coverUrl: string;
-  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller';
+  source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller' | 'reviewed_open_library';
+  editionLanguage?: 'eng' | 'nld';
+  openLibraryEditionId?: string;
   evidenceUrl: string;
   reviewedAt: string;
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Positive edition/image evidence, checked 2026-10-21. No unknown-language
+  // edition is made eligible by this list. Full trace: catalog/editorial-parity-20261021.
+  {workId:'102',title:'The Hunger Games',author:'Suzanne Collins',isbn13:'9780439023481',editionLanguage:'eng',openLibraryEditionId:'OL22549594M',coverUrl:'https://covers.openlibrary.org/b/id/7890713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL22549594M',reviewedAt:'2026-10-21'},
+  {workId:'102',title:'De Hongerspelen',author:'Suzanne Collins',isbn13:'9789000399284',editionLanguage:'nld',openLibraryEditionId:'OL60075974M',coverUrl:'https://covers.openlibrary.org/b/id/15120650-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL60075974M',reviewedAt:'2026-10-21'},
+  {workId:'2718',title:'Never Let Me Go',author:'Kazuo Ishiguro',isbn13:'9781400078776',editionLanguage:'eng',openLibraryEditionId:'OL16198255M',coverUrl:'https://covers.openlibrary.org/b/id/13160732-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL16198255M',reviewedAt:'2026-10-21'},
+  {workId:'208',title:'Parable of the Sower: A Novel',author:'Octavia E. Butler',isbn13:'9781609807191',editionLanguage:'eng',openLibraryEditionId:'OL27288938M',coverUrl:'https://covers.openlibrary.org/b/id/8768819-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL27288938M',reviewedAt:'2026-10-21'},
+  {workId:'2717',title:'Scythe',author:'Neal Shusterman',isbn13:'9781481485265',editionLanguage:'eng',openLibraryEditionId:'OL46932981M',coverUrl:'https://covers.openlibrary.org/b/id/15152462-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46932981M',reviewedAt:'2026-10-21'},
+  {workId:'2724',title:'Unwind',author:'Neal Shusterman',isbn13:'9781416912040',editionLanguage:'eng',openLibraryEditionId:'OL11758843M',coverUrl:'https://covers.openlibrary.org/b/id/2787713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL11758843M',reviewedAt:'2026-10-21'},
+  {workId:'2846',title:'The Year of the Flood',author:'Margaret Atwood',isbn13:'9781408461426',editionLanguage:'eng',openLibraryEditionId:'OL36612602M',coverUrl:'https://covers.openlibrary.org/b/id/12508446-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL36612602M',reviewedAt:'2026-10-21'},
+  {workId:'1',title:'Project Hail Mary',author:'Andy Weir',isbn13:'9780593135204',editionLanguage:'eng',openLibraryEditionId:'OL30036715M',coverUrl:'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL30036715M',reviewedAt:'2026-10-21'},
+  {workId:'4316',title:'All Systems Red: The Murderbot Diaries',author:'Martha Wells',isbn13:'9780765397539',editionLanguage:'eng',openLibraryEditionId:'OL26500848M',coverUrl:'https://covers.openlibrary.org/b/id/9157148-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26500848M',reviewedAt:'2026-10-21'},
   {
     workId: '1305',
     title: 'Madonna',
@@ -266,11 +280,15 @@ export function getReviewedCoverOverride(input: {
   title?: string | null;
   author?: string | null;
   isbn13?: string | null;
+  editionLanguage?: string | null;
+  openLibraryEditionId?: string | null;
 }): ReviewedCoverOverride | null {
   const isbn13 = normalizeIsbn13(input.isbn13);
   return REVIEWED_COVER_OVERRIDES.find((entry) =>
     entry.workId === input.workId?.trim() &&
     entry.isbn13 === isbn13 &&
+    (!entry.editionLanguage || entry.editionLanguage === normalizeEditionLanguage(input.editionLanguage ?? '')) &&
+    (!entry.openLibraryEditionId || entry.openLibraryEditionId === input.openLibraryEditionId) &&
     normalizeIdentityText(entry.title) === normalizeIdentityText(input.title) &&
     normalizeIdentityText(entry.author) === normalizeIdentityText(input.author)
   ) ?? null;

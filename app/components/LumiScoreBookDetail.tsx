@@ -109,7 +109,7 @@ export function LumiScoreBookDetail({
   } | null>(null);
   const detailPath = bookAuthenticationReturnPath(book.workId!, returnNavigation);
   const loginHref = `/login?next=${encodeURIComponent(detailPath)}`;
-  const publicRating = formatPublicRatingDisplay(ratingState.lumiscore, ratingState.ratingCount, locale, ratingState.ratingBand);
+  const publicRating = formatPublicRatingDisplay(ratingState.lumiscore, ratingState.ratingCount, locale, ratingState.ratingBand, ratingState.publicRatingUnavailable);
   const score = publicRating.score;
   const backCover = getVerifiedBackCover(book);
   const isAuthenticated = ratingState.authenticated;

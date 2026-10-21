@@ -10,7 +10,8 @@ export type PublicRatingSummaryRow = {
   evidence_status?: string | null;
 };
 export type PublicRatingSummary = { lumiscore: number | null; ratingCount: null; ratingBand: RatingCountBand | null };
-export function formatPublicRatingDisplay(lumiscore: number | null, _ratingCount: number | null, locale: Locale = 'en', ratingBand?: string | null): { score: string; count: string } {
+export function formatPublicRatingDisplay(lumiscore: number | null, _ratingCount: number | null, locale: Locale = 'en', ratingBand?: string | null, unavailable = false): { score: string; count: string } {
+  if (unavailable) return { score: '—', count: locale === 'nl' ? 'Beoordelingen tijdelijk niet beschikbaar' : 'Ratings temporarily unavailable' };
   if (lumiscore === null || !RATING_COUNT_BANDS.includes(ratingBand as RatingCountBand))
     return { score: '—', count: locale === 'nl' ? 'Onvoldoende beoordelingen' : 'Insufficient ratings' };
   return { score: lumiscore.toFixed(1), count: `${ratingBand} ${locale === 'nl' ? 'beoordelaars' : 'raters'}` };
@@ -34,6 +35,6 @@ export function applyRatingSummaries(books: readonly Book[], summaries: Readonly
   return books.map(book => {
     if (book.source !== 'supabase' || !book.workId) return book;
     const summary = summaries.get(book.workId);
-    return { ...book, score: summary?.lumiscore ?? null, ratingsCount: null, ratingBand: summary?.ratingBand ?? null };
+    return { ...book, score: summary?.lumiscore ?? null, ratingsCount: null, ratingBand: summary?.ratingBand ?? null, publicRatingUnavailable: !summary };
   });
 }

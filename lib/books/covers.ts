@@ -116,3 +116,19 @@ export function nextBookCoverAttempt(index: number, canRetryLarge: boolean) {
     ? { index, largeFallbackIndex: index }
     : { index: index + 1, largeFallbackIndex: null };
 }
+
+/** Bounded recovery within ONE verified image identity. A broken L must not
+ * discard an available M (including when a Retina source selected L). */
+export function getVerifiedCoverAttempts(url: string, presentation: CoverPresentation) {
+  const initial = getBookCoverImageSource(url, presentation);
+  const medium = getOpenLibraryCoverVariantUrl(url, 'M');
+  const large = getOpenLibraryCoverVariantUrl(url, 'L');
+  const small = getOpenLibraryCoverVariantUrl(url, 'S');
+  const attempts = [initial];
+  if (medium !== large) for (const src of [medium, large, small]) {
+    if (!attempts.some(attempt => attempt.src === src && !attempt.srcSet)) {
+      attempts.push({src, srcSet:undefined, canRetryLarge:false});
+    }
+  }
+  return attempts;
+}

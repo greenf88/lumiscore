@@ -9,8 +9,7 @@ import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, us
 import type { Book } from '../data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
-  getBookCoverImageSource,
-  nextBookCoverAttempt,
+  getVerifiedCoverAttempts,
   isUsableCoverImageDimensions,
   type CoverPresentation,
 } from '@/lib/books/covers';
@@ -125,18 +124,17 @@ function BookCoverForIdentity({
   publicScoreDisplay,
 }: BookCoverProps) {
   const { locale, t } = useLumiScoreLocale();
-  const scoreDisplay = publicScoreDisplay ?? formatPublicRatingDisplay(book.score, book.ratingsCount, locale, book.ratingBand).score;
+  const scoreDisplay = publicScoreDisplay ?? formatPublicRatingDisplay(book.score, book.ratingsCount, locale, book.ratingBand, book.publicRatingUnavailable).score;
   const [coverUrls, setCoverUrls] = useState(() =>
     getInitialBookCoverUrls(book),
   );
   const [coverIndex, setCoverIndex] = useState(0);
-  const [largeFallbackIndex, setLargeFallbackIndex] = useState<number | null>(null);
+  const [variantIndex, setVariantIndex] = useState(0);
   const [coverLoaded, setCoverLoaded] = useState(false);
   const resolvedRequested = useRef(false);
   const coverUrl = coverUrls[coverIndex] ?? null;
-  const imageSource = coverUrl
-    ? getBookCoverImageSource(coverUrl, presentation, largeFallbackIndex === coverIndex)
-    : null;
+  const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
+  const imageSource = imageAttempts[variantIndex] ?? null;
   const displayedCoverUrl = imageSource?.src ?? null;
 
   const requestResolvedCovers = useCallback(() => {
@@ -159,12 +157,14 @@ function BookCoverForIdentity({
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = () => {
-    const next = nextBookCoverAttempt(coverIndex, imageSource?.canRetryLarge ?? false);
     setCoverLoaded(false);
-    setLargeFallbackIndex(next.largeFallbackIndex);
-    setCoverIndex(next.index);
-    // Try the same verified identity at L before resolving/advancing to another cover.
-    if (next.index !== coverIndex) requestResolvedCovers();
+    if (variantIndex + 1 < imageAttempts.length) {
+      setVariantIndex(variantIndex + 1);
+    } else {
+      setVariantIndex(0);
+      setCoverIndex(coverIndex + 1);
+      requestResolvedCovers();
+    }
   };
 
   return (
@@ -179,13 +179,13 @@ function BookCoverForIdentity({
       <span className="cover-mark" aria-hidden="true">✦</span>
       <span className="cover-author" aria-hidden="true">{book.author}</span>
       {displayedCoverUrl && (
-        <picture key={displayedCoverUrl}>
+        <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
           key={displayedCoverUrl}
           className={`book-cover-image${coverLoaded ? ' is-loaded' : ''}`}
           src={displayedCoverUrl}
-          alt=""
+          alt={label ?? ''}
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading="lazy"
@@ -301,6 +301,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
     book.ratingsCount ?? 0,
     locale,
     book.ratingBand,
+    book.publicRatingUnavailable,
   );
   const href = getBookHref(book, returnContext);
   const matchText = recommendation ? recommendationMatchLabel(recommendation, locale) : ratingDisplay.count;
@@ -456,7 +457,7 @@ type BookCardProps = {
 export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard' }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant'>) {
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
-  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount, locale, book.ratingBand);
+  const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount, locale, book.ratingBand, book.publicRatingUnavailable);
   return (
     <>
       <div className="card-cover-wrap">
@@ -473,7 +474,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
         {variant !== 'browse' && book.genre && <span className="book-genre">{book.genre}</span>}
         {matchLabel && <span className="book-match">{matchLabel}</span>}
         <div className="book-meta">
-          {variant === 'browse' ? ratingDisplay.score === '—'
+          {variant === 'browse' && !book.publicRatingUnavailable ? ratingDisplay.score === '—'
             ? <span>{t('browse.noReliableScore')}</span>
             : <span>{ratingDisplay.count}</span>
             : <span>{ratingDisplay.count}</span>}

@@ -34,7 +34,7 @@ export async function withEditionCoverEvidence(books:readonly Book[],fetcher:typ
       }catch{return null;}
     })();
     for(const id of batch){
-      const value=task.then(rows=>{const edition=rows?.['/books/'+id]??null;cache.set(id,{value:edition,expires:Date.now()+(rows?TTL:FAILURE_TTL)});return edition;}).finally(()=>pending.delete(id));
+      const value=task.then(rows=>{const edition=rows?.['/books/'+id]??null;cache.set(id,{value:edition,expires:Date.now()+(edition?TTL:FAILURE_TTL)});return edition;}).finally(()=>pending.delete(id));
       pending.set(id,value);
     }
   }

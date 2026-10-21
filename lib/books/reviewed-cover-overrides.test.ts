@@ -47,3 +47,14 @@ test('existing resolved cover candidates retain priority over a reviewed fallbac
     getReviewedCoverOverride(festival)?.coverUrl,
   ]);
 });
+
+test('editorial positive cover evidence requires exact ISBN, Work, title, author, edition and language',()=>{
+  const entries=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library');
+  assert.equal(entries.length,9);
+  for(const entry of entries){
+    assert.equal(getReviewedCoverOverride(entry)?.coverUrl,entry.coverUrl);
+    for(const change of [{editionLanguage:null},{editionLanguage:'ger'},{openLibraryEditionId:'OL999M'},{isbn13:'9780000000000'},{workId:'999'}]){
+      assert.equal(getReviewedCoverOverride({...entry,...change}),null);
+    }
+  }
+});
