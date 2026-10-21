@@ -47,4 +47,5 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  assert.match(page,/loadCatalogBook\(workId, locale, true\)/);
  assert.match(page,/descriptionPromise=\{descriptionPromise\}/);
  assert.doesNotMatch(page,/await descriptionPromise/);
+ assert.match(page,/book\.coverUrls\?\.\[0\] \?\? \(await book\.editionCoverUrls\)\?\.\[0\]/,'late verified cover is retained in social metadata using the shared promise');
 });

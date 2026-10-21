@@ -28,6 +28,9 @@ const modules = {
 };
 // Explicit loopback-only fault/performance comparison. Neither the source
 // replacement nor this probe is part of a deployment or production build.
+if(process.argv.includes('--slow-cover')){
+ modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return books.find(b=>b.workId===id)??null',"const book=books.find(b=>b.workId===id);return book?{...book,strictEditionLanguage:'en',editionAvailable:true,editionCoverUrls:new Promise(r=>setTimeout(()=>r(['https://example.invalid/reviewed-cover.jpg']),2000))}:null");
+}
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];
  modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;

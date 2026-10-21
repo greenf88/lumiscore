@@ -51,7 +51,9 @@ export async function generateMetadata({
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
-  const cover = book.coverUrls?.[0];
+  // Metadata may finish after the visible shell. Reuse the very same verified
+  // cover promise as the card; never drop a late cover or perform a second lookup.
+  const cover = book.coverUrls?.[0] ?? (await book.editionCoverUrls)?.[0];
 
   return createLocalizedPageMetadata({
     title,
