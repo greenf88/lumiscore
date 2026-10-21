@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-21T11:29:50.465Z",
+  "receipt": {
+    "target": "hlvujbrmfdlrfxdjwsmb",
+    "inserted": [
+      {
+        "id": 921299100,
+        "title": "The Giver",
+        "isbn_13": "9780385732550",
+        "work_id": 921100100,
+        "language": "eng",
+        "open_library_edition_id": "OL7441983M"
+      }
+    ]
+  },
+  "source": "https://openlibrary.org/books/OL7441983M",
+  "sourceWorkId": "OL1846076W",
+  "sourceLanguages": [
+    "eng"
+  ],
+  "sourceIsbn13": "9780385732550",
+  "sourceCoverId": 244186,
+  "productionStatus": "NOT_APPLIED_TEST_ONLY_APPROVAL",
+  "sql": "begin;\ndo $$ begin\nif not exists(select 1 from public.works where id=921100100 and title='The Giver' and open_library_id='OL1846076W') then raise exception 'Giver Work mismatch'; end if;\nif exists(select 1 from public.editions where (id=921299100 or isbn_13='9780385732550' or open_library_edition_id='OL7441983M') and (id<>921299100 or work_id<>921100100 or title is distinct from 'The Giver' or language is distinct from 'eng' or isbn_13 is distinct from '9780385732550' or open_library_edition_id is distinct from 'OL7441983M')) then raise exception 'Giver edition collision'; end if;\nend $$;\nwith added as (\ninsert into public.editions(id,work_id,title,language,isbn_10,isbn_13,publisher,open_library_edition_id)\nselect 921299100,921100100,'The Giver','eng','0385732554','9780385732550','Delacorte Books for Young Readers','OL7441983M'\nwhere not exists(select 1 from public.editions where id=921299100)\nreturning id,work_id,title,language,isbn_13,open_library_edition_id)\nselect jsonb_build_object('inserted',coalesce(jsonb_agg(to_jsonb(a)),'[]'::jsonb),'target','hlvujbrmfdlrfxdjwsmb') as receipt from added a;\nrollback;"
+}

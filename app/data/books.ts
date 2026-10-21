@@ -35,6 +35,7 @@ export type Book = {
   score: number | null;
   ratingsCount: number | null;
   ratingBand?: string | null;
+  publicRatingUnavailable?: boolean;
   match: number | null;
   cover: string;
   isbn10?: string | null;

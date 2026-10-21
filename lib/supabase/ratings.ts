@@ -7,20 +7,15 @@ import {
 import { createServerSupabaseClient } from './server.ts';
 import { getVerifiedServerUser } from './auth.ts';
 import { supabase as publicSupabase } from './client.ts';
-import { ratingSummaryMap, type PublicRatingSummaryRow } from '../ratings/card-summaries.ts';
+import { loadPublicRatingSummaries } from './public-rating-summaries.ts';
 import { insertUnrated } from '../ratings/insert-unrated.ts';
 
 async function loadPublicSummary(
   supabase: SupabaseClient,
   workId: string,
-): Promise<Pick<BookRatingState, 'lumiscore' | 'ratingCount' | 'ratingBand'>> {
-  const { data, error } = await supabase
-    .rpc('get_work_rating_summaries_v2', { target_work_ids: [Number(workId)] })
-    .maybeSingle<PublicRatingSummaryRow>();
-
-  if (error || !data) return { lumiscore: null, ratingCount: null, ratingBand: null };
-
-  return ratingSummaryMap([data]).get(workId) ?? { lumiscore: null, ratingCount: null, ratingBand: null };
+): Promise<Pick<BookRatingState, 'lumiscore' | 'ratingCount' | 'ratingBand' | 'publicRatingUnavailable'>> {
+  const summary = (await loadPublicRatingSummaries(supabase, [workId])).get(workId);
+  return { ...(summary ?? { lumiscore: null, ratingCount: null, ratingBand: null }), publicRatingUnavailable: !summary };
 }
 
 async function getVerifiedUser(supabase: SupabaseClient): Promise<User | null> {
@@ -51,7 +46,7 @@ export async function loadBookRatingState(workId: string): Promise<BookRatingSta
       ...summary,
     };
   } catch {
-    return EMPTY_RATING_STATE;
+    return { ...EMPTY_RATING_STATE, publicRatingUnavailable: true };
   }
 }
 

@@ -11,6 +11,7 @@ export type BookRatingState = {
   lumiscore: number | null;
   ratingCount: number | null;
   ratingBand?: string | null;
+  publicRatingUnavailable?: boolean;
 };
 
 export const EMPTY_RATING_STATE: BookRatingState = {

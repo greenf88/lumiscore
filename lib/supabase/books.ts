@@ -269,6 +269,7 @@ export async function loadCatalogBooksByIds(
   workIds: readonly string[],
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
   locale: Locale = 'en',
+  keepUnavailable = false,
 ): Promise<Book[]> {
   const ids = [...new Set(
     workIds
@@ -277,18 +278,17 @@ export async function loadCatalogBooksByIds(
   )];
   if (ids.length === 0) return [];
 
-  const result = await supabase
-    .from('works')
-    .select(HOMEPAGE_CATALOG_SELECT)
-    .in('id', ids);
-  if (result.error) throw result.error;
-
-  const [works, summaries] = await Promise.all([
-    completeEditions(asRows(result.data)),
+  // All target IDs are already known. Public identity, complete edition metadata
+  // and safe aggregates are independent; none needs to wait for another request.
+  const [result, editions, summaries] = await Promise.all([
+    supabase.from('works').select(HOMEPAGE_CATALOG_SELECT).in('id', ids),
+    loadEditionRows(supabase, ids.map(String)),
     prefetchedSummaries ?? loadPublicRatingSummariesBatched(supabase, ids.map(String)),
   ]);
-  const catalogBooks = works
-    .map((work, index) => mapCatalogBook(work, [], [], index, locale))
+  if (result.error) throw result.error;
+  const editionRows = asRows(editions);
+  const catalogBooks = asRows(result.data)
+    .map((work, index) => mapCatalogBook(work, [], editionRows, index, locale) ?? (keepUnavailable ? mapUnavailableWork(work, locale) : null))
     .filter((book): book is Book => book !== null);
   return applyRatingSummaries(catalogBooks, summaries);
 }
@@ -303,6 +303,23 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
   // Legacy Work/ISBN cache is not edition evidence and was deliberately discarded.
   // Do not read an unused privileged cache before displaying a public book card.
   return streamCovers ? deferEditionCoverEvidence(books) : withEditionCoverEvidence(books);
+}
+
+/** Bounded editorial identity lookup; all detail links and ratings retain the
+ * actual stored Work ID. Never substitute an unrelated same-number fixture. */
+export async function loadCatalogBooksBySourceIds(sourceIds:readonly string[],locale:Locale):Promise<Book[]>{
+  const ids=[...new Set(sourceIds)];
+  if(ids.length>100||ids.some(id=>!/^OL\d+W$/.test(id)))throw new Error('Invalid editorial source selection');
+  if(!ids.length)return [];
+  const result=await supabase.from('works').select(HOMEPAGE_CATALOG_SELECT).in('open_library_id',ids);
+  if(result.error)throw result.error;
+  const works=asRows(result.data);
+  const seen=new Set<string>();
+  for(const work of works){const key=readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work');if(!key||seen.has(key))throw new Error('Ambiguous editorial Work identity');seen.add(key);}
+  const workIds=works.flatMap(work=>getWorkId(work)?[getWorkId(work)!]:[]);
+  const [editions,summaries]=await Promise.all([loadEditionRows(supabase,workIds),loadPublicRatingSummariesBatched(supabase,workIds)]);
+  const books=works.map((work,index)=>mapCatalogBook(work,[],asRows(editions),index,locale)??mapUnavailableWork(work,locale)).filter((b):b is Book=>b!==null);
+  return applyRatingSummaries(books,summaries);
 }
 
 export type CatalogBrowsePage = {
@@ -472,9 +489,15 @@ export async function loadCatalogBook(
   const work=(await completeEditions([rawWork]))[0];
   const book=mapCatalogBook(work,[],[],0,locale);
   if(book)return (await withEditionCoverEvidence([book]))[0];
+  return mapUnavailableWork(work,locale);
+}
+
+function mapUnavailableWork(work:DatabaseRow,locale:Locale):Book {
+  const workId=getWorkId(work)!;
   const title=readString(work,['title'])??'';
   return unavailableEdition({id:`work-${workId}`,source:'supabase',workId,title,
     author:readString(getRelatedAuthor(work,[])??{},['name'])??'Unknown author',
+    firstPublishYear:getWorkFirstPublishYear(readNumber(work,['first_publish_year'])),
     openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
     cover:'orbit',score:null,ratingsCount:null,match:null},locale);
 }

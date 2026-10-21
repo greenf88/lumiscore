@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { editorialTopLists, editorialTopBooks, topListBookHref, topListBook } from './top-lists.ts';
+import { editorialTopLists, editorialTopBooks, topListBookHref, getEditorialWorkSourceId } from './top-lists.ts';
 import { bookAuthenticationReturnPath, resolveBookReturnNavigation } from '../navigation/book-return.ts';
 import { buildPublicSitemapPaths } from '../seo/sitemap.ts';
 test('two exact editorial lists reference 35 existing stable identities, not scores or editions',()=>{
@@ -11,13 +11,18 @@ test('two exact editorial lists reference 35 existing stable identities, not sco
     for(const id of list.workIds){
       const b=editorialTopBooks.find(b=>b.workId===id)!; assert.ok(b);
       assert.match(id,/^[1-9]\d*$/); assert.ok(b.note.nl && b.note.en && b.basis.nl && b.source);
-      assert.equal(topListBook(b).score,null);
       assert.equal(new URL(topListBookHref(id,list.slug),'https://lumisco.re').pathname,'/book/'+id);
       if(list.slug==='dystopie-vanaf-1990') assert.ok(b.originalYear>=1990);
     }
     assert.ok(buildPublicSitemapPaths([],[]).includes('/toplijsten/'+list.slug));
   }
   assert.throws(()=>topListBookHref('null',editorialTopLists[0].slug));
+});
+test('editorial return verifies canonical source identity, not a colliding numeric fixture ID',async()=>{
+ const path='/toplijsten/dystopie-vanaf-1990';
+ assert.deepEqual(await resolveBookReturnNavigation(path,'921100102',async()=>null,getEditorialWorkSourceId('102')),{kind:'editorial',href:path});
+ for(const source of [null,'OL999W',getEditorialWorkSourceId('6')])assert.deepEqual(await resolveBookReturnNavigation(path,'102',async()=>null,source),{kind:'browse',href:'/browse'});
+ assert.throws(()=>getEditorialWorkSourceId('999999'));
 });
 test('verified list-to-book navigation returns to exact list; forged sources fall back safely',async()=>{
   const verify=async()=>null;

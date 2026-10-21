@@ -47,3 +47,23 @@ test('existing resolved cover candidates retain priority over a reviewed fallbac
     getReviewedCoverOverride(festival)?.coverUrl,
   ]);
 });
+
+test('editorial positive cover evidence requires exact ISBN, Work, title, author, edition and language',()=>{
+  const entries=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library');
+  assert.equal(entries.length,13);
+  for(const entry of entries){
+    assert.equal(getReviewedCoverOverride(entry)?.coverUrl,entry.coverUrl);
+    for(const change of [{editionLanguage:null},{editionLanguage:'ger'},{openLibraryEditionId:'OL999M'},{isbn13:'9780000000000'},{openLibraryWorkId:'OL999W'}]){
+      assert.equal(getReviewedCoverOverride({...entry,...change}),null);
+    }
+  }
+});
+test('reviewed exact publisher images survive numeric test-ID mapping but never a different source identity',()=>{
+ for(const workId of ['25','304']){
+  const entry=REVIEWED_COVER_OVERRIDES.find(e=>e.workId===workId)!;
+  assert.equal(getReviewedCoverOverride({...entry,workId:'921100'+workId})?.coverUrl,entry.coverUrl);
+  assert.equal(getReviewedCoverOverride({...entry,openLibraryWorkId:'OL999W'}),null);
+  assert.equal(getReviewedCoverOverride({...entry,editionLanguage:'nld'}),null);
+  assert.equal(getReviewedCoverOverride({...entry,openLibraryEditionId:'OL999M'}),null);
+ }
+});

@@ -32,7 +32,7 @@ export function withStrictEdition(book: Book, edition: StrictEditionRow | null, 
   const editionOlid = normalizeOpenLibraryId(edition.open_library_edition_id, 'edition');
   const isbn13 = normalizeIsbn13(edition.isbn_13);
   const isbn10 = edition.isbn_10?.replace(/[\s-]/g, '').toUpperCase();
-  const reviewed = getReviewedCoverOverride({ ...book, title:edition.title.trim(), isbn13 });
+  const reviewed = getReviewedCoverOverride({ ...book, title:edition.title.trim(), isbn13, editionLanguage:edition.language, openLibraryEditionId:editionOlid });
   const keys = new Set([editionOlid].filter(Boolean));
   const verified = storedCovers.filter(c => c.editionVerified===true && c.state === 'resolved' && keys.has(c.source_key)).map(c => c.cover_url);
   // Work-level cover IDs and resolved Work covers may belong to another edition.
@@ -48,7 +48,7 @@ export function withStrictEdition(book: Book, edition: StrictEditionRow | null, 
 
 /** Direct links remain valid even when no permitted edition can be presented. */
 export function unavailableEdition(book:Book, locale:Locale):Book {
-  return {...book,title:locale==='nl'?'Geen passende editie beschikbaar':'No suitable edition available',
+  return {...book,
     editionAvailable:false,englishEditionFallback:false,strictEditionLanguage:locale,
     editionId:null,editionTitle:null,editionLanguage:null,editionPublisher:null,
     openLibraryEditionId:null,isbn10:null,isbn13:null,coverUrls:[],backCover:null,descriptionCandidates:[]};

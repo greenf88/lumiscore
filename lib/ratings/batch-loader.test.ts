@@ -39,7 +39,8 @@ test('loads a recommendation catalog in bounded batches instead of per-card quer
         data: args.target_work_ids.map((workId) => ({
           work_id: workId,
           lumiscore: null,
-          rating_count: 0,
+          rating_count_band: null,
+          evidence_status: 'insufficient_evidence',
         })),
         error: null,
       };

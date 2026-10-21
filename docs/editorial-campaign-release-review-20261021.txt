@@ -1,0 +1,115 @@
+LumiScore redactionele lijsten — vervolg en releasevoorbereiding,21 oktober2026
+
+Status vóór hosted controle: code en echte testcatalogus lokaal geverifieerd;
+geen toestemming voor productie-import, merge, productie- of socialpublicatie.
+Dit vervolgverslag gaat vóór de oudere momentopnamen in het eerdere verslag.
+Definitieve hosted resultaten/deployment/SHA worden in de Draft-PR vastgelegd.
+
+Basis en afbakening
+Branch fix/editorial-edition-score-parity-20261021, commits2438d5e en32cf43a behouden.
+Remote main en productie op a668d8fd9ff964175ba0b9a55db706d3f5f0b047, Ready,
+deployment dpl_7oioeXmUmtTNVceasW9jmPtvsNNB. PR38/44/46/11 ongemoeid.
+Alle writes uitsluitend test hlvujbrmfdlrfxdjwsmb. Geen accounts of ratings gemaakt.
+Een reeds bestaande lokale wijziging in het oude verslag is niet overschreven.
+
+Waarom niet24 talen voor vier boeken?
+De24 brongecontroleerde NULL->eng-correcties zijn opnieuw bevestigd per exacte
+editie-ID, ISBN, taalveld en Work-koppeling. Geen taal afgeleid uit titel/cover/prefix.
+20 betreffen fantasy/SF; één betreft een extra Hunger Games-editie terwijl al een
+bruikbare NL- en EN-editie bestaan; drie betreffen Giver100,Divergent179,Testaments199.
+Oryx2600 heeft géén gekoppelde editie en vereist een nieuwe exacte editie.
+De oorspronkelijke minimale variant is dus3 talen+1Oryx, niet24 talen+1editie.
+
+Giver100 bleek daarna nog coverloos. Na apart TEST-akkoord is OL7441983M /
+ISBN9780385732550/eng toegevoegd aan hetzelfde test-Work. Bron heeft exact dezelfde
+Work-identiteit, expliciete eng-taal en cover244186. Geen bestaande editie vervangen.
+De normale selector kiest nu The Giver met die cover. Productietoestemming ontbreekt.
+De kleinste aanbevolen COMPLETE-covervariant is daarom2 talen(179,199)+2nieuwe
+edities(Oryx en Giver). De oude Giver-taalcorrectie is dan niet meer noodzakelijk.
+De andere22 taalcorrecties blijven apart; deze worden niet stilzwijgend meegenomen.
+
+Productievoorstellen — ALLEEN VOORBEREID
+catalog/editorial-parity-20261021/campaign-source-recheck.json: alle24 exact herbevestigd.
+campaign-production-proposal.json +campaign-production-dry-run.sql: oorspronkelijke3+1.
+campaign-production-recommended.json +campaign-production-recommended-dry-run.sql:
+aanbevolen2+2, vereist nog productieakkoord incl. Giver. Standaard altijd ROLLBACK.
+Nieuwe editie-ID's pas via RETURNING; geen nieuwe productie-Works/auteurs nodig.
+Oryx ISBN9780385721677/OL39470791M/eng, Anchor Books, Work2600.
+Giver ISBN9780385732550/OL7441983M/eng, Delacorte, Work100.
+Onzekere Oryx-editiedatum niet gekopieerd. Geen andere cataloguscorrecties toegepast.
+
+Testimport en behoud
+Na voorafgaande exacte identiteit-/botsingscontrole:11 ontbrekende test-Works,
+13 exacte edities en8 ontbrekende auteurs toegevoegd, plus later één Giver-editie.
+Dit zijn de10 dystopieboeken en All Systems Red; de20 fantasy-testfixtures uit
+de eerdere stap zijn hergebruikt. Geen productiegebruikers/ratings gekopieerd.
+Test-ID's zijn expliciet gemapt; numerieke placeholders niet overschreven.
+Herhaling van de eerste import: nul inserts/updates; hash/aantal van alle eerder
+bestaande bibliografische rijen buiten eigen fixtures onveranderd.
+campaign-test-{plan,receipt}.json en giver-test-receipt.json bevatten de exacte IDs.
+
+Code / veiligheidsgrenzen
+Dezelfde bestaande strikte editiepresentatie en publieke scorebron blijven gelden.
+Redactionele lijsten zoeken nu op geverifieerde bron-Work-ID, niet op toevallig
+gelijke numerieke IDs in verschillende databases. Max100 expliciete bronidentiteiten,
+één Works-query, daarna edities en publieke samenvattingen parallel; geen N+1.
+Kaart/detail/rating blijven het daadwerkelijke database-Work-ID gebruiken.
+Terugkeercontrole gebruikt de servergeladen bronidentiteit; vervalste returnTo of
+een gelijk numeriek ID van een ander Work geeft geen lidmaatschap.
+Twee exact-ISBN-gebonden PRH-covers voor Game of Thrones25 en Assassin's Apprentice304
+via het bestaande reviewed-cover-mechanisme. Oryx/Giver/Divergent/Testaments hebben
+positief, exacte editie-/taal-/ISBN-gebonden coverbewijs. Geen ISBN-imageguess.
+Geen globale score-/ratingwijziging, testbypass, privé-cache, schema- of Auth-wijziging.
+De back-link en sectieaanduiding staan nu op aparte regels (alleen deze lijsten).
+
+Per dystopieboek, lokale echte app+testproject
+102 De Hongerspelen(NL editie1320) / The Hunger Games(EN1319): juiste eigen covers.
+2718 Never Let Me Go, editie2877: cover13160732.
+208 Parable of the Sower: A Novel, editie208: cover8768819.
+2600 Oryx and Crake, nieuwe exacte editieOL39470791M: cover12869726.
+100 The Giver, extra exacte editieOL7441983M: cover244186.
+2717 Scythe, editie2876: cover15152462.
+179 Divergent, editie179: cover7129729; bekend Work-jaar2010 blijft apart dataprobleem.
+2724 Unwind, editie2883: cover2787713.
+2846 The Year of the Flood, editie3005: cover12508446.
+199 The Testaments, editie199: cover12366818.
+Alle test-Works hebben terecht centrale lege scorestatus; geen testcijfers aangemaakt.
+Een gerichte lokale mocktest bewijst ook afgeronde beschikbare scorepariteit,
+transportfouten en ontbrekende RPC-rijen; dat is geen echte opgeslagen beoordeling.
+
+Fantasy / aanvullende datagaten
+The Fifth Season30,Hitchhiker32,Three-Body117 gebruiken nu de exact opgeslagen
+Engelse editietitel en broncover. All Systems Red4316 gebruikt editie4475/cover9157148.
+De testlijst bevat22 van25 bibliografische identiteiten: Project Hail Mary1 en de
+apart gehouden audio22/tweetalige14 zijn niet aangevuld. Geen25-van25-testclaim.
+21 Left Hand of Darkness en26 Narnia blijven zonder betrouwbare exacte cover.
+Dune8 heeft eng in DB maar OL-brontaal ontbreekt; geen willekeurige cover geleend.
+Three-Body-auteur heeft alleen de opgeslagen Chinese naam; geen romanisering verzonnen.
+
+Controles
+Volledige lokale suite:778 geslaagd,16 bestaande skips,0 fouten (794 totaal).
+Daarna gerichte nieuwe terugkeer-/bronidentiteit-/cover-/importtests geslaagd.
+TypeScript, lint, beide productiebuilds en secretscan72 clientbestanden groen.
+36 echte oorspronkelijke server-HTML-responses:4 lijsten en32 detailroutes NL/EN.
+Daarin titel/score/cover-ID-pariteit, eigen test-Worklinks en geverifieerde terugkeer.
+Browserbewijs onderscheidt daadwerkelijke geladen afbeeldingen van vroege
+nog niet geladen img-elementen. Geen fysieke telefooncontrole.
+Een lokale uitschieter bij EN Giver duurde17,9s; ook catalogus/personalizatiequeries
+waren toen traag. Geen garantie of verborgen leeg-resultaatfallback daarover.
+Lokale dev-/testprojectmetingen zijn geen hosted of productiebenchmark.
+
+Herstel en productiegoedkeuring
+App: revert uitsluitend commits uit deze PR, met behoud van later main-werk;
+oude productiecommit/deployment hierboven is het inspecteerbare herstelpunt.
+Data: voer nooit de brede24-correcties uit voor deze campagne. Bewaar RETURNING-
+receipt van het goedgekeurde minimale pakket. Zet alleen receipt-gewijzigde talen
+terug naar NULL als alle identiteitsvelden en huidige eng-waarde nog gelijk zijn.
+Verwijder hoogstens de receipt-nieuw-aangemaakte edities, na afhankelijkheidscontrole;
+nooit bestaande edities/Works/ratings/statussen/collectiekoppelingen/rondes verwijderen.
+Testfixtures blijven beschikbaar voor review, geen ongemelde cleanup van bestaande data.
+Branchgebonden URL/publieke clientkey mogen na review alleen voor deze branch worden
+verwijderd; productie en andere branches behouden hun instellingen.
+
+Facebook-oordeel: pas positief na geslaagde hosted controle, expliciete goedkeuring
+van het volledige minimale productiecorrectiepakket, publicatie en live nacontrole.
+De huidige productiepagina is met dit testwerk niet automatisch hersteld.
