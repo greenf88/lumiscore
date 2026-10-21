@@ -1,0 +1,156 @@
+{
+  "roles": [
+    {
+      "role": "anon",
+      "schema_usage": true,
+      "aggregate_execute": true
+    },
+    {
+      "role": "authenticated",
+      "schema_usage": true,
+      "aggregate_execute": true
+    }
+  ],
+  "tables": [
+    {
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "authors",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "table": "catalog_categories",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "table": "catalog_selection_members",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "table": "catalog_work_title_aliases",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "editions",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,service_role=arwdDxtm/postgres,anon=r/postgres,authenticated=r/postgres}",
+      "rls": true,
+      "table": "work_catalog_categories",
+      "anon_select": true,
+      "authenticated_select": true
+    },
+    {
+      "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}",
+      "rls": true,
+      "table": "works",
+      "anon_select": true,
+      "authenticated_select": true
+    }
+  ],
+  "policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "authors",
+      "permissive": "PERMISSIVE",
+      "policyname": "Public can read authors",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "catalog_categories",
+      "permissive": "PERMISSIVE",
+      "policyname": "catalog_categories_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "catalog_selection_members",
+      "permissive": "PERMISSIVE",
+      "policyname": "catalog_selection_members_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "catalog_work_title_aliases",
+      "permissive": "PERMISSIVE",
+      "policyname": "catalog_work_title_aliases_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "editions",
+      "permissive": "PERMISSIVE",
+      "policyname": "Public can read editions",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "work_catalog_categories",
+      "permissive": "PERMISSIVE",
+      "policyname": "work_catalog_categories_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "public"
+      ],
+      "tablename": "works",
+      "permissive": "PERMISSIVE",
+      "policyname": "Public can read works",
+      "schemaname": "public",
+      "with_check": null
+    }
+  ],
+  "function_absent": true
+}

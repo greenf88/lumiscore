@@ -21,15 +21,26 @@ test('three-book proposal is dry-run by default, guarded, idempotent and exactly
   const state=async()=>(await db.query('select * from editions order by id')).rows;
   const before=await state(); await db.exec(proposal);assert.deepEqual(await state(),before);
   const committed=proposal.replace(/rollback;\s*$/,'commit;');
-  const first=await db.exec(committed);assert.equal(first.flatMap(x=>x.rows).filter(x=>x.action).length,4);
+  const first=await db.exec(committed),receipt=first.flatMap(x=>x.rows).filter(x=>x.action);assert.equal(receipt.length,4);
   const changed=await state();assert.equal(changed.length,4);
   const second=await db.exec(committed);assert.equal(second.flatMap(x=>x.rows).filter(x=>x.action).length,0);
   assert.deepEqual(await state(),changed);
-  const recovered=recovery.replace('crawdads_added_id bigint := null','crawdads_added_id bigint := 1422')
-    .replace('animal_added_id bigint := null','animal_added_id bigint := 1423').replace(/rollback;\s*$/,'commit;');
+  const recovered=recovery.replace('receipt jsonb := null',"receipt jsonb := '"+JSON.stringify(receipt).replaceAll("'","''")+"'::jsonb")
+    .replace(/rollback;\s*$/,'commit;');
+  await assert.rejects(db.exec(recovery),/FULL before\/after receipt/);await db.exec('rollback');
+  await db.exec("update editions set publisher='Later legitimate edit' where id=1422");
+  await assert.rejects(db.exec(recovered),/changed since import/);await db.exec('rollback');
+  await db.exec("update editions set publisher='Uitgeverij Rainbow' where id=1422");
+  await db.exec('create table synthetic_edition_reference(edition_id bigint references editions(id) on delete cascade); insert into synthetic_edition_reference values(1422)');
+  await assert.rejects(db.exec(recovered),/Later edition reference/);await db.exec('rollback');
+  assert.equal((await db.query('select count(*)::int n from synthetic_edition_reference')).rows[0].n,1);
+  await db.exec('delete from synthetic_edition_reference');
   await db.exec(recovered);assert.deepEqual(await state(),before);
   assert.deepEqual((await db.query('select * from synthetic_ratings')).rows,[{work_id:114,score:8}]);
   assert.deepEqual((await db.query('select * from synthetic_progress')).rows,[{work_id:1381,status:'read'}]);
+  await db.exec("update editions set language='eng' where id=114");
+  await assert.rejects(db.exec(committed),/Expected exactly four/);await db.exec('rollback');
+  assert.equal((await state()).length,2,'partial pre-state must not be silently completed');
   await db.exec("update editions set language='deu' where id=114");
   await assert.rejects(db.exec(committed),/identity changed/);await db.exec('rollback');
   assert.equal((await state()).length,2,'conflict cannot add another edition');

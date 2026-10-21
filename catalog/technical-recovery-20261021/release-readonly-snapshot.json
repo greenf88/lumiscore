@@ -1,0 +1,241 @@
+{
+  "checkedAt": "2026-10-21 18:30:27 UTC",
+  "productionProject": "qvplwejffhjvxaypmjut",
+  "testProject": "hlvujbrmfdlrfxdjwsmb",
+  "readOnly": true,
+  "production": {
+    "indexes": [
+      {
+        "name": "authors_pkey",
+        "table": "authors",
+        "definition": "CREATE UNIQUE INDEX authors_pkey ON public.authors USING btree (id)"
+      },
+      {
+        "name": "authors_open_library_id_key",
+        "table": "authors",
+        "definition": "CREATE UNIQUE INDEX authors_open_library_id_key ON public.authors USING btree (open_library_id)"
+      },
+      {
+        "name": "catalog_categories_pkey",
+        "table": "catalog_categories",
+        "definition": "CREATE UNIQUE INDEX catalog_categories_pkey ON public.catalog_categories USING btree (id)"
+      },
+      {
+        "name": "catalog_selection_members_selection_slug_candidate_id_key",
+        "table": "catalog_selection_members",
+        "definition": "CREATE UNIQUE INDEX catalog_selection_members_selection_slug_candidate_id_key ON public.catalog_selection_members USING btree (selection_slug, candidate_id)"
+      },
+      {
+        "name": "catalog_selection_members_pkey",
+        "table": "catalog_selection_members",
+        "definition": "CREATE UNIQUE INDEX catalog_selection_members_pkey ON public.catalog_selection_members USING btree (selection_slug, work_id)"
+      },
+      {
+        "name": "catalog_selection_members_work_idx",
+        "table": "catalog_selection_members",
+        "definition": "CREATE INDEX catalog_selection_members_work_idx ON public.catalog_selection_members USING btree (work_id)"
+      },
+      {
+        "name": "catalog_work_title_aliases_pkey",
+        "table": "catalog_work_title_aliases",
+        "definition": "CREATE UNIQUE INDEX catalog_work_title_aliases_pkey ON public.catalog_work_title_aliases USING btree (work_id, title)"
+      },
+      {
+        "name": "editions_pkey",
+        "table": "editions",
+        "definition": "CREATE UNIQUE INDEX editions_pkey ON public.editions USING btree (id)"
+      },
+      {
+        "name": "editions_open_library_edition_id_key",
+        "table": "editions",
+        "definition": "CREATE UNIQUE INDEX editions_open_library_edition_id_key ON public.editions USING btree (open_library_edition_id)"
+      },
+      {
+        "name": "editions_work_id_idx",
+        "table": "editions",
+        "definition": "CREATE INDEX editions_work_id_idx ON public.editions USING btree (work_id)"
+      },
+      {
+        "name": "work_catalog_categories_pkey",
+        "table": "work_catalog_categories",
+        "definition": "CREATE UNIQUE INDEX work_catalog_categories_pkey ON public.work_catalog_categories USING btree (work_id, category_id)"
+      },
+      {
+        "name": "work_catalog_categories_category_idx",
+        "table": "work_catalog_categories",
+        "definition": "CREATE INDEX work_catalog_categories_category_idx ON public.work_catalog_categories USING btree (category_id, work_id)"
+      },
+      {
+        "name": "works_pkey",
+        "table": "works",
+        "definition": "CREATE UNIQUE INDEX works_pkey ON public.works USING btree (id)"
+      },
+      {
+        "name": "works_open_library_id_key",
+        "table": "works",
+        "definition": "CREATE UNIQUE INDEX works_open_library_id_key ON public.works USING btree (open_library_id)"
+      },
+      {
+        "name": "works_native_identity_key_unique",
+        "table": "works",
+        "definition": "CREATE UNIQUE INDEX works_native_identity_key_unique ON public.works USING btree (native_identity_key) WHERE (native_identity_key IS NOT NULL)"
+      },
+      {
+        "name": "works_author_id_idx",
+        "table": "works",
+        "definition": "CREATE INDEX works_author_id_idx ON public.works USING btree (author_id)"
+      }
+    ],
+    "editions": [
+      {
+        "author": "Frank Herbert",
+        "edition": {
+          "id": 8,
+          "title": "Dune",
+          "isbn_10": "0575073349",
+          "isbn_13": "9780575073340",
+          "work_id": 8,
+          "language": "eng",
+          "publisher": "Gollancz",
+          "created_at": "2026-09-01T06:02:03.345135+00:00",
+          "open_library_edition_id": "OL7878673M"
+        },
+        "work_id": 8,
+        "work_ol": "OL893414W",
+        "work_title": "Dune"
+      },
+      {
+        "author": "Delia Owens",
+        "edition": {
+          "id": 114,
+          "title": "Where the Crawdads Sing",
+          "isbn_10": null,
+          "isbn_13": "9780735219090",
+          "work_id": 114,
+          "language": null,
+          "publisher": "G.P. Putnam's Sons",
+          "created_at": "2026-09-01T15:22:09.959029+00:00",
+          "open_library_edition_id": "OL26702293M"
+        },
+        "work_id": 114,
+        "work_ol": "OL18766691W",
+        "work_title": "Where the Crawdads Sing"
+      },
+      {
+        "author": "George Orwell",
+        "edition": {
+          "id": 1421,
+          "title": "Dierenboerderij",
+          "isbn_10": "9041330364",
+          "isbn_13": null,
+          "work_id": 1381,
+          "language": "dut",
+          "publisher": "Singel Pockets",
+          "created_at": "2026-09-16T15:06:23.69242+00:00",
+          "open_library_edition_id": "OL18430168M"
+        },
+        "work_id": 1381,
+        "work_ol": "OL1168007W",
+        "work_title": "Animal Farm"
+      },
+      {
+        "author": "George Orwell",
+        "edition": {
+          "id": 1420,
+          "title": "Animal Farm",
+          "isbn_10": "0307261239",
+          "isbn_13": "9780307261236",
+          "work_id": 1381,
+          "language": "eng",
+          "publisher": "Listening Library",
+          "created_at": "2026-09-16T15:06:23.475387+00:00",
+          "open_library_edition_id": "OL10352481M"
+        },
+        "work_id": 1381,
+        "work_ol": "OL1168007W",
+        "work_title": "Animal Farm"
+      }
+    ],
+    "functions": [
+      {
+        "acl": "{postgres=X/postgres,service_role=X/postgres,anon=X/postgres,authenticated=X/postgres}",
+        "name": "get_work_rating_summaries_v2(bigint[])",
+        "owner": "postgres",
+        "definition": "CREATE OR REPLACE FUNCTION public.get_work_rating_summaries_v2(target_work_ids bigint[])\n RETURNS TABLE(work_id bigint, lumiscore numeric, rating_count_band text, evidence_status text)\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  if coalesce(cardinality(target_work_ids),0)>100 or coalesce(array_ndims(target_work_ids),1)>1 then\n    raise exception using errcode='22023', message='target_work_ids must be a one-dimensional array of at most 100 values';\n  end if;\n  return query with ids as (\n    select distinct id from unnest(target_work_ids) id where id>0\n  ), aggregates as (\n    select ids.id, count(distinct r.user_id) as n, round(avg(r.rating)::numeric,1)::numeric(3,1) as score\n    from ids left join public.ratings r on r.work_id=ids.id group by ids.id\n  ) select a.id, case when a.n>=3 then a.score end,\n    case when a.n<3 then null when a.n<5 then '3–4' when a.n<10 then '5–9' when a.n<20 then '10–19'\n      when a.n<50 then '20–49' else '50+' end,\n    case when a.n>=3 then 'available' else 'insufficient_evidence' end\n  from aggregates a;\nend;\n$function$\n"
+      }
+    ],
+    "collisions": null
+  },
+  "test": {
+    "editions": [
+      {
+        "id": 91021001,
+        "title": "Dune",
+        "isbn_10": "0575073349",
+        "isbn_13": "9780575073340",
+        "work_id": 91021001,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Gollancz",
+        "publish_date": null,
+        "open_library_edition_id": "OL7878673M"
+      },
+      {
+        "id": 921200114,
+        "title": "Where the Crawdads Sing",
+        "isbn_10": null,
+        "isbn_13": "9780735219090",
+        "work_id": 921100114,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "G.P. Putnam's Sons",
+        "publish_date": null,
+        "open_library_edition_id": "OL26702293M"
+      },
+      {
+        "id": 921200115,
+        "title": "Daar waar de rivierkreeften zingen",
+        "isbn_10": null,
+        "isbn_13": "9789041716149",
+        "work_id": 921100114,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Uitgeverij Rainbow",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      {
+        "id": 921201421,
+        "title": "Dierenboerderij",
+        "isbn_10": "9041330364",
+        "isbn_13": "9789041330369",
+        "work_id": 921101381,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Singel Pockets",
+        "publish_date": null,
+        "open_library_edition_id": "OL18430168M"
+      },
+      {
+        "id": 921201422,
+        "title": "Animal Farm",
+        "isbn_10": "0451526341",
+        "isbn_13": "9780451526342",
+        "work_id": 921101381,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Signet",
+        "publish_date": null,
+        "open_library_edition_id": "OL7577246M"
+      }
+    ],
+    "function": {
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+      "config": [
+        "search_path=\"\""
+      ],
+      "body_md5": "a8d63c0f16b97bd40e02e1ad0a150a5f",
+      "definition": "CREATE OR REPLACE FUNCTION public.catalog_browse_page_v2(p_locale text, p_query text DEFAULT ''::text, p_categories text[] DEFAULT '{}'::text[], p_selection text DEFAULT ''::text, p_languages text[] DEFAULT '{}'::text[], p_sort text DEFAULT 'highest'::text, p_page integer DEFAULT 1, p_page_size integer DEFAULT 16, p_alias_ids bigint[] DEFAULT '{}'::bigint[], p_author_id bigint DEFAULT NULL::bigint)\n RETURNS jsonb\n LANGUAGE plpgsql\n STABLE\n SET search_path TO ''\nAS $function$\ndeclare\n  result jsonb;\n  ws constant text := U&'\\0009\\000A\\000B\\000C\\000D\\0020\\00A0\\1680\\2000\\2001\\2002\\2003\\2004\\2005\\2006\\2007\\2008\\2009\\200A\\2028\\2029\\202F\\205F\\3000\\FEFF';\nbegin\n  if p_locale is null or p_locale not in ('nl','en')\n    or p_sort is null or p_sort not in ('az','newest','highest')\n    or p_page_size is null or p_page_size not in (16,32,64,128)\n    or length(coalesce(p_query,''))>100\n    or coalesce(cardinality(p_categories),0)>32\n    or coalesce(cardinality(p_languages),0)>2\n    or coalesce(cardinality(p_alias_ids),0)>100 then\n    raise exception using errcode='22023',message='Invalid public browse selection';\n  end if;\n  with base as materialized (\n    select w.id,w.title,w.first_publish_year from public.works w\n    left join public.authors a on a.id=w.author_id\n    where btrim(coalesce(w.title,''),ws)<>''\n    and (p_author_id is null or w.author_id=p_author_id)\n    and (trim(coalesce(p_query,''))='' or position(lower(trim(p_query)) in lower(w.title))>0\n      or position(lower(trim(p_query)) in lower(a.name))>0\n      or w.id=any(coalesce(p_alias_ids,'{}'))\n      or exists(select 1 from public.catalog_work_title_aliases x where x.work_id=w.id and position(lower(trim(p_query)) in lower(x.title))>0)\n      or exists(select 1 from public.editions e where e.work_id=w.id and position(lower(trim(p_query)) in lower(e.title))>0))\n    and (coalesce(p_selection,'')='' or exists(select 1 from public.catalog_selection_members m where m.work_id=w.id and m.selection_slug=p_selection))\n    -- Existence is sufficient: hydration still uses the shared strict edition\n    -- ranking. This is its eligibility predicate, not a second edition chooser.\n    -- No off-page editions, covers or descriptions leave the database.\n    and exists (\n      select 1 from public.editions e\n      cross join lateral (select lower(regexp_replace(regexp_replace(btrim(e.language,ws),'/+$',''),'^.*/','')) as lang) l\n      where e.work_id=w.id and btrim(coalesce(e.title,''),ws)<>''\n      and (l.lang in ('en','eng','english') or (p_locale='nl' and l.lang in ('nl','nld','dut','dutch')))\n      and (coalesce(cardinality(p_languages),0)=0\n        or ('en'=any(p_languages) and l.lang in ('en','eng','english'))\n        or ('nl'=any(p_languages) and l.lang in ('nl','nld','dut','dutch')))\n      -- Same title-only suspicious-form guard used by strict-edition.ts and\n      -- the existing PR45 SQL projection. No script/ISBN-prefix inference.\n      and e.title !~* '(^|[^A-Za-z0-9_])(audio\\s*(?:book|books|cd|cassette)?|audiobook|bookcassette|books? on (?:tape|cassette)|cassette|cd-rom|mp3(?:-?cd)?|spoken word|unabridged|abridged|dramatized|recorded books|large[-\\s]?print|box(?:ed)?[-\\s]?set|omnibus|study guide|(?:book )?summary|adaptation|(?:movie|film)(?:\\s*/\\s*tv)?[-\\s]?tie[-\\s]?in)($|[^A-Za-z0-9_])'\n    )\n  ), filtered as materialized (\n    select b.* from base b where coalesce(cardinality(p_categories),0)=0 or exists(\n      select 1 from public.work_catalog_categories c where c.work_id=b.id and c.category_id=any(p_categories))\n  ), summary_batches as (\n    select array_agg(id) as ids from (\n      select id,(row_number() over(order by id)-1)/100 as batch from filtered where p_sort='highest'\n    ) numbered group by batch\n  ), summaries as materialized (\n    select s.* from summary_batches b cross join lateral public.get_work_rating_summaries(b.ids) s\n  ), ranked as (\n    select f.*,s.lumiscore from filtered f left join summaries s on s.work_id=f.id\n  ), stats as (select count(*) as total from filtered), paging as (\n    select total,greatest(1,ceil(total::numeric/p_page_size)::integer) as pages,\n      least(greatest(1,coalesce(p_page,1)),greatest(1,ceil(total::numeric/p_page_size)::integer)) as page from stats\n  ), results as (\n    select f.id,row_number() over(order by\n      case when p_sort='highest' then f.lumiscore end desc nulls last,\n      case when p_sort='newest' then f.first_publish_year end desc nulls last,\n      lower(f.title),f.id) as position\n    from ranked f order by position limit p_page_size offset (select (page::bigint-1)*p_page_size from paging)\n  ), facets as (\n    select c.id,count(distinct b.id) as count from public.catalog_categories c\n    left join public.work_catalog_categories wc on wc.category_id=c.id\n    left join base b on b.id=wc.work_id group by c.id\n  )\n  select jsonb_build_object('contract','eligible-browse-v2','locale',p_locale,\n    'workIds',coalesce((select jsonb_agg(id order by position) from results),'[]'::jsonb),\n    'total',total,'page',page,'pageSize',p_page_size,'pageCount',pages,\n    'selectionCount',(select count(*) from filtered f where exists(select 1 from public.catalog_selection_members m where m.work_id=f.id and m.selection_slug='lumiscore-selectie-1000')),\n    'facets',coalesce((select jsonb_object_agg(id,count) from facets),'{}'::jsonb)) into result from paging;\n  return result;\nend;\n$function$\n"
+    }
+  }
+}

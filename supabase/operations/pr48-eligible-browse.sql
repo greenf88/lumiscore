@@ -1,7 +1,31 @@
 -- PR48: independently reviewed, read-only function. Install on TEST first.
 -- No catalog, ratings, policies or existing RPCs are changed.
 begin;
-create or replace function public.catalog_browse_page_v2(
+set local lock_timeout = '3s';
+set local statement_timeout = '30s';
+-- Fresh installation only. Never replace a pre-existing definition/ACL blindly.
+-- If present, export its definition, owner and ACL and review it separately.
+do $preflight$
+declare role_name text; relation_name text;
+begin
+  if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proname='catalog_browse_page_v2') then
+    raise exception 'catalog_browse_page_v2 already exists: preserve definition/ACL; stop, do not replace';
+  end if;
+  foreach role_name in array array['anon','authenticated'] loop
+    if not has_schema_privilege(role_name,'public','USAGE')
+      or not has_function_privilege(role_name,'public.get_work_rating_summaries(bigint[])','EXECUTE') then
+      raise exception 'Missing existing public dependency privilege for %',role_name;
+    end if;
+    foreach relation_name in array array['works','authors','editions','catalog_work_title_aliases',
+      'catalog_selection_members','work_catalog_categories','catalog_categories'] loop
+      if not has_table_privilege(role_name,'public.'||relation_name,'SELECT') then
+        raise exception 'Missing existing SELECT for % on %',role_name,relation_name;
+      end if;
+    end loop;
+  end loop;
+end $preflight$;
+create function public.catalog_browse_page_v2(
   p_locale text, p_query text default '', p_categories text[] default '{}',
   p_selection text default '', p_languages text[] default '{}',
   p_sort text default 'highest', p_page integer default 1,
@@ -80,6 +104,21 @@ begin
   return result;
 end;
 $fn$;
+-- Remove automatic grants on THIS new function, including Supabase defaults.
+-- No existing table/schema/function permissions or RLS policies are changed.
+do $acl$
+declare grantee_name text;
+begin
+  for grantee_name in
+    select distinct r.rolname from pg_proc p
+    cross join lateral aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a
+    join pg_roles r on r.oid=a.grantee
+    where p.oid='public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint)'::regprocedure
+      and a.grantee<>p.proowner
+  loop
+    execute format('revoke all on function public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint) from %I',grantee_name);
+  end loop;
+end $acl$;
 revoke all on function public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint) from public;
 grant execute on function public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint) to anon,authenticated;
 comment on function public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint) is

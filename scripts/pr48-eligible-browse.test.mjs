@@ -9,7 +9,7 @@ import { readEligibleBrowsePage, eligibleBrowseArgs, alignEligibleBrowseBooks } 
 test('eligible Browse: pre-page language/filter selection, full16, stable ties, bounded10k, RLS and fresh scores', {timeout:120000}, async () => {
   const db = new PGlite(); await db.waitReady;
   try {
-    await db.exec(`create role anon; create role authenticated;
+    await db.exec(`create role anon; create role authenticated; create role service_role; create role unrelated_role;
       create table authors(id bigint primary key,name text);
       create table works(id bigint primary key,title text,first_publish_year int,author_id bigint);
       create table editions(id bigint primary key,work_id bigint,title text,language text);
@@ -36,7 +36,17 @@ test('eligible Browse: pre-page language/filter selection, full16, stable ties, 
       grant select on all tables in schema public to anon,authenticated;`);
     const sql = await readFile(new URL('../supabase/operations/pr48-eligible-browse.sql',import.meta.url),'utf8');
     assert.doesNotMatch(sql,/security definer|\b(?:insert|update|delete|truncate)\s+(?:into|from|public\.)/i);
+    // Supabase defaults must not silently widen the new function's API.
+    await db.exec('alter default privileges grant execute on functions to service_role,unrelated_role');
     await db.exec(sql);
+    const signature='public.catalog_browse_page_v2(text,text,text[],text,text[],text,integer,integer,bigint[],bigint)';
+    for(const role of ['anon','authenticated','service_role','unrelated_role']) {
+      assert.equal((await db.query('select has_function_privilege($1,$2,\'EXECUTE\') ok',[role,signature])).rows[0].ok,
+        ['anon','authenticated'].includes(role),'only explicitly intended client roles execute');
+    }
+    const definition=(await db.query('select pg_get_functiondef($1::regprocedure) def',[signature])).rows[0].def;
+    await assert.rejects(db.exec(sql),/already exists/);await db.exec('rollback');
+    assert.equal((await db.query('select pg_get_functiondef($1::regprocedure) def',[signature])).rows[0].def,definition);
     const read = async (locale='en', params={}) => {
       const state=browseQuery(params),a=eligibleBrowseArgs(state,locale);
       const data=(await db.query('select catalog_browse_page_v2($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) as data',
@@ -86,5 +96,17 @@ test('eligible Browse: pre-page language/filter selection, full16, stable ties, 
     assert.throws(()=>readEligibleBrowsePage(malformed,browseQuery({}),'en'),/Invalid/);
     assert.throws(()=>alignEligibleBrowseBooks(['1','2'],[{workId:'1'}]),/changed/);
     assert.equal((await db.query('select count(*)::int n from works')).rows[0].n,10020);
+    const recovery=await readFile(new URL('../supabase/operations/pr48-eligible-browse-rollback.sql',import.meta.url),'utf8');
+    await assert.rejects(db.exec(recovery),/pre-install snapshot/);await db.exec('rollback');
+    const allowedRecovery=recovery.replace('baseline_confirmed_absent boolean := false','baseline_confirmed_absent boolean := true').replace(/rollback;\s*$/,'commit;');
+    await db.exec('grant execute on function '+signature+' to unrelated_role');
+    await assert.rejects(db.exec(allowedRecovery),/changed after installation/);await db.exec('rollback');
+    await db.exec('revoke execute on function '+signature+' from unrelated_role');
+    await db.exec(allowedRecovery);
+    assert.equal((await db.query('select to_regprocedure($1) as f',[signature])).rows[0].f,null);
+    // With default PUBLIC execute removed entirely, explicit grants still work.
+    await db.exec('alter default privileges revoke execute on functions from public,service_role,unrelated_role');
+    await db.exec(sql);
+    await db.exec('set role anon');assert.equal((await read('en')).ids.length,16);await db.exec('reset role');
   } finally {await db.close();}
 });
