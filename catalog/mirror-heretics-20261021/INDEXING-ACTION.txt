@@ -1,0 +1,41 @@
+INDEXERINGS-ACTIE — THE MIRROR OF INFINITE ENDINGS (Work 10138)
+Status: VOORBEREID / WACHT OP AFZONDERLIJK PRODUCTIEAKKOORD EN PUBLICATIE.
+Dit is een releaseactie, geen verzoek om de beschermde Preview te indexeren.
+
+Doel-URL's (geen returnTo, tracking of oude /book-redirect):
+https://lumisco.re/nl/book/10138
+https://lumisco.re/en/book/10138
+
+Technische aanvulling
+- Geverifieerde US-cover direct beschikbaar via het bestaande, exacte Work/titel/auteur/ISBN-overridebeleid; geen afhankelijkheid van een warme covercache voor eerste HTML en OG/Twitter.
+- Nederlandse en Engelse boekgerichte metabeschrijving. Titel, self-canonical, wederkerige taalverwijzingen en bestaande URL's blijven behouden.
+- Eén servergerenderde Book-entiteit voor uitsluitend de exacte gecontroleerde Mirror-editie: officiële titel, auteur, illustrator, ISBN, Engelse editietaal, juiste editieverschijningsdatum en bijpassende cover.
+- De NL-pagina/eigen samenvatting blijft Nederlands; de boekeditie blijft Engels. Geen Nederlandse vertaling verzonnen.
+- Geen AggregateRating, review, bestsellerclaim of vierde verplicht hoofddeel aan structured data toegevoegd. Bestaande enkele WebSite-entiteit blijft behouden.
+- De bestaande gedeelde detailcover geeft zijn betekenisvolle label ook door als HTML-alt-tekst; layout en scorebadge zijn ongewijzigd.
+- De bestaande sitemap neemt Work 10138 automatisch op als beide schone taal-URL's. Geen volledige catalogus-/afbeeldingsverrijking voor een nieuwe image-sitemap.
+
+Uitvoering NA een afzonderlijk goedgekeurde productie-release
+1. Controleer productie-SHA/deployment en beide definitieve URL's: HTTP200, server-H1/tekst/cover/Book-JSON-LD, self-canonical zonder query, wederkerige NL/EN-alternates.
+2. Controleer HTTP X-Robots-Tag EN robots-metatag: geen noindex op productie. Previewbescherming/noindex blijft intact; verwijder die niet om een test te laten slagen.
+3. Controleer https://lumisco.re/sitemap.xml: beide boek-URL's aanwezig; Search Console-sitemap Succesvol.
+4. Open de bestaande Search Console-property lumisco.re, inspecteer elk van de twee schone boek-URL's. Controleer Google-canonical, laatste crawl en verwerkte HTML/cover. Vraag alleen indexering aan als de URL ontbreekt of de uitgegeven nieuwe versie nog niet verwerkt is; geen herhaalde verzoeken voor al verwerkte pagina's.
+5. Vraag hercrawling van de BOEKPAGINA aan, niet van Preview-URL's, oude /book/10138-links, returnTo-varianten of een extern coverbestand dat LumiScore niet beheert.
+6. Inspecteer indien bestaande bevoegde toegang beschikbaar is dezelfde URL's in Bing Webmaster Tools; gebruik de bestaande sitemap. Geen nieuwe IndexNow-infrastructuur of accounts.
+7. Noteer daadwerkelijke inspectiedatum, status/Google-canonical en wel/niet ingediende aanvraag. Claim alleen een aanvraag als die echt verstuurd is; claim indexering pas als de zoekmachine dat bevestigt.
+
+Grenzen
+- Geen productie-import, merge of publicatie door deze SEO-aanvulling.
+- Geen echte indexeringsaanvraag uitgevoerd. De Preview blijft uitgesloten.
+- Google bepaalt indexering en afbeeldingkeuze; direct/zeker indexeren of een positie kan niet worden beloofd. Een verzoek kan dagen tot weken verwerking vragen.
+- Geen Google Indexing API voor gewone boekpagina's: deze is beperkt tot JobPosting en ondersteunde livestreams. Geen nieuw analytics- of indexeringssysteem.
+- De cover staat bij een externe provider. Beschikbaarheid is te controleren; diens crawl-/gebruiksrechten en Google-afbeeldingsindex kunnen we niet veranderen of garanderen.
+
+Bronnen
+https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl
+https://developers.google.com/search/docs/appearance/google-images
+https://developers.google.com/search/apis/indexing-api/v3/using-api
+https://schema.org/Book
+
+Lokale controle (echte testcatalogus, geen JavaScript nodig):
+SEO_TEST_ORIGIN=http://localhost:3136 node --experimental-strip-types scripts/operations/verify-mirror-seo.mjs

@@ -30,7 +30,7 @@ test('own bilingual descriptions do not turn English editions into Dutch edition
 test('registry cover applies only to exact English edition identity, not another ISBN',()=>{
  const input={workId:'10138',title:'The Mirror of Infinite Endings',author:'Stephanie Garber',isbn13:'9781399641777'};
  assert.ok(getReviewedCoverOverride(input)?.coverUrl.includes('isbn.nl'));
- assert.equal(getReviewedCoverOverride({...input,isbn13:'9781250462039'}),null);
+ assert.ok(getReviewedCoverOverride({...input,isbn13:'9781250462039'})?.coverUrl.includes('/15201916-L.jpg'));
  const original={...input,id:'work-10138',cover:'orbit',score:null,match:null,coverUrls:['https://example.invalid/other-edition.jpg']} as Book;
  const edition={id:91021203,work_id:10138,title:input.title,language:'eng',isbn_13:input.isbn13,open_library_edition_id:null,publisher:'Orion'};
  const english=withStrictEdition(original,edition,'en')!;

@@ -185,7 +185,7 @@ function BookCoverForIdentity({
           key={displayedCoverUrl}
           className={`book-cover-image${coverLoaded ? ' is-loaded' : ''}`}
           src={displayedCoverUrl}
-          alt=""
+          alt={label ?? ''}
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading="lazy"
