@@ -1,0 +1,337 @@
+{
+  "profile": "Local Vinext dev servers on same Windows machine; normal desktop network, browser390x844, guest/public only; warm browser resources and compiled routes, n3 per locale/phase; NOT physical phone, throttled mobile or production latency.",
+  "baseline": "main a668d8f static editorial data, no catalog requests and all scores incorrectly neutral",
+  "queries": {
+    "finalDystopia": {
+      "works": 10,
+      "editions": 11,
+      "summaryRows": 10,
+      "databaseRequests": 3,
+      "parallel": true,
+      "externalMetadataRequests": 0
+    },
+    "finalFantasy": {
+      "works": 25,
+      "editions": 25,
+      "summaryRows": 25,
+      "databaseRequests": 3,
+      "parallel": true,
+      "externalMetadataRequests": 1,
+      "note": "Only Dune needs source evidence; source lacks language, so cover remains neutral. Request is optional/deferred."
+    }
+  },
+  "measurements": [
+    {
+      "phase": "baseline-mobile",
+      "locale": "nl",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 94,
+        "min": 73,
+        "max": 125
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 198,
+        "min": 162,
+        "max": 241
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 248,
+        "min": 212,
+        "max": 323
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 200,
+        "min": 164,
+        "max": 242
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 288,
+        "min": 236,
+        "max": 460
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "baseline-mobile",
+      "locale": "en",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 61,
+        "min": 57,
+        "max": 77
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 126,
+        "min": 116,
+        "max": 142
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 197,
+        "min": 172,
+        "max": 199
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 127,
+        "min": 118,
+        "max": 144
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 224,
+        "min": 208,
+        "max": 236
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "fixed-mobile",
+      "locale": "nl",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 439,
+        "min": 323,
+        "max": 643
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 499,
+        "min": 380,
+        "max": 721
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 543,
+        "min": 434,
+        "max": 788
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 502,
+        "min": 383,
+        "max": 1194
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 588,
+        "min": 468,
+        "max": 832
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "fixed-mobile",
+      "locale": "en",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 348,
+        "min": 326,
+        "max": 633
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 401,
+        "min": 385,
+        "max": 732
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 443,
+        "min": 442,
+        "max": 778
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 404,
+        "min": 387,
+        "max": 804
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 496,
+        "min": 476,
+        "max": 804
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "final-parallel-mobile",
+      "locale": "nl",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 245,
+        "min": 233,
+        "max": 286
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 316,
+        "min": 303,
+        "max": 344
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 387,
+        "min": 358,
+        "max": 421
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 347,
+        "min": 339,
+        "max": 355
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 416,
+        "min": 408,
+        "max": 452
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "final-parallel-mobile",
+      "locale": "en",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 194,
+        "min": 190,
+        "max": 360
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 263,
+        "min": 261,
+        "max": 461
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 315,
+        "min": 310,
+        "max": 524
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 275,
+        "min": 263,
+        "max": 511
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 372,
+        "min": 356,
+        "max": 568
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "final-reviewed-mobile",
+      "locale": "nl",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 283,
+        "min": 215,
+        "max": 529
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 352,
+        "min": 284,
+        "max": 642
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 439,
+        "min": 333,
+        "max": 729
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 353,
+        "min": 285,
+        "max": 643
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 468,
+        "min": 380,
+        "max": 788
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "phase": "final-reviewed-mobile",
+      "locale": "en",
+      "ttfbMs": {
+        "samples": 3,
+        "median": 217,
+        "min": 200,
+        "max": 229
+      },
+      "firstCardParsedMs": {
+        "samples": 3,
+        "median": 314,
+        "min": 304,
+        "max": 353
+      },
+      "firstCardVisibleMs": {
+        "samples": 3,
+        "median": 443,
+        "min": 359,
+        "max": 485
+      },
+      "firstImageLoadMs": {
+        "samples": 3,
+        "median": 315,
+        "min": 306,
+        "max": 355
+      },
+      "lcpMs": {
+        "samples": 3,
+        "median": 472,
+        "min": 408,
+        "max": 1140
+      },
+      "cls": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

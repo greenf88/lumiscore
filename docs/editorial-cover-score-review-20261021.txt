@@ -1,0 +1,158 @@
+LumiScore — redactionele editie-, cover- en scorepariteit, 21 oktober 2026
+
+OORDEEL: NOG NIET KLAAR OM DE DYSTOPIEPAGINA VIA FACEBOOK TE DELEN.
+De code is lokaal hersteld en gericht gecontroleerd; vier datagaten blijven.
+Er is niet gepusht, gemerged, gepubliceerd of naar een database geschreven.
+
+Basis / afbakening
+Remote main: a668d8fd9ff964175ba0b9a55db706d3f5f0b047, opnieuw gecontroleerd.
+Actief productie: dpl_7oioeXmUmtTNVceasW9jmPtvsNNB, Ready, dezelfde main-SHA.
+Branch: fix/editorial-edition-score-parity-20261021, nieuwe geïsoleerde worktree.
+Zelfstandig reviewbare codecommit: 2438d5ec2da5c40da9ba50d76a17128e8d329cd0.
+Open PR38 (smaakselectie/opslag), PR44 (vooruitladen), PR46 (Mirror/companion/SEO)
+zijn bekeken maar niet meegenomen. Geen schema-, Auth-, configuratie- of datawrite.
+PR44/46 raken eveneens de gedeelde covercomponent; bij latere integratie opnieuw
+diff controleren. De alt-tekstwijziging en reviewed_open_library-bron zijn gelijk-
+gericht, maar dit pakket bevat geen Mirror- of smaaktestvooruitlaadfunctionaliteit.
+
+Oorzaken en codeherstel
+1. Toplijsten bouwden kaarten uit statische bibliografische snapshots, met vaste
+   coverURL en expliciet null voor score/band. Dat verklaart de mismatch, niet een
+   andere publieke scoreberekening. Snapshotcovers verwijderd uit lijstdata.
+2. Lijsten gebruiken nu loadCatalogBooksByIds -> dezelfde mapCatalogBook /
+   selectStrictEdition / withStrictEdition als detail. De redactionele volgorde,
+   motivatie, bronnen, taalwissel en returnTo blijven behouden. Ontbrekende
+   geschikte edities zijn expliciet gemarkeerd, niet gevuld met een vreemde taal.
+3. Publieke scorebron voor lijst én detail: get_work_rating_summaries_v2 via
+   loadPublicRatingSummaries. Eén batch per lijst (10 of25 IDs); geen individuele
+   ratings. Gecontroleerde databasefunctie: gemiddelde op één decimaal, pas
+   openbaar bij >=3 verschillende beoordelaars; alleen geaggregeerde telbanden.
+   Fout/mislukte/malformeerde/ontbrekende response is nu 'tijdelijk niet beschikbaar',
+   niet nul of 'onvoldoende'. Scoreformule en publicatiedrempel niet gewijzigd.
+4. unavailableEdition overschreef de Work-titel met een beschikbaarheidsmelding;
+   de detailfallback verloor bovendien het jaar. Titel, auteur en opgeslagen
+   oorspronkelijke jaar blijven nu staan; editie/ISBN/cover blijven afwezig.
+   Dit repareert geen foutief catalogusjaar, bijvoorbeeld Divergent2010.
+5. De oude afbeeldingsfallback kon na een defect L geen werkende M kiezen.
+   Nu een begrensde rij varianten van exact dezelfde geverifieerde afbeelding;
+   geen zoekopdracht of andere taal/ISBN als image-fallback. Negatieve ontbrekende
+   bronrij wordt één minuut bewaard in plaats van een dag.
+6. Negen positieve, brongecontroleerde editiebeelden zijn vastgelegd via het
+   bestaande reviewed-cover-mechanisme. Deze nieuwe entries vereisen ook exacte
+   editie-OLID en taal, naast Work, ISBN, titel en auteur. Dat maakt onzekere
+   edities niet geschikt. Alle zes beschikbare dystopieboeken hebben hierdoor
+   direct een coverURL zonder externe metadata-aanvraag bij een koude broncache.
+   Geen originele coverbestanden of scorebadgestijlen gewijzigd.
+
+Dystopie vóór -> na, beide talen (kaart en detail)
+ID    Eerdere lijst                 Lokale lijst/detail nu
+102   Statische EN-cover, —          NL De Hongerspelen / EN The Hunger Games,
+                                    exacte editie1320/1319; 8,8, telband5–9.
+2718  Placeholder, —                Cover13160732 geladen; — onvoldoende.
+208   Cover8757605, —               Exacte editie208/cover8768819; 8,0, band3–4.
+2600  Placeholder                   Worktitel/jaar behouden; GEEN editie gekoppeld.
+100   Cover244186 ondanks taal NULL  Worktitel/jaar behouden; taal NULL, broneditie
+                                    heeft ook geen cover. Niet campagneklaar.
+2717  Placeholder                   Editie2876/cover15152462 geladen; — onvoldoende.
+179   Statische cover7276222        Taal NULL -> geen geschikte cover. Workjaar2010
+                                    blijft als afzonderlijk dataprobleem genoteerd.
+2724  Placeholder                   Editie2883/cover2787713 geladen; — onvoldoende.
+2846  Placeholder                   Editie3005/cover12508446 geladen; — onvoldoende.
+199   Statische cover14534572       Taal NULL -> geen geschikte cover.
+Voor6/10 zijn grote covers daadwerkelijk geladen op mobiele NL én EN-detail-
+pagina's; niet afgeleid uit een img-tag of HTTP200. De vier overige gevallen
+zijn nadrukkelijk niet als hersteld/geladen aangemerkt. Nieuwe lokale lijsten
+tonen geen onbewezen snapshotcover om deze gaten te verbergen.
+
+Volledige tweede lijst en steekproef
+Alle25 Works, bestaande gekoppelde edities, talen en beschikbare coverbewijzen
+zijn gecontroleerd. Alle70 detailroutes en vier lijstroutes geven HTTP200 met
+gelijke servergerenderde titel en publieke score per taal en Work.
+30/32/117: bestaande editie heeft taal NULL; eigen Work-identiteit blijft staan.
+4316: correcte eng-editie4475, cover9157148 daadwerkelijk geladen, neutrale score.
+Huidige fantasy/SF-catalogus heeft slechts drie geschikte Works: 1,8,4316.
+1 en4316 hebben coverbewijs;8 heeft eng in DB maar geen taalbewijs in de OL-bron
+en houdt dus een neutrale cover. Er zijn geen taalregels versoepeld.
+Live steekproef: NL Hunger Games-collectie en detail tonen dezelfde NL-cover en
+8,8; zoeken EN toont8,8, maar de eerste zoekweergave had nog geen geladen cover.
+Dit bevestigt het belang van een positieve, gedeelde editiecover zonder bron-
+wachtronde. Geen claim dat de nog niet gepubliceerde fix al live zichtbaar is.
+
+Afzonderlijk catalogusvoorstel — NIET TOEGEPAST
+catalog/editorial-parity-20261021/correction-proposal.json:
+24 exact gekoppelde edities NULL -> eng, met Work/Edition/ISBN/OLID/titel/bron.
+Eén ontbrekende Oryx-editie op bestaand Work2600: OL39470791M,
+ISBN9780385721677, eng, Anchor Books. Geen nieuw Work. Officiële publicatiebron:
+https://www.penguinrandomhouse.com/books/6113/oryx-and-crake-by-margaret-atwood/
+De bron noemt30-03-2004; OL vermeldt onzeker2009?. Geen onzekere datum gekopieerd.
+proposed-dry-run.sql heeft exacte preimage-/botsingsguards en standaard ROLLBACK;
+herhaling raakt reeds gecorrigeerde talen niet en maakt geen dubbele editie.
+SQL is structureel getest, NIET op test of productie uitgevoerd. De read-only
+testquery vond geen van de14 expliciet prioritaire productie-Work-ID's. Een
+aanvullende identiteit-/ISBN-controle vond van alle35 Works alleen Dune onder
+test-Work91021001 / editie91021001 (eng); dat is productie-Work8 en geen taal-
+correctiedoel. Geen ongevraagde cataloguskopie gemaakt om de overige ontbrekende
+testidentiteiten te maskeren; uitvoeren vereist passende, gemapte testdata.
+14 blijft apart: Spaans/Engels tweetalige editie.22 blijft apart: audio-cassette.
+Giver100 blijft coveronderzoek vereisen: alternatieve OL26673438M heeft cover/ISBN
+maar geen expliciet bron-taalveld; niet als nieuwe geschikte editie goedgekeurd.
+Ook coverloze edities21/25/26/304, Dune8-brontaal, Divergent179-jaar en de primaire
+auteurscredit bij27 blijven afzonderlijk gedocumenteerd. Geen auteurs geromaniseerd.
+
+Prestatiebewijs (geen productiebenchmark)
+Dezelfde Windows-machine, lokale Vinext-devrouter, uitgelogde afgeschermde gast,
+390x844 browserviewport, normaal desktopnetwerk, geen mobiele throttling, n=3.
+Private en collectie-zijpanelen staan alleen in de lokale adapter buiten scope;
+de productierating-/schrijfroute is niet vervangen. Alleen openbare reads op
+deze35 IDs en geaggregeerde score-RPC zijn in die adapter toegestaan.
+                         NL mediaan(min-max)      EN mediaan(min-max)
+Oude statische TTFB       94(73–125)ms             61(57–77)ms
+Oude eerste zichtb.kaart  248(212–323)ms           197(172–199)ms
+Definitieve TTFB          283(215–529)ms           217(200–229)ms
+Definitieve zichtb.kaart  439(333–729)ms           443(359–485)ms
+Definitief eerste beeld  353(285–643)ms           315(306–355)ms
+Definitieve LCP           468(380–788)ms           472(408–1140)ms
+Gemeten CLS0 in alle zes definitieve metingen. Kleine steekproef, achtergrond-
+browserruis en warme browserbronnen; geen snelheidsgarantie of fysieke telefoontest.
+Actuele data kosten circa0,15–0,2sec TTFB meer dan de onjuiste statische kaarten.
+De eerste correcte maar opeenvolgende implementatie had eerste-kaartmedianen
+543ms NL/443ms EN; de parallelle tussenmeting387ms/315ms. Spreiding blijft relevant.
+De drie bounded queries lopen nu parallel: 10 Works +11 edities +10 publieke
+samenvattingen (dystopie);25+25+25 voor fantasy/SF. Geen volledige catalogusload.
+Dystopie:0 externe covermetadata-requests; fantasy: hoogstens één uitgestelde
+batch voor Dune, met gedeelde bestaande broncache. Scores worden niet meegached.
+Eerste devcompilaties duurden circa4,3sec vóór/5,3–5,8sec na en zijn apart gehouden;
+die vergelijken geen productie-cold-start. Geen nieuwe productienameting geclaimd.
+
+Afbeeldings- en foutbewijs
+18 begrensde M/L-GETs gecontroleerd: alle bestanden onder300kB; alle9 L-beelden
+zijn echte JPEGs met gemeten afmetingen. Eén M-aanvraag voor Parable gaf HTTP502;
+dat is tijdelijke provideruitval, geen bewijs van een ontbrekend boek/andere taal.
+In een lokale faultadapter is L voor Hongerspelen bewust404 gemaakt: de echte
+gedeelde React-component laadt vervolgens M met hetzelfde cover-ID15120650,
+180x232 pixels, terwijl titel, editie en score8,8 behouden blijven. Screenshot
+en serverlog bevestigen dit. Geen productie-afbeelding of database gewijzigd.
+
+Checks / bewijsbestanden
+Gerichte regressies: boek-/editie-/cover-/publieke score-/editorial-/route-tests,
+plus voorsteltests:172 geslaagd. TypeScript, volledige lint, Vinext- en Vercel-
+build, secretscan72 clientbestanden en diffcontrole geslaagd.
+74 oorspronkelijke server-HTML-responses gecontroleerd, inclusief beide volledige
+lijsten en35 detailpagina's per taal. Dit bewijst geen geladen browserafbeelding.
+Browser: NL/EN, Paper/Ink,390px en1280px, lijst->detail->terug, direct/herladen;
+alle10 dystopie-details in beide talen en4 aanvullende Engelse details bekeken.
+Geen horizontale overflow. Volledige bron-, per-boek-, HTTP- en meetgegevens:
+catalog/editorial-parity-20261021/{per-book-review,performance-summary,
+server-html-verification,image-http-audit,source-research,public-score-snapshot}.json
+Screenshots en browserdetails: outputs/editorial-parity-* in de hoofdwerkruimte.
+
+Herstel / vervolg
+Codeherstel: revert uitsluitend de lokale codecommit, of herstel bij een later
+apart goedgekeurde release het voorgaande applicatiedeployment. Geen database-
+backup terugzetten. Nu is geen dataherstel nodig: er zijn geen writes uitgevoerd.
+Een eventuele latere catalogustoepassing vereist een receipt; herstel alleen de
+daarmee aangeraakte nieuwe metadata/nieuwe editie, nooit bestaande gebruikersdata.
+Volgende noodzakelijke stap voor de campagne: gerichte datagaten eerst op het
+geïsoleerde testdoel valideren, daarna afzonderlijk productie- en codeakkoord.
+Tot alle10 kaarten én detailpagina's passende geladen covers tonen en de code
+daadwerkelijk gepubliceerd is, de Facebookcampagne niet als gereed markeren.
