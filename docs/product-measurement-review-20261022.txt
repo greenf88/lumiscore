@@ -1,0 +1,80 @@
+LumiScore productmetingen — geïsoleerde voorbereiding 22 oktober 2026
+
+Basis: remote main en actieve Ready-productie beide
+b4ac64d1166831f3578616f9288680d11275f916 (PR48 plus PR49/50).
+Nieuwe worktree/branch feature/product-measurements-20261022 vanaf die basis.
+Hergebruikt: alleen meetcommit660a178 uit het geparkeerde19-oktoberwerk.
+Andere werkbomen, PR38/44/46, kenmerkaudit en productiedata niet aangepast.
+
+Al actief: bestaande Speed Insights voor technische webprestaties; bestaande
+operationele ratings/rondes. Geen gevalideerde productfunnel of campagnebaseline.
+De historische517 ratings/19 rondes hebben onbekende meetherkomst en blijven
+buiten deze baseline. Contract: docs/product-measurement-contract.md.
+
+Afgeronde codevoorbereiding:
+- vijf bestaande eventnamen behouden; zeven minimale aanvullingen voor pagina,
+  redactionele lijst, boeklink/detail, opgeslagen rating, resultaat en login;
+- vaste campagne-/zoekbronwaarden; alleen begrensde context30min per browsertab,
+  geen cookie/visitor-ID, raw URL, zoektekst, naam, email of individuele score;
+- originele vormgeving en canonicals/sitemap; alleen onzichtbare meetcomponenten,
+  data-attributen, kleine contextheaders/hidden formcontext op het testdoel;
+- anonieme dagtellers; rating nieuw/gewijzigd en ronde-overgangen volgen alleen
+  echte DB-overgangen. De bedrijfs-RPCs/ratingregels zijn ongewijzigd;
+- geen nieuwe blokkerende rating/ronde-aanvragen. Loginlevering na response,
+  beperkte tijd, fouten veranderen de uitkomst van aanmelden/navigeren niet;
+- publieke collector weigert server-success-events en persoonsgegevensvelden;
+  batches max10/8192bytes, origin/typecontrole, GPC/DNT en SQL-validatie;
+- alle testdata verplicht traffic=synthetic, standaard uitgesloten van rapport.
+
+Meetbaarheid en grenzen:
+Het contract levert gebeurtenissen en ongerelateerde eventverhoudingen, geen
+unieke bezoeken/personen/sessies of aantoonbare individuele uitval per stap.
+Rapport vermeldt noemer, periode, onbekende herkomst en bezorgingsverlies.
+Dagvenster UTC; eventreceipts/tellers90dagen, globale120events/minuutgrens.
+Consent/operationele providerlogs/capaciteit moeten vóór productie worden beoordeeld.
+Productiecollectie is hard uit en wordt door deze PR niet geactiveerd.
+
+LOKAAL BEWEZEN:
+Werkelijke PostgreSQL/PGlite-test van installatie en tweede idempotente installatie,
+nieuwe en gewijzigde ratings, identieke retries/no-ops, mislukte rating,
+eerste rondeovergang, dubbele completion/receipts, want-to-read, geverifieerde
+loginreceipt, anon-ACL, denied fields, rate limit, privacyopt-out en meetstoring
+zonder terugrollen van echte rating. Browsertransporttests controleren batching,
+campagnebehoud, taalwissel, payloadallowlist, productie-uit en GPC/DNT.
+De bestaande rating/ronde/scoringscontracten blijven bytegelijk.
+Volledige bestaande suite:839 tests,823 pass,16 skipped,0 fail. Laatste gerichte
+meettests volgen de definitieve bestanden. TypeScript/lint/build/secretscan worden
+bij afronding opnieuw op de definitieve commit bevestigd.
+
+SQL-microbenchmark lokaal(PGlite/WASM/Node24.20/win32x64),21 sequentiële writes:
+zonder observers median2.27ms(min1.95,max4.26); observers zonder context3.35ms
+(2.13..16.79); met context5.35ms(2.91..30.82). Alleen een lokale CPU/SQL-proef;
+geen bewezen hosted/productionlatency. Geen extra DB-netwerkquery op de mutatieroute.
+
+ECHTE BLOKKADE:
+Een nieuwe expliciet toegestane apply_migration-opdracht op uitsluitend
+hlvujbrmfdlrfxdjwsmb gaf exact `McpServerError: Invalid or expired requestState`.
+Read-back: daily_counters=NULL, batchcollector=NULL, eigen triggers=0.
+Geen tweede poging, execute_sql-DDL, CLI/direct-SQL-omweg of productie-installatie.
+Geen succesvolle hosted meetopslag of browser->login->rating->completion-tellers
+bewezen. Geen nieuwe accounts/ratings/leesstatussen gemaakt om dat te simuleren.
+Minimale herstelactie: Supabase-koppeling/schrijfactie in Codex opnieuw autoriseren,
+dan dezelfde concrete testinstallatie via de normale connector laten uitvoeren.
+
+Rapportage:
+node --experimental-strip-types scripts/product-measurement-report.mjs --synthetic-example
+Dit is herkenbaar fictieve lokale testinput, geen waargenomen hosted verkeer.
+Voorbeeld:2 lijstopeningen,1 boekklik,10 nieuwe ratings,1 wijziging,1 start/1 einde.
+1/2 is een eventverhouding, geen50% unieke-bezoekersconversie. Sessions/users=null.
+Read-only queries: test-support/product-metrics/report.sql.
+Afzonderlijk voorstel: docs/product-measurement-production-proposal-20261022.txt.
+
+Preview: uitsluitend publieke Supabase-URL/publishable key van deze branch;
+geen admin key, productie-, andere branch- of beschermingswijziging.
+Hosted status/route/privacy/fout-/performancebewijs volgt in PR en externe bewijsmap
+outputs/product-measurements-20261022. Collector503 bij ontbrekende installatie
+wordt als echte blokkade getoond, nooit als opgeslagen succes of nul gebruik.
+
+Advies: Draft houden. Eerst connector herstellen, testinstallatie en werkelijke
+synthetische hosted tellerroute afronden; daarna een afzonderlijk exact productie-
+installatie/activatiepakket beoordelen. Geen merge, productie- of socialpublicatie.

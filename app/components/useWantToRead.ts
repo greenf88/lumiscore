@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Book } from '../data/books';
+import {measurementHeaders} from '@/lib/product-metrics/browser';
 import { isReadingStatus, type ReadingStatus } from '@/lib/collections/model';
 import {
   GUEST_WANTED_STORAGE_KEY,
@@ -119,7 +120,7 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
       });
       void fetch(`/api/books/${book.workId}/status`, {
         method: wasWanted ? 'DELETE' : 'PUT',
-        headers: wasWanted ? undefined : { 'Content-Type': 'application/json' },
+        headers: wasWanted ? undefined : { 'Content-Type': 'application/json', ...measurementHeaders(document.documentElement.lang === 'nl' ? 'nl' : 'en') },
         body: wasWanted ? undefined : JSON.stringify({ status: 'want_to_read' }),
       }).then((response) => {
         if (!response.ok) throw new Error('Status update failed.');

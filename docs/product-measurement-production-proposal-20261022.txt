@@ -1,0 +1,75 @@
+PRODUCTION INSTALLATION PROPOSAL — NOT APPROVED / NOT EXECUTED
+
+Current main/production base: b4ac64d1166831f3578616f9288680d11275f916.
+Production target qvplwejffhjvxaypmjut; isolated test hlvujbrmfdlrfxdjwsmb.
+No production migration, collector activation, event write, account or rating change.
+
+Reviewed test artifact: test-support/product-metrics/install.sql.
+It contains a mandatory synthetic-test marker and must NOT run on production.
+The code likewise hard-gates collection to the test Supabase origin. Merging
+this preparation by itself would NOT activate production measurement.
+
+Proposed production objects, to be finalized only after actual test proof:
+- private product_metrics schema with daily_counters(day,event,dimensions,n),
+  receipts(event_id,day), budgets(minute,n), composite/day lookup indexes;
+- public collector: bounded browser batch, narrow single-observation wrapper,
+  authenticated sign-in observation; fixed parameters/return values matching
+  the tested v1 RPC signatures; production names/traffic hard gate require a
+  separate explicit activation diff, not a quiet environment-variable toggle;
+- optional AFTER observers on public.ratings, public.user_book_status and
+  public.taste_rating_rounds, with the exact behavior of the test artifact.
+  They observe only genuine mutations and do not alter the business NEW row.
+  No replacement rating/round computation, schema or stored user data change.
+
+Rights/security:
+All counter/receipt/budget tables ENABLE+FORCE RLS; no anon/authenticated table
+SELECT/INSERT/UPDATE/DELETE grants and no public reporting endpoint. Reporting
+uses an existing privileged operator connection with read-only aggregate SQL.
+Public wrappers SECURITY INVOKER, empty search_path, explicit function grants.
+Only browser wrappers execute for anon; sign-in wrapper authenticated only.
+The bounded private writer is SECURITY DEFINER, empty search_path. Invoker
+wrappers need schema USAGE and its explicit EXECUTE; canonical rating/status/
+round names additionally require trigger depth, and login receipts require
+auth.uid plus the actual signed JWT session. The private trigger function is
+not executable by client roles. No auth user/email/token/score table projection.
+No automatic Supabase default grants are relied upon. Operational server tokens
+are neither metric dimensions nor logs; sign-in JWT only authenticates the
+normal scoped RPC and is never persisted by the collector.
+
+Ordering after a future concrete release approval:
+1. Restore connector write-approval state. Reconfirm hashes, code, test marker,
+   schema/roles, and absent or matching objects; stop on unexpected definitions.
+2. Install the final test SQL once through the restored standard connector;
+   verify idempotence, explicit ACLs and the genuine hosted synthetic route.
+3. Resolve consent/notice and Vercel/Supabase access-log handling/retention.
+   No certification/compliance claim is implied. Approve capacity for the
+   first campaign; current120 events/minute can undercount a traffic burst.
+4. Finalize a separately reviewed production SQL/activation diff. Inspect and
+   save any existing definitions, grants, triggers and counters before install.
+5. Install compatible additive production objects, then deploy the exact
+   approved application. Old application does not supply measurement context;
+   observers therefore do nothing during the transition.
+6. Verify with explicitly approved production checks and controlled sources;
+   keep synthetic traffic separately tagged/excluded and report gaps honestly.
+No current authorization covers steps4-6 or a production write.
+
+Rollback:
+Disable app collector/context first (existing test hard gate currently already
+keeps production off). Remove ONLY the three named product_metric_*_v1 observers
+after checking their definitions; business tables/ratings/rounds remain intact.
+Revoke only the named public collector wrappers; restore any saved previous
+function definitions/ACLs if they existed. Retain counters for evidence unless
+explicit deletion is approved. Drop private objects only after checking later
+dependencies; no CASCADE and no broad schema/table grants/revokes on public.
+App rollback remains compatible because these observers are optional/fail-open.
+
+Installation takes ordinary CREATE FUNCTION/table/index locks and brief trigger
+DDL locks on the three source tables. No source-row rewrite or rating backfill.
+Use a bounded lock timeout during eventual production install; stop rather than
+waiting through active traffic. No new periodic automation or paid service.
+
+BLOCKER: apply_migration on the isolated project returned exactly
+McpServerError: Invalid or expired requestState. Read-only calls work; writing
+approval state does not. Refresh the Supabase connection/authorization in Codex
+and complete a fresh approval action. Do not use another SQL route to bypass it.
+Until installation+hosted storage proof succeed this package is NOT merge-ready.

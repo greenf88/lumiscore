@@ -10,7 +10,7 @@ import { editorialTopLists, getEditorialTopBook, getEditorialWorkSourceId, topLi
 export function EditorialTopList({ list, books, unavailable = false, authenticated = false }: { list: typeof editorialTopLists[number]; books: Book[]; unavailable?: boolean; authenticated?: boolean }) {
   const { locale } = useLumiScoreLocale();
   const { wanted, statuses, toggleWanted } = useWantToRead(authenticated, books);
-  return <section className="featured-section editorial-lists">
+  return <section className="featured-section editorial-lists" data-product-list={list.slug}>
     <LocaleLink href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
     <h1>{list.title[locale]}</h1><p>{list.description[locale]}</p>
