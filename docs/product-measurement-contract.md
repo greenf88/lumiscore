@@ -52,6 +52,11 @@ The five existing names and their meaning above are retained. Necessary addition
 | taste_result_opened | Successful authenticated result content rendered, not loading/error/signed-out state | surface |
 | sign_in_succeeded | Successful password sign-in; one receipt per actual verified Auth session | surface |
 
+Result opening does not itself prove completion: a valid existing partial result
+may be viewed. Only taste_round_completed proves the actual goal transition.
+The separate guest-preferences questionnaire is not an authenticated rating round;
+its pageviews must never be reported as taste_round_started/completed successes.
+
 Recommendation opens count once per mounted impressed card. The rating score is
 never collected. The canonical database transition, not the score click or a
 before/after client guess, produces ratings, want-to-read and round events.

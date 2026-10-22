@@ -13,6 +13,15 @@ and dimensions->>'traffic'='synthetic' and dimensions->>'source'='facebook'
 and dimensions->>'campaign'='dystopie_202610'
 group by event,surface,operation order by event,surface,operation;
 
+-- Acquisition pageviews, not visits/sessions/unique people. A reload counts again.
+-- Unknown referrer/blocked context must remain unknown, never inferred as search.
+select dimensions->>'source' as source,dimensions->>'medium' as medium,
+dimensions->>'campaign' as campaign,dimensions->>'locale' as locale,sum(n) as pageviews
+from product_metrics_test.daily_counters
+where day between date '2026-10-22' and date '2026-10-22'
+and dimensions->>'traffic'='synthetic' and event='page_opened'
+group by source,medium,campaign,locale order by source,medium,campaign,locale;
+
 -- Show exclusion explicitly. Production reports must select production traffic,
 -- and say UNAVAILABLE while production instrumentation has not been activated.
 select coalesce(dimensions->>'traffic','unknown') as traffic,sum(n) as events
