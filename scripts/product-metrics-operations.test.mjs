@@ -68,5 +68,6 @@ test('shared project capacity across clients/logical instances, local burst limi
   assert.equal((await db.query('select count(*)::int n from product_metrics_test.receipts')).rows[0].n,661);
   const health=(await db.query('select reason,sum(n)::int n from product_metrics_test.operational_counts group by reason')).rows;
   assert.ok(health.some(x=>x.reason==='project_rate_limited'&&x.n===1));assert.ok(health.some(x=>x.reason==='grant_rate_limited'&&x.n===1));
+  await clock(db,'2026-10-22T12:31:00Z');for(let i=0;i<60;i++)assert.ok(await grant(db));assert.equal(await grant(db),undefined);
  }finally{await db.close();}
 });
