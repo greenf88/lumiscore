@@ -125,7 +125,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .header-account-label { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .header-account-chevron { color: var(--muted); font-size: 13px; transition: transform 160ms ease; }
 .header-account-trigger[aria-expanded='true'] .header-account-chevron { transform: rotate(180deg); }
-.header-account-panel { position: absolute; z-index: 33; top: calc(100% + 8px); right: 0; width: min(280px, calc(100vw - 24px)); padding: 14px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-raised); box-shadow: var(--panel-shadow); white-space: normal; }
+.header-account-panel { position: absolute; z-index: 33; top: calc(100% + 8px); right: auto; width: min(280px, calc(100vw - 24px)); max-height: calc(100dvh - 88px); overflow-y: auto; overscroll-behavior: contain; overflow-wrap: anywhere; padding: 14px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-raised); box-shadow: var(--panel-shadow); white-space: normal; }
 .header-account-panel button { width: 100%; min-height: 44px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text); cursor: pointer; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .account-name-prompt { margin: 0 0 12px; color: var(--muted); font-family: var(--serif); font-size: 14px; line-height: 1.45; }
 .account-name-form { display: grid; gap: 8px; margin-bottom: 10px; }

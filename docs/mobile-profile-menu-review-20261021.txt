@@ -1,0 +1,72 @@
+Mobile profile menu / Hobbit cover — review, 21 October 2026
+
+Scope and base
+Base: origin/main 316adcf8592a08f88b7d5e12d871b549ced1a7e8 (PR48 released).
+Branch: fix/mobile-profile-menu-20261021. Separate worktree; PR38/44/46 untouched.
+No database, catalog, rating, profile, Auth or production deployment changes.
+
+Cause and fix
+The detail header placed the avatar BEFORE language and theme controls. The 280px
+account panel used absolute right:0 relative to that avatar, not the viewport.
+The real component with a local synthetic signed-in state on /en/book/6 measured
+left=-59.4, right=220.6 at 390px. There was no panel height cap or scroll container.
+This affects every localized /book/[workId] using the same detail header, not only
+Work6; /books/[workId] redirects there. The site header normally had the avatar at
+the right and did not have that horizontal cause, but shared the height limitation.
+
+The detail avatar is now rightmost, retaining normal DOM/keyboard order. Shared
+panel geometry clamps its edges to the visible viewport with 12px margins; it
+recomputes while open on resize, scroll, visual-viewport keyboard/zoom events and
+avatar resize. The panel stays in the account root, so it needs no portal or focus
+trap. Height is bounded and overflow scrolls. Escape restores avatar focus;
+outside clicks and focus leaving the account close the nonmodal panel. Existing
+name-save, preferences and logout handlers/authorization are unchanged.
+
+Local evidence (not hosted authentication evidence)
+Loopback-only scripts/account-menu-review-local.mjs renders the REAL detail/menu
+components with an explicit synthetic user and blocks API writes. It is not
+imported by app/build, has no public review parameter or deployed auth bypass,
+strips remote credentials and binds 127.0.0.1 only.
+Measured 16 portrait combinations: NL/EN × Paper/Ink × 320/375/390/430×844.
+All panel edges and visible control widths remain inside viewport; no page overflow.
+16 corresponding landscape checks at 844×320/375/390/430: scrollable, bounded.
+Escape/focus passed in all four language/theme combinations. Enter opens; Tab
+leaving the panel closes it. Actual landscape scroll reached the Sign out button
+inside the visible panel. Desktop 1440×900 checked. No physical phone used.
+Evidence: outputs/mobile-profile-menu-20261021 outside this repository, including
+before-en-390.png, local-<locale>-<theme>-<width>.png, landscape/desktop screenshots,
+local-menu-geometry.json and local-menu-rotation.json.
+
+Checks
+Targeted Auth/header/cover tests, TypeScript and lint passed. Vercel production-format
+build passed outside the Windows filesystem sandbox (initial sandbox build stopped
+at EPERM readlink C:\Users\rickg during dependency tracing, not compilation).
+Client secret scan passed. CI and hosted evidence to be appended after push.
+
+Hobbit: source-resolution limit, no unverified replacement
+Read-only live /en/book/6 selected ISBN9780606212342, The Hobbit, English, publisher
+Turtleback. Actual currentSrc is https://covers.openlibrary.org/b/id/5080697-L.jpg?default=false
+natural dimensions 128×194, displayed at 312×472.7 in the observed desktop layout.
+The detail component already requests L first, not S/M. Open Library independently
+confirms OL10925146M, WorkOL27482W, language eng, ISBN9780606212342 and cover5080697:
+https://openlibrary.org/isbn/9780606212342.json
+https://covers.openlibrary.org/b/id/5080697.json
+Its original width/height are 128/194; M and L even reference the same stored image.
+Thus requesting L cannot create missing detail. A bounded exact-ISBN Google Books
+lookup returned HTTP429 RESOURCE_EXHAUSTED; no larger same-edition image has been
+verified. No guessed URLs, edition swap, invented cover or catalog update applied.
+Existing regression ensures detail uses the largest provider variant and retains
+verified image identity. This is an unresolved source-quality limitation.
+
+Hosted prerequisites / limitations
+Existing test Preview /en/book/6 is a synthetic migration placeholder with no cover,
+not the production Hobbit. Do not copy or change test catalog records for this task.
+Existing test Preview was signed out; a permitted existing synthetic test login
+has been requested. Real signed-in hosted reproduction remains unproven until then.
+The new branch has no Preview environment variables (Vercel CLI metadata check).
+Branch-only public test URL/key authorization requested; no settings changed yet.
+
+Rollback
+Revert this isolated menu commit; no data restoration or migration is involved.
+No merge or production release in this task. Do not claim hosted completion based
+on local fixture screenshots, or claim a sharper Hobbit source without evidence.

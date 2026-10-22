@@ -3,7 +3,8 @@
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useLayoutEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { accountPanelLayout } from '@/lib/auth/account-panel-layout';
 import {
   DISPLAY_NAME_MAX_LENGTH,
   normalizeDisplayName,
@@ -50,7 +51,39 @@ export function LumiScoreAccountMenu({
   } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const panelId = `account-panel-${useId().replaceAll(':', '')}`;
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const updatePosition = () => {
+      const root = rootRef.current, panel = panelRef.current;
+      if (!root || !panel) return;
+      const viewport = window.visualViewport;
+      const layout = accountPanelLayout(root.getBoundingClientRect(), {
+        left: viewport?.offsetLeft ?? 0, top: viewport?.offsetTop ?? 0,
+        width: viewport?.width ?? document.documentElement.clientWidth,
+        height: viewport?.height ?? window.innerHeight,
+      });
+      for (const [property, value] of Object.entries(layout)) {
+        panel.style.setProperty(property === 'maxHeight' ? 'max-height' : property, `${value}px`);
+      }
+    };
+    updatePosition();
+    const observer = new ResizeObserver(updatePosition);
+    if (rootRef.current) observer.observe(rootRef.current);
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    window.visualViewport?.addEventListener('resize', updatePosition);
+    window.visualViewport?.addEventListener('scroll', updatePosition);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+      window.visualViewport?.removeEventListener('resize', updatePosition);
+      window.visualViewport?.removeEventListener('scroll', updatePosition);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -136,6 +169,9 @@ export function LumiScoreAccountMenu({
     <div
       className={`header-account${variant === 'detail' ? ' detail-account-menu' : ''}`}
       ref={rootRef}
+      onBlur={(event) => {
+        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
     >
       <button
         className="header-account-trigger"
@@ -156,6 +192,7 @@ export function LumiScoreAccountMenu({
       {open && (
         <div
           className="header-account-panel"
+          ref={panelRef}
           id={panelId}
           role="dialog"
           aria-label={t('header.account')}

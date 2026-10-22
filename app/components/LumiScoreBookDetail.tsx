@@ -260,9 +260,9 @@ export function LumiScoreBookDetail({
         <div className="detail-header-actions">
           <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
           <MobileNavigation authenticated={authState.authenticated} />
-          <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
           <LanguageSwitcher />
           <ThemeToggle onToggle={toggleTheme} labeled />
+          <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />
         </div>
       </header>
 
