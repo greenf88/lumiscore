@@ -90,6 +90,16 @@ purging is opportunistic during collection, not a new scheduled job. After that
 window, lifetime deduplication/history is unavailable. Receipt hashes are not
 shared across different event types and are not visitor join keys.
 
+Retention clarification after the final installation review: the exact predicate
+keeps today plus90 previous UTC dates (91 dates) and deletes only on later
+collection; idle data has no wall-clock deletion guarantee. Campaign context has
+30-minute logical validity but expired sessionStorage is not proactively erased.
+Round/login receipt hashes are deterministic pseudonymous derivatives of a
+round/Auth-session identity; an operator with the source IDs can recompute them.
+They are not raw user/session IDs or a supported funnel key, but must not be
+described as guaranteed anonymous. See the separate privacy/capacity review for
+actual pre/post-consent behavior and the unimplemented production decision.
+
 The public collector accepts at most ten browser observations/8192 bytes and
 batches emissions after hydration, never delaying native navigation. Server
 success events cannot be posted through that endpoint. Sign-in delivery runs
