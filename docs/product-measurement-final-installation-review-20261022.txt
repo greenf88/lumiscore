@@ -1,3 +1,79 @@
+PR51 — ACTUEEL V3-VERVOLG, 22 oktober 2026
+
+PR blijft Draft. Geteste applicatiecommit:
+3bf06b9e02a63308ce35276e7728819f491d41e8
+Remote main ongewijzigd: b4ac64d1166831f3578616f9288680d11275f916.
+Ready Preview voor deze applicatie:
+https://lumiscore-iqkxa5d2v-rgkgroeneveld-9102.vercel.app
+Latere verslagcommits veranderen applicatie, SQL en configuratie niet.
+
+AFGEROND BINNEN DE DRIE PUNTEN
+- Expliciete opt-in standaard uit, noodzakelijke versie-cookie90dagen zonder ID,
+  HttpOnly30min-grant alleen na acceptatie. Client/server/DB-triggers controleren
+  toestemming; DB-rowlock serialiseert revoke met vertraagde opslag. Geen replay.
+  Bij netwerkstoring is remote intrekken eerlijk pending. Ratings blijven werken.
+- Zelfstandige5min pg_cron-installatie voorbereid, max5000rijen per expiratietabel,
+  indexen/SKIP LOCKED/3s uitvoering. Normale bovengrens90dagen+5min+3s bij tijdige
+  start en zonder backlog; geen garantie bij scheduler-/opslagstoring. Monitor en
+  gerichte hash-beveiligde rollback in het pakket. Niet remote geïnstalleerd.
+- Oude120/min was projectbreed, plus globale advisorymutex. V3 atomisch600/min
+  project,60/min/grant,60grantmints/min. Geen permanente bezoekers-ID. Lokale
+  campagnepiek20x28=560, daarna40 tot600, volgende weigering zichtbaar. Pergrant,
+  reset/dedup en expiry getest. Geen bewezen echte parallelle cloudthroughput.
+  Browser queue20/batch10/max2inflight/3s/geen retries; inhoudloze lokale/DB-health.
+- Bestaande Speed Insights-bootstrap verwijderd om geen apart optioneel script
+  buiten de toestemming/intrekking actief te houden. Geen nieuwe tracker.
+
+LOKAAL BEWEZEN
+Volledige suite:843tests,827geslaagd,16bewustovergeslagen,0fouten. Daarna10gerichte
+v3-tests opnieuw groen op definitieve code; TypeScript, volledige lint,
+Vercel-productiebuild en secretscan groen. Bouwsandbox vereiste leesrechten op
+bestaande Node-dependencies; geen productie- of environmentwijziging.
+Werkelijke SQL draait lokaal in PGlite; RLS/ACLs, missing/deny/revoked grants,
+ratingno-op/mislukking/new/update, roundreceipt, storage-errorfailopen, UTC-grenzen,
+batchbacklog, cronconflict en guarded rollback/herinstallatie getest.
+Cronfixture verifieert commando/configuratie, niet de echte daemon.
+Twee logische instanties delen SQL-budgetten, PGlite serialiseert transacties.
+Lokale21-writevergelijking medianen baseline1,53ms, triggerzondertoestemming1,89ms,
+actieveanalyse4,29ms; spreiding in privacy/capaciteitsanalyse. Niet hosted/LCP.
+Allocatiemodel en installatiehashes reproduceerbaar; exacte LF-blobhashes bevestigd.
+
+HOSTED BEWEZEN — GEEN MEETOPSLAGCLAIM
+16 HTTP-checks via bestaande officiële Vercel-CLI-toegang groen:
+NL/EN campagne+boekdetail200, canonicals zonderUTM, preview-noindex behouden;
+consent GET standaardactive=false; geenkeuze204; deny200/inactive; accept200/inactive
+bij ontbrekende RPC; ongeldigeversie/129bytebody400; crossorigin403;
+geenconsent verwerktbody niet204; DNT/GPC204; rating0=400; gastrondestart401.
+Geen accounts, ratings of meetrecords aangemaakt. Noodzakelijke synthetische
+keuzecookie getest. Geen remote grant zolang RPC ontbreekt.
+Werkelijke browser: NL/EN, Paper/Ink, mobiele320/390 en desktop1440. Keuze,
+weigeren/intrekken, taalwissel, herladen, blijvende voorkeurenknop, Enter en Escape
+met focus-terugkeer gecontroleerd. Knoppen44px; accept/deny even hoog; geen
+zijdelingse overflow. Screenshots in outputs/product-measurements-20261022/v3:
+nl-paper-320.png, nl-ink-390-denied.png, en-paper-390.png, en-ink-390.png,
+nl/en-paper-desktop.png en nl/en-ink-desktop.png. Browseremulatie, geen telefoon.
+DOM toont geen Speed Insights-script. Geen claim over volledige providerlogs.
+Vercel-connector gaf scope403; officiële bestaande CLI-toegang werkte voor exact
+dezelfde team/projectscope. Deployment Protection en environment ongemoeid.
+
+CONNECTOR EN RELEASEBLOKKADE
+Alleen read-only metadata opnieuw: testmarker1,metrics_schemaNULL,metric_triggers0,
+pg_cron niet geïnstalleerd maar wel beschikbaar. Geen gedeeltelijke metricobjecten.
+Geen nieuwe installatiepoging: geen aantoonbare wijziging van sessie/toegang.
+Bestaande fout blijft McpServerError: Invalid or expired requestState, oorzaak
+onbekend. Niet bewezen als verlopen OAuth-login of beveiligingsweigering.
+Supabase-plugin installed/ENABLED; tools bieden geen herstelactie of exacte UI-route.
+Minimale handeling: bestaande Supabase-pluginverbinding in Codex herstellen/opnieuw
+verbinden als die optie aanwezig is; anders connector/app-ondersteuning om de
+requestState te herstellen. Geen credentials delen, geen alternatieve SQL-route.
+Pas daarna project/partiële staat controleren, idempotent testpakket+cron installeren,
+volledige hosted route met geldige toestemming+opslagreadback en overhead meten.
+Rechten, hashes, retentiebeleid, capaciteitsbeperkingen, volgorde en rollback staan
+in het bijgewerkte productievoorstel. Test-SQL nooit blind naar productie vertalen;
+productie blijft door harde testorigin/synthetic-gate uit.
+RELEASEADVIES: GEBLOKKEERD op hosted installatie/readback/cron/overhead. Niet mergen.
+
+----- HISTORISCH V2-CHECKPOINT HIERONDER; NIET DE ACTUELE IMPLEMENTATIE -----
 PR51 — definitieve installatiecontrole en releasebesluit, vervolg22oktober2026
 
 UITKOMST: GEBLOKKEERD. Geen hosted counteropslag bewezen. Geen productie-SQL,
