@@ -1571,3 +1571,10 @@ button, input, select, textarea { font-family: var(--sans); }
   .collection-book-card .book-card-action { padding-inline: 8px; }
   .collection-book-card .collection-quick-editor { padding: 6px; }
 }
+.product-analysis-settings { width: min(680px, calc(100% - 24px)); margin: 24px auto; color: var(--text); }
+.product-analysis-settings .ui-control { padding: 10px 16px; }
+.product-analysis-settings section { margin-top: 12px; padding: clamp(16px, 4vw, 24px); background: var(--surface-raised); border: 1px solid var(--control-border); border-radius: var(--control-radius); overflow-wrap: anywhere; }
+.product-analysis-settings h2 { margin: 0 0 12px; font-family: var(--serif); font-size: var(--type-section); }
+.product-analysis-settings p { margin: 12px 0; line-height: 1.6; }
+.product-analysis-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+@media (max-width: 359px) { .product-analysis-actions { grid-template-columns: 1fr; } }

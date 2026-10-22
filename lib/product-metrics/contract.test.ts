@@ -19,6 +19,7 @@ test('report distinguishes unavailable from zero and exposes denominators withou
  const context={source:'facebook',medium:'organic_social',campaign:'dystopie_202610',traffic:'synthetic'};
  const report=productMeasurementReport({available:true,includeSynthetic:true,period,rows:[{day:'2026-10-19',event:'recommendation_impression',dimensions:{...event().properties,...context},n:2},{day:'2026-10-19',event:'recommendation_open',dimensions:{...event().properties,...context},n:1}]});
  assert.equal(report.ratios?.opensPerImpression.numerator,1);assert.equal(report.ratios?.opensPerImpression.denominator,2);assert.equal(report.ratios?.completedPerStarted.value,null);
+ assert.equal(report.coverage?.complete,false);assert.equal(report.coverage?.observedRejected,null);
 });
 test('bounded campaign/search context survives NL/EN navigation without retaining URLs or free text',()=>{
  const c=campaignContext('https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610&email=PRIVATE','', 'nl');

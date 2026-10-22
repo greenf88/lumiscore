@@ -31,12 +31,14 @@ for(const locale of ['nl','en']){
  check(`${locale} real detail`,href.replaceAll('&amp;','&'),{},200);
 }
 const valid={events:[{event_id:receipt,event:'editorial_list_opened',properties:{...context,list_id:'dystopie-vanaf-1990'}}]};
-check('missing installed collector is explicit, not success','/api/product-metrics',{method:'POST',body:JSON.stringify(valid)},503);
+const before=check('necessary preference defaults off','/api/product-analysis-consent',{},200);assert.equal(JSON.parse(before.body).active,false);
+check('no choice: no optional collection','/api/product-metrics',{method:'POST',body:JSON.stringify(valid)},204);
+const denied=check('explicit refusal persists without analytics','/api/product-analysis-consent',{method:'POST',body:JSON.stringify({choice:'denied',version:1})},200);assert.equal(JSON.parse(denied.body).active,false);
+const accepted=check('acceptance cannot activate an uninstalled collector','/api/product-analysis-consent',{method:'POST',body:JSON.stringify({choice:'accepted',version:1})},200);assert.equal(JSON.parse(accepted.body).active,false);
+check('unknown choice version denied','/api/product-analysis-consent',{method:'POST',body:JSON.stringify({choice:'accepted',version:2})},400);
+check('bounded consent body','/api/product-analysis-consent',{method:'POST',body:'x'.repeat(129)},400);
 check('cross-origin denied','/api/product-metrics',{method:'POST',body:JSON.stringify(valid),originHeader:'https://denied.invalid'},403);
-check('content type denied','/api/product-metrics',{method:'POST',body:'{}',type:'text/plain'},415);
-check('oversize denied','/api/product-metrics',{method:'POST',body:'x'.repeat(8193)},413);
-check('identity property denied','/api/product-metrics',{method:'POST',body:JSON.stringify({events:[{...valid.events[0],properties:{...valid.events[0].properties,email:'synthetic-denied'}}]})},400);
-check('forged storage success denied','/api/product-metrics',{method:'POST',body:JSON.stringify({events:[{event_id:receipt,event:'rating_saved',properties:{...context,work_id:1,operation:'new'}}]})},400);
+check('no consent: body not processed','/api/product-metrics',{method:'POST',body:'x'.repeat(8193),type:'text/plain'},204);
 check('DNT no collection','/api/product-metrics',{method:'POST',body:JSON.stringify(valid),headers:['DNT: 1']},204);
 check('GPC no collection','/api/product-metrics',{method:'POST',body:JSON.stringify(valid),headers:['Sec-GPC: 1']},204);
 check('invalid rating does not reach storage','/api/ratings/1',{method:'PUT',body:JSON.stringify({rating:0})},400);

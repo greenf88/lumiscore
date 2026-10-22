@@ -12,6 +12,6 @@ select jsonb_build_object(
  'functions',(select coalesce(jsonb_agg(jsonb_build_object('schema',n.nspname,'name',p.proname,'arguments',pg_get_function_identity_arguments(p.oid),'returns',pg_get_function_result(p.oid),
  'body_md5',md5(p.prosrc),'definer',p.prosecdef,'settings',p.proconfig,'owner',pg_get_userbyid(p.proowner),'acl',p.proacl,
  'anon_execute',has_function_privilege('anon',p.oid,'EXECUTE'),'authenticated_execute',has_function_privilege('authenticated',p.oid,'EXECUTE'))),'[]'::jsonb)
- from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='product_metrics_test' or(n.nspname='public' and p.proname in('record_product_event_test_v1','record_product_events_test_v1','record_product_sign_in_test_v1'))),
+ from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='product_metrics_test' or(n.nspname='public' and p.proname in('record_product_event_test_v1','record_product_events_test_v1','record_product_sign_in_test_v1','product_analysis_consent_test_v3'))),
  'triggers',(select coalesce(jsonb_agg(jsonb_build_object('name',tgname,'table',tgrelid::regclass::text,'enabled',tgenabled,'definition',pg_get_triggerdef(oid))),'[]'::jsonb) from pg_trigger where not tgisinternal and tgname like 'product_metric%')
 ) as verification;

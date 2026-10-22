@@ -1,157 +1,134 @@
-PR51 — toestemming, retentie en capaciteit; GEEN productieactivatie
-Onderzocht op applicatie916ebf / PR-head7d7460f, 22 oktober 2026.
-Dit is een technisch feitenoverzicht en één minimaal productvoorstel, geen
-juridische vrijstelling of claim dat cookieloze analyse geen toestemming vereist.
+PR51 v3 — toestemming, retentie en capaciteit — 22 oktober 2026
+Vervangt de v2-analyse; eerdere checkpoints zijn historische feiten.
+Implementatie/testsupport voorbereid; geen hosted installatie of productieactivatie.
 
-WERKELIJK GEDRAG NU
-Productie: nieuwe productmetingen volledig uit door vaste testprojectcontrole.
-Geïsoleerde Preview: browsermeting automatisch na hydration, zonder nieuwe
-toestemmingsdialoog, behalve bij DNT/GPC. Dit betreft alleen synthetische testdata.
-Er is geen bestaande opt-in, weigeren-knop of intrekken-flow voor productanalyse.
-Aan- of afwezigheid van toestemming wordt niet opgeslagen als bewezen gegeven.
-De root bevat reeds Speed Insights, onafhankelijk van deze wijziging; dat is
-bestaande technische prestatieanalyse, niet deze productfunnel. De code bevat
-hiervoor geen nieuwe consentkoppeling. Providerbeleid/retentie niet geverifieerd.
+TOESTEMMING
+Optionele analyse is standaard UIT. Onbekende/ongeldige/verlopen keuze, DNT/GPC,
+ontbrekende grant of meetdienst: geen events, contextheaders, UUIDs, UTM-storage
+of replaybuffer. Ratings, authenticatie en leesvoortgang blijven onafhankelijk.
+Alle contractevents (zie contract.md) zijn optionele analyse. Er is geen door
+clients te kiezen categorie 'operationeel noodzakelijk'.
 
-NOODZAKELIJK VERSUS OPTIONEEL
-Auth-sessie, eigenaarschap/RLS, rating en rondevoortgang zijn bestaande operationele
-gegevens die nodig zijn voor de gebruikershandeling. Deze PR verandert hun
-bewaartermijn of toestemming niet. De dagtellers/receipts/campagnecontext hieronder
-zijn optionele productanalyse. Een succesvolle operationele rating mag blijven
-bestaan als analyse uitstaat of faalt. Dit is lokaal getest, niet hosted bewezen.
+Twee gelijkwaardige lichte knoppen, NL/EN, Paper/Ink. Permanente footerknop
+'Analysevoorkeuren / Analytics preferences'; intrekken op dezelfde plaats.
+Noodzakelijke HttpOnly/SameSite=Strict keuze-cookie bevat alleen versie1,
+accepted/denied en vervaldatum90dagen. Geen ID, campagne of gedragsinhoud.
+Afzonderlijke HttpOnly30min-autorisatie pas NA expliciet accepteren. Private
+consent_grants bevat willekeurige token, versie, created_at, expires_at, revoked_at.
+Token is een kortlevend pseudoniem bearer-autorisatiemiddel, geen bezoeker-ID;
+niet als eventdimensie opgeslagen of voor een funneljoin gebruikt.
+Geen claim van anonimiteit: bevoegde beheerders hebben technische toegang.
 
-OPGESLAGEN ANALYSEVELDEN
-Elke dagteller bevat: UTC-datum, eventnaam, allowlisted dimensions en aantal n.
-Common dimensions: locale(nl/en), surface, source, medium, campaign en
-traffic=synthetic. Campagne: alleen facebook/organic_social/dystopie_202610.
-Zoekherkomst: begrensde Google/Bing/DuckDuckGo-classificatie; geen raw referrer.
-Geen naam, e-mail, auth-/user-ID, wachtwoord, score, zoektekst of volledige URL.
+Browser ontvangt alleen active/choice/expiry, nooit token. Server valideert
+keuze+grant-cookie; database controleert grant op opslagmoment. Ook AFTER-triggers
+en vertraagde loginmeting vereisen actieve grant, geen browser-only schakelaar.
+Revoke en event locken dezelfde grant-rij. Na bevestigde revoke-commit worden
+oude requests geweigerd. Een eerder gecommit event is niet terug te halen.
+Bij netwerkfout: lokaal direct uit; UI vermeldt dat serverbevestiging ontbreekt.
+Geen belofte van onmiddellijke remote intrekking bij een onbereikbare dienst.
 
-Event                         Aanvullende dimensions
-page_opened                   geen
-editorial_list_opened         list_id(dystopie-vanaf-1990/other)
-book_card_opened              work_id, list_id
-book_detail_opened            work_id
-recommendation_impression     work_id, position(1..100), ranker_version=8f337dd
-recommendation_open           dezelfde velden; pas na geldige impressie
-want_to_read_saved            work_id; ranker_version indien aanwezig
-rating_saved                  work_id, operation(new/updated); nooit ratingcijfer
-taste_round_started           goal(10/15/20/30)
-taste_round_completed         goal; echte completed_at-overgang, niet resultaatklik
-taste_result_opened           geen; geldig resultaat kan gedeeltelijk zijn
-sign_in_succeeded             geen; succesvolle normale wachtwoordlogin
+Intrekken/expiry wist queue+campagnecontext en abort lopende verzending; geen
+automatische retry/offline replay. Andere tabs ontvangen alleen stopsignaal.
+Fresh accept registreert GEEN eerdere paginabezoeken; uitsluitend toekomstige
+handelingen. Bij geldig herstelde eerdere keuze mag de huidige route tellen.
+Campagnecontext (uitsluitend vaste enums) wordt alleen actief gelezen/opgeslagen
+na toestemming, maximaal tot grantverval30min. Vooraf bekeken herkomst niet
+bufferen. Op intrekken/expiry gewist in actieve tab. Een gesuspendeerde/gesloten
+tab kan geen tijdige fysieke timer garanderen; hergebruik controleert expiry,
+verwijdert verlopen context; sessionStorage verdwijnt bij sessie/tabbeëindiging.
+Geen namen/e-mails/tokens/zoekteksten/URLs in counters, receipts of healthcounts.
+Noodzakelijke consent-cookie staat los van analyse en kan90dagen blijven bestaan.
 
-IDENTIFIERS EN LEVENSDUUR — GEEN CLAIM VAN VOLLEDIGE ANONIMITEIT
-- Browser: geen bezoeker-, user- of sessie-ID. Per observatie een willekeurige UUID
-  als transportreceipt, geen property. Queue maximaal20, batches maximaal10,
-  timer100ms, geen offline replay. Verwijderd uit queue bij afleverpoging; een
-  mislukking is meetverlies, geen betrouwbare nul. Max8192bytes per collectorbatch.
-- DB receipts: event_id(uuid) en UTC-datum. Browserreceipts zijn willekeurig;
-  rating/statusreceipts worden per echte overgang willekeurig gemaakt.
-- Ronde-start/completionreceipts: MD5(eventnaam:round_id). Loginreceipt:
-  MD5(login:Auth-session_id). Dit zijn deterministische pseudonieme afgeleiden,
-  geen raw user/session-ID, maar een bevoegde beheerder met bron-ID's kan ze
-  opnieuw berekenen. Hashing is geen gegarandeerde anonimisering. Receipts staan
-  los van dagtellers en zijn geen ondersteunde bezoekers-funneljoin.
-- Browsercampagnecontext: alleen common enums plus expires in sessionStorage.
-  Logisch geldig tot30min inactiviteit; elk gebruik verlengt deze geldigheid.
-  Verlopen context wordt niet actief verwijderd, alleen niet meer hergebruikt.
-  Fysiek blijft de entry tot overschrijven/tab-einde; geen harde30min-wisclaim.
-  DNT/GPC stopt nieuwe verzending/contextheaders, maar wist oude storage niet.
-- Budget: minute(timestamptz), n. Geen IP- of persoonsgebonden limiter.
+Eerdere gegevens worden niet op basis van intrekken uit totalen teruggezocht:
+geen ondersteunde persoonskoppeling. Ze volgen onderstaande bewaartermijnen.
+Bestaande Speed Insights-bootstrap uit deze app verwijderd: geen afzonderlijk
+niet-intrekbaar SDK-script naast deze opt-in. Dependency ongewijzigd; geen
+dashboardconfiguratie aangepast. Operationele providerlogs/backups staan los
+hiervan; toegangsrechten/retentie daarvan blijven productie-beslispunt.
 
-WERKELIJKE RETENTIE
-Dagtellers en receipts worden verwijderd waar day < huidigeUTCdatum-90.
-Dat houdt vandaag plus90 vorige datums, dus91 UTC-datums. Opschoning gebeurt op
-de eerste budgetgebeurtenis van een nieuwe minuut, niet via een geplande taak.
-Bij stil verkeer kunnen oudere records blijven bestaan. Een harde verwijder-SLA
-is niet geïmplementeerd. Budgetcleanup houdt huidige en2 vorige minuten; bij
-inactiviteit blijft ook die fysieke data langer staan.
-Geen extra ruwe eventtabel: dagtellers zijn al geaggregeerd, maar met Work en
-contextdimensies kan een dun bezette cel weinig gebeurtenissen bevatten.
-Verwijderen is gewone gerichte SQL-DELETE, niet verwijderen uit backups/providerlogs.
-Backup- en logtermijnen zijn onbekend. Geen nieuwe cleanupautomatisering aangemaakt.
+GEGEVENS EN RETENTIE — PRODUCTVOORSTEL, GEEN WETTELIJKE STANDAARD
+daily_counters: UTC-datum,event,allowlisted dimensions,n,expires_at.
+Geen ruwe eventinhoudtabel. Kleine geaggregeerde cellen zijn niet vanzelf anoniem.
+Expiry is START van UTC-bucketdatum+90dagen: individuele bijdrage89–90dagen.
+receipts: opaque event_id,recorded_at,expires_at. Browser/rating/status24uur;
+round-start/completion/login90dagen voor begrensde dedup. Round/session-receipts
+deterministische hashes; geen anonimiteitsclaim, geen user/round-ID in teller.
+consent_grants: maximaal30min (eerder ingetrokken blijven slechts tot expiry).
+grant_budgets/project budgets: timestamp-minute,n,expires na1uur.
+operational_counts: vaste reden/minuut/aantal,7dagen; geen eventinhoud of IDs.
+maintenance_state: één overschreven rij met tijden, SQLSTATE, aantallen/backlog;
+geen historische gedragsgegevens. Alleen eigen cron-runhistory ouder7dagen wissen.
 
-WEIGEREN/INTREKKEN NU
-Geen product-consentstatus aanwezig. DNT/GPC voorkomt nieuwe events en headers;
-het kan een reeds verzonden request niet terughalen en verwijdert geen oude
-receipts/dagtellers. Zonder bezoeker-ID kunnen eigen historische cellen niet
-betrouwbaar uit globale tellers worden gefilterd. Geen verwijdering beloven die
-niet technisch mogelijk is. Geen voor-toestemminggegevens later terugspelen.
+pg_cron-voorstel: iedere5min, zelfstandig zonder ingest/verkeer. Max5000rijen
+perzes expiratietabellen perrun, FOR UPDATE SKIP LOCKED, expiry-indexen,
+100ms lock_timeout; jobcommand statement_timeout3s. Eigen cronhistory nog
+max5000rijen. Geen ratings/accounts/books/voortgang geraakt.
+Normaal, zonder achterstand en bij tijdige taakstart: raw maximaal90dagen+5min
+plus maximaal3s uitvoering. Schedulervertraging is niet in die bovengrens gedekt.
+Geen exacte90dagen-garantie. Bij storing/backlog langer totdat hersteld.
+monitor.sql: laatste succes >10min, ontbrekende status, SQLSTATE of backlog is
+alarmsignaal. Cron job/runstatus afzonderlijk controleren; querycancellation
+buiten functie kan statuswrite terugrollen, daarom stale-successcontrole nodig.
+Geen nieuwe externe notificatie-integratie: bevoegde operator moet deze bestaande
+SQL-check daadwerkelijk uitvoeren/monitoren; unattended alarmering niet bewezen.
+Inhalen: dezelfde5min-taak metbegrensde batches doorlaten, backlog controleren;
+eventueel handmatig1run/keer max5000/table, niet één onbeperkte DELETE.
+Backups/providerlogs: onbekende bewaartermijn, geen SQL-DELETE-belofte daarvoor.
 
-RAPPORTAGETOEGANG
-Geen publiek dashboard of rapport-RPC. Tables ENABLE+FORCE RLS en geen anon/
-authenticated SELECT/INSERT/UPDATE/DELETE. Alleen bestaande bevoegde operator-
-verbinding kan aggregate SELECT uitvoeren. Exacte teamleden/productiontoegang
-zijn niet geaudit; dit geeft geen nieuwe accounts of rechten. Publieke functies
-kunnen alleen begrensd tellen. invoker wrappers, private definer schrijver,
-lege search_path, expliciete grants/revokes. Succes-events via DB-overgang;
-loginreceipt via geverifieerde Auth-sessie, geen e-mail in meetpayload.
-Operationele Vercel/Supabase-toegangslogs kunnen gewone requestmetadata bevatten;
-geen conclusie over hun inhoud/retentie afleiden uit een schone meetpayload.
+CAPACITEIT
+V2:120events/min PROJECTBREED, gedeelde DB-budgetrij, niet perclient/proces/IP.
+Bovendien globale niet-wachtende advisorymutex: unrelated gelijktijdigheid kon
+events verliezen. V3 verwijdert die mutex, behoudt atomische gedeelde DB-budgets:
+600events/min/project,60/min/30min-grant, maximaal60nieuwe grants/min/project.
+Geen permanente bezoekersidentificatie. Pergrant-rowlock serialiseert met revoke;
+projectbudget blijft atomisch ook over meerdere appinstanties. Lockwait25ms,
+best-effort health-counter5ms; verlies 'busy' expliciet, niet gebruikershandeling.
+Queue20/batch10/max8192bytes/100ms flush, maximaal2 requests tegelijk,3s abort,
+nul retries. Lokale tijdelijke transporttellers tonen queueverlies/failed/rejected
+batches zonder inhoud of IDs; geen extra healthrequests, reset bij intrekken.
+Bots kunnen publieke metingen nog vervalsen/uitputten; geen ranking/populariteit/
+autorisatie afleiden. Limieten blijven een bewuste ondertelgrens, geen SLA.
 
-ÉÉN MINIMAAL PRODUCTBESLUIT VOOR PRODUCTIE — VOORGESTELD, NIET GEBOUWD
-Kies optionele first-party productanalyse alleen na expliciete keuze, standaard
-uit. Eén bescheiden NL/EN-keuze met evenwaardige toestaan/weigeren en blijvend
-bereikbare intrekoptie. Alleen een noodzakelijke ja/nee-voorkeur lokaal opslaan
-(voorgesteld90dagen, zonder tracking-ID). Geen pre-consent events of UTM-storage.
-Bij intrekken: queue en campagnecontext direct wissen, volgende requests/headers
-uitschakelen; essentiële login/rating blijft werken. DNT/GPC blijft doorslaggevend.
-Gebruik na toestemming dezelfde bestaande eventdefinities, geen extra tracker.
-Geen omzetting van de huidige testgate naar stilzwijgende productieactivatie.
-Laat91-datumretentie vervallen als publieke belofte: stel90dagen als maximum voor,
-en toets een expliciet goedgekeurde dagelijkse wiscontrole plus backup/logbeleid
-vóór activatie. Dat is nog geen geïnstalleerde taak of vastgesteld beleid.
-Dit ene opt-in/retentiepakket moet als productievoorwaarde worden besloten en
-gericht geïmplementeerd/getest; valt buiten deze beperkte afrondingsopdracht.
+Onderbouwing:20logische10-boekroutes x28events=560/min synthetische campagnepiek;
+extra40=600,volgendeweigering; pergrant60limiet en reset volgende minuut getest.
+PGlite serialiseert transacties: twee logische applicatieinstanties/multiclients
+delen cap in lokale test, maar GEEN bewezen parallel hosted lockthroughput.
+Bekende weigeringen: project_rate_limited,grant_rate_limited,busy,storage_error.
+Daarnaast consent_denied/invalid_payload/duplicate/accepted en grant_issued.
+Alleen vaste reason+minuut+n,7dagen. Healthwrite kan ook mislukken; browserqueue,
+clientuitval/netwerkverlies niet volledig observeerbaar. Geen volledige telling,
+unieke personen of gekoppelde conversie claimen. report.ts coverage.complete=false.
+Geen eventinhoud bewaren om meetuitval te verklaren.
 
-CAPACITEIT — GEMETEN LOKAAL, NIET HOSTED
-Reproduceer: node scripts/product-metrics-capacity-local.mjs
-PGlite/PostgreSQL, Node24.20 win32x64. Exacte installatie tweemaal,1000 bewust
-verschillende countercellen en1000 receipts rechtstreeks in een lokale fixture.
-Dit is allocatieplanning, geen remote loadtest of omzeiling van de rate limit.
+LOKAAL GEMETEN (PGlite/WASM win32/x64 Node24.20; niet hosted)
+21new-ratingwrites/variant:
+baseline mediaan1,53ms (1,10–2,23); mettrigger geweigerd1,89ms (1,14–9,59);
+metactieve grant4,29ms (3,12–19,20). Geen extra netwerkrequest op ratingpad;
+wel synchroon werk in dezelfde transactie. Geen TTFB/LCP-/productieclaim.
+Peraccepted event5logische writes: grantbudget,projectbudget,receipt,counter,
+accepted-health; plus grant SELECT FOR UPDATE en index/WALwerk niet apartgemeten.
+Extra consent GET na hydration, accept/revoke POST, batchcollectors alleen actief;
+geen nieuwe catalogus/externe boekrequests op kritieke laadroute.
 
-Tabel           row pg_column_size     heap       indexes      total bytes
-daily_counters  256bytes               270336     294912       598016
-receipts        gemiddeld44bytes      57344      73728        155648
-budgets         33bytes(1rij)          8192       16384        24576
-total bevat ook relationele overhead/TOAST/FSM. Geen gelijkstelling aan cloud-
-facturatie. Worst-case per event: counter+receipt allocatie~754bytes bij deze
-1000-rijproef; herhaalde cellen aggregeren en gebruiken minder counteropslag.
+1000unieke cellen/receipts/grants lokaal, inclusief indexallocatie:
+counter622,592bytes/rij; receipt163,84; grant172,032. Kleinproef paginavulling,
+geen hosted grootte/kosten. Model80%5-event/20%28-eventroutes=9,6events/route,
+max90dagen unieke cellen;24h kortere receipts,3langere/28events90dagen.
+Routes/dag  modelsubtotalMiB  3xplanmargeMiB
+100         52,28            156,85
+1000        522,85           1568,54
+10000       5228,47          15685,42
+Exclusief bounded budget/health/history enWAL/backups; geen prognose of kosten.
+Werkelijke aggregatie kan cellen sterk beperken. Gemiddelde belasting bewijst
+geen piekgeschiktheid. Geen abonnement/extra kosten aangegaan.
 
-Geraamde route: lijst→boek→login→boek→smaaktest10→10 nieuwe ratings→1 wijziging
-→completion→resultaat:25events; met3 geldige aanbevelingsimpressies28.
-Zonder login: lijst→boek is5events. Geen unieke-personentelling.
-Per geaccepteerd event:1 budgetupsert+1 receiptinsert+1 counterupsert =3 logische
-meetwrites, geen3 extra netwerkrequests. Route25events≈75logische writes, plus
-eerste-minuutcleanupstatements. Index-/WAL-writes niet afzonderlijk gemeten.
-No-op-ratingretry produceert geen nieuw event; herhaalde eventreceipt geen
-nieuwe counter/receipt/budgetwrite. Rate-limited verzoek kan budget verhogen.
-
-Scenario(aannames):80%5-eventroutes,20%28-eventroutes =9,6events per routebezoek.
-100%bezorgd,91 datums, worst-case1countercel/1receipt per event. Geen gemeten
-bezoekersprognose of gemeten hosted footprint. De3x-kolom is alleen planmarge.
-Routes/dag   Events/dag   Gemiddeld/min   Worst-case MiB   Met3x-planmarge MiB
-100          960          0,67            62,79            188,37
-1000         9600         6,67            627,90           1883,70
-10000        96000        66,67           6279,00          18837,00
-Meer hergebruik van countercellen verlaagt dit, receipts blijven per event.
-Geen bedrag/extra kosten aangegaan of abonnement aangepast.
-
-Globaal120events/min = slechts~4,29 complete28-eventroute-equivalenten/minuut;
-werkelijke events zijn over de routeduur gespreid. Een campagnepiek kan de cap
-overschrijden terwijl het daggemiddelde laag is. Daarnaast kan de niet-wachtende
-globale mutex events laten vallen. Die verliezen zijn niet compleet te tellen
-met de huidige data. Geen onbewezen perfecte campagneconversie beloven.
-
-HOSTED PRESTATIES/VERGELIJKING: ONBEKEND
-Installatie geweigerd; geen ratingtrigger/meetrecord op hosted test geïnstalleerd.
-Geen hosted grootte, indexomvang, verzend-/opslaanduur of met/zonder-metingvergelijking.
-Eerdere lokale21-writeproef: baseline2,27ms; trigger zonder context3,35ms; met
-context5,35ms mediaan. Microbenchmark, niet hosted of zichtbare inhoud/LCP.
-Eerdere Preview-TTFB staat afzonderlijk in het reviewverslag; geen opslagoverhead.
-Na herstel: één eigen synthetische actor en10 bestaande toegestane test-Works;
-begrensde gepaarde writes met/zonder context (dezelfde geïnstalleerde observers),
-aparte HTTP/wallclock/DBtijd, medianen+spreiding, counterreadback en foutisolatie.
-Vergelijking zonder trigger-DDL blijft nodig voor echte baseline indien toegestaan;
-geen productiebelasting. Tot die tijd releaseadvies: GEBLOKKEERD.
+RAPPORTAGE/BEWIJS
+Alleen bevoegde operator via private SQL; alle7tabellen FORCE RLS en geen
+client-tablegrants. Functie-ACLs expliciet, lege search_path, geen publiek rapport.
+Contractevents/dimensions ongewijzigd; events zijn geen bezoeken/personen.
+Eerdere517ratings/19rondes blijven onbekende herkomst, geen valide baseline.
+SQL- en browsertransporttests lokaal geslaagd; schedulercommando lokaalfixture
+getest, geen echte pg_cron-daemon/hosted opslag bewezen.
+Connectorfout ongewijzigd: McpServerError: Invalid or expired requestState.
+Oorzaak onbekend; read-only werkt. Geen nieuwe installatiepoging zonder aantoonbaar
+gewijzigde sessie. Niet bewezen dat dit OAuth-expiry of beveiligingsweigering is.

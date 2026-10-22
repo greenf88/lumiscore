@@ -1,7 +1,7 @@
 import { METRIC_EVENTS, parseMetric } from './contract.ts';
 export type CounterRow = { day: string; event: string; dimensions: Record<string, unknown>; n: number };
-export function productMeasurementReport(input: { available: boolean; period: { from: string; through: string }; rows: CounterRow[]; includeSynthetic?: boolean }) {
-  const unavailable = (note: string) => ({ period: input.period, available: false, scope: input.includeSynthetic ? 'synthetic' : 'production', counts: null, ratios: null, excludedSynthetic: input.rows.filter(r => r.dimensions.traffic === 'synthetic').reduce((n, r) => n + r.n, 0), note });
+export function productMeasurementReport(input: { available: boolean; period: { from: string; through: string }; rows: CounterRow[]; includeSynthetic?: boolean; observedRejected?:number }) {
+  const unavailable = (note: string) => ({ period: input.period, available: false, scope: input.includeSynthetic ? 'synthetic' : 'production', counts: null, ratios: null, coverage:null, excludedSynthetic: input.rows.filter(r => r.dimensions.traffic === 'synthetic').reduce((n, r) => n + r.n, 0), note });
   if (!input.available) return unavailable('Instrumentation/storage unavailable; not zero.');
   const counts = Object.fromEntries(METRIC_EVENTS.map(event => [event, 0]));
   let excludedSynthetic = 0, excludedUnknown = 0;
@@ -17,6 +17,7 @@ export function productMeasurementReport(input: { available: boolean; period: { 
   const sum = (event: string, match: (row: CounterRow) => boolean = () => true) => rows.filter(r => r.event === event && match(r)).reduce((n, r) => n + r.n, 0);
   const campaign = (r: CounterRow) => r.dimensions.campaign === 'dystopie_202610' && r.dimensions.source === 'facebook';
   return { period: input.period, available: true, scope: input.includeSynthetic ? 'synthetic' : 'production', counts, rows, excludedSynthetic, excludedUnknown,
+    coverage:{observedRejected:input.observedRejected??null,complete:false,note:input.observedRejected?'Known loss: these counts are incomplete.':'Delivery completeness is unknown; consent refusal, blocked clients and network loss cannot be reconstructed.'},
     units: { pageViews: 'page_opened events, including new document loads; not unique visits', sessions: null, users: null, uniquePeople: null },
     campaign: { pageViews: sum('page_opened', campaign), listOpens: sum('editorial_list_opened', campaign), bookClicks: sum('book_card_opened', campaign), newRatings: sum('rating_saved', r => campaign(r) && r.dimensions.operation === 'new'), changedRatings: sum('rating_saved', r => campaign(r) && r.dimensions.operation === 'updated') },
     ratios: { opensPerImpression: ratio(counts.recommendation_open, counts.recommendation_impression), completedPerStarted: ratio(counts.taste_round_completed, counts.taste_round_started), campaignClicksPerListOpen: ratio(sum('book_card_opened', campaign), sum('editorial_list_opened', campaign)) },

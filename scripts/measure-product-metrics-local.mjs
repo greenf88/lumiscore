@@ -1,17 +1,14 @@
 import {PGlite} from '@electric-sql/pglite';
-import {readFile} from 'node:fs/promises';
 import {performance} from 'node:perf_hooks';
 import {fixture} from '../test-support/product-metrics/local-fixture.mjs';
-const db=new PGlite(),actor='b0000000-0000-4000-8000-000000000001';let work=1;
-const summary=values=>{const n=[...values].sort((a,b)=>a-b);return{n:n.length,medianMs:n[Math.floor(n.length/2)],minMs:n[0],maxMs:n.at(-1),samplesMs:values};};
+import {actor,text,grant,headers} from '../test-support/product-metrics/local-v3.mjs';
+const db=new PGlite();let work=1;
+const summary=v=>{const s=[...v].sort((a,b)=>a-b);return{n:s.length,medianMs:s[Math.floor(s.length/2)],minMs:s[0],maxMs:s.at(-1),samplesMs:v};};
 async function sample(){const times=[];for(let i=0;i<21;i++){const start=performance.now();await db.query('insert into public.ratings(user_id,work_id,rating) values($1,$2,8)',[actor,work++]);times.push(performance.now()-start);}return summary(times);}
 try{
- await db.exec(fixture);await db.query("select set_config('request.jwt.claim.sub',$1,false)",[actor]);
- await db.exec('set role authenticated');const before=await sample();await db.exec('reset role');
- await db.exec(await readFile(new URL('../test-support/product-metrics/install.sql',import.meta.url),'utf8'));
- await db.exec('set role authenticated');const noContext=await sample();await db.exec('reset role');
- const c={locale:'nl',surface:'taste_test',source:'facebook',medium:'organic_social',campaign:'dystopie_202610',traffic:'synthetic'};
- await db.query("select set_config('request.headers',$1,false)",[JSON.stringify({'x-lumiscore-product-context':JSON.stringify(c)})]);
- await db.exec('set role authenticated');const withContext=await sample();
- console.log(JSON.stringify({profile:`LOCAL PGlite/WASM on ${process.platform}/${process.arch}, Node ${process.version}; warmed sequential single-actor writes; no network`,before,noContext,withContext,hostedImpact:null,note:'SQL microbenchmark only. Not browser, hosted or production latency. No additional database network requests are introduced on rating/round paths.'},null,2));
+ await db.exec(fixture);await headers(db,null);await db.exec('set role authenticated');const baseline=await sample();await db.exec('reset role');
+ await db.exec(await text('install.sql'));await db.exec('set role authenticated');const denied=await sample();await db.exec('reset role');
+ await headers(db,await grant(db));await db.exec('set role authenticated');const accepted=await sample();await db.exec('reset role');
+ const counts=(await db.query('select event,dimensions,n::int n from product_metrics_test.daily_counters')).rows;
+ console.log(JSON.stringify({profile:`LOCAL PGlite/WASM ${process.platform}/${process.arch}, ${process.version};21 sequential distinct new ratings each; no network`,baseline,denied,accepted,counts,hostedStorageOverhead:null,note:'Single-engine local SQL microbenchmark,not actual concurrent cloud locks or UI/LCP. Normal rating path has no extra network request; optional AFTER observer does synchronous bounded DB work. No production/test-project writes.'},null,2));
 }finally{await db.close();}

@@ -1,83 +1,104 @@
-PRODUCTION INSTALLATION PROPOSAL — NOT APPROVED / NOT EXECUTED
+PR51 v3 — installatie- en releasevoorstel, NIET OP PRODUCTIE UITVOEREN
+22 oktober 2026. Geen merge, productie-SQL, productiescheduler of publicatie.
+Test: hlvujbrmfdlrfxdjwsmb. Productie qvplwejffhjvxaypmjut buiten schrijfscope.
 
-Latest bounded follow-up: product-measurement-final-installation-review-20261022.txt.
-One fresh test installation failed again with the same requestState error;
-readback still shows no metric schema/functions/triggers. No production SQL.
-See product-measurement-privacy-capacity-20261022.txt for exact pre/post-consent
-behavior, pseudonymous receipt identities, opportunistic91-date retention,
-local-only indexed size estimates and the proposed minimum production opt-in.
-Neither a definitive executable production migration nor activation is ready.
+TESTARTIFACTEN — exacte LF-bytes, manifest met alle functiehashes/ACLs
+test-support/product-metrics/install.sql
+SHA256 fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3
+test-support/product-metrics/scheduler-test.sql
+SHA256 c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
+test-support/product-metrics/rollback.sql
+SHA256 549d6325362598b09e0e656bab62e6eadcda8b54ee80d87e3d53fc186cc6d4bc
+package-manifest-v3.json reproduceerbaar met product-metrics-package-local.mjs.
+Verplichte TEST-marker; nooit op productie draaien of blind de marker verwijderen.
+V3 weigert onbekend/v2-schema. Controleer vooraf volledige metadata/afwezige
+baseline; een gewijzigde v3-definitie niet blind overschrijven.
+verify-install.sql, monitor.sql en report.sql zijn read-only.
 
-Current main/production base: b4ac64d1166831f3578616f9288680d11275f916.
-Production target qvplwejffhjvxaypmjut; isolated test hlvujbrmfdlrfxdjwsmb.
-No production migration, collector activation, event write, account or rating change.
+OBJECTEN EN RECHTEN
+Private schema product_metrics_test:7 FORCE-RLS-tabellen, nul clienttablegrants:
+daily_counters,receipts,budgets,consent_grants,grant_budgets,operational_counts,
+maintenance_state. Expiry-indexen op de eerste6; geen privé-readerprojectie.
+Publieke invoker-wrappers, lege search_path, expliciete EXECUTE:
+- record_product_event_test_v1(uuid,text,jsonb)->text: anon/authenticated
+- record_product_events_test_v1(jsonb)->jsonb: anon/authenticated
+- record_product_sign_in_test_v1(jsonb)->text: alleen authenticated
+- product_analysis_consent_test_v3(text,uuid,timestamptz)->jsonb: anon/authenticated
+Deze rollen krijgen schema USAGE en alleen EXECUTE op valid_context,record_event,
+consent. Definer-schrijvers hebben lege search_path; canonical events vereisen
+triggerdepth of geverifieerde authsessie. Geen client EXECUTE op cleanup,
+current_time,operational,request_context,request_grant,observe_transition.
+Geen automatische Supabase-rechten nodig. Geen publiek rapport of nieuwe beheerrol.
+Drie fail-open AFTER-observers zien alleen eigen echte rating/status/rondeovergangen.
+Cron draait als bestaande installowner. Geen publieke cronrechten of nieuwe accounts.
+pg_cron alleen op test installeren indien afwezig; alleen eigen5min-job plannen.
 
-Reviewed test artifact: test-support/product-metrics/install.sql.
-It contains a mandatory synthetic-test marker and must NOT run on production.
-The code likewise hard-gates collection to the test Supabase origin. Merging
-this preparation by itself would NOT activate production measurement.
+GEDRAG EN PRODUCTKEUZES
+Alle12 contractevents zijn optioneel. Default uit; geen clientveld 'noodzakelijk'.
+Noodzakelijke keuze-cookie90dagen zonder ID; afzonderlijke HttpOnly grant30min.
+DB-hercontrole bij opslag en rijlock gedeeld met revoke. Geen analysecontext,
+identifiers of buffers vóór toestemming; geen replay na acceptatie.
+Intrekken wist lokaal/abort requests; remote stop pas na bevestigde revoke.
+Eerder gecommitteerde totalen volgen retentie en zijn niet persoonsgericht terug
+te zoeken. Speed Insights-bootstrap verwijderd, geen tweede tracker toegevoegd.
 
-Proposed production objects, to be finalized only after actual test proof:
-- private product_metrics schema with daily_counters(day,event,dimensions,n),
-  receipts(event_id,day), budgets(minute,n), composite/day lookup indexes;
-- public collector: bounded browser batch, narrow single-observation wrapper,
-  authenticated sign-in observation; fixed parameters/return values matching
-  the tested v1 RPC signatures; production names/traffic hard gate require a
-  separate explicit activation diff, not a quiet environment-variable toggle;
-- optional AFTER observers on public.ratings, public.user_book_status and
-  public.taste_rating_rounds, with the exact behavior of the test artifact.
-  They observe only genuine mutations and do not alter the business NEW row.
-  No replacement rating/round computation, schema or stored user data change.
+Voorstel (nog productie te besluiten, geen wettelijke standaard):
+- raw max90dagen +max5min interval +3s uitvoering bij tijdige start, zonder
+  storing/backlog; schedulervertraging valt buiten die bovengrens;
+- dagcellen UTC-start+90dagen; random receipts24h, ronde/loginreceipts90dagen;
+- grants30min, budgets1uur, healthcounts/eigen cronhistory7dagen;
+- cron iedere5min,5000rijen per expiratietabel, jobtimeout3s, lockwait100ms;
+- stale succes>10min/errors/backlog via monitor.sql; operator moet dit bewaken;
+- bij storing geen harde bovengrens; begrensd inhalen, geen onbeperkte DELETE;
+- providerlogs/backups en exacte rapportagebevoegden blijven productie-afspraken.
+Capaciteit600projectevents/min,60/grant/min,60grantmints/min; SDK queue20/batch10/
+max2requests/3s abort/geen retries. Bekende verliezen tonen; onbekend blijft onbekend.
+Geen unieke personen, persoonsfunnel of complete conversietelling beloven.
 
-Rights/security:
-All counter/receipt/budget tables ENABLE+FORCE RLS; no anon/authenticated table
-SELECT/INSERT/UPDATE/DELETE grants and no public reporting endpoint. Reporting
-uses an existing privileged operator connection with read-only aggregate SQL.
-Public wrappers SECURITY INVOKER, empty search_path, explicit function grants.
-Only browser wrappers execute for anon; sign-in wrapper authenticated only.
-The bounded private writer is SECURITY DEFINER, empty search_path. Invoker
-wrappers need schema USAGE and its explicit EXECUTE; canonical rating/status/
-round names additionally require trigger depth, and login receipts require
-auth.uid plus the actual signed JWT session. The private trigger function is
-not executable by client roles. No auth user/email/token/score table projection.
-No automatic Supabase default grants are relied upon. Operational server tokens
-are neither metric dimensions nor logs; sign-in JWT only authenticates the
-normal scoped RPC and is never persisted by the collector.
+VOLGORDE NA AANTOONBAAR HERSTEL VAN CONNECTOR — NU ALLEEN TEST TOEGESTAAN
+1. Bevestig project hlvujbrmfdlrfxdjwsmb, marker en actuele PR-/pakket-SHA.
+   Lees bestaande objecten. Bewaar oude DDL/ACLs/triggers/cron-definities.
+   STOP bij onbekende/v2/gewijzigde objecten; geen blinde vervanging.
+2. Installeer install.sql via de bestaande herstelde connector. Lees terug:
+   7tabellen,13functies,3triggers en expliciete ACLs. Herhaalbaarheid lokaal
+   getest; check op gedeeltelijke toestand na elke fout. Geen alternatieve route.
+3. Installeer scheduler-test.sql; exact één eigen job. Idente schedule/command/
+   owner/database toegestaan; elk conflict stopt. Verifieer daadwerkelijke runs.
+4. Hosted synthetische route met echte readback: vóór keuze/deny0optionle events;
+   accept→campagnelijst→boekklik/detail→login→ronde→newrating→update→afronden→resultaat.
+   Test intrekken/inflight, verval, dedup, mislukte rating en foutisolatie.
+   Alleen bestaande testdata/toegestane testlogin, geen productiegebruikers kopiëren.
+5. Verifieer cleanup zonder verkeer, grenzen/backlog/status en echte multiinstance-
+   limiter. Meet opslagoverhead apart van TTFB/LCP. Lokale WASM niet hosted noemen.
+   Ruim uitsluitend eigen synthetische records/account op met gericht plan;
+   bewaar geanonimiseerd verslag.
+6. Bij groen hosted bewijs: apart concreet productie-SQL en activatiediff reviewen.
+   Huidige code hard-gate op testorigin en traffic=synthetic houdt productie UIT.
+   Productienamen/schema/projectguard/traffic en activering vereisen aparte
+   expliciete beoordeling. Geen stille environment-toggle of uitvoerbare prodSQL nu.
+7. Pas na afzonderlijk releaseakkoord: compatible additieve DDL/rechten/scheduler,
+   goedgekeurde app, readback/health. Oude code zonder grant blijft werken en meet
+   niets. Begrensde install-locktimeout, stoppen bij locks i.p.v. blijven wachten.
 
-Ordering after a future concrete release approval:
-1. Restore connector write-approval state. Reconfirm hashes, code, test marker,
-   schema/roles, and absent or matching objects; stop on unexpected definitions.
-2. Install the final test SQL once through the restored standard connector;
-   verify idempotence, explicit ACLs and the genuine hosted synthetic route.
-3. Resolve consent/notice and Vercel/Supabase access-log handling/retention.
-   No certification/compliance claim is implied. Approve capacity for the
-   first campaign; current120 events/minute can undercount a traffic burst.
-4. Finalize a separately reviewed production SQL/activation diff. Inspect and
-   save any existing definitions, grants, triggers and counters before install.
-5. Install compatible additive production objects, then deploy the exact
-   approved application. Old application does not supply measurement context;
-   observers therefore do nothing during the transition.
-6. Verify with explicitly approved production checks and controlled sources;
-   keep synthetic traffic separately tagged/excluded and report gaps honestly.
-No current authorization covers steps4-6 or a production write.
+GERICHTE ROLLBACK
+Alleen bij bewezen afwezige oude baseline, safety-latch 'confirmed', exacte
+13functiehashes en3triggerchecks. Default ROLLBACK, bewust COMMIT na review.
+Eigen cronjob alleen unschedule bij exacte command/schedule/owner/database-match;
+bij afwijking stoppen. Geen pg_cron-drop, andere jobs, DELETE of CASCADE.
+Alleen drie eigen observers verwijderen, eigen wrappers/private EXECUTE/schema
+USAGE intrekken. Ratings/Auth/books/voortgang ongewijzigd. Meetgegevens behouden
+voor afzonderlijk goedgekeurde opschoning. Als objecten vooraf bestonden: bewaarde
+oude definities/ACLs herstellen, niet het absent-baselinepad gebruiken.
+Approllback blijft compatible; lokaal herinstalleren behoudt alle gegevens.
 
-Rollback:
-Disable app collector/context first (existing test hard gate currently already
-keeps production off). Remove ONLY the three named product_metric_*_v1 observers
-after checking their definitions; business tables/ratings/rounds remain intact.
-Revoke only the named public collector wrappers; restore any saved previous
-function definitions/ACLs if they existed. Retain counters for evidence unless
-explicit deletion is approved. Drop private objects only after checking later
-dependencies; no CASCADE and no broad schema/table grants/revokes on public.
-App rollback remains compatible because these observers are optional/fail-open.
-
-Installation takes ordinary CREATE FUNCTION/table/index locks and brief trigger
-DDL locks on the three source tables. No source-row rewrite or rating backfill.
-Use a bounded lock timeout during eventual production install; stop rather than
-waiting through active traffic. No new periodic automation or paid service.
-
-BLOCKER: apply_migration on the isolated project returned exactly
-McpServerError: Invalid or expired requestState. Read-only calls work; writing
-approval state does not. Refresh the Supabase connection/authorization in Codex
-and complete a fresh approval action. Do not use another SQL route to bypass it.
-Until installation+hosted storage proof succeed this package is NOT merge-ready.
+BLOKKADE EN ADVIES
+McpServerError: Invalid or expired requestState. Geen nieuwe installatiepoging:
+geen aantoonbare toegangsverandering. Leestoegang werkt; oorzaak onbekend.
+Supabase-plugin installed/ENABLED. Beschikbare tools bieden geen reconnectactie of
+exacte instellingroute. Open de bestaande Supabase-pluginverbinding in Codex en
+gebruik herstellen/opnieuw verbinden ALS die optie wordt aangeboden; meld daarna
+dat de sessie vernieuwd is. Vraag geen credentials. Ontbreekt die optie: laat
+app-/connectorondersteuning de requestState herstellen. Geen alternatieve SQL-route.
+Niet bewezen dat OAuth verlopen is of dat een beveiligingsbeleid weigert.
+Hosted opslag, echte cronruns, parallelle cloudlocks en overhead blijven onbewezen.
+RELEASEADVIES: GEBLOKKEERD; PR51 blijft Draft.

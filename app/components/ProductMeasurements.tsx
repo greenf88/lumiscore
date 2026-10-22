@@ -1,18 +1,21 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 import { useLumiScoreLocale } from './LumiScoreLocale';
-import { browserMetricContext, browserMetricsEnabled, emitBrowserMetric, flushBrowserMetrics } from '@/lib/product-metrics/browser';
+import { browserMetricContext, browserMetricsEnabled, emitBrowserMetric, flushBrowserMetrics,subscribeAnalysis,analysisRevision,serverAnalysisRevision,analysisChangeReason } from '@/lib/product-metrics/browser';
 import { metricSurfaceForPath } from '@/lib/product-metrics/contract';
 
 /** No visible UI, cookies, visitor identifiers or third-party tracker. */
 export function ProductMeasurements() {
-  const pathname = usePathname(), { locale } = useLumiScoreLocale(), last = useRef({key:'',markerSent:false});
+  const pathname = usePathname(), { locale } = useLumiScoreLocale(), last = useRef({key:'',markerSent:false,blocked:true});
+  const revision=useSyncExternalStore(subscribeAnalysis,analysisRevision,serverAnalysisRevision);
   useEffect(() => {
-    if (!browserMetricsEnabled()) return;
+    if (!browserMetricsEnabled()) {last.current={key:`${locale}:${pathname}`,markerSent:true,blocked:true};return;}
+    if(analysisChangeReason()==='accepted'&&last.current.key===`${locale}:${pathname}`){last.current.blocked=false;return;} // No pre-consent page replay.
+    if(last.current.blocked&&analysisChangeReason()==='restored')last.current={key:'',markerSent:false,blocked:false};
     const key = `${locale}:${pathname}`;
     const surface = metricSurfaceForPath(location.pathname);
-    if(last.current.key!==key){last.current={key,markerSent:false};emitBrowserMetric('page_opened', { locale, surface });}
+    if(last.current.key!==key){last.current={key,markerSent:false,blocked:false};emitBrowserMetric('page_opened', { locale, surface });}
     const entry=last.current;
     const observeContent=()=>{
       if(entry.markerSent)return true;
@@ -31,7 +34,7 @@ export function ProductMeasurements() {
     observer.observe(document.body,{childList:true,subtree:true});
     const stop=setTimeout(()=>observer.disconnect(),10000);
     return()=>{observer.disconnect();clearTimeout(stop);};
-  }, [locale, pathname]);
+  }, [locale, pathname,revision]);
   useEffect(() => {
     if (!browserMetricsEnabled()) return;
     const activated = new WeakMap<HTMLAnchorElement, number>();
@@ -52,16 +55,17 @@ export function ProductMeasurements() {
     document.addEventListener('auxclick', click, true);
     window.addEventListener('pagehide', flushBrowserMetrics);
     return () => { document.removeEventListener('click', click, true); document.removeEventListener('auxclick', click, true); window.removeEventListener('pagehide', flushBrowserMetrics); };
-  }, [locale]);
+  }, [locale,revision]);
   return null;
 }
 
 export function MeasurementFormContext() {
   const { locale } = useLumiScoreLocale();
   const input = useRef<HTMLInputElement>(null);
+  const revision=useSyncExternalStore(subscribeAnalysis,analysisRevision,serverAnalysisRevision);
   useEffect(() => {
     const context = browserMetricContext(locale, 'login');
     if (input.current) input.current.value = context ? JSON.stringify(context) : '';
-  }, [locale]);
+  }, [locale,revision]);
   return <input ref={input} type="hidden" name="productContext" defaultValue="" />;
 }

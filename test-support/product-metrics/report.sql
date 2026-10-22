@@ -1,6 +1,8 @@
 -- READ ONLY. Privileged operator/reporting connection; never expose as public RPC.
 -- On the isolated test project only: traffic='synthetic' is explicit.
 -- No user, session, IP, rating value or private reader table is accessed.
+-- Always run monitor.sql alongside these counts. Known rate/busy/storage losses
+-- make them incomplete. No health rows does NOT prove complete delivery.
 select day,event,dimensions,n from product_metrics_test.daily_counters
 where day between date '2026-10-22' and date '2026-10-22'
 and dimensions->>'traffic'='synthetic' order by day,event,dimensions::text;

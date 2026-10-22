@@ -2,15 +2,27 @@
 begin;
 do $$begin
  if not exists(select 1 from discovery_test_private.marker where identity='lumiscore-pr8-synthetic-v1') then raise exception 'TEST_TARGET_REQUIRED';end if;
- if exists(select 1 from pg_namespace where nspname='product_metrics_test') and obj_description(to_regnamespace('product_metrics_test'),'pg_namespace') is distinct from 'lumiscore-product-metrics-v2-test' then raise exception 'UNEXPECTED_EXISTING_METRICS_SCHEMA';end if;
+ if exists(select 1 from pg_namespace where nspname='product_metrics_test') and obj_description(to_regnamespace('product_metrics_test'),'pg_namespace') is distinct from 'lumiscore-product-metrics-v3-test' then raise exception 'UNEXPECTED_EXISTING_METRICS_SCHEMA';end if;
 end$$;
 create schema if not exists product_metrics_test;
-comment on schema product_metrics_test is 'lumiscore-product-metrics-v2-test';
+comment on schema product_metrics_test is 'lumiscore-product-metrics-v3-test';
 revoke all on schema product_metrics_test from public,anon,authenticated;
-create table if not exists product_metrics_test.daily_counters(day date not null,event text not null,dimensions jsonb not null,n bigint not null check(n>0),primary key(day,event,dimensions));
-create table if not exists product_metrics_test.receipts(event_id uuid primary key,day date not null);
-create index if not exists product_metric_receipt_day on product_metrics_test.receipts(day);
-create table if not exists product_metrics_test.budgets(minute timestamptz primary key,n integer not null);
+create table if not exists product_metrics_test.daily_counters(day date not null,event text not null,dimensions jsonb not null,n bigint not null check(n>0),expires_at timestamptz not null,primary key(day,event,dimensions));
+create table if not exists product_metrics_test.receipts(event_id uuid primary key,recorded_at timestamptz not null,expires_at timestamptz not null);
+create table if not exists product_metrics_test.budgets(minute timestamptz primary key,n integer not null,expires_at timestamptz not null);
+create table if not exists product_metrics_test.consent_grants(token uuid primary key,version int not null check(version=1),created_at timestamptz not null,expires_at timestamptz not null,revoked_at timestamptz);
+create table if not exists product_metrics_test.grant_budgets(grant_id uuid,minute timestamptz,n int not null,expires_at timestamptz not null,primary key(grant_id,minute));
+create table if not exists product_metrics_test.operational_counts(minute timestamptz,reason text,n bigint not null,expires_at timestamptz not null,primary key(minute,reason));
+create table if not exists product_metrics_test.maintenance_state(task text primary key check(task='cleanup'),last_attempt_at timestamptz,last_success_at timestamptz,last_error_code text,deleted jsonb,backlog boolean);
+do $$declare name text;begin
+ foreach name in array array['daily_counters','receipts','budgets','consent_grants','grant_budgets','operational_counts'] loop
+  execute format('create index if not exists %I on product_metrics_test.%I(expires_at)',name||'_expiry',name);
+ end loop;
+ foreach name in array array['daily_counters','receipts','budgets','consent_grants','grant_budgets','operational_counts','maintenance_state'] loop
+  execute format('alter table product_metrics_test.%I enable row level security',name);
+  execute format('alter table product_metrics_test.%I force row level security',name);
+ end loop;
+end$$;
 alter table product_metrics_test.daily_counters enable row level security;
 alter table product_metrics_test.daily_counters force row level security;
 alter table product_metrics_test.receipts enable row level security;
@@ -18,6 +30,38 @@ alter table product_metrics_test.receipts force row level security;
 alter table product_metrics_test.budgets enable row level security;
 alter table product_metrics_test.budgets force row level security;
 revoke all on all tables in schema product_metrics_test from public,anon,authenticated;
+
+create or replace function product_metrics_test.current_time() returns timestamptz language sql volatile set search_path='' as $$select clock_timestamp()$$;
+-- Operational service health only: fixed reason, minute, count; no event content,
+-- identity, grant, address or client-provided necessity classification.
+create or replace function product_metrics_test.operational(p_reason text) returns void language plpgsql security definer set search_path='' set lock_timeout='5ms' as $$
+declare t timestamptz:=product_metrics_test.current_time();begin
+ if p_reason not in ('accepted','duplicate','consent_denied','project_rate_limited','grant_rate_limited','busy','storage_error','invalid_payload') then return;end if;
+ insert into product_metrics_test.operational_counts values(date_trunc('minute',t),p_reason,1,date_trunc('minute',t)+interval '7 days') on conflict(minute,reason) do update set n=product_metrics_test.operational_counts.n+1;
+exception when query_canceled or others then return;end$$;
+create or replace function product_metrics_test.request_grant() returns uuid language plpgsql stable set search_path='' as $$
+declare h jsonb;begin
+ h:=nullif(current_setting('request.headers',true),'')::jsonb;
+ if h->>'dnt'='1' or h->>'sec-gpc'='1' then return null;end if;
+ return (h->>'x-lumiscore-analysis-grant')::uuid;
+exception when others then return null;end$$;
+create or replace function product_metrics_test.consent(p_action text,p_token uuid,p_until timestamptz) returns jsonb language plpgsql security definer set search_path='' set lock_timeout='1s' as $$
+declare t timestamptz:=product_metrics_test.current_time();g product_metrics_test.consent_grants;issued int;id uuid;until_at timestamptz;begin
+ if p_action not in ('accept','revoke','status') or p_action is null then raise exception 'invalid consent action';end if;
+ if p_action='status' then
+  select * into g from product_metrics_test.consent_grants where token=p_token;
+  return jsonb_build_object('active',coalesce(g.revoked_at is null and g.version=1 and g.expires_at>t,false),'expires',coalesce(floor(extract(epoch from g.expires_at)*1000),0));
+ end if;
+ if p_token is not null then update product_metrics_test.consent_grants set revoked_at=t where token=p_token and revoked_at is null;end if;
+ if p_action='revoke' then return jsonb_build_object('active',false,'expires',0,'revoked',true);end if;
+ until_at:=least(coalesce(p_until,t+interval '30 minutes'),t+interval '30 minutes');
+ if until_at<=t then return jsonb_build_object('active',false,'expires',0);end if;
+ insert into product_metrics_test.operational_counts values(date_trunc('minute',t),'grant_issued',1,date_trunc('minute',t)+interval '7 days') on conflict(minute,reason) do update set n=product_metrics_test.operational_counts.n+1 where product_metrics_test.operational_counts.n<60 returning n into issued;
+ if issued is null then return jsonb_build_object('active',false,'expires',0);end if;
+ id:=gen_random_uuid();insert into product_metrics_test.consent_grants values(id,1,t,until_at,null);
+ return jsonb_build_object('active',true,'token',id,'expires',floor(extract(epoch from until_at)*1000));
+end$$;
+create or replace function public.product_analysis_consent_test_v3(p_action text,p_token uuid default null,p_until timestamptz default null) returns jsonb language sql security invoker set search_path='' as $$select product_metrics_test.consent(p_action,p_token,p_until)$$;
 
 create or replace function product_metrics_test.valid_context(p jsonb) returns boolean language sql immutable set search_path='' as $$
  select coalesce(jsonb_typeof(p)='object' and p->>'locale' in ('nl','en') and p->>'surface' in ('home','recommendations','taste_result','book_detail','collection','editorial','browse','login','taste_test','other') and p->>'traffic'='synthetic'
@@ -28,14 +72,15 @@ create or replace function product_metrics_test.request_context() returns jsonb 
 declare h jsonb;c jsonb;
 begin
  h:=nullif(current_setting('request.headers',true),'')::jsonb;
+ if product_metrics_test.request_grant() is null then return null;end if;
  if h->>'sec-gpc'='1' or h->>'dnt'='1' or octet_length(h->>'x-lumiscore-product-context')>512 then return null;end if;
  c:=(h->>'x-lumiscore-product-context')::jsonb;
  if not product_metrics_test.valid_context(c) then return null;end if;
  return c;
 exception when others then return null;
 end$$;
-create or replace function product_metrics_test.record_event(p_event_id uuid,p_event text,p_dimensions jsonb) returns text language plpgsql security definer set search_path='' as $$
-declare minute_count integer;allowed text[];is_round boolean;is_rec boolean;c jsonb;event_day date:=(now() at time zone 'UTC')::date;
+create or replace function product_metrics_test.record_event(p_event_id uuid,p_event text,p_dimensions jsonb) returns text language plpgsql security definer set search_path='' set lock_timeout='25ms' as $$
+declare minute_count integer;allowed text[];is_round boolean;is_rec boolean;c jsonb;t timestamptz;g product_metrics_test.consent_grants;receipt uuid;event_day date;
 begin
  if p_event_id is null or p_event is null or p_event not in ('recommendation_impression','recommendation_open','want_to_read_saved','taste_round_started','taste_round_completed','page_opened','editorial_list_opened','book_card_opened','book_detail_opened','rating_saved','taste_result_opened','sign_in_succeeded') then raise exception 'invalid event' using errcode='22023';end if;
  if p_event in ('rating_saved','want_to_read_saved','taste_round_started','taste_round_completed') and pg_trigger_depth()=0 then raise exception 'server transition required' using errcode='42501';end if;
@@ -59,19 +104,24 @@ begin
  if p_dimensions ? 'list_id' and p_dimensions->>'list_id' not in ('dystopie-vanaf-1990','other') then raise exception 'invalid list' using errcode='22023';end if;
  if p_event='rating_saved' then allowed:=allowed||array['operation'];if p_dimensions->>'operation' is null or p_dimensions->>'operation' not in ('new','updated') then raise exception 'invalid operation' using errcode='22023';end if;end if;
  if exists(select 1 from jsonb_object_keys(p_dimensions) k where not(k=any(allowed))) then raise exception 'denied property' using errcode='22023';end if;
- -- Never wait for the metrics mutex in a rating transaction.
- if not pg_try_advisory_xact_lock(20261019,31) then return 'busy';end if;
- if exists(select 1 from product_metrics_test.receipts where event_id=p_event_id) then return 'duplicate';end if;
- insert into product_metrics_test.budgets values(date_trunc('minute',now()),1) on conflict(minute) do update set n=product_metrics_test.budgets.n+1 returning n into minute_count;
- if minute_count=1 then
-  delete from product_metrics_test.receipts where day<event_day-90;
-  delete from product_metrics_test.daily_counters where day<event_day-90;
-  delete from product_metrics_test.budgets where minute<date_trunc('minute',now())-interval '2 minutes';
- end if;
- if minute_count>120 then return 'rate_limited';end if;
- insert into product_metrics_test.receipts values(p_event_id,event_day);
- insert into product_metrics_test.daily_counters values(event_day,p_event,p_dimensions,1) on conflict(day,event,dimensions) do update set n=product_metrics_test.daily_counters.n+1;
+ -- Serialize with revocation on this SHORT-LIVED consent row, never a visitor ID.
+ select * into g from product_metrics_test.consent_grants where token=product_metrics_test.request_grant() for update;
+ t:=product_metrics_test.current_time();event_day:=(t at time zone 'UTC')::date;
+ if not found or g.revoked_at is not null or g.version<>1 or g.expires_at<=t then perform product_metrics_test.operational('consent_denied');return 'consent_denied';end if;
+ if exists(select 1 from product_metrics_test.receipts where event_id=p_event_id and expires_at>t) then perform product_metrics_test.operational('duplicate');return 'duplicate';end if;
+ insert into product_metrics_test.grant_budgets values(g.token,date_trunc('minute',t),1,t+interval '1 hour') on conflict(grant_id,minute) do update set n=product_metrics_test.grant_budgets.n+1 where product_metrics_test.grant_budgets.n<60 returning n into minute_count;
+ if minute_count is null then perform product_metrics_test.operational('grant_rate_limited');return 'grant_rate_limited';end if;
+ insert into product_metrics_test.budgets values(date_trunc('minute',t),1,t+interval '1 hour') on conflict(minute) do update set n=product_metrics_test.budgets.n+1 where product_metrics_test.budgets.n<600 returning n into minute_count;
+ if minute_count is null then perform product_metrics_test.operational('project_rate_limited');return 'project_rate_limited';end if;
+ delete from product_metrics_test.receipts where event_id=p_event_id and expires_at<=t;
+ insert into product_metrics_test.receipts values(p_event_id,t,t+case when p_event in ('taste_round_started','taste_round_completed','sign_in_succeeded') then interval '90 days' else interval '1 day' end) on conflict(event_id) do nothing returning event_id into receipt;
+ if receipt is null then perform product_metrics_test.operational('duplicate');return 'duplicate';end if;
+ insert into product_metrics_test.daily_counters values(event_day,p_event,p_dimensions,1,(event_day::timestamp at time zone 'UTC')+interval '90 days') on conflict(day,event,dimensions) do update set n=product_metrics_test.daily_counters.n+1;
+ perform product_metrics_test.operational('accepted');
  return 'counted';
+exception when lock_not_available then perform product_metrics_test.operational('busy');return 'busy';
+ when invalid_parameter_value or insufficient_privilege then perform product_metrics_test.operational('invalid_payload');return 'invalid_payload';
+ when query_canceled or others then perform product_metrics_test.operational('storage_error');return 'storage_error';
 end$$;
 
 -- Preserve the original narrow receipt RPC, restricted to browser observations.
@@ -120,11 +170,38 @@ begin
 exception when others then return new; -- Metrics never roll back the business write.
 end$$;
 
+-- Scheduled maintenance; never called from event ingestion. Privileged only.
+create or replace function product_metrics_test.cleanup(p_at timestamptz default null,p_batch int default 5000) returns jsonb language plpgsql security definer set search_path='' set lock_timeout='100ms' as $$
+declare t timestamptz:=coalesce(p_at,product_metrics_test.current_time());name text;deleted_n int;counts jsonb:='{}';has_backlog boolean:=false;remaining boolean;code text;
+begin
+ if p_batch<1 or p_batch>5000 or p_batch is null then raise exception 'invalid cleanup batch';end if;
+ insert into product_metrics_test.maintenance_state(task,last_attempt_at) values('cleanup',t) on conflict(task) do update set last_attempt_at=t;
+ begin
+  foreach name in array array['daily_counters','receipts','budgets','consent_grants','grant_budgets','operational_counts'] loop
+   execute format('delete from product_metrics_test.%I where ctid in(select ctid from product_metrics_test.%I where expires_at<=$1 order by expires_at limit $2 for update skip locked)',name,name) using t,p_batch;
+   get diagnostics deleted_n=row_count;counts:=counts||jsonb_build_object(name,deleted_n);
+   execute format('select exists(select 1 from product_metrics_test.%I where expires_at<=$1)',name) into remaining using t;has_backlog:=has_backlog or remaining;
+  end loop;
+  if to_regclass('cron.job_run_details') is not null then
+   execute 'delete from cron.job_run_details where runid in(select d.runid from cron.job_run_details d join cron.job j on j.jobid=d.jobid where j.jobname=''lumiscore-product-metrics-test-cleanup-v3'' and j.username=current_user and j.database=current_database() and d.end_time<=$1-interval ''7 days'' order by d.end_time limit $2)' using t,p_batch;
+  end if;
+  update product_metrics_test.maintenance_state set last_success_at=t,last_error_code=null,deleted=counts,backlog=has_backlog where task='cleanup';
+  return jsonb_build_object('status','ok','deleted',counts,'backlog',has_backlog);
+ exception when query_canceled or others then
+  get stacked diagnostics code=returned_sqlstate;
+  update product_metrics_test.maintenance_state set last_error_code=code,backlog=true where task='cleanup';
+  return jsonb_build_object('status','failed','sqlstate',code);
+ end;
+end$$;
+
 -- All installation ACLs explicit; no dependency on default Supabase grants.
 revoke all on all functions in schema product_metrics_test from public,anon,authenticated;
 grant usage on schema product_metrics_test to anon,authenticated;
 grant execute on function product_metrics_test.valid_context(jsonb) to anon,authenticated;
 grant execute on function product_metrics_test.record_event(uuid,text,jsonb) to anon,authenticated;
+grant execute on function product_metrics_test.consent(text,uuid,timestamptz) to anon,authenticated;
+revoke all on function public.product_analysis_consent_test_v3(text,uuid,timestamptz) from public,anon,authenticated;
+grant execute on function public.product_analysis_consent_test_v3(text,uuid,timestamptz) to anon,authenticated;
 revoke all on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb),public.record_product_sign_in_test_v1(jsonb) from public,anon,authenticated;
 grant execute on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb) to anon,authenticated;
 grant execute on function public.record_product_sign_in_test_v1(jsonb) to authenticated;

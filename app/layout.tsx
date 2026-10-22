@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ProductAnalysisConsent } from './components/ProductAnalysisConsent';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { resolveRequestLocale, requestPagePath } from '@/lib/i18n/server';
@@ -66,8 +66,8 @@ export default async function RootLayout({
           {children}
           <OverviewScrollMemory />
           <ProductMeasurements />
+          <ProductAnalysisConsent />
         </LumiScoreLocaleProvider>
-        <SpeedInsights />
       </body>
     </html>
   );

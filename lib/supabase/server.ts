@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies, headers } from 'next/headers';
 import { readServerEnvironment } from '@/lib/server-environment';
 import { measurementTestTarget, METRIC_CONTEXT_HEADER, parseMetricContext } from '@/lib/product-metrics/contract';
+import {CHOICE_COOKIE,GRANT_COOKIE,GRANT_HEADER,grantedAnalysisToken} from '@/lib/product-metrics/consent';
 
 function getSupabaseEnvironment() {
   const url = readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL');
@@ -22,15 +23,16 @@ export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
   const { url, publishableKey } = getSupabaseEnvironment();
   let context = null;
+  const grant=grantedAnalysisToken(cookieStore.get(CHOICE_COOKIE)?.value,cookieStore.get(GRANT_COOKIE)?.value);
   if (measurementTestTarget(url)) {
     const h = await headers(), raw = h.get(METRIC_CONTEXT_HEADER);
-    if (raw && raw.length <= 512 && h.get('sec-gpc') !== '1' && h.get('dnt') !== '1') {
+    if (grant && raw && raw.length <= 512 && h.get('sec-gpc') !== '1' && h.get('dnt') !== '1') {
       try { context = parseMetricContext(JSON.parse(raw)); } catch { /* Optional metrics never prevent authentication or writes. */ }
     }
   }
 
   return createServerClient(url, publishableKey, {
-    ...(context ? { global: { headers: { [METRIC_CONTEXT_HEADER]: JSON.stringify(context) } } } : {}),
+    ...(context && grant ? { global: { headers: { [METRIC_CONTEXT_HEADER]: JSON.stringify(context),[GRANT_HEADER]:grant } } } : {}),
     cookies: {
       getAll() {
         return cookieStore.getAll();
