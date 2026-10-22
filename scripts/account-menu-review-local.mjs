@@ -3,7 +3,7 @@ import {createServer} from 'vite';
 import vinext from 'vinext';
 import tailwindcss from '@tailwindcss/postcss';
 import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../',import.meta.url)),port=3182;
+const root=fileURLToPath(new URL('../',import.meta.url)),guest=process.argv.includes('--guest'),port=guest?3183:3184;
 for(const key of Object.keys(process.env))if(/SUPABASE|DATABASE|SECRET|TOKEN|GOOGLE_BOOKS/.test(key))delete process.env[key];
 const modules={
  'lib/supabase/client.ts':'export const supabase=null;',
@@ -13,9 +13,9 @@ const modules={
  export default function Review(){return <LumiScoreBookDetail
  book={{id:'work-6',workId:'6',title:'Local synthetic menu review',author:'Test fixture',cover:'orbit',coverUrls:[],score:null,ratingsCount:0,match:null}}
  description={null} initialReadingStatus={null} collectionContext={null}
- initialRatingState={{authenticated:true,userEmail:'synthetic@example.invalid',userRating:null,lumiscore:null,ratingCount:0}}
- personalization={{authenticated:true,hasEvidence:false,candidate:null,match:null}}
- authState={{authenticated:true,displayName:'Synthetic reviewer',avatarLetter:'S'}}
+ initialRatingState={{authenticated:${!guest},userEmail:null,userRating:null,lumiscore:null,ratingCount:0}}
+ personalization={{authenticated:${!guest},hasEvidence:false,candidate:null,match:null}}
+ authState={{authenticated:${!guest},displayName:'Synthetic reviewer',avatarLetter:'S'}}
  returnNavigation={{kind:'browse',href:'/browse'}}/>}`,
 };
 const server=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/account-review',
