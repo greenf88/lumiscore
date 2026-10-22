@@ -1,0 +1,43 @@
+PR49 release follow-up — 2026-10-22
+
+PR49 head 60b82af73f328779d194c1f7c13a4e995e2c49d1 merged as
+18df042f368c384b804ba7697bf97d157c366bbc. Both trees were identical.
+The first live guest smoke test found a 5px horizontal overflow at Dutch
+320px (305px content viewport with scrollbar). The rightmost guest sign-in
+link shrank below its text width. No authenticated menu failure was found.
+
+Production was rolled back to deployment dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc,
+SHA 316adcf8592a08f88b7d5e12d871b549ced1a7e8, while preparing this follow-up.
+No database, account, rating, reading-status or environment changes.
+
+Correction: retain the guest sign-in's original location before languages;
+only the authenticated avatar is rightmost. At the existing <359px
+breakpoint, use 6px detail-header sides, zero gaps, and prevent the guest
+link from shrinking. Text and 44px touch targets are not reduced.
+The original authenticated panel geometry, dismissal and handlers are unchanged.
+
+Local checks: 33 targeted auth/menu tests; TypeScript; targeted ESLint;
+Vercel-format production build; client-secret scan; git diff --check pass.
+16 guest cases and 16 locally simulated authenticated cases: NL/EN,
+Paper/Ink, widths 320/375/390/430. No document overflow or clipped guest
+label; open account panels remain at least 12px inside available width.
+The review harness is loopback-only, removes credentials, and blocks API
+writes. Synthetic identities are not included in application routes/builds.
+Prior PR49 genuine hosted test-account evidence is retained for unchanged
+authenticated behavior; its temporary account and credentials are already
+removed. Local simulation is not a new hosted login or a physical phone test.
+
+Evidence: outputs/mobile-profile-menu-20261021/guest-fix-local-*.json/png
+(outside repository). Hosted follow-up and final deployment results are
+recorded in the PR and that directory's release-20261022.txt.
+
+Release: reuse the existing authorized PR49 Preview branch configuration,
+wait for full CI and hosted guest checks. After merging, verify a new
+production-target deployment and promote it to resume production assignment
+after rollback. Never promote the test-project Preview to production.
+Recovery: rollback application to the above known-good production deployment;
+no data rollback. A separate revert can restore main if needed.
+
+Live signed-in menu verification still requires the user's existing session;
+no production test account is created. Further Hobbit-cover research remains
+outside this release.

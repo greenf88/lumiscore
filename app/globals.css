@@ -1539,6 +1539,9 @@ button, input, select, textarea { font-family: var(--sans); }
 }
 @media (max-width: 359px) {
   .site-header, .browse-page-shell .site-header { padding-inline: 6px; column-gap: 0; }
+  .detail-header { padding-inline: 6px; gap: 0; }
+  .detail-header-actions { gap: 0; }
+  .detail-header .detail-sign-in { flex-shrink: 0; }
   .site-header { grid-template-columns: 44px minmax(0, 1fr); }
   .main-nav { gap: 0; }
   .site-header .mobile-search-button { display: none; }

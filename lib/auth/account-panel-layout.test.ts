@@ -37,5 +37,13 @@ test('both header variants use bounded geometry, scrolling and existing keyboard
   assert.match(menu,/ref=\{panelRef\}/);
   assert.match(menu,/triggerRef\.current\?\.focus\(\)/);
   assert.match(css,/\.header-account-panel \{[^}]*overflow-y: auto[^}]*overscroll-behavior: contain/);
-  assert.match(detail,/<LanguageSwitcher \/>[\s\S]*?<ThemeToggle[^>]+\/>\s*<LumiScoreAccountMenu/);
+  assert.match(detail,/<LanguageSwitcher \/>[\s\S]*?<ThemeToggle[^>]+\/>\s*\{authState\.authenticated && <LumiScoreAccountMenu/);
+});
+
+test('guest sign-in retains its original position; only the authenticated avatar moves right',async()=>{
+  const detail=await readFile(new URL('../../app/components/LumiScoreBookDetail.tsx',import.meta.url),'utf8');
+  assert.match(detail,/<MobileNavigation[^>]+\/>\s*\{!authState\.authenticated && <LumiScoreAccountMenu[^>]+\/\>\}\s*<LanguageSwitcher \/>/);
+  assert.equal((detail.match(/authState\.authenticated && <LumiScoreAccountMenu/g)??[]).length,2);
+  const css=await readFile(new URL('../../app/globals.css',import.meta.url),'utf8');
+  assert.match(css,/\.detail-header \.detail-sign-in \{ flex-shrink: 0; \}/);
 });
