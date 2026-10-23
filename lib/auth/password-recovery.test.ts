@@ -13,15 +13,17 @@ import { getSafeNextPath } from './request.ts';
 
 const VALID_STATE = '0d85fa53-3ca0-48b2-91ab-3f105570aa31';
 
-test('recovery callback is fixed to the trusted site origin and update path', () => {
-  const callback = new URL(createPasswordRecoveryCallbackUrl(VALID_STATE));
-  assert.equal(callback.pathname, '/auth/callback');
-  assert.equal(callback.searchParams.get('flow'), 'recovery');
-  assert.equal(callback.searchParams.get('next'), PASSWORD_RECOVERY_PATH);
-  assert.equal(callback.searchParams.get('recovery_state'), VALID_STATE);
-  assert.ok(callback.protocol === 'https:' || callback.protocol === 'http:');
-  assert.equal(callback.username, '');
-  assert.equal(callback.password, '');
+test('recovery landing retains the requesting environment and locale, not the SEO origin', () => {
+  for (const origin of ['https://lumisco.re', 'https://review.vercel.app', 'http://127.0.0.1:3015']) {
+    for (const locale of ['nl', 'en'] as const) {
+      const callback = new URL(createPasswordRecoveryCallbackUrl(VALID_STATE, `${origin}/auth/request-password-reset`, locale));
+      assert.equal(callback.origin, origin);
+      assert.equal(callback.pathname, `/${locale}${PASSWORD_RECOVERY_PATH}`);
+      assert.equal(callback.searchParams.get('recovery_state'), VALID_STATE);
+      assert.equal(callback.username, '');
+      assert.equal(callback.password, '');
+    }
+  }
 });
 
 test('recovery state must be present, well formed, and browser bound', () => {
@@ -78,7 +80,8 @@ test('reset requests use one generic response for known and unknown addresses', 
   assert.match(route, /resetPasswordForEmail\(email/);
   assert.match(route, /PASSWORD_RESET_REQUEST_DESTINATION/);
   assert.doesNotMatch(route, /error\s*\?[^:]+:/);
-  assert.doesNotMatch(route, /request\.url|headers\.get\(['"]host/i);
+  assert.match(route, /createPasswordRecoveryCallbackUrl\(recoveryState, request\.url, locale\)/);
+  assert.doesNotMatch(route, /headers\.get\(['"](?:host|x-forwarded-host)/i);
 });
 
 test('recovery writes are CSRF checked, authenticated, and never expose secrets', async () => {

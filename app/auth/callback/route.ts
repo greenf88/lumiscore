@@ -11,20 +11,21 @@ import {
 import { getSafeNextPath, PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
-import { absoluteLumiScoreUrl } from '@/lib/seo/site-origin';
 import { registrationCallbackDestination } from '@/lib/auth/registration';
+import { isRecoveryDestination, recoveryLocale } from '@/lib/auth/recovery-link';
+import { localizedHref, splitLocalePath } from '@/lib/i18n/paths';
 
 const VERIFIED_RECOVERY_MAX_AGE_SECONDS = 10 * 60;
 
-function privateRedirect(destination: string) {
-  return NextResponse.redirect(absoluteLumiScoreUrl(destination), {
+function privateRedirect(destination: string, requestUrl: string) {
+  return NextResponse.redirect(new URL(destination, new URL(requestUrl).origin), {
     status: 303,
     headers: PRIVATE_RESPONSE_HEADERS,
   });
 }
 
-function invalidRecoveryRedirect() {
-  const response = privateRedirect('/forgot-password?error=invalid_link');
+function invalidRecoveryRedirect(requestUrl: string, locale: 'nl' | 'en') {
+  const response = privateRedirect(localizedHref('/forgot-password?error=invalid_link', locale), requestUrl);
   response.cookies.set(
     PASSWORD_RECOVERY_PENDING_COOKIE,
     '',
@@ -47,17 +48,18 @@ export async function GET(request: NextRequest) {
   );
 
   if (recoveryFlow) {
+    const locale = recoveryLocale(splitLocalePath(next).locale);
     const pendingState = request.cookies.get(
       PASSWORD_RECOVERY_PENDING_COOKIE,
     )?.value;
     const suppliedState = request.nextUrl.searchParams.get('recovery_state');
     if (
-      next !== PASSWORD_RECOVERY_PATH ||
+      !isRecoveryDestination(next) ||
       !code ||
       !isValidRecoveryState(suppliedState) ||
       !recoveryStatesMatch(pendingState, suppliedState)
     ) {
-      return invalidRecoveryRedirect();
+      return invalidRecoveryRedirect(request.url, locale);
     }
 
     const supabase = await createServerSupabaseClient();
@@ -66,17 +68,17 @@ export async function GET(request: NextRequest) {
       'private',
       () => supabase.auth.exchangeCodeForSession(code),
     );
-    if (error || !data.session?.user) return invalidRecoveryRedirect();
+    if (error || !data.session?.user) return invalidRecoveryRedirect(request.url, locale);
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
     if (
       claimsError ||
       !hasRecentRecoveryAuthentication(claimsData?.claims)
     ) {
       await supabase.auth.signOut({ scope: 'local' });
-      return invalidRecoveryRedirect();
+      return invalidRecoveryRedirect(request.url, locale);
     }
 
-    const response = privateRedirect(PASSWORD_RECOVERY_PATH);
+    const response = privateRedirect(localizedHref(PASSWORD_RECOVERY_PATH, locale), request.url);
     response.cookies.set(
       PASSWORD_RECOVERY_PENDING_COOKIE,
       '',

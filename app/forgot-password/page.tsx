@@ -37,6 +37,7 @@ export default async function ForgotPasswordPage({
         mode="request"
         error={error === 'invalid_link'
           ? translate(locale, 'auth.recoveryInvalid')
+          : error === 'update_failed' ? translate(locale, 'auth.passwordUpdateFailed')
           : null}
         message={message === 'check_email'
           ? translate(locale, 'auth.recoveryCheckEmail')
