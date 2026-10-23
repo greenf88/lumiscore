@@ -1,0 +1,104 @@
+Drie resterende collectiecovergevallen — testreview, 23 oktober 2026
+
+Basis: remote main 8a9bc3756800e366e70b409c4bc664c7e1b7888d, inclusief PR52.
+Afzonderlijke branch: fix/remaining-collection-covers-20261023.
+Geen push, merge, hosted deployment of productiepublicatie binnen deze opdracht.
+PR #51 en zijn meetinstallatie niet aangeraakt.
+
+Oorzaak en gekozen oplossing
+De huidige edities 148/228/553 hebben expliciete Engelse taal, maar geen positief
+exact-edition coverrecord bij OL. De ISBN-coveraanvraag is geen bewijs en wordt
+terecht niet als willekeurige fallback gebruikt. Er is geen nieuwe generieke
+selectie- of taalbug aangetoond. De oude edities blijven neutraal en behouden.
+
+Voor ieder bestaand Work is één andere, onderbouwde Engelse printeditie getest:
+Work 148: ISBN 9780064471107, OL7292690M, The Magician's Nephew (The Chronicles
+of Narnia), C.S.Lewis, HarperTrophy. Cover52093 uit precies deze OL-editie.
+Work 228: ISBN 9780440418566, OL7521619M, The Amber Spyglass, Philip Pullman,
+Dell Yearling. Officiële PRH-afbeelding en Book-schema met expliciet English.
+Work 553: ISBN 9781837901326, OL46530123M, The Housemaid's Secret, Freida McFadden,
+Bookouture. Exacte bibliotheekeditie bevestigt English en paperback. OL zelf
+mist taal; er wordt niets uit titelwoorden of covertekst afgeleid. Positief
+cover14840896 hoort bij precies dit ISBN/OL-record en de juiste Work/auteur.
+
+Belangrijke afwijzingen
+- 9780008662950/OL48679586M verwijst naar ander OL-Work OL35919517W: niet overgenomen.
+- 9780349132617/OL48185910M verwijst naar auteur OL7386651A, B.A. Paris: afgewezen
+  ondanks overeenkomende titel/ISBN/Work. Geen auteur of bronrecord aangepast.
+- 9781837901326/OL46530123M heeft de correcte auteur OL8384995A, Freida McFadden.
+- Bestaand 9781538742587 heeft tegenstrijdige winkelmetadata en de officiële
+  URL landt op de algemene uitgevershomepage: geen bewijs voor een cover.
+- Historische C.S. Lewis ISBN-pagina redirect nu naar algemene HarperCollins-pagina;
+  de actuele Engelse taalonderbouwing is de exacte OL- en bibliotheekeditie.
+
+Bronnen/controledatum, exacte identifiers en onzekerheden: proposal.json.
+Minimale bronfeiten en afgewezen aanvragen: source-probes.json.
+Werkelijke afbeeldingen bekeken; alle drie HTTP 200 image/jpeg, 36.046/60.158/
+59.301 bytes, ruim onder 300 kB. Narnia 309x500, Amber 306x450, Housemaid 325x500.
+Geen afbeelding gegenereerd, geen beeld van een ander ISBN op de oude editie.
+Dit bronnenonderzoek is geen beoordeling van beeldgebruiksrechten.
+
+Testdatabase
+Doel expliciet bevestigd: hlvujbrmfdlrfxdjwsmb.
+Drie edities toegevoegd aan reeds bestaande test-Works:
+924100148→924210148, 924100228→924210228, 924100553→924210553.
+Oude test-edities 924200148/228/553 behouden. Geen nieuw Work/auteur/collectielid.
+Gecontroleerde dry-run gaf 3 toevoegingen, commit 3, herhaling 0.
+Werkelijke committed receipt: test-receipt.json.
+Voor/na controlesommen van alle Works, auteurs, ratings, leesstatussen,
+collectieleden en overige edities identiek. Geen accounts/ratings aangemaakt.
+
+Applicatie en controles
+Alleen 3 nieuwe exacte coverentries in bestaand reviewed-cover-mechanisme.
+Geen wijziging aan selector, taalregels, scoreberekening of voortgang.
+De bestaande selector kiest met ongewijzigde regels de nieuwe edities.
+3 nieuwe identiteit-/taal-/scoretests plus 6 SQL-import/hersteltests.
+257 boek-/collectie-/SQL-tests groen, plus één daarna toegevoegde geslaagde
+test van de exacte productie-SQL in lokaal PostgreSQL. TypeScript, gerichte lint,
+productiebuild en clientsecretscan groen (70 clientbestanden, geen secrets).
+De eerste beperkte sandboxbuild strandde op EPERM readlink; dezelfde build met
+toegestane bestandsrechten slaagde. Geen dependency/configuratie gewijzigd.
+Gebruikelijke niet-fatale Nitro optioneletrace/dynamic-importwaarschuwingen.
+
+Gebouwde applicatie met echte testdatabase: zes NL/EN-detailroutes en beide
+testcollectieroutes HTTP 200. Editietitel, ISBN, cover-src, NL Engelse-editielabel,
+neutrale score en teruglink allemaal bevestigd in server-HTML.
+Local HTTP preview: http://127.0.0.1:3991/nl/book/924100148
+Read-only GET/HEAD host; POST afgewezen. Geen echte login of rating nodig.
+HTTP/SSR-uitkomsten: http-verification.json.
+
+Beperkingen
+De cloudbrowser kan deze lokale loopbackserver niet bereiken. Daarom geen
+nieuwe browser-hydratatie-, Paper/Ink-, viewport- of daadwerkelijk-in-browser
+geladen-afbeeldingenclaim. De beelden zelf zijn opgehaald en visueel geïnspecteerd.
+Een eerdere lokale Cloudflare-devserver gaf een catalogusnetwerkfout/HTTP500;
+de gebouwde Node-versie met dezelfde testconfiguratie geeft alle gerichte routes 200.
+Geen algemene productiefout afgeleid uit die lokale ontwikkelbeperking.
+Een afzonderlijke hosted Preview met visuele controles is de volgende stap
+vóór productie. Er is binnen deze opdracht niets gepusht of gedeployd.
+
+Productievoorstel, nog NIET uitgevoerd
+production-proposal.sql: exact 3 toevoegingen aan Works 148/228/553; geen updates
+van bestaande edities. De drie ISBN's/OL-ID's zijn read-only niet gevonden op
+productie. Identiteit/ISBN10/ISBN13/OL-ID-conflicten stoppen de hele transactie.
+Bestaande identitysequence wordt gebruikt en vooraf gecontroleerd; geen setval.
+Alleen 3 toevoegingen of volledige ongewijzigde herhaling toegestaan, niet gedeeltelijk.
+SQL eindigt bewust met ROLLBACK. Testbevoegdheid is geen productieakkoord.
+
+Veilige volgorde na later afzonderlijk akkoord
+1. Controleer actuele main, productie-Work/auteur/oudeditie, ontbrekende ISBN's en
+ identitysequence opnieuw. Stop bij afwijkingen; geen automatische reparatie.
+2. Draai ongewijzigde productie-dry-run, controleer 3 regels, bewaar ontvangstbewijs.
+3. Pas uitsluitend goedgekeurde import toe met COMMIT en bewaar FULL committed receipt.
+4. Controleer alle oude records, ratings, statussen en collectieleden onveranderd.
+5. Publiceer uitsluitend het apart goedgekeurde codepakket; daarna NL/EN livecontrole.
+ Code is compatibel vóór import: de entries raken dan geen bestaande editie.
+ Data zonder code heeft voor Housemaid geen gegarandeerde directe broncover;
+ voer beide als één gepland releasepakket uit, niet onbedoeld afzonderlijk.
+6. Gericht terugzetten met recovery.sql en het committed receipt. Stopt bij latere
+ metadatawijzigingen of nieuwe edition-FK-verwijzingen. Geen CASCADE, geen herstel
+ van gebruikers- of ratingtabellen. Rollback van applicatie kan zonder DB-reset;
+ later verwijderen van de extra edities alleen na deze herstelcontroles.
+
+Advies: drie oplossingen onderbouwd en op test/SSR gevalideerd, gereed voor
+afzonderlijke hosted beoordeling. Nog geen productie-import of releaseakkoord.
