@@ -1,0 +1,143 @@
+LumiScore productmetingen — geïsoleerde voorbereiding 22 oktober 2026
+
+Laatste vervolgcontrole: zie product-measurement-final-installation-review-20261022.txt.
+Opnieuw één normale installatiepoging: dezelfde requestState-fout; nacontrole
+bevestigt schema/functies/triggers nog afwezig. Geen hosted opslagbewijs of release.
+Consent/retentie/capaciteit nu uitgewerkt in
+product-measurement-privacy-capacity-20261022.txt; dit preciseert de eerdere korte
+"90dagen/anonieme receipts"-omschrijving. Applicatie en install.sql ongewijzigd.
+
+Basis: remote main en actieve Ready-productie beide
+b4ac64d1166831f3578616f9288680d11275f916 (PR48 plus PR49/50).
+Nieuwe worktree/branch feature/product-measurements-20261022 vanaf die basis.
+Hergebruikt: alleen meetcommit660a178 uit het geparkeerde19-oktoberwerk.
+Andere werkbomen, PR38/44/46, kenmerkaudit en productiedata niet aangepast.
+
+Al actief: bestaande Speed Insights voor technische webprestaties; bestaande
+operationele ratings/rondes. Geen gevalideerde productfunnel of campagnebaseline.
+De historische517 ratings/19 rondes hebben onbekende meetherkomst en blijven
+buiten deze baseline. Contract: docs/product-measurement-contract.md.
+
+Afgeronde codevoorbereiding:
+- vijf bestaande eventnamen behouden; zeven minimale aanvullingen voor pagina,
+  redactionele lijst, boeklink/detail, opgeslagen rating, resultaat en login;
+- vaste campagne-/zoekbronwaarden; alleen begrensde context30min per browsertab,
+  geen cookie/visitor-ID, raw URL, zoektekst, naam, email of individuele score;
+- originele vormgeving en canonicals/sitemap; alleen onzichtbare meetcomponenten,
+  data-attributen, kleine contextheaders/hidden formcontext op het testdoel;
+- anonieme dagtellers; rating nieuw/gewijzigd en ronde-overgangen volgen alleen
+  echte DB-overgangen. De bedrijfs-RPCs/ratingregels zijn ongewijzigd;
+- geen nieuwe blokkerende rating/ronde-aanvragen. Loginlevering na response,
+  beperkte tijd, fouten veranderen de uitkomst van aanmelden/navigeren niet;
+- publieke collector weigert server-success-events en persoonsgegevensvelden;
+  batches max10/8192bytes, origin/typecontrole, GPC/DNT en SQL-validatie;
+- alle testdata verplicht traffic=synthetic, standaard uitgesloten van rapport.
+
+Meetbaarheid en grenzen:
+Het contract levert gebeurtenissen en ongerelateerde eventverhoudingen, geen
+unieke bezoeken/personen/sessies of aantoonbare individuele uitval per stap.
+Rapport vermeldt noemer, periode, onbekende herkomst en bezorgingsverlies.
+Dagvenster UTC; eventreceipts/tellers90dagen, globale120events/minuutgrens.
+Consent/operationele providerlogs/capaciteit moeten vóór productie worden beoordeeld.
+Productiecollectie is hard uit en wordt door deze PR niet geactiveerd.
+
+LOKAAL BEWEZEN:
+Werkelijke PostgreSQL/PGlite-test van installatie en tweede idempotente installatie,
+nieuwe en gewijzigde ratings, identieke retries/no-ops, mislukte rating,
+eerste rondeovergang, dubbele completion/receipts, want-to-read, geverifieerde
+loginreceipt, anon-ACL, denied fields, rate limit, privacyopt-out en meetstoring
+zonder terugrollen van echte rating. Browsertransporttests controleren batching,
+campagnebehoud, taalwissel, payloadallowlist, productie-uit en GPC/DNT.
+De bestaande rating/ronde/scoringscontracten blijven bytegelijk.
+Volledige bestaande suite tijdens voorbereiding:839 tests,823 pass,16 skipped,
+0 fail. Daarna8 gerichte tests op de definitieve applicatiebestanden groen.
+TypeScript, volledige lint, productiebuild en client-secretscan146bestanden groen.
+Volledige CI39751679372 op applicatiecommit916ebf eveneens success: unit suite,
+TypeScript, lint, synthetische NL/EN SSR, Vercel-build, secretscan en diffcontrole.
+
+SQL-microbenchmark lokaal(PGlite/WASM/Node24.20/win32x64),21 sequentiële writes:
+zonder observers median2.27ms(min1.95,max4.26); observers zonder context3.35ms
+(2.13..16.79); met context5.35ms(2.91..30.82). Alleen een lokale CPU/SQL-proef;
+geen bewezen hosted/productionlatency. Geen extra DB-netwerkquery op de mutatieroute.
+
+ECHTE BLOKKADE:
+Een nieuwe expliciet toegestane apply_migration-opdracht op uitsluitend
+hlvujbrmfdlrfxdjwsmb gaf exact `McpServerError: Invalid or expired requestState`.
+Read-back: daily_counters=NULL, batchcollector=NULL, eigen triggers=0.
+Geen tweede poging, execute_sql-DDL, CLI/direct-SQL-omweg of productie-installatie.
+Geen succesvolle hosted meetopslag of browser->login->rating->completion-tellers
+bewezen. Geen nieuwe accounts/ratings/leesstatussen gemaakt om dat te simuleren.
+Minimale herstelactie: Supabase-koppeling/schrijfactie in Codex opnieuw autoriseren,
+dan dezelfde concrete testinstallatie via de normale connector laten uitvoeren.
+
+Rapportage:
+node --experimental-strip-types scripts/product-measurement-report.mjs --synthetic-example
+Dit is herkenbaar fictieve lokale testinput, geen waargenomen hosted verkeer.
+Voorbeeld:2 lijstopeningen,1 boekklik,10 nieuwe ratings,1 wijziging,1 start/1 einde.
+1/2 is een eventverhouding, geen50% unieke-bezoekersconversie. Sessions/users=null.
+Read-only queries: test-support/product-metrics/report.sql.
+Afzonderlijk voorstel: docs/product-measurement-production-proposal-20261022.txt.
+
+Preview: uitsluitend publieke Supabase-URL/publishable key van deze branch;
+geen admin key, productie-, andere branch- of beschermingswijziging.
+Draft-PR: https://github.com/greenf88/lumiscore/pull/51
+Geteste applicatiecommit:916ebf1131c19f6e308f52401693e435fbea18ac.
+Ready testdeployment:dpl_9DhCuyddo2XnBVqhAMAsi6dQwiEa, gitSHA via VercelAPI bevestigd.
+https://lumiscore-e6ytghn29-rgkgroeneveld-9102.vercel.app/nl/toplijsten/dystopie-vanaf-1990?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610
+Eén noodzakelijke expliciete rebuild nadat alleen de twee publieke branchwaarden
+waren toegevoegd. Eerste build zonder configuratie niet als testbewijs gebruikt.
+Latere commits met uitsluitend verslag/reportquery/meethelper wijzigen de
+applicatie of SQL-installatie niet; dit applicatiebewijs blijft afzonderlijk.
+
+HOSTED WEL BEWEZEN22oktober, via officiële beschermde Vercel-route:
+- NL/EN campagnepagina en echte test-boekdetail elk HTTP200, bestaande markers;
+  campagnequery niet in canonical, Preview blijft noindex;
+- geldige collectorbatch503 zolang installatie ontbreekt; cross-origin403,
+  text/plain415, oversize413, identiteitsveld400, vervalst rating_saved400,
+  DNT/GPC204; ongeldige rating0 geeft400, gast-start401, geen echte testwrites;
+- browser390x844/1280desktop, NL/EN, Ink/Paper: tien bestaande testboeken,
+  native boekklik, detail, loginroute, taalwissel, teruglink en smaaktest-ingang
+  blijven bruikbaar ondanks collector503. Geen fysieke telefooncontrole;
+- deploymentlogs tonen verwachte POST503 zonder runtimepayloads; afgebakende
+  controle vanaf2026-10-22T09:09:29.694Z na twee thema-her-renders:0 extra requests.
+  Geen claim over alle requests/gedrag van een ingelogde route;
+- browser API laat geen Performance API zien en redigeert verborgen formwaarde.
+  Browserpayload/context is dus niet uit verborgen opslag/velden gehaald;
+  allowlist/campagnebehoud zijn lokaal getest, niet als hosted opslag gepresenteerd.
+
+EXTRA TESTBEPERKING:
+De gastlink /en/taste-test/preferences toont op deze testcatalogus eerlijk
+"The Taste Test is temporarily unavailable / One or more catalog books could
+not be loaded". Geen nieuwe catalogusdata toegevoegd om dit te omzeilen.
+Voorkeuren zijn geen echte ratingronde: geen fictieve start/completionmeetclaim.
+Geen synthetisch account gemaakt: installatie ontbreekt; complete authentieke
+browser->login->rating->ronde->resultaat->tellers blijft onbewezen.
+
+HOSTED HTTP-TIJDEN:3 sequentiële requests per route, Windows desktop curl via
+officiële Verceltoegang, bestaand netwerk, geen throttle/gedwongen koude start.
+CLI-starttijd uitgesloten. TTFB en volledige server-HTML, niet paint/LCP/covers.
+                         TTFB mediaan(min..max)  HTML mediaan(min..max),ms
+NL dystopielijst          362(302..554)           370(312..566)
+EN dystopielijst          280(207..284)           294(218..308)
+NL detail921100102        225(216..283)           226(218..958)
+EN detail921100102        246(235..270)           287(237..693)
+Geen vergelijkbare onbehandelde Previewbaseline; geen bewezen performancewinst
+of geïnstalleerde hosted-triggeroverhead. Geen extra rating-netwerkquery in de
+code; batch na hydration en loginlevering na response. Lokale SQL-proef apart.
+
+Bewijs buiten repository: outputs/product-measurements-20261022/hosted-evidence.json
+en zes screenshots (NL Ink mobiel; EN Paper mobiel lijst/detail/gastingang;
+EN Ink desktop; NL Paper desktop). Alle UI-screenshots bevatten alleen openbare
+testcatalogus/gastweergave. Geen accounts/credentials/ratings gemaakt of te wissen.
+Cleanup voor reviewconfiguratie: uitsluitend NEXT_PUBLIC_SUPABASE_URL en
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY met gitBranch feature/product-measurements-20261022
+na review verwijderen; geen projectbrede/production variabelen of bescherming.
+
+Installatiebestand SHA256:
+B6487DBFA521BB9F6ACF77DF6E3842D625AD4597A58F017798E6ED0F332C84FC.
+Foutdetail connector: INVALID_ARGUMENT, JSON-RPC-32602, reason invalid_request_state.
+Collector503 is een blokkade, geen opgeslagen succes en geen nul gebruik.
+
+Advies: Draft houden. Eerst connector herstellen, testinstallatie en werkelijke
+synthetische hosted tellerroute afronden; daarna een afzonderlijk exact productie-
+installatie/activatiepakket beoordelen. Geen merge, productie- of socialpublicatie.

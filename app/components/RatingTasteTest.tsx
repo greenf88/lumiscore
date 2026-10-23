@@ -7,6 +7,7 @@ import type { Book } from '@/app/data/books';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { NEW_ROUND_GOALS, type RatingRoundState, type RoundAction } from '@/lib/taste-test/rating-round';
 import { DirectRatingScores } from './DirectRatingScores';
+import { measurementHeaders } from '@/lib/product-metrics/browser';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
@@ -94,7 +95,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     setSelectedScore(action === 'rate' && chosenWork && rating !== undefined ? { workId: chosenWork, score: rating } : null);
     return gate.current.run(async () => {
       const r = await fetch(`/api/taste-test/rounds?locale=${locale}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json', ...measurementHeaders(locale, 'taste_test') },
         body: JSON.stringify(buildRoundRequest(action, before, locale, goal, chosenWork, rating)),
       });
       if (!r.ok) throw new Error();

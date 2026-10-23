@@ -1,0 +1,256 @@
+PR51 — ACTUEEL V3-VERVOLG, 22 oktober 2026
+
+PR blijft Draft. Geteste applicatiecommit:
+3bf06b9e02a63308ce35276e7728819f491d41e8
+Remote main ongewijzigd: b4ac64d1166831f3578616f9288680d11275f916.
+Ready Preview voor deze applicatie:
+https://lumiscore-iqkxa5d2v-rgkgroeneveld-9102.vercel.app
+Latere verslagcommits veranderen applicatie, SQL en configuratie niet.
+
+AFGEROND BINNEN DE DRIE PUNTEN
+- Expliciete opt-in standaard uit, noodzakelijke versie-cookie90dagen zonder ID,
+  HttpOnly30min-grant alleen na acceptatie. Client/server/DB-triggers controleren
+  toestemming; DB-rowlock serialiseert revoke met vertraagde opslag. Geen replay.
+  Bij netwerkstoring is remote intrekken eerlijk pending. Ratings blijven werken.
+- Zelfstandige5min pg_cron-installatie voorbereid, max5000rijen per expiratietabel,
+  indexen/SKIP LOCKED/3s uitvoering. Normale bovengrens90dagen+5min+3s bij tijdige
+  start en zonder backlog; geen garantie bij scheduler-/opslagstoring. Monitor en
+  gerichte hash-beveiligde rollback in het pakket. Niet remote geïnstalleerd.
+- Oude120/min was projectbreed, plus globale advisorymutex. V3 atomisch600/min
+  project,60/min/grant,60grantmints/min. Geen permanente bezoekers-ID. Lokale
+  campagnepiek20x28=560, daarna40 tot600, volgende weigering zichtbaar. Pergrant,
+  reset/dedup en expiry getest. Geen bewezen echte parallelle cloudthroughput.
+  Browser queue20/batch10/max2inflight/3s/geen retries; inhoudloze lokale/DB-health.
+- Bestaande Speed Insights-bootstrap verwijderd om geen apart optioneel script
+  buiten de toestemming/intrekking actief te houden. Geen nieuwe tracker.
+
+LOKAAL BEWEZEN
+Volledige suite:843tests,827geslaagd,16bewustovergeslagen,0fouten. Daarna10gerichte
+v3-tests opnieuw groen op definitieve code; TypeScript, volledige lint,
+Vercel-productiebuild en secretscan groen. Bouwsandbox vereiste leesrechten op
+bestaande Node-dependencies; geen productie- of environmentwijziging.
+Werkelijke SQL draait lokaal in PGlite; RLS/ACLs, missing/deny/revoked grants,
+ratingno-op/mislukking/new/update, roundreceipt, storage-errorfailopen, UTC-grenzen,
+batchbacklog, cronconflict en guarded rollback/herinstallatie getest.
+Cronfixture verifieert commando/configuratie, niet de echte daemon.
+Twee logische instanties delen SQL-budgetten, PGlite serialiseert transacties.
+Lokale21-writevergelijking medianen baseline1,53ms, triggerzondertoestemming1,89ms,
+actieveanalyse4,29ms; spreiding in privacy/capaciteitsanalyse. Niet hosted/LCP.
+Allocatiemodel en installatiehashes reproduceerbaar; exacte LF-blobhashes bevestigd.
+
+HOSTED BEWEZEN — GEEN MEETOPSLAGCLAIM
+16 HTTP-checks via bestaande officiële Vercel-CLI-toegang groen:
+NL/EN campagne+boekdetail200, canonicals zonderUTM, preview-noindex behouden;
+consent GET standaardactive=false; geenkeuze204; deny200/inactive; accept200/inactive
+bij ontbrekende RPC; ongeldigeversie/129bytebody400; crossorigin403;
+geenconsent verwerktbody niet204; DNT/GPC204; rating0=400; gastrondestart401.
+Geen accounts, ratings of meetrecords aangemaakt. Noodzakelijke synthetische
+keuzecookie getest. Geen remote grant zolang RPC ontbreekt.
+Werkelijke browser: NL/EN, Paper/Ink, mobiele320/390 en desktop1440. Keuze,
+weigeren/intrekken, taalwissel, herladen, blijvende voorkeurenknop, Enter en Escape
+met focus-terugkeer gecontroleerd. Knoppen44px; accept/deny even hoog; geen
+zijdelingse overflow. Screenshots in outputs/product-measurements-20261022/v3:
+nl-paper-320.png, nl-ink-390-denied.png, en-paper-390.png, en-ink-390.png,
+nl/en-paper-desktop.png en nl/en-ink-desktop.png. Browseremulatie, geen telefoon.
+DOM toont geen Speed Insights-script. Geen claim over volledige providerlogs.
+Vercel-connector gaf scope403; officiële bestaande CLI-toegang werkte voor exact
+dezelfde team/projectscope. Deployment Protection en environment ongemoeid.
+
+CONNECTOR EN RELEASEBLOKKADE
+Alleen read-only metadata opnieuw: testmarker1,metrics_schemaNULL,metric_triggers0,
+pg_cron niet geïnstalleerd maar wel beschikbaar. Geen gedeeltelijke metricobjecten.
+Geen nieuwe installatiepoging: geen aantoonbare wijziging van sessie/toegang.
+Bestaande fout blijft McpServerError: Invalid or expired requestState, oorzaak
+onbekend. Niet bewezen als verlopen OAuth-login of beveiligingsweigering.
+Supabase-plugin installed/ENABLED; tools bieden geen herstelactie of exacte UI-route.
+Minimale handeling: bestaande Supabase-pluginverbinding in Codex herstellen/opnieuw
+verbinden als die optie aanwezig is; anders connector/app-ondersteuning om de
+requestState te herstellen. Geen credentials delen, geen alternatieve SQL-route.
+Pas daarna project/partiële staat controleren, idempotent testpakket+cron installeren,
+volledige hosted route met geldige toestemming+opslagreadback en overhead meten.
+Rechten, hashes, retentiebeleid, capaciteitsbeperkingen, volgorde en rollback staan
+in het bijgewerkte productievoorstel. Test-SQL nooit blind naar productie vertalen;
+productie blijft door harde testorigin/synthetic-gate uit.
+RELEASEADVIES: GEBLOKKEERD op hosted installatie/readback/cron/overhead. Niet mergen.
+
+----- HISTORISCH V2-CHECKPOINT HIERONDER; NIET DE ACTUELE IMPLEMENTATIE -----
+PR51 — definitieve installatiecontrole en releasebesluit, vervolg22oktober2026
+
+UITKOMST: GEBLOKKEERD. Geen hosted counteropslag bewezen. Geen productie-SQL,
+merge, publicatie, nieuwe tracker of functionele uitbreiding uitgevoerd.
+
+ACTUELE BASIS
+PR-head bij aanvang:7d7460f45f199682d9151a7958ff371219e2ba25, Draft/open.
+Main:b4ac64d1166831f3578616f9288680d11275f916, opnieuw via GitHub bevestigd.
+Geteste applicatie:916ebf1131c19f6e308f52401693e435fbea18ac.
+Ready Preview van verslagcommit7d7460f:
+https://lumiscore-9dcyfbg38-rgkgroeneveld-9102.vercel.app
+deployment dpl_AXw6QkMye32fiFU3eU7xYce9r3kd, opnieuw Ready bevestigd.
+Team rgkgroeneveld-9102, project prj_44WeKduJU042ZAI85eAifSWwoY0i.
+Geen lokale werkmaplink aangemaakt; expliciete project/deployment-read gebruikt.
+Latere ops-/verslagcommit verandert geen appbestand of installatiebestand.
+Bestaande volledige CI39753652341 groen op7d7460f; geen brede lokale herhaling.
+
+IDENTITEIT EN VOOR-/NACONTROLE
+Supabase get_project:hlvujbrmfdlrfxdjwsmb,
+lumiscore-pr8-discovery-test, ACTIVE_HEALTHY, eu-west-1, PostgreSQL17.11.
+Marker lumiscore-pr8-synthetic-v1 exact1. Beveiligingsadviezen read-only gelezen.
+Vooraf: meetschema=NULL, countertabel=NULL, publieke collectors=[], private
+functies=[], meettriggers=[]. Bestaande rating-/status-beschermings- en sync-
+triggers zijn alleen gelezen, niet vervangen. Geen bestaande gebruikers opgehaald.
+
+Precies één nieuwe apply_migration-aanvraag:
+project_id=hlvujbrmfdlrfxdjwsmb; name=product_metrics_test_v2_20261022.
+Bestand:test-support/product-metrics/install.sql (12997tekens, LF).
+SHA256:b6487dbfa521bb9f6acf77df6e3842d625ad4597a58f017798e6ed0f332c84fc.
+Resultaat exact:
+McpServerError: Invalid or expired requestState
+error_code=INVALID_ARGUMENT; JSON-RPC=-32602; reason=invalid_request_state.
+
+Nacontrole via read-only SELECT: schema/counters/receipts/budgets=NULL,
+public_collectors=0, private_functions=0, metric_triggers=0.
+Dus NIETS van deze meetinstallatie als uitgevoerd rapporteren. Geen loop,
+execute_sql-DDL, dashboardSQL, directe DB-verbinding of CLI-schrijfroute gebruikt.
+Geen account/ratings/status/rondes/catalogus voor deze controle aangemaakt.
+Geen cleanup van bestaande gegevens uitgevoerd; lokale fixtures afgesloten.
+
+WAT DE FOUT WEL/NIET BEWIJST
+De geïnstalleerde Supabase-plugin is ENABLED en reads zijn bruikbaar. De
+schrijfactie strandt op requestState. Geen aangetoonde401/token-expiry,
+403/permission_denied, RLS-weigering of ontbrekende menselijke scopeautorisatie.
+Een verlopen bevestigings-/aanvraagstatus is aannemelijk, maar exacte oorzaak
+en werking van opnieuw verbinden zijn niet bewezen. Geen bredere rechten vragen.
+
+MINIMALE HANDMATIGE HERSTELACTIE
+Open in de lokale Codex-app Plugins, kies de bestaande Supabase-plugin en open
+de gekoppelde accountverbinding. Ververs/herverbind die verbinding waar de app
+dat aanbiedt, rond de eventuele provider-autorisatie zelf af en herlaad de
+Codex-sessie. Sluit eventueel achtergebleven oude Supabase-bevestigingsvensters.
+Geen wachtwoord/token in chat, geen API-/servicekey toevoegen, geen beveiliging
+uitschakelen of skip-elicitations instellen. Dit vraagt geen nieuw inhoudelijk
+installatieakkoord: de testscope is al toegestaan. Na werkelijk herstel één
+nieuwe normale installatieaanvraag met dezelfde hash en nieuwe readback.
+Als reads werken maar requestState blijft falen: stop writes en geef de exacte
+foutcode en deze bewijsgegevens aan connector/Codex-support; geen retryloop.
+
+Bronnen voor herstelrichting, niet als bewijs van de specifieke interne oorzaak:
+https://developers.openai.com/training/walkthroughs/plugins-and-skills
+https://developers.openai.com/plugins/deploy/troubleshooting
+https://supabase.com/docs/guides/ai-tools/mcp
+
+EXACT TESTINSTALLATIEPAKKET
+Ongewijzigde install.sql met bovengenoemde hash. Private schema product_metrics_test:
+daily_counters(day date,event text,dimensions jsonb,n bigint; samengestelde PK),
+receipts(event_id uuid PK,day date; extra day-index),budgets(minute timestamptz PK,n int).
+Drie tables ENABLE+FORCE RLS, clientrollen geen table-reads/writes.
+Functies (lege search_path; alle parameters expliciet):
+product_metrics_test.valid_context(p jsonb) -> boolean, invoker
+product_metrics_test.request_context() -> jsonb, invoker
+product_metrics_test.record_event(p_event_id uuid,p_event text,p_dimensions jsonb) -> text, definer
+product_metrics_test.observe_transition() -> trigger, definer
+public.record_product_event_test_v1(p_event_id uuid,p_event text,p_dimensions jsonb) -> text, invoker
+public.record_product_events_test_v1(p_events jsonb) -> jsonb, invoker
+public.record_product_sign_in_test_v1(p_dimensions jsonb) -> text, invoker
+PUBLIC-execute expliciet ingetrokken. anon/authenticated: private-schemaUSAGE,
+valid_context/record_event-EXECUTE en twee browserwrappers-EXECUTE. Alleen
+authenticated sign-inwrapper. Geen clientexecute op context-/triggerfunctie.
+Canonieke successen zijn niet forgeable via browserwrapper; helper eist echte
+triggerdiepte, loginreceipt geverifieerde Auth-sessie. Geen privérapport-RPC.
+Drie named AFTER-observers: product_metric_rating_v1 op ratings,
+product_metric_status_v1 op user_book_status, product_metric_round_v1 op
+taste_rating_rounds. Ze observeren alleen de actor, schrijven niet aan NEW en
+vangen gewone meetfouten op. Geen dubbele observers op test: nu0, gewenst exact3.
+
+REPRODUCEERBARE CONTROLE/HERSTEL
+test-support/product-metrics/verify-install.sql: alleen metadata; werkelijke
+projectidentiteit ook via toolargument/get_project verifiëren. Controleer exact3
+tables/7functions/3triggers, RLS, grants, config en bodyhashes vóór herinstallatie.
+Stop bij onbekende schema/functie/trigger of afwijkende oude definitie; bewaar
+dan definitie/rechten en wijzig niets blind. Install.sql behoudt counterdata.
+test-support/product-metrics/rollback.sql: alleen test, standaard ROLLBACK,
+expliciete absent-baseline-latch, marker/comment/bodyhash- en triggercontroles.
+Verwijdert alleen drie eigen observers en trekt eigen clientexecute/USAGE in;
+behoudt functies/tellers en alle bedrijfsdata. Bij bestaande baselineobjecten
+juist de opgeslagen oude definities/rechten herstellen, niet dit absent-pad.
+Lokaal bewezen: herinstallatie met bestaande rijen behoudt data; rollback zonder
+latch stopt, standaardrollback houdt triggers, bewuste lokale commit deactiveert
+alleen eigen observers, gewijzigde body wordt geweigerd. Geen rollback op hosted.
+
+BEWIJSMATRIX HOSTED — NIET BESCHIKBAAR, GEEN NULCONVERSIE
+Stap   Verwacht volgens contract                         Gevonden hosted record
+1      page_opened + editorial_list_opened campagne      niet leesbaar: schema ontbreekt
+2      book_card_opened, list_id + Work                  niet leesbaar: schema ontbreekt
+3      page_opened + book_detail_opened juiste Work      niet leesbaar: schema ontbreekt
+4      sign_in_succeeded,1receipt/geverifieerde sessie    niet uitgevoerd met nieuwe testlogin
+5      taste_round_started, echte INSERT                niet uitgevoerd
+6      rating_saved operation=new                       niet uitgevoerd
+7      rating_saved operation=updated                   niet uitgevoerd
+8      taste_round_completed, echte doelovergang        niet uitgevoerd
+9      taste_result_opened, geldig getoond resultaat     niet uitgevoerd
+Voor10-doel zijn in totaal10 verschillende nieuwe ratings nodig; één wijzigen
+verhoogt de rondevoortgang niet. Geen vervalste afronding of losse klik als bewijs.
+Er is geen opgeslagen bezoeker-/funnel-ID om deze events tot unieke mensen te
+koppelen. Campagnecontext is gedeelde herkomst, geen betrouwbare persoonjoin.
+
+Bestaande hosted UI/privacybewijs op ongewijzigde app hergebruikt: NL/EN Paper/Ink,
+mobiel/desktop, native navigatie en collectorvalidatie. Geldige batch503 bij
+ontbrekende collector is geen succes. Ongeldige origin/type/grootte/properties en
+forged ratingevent zijn geweigerd; DNT/GPC levert geen collection. Geen claim dat
+alle9stappen, retries, nieuwe/wijzigingscounts, meetuitval en login op hosted
+opslag opnieuw bewezen zijn. Payloadallowlist/loggeencredentials alleen lokaal
+en eerder afgebakend deploymentbewijs; geen bestaande gebruikerslogs doorzocht.
+
+LOKAAL AANVULLEND BEWIJS
+Zeven gerichte tests: contract/report/clientprivacy/attributie/impression,
+werkelijke PGlite-installatie/idempotentie/ACL/transition/noop/retry/fail-open,
+en nieuw ops-verificatie/guardedrollback. Geen lokale simulatie als hosted bewijs.
+Capaciteit: scripts/product-metrics-capacity-local.mjs;1000 lokale countercellen
+en receipts, inclusief echte indexallocatie. Analyse en concrete consent/retentie:
+docs/product-measurement-privacy-capacity-20261022.txt.
+Meetoverhead op hosted blijft onbekend. Geen belastingtest op productie of test
+uitgevoerd omdat de toegestane installatie niet beschikbaar kwam.
+
+RAPPORTAGE
+Voorbereide SQL:test-support/product-metrics/report.sql; niet uitgevoerd tegen
+niet-bestaande tabellen om geen nul of succesvol rapport te verzinnen.
+CLIvoorbeeld: node --experimental-strip-types scripts/product-measurement-report.mjs --synthetic-example
+Alleen lokaal synthetisch voorbeeld:2lijstopeningen/1boekklik/10nieuwe/1wijziging/
+1start/1afronding.1/2 is eventratio, niet50% bezoekersconversie. Testtraffic is
+synthetic en standaard uitgesloten; actuele productiecollectie unavailable, niet0.
+
+PRODUCTIEVOORSTEL EN VOLGORDE — GEBLOKKEERD, NIET GOEDGEKEURD
+Productieproject qvplwejffhjvxaypmjut niet benaderd met SQL en geen productiewrites.
+Het exacte installeerbare/geteste artefact is uitsluitend het bovenstaande
+TEST-pakket. Het testmarker/script nooit op productie draaien. Er is nog geen
+geteste productieactivatie of definitieve uitvoerbare productiemigratie; die als
+klaar presenteren zou onjuist zijn. PR mergen activeert momenteel productie niet.
+
+Voor een toekomstig expliciet pakket: private schema product_metrics met dezelfde
+3tabellen/indexen; public record_product_event_v1(uuid,text,jsonb)->text,
+record_product_events_v1(jsonb)->jsonb en record_product_sign_in_v1(jsonb)->text;
+4zelfde private helpers en3named observers. Minimaal dezelfde clienttable-denial,
+expliciete executegrants, invoker wrappers/private definer en lege search_path.
+Dit is een exact naam/signature/rechtenvoorstel, geen reeds geteste prod-SQL.
+
+Uitvoeringsvolgorde na afzonderlijk releaseakkoord en vervulde gates:
+1. Connectorherstel→testinstallatie exactehash→metadata/idempotentie/ACLreadback.
+   Stop bij afwijkingen; geen extra accounts/data zolang doelinstallatie ontbreekt.
+2. Volledige echte synthetische hosted route; echte tellers teruglezen, negatieve
+   cases en begrensde met/zonder-meetoverhead bewijzen. Cleanup alleen eigen data;
+   geaggregeerde bewijsoutput bewaren zonder account/session/roundidentiteiten.
+3. Eén minimaal opt-in/retentiepakket besluiten en implementeren; capaciteit/piek/
+   verlies meten en doelbewust besluiten. Geen stilzwijgende120/min-ondertelling.
+4. Dan exacte productie-SQL én activatiecommit/hash vastleggen. Opnieuw read-only
+   productievoorcontrole/baseline defs/ACLs/waarden bewaren; stop bij verschillen.
+5. Additieve compatibele prodobjecten met minimale grants en bounded lock_timeout;
+   oude app doet zonder context niets. Gerichte privileges/data-isolatiecontrole.
+6. Exact goedgekeurde app activeren; toegestane livecontrole zonder andere users
+   te wijzigen. Bij fout eerst analyse uit/old app terug, dan eigen observers en
+   wrappers deactiveren of saved defs/rechten herstellen. Counters bewaren.
+Geen CASCADE, geen terugdraaien ratings/status/voortgang. Geen productiecleanup
+of nieuw retentiecron/extra kosten zonder afzonderlijk vastgesteld beleid.
+
+ÉÉN RELEASEADVIES
+GEBLOKKEERD. Eerst requestState-/connectorsessie herstellen en echte hosted
+readback bewijzen. Daarna consent/retentie en capaciteit als concreet product-
+releasebesluit afronden. Geen releaseakkoord vragen voor dit onvolledige pakket.
