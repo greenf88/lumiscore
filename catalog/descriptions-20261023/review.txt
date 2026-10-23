@@ -1,0 +1,62 @@
+Beschrijvingen Works 148 / 228 / 553 — lokale testreview, 23 oktober 2026
+
+Basis en scope
+Remote main en actieve productie bij aanvang: 815fc0998a464bbcf7d3382b323e23f65bb9a847.
+Nieuwe geïsoleerde branch: fix/book-description-loading-20261023.
+PR51, overige werkbomen, ratings, leesstatussen, voortgang en catalogusrecords niet gewijzigd.
+Geen productie- of testdatabasewrites, Auth-/schema-/Vercel-configuratieaanpassing,
+push, merge of publicatie. Alleen publieke testconfiguratie lokaal, gitignored.
+
+Bewezen probleem
+Zes anonieme HTTP-aanvragen op live NL/EN (148,228,553) geven 200 en de tijdelijke
+beschrijvingsfout, geen bronlink. Dit is niet alleen een Previewprobleem.
+De exacte OL-edities 7292690M,7521619M,46530123M geven 200 zonder description.
+Publieke Google Books ISBN-aanvragen geven 429 RESOURCE_EXHAUSTED/rateLimitExceeded.
+De bestaande resolver onderscheidt ontbrekende inhoud terecht van bronuitval.
+Geen bewijs voor een taalfout, een UI-fout of het leegraken van de 4s-deadline.
+De proef zonder Google-key bewijst niet welke fout de productie-key precies geeft;
+die key en zijn accountinstellingen zijn niet gelezen of aangepast.
+
+Gerichte oplossing
+Drie korte eigen Engelse samenvattingen in het BESTAANDE reviewed-description-register.
+Zelfde mechanismen als Madonna/Silver Flames; geen tweede loader, runtime-scraper,
+automatische vertaling, ruimere taalregels of uitbreiding van de aanvraagdeadline.
+Exacte binding aan ISBN, OL Work, OL Edition, editietitel, auteur en eng.
+NL toont alleen bij de toegestane Engelse fallback de expliciete Engelse-beschrijvingslabel.
+EN toont Engelse tekst. Een onzekere/andere taal of verkeerde identiteit krijgt deze tekst niet.
+De broncontrole vindt vóór externe aanvragen en vóór negatieve providercaches plaats.
+Voor deze drie identiteiten zijn daarom nul externe beschrijvingsaanvragen nodig.
+Dit herstelt NIET de algemene externe providerbeschikbaarheid of diens quota.
+
+Bronnen en eigen tekst
+148 / 9780064471107: NSW Department of Education, PRC-record2758 met exactISBN,
+Lewis, titel en inhoud. Een aparte, strikt geregistreerde official_catalog-bronsoort
+voorkomt de onjuiste labels uitgever/Open Library. Uitgevers- en bibliotheek-403's
+niet omzeild. De nieuwe bronsoort staat geen vrije URL's uit payloads toe.
+228 / 9780440418566: officiële Penguin Random House paperbackpagina.
+553 / 9781837901326: officiële Bookouture-pagina met exacte paperbackISBN.
+Minimale bronfeiten en URLs: review.json. Geen volledige flapteksten overgenomen.
+
+Controles
+Eerste39 beschrijvings-/bestaandeMadonna-/SilverFlames-tests groen.
+188 boek-/taal-/SEO-regressietests groen; daarna extra negatieve-cachetest toegevoegd
+en de volledige nieuwe testfile (8 tests) opnieuw groen. 189 unieke tests afgedekt.
+TSC, gerichte ESLint, diffcheck, productiebuild groen; secretscan70clientbestanden groen.
+Gebruikelijke niet-fatale Nitro/vinext chunk/tracewaarschuwingen, geen dependencywijziging.
+
+Gebouwde lokale applicatie op echt testproject hlvujbrmfdlrfxdjwsmb:
+testWorks924100148/228/553 en edities924210148/228/553 read-only vooraf bevestigd.
+Zes NL/EN-detailroutes en zes API-antwoorden HTTP200 en resolved. Bron, bronnaam,
+ISBN, taal, tekst, juiste cover, gekozen titel en collectie-teruglink gecontroleerd.
+NL Engelse-beschrijvingslabel aanwezig; EN geen onterechte NL-label.
+Bewijs: test-http-proof.json. Testbuild zonder Googlekey/privilegedSupabasekey.
+Lokale preview: http://127.0.0.1:3992/nl/book/924100148
+Server accepteert uitsluitend GET/HEAD. Geen accounts of beoordelingen aangemaakt.
+
+Beperkingen en overdracht
+Geen hosted Preview of nieuwe fysieke telefoon-/Paper/Ink-browserclaim: lokale
+HTTP/SSR/API-controles, geen nieuwe visuele/hydratatiecontrole. Bestaande componenten,
+styles, schermbediening en streaming zijn niet gewijzigd.
+Lokaal gemeten HTTP-duren zijn geen productiewinst; baseline/testdoel verschillen.
+Voor publicatie nog hosted controle van de nieuwe bronlinks, labels en weergave.
+Herstel is deze lokale codecommit terugnemen; er is geen data-installatie terug te draaien.

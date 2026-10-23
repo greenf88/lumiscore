@@ -1,0 +1,25 @@
+{
+  "checkedAt":"2026-10-23",
+  "baseMain":"815fc0998a464bbcf7d3382b323e23f65bb9a847",
+  "branch":"fix/book-description-loading-20261023",
+  "liveBaseline":{"target":"https://lumisco.re","authenticated":false,"requests":6,"httpStatuses":[200,200,200,200,200,200],"allTemporaryFailure":true,"elapsedMs":[1487,251,735,167,1398,192],"order":["nl/148","en/148","nl/228","en/228","nl/553","en/553"]},
+  "publicSourceProbe":[
+    {"workId":148,"edition":"OL7292690M","isbn":"9780064471107","olStatus":200,"olElapsedMs":920,"olHasDescription":false,"googlePublicStatus":429,"googleElapsedMs":721},
+    {"workId":228,"edition":"OL7521619M","isbn":"9780440418566","olStatus":200,"olElapsedMs":224,"olHasDescription":false,"googlePublicStatus":429,"googleElapsedMs":598},
+    {"workId":553,"edition":"OL46530123M","isbn":"9781837901326","olStatus":200,"olElapsedMs":297,"olHasDescription":false,"googlePublicStatus":429,"googleElapsedMs":153}
+  ],
+  "diagnosis":"The stored exact OL editions have no description; missing exact edition text followed by Google transport/quota failure legitimately resolves to temporary_failure. No four-second deadline exhaustion, UI/translation or source-attribution code bug was demonstrated. The unauthenticated external Google probe is not proof of the exact production-key quota, whose values were not retrieved. Do not claim the general provider service or configuration is repaired.",
+  "solution":"Three short own English summaries added to the existing reviewed registry, guarded by exact ISBN, Work OLID, edition OLID, selected title, author and eng. No second resolver, runtime scraping, automatic translation, language relaxation, timeout expansion or production configuration change. The reviewed source resolves before provider/cache work, so these three exact editions need no external description requests.",
+  "sources":[
+    {"workId":148,"isbn":"9780064471107","sourceKind":"official_catalog","sourceName":"NSW Department of Education","url":"https://online.education.nsw.gov.au/prc/booklist/listBooksByTitle.html?letter=M&levelId=3","sourceRecord":"2758","facts":["C S Lewis, same exact ISBN and title","HarperCollins US 2002","Polly and Digory reach Narnia unexpectedly; origin of travel between worlds"],"note":"This is an official educational catalogue, NOT a publisher. Separate source kind prevents false publisher/Open Library attribution. HarperCollins UK and PPL library access denied; not bypassed or used as fetched evidence."},
+    {"workId":228,"isbn":"9780440418566","sourceKind":"official_publisher","sourceName":"Penguin Random House","url":"https://www.penguinrandomhouse.com/books/136441/his-dark-materials-the-amber-spyglass-book-3-by-philip-pullman/9780440418566/","facts":["Philip Pullman; exact paperback ISBN; Yearling","Lyra and Will's dangerous journey; Lord Asriel's rebellion; stakes for living and dead"]},
+    {"workId":553,"isbn":"9781837901326","sourceKind":"official_publisher","sourceName":"Bookouture","url":"https://bookouture.com/books/2903/","facts":["Freida McFadden; exact paperback ISBN; 20 February 2023","Housemaid employed by Garricks; hidden past; Mrs Garrick's absence and distress; closed bedroom"]}
+  ],
+  "languagePolicy":"All three selected editions are English. EN shows own reviewed English text; NL shows the same text only with the explicit English-edition fallback and English-description label. No Dutch edition or Dutch synopsis invented.",
+  "testTarget":"hlvujbrmfdlrfxdjwsmb",
+  "testWorks":[924100148,924100228,924100553],
+  "testEditions":[924210148,924210228,924210553],
+  "databaseWrites":false,
+  "excluded":["PR51","ratings","accounts","progress","catalogue mutations","deployment/environment changes"],
+  "publication":"Local only; not pushed, merged or published."
+}
