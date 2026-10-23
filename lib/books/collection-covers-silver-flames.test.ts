@@ -5,7 +5,8 @@ import { getReviewedDescription, reviewedDescriptionSource } from './reviewed-de
 import { clearBookDescriptionCacheForTests, resolveBookDescription } from './description-resolution.ts';
 
 test('nine exact images survive test-ID mapping without making other editions eligible', () => {
-  const entries = REVIEWED_COVER_OVERRIDES.filter(e => e.reviewedAt === '2026-10-23');
+  const originalNine = new Set(['126','138','178','683','688','699','772','1116','1251']);
+  const entries = REVIEWED_COVER_OVERRIDES.filter(e => e.reviewedAt === '2026-10-23' && originalNine.has(e.workId));
   assert.equal(entries.length, 9);
   for (const entry of entries) {
     assert.equal(getReviewedCoverOverride({ ...entry, workId:'different-test-id' })?.coverUrl, entry.coverUrl);
