@@ -1,0 +1,172 @@
+{
+  "applicationCommit": "dd4eace2f821133af7fa144aa775840df2c1e35d",
+  "baseMain": "b4ac64d1166831f3578616f9288680d11275f916",
+  "branch": "fix/collection-covers-silver-flames-20261023",
+  "environment": {
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "localDevelopment": "http://127.0.0.1:3187",
+    "localBuiltReadOnlyPreview": "http://127.0.0.1:3983",
+    "newHostedDeployment": false,
+    "productionWrites": 0,
+    "testDatabaseWrites": 0,
+    "privilegedKeysLoaded": false
+  },
+  "checks": {
+    "unit": {
+      "passed": 249,
+      "failed": 0,
+      "command": "node --experimental-strip-types --test \"lib/books/*.test.ts\" \"lib/collections/*.test.ts\""
+    },
+    "typescript": "passed",
+    "targetedLint": "passed",
+    "vercelProductionBuild": "passed",
+    "clientSecretScan": {
+      "passed": true,
+      "files": 70
+    },
+    "editionReadback": {
+      "count": 13,
+      "equal": true,
+      "checkedAt": "2026-10-23T09:48:31.643Z"
+    },
+    "browser": {
+      "developmentDetailRoutes": 26,
+      "coverImages": {
+        "nl": 9,
+        "en": 7,
+        "actuallyLoaded": true
+      },
+      "unresolvedNeutral": {
+        "workIds": [
+          148,
+          228,
+          553
+        ],
+        "locales": [
+          "nl",
+          "en"
+        ]
+      },
+      "dutchOnlyExcludedFromEnglish": [
+        1116,
+        1251
+      ],
+      "collectionCards": {
+        "nl": 45,
+        "en": 42
+      },
+      "collectionTargetImages": {
+        "nl": 9,
+        "en": 7,
+        "actuallyLoaded": true
+      },
+      "builtKeyboardRoundTripsConfirmed": [
+        {
+          "locale": "nl",
+          "workId": 126
+        },
+        {
+          "locale": "nl",
+          "workId": 138
+        },
+        {
+          "locale": "nl",
+          "workId": 178
+        }
+      ],
+      "builtMouseExactLinkConfirmed": {
+        "locale": "nl",
+        "workId": 688
+      },
+      "note": "Rapid mouse-loop results were discarded: scroll-restoration timing moved targets during automated clicks. Independent observed click confirmed correct Twisted Hate identity. No code regression inferred from discarded measurements.",
+      "silverFlamesBuiltMatrix": {
+        "locales": [
+          "nl",
+          "en"
+        ],
+        "themes": [
+          "paper",
+          "ink"
+        ],
+        "viewportWidths": [
+          390,
+          1280
+        ],
+        "combinations": 8,
+        "horizontalOverflow": false,
+        "sourceLink": "https://www.bloomsbury.com/au/court-of-silver-flames-9781526602312/",
+        "nlEnglishDescriptionLabel": true,
+        "enNoDutchLabel": true
+      },
+      "physicalPhoneTest": false
+    }
+  },
+  "imageResponses": [
+    {
+      "workId": "126",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 51097
+    },
+    {
+      "workId": "138",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 9322
+    },
+    {
+      "workId": "178",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 12662
+    },
+    {
+      "workId": "683",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 6929
+    },
+    {
+      "workId": "688",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 7983
+    },
+    {
+      "workId": "699",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 10807
+    },
+    {
+      "workId": "772",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 9778
+    },
+    {
+      "workId": "1116",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 65482
+    },
+    {
+      "workId": "1251",
+      "status": 200,
+      "contentType": "image/jpeg",
+      "bytes": 54048
+    }
+  ],
+  "screenshots": [
+    "C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/covers-silver-flames-20261023/silver-flames-nl-paper-mobile.png",
+    "C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/covers-silver-flames-20261023/silver-flames-en-ink-desktop.png",
+    "C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/covers-silver-flames-20261023/kinderen-nl-paper-mobile.png",
+    "C:/Users/rickg/Documents/Codex/2026-09-18/ga-x20/outputs/covers-silver-flames-20261023/collection-nl-ink-desktop.png"
+  ],
+  "limits": [
+    "Local against real isolated test catalog; not a hosted verification or production result.",
+    "No user login, rating save or progress mutation performed: code scope changes neither those paths nor database rows.",
+    "Five Google Books sources are limited to 128px width.",
+    "Three exact-edition covers unresolved; source conflicts not silently corrected."
+  ]
+}

@@ -250,10 +250,13 @@ export async function resolveBookDescription(
   lookup: BookDescriptionLookup,
   fetchImplementation: typeof fetch = fetch,
 ): Promise<BookDescriptionResolution> {
-  const reviewed = getReviewedDescription(lookup, lookup.locale ?? 'en');
+  const locale = lookup.locale ?? 'en';
+  // An allowed English fallback edition in NL retains an explicitly English
+  // synopsis. Reviewed copy uses the same language rule as provider copy.
+  const descriptionLanguage:Locale = locale==='nl' && localeFromLanguage(lookup.editionLanguage)==='en' ? 'en' : locale;
+  const reviewed = getReviewedDescription(lookup, descriptionLanguage);
   if (reviewed) return { state: 'resolved', description: reviewed };
   const workId = normalizeOpenLibraryId(lookup.openLibraryWorkId, 'work');
-  const locale = lookup.locale ?? 'en';
   const candidates = [
     {
       openLibraryEditionId: lookup.openLibraryEditionId,
@@ -273,8 +276,6 @@ export async function resolveBookDescription(
       values.findIndex((other) =>
         other.editionId === candidate.editionId && other.isbn13 === candidate.isbn13) === index)
     .slice(0, 3);
-  // Site-language intent wins over an available edition in another language.
-  const descriptionLanguage:Locale = locale==='nl' && localeFromLanguage(lookup.editionLanguage)==='en' ? 'en' : locale;
   const states: Array<DescriptionResolutionState | null> = [];
 
   for (const candidate of candidates) {
