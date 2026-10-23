@@ -1,0 +1,59 @@
+Coverfallbacks en Silver Flames — lokaal reviewpakket, 23 oktober 2026
+
+Applicatiecommit: dd4eace2f821133af7fa144aa775840df2c1e35d
+Basis remote main: b4ac64d1166831f3578616f9288680d11275f916
+Branch: fix/collection-covers-silver-flames-20261023
+Geen push, hosted deployment, merge of productiepublicatie uitgevoerd.
+PR #51, audio-/tweetalige edities en andere cataloguscorrecties niet meegenomen.
+
+Resultaat
+Negen van twaalf neutrale covers hebben nu gecontroleerd, exact editiegebonden beeld:
+126 A feast for crows — ISBN 9780553582024 — eng.
+138 Two Towers — ISBN 9781484490334 — eng.
+178 Subtle Knife — ISBN 9780613722551 — eng.
+683 Twisted Love — ISBN 9781087939278 — eng, speciale editie.
+688 Twisted Hate - Special Edition — ISBN 9781735056692 — eng.
+699 King of Pride — ISBN 9780349436340 — eng.
+772 King of Wrath — ISBN 9781957464084 — eng.
+1116 Het Gulden Vlies van Thule — ISBN 9789047750505 — nld, ebook.
+1251 Kinderen van Moeder Aarde — ISBN 9789060696125 — nld.
+Exacte Work/Edition/OL-identiteiten, test-ID-mapping, bronpagina en afbeelding per record: review.json en identities.json.
+
+Open, bewust neutraal gehouden
+148 The Magician’s Nephew — 9780606203081: geen bewezen cover voor deze Demco-editie; Google toont uitsluitend no_cover_thumb.gif. Uitgavedata verschillen tussen bronnen.
+228 The Amber Spyglass — 9780606295437: geen bewezen cover voor deze Turtleback-editie; Google toont uitsluitend no_cover_thumb.gif.
+553 The Housemaid’s Secret — 9781538742587: OL heeft geen positieve cover, Google-ISBN-pagina 404, onderling tegenstrijdige winkelmetadata. Geen cover van The Housemaid Is Watching of een ander ISBN overgenomen.
+Dit pakket herstelt dus niet alle twaalf gevallen en wijzigt geen onzekere catalogusmetadata.
+
+Silver Flames
+Work/Edition 253, OL21703979W/OL29532409M, ISBN 9781526602312, eng.
+De exacte OL-editie heeft geen beschrijving. Hier retourneerde de publieke, niet-gekeyde Google Books API 429. De bestaande resolver houdt zo’n bronfout terecht apart van ontbrekende inhoud. De exacte productie-upstreamoorzaak is daarmee niet definitief bewezen.
+Een korte eigen Engelse samenvatting op basis van de officiële Bloomsbury-editiepagina is toegevoegd aan het bestaande gecontroleerde-beschrijvingsmechanisme. Work, editie, ISBN, titel, auteur en taal moeten allemaal overeenkomen. SSR en API gebruiken dezelfde resolver, zonder externe beschrijvingsrequest voor deze identiteit.
+NL toont bij de toegestane Engelse fallback expliciet “Engelse beschrijving bij de Engelse editie”; EN toont de Engelse tekst. Beide verwijzen compact naar Bloomsbury. Geen automatische vertaling of Nederlandse editie geclaimd.
+
+Implementatie en grenzen
+Alleen lib/books/reviewed-cover-overrides.ts, reviewed-descriptions.ts en de taalkeuze vóór reviewed-description-resolutie zijn functioneel aangepast. Geen nieuwe coverresolver of ruimere bewijsregels.
+Kinderen: positief OL-beeld is verbonden met exact ISBN; de ontbrekende upstream-taal wordt niet gegokt maar gecombineerd met het eerder onafhankelijk geverifieerde Nederlandse taalbewijs.
+Het Gulden Vlies: de ebook-afbeelding uit de juiste uitgeversrij is gebruikt, niet de OG-cover van de andere hardcover.
+King of Pride: officiële afbeelding 2.264.739 bytes afgewezen voor bezorging; dezelfde exact-ISBN-cover via Google Books is 10.807 bytes. Alle negen gekozen bestanden geven HTTP 200 image/jpeg en zijn 6.929–65.482 bytes.
+Vijf Google Books-covers zijn 128 px breed: geschikt als lichte thumbnail, zichtbaar zacht op groot detailformaat. Geen verzonnen of opgeblazen hogeresolutiebron. Externe beschikbaarheid blijft een risico en houdt de neutrale fallback als vangnet.
+Broncontrole is geen beoordeling van beeldgebruiksrechten.
+
+Testbewijs
+249 boek-/collectietests groen, inclusief vier nieuwe gerichte tests; TypeScript, gerichte lint, definitieve Vercel-productiebuild en secretscan groen. Scan: 70 clientbestanden, geen secretwaarden of secretidentifiers gebundeld.
+Lokale ontwikkelapp op echte bestaande testcatalogus: 26 detailroutes NL/EN; alle negen herstelde covers daadwerkelijk geladen in NL, zeven toegestane Engelse covers in EN. De twee uitsluitend Nederlandse edities blijven in EN onbeschikbaar. Drie onopgeloste gevallen blijven neutraal.
+Testcollectie: 45 NL-/42 EN-kaarten; negen respectievelijk zeven betrokken coverafbeeldingen daadwerkelijk geladen. De ontbrekende Engelse beschikbaarheid is niet door covers versoepeld.
+Gebouwde applicatie op dezelfde testcatalogus: acht combinaties NL/EN × Paper/Ink × 390/1280 px voor Silver Flames; bronlink, taallabel en geen horizontale overflow bevestigd. Mobiele toetsenbord-doorklik/terugkeer afzonderlijk bevestigd voor 126, 138, 178; geobserveerde muisklik voor 688 opent de juiste editie. Snelle geautomatiseerde muislus met scroll-restoratierace is niet als bewijs gebruikt.
+Geen fysieke telefooncontrole. Geen hosted bewijs voor deze nieuwe branch geclaimd.
+Testdatabase: dertien betrokken editierecords identiek teruggelezen aan beginstand. Geen SQL-writes, accounts, ratings of leesstatussen aangemaakt/gewijzigd; geen wijzigingen aan collectieleden of voortgangsregels.
+Details, bronresponsen, schermafbeeldingen en beperking per controle: verification.json en provider-probes.json.
+
+Lokale read-only preview
+http://127.0.0.1:3983/nl/book/924100253
+http://127.0.0.1:3983/en/book/924100253
+http://127.0.0.1:3983/nl/collection/collection-languages-review-20261023
+Deze bestaande lokale Vercel-buildhost accepteert uitsluitend GET/HEAD. Bestaande publieke testconfiguratie wordt alleen in het proces gebruikt; geen environmentwijziging of privileged key.
+
+Vervolg en herstel
+Negen covers en de Silver Flames-samenvatting zijn lokaal reviewbaar. De drie overige gevallen vereisen nieuw exact editiebeeld of een afzonderlijk onderbouwde editievoorstel; nu geen vervangende edities importeren.
+Er is geen productie-SQL nodig voor dit codepakket. Geen publicatie uitgevoerd. Bij een latere ongewenste code-uitkomst kan uitsluitend applicatiecommit dd4eace2f821133af7fa144aa775840df2c1e35d worden gerevert; databaseherstel is niet nodig en ratings/voortgang blijven buiten de wijziging.
