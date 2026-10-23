@@ -84,6 +84,8 @@ productie. Identiteit/ISBN10/ISBN13/OL-ID-conflicten stoppen de hele transactie.
 Bestaande identitysequence wordt gebruikt en vooraf gecontroleerd; geen setval.
 Alleen 3 toevoegingen of volledige ongewijzigde herhaling toegestaan, niet gedeeltelijk.
 SQL eindigt bewust met ROLLBACK. Testbevoegdheid is geen productieakkoord.
+Bestands-SHA256: hashes.json. Lokale .gitattributes houdt uitsluitend deze
+review-SQL-bestanden op LF, zodat een Windows-checkout hun hashes behoudt.
 
 Veilige volgorde na later afzonderlijk akkoord
 1. Controleer actuele main, productie-Work/auteur/oudeditie, ontbrekende ISBN's en
