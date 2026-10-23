@@ -6,6 +6,7 @@ import { normalizeIsbn13 } from './covers.ts';
 /** Own short summaries, reviewed against an exact publisher/edition identity. */
 type ReviewedDescription = {
   workId?:string; editionId?:string; title:string; author:string; isbn13:string;
+  openLibraryWorkId?:string; openLibraryEditionId?:string; editionLanguage?:'eng'|'nld';
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
 };
 const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
@@ -20,6 +21,12 @@ const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   title:'Souvenir',author:'Suzanne Vermeer',isbn13:'9789044978834',language:'nl',reviewedAt:'2026-10-21',
   sourceName:'A.W. Bruna Uitgevers',sourceUrl:'https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/souvenir/',
   text:'Tijdens een vakantie in Umbrië verdwijnt Nienkes moeder Carolien, die alzheimer heeft. Haar spoor leidt naar Florence. Met een medaillon als aanwijzing probeert Nienke te achterhalen wat er is gebeurd.',
+}, {
+  title:'A \u200bCourt of Silver Flames',author:'Sarah J. Maas',isbn13:'9781526602312',
+  openLibraryWorkId:'OL21703979W',openLibraryEditionId:'OL29532409M',editionLanguage:'eng',
+  language:'en',reviewedAt:'2026-10-23',sourceName:'Bloomsbury',
+  sourceUrl:'https://www.bloomsbury.com/au/court-of-silver-flames-9781526602312/',
+  text:'After the war, Nesta Archeron struggles with becoming High Fae and finding her place in the Night Court. Training with Cassian forces her to face old wounds, while a renewed threat puts their court at risk.',
 }];
 
 export function reviewedDescriptionSource(sourceKey: string): { name: string; href: string } | null {
@@ -30,12 +37,16 @@ export function reviewedDescriptionSource(sourceKey: string): { name: string; hr
 export function getReviewedDescription(input: {
   workId?: string | null; editionId?: string | null; editionTitle?: string | null;
   author?: string | null; isbn13?: string | null; editionLanguage?: string | null;
+  openLibraryWorkId?: string | null; openLibraryEditionId?: string | null;
 }, locale: Locale): VerifiedBookDescription | null {
   const normalize = (text?: string | null) => text?.trim().normalize('NFC').toLocaleLowerCase('nl');
   const entry = REVIEWED_DESCRIPTIONS.find(row => (!row.workId || row.workId === input.workId) &&
     (!row.editionId || row.editionId === input.editionId) && row.isbn13 === normalizeIsbn13(input.isbn13) &&
+    (!row.openLibraryWorkId || row.openLibraryWorkId === input.openLibraryWorkId) &&
+    (!row.openLibraryEditionId || row.openLibraryEditionId === input.openLibraryEditionId) &&
     normalize(row.title) === normalize(input.editionTitle) && normalize(row.author) === normalize(input.author) &&
-    row.language === locale && normalizeEditionLanguage(input.editionLanguage ?? '') === 'nld');
+    row.language === locale && normalizeEditionLanguage(input.editionLanguage ?? '') ===
+      (row.editionLanguage ?? (row.language === 'nl' ? 'nld' : 'eng')));
   return entry ? { text: entry.text, source: 'official_publisher', sourceKey: entry.isbn13,
     verifiedAt: entry.reviewedAt, language: entry.language } : null;
 }

@@ -1,0 +1,4 @@
+const targets=[['148','9780606203081'],['228','9780606295437'],['553','9781538742587'],['138','9781484490334'],['178','9780613722551'],['683','9781087939278'],['699','9780349436340'],['772','9781957464084']];const out=[];
+for(const [workId,isbn] of targets){const url='https://books.google.com/books?vid=ISBN'+isbn;
+try{const r=await fetch(url,{signal:AbortSignal.timeout(15000)}),h=await r.text();out.push({workId,isbn,status:r.status,url:r.url,title:h.match(/<title>([^<]*)/i)?.[1],images:[...h.matchAll(/<img\b[^>]*(?:Front Cover|summary-frontcover)[^>]*>/gi)].map(m=>m[0].replace(/&(?:amp;)?imgtk=[^" >]*/g,'')),bibliographic:h.match(/<table id="metadata_content_table">([\s\S]*?)<\/table>/)?.[1]?.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').slice(0,1600)});}catch(error){out.push({workId,isbn,error:String(error)});}}
+console.log(JSON.stringify(out,null,2));

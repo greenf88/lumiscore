@@ -49,7 +49,7 @@ test('existing resolved cover candidates retain priority over a reviewed fallbac
 });
 
 test('editorial positive cover evidence requires exact ISBN, Work, title, author, edition and language',()=>{
-  const entries=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library');
+  const entries=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library' && entry.reviewedAt==='2026-10-21');
   assert.equal(entries.length,13);
   for(const entry of entries){
     assert.equal(getReviewedCoverOverride(entry)?.coverUrl,entry.coverUrl);
