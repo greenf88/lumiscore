@@ -16,6 +16,11 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Three proposed additional print editions, validated on the isolated test catalog.
+  // Existing editions remain intact. Source/author conflicts: catalog/remaining-covers-20261023.
+  {workId:'148',openLibraryWorkId:'OL71042W',title:"The Magician's Nephew (The Chronicles of Narnia)",author:'C. S. Lewis',isbn13:'9780064471107',editionLanguage:'eng',openLibraryEditionId:'OL7292690M',coverUrl:'https://covers.openlibrary.org/b/id/52093-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7292690M',reviewedAt:'2026-10-23'},
+  {workId:'228',openLibraryWorkId:'OL28996W',title:'The Amber Spyglass',author:'Philip Pullman',isbn13:'9780440418566',editionLanguage:'eng',openLibraryEditionId:'OL7521619M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780440418566',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouse.com/books/136441/his-dark-materials-the-amber-spyglass-book-3-by-philip-pullman/',reviewedAt:'2026-10-23'},
+  {workId:'553',openLibraryWorkId:'OL34113490W',title:"The Housemaid's Secret",author:'Freida McFadden',isbn13:'9781837901326',editionLanguage:'eng',openLibraryEditionId:'OL46530123M',coverUrl:'https://covers.openlibrary.org/b/id/14840896-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46530123M',reviewedAt:'2026-10-23'},
   // Exact-edition image review; no eligibility, rating or edition changes.
   // Identity/source audit: catalog/covers-silver-flames-20261023/review.json.
   {"workId":"126","openLibraryWorkId":"OL257948W","title":"A feast for crows","author":"George R. R. Martin","isbn13":"9780553582024","editionLanguage":"eng","openLibraryEditionId":"OL22236422M","coverUrl":"https://images.penguinrandomhouse.com/cover/9780553582024","source":"official_publisher","evidenceUrl":"https://prhinternationalsales.com/book/?isbn=9780553582024","reviewedAt":"2026-10-23"},
