@@ -46,11 +46,11 @@ export function LocaleLink({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorEl
   return <a {...props} href={href ? localizedHref(href, locale) : href} />;
 }
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ hrefForLocale }: { hrefForLocale?: (locale: Locale) => string } = {}) {
   const { locale, pagePath, t } = useLumiScoreLocale();
   return <div className="language-switcher" role="group" aria-label={t('language.label')}>
     {(['nl', 'en'] as const).map(option => <a key={option}
-      href={localizedHref(pagePath, option)}
+      href={hrefForLocale ? hrefForLocale(option) : localizedHref(pagePath, option)}
       aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
       aria-current={locale === option ? 'page' : undefined}
       onClick={() => rememberLocale(option)}>{option.toUpperCase()}</a>)}

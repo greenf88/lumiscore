@@ -1,5 +1,7 @@
 import { timingSafeEqual } from 'node:crypto';
-import { absoluteLumiScoreUrl } from '../seo/site-origin.ts';
+import type { Locale } from '../i18n/config.ts';
+import { localizedHref } from '../i18n/paths.ts';
+import { isRecoveryState } from './recovery-link.ts';
 import {
   isValidNewAccountPassword,
   NEW_ACCOUNT_PASSWORD_MIN_LENGTH,
@@ -10,23 +12,20 @@ export const PASSWORD_RECOVERY_VERIFIED_COOKIE = 'lumiscore-recovery-verified';
 export const PASSWORD_RECOVERY_PATH = '/update-password';
 export const PASSWORD_RESET_REQUEST_DESTINATION = '/forgot-password?message=check_email';
 
-const RECOVERY_STATE_PATTERN = /^[0-9a-f-]{36}$/u;
 const RECOVERY_AUTH_MAX_AGE_SECONDS = 15 * 60;
 
 export type PasswordUpdateValidation =
   | { ok: true; password: string }
   | { ok: false; error: 'password_too_short' | 'password_mismatch' };
 
-export function createPasswordRecoveryCallbackUrl(state: string): string {
-  const callback = new URL('/auth/callback', absoluteLumiScoreUrl('/'));
-  callback.searchParams.set('flow', 'recovery');
-  callback.searchParams.set('next', PASSWORD_RECOVERY_PATH);
+export function createPasswordRecoveryCallbackUrl(state: string, requestUrl: string, locale: Locale = 'en'): string {
+  const callback = new URL(localizedHref(PASSWORD_RECOVERY_PATH, locale), new URL(requestUrl).origin);
   callback.searchParams.set('recovery_state', state);
   return callback.toString();
 }
 
 export function isValidRecoveryState(value: string | null | undefined): value is string {
-  return typeof value === 'string' && RECOVERY_STATE_PATTERN.test(value);
+  return isRecoveryState(value);
 }
 
 export function recoveryStatesMatch(
