@@ -1,5 +1,6 @@
 import { languageAlternates, localizedHref } from '../i18n/paths.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
+import { editorialTopLists } from '../catalog/top-lists.ts';
 
 export function buildPublicSitemapPaths(
   workIds: readonly string[],
@@ -11,8 +12,7 @@ export function buildPublicSitemapPaths(
     '/collections',
     '/categories',
     '/toplijsten',
-    '/toplijsten/dystopie-vanaf-1990',
-    '/toplijsten/fantasy-sciencefiction',
+    ...editorialTopLists.map(list => '/toplijsten/' + list.slug),
     '/taste-test',
     '/over-ons',
     '/zo-werkt-het',

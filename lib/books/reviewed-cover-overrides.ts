@@ -1,5 +1,6 @@
 import { normalizeIsbn13 } from './covers.ts';
 import { normalizeEditionLanguage } from './edition-ranking.ts';
+import editorialCovers from './reviewed-editorial-covers-20261028.json' with { type: 'json' };
 
 export type ReviewedCoverOverride = {
   workId: string;
@@ -16,6 +17,9 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Exact Dutch paperback; publisher confirms ISBN/language, KB catalogue confirms
+  // translation of The Final Empire. No OL edition ID is invented or required here.
+  {workId:'197',openLibraryWorkId:'OL5738148W',title:'Het laatste rijk',author:'Brandon Sanderson',isbn13:'9789024581269',editionLanguage:'nld',coverUrl:'https://www.lsuitgeverij.nl/wp-content/uploads/2026/10/9789024581269_frontcover-320x499.jpg',source:'official_publisher',evidenceUrl:'https://www.lsuitgeverij.nl/boek/het-laatste-rijk/',reviewedAt:'2026-10-28'},
   // Three proposed additional print editions, validated on the isolated test catalog.
   // Existing editions remain intact. Source/author conflicts: catalog/remaining-covers-20261023.
   {workId:'148',openLibraryWorkId:'OL71042W',title:"The Magician's Nephew (The Chronicles of Narnia)",author:'C. S. Lewis',isbn13:'9780064471107',editionLanguage:'eng',openLibraryEditionId:'OL7292690M',coverUrl:'https://covers.openlibrary.org/b/id/52093-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7292690M',reviewedAt:'2026-10-23'},
@@ -300,6 +304,7 @@ export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
     evidenceUrl: 'https://metadata.isbn.nl/1426132/de-mitsukoshi-troostbaby-company.html',
     reviewedAt: '2026-10-17',
   },
+  ...editorialCovers.map(entry => ({ ...entry, source: 'reviewed_open_library' as const, editionLanguage: entry.editionLanguage as 'eng' | 'nld' })),
 ] as const;
 
 function normalizeIdentityText(value: string | null | undefined): string {

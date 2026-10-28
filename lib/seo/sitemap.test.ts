@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildPublicSitemapPaths } from './sitemap.ts';
+import { editorialTopLists } from '../catalog/top-lists.ts';
 
 test('sitemap paths include all current public books and collections without duplicates', () => {
   assert.deepEqual(
@@ -11,8 +12,7 @@ test('sitemap paths include all current public books and collections without dup
       '/collections',
       '/categories',
       '/toplijsten',
-      '/toplijsten/dystopie-vanaf-1990',
-      '/toplijsten/fantasy-sciencefiction',
+      ...editorialTopLists.map(list => '/toplijsten/' + list.slug),
       '/taste-test',
       '/over-ons',
       '/zo-werkt-het',

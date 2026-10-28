@@ -1,6 +1,12 @@
 import data from './top-lists.json' with { type: 'json' };
-export const editorialTopLists = data.lists;
-export const editorialTopBooks = data.books;
+import campaigns from './editorial-campaigns-20261028.json' with { type: 'json' };
+type LocalizedText = { nl: string; en: string };
+export type EditorialList = {
+  slug: string; title: LocalizedText; description: LocalizedText; workIds: string[];
+  criteria?: LocalizedText; notes?: Partial<Record<string, LocalizedText>>; related?: string[]; shareImage?: string;
+};
+export const editorialTopLists: EditorialList[] = [...data.lists, ...campaigns.lists];
+export const editorialTopBooks = [...data.books, ...campaigns.books.filter(book => !data.books.some(existing => existing.workId === book.workId))];
 export function getEditorialTopList(slug: string) { return editorialTopLists.find(list => list.slug === slug); }
 export function getEditorialTopBook(id: string) { return editorialTopBooks.find(book => book.workId === id)!; }
 /** The public source identity is portable; a database's numeric IDs are not. */
