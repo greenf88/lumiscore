@@ -78,3 +78,14 @@ test('editorial reasons cannot inherit the narrow six-column catalogue grid', ()
   assert.match(css,/\.editorial-books\s*\{[^}]*minmax\(min\(100%, 220px\), 1fr\)/);
   assert.match(css,/\.editorial-reason\s*\{[^}]*overflow-wrap: anywhere/);
 });
+
+test('publisher-proven Dutch Final Empire cover stays bound to ISBN, Work, author and language without inventing an OL edition', () => {
+  const base={id:'test-final-empire',workId:'8800309',openLibraryWorkId:'OL5738148W',title:'The Final Empire',author:'Brandon Sanderson',score:null,ratingsCount:null,match:null,cover:'orbit'} as Book;
+  const nl={id:614,work_id:8800309,title:'Het laatste rijk',language:'nld',isbn_13:'9789024581269',open_library_edition_id:null};
+  const presented=withStrictEdition(base,nl,'nl')!;
+  assert.match(presented.coverUrls![0],/lsuitgeverij\.nl.*9789024581269_frontcover/);
+  assert.equal(presented.openLibraryEditionId,null);
+  assert.equal(withStrictEdition(base,nl,'en'),null);
+  for(const change of [{isbn_13:'9789024565306'},{language:'eng'}]) assert.deepEqual(withStrictEdition(base,{...nl,...change},'nl')?.coverUrls,[]);
+  for(const change of [{author:'Another author'},{openLibraryWorkId:'OL999999W'}]) assert.deepEqual(withStrictEdition({...base,...change},nl,'nl')?.coverUrls,[]);
+});
