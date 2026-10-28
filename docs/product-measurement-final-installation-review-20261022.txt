@@ -1,3 +1,53 @@
+PR51 — READ-ONLY OPRUIMNACONTROLE; GEEN NIEUWE AANLEIDING VOOR WRITE
+28oktober2026,12:31:13–12:32:27UTC /13:31:13–13:32:27Europe/Amsterdam(CET).
+Head6354e56adf7a0e0e8de6bff8d2f37a5c5f0973ce opnieuw open/Draft,mergeable;
+applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd. Bestaande
+quality40678865703success(856pass/16skip/0fail),Ready4y18xiv1a en volledige
+hosted10/10-acceptatie hieronder hergebruikt. Geen nieuwe testcampagne/appcode.
+
+GEEN nieuwe cleanup aangeboden: geen aantoonbaar connectorherstel, vernieuwde
+sessie of concrete herstelstap van support. Supabase installed/ENABLED en
+get_project/SELECT werken; dit werkte eerder ook en bewijst geen writeherstel.
+Tools bieden geen sessievernieuwingstijd of concrete requestState-herstelactie.
+Geen alternatieve toegang, installatie, accounts, ratings of productiemutaties.
+
+Exacte bestaande manifestidentiteit/aanmaaktijd en alle volledige businessrijen
+opnieuw gelijk bevonden (ratings,statussen,offers,ronde,voorkeuren).
+Nog aanwezig/te verwijderen:eigen Auth-account1,ratings12(inclusief3oude),
+leesstatussen12,offers10,afgeronde ronde1;voorkeuren/responses0;sessies/refresh0.
+FixtureWorks9/edities9/auteur1/traitrijen9/inventaris9. Geen andere gebruiker
+heeft deze Works in ratings/statussen/offers;geen onverwachte collectie-,cover-,
+categorie-,selectie-,alias-,editorial- of auteurafhankelijkheden gevonden.
+Meetrijen:38countercellen/83bijdragen,83receipts,18operationele rijen;alle
+fingerprints passen bij het eerdere exacte manifest. Verlopen grant/budgets/
+grantbudgets zijn door de normale cron inmiddels0: geen geslaagde actorcleanup.
+Oud cleanup-SQL NIET opnieuw gebruiken; de rowguards moeten na herstel vers zijn.
+
+Behouden oorspronkelijke catalogus529Works/763edities/68auteurs/inventaris7;
+andere ratings68/statussen68/rondes5/offers69. Meetinstallatie7FORCE-RLS-tabellen,
+9private functies,3enabled observers; eigen vijfminutenjob1actief. Laatste normale
+runs12:25en12:30UTCsucceeded. Geen volledige nieuwe installatie-audit geclaimd.
+Eén read-only vergelijkings-SELECT had een syntaxfout42601; alleen die SELECT
+gecorrigeerd en geslaagd. Geen mutatie, requestState-retry of beveiligingsweigering.
+
+Exacte private restanten:outputs/product-measurements-20261028/
+cleanup-residuals-123227.private.json. Geanonimiseerd bewijs:
+cleanup-readonly-followup.json. Bestaand support-cleanup-requeststate.txt
+bijgewerkt; niets verzonden. Oude manifesten/foutbewijzen niet overschreven.
+
+Laatste ECHT uitgevoerde cleanupfout blijft de aanvraag11:04:12UTC/resultaat
+11:11:32UTC:Invalid or expired requestState,INVALID_ARGUMENT,JSON-RPC-32602,
+geenrequest-ID. Geen nieuwe foutwaarneming/uitvoerduurclaim in deze nacontrole.
+Minimale vervolghandeling: support bevestigt herstel van deze write-requestState
+of geeft een concrete ondersteunde herstelstap. Dan eerst actuele waarden/expiry
+en identiteit controleren, vervolgens één gerichte toegestane cleanup.
+GEBLOKKEERD; PR51 blijft Draft. Geen productieakkoordtekst afgeven: de bestaande
+installatiebestanden zijn TEST-only, met harde test-origin-gate. Het ontbreken
+van een gevalideerd productie-install/activatiepakket is ongewijzigd expliciet
+beschreven in productievoorstel. Niet stil omzetten in productiemigraties in
+deze connectorgeblokkeerde afronding. Bestaande hashes/rollback blijven gelijk.
+
+----- EERDER CHECKPOINT -----
 PR51 — VOLLEDIGE HOSTED RONDE BEWEZEN; EXACTE OPRUIMING GEBLOKKEERD
 28 oktober 2026, aanvullend acceptatiecheckpoint. Oudere checkpoints hieronder
 zijn historische feiten; dit blok geeft de actuele uitkomst.
