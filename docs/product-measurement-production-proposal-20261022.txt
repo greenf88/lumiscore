@@ -4,11 +4,17 @@ Test: hlvujbrmfdlrfxdjwsmb. Productie qvplwejffhjvxaypmjut buiten schrijfscope.
 
 TESTARTIFACTEN — exacte LF-bytes, manifest met alle functiehashes/ACLs
 test-support/product-metrics/install.sql
-SHA256 fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3
+SHA256 16bf7718f3dee4aeae5a8747e0867033e7830f60302e52d3169ac1d75b0bff0c
 test-support/product-metrics/scheduler-test.sql
 SHA256 c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
 test-support/product-metrics/rollback.sql
-SHA256 549d6325362598b09e0e656bab62e6eadcda8b54ee80d87e3d53fc186cc6d4bc
+SHA256 b7e14587e7aba69b19d8304f127d8978a0a006f27eb1fa9ad3ea10f18e8bb92b
+Test-only ACL-reparatie: repair-service-role-acl.sql
+SHA256 b63ff48a905517a3ce7d4dff1806412f3890930a0da5bb3b8f7d92d9b35dc8ef
+28oktober: expliciete service_role-revoke toegevoegd aan de vier publieke
+wrappers en guarded rollback; geen globale default-ACL aangepast. De eerdere
+installatie fddb6c... plus deze kleine reparatie heeft dezelfde functie-inhoud
+en effectieve ACLs als de nieuwe installer; productie is niet benaderd.
 package-manifest-v3.json reproduceerbaar met product-metrics-package-local.mjs.
 Verplichte TEST-marker; nooit op productie draaien of blind de marker verwijderen.
 V3 weigert onbekend/v2-schema. Controleer vooraf volledige metadata/afwezige
@@ -91,7 +97,29 @@ voor afzonderlijk goedgekeurde opschoning. Als objecten vooraf bestonden: bewaar
 oude definities/ACLs herstellen, niet het absent-baselinepad gebruiken.
 Approllback blijft compatible; lokaal herinstalleren behoudt alle gegevens.
 
-BLOKKADE EN ADVIES
+BLOKKADE EN ADVIES — actuele stand28oktober2026
+Testinstallatie en rechtenreparatie zijn via de bestaande connector geslaagd.
+De vijfminuten-cron draaide aantoonbaar zelfstandig07:55UTC: precies1verlopen
+record uit elk van6tabellen verwijderd, actueel receipt behouden, geen backlog.
+Latere normale runs ook succeeded. Geen handmatige cleanup als schedulerbewijs.
+Gastbrowserroute en begrensde HTTP-test teruggelezen:91synthetische bijdragen,
+waarvan5echte browserroute-events,2bij gedeeltelijke testharnesspogingen en84in
+de volledige gastcontrole. Herhaalde receipt telt niet opnieuw; één bewuste
+grant-rate-reject in healthtelling. Ongeldige/grote payloads400/413; geweigerde
+toestemming/DNT/intrekken204. Geen rating_saved zonder werkelijke rating.
+CollectorHTTP n3:accept mediaan183.224ms(min178.240,max187.809); deny n3:
+133.629ms(min132.403,max136.409). Dit is GEEN ratingopslagoverhead, browserpaint
+of causale prestatievergelijking; sequentiële Windows/curl/Previewmetingen.
+Twee gelijktijdige grants verwerken40events in4batches;188.361–228.375ms/batch.
+Geen bewijs van volledige campagnecapaciteit of meerdere appinstances.
+Nog open: tijdelijke login, nieuwe/gewijzigde rating, ronde/resultaatreadback,
+ratingfoutisolatie en vergelijkbare hosted ratingoverhead. Publieke test-signup
+staat uit(signup_disabled); geen Auth-instelling veranderd. Dashboardformulier
+voor exact één toegestaan tijdelijk testaccount voorbereid voor gebruikersinvoer.
+PR51 blijft Draft, NIET gereed voor release. Geen uitvoerbaar productie-SQL of
+activatiediff goedgekeurd: de bestaande test-origin-gate blijft hard uit op prod.
+
+HISTORISCHE CONNECTORBLOKKADE (niet meer de actuele installatiestatus)
 McpServerError: Invalid or expired requestState. Geen nieuwe installatiepoging:
 geen aantoonbare toegangsverandering. Leestoegang werkt; oorzaak onbekend.
 Supabase-plugin installed/ENABLED. Beschikbare tools bieden geen reconnectactie of

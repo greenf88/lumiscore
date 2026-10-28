@@ -3,14 +3,18 @@
 -- No user, session, IP, rating value or private reader table is accessed.
 -- Always run monitor.sql alongside these counts. Known rate/busy/storage losses
 -- make them incomplete. No health rows does NOT prove complete delivery.
+-- Optional session settings: SET lumiscore.report_from='2026-10-28';
+-- SET lumiscore.report_to='2026-10-28'; absent values default to today's UTC date.
 select day,event,dimensions,n from product_metrics_test.daily_counters
-where day between date '2026-10-22' and date '2026-10-22'
+where day between coalesce(nullif(current_setting('lumiscore.report_from',true),''),(now() at time zone 'UTC')::date::text)::date
+and coalesce(nullif(current_setting('lumiscore.report_to',true),''),(now() at time zone 'UTC')::date::text)::date
 and dimensions->>'traffic'='synthetic' order by day,event,dimensions::text;
 
 -- Campaign event counts. These are NOT unique visitors or a linked funnel.
 select event,dimensions->>'surface' as surface,dimensions->>'operation' as operation,sum(n) as event_count
 from product_metrics_test.daily_counters
-where day between date '2026-10-22' and date '2026-10-22'
+where day between coalesce(nullif(current_setting('lumiscore.report_from',true),''),(now() at time zone 'UTC')::date::text)::date
+and coalesce(nullif(current_setting('lumiscore.report_to',true),''),(now() at time zone 'UTC')::date::text)::date
 and dimensions->>'traffic'='synthetic' and dimensions->>'source'='facebook'
 and dimensions->>'campaign'='dystopie_202610'
 group by event,surface,operation order by event,surface,operation;
@@ -20,7 +24,8 @@ group by event,surface,operation order by event,surface,operation;
 select dimensions->>'source' as source,dimensions->>'medium' as medium,
 dimensions->>'campaign' as campaign,dimensions->>'locale' as locale,sum(n) as pageviews
 from product_metrics_test.daily_counters
-where day between date '2026-10-22' and date '2026-10-22'
+where day between coalesce(nullif(current_setting('lumiscore.report_from',true),''),(now() at time zone 'UTC')::date::text)::date
+and coalesce(nullif(current_setting('lumiscore.report_to',true),''),(now() at time zone 'UTC')::date::text)::date
 and dimensions->>'traffic'='synthetic' and event='page_opened'
 group by source,medium,campaign,locale order by source,medium,campaign,locale;
 

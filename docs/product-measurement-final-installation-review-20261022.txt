@@ -1,3 +1,224 @@
+PR51 — RECHTENHERSTEL, ECHTE CRON EN GASTOPSLAG BEWEZEN, 28 oktober 2026
+
+Scope: uitsluitend hlvujbrmfdlrfxdjwsmb. Productie niet benaderd. Geen appcode,
+environment, Auth-instellingen, catalogus, merge of productiepublicatie gewijzigd.
+Remote PR-head opnieuw c9c274eb61be947e397a99c0913b8bc9dddacd55,open/Draft;
+applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Ready dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx, https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app.
+
+RECHTEN
+Oorzaak aangetoond: Supabase default-function-ACLs in public gaven service_role
+extra EXECUTE op4nieuwe invokerwrappers. Alleen die4EXECUTE-grants ingetrokken;
+geen globale defaults, andere rollen, function bodies of clienttablegrants.
+Migratie product_metrics_test_wrapper_acl_20261028 geslaagd, teruggelezen07:51:09.991942UTC:
+alle4service_role_execute=false, exacte13functiehashes/ACLs behouden.
+Nieuwe installer en guarded rollback trekken dit voortaan expliciet in.
+Lokale fixture bootst de echte default-ACL na; repair tweemaal veilig getest.
+
+Definitieve LF-bestanden/manifest:
+install.sql 16bf7718f3dee4aeae5a8747e0867033e7830f60302e52d3169ac1d75b0bff0c
+scheduler-test.sql c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
+rollback.sql b7e14587e7aba69b19d8304f127d8978a0a006f27eb1fa9ad3ea10f18e8bb92b
+repair-service-role-acl.sql b63ff48a905517a3ce7d4dff1806412f3890930a0da5bb3b8f7d92d9b35dc8ef
+Geïnstalleerd: oorspronkelijke installer fddb6c... + exact bovenstaande ACL-repair;
+functionele inhoud en effectieve rechten gelijk aan nieuwe installer.
+
+WERKELIJKE SCHEDULER
+Migratie product_metrics_test_scheduler_v3_20261028, job1
+lumiscore-product-metrics-test-cleanup-v3, */5 * * * *, postgres/postgres;
+SET statement_timeout='3s'; SELECT product_metrics_test.cleanup();
+Geen versneld schema of handmatige cleanup gebruikt als schedulerbewijs.
+Kleine seed:1verlopen rij per6expiratietabellen en1actuele receipt.
+Daemonrun07:55:00.118436–07:55:00.138395UTC,succeeded; maintenance success
+07:55:00.124987UTC, deleted6x1,backlogfalse,errorNULL; verlopen receipt0,
+actuele receipt1. Volgende normale runs08:00,08:05,08:10 eveneens succeeded.
+Normale retentiegrens90dagen+5min+max3s bij tijdige start/geenbacklog;
+geen harde garantie bij storing. Lokale UTC-grenzen/backlog/fouttests behouden.
+Geen ratings/accounts/leesstatussen door cleanup geraakt; SQL beperkt tot eigen
+private meettabellen en eigen cronhistorie. Geen productiecron geïnstalleerd.
+
+HOSTED GASTBEWIJS EN RAPPORTAGE
+Browser:geenkeuze/weigeren0events; accepteren activegrant1,events0(geenreplay).
+Reloadcampagne:page_opened1/editorial_list_opened1; echte boekklik:
+book_card_opened1/book_detail_opened1/page_opened1, allemetfacebook/
+organic_social/dystopie_202610/synthetic,Work921100102. Na intrekken enEN-
+taalwissel0EN-events; geen actieve grants. Campagne blijft binnen de route.
+Gecontroleerde HTTP-harness31checks: defaultoff/deny/revoke/DNT204,
+valid202, te groot413, verboden extra veld/forged ratingevent400.
+Retry zelfde receipt telt eenmaal; DBhealth duplicate2 omvat2harnesspogingen.
+2gelijktijdige grants:40events/4batches geslaagd; één grant daarna tot60,
+61e event429 en exact1grant_rate_limited in privatehealthtelling.
+Dit bewijst geen volledige campagnecapaciteit/multiinstanceallocatie.
+SQL-readback08:14:35.458414UTC:91bijdragen/5countercellen/92receipts;
+91=5echte browserroute-events+2gedeeltelijke harnesspogingen+84volledigeharness.
+Rapport:editorial87,bookclick1,bookdetail1,pagevieweditorial1/pageviewdetail1.
+Niet presenteren als87bezoeken/personen of een gelinkteconversiefunnel.
+HTTPchecks en counters afzonderlijk geanonimiseerd bewaard. Testscores0.
+Rapportquery gebruikt nu instelbare periode/defaultUTCvandaag i.p.v.22oktober.
+
+METINGEN (GEEN RATINGOVERHEAD)
+Windowsdesktop, bestaande netwerkaansluiting, officiële vercel curl toegang,
+geen throttling,CLI-opstart niet meegerekend. CollectorHTTPaccept n3:mediaan
+183.224ms,min178.240,max187.809;deny n3:133.629ms,min132.403,max136.409.
+Verschilmedianen49.595ms is beschrijvend, geen causale ratingoverheadclaim.
+Parallelle10-eventbatches188.361–228.375ms. Geen browserpaint/LCP uitHTTP afgeleid.
+Gemiddelde actuele tuple:counter243.2B,receipt55.97B,grant71.4B(excl.index).
+Kleine hosted tabellen hebben8KiBheap/16–32KiBindex; page-rounding verhindert
+betrouwbare per-event-indexextrapolatie. Lokale1000rijenraming blijft lokaal.
+
+OPSCHONING
+08:20:40.216892UTC: eigen synthetische countercellen5,receipts92,grants5,
+budgets6,grantbudgets7,health13 gericht verwijderd na exacte snapshot/rowcount-
+guards, revoked-grantcontrole en geldige testmarker. Bij extra records zou alles
+stoppen. Counters/receipts/grants0; eigenjob en maintenancestate behouden.
+Geanonimiseerd bewijs:outputs/product-measurements-20261028/hosted-cron-guest-proof.json;
+guarded cleanupquery:cleanup-guest-proof.sql. Cookiejars/credentials niet inGit.
+
+OPEN — NOG GEEN RELEASEGEREEDCLAIM
+Publieke signup geeft signup_disabled. Geen registratie/Auth-instelling geopend.
+Rick heeft exact één synthetisch account in test aangemaakt/bevestigd08:20:31UTC;
+geen andere gebruikers gelezen. Previewlogin nog nodig; wachtwoord niet opgevraagd.
+Ingelogde signup/login→nieuwe/gewijzigde rating→rondeafronding→resultaatreadback,
+meetfoutisolatie en vergelijkbare hostedratingoverhead blijven open.
+Account blijft uitsluitend voor afronding; na test revoke/logout en gericht
+verwijderen volgens bestaand plan. PR blijft Draft. De oude connectorblokkade
+hieronder is historisch en niet meer het actuele releaseobstakel.
+
+PR51 — EEN EXPLICIET GEVRAAGDE TESTINSTALLATIE GESLAAGD, 28 oktober 2026
+
+Rick gaf expliciet opdracht om nu één voorbereide installatiepoging te doen,
+ook zonder vooraf bewezen connectorherstel. Precies één apply_migration via de
+bestaande Supabase-koppeling; geen fallback of retry. Alleen hlvujbrmfdlrfxdjwsmb.
+Voorcontrole07:40:00.764430UTC: marker1,metrics_schemaNULL,cron.jobNULL,
+metric_functions0,metric_triggers0,metric_migrations0. PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55
+opnieuw open/Draft; applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Install.sql exact fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Aanvraag07:40:27.455UTC /08:40:27CET; successresultaat waargenomen
+07:41:59.367UTC /08:41:59CET. Toolresultaat {success:true}; geen requestState-fout.
+Migratieregistratie product_metrics_test_v3_20261022,version20261028074159.
+
+Werkelijke metadatareadback:7tabellen,13functies,3enabled triggers; alle13body-
+hashes,definer/invokerkeuzes en search_path/timeoutsettings conform manifest.
+Alle7tabellen ENABLE+FORCE RLS, geen anon/authenticated SELECT of schrijfrechten.
+AFWIJKING:4publieke invokerwrappers behouden extra service_role EXECUTE t.o.v.
+het lokale manifest; overige ACLs en alle functie-inhoud gelijk. Vastgelegd voor
+gerichte rechtenreview; geen tweede migratie of privilegewijziging uitgevoerd.
+Definities/ACLs en default-function-ACLmetadata opgeslagen in het bewijsbestand.
+
+Nacontrole07:43:33.864325UTC:counterrows0,receipts0,grants0;cron.jobNULL.
+Geen testaccounts,ratings,leesstatussen,rondes of events aangemaakt. Alleen
+voorbereide meetobjecten en migratieregistratie op test toegevoegd; productie
+is niet benaderd. Geen schedulerinstallatie of hosted metingen binnen deze
+één-pogingopdracht. Geen codewijziging,rebuild,push,merge of publicatie.
+
+CONCLUSIE: de bestaande Supabase-installatieroute werkte voor deze poging.
+De eerdere foutoorzaak is daarmee niet verklaard. Hosted opslagreadback, echte
+cronrun en opslagoverhead blijven onbewezen; geen releasegereed-claim.
+Eerst de concrete ACL-afwijking beoordelen, daarna de bestaande testafronding.
+PR51 blijft Draft. Bewijs:outputs/product-measurements-20261028/test-installation-proof.json.
+Historische blokkades hieronder blijven uitsluitend historische checkpoints.
+
+PR51 — AFZONDERLIJKE SUPABASE-TOEGANGSCONTROLE, 27 oktober 2026
+
+Vercel-teamtoegang is afzonderlijk hersteld. Dit is geen bewijs van vernieuwde
+Supabase-sessie of herstelde apply_migration-requestState. De gebruiker staat
+één installatiepoging uitsluitend na aantoonbaar vernieuwde toegang toe.
+In deze controle daarom GEEN apply_migration aangeroepen: die voorwaarde is
+niet aangetoond. Geen identieke retries of alternatieve schrijfroute gebruikt.
+
+PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55, open/Draft, ongewijzigd.
+Applicatiecommit 3bf06b9e02a63308ce35276e7728819f491d41e8. Latere commits
+betreffen verslag en lokale capaciteit-/operatietests, niet de applicatie/SQL.
+Actuele remote main via GitHub:2651c364eb879dc6ec7416034744b3e947458449;
+de historische mainverwijzingen hieronder zijn geen actuele stand.
+CI quality39782654443 success; Vercel success. Bestaande deployment
+dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx opnieuw READY, head exact c9c274e:
+https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app
+Geen rebuild of applicatiewijziging; geldig lokaal/UI-bewijs hergebruikt.
+
+Supabase get_project bevestigt uitsluitend test hlvujbrmfdlrfxdjwsmb,
+ACTIVE_HEALTHY. Expliciete metadata-SELECT 2026-10-27 12:48:48.363293 UTC
+(13:48:48 Europe/Amsterdam/CET): expected_marker1; product_metrics_testNULL;
+cron.jobNULL; metric_functions0; metric_triggers0; metric_migrations0.
+Geen gedeeltelijke meetinstallatie aangetoond. Geen persoonsgegevens gelezen.
+Plugin discovery: Supabase installed/ENABLED; geen sessievernieuwingstijd,
+schrijf-requestState, herstelactie of bevestiging van connectorherstel zichtbaar.
+Werkende reads en ENABLED-status werkten al vóór de historische installatiefout.
+Zij bewijzen dus geen vernieuwde installatieautorisatie.
+
+Alle drie SHA256-hashes opnieuw exact gelijk aan manifest/proposal:
+install.sql fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3
+scheduler-test.sql c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
+rollback.sql 549d6325362598b09e0e656bab62e6eadcda8b54ee80d87e3d53fc186cc6d4bc
+Testguard, expliciete ACLs/FORCE RLS, begrensde5min-cron en gerichte rollback
+behouden. Geen accounts/ratings/status/events aangemaakt, dus geen cleanup.
+
+Laatste ECHT uitgevoerde installatiefout blijft23oktober: aanvraag07:20:13UTC,
+resultaatbeschikbaar07:25:16UTC, McpServerError: Invalid or expired requestState,
+INVALID_ARGUMENT/JSON-RPC-32602/reason invalid_request_state, geen request-ID.
+Dit is geen nieuwe foutwaarneming op27oktober. Oorzaak blijft onbekend; geen
+bewezen OAuth-expiry, RLS-weigering of beveiligingsweigering.
+
+RELEASEADVIES: GEBLOKKEERD op aantoonbaar herstel van Supabase-installatietoegang.
+Minimale vervolgactie: support bevestigt herstel van de bestaande Supabase-
+apply_migration-requestState of levert een concrete, ondersteunde herstelstap.
+Daarna één testinstallatie, metadatareadback, echte hosted opslagroute,
+daadwerkelijke cronrun en opslagoverhead. Tot dan blijven deze drie onbewezen.
+Geen productiecontact/writes, migraties, scheduler, merge of publicatie.
+Supportvervolg lokaal:outputs/product-measurements-20261027/support-followup.txt.
+Bestaande on-gecommitteerde verslagaanvullingen zijn behouden.
+
+PR51 — TWEEDE BEVESTIGDE VERBINDINGSVERNIEUWING, 23 oktober 2026
+
+User meldde opnieuw ingelogd te zijn en vroeg nogmaals te proberen. Eén nieuwe
+apply_migration-aanvraag voor hlvujbrmfdlrfxdjwsmb, geen alternatieve toegang.
+Voorcontrole 07:19:44.742346 UTC: marker1, metrics_schemaNULL, cron.jobNULL,
+metric_functions0, metric_triggers0, metric_migrations0. Install.sql onveranderd:
+fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Aanvraag geregistreerd 2026-10-23 07:20:13 UTC (09:20:13 CEST), resultaat
+beschikbaar 07:25:16 UTC (09:25:16 CEST); intern fouttijdstip onbekend.
+Tool Supabase apply_migration; name product_metrics_test_v3_20261022.
+Resultaat exact: McpServerError: Invalid or expired requestState.
+INVALID_ARGUMENT; JSON-RPC -32602; reason invalid_request_state; geen request-ID.
+Lezen werkt; oorzaak onbekend. Geen bewezen verlopen OAuth of veiligheidsweigering.
+Geen verdere installatiepoging zonder aantoonbaar herstel door ondersteuning.
+Geen schedulerinstallatie, meetwrites, accounts of productieacties uitgevoerd.
+Nacontrole 07:25:45.185894 UTC: dezelfde afwezige objecten, marker1.
+Hosted meetopslag, cronwerking en overhead blijven onbewezen; PR blijft Draft.
+
+PR51 — CONNECTORHERPROEF NA OPNIEUW VERBINDEN, 23 oktober 2026
+
+UITKOMST: GEBLOKKEERD. User bevestigde 'Supabase verbonden'. Daarna exact één
+nieuwe apply_migration-aanvraag, geen alternatieve SQL-/credentialroute.
+PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55 blijft Draft/open; main
+b4ac64d1166831f3578616f9288680d11275f916. Beide CI-checks opnieuw success.
+Applicatiecommit 3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Preview https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app.
+
+Testidentiteit get_project: hlvujbrmfdlrfxdjwsmb, ACTIVE_HEALTHY, eu-west-1.
+Voorcontrole 2026-10-22 17:34:06.206069 UTC (19:34:06 CEST): marker1,
+metrics_schemaNULL, metric_functions0, metric_triggers0, metric_migrations0,
+cron.jobNULL. Bestaande securityadviezen en logbron-aantallen read-only gelezen.
+Aanvraag geregistreerd 2026-10-22 17:34:25 UTC (19:34:25 CEST), tool
+Supabase apply_migration, name product_metrics_test_v3_20261022, alleen test.
+install.sql SHA256 fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Resultaat beschikbaar 2026-10-23 07:14:07 UTC (09:14:07 CEST):
+McpServerError: Invalid or expired requestState
+error_code INVALID_ARGUMENT; JSON-RPC -32602; reason invalid_request_state.
+Geen request-ID teruggegeven. Exact intern fouttijdstip/aanvraagduur onbekend:
+de tool leverde het resultaat pas bij hervatten; geen netwerkduurmeter hiervan.
+Nacontrole 2026-10-23 07:14:26.575350 UTC (09:14:26 CEST): zelfde afwezige
+objecten en marker1. Geen gedeeltelijke installatie aantoonbaar. Scheduler niet
+aangeboden omdat de vereiste meetobjecten ontbreken. Geen testaccount/writes.
+
+Oorzaak onbekend: lezen werkt; OAuth-verloop of beveiligingsweigering niet bewezen.
+Opnieuw verbinden heeft dit niet opgelost. Geen nieuwe herhaalpoging zonder
+aantoonbaar gewijzigde toegang. Minimale vervolgactie: app-/connectorondersteuning
+deze Supabase apply_migration-requestState laten onderzoeken/herstellen. Geen
+credentials nodig in de chat. Hosted opslagreadback, echte cronruns en hosted
+opslagoverhead blijven onbewezen. Geldig lokaal/visueel bewijs hieronder hergebruikt.
+Pakket-hashes onveranderd; geen applicatiewijziging of rebuild nodig.
+
 PR51 — ACTUEEL V3-VERVOLG, 22 oktober 2026
 
 PR blijft Draft. Geteste applicatiecommit:
