@@ -1,0 +1,61 @@
+EDITORIAL TOP10 REVIEW — 28 OCTOBER 2026
+Status: local implementation complete; hosted verification pending.
+Base remote main: 2651c364eb879dc6ec7416034744b3e947458449 (rechecked unchanged).
+Branch: editorial/top10-campaigns-20261028. Separate worktree; PR51 untouched.
+
+Scope and decisions
+10 additional Top10s, 86 unique existing Works / 100 list places; original two lists preserved.
+Titles/criteria/reasons and routes: lib/catalog/editorial-campaigns-20261028.json.
+“Short novels” includes novellas; survival explicitly distinguishes nine novels and one nonfiction book.
+No two new lists share five or more Works. Older fantasy/SF list overlaps are intentional connections,
+not a new copy of its ranking. No readers, reviews, bestsellers or personal matches invented.
+Most NL cards necessarily use labelled English fallbacks; see exact source/edition register.
+Source synopsis/edition identity and targeted official content/series review: selection-register.json.
+Sources do not become new stored taste traits, and no catalogue eligibility rules are relaxed.
+
+Design
+Raised light cards in Paper/Ink; serif headings; compact mobile introduction.
+Shared opt-in ui-action variant, green primary and filled lighter secondary actions, minimum44px.
+Book-specific reasons are visible without opening a disclosure; source/selection remains collapsible.
+Taste CTA and relevant other lists retain crawlable ordinary links and focus styles.
+20 own 1200x630 PNGs, all below300KB. No cover collage or external image generator.
+The complete list registry remains server-only for the editorial component; only the current list,
+10 catalogue books and small source/link props are serialized, not all ten lists' book notes.
+
+Data, scores and performance
+Existing PR48 loadCatalogBooksBySourceIds + strict edition selection + public score summary RPC.
+One bounded Work query by up to10 exact source IDs; one stored-edition batch and public summary batch.
+No full catalogue read on list rendering, external metadata per book, new personal cache, or fake score.
+93 exact edition-bound public image records use the existing reviewed override mechanism.
+Some source print editions intentionally are large print (documented in the catalogue README).
+A missing catalogue/edition is explicit, not a silently short Top10 or a foreign-language fallback.
+Status lookup now uses actual database Work-ID, not the production-only editorial numeric identity.
+
+Test installation (separately authorized)
+hlvujbrmfdlrfxdjwsmb only:73Works+80Editions+54Authors.
+Dry-run then exact commit; repeat was zero insert. Existing public row digests unchanged.
+No users, ratings, statuses, taste inventory or PR51 fixtures were changed.
+Test-only dry-run/receipt/recovery and data gaps are in catalog/editorial-campaigns-20261028/.
+No production import is needed or included. Recovery is rollback-only and never CASCADE.
+
+Local checks
+TypeScript and lint passed after correcting test-only types.
+18 final editorial/parity/sitemap tests passed;74 catalogue/SEO tests passed before final type cleanup.
+Full unit run:847 passed,16 skipped,0 failed,1 timed out during concurrent bulk-fixture tests.
+The unchanged timed-out test passed alone:45.175s. No timeout limit was increased.
+vinext production build passed;Vite/Vercel build passed (before the small client-prop split);
+remote Vercel build will verify the final app. Existing Vinext dynamic-import warnings remain.
+Secretscan:92clientfiles,no server secret identifiers/values; local config has public test keys only.
+First3NL mobile local routes:10 cards/10 loaded covers each,0 unavailable,0 horizontal overflow.
+These development-server observations are NOT hosted timings or production performance claims.
+Hosted matrix, raw HTML/metadata, all covers/detail parities, CI and measurements still to append.
+
+Social
+docs/editorial-social-concepts-20261028.json holds10 Dutch draft posts, questions, destinations,
+one top-level campaign toplijsten_202610 and a different utm_content per list.
+First recommendations:fantasy entry,spoiler-free thrillers,after ProjectHailMary.
+No posting/planning/IndexNow/analytics changes. PR51 remains a separate Draft.
+
+Release boundary
+DraftPR + testPreview only. No merge, production release or production database/configuration writes.
+Release advice remains conditional on hosted completion and final CI, not campaign-ready yet.

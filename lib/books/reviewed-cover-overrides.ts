@@ -1,5 +1,6 @@
 import { normalizeIsbn13 } from './covers.ts';
 import { normalizeEditionLanguage } from './edition-ranking.ts';
+import editorialCovers from './reviewed-editorial-covers-20261028.json' with { type: 'json' };
 
 export type ReviewedCoverOverride = {
   workId: string;
@@ -300,6 +301,7 @@ export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
     evidenceUrl: 'https://metadata.isbn.nl/1426132/de-mitsukoshi-troostbaby-company.html',
     reviewedAt: '2026-10-17',
   },
+  ...editorialCovers.map(entry => ({ ...entry, source: 'reviewed_open_library' as const, editionLanguage: entry.editionLanguage as 'eng' | 'nld' })),
 ] as const;
 
 function normalizeIdentityText(value: string | null | undefined): string {

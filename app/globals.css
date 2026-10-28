@@ -1458,6 +1458,31 @@ button, input, select, textarea { font-family: var(--sans); }
   }
 }
 .ui-control:active, .taste-direct-test button:not(:disabled):active { box-shadow: inset 0 0 0 2px var(--teal); }
+/* Reusable filled actions: same hit area and alignment for anchors and buttons. */
+.ui-control.ui-action { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 18px; text-align: center; text-decoration: none; line-height: 1.35; }
+.ui-secondary { background: var(--control-hover); color: var(--text); }
+.featured-section.editorial-lists { padding-block: 24px 40px; }
+.editorial-lists h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.15; }
+.editorial-lists > .eyebrow { margin-block: 12px; }
+.reading-list-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 18px; margin-block: 24px; }
+.reading-list-card { min-width: 0; display: flex; flex-direction: column; gap: 14px; background: var(--surface-raised); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.reading-list-card h2 { font-family: var(--serif); font-size: 23px; line-height: 1.2; margin: 0; }
+.reading-list-card > p { margin: 0; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.reading-list-card > .ui-control { margin-top: auto; align-self: flex-start; }
+.reading-list-actions { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; margin-block: 24px 8px; }
+.editorial-back { display: inline-flex; align-items: center; min-height: 44px; text-underline-offset: 4px; }
+.editorial-criteria { color: var(--muted); max-width: 75ch; }
+.editorial-criteria p { line-height: 1.65; margin-block: 8px 0; }
+.editorial-reason { color: var(--text); line-height: 1.55; font-size: 14px; margin-block: 16px 0; }
+.editorial-related { margin-top: 36px; }
+.editorial-related h2 { font-family: var(--serif); font-size: 25px; }
+.editorial-unavailable > p { display: block; overflow: visible; }
+@media (max-width: 600px) {
+  .featured-section.editorial-lists { padding-block: 16px 32px; }
+  .reading-list-grid { margin-top: 20px; gap: 14px; }
+  .reading-list-card { padding: 18px; }
+  .reading-list-actions > .ui-control { flex: 1 1 100%; }
+}
 .ui-control:disabled, .taste-direct-test button:disabled, .header-account-panel button:disabled,
 .rating-options button:disabled, .rating-save-button:disabled { opacity: .55; cursor: not-allowed; }
 @media (hover: none) {
