@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { editorialTopLists, editorialTopBooks, topListBookHref, getEditorialWorkSourceId } from './top-lists.ts';
 import { bookAuthenticationReturnPath, resolveBookReturnNavigation } from '../navigation/book-return.ts';
 import { buildPublicSitemapPaths } from '../seo/sitemap.ts';
+import { localizedHref } from '../i18n/paths.ts';
 test('two preserved lists and ten new Top10s reference unique existing Work identities, never scores or editions',()=>{
   assert.deepEqual(editorialTopLists.map(l=>l.workIds.length),[10,25,...Array(10).fill(10)]);
   assert.equal(new Set(editorialTopBooks.map(b=>b.workId)).size,editorialTopBooks.length);
@@ -35,4 +36,16 @@ test('verified list-to-book navigation returns to exact list; forged sources fal
   const navigation = await resolveBookReturnNavigation('/toplijsten/dystopie-vanaf-1990','102',verify);
   assert.equal(bookAuthenticationReturnPath('102',navigation),'/book/102?returnTo=%2Ftoplijsten%2Fdystopie-vanaf-1990');
   assert.equal(bookAuthenticationReturnPath('102',{kind:'browse',href:'/browse'}),'/book/102');
+});
+
+test('verified editorial return and login context render English toplists without changing membership validation',async()=>{
+  const internal='/toplijsten/dystopie-vanaf-1990';
+  const navigation=await resolveBookReturnNavigation(internal,'102',async()=>null);
+  assert.equal(localizedHref(navigation.href,'en'),'/en/toplists/dystopie-vanaf-1990');
+  assert.equal(localizedHref(navigation.href,'nl'),'/nl/toplijsten/dystopie-vanaf-1990');
+  const loginNext=localizedHref(bookAuthenticationReturnPath('102',navigation),'en');
+  const parsed=new URL(loginNext,'https://lumisco.re');
+  assert.equal(parsed.pathname,'/en/book/102');
+  const resumed=await resolveBookReturnNavigation(parsed.searchParams.get('returnTo'),'102',async()=>null);
+  assert.equal(localizedHref(resumed.href,'en'),'/en/toplists/dystopie-vanaf-1990');
 });
