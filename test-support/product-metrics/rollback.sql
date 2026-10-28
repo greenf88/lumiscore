@@ -39,7 +39,7 @@ end$$;
 drop trigger product_metric_rating_v1 on public.ratings;
 drop trigger product_metric_status_v1 on public.user_book_status;
 drop trigger product_metric_round_v1 on public.taste_rating_rounds;
-revoke all on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb),public.record_product_sign_in_test_v1(jsonb),public.product_analysis_consent_test_v3(text,uuid,timestamptz) from public,anon,authenticated;
+revoke all on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb),public.record_product_sign_in_test_v1(jsonb),public.product_analysis_consent_test_v3(text,uuid,timestamptz) from public,anon,authenticated,service_role;
 revoke all on all functions in schema product_metrics_test from public,anon,authenticated;
 revoke usage on schema product_metrics_test from public,anon,authenticated;
 -- Keep grant rows until expiry (no new writes are possible); keep counters for

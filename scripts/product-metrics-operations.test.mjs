@@ -8,6 +8,12 @@ test('explicit ACLs, idempotent install and guarded rollback preserve source and
   assert.equal(m.tables.length,7);assert.equal(m.functions.length,13);assert.equal(m.triggers.length,3);
   assert.ok(m.tables.every(t=>t.rls&&t.force_rls&&!t.anon_select&&!t.authenticated_select&&!t.anon_write&&!t.authenticated_write));
   assert.ok(m.functions.every(f=>f.settings.includes('search_path=""')));
+  const wrappers=m.functions.filter(f=>f.schema==='public');
+  for(const f of wrappers)assert.equal((await db.query('select has_function_privilege(\'service_role\',$1,\'EXECUTE\') allowed',[`${f.schema}.${f.name}(${f.arguments.split(', ').filter(Boolean).map(a=>a.substring(a.indexOf(' ')+1)).join(', ')})`])).rows[0].allowed,false);
+  await db.exec("grant execute on function public.record_product_events_test_v1(jsonb) to service_role");
+  await db.exec(await text('repair-service-role-acl.sql'));
+  await db.exec(await text('repair-service-role-acl.sql'));
+  assert.equal((await db.query("select has_function_privilege('service_role','public.record_product_events_test_v1(jsonb)','EXECUTE') allowed")).rows[0].allowed,false);
   assert.ok(m.functions.filter(f=>['cleanup','current_time','operational','request_grant','request_context','observe_transition'].includes(f.name)).every(f=>!f.anon_execute&&!f.authenticated_execute));
   await db.query('insert into public.ratings(user_id,work_id,rating) values($1,1,8)',[actor]);
   await headers(db,await grant(db));assert.deepEqual(await browser(db,event()),['counted']);

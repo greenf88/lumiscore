@@ -1,5 +1,7 @@
 // Local PostgreSQL simulation only; never import this module in application code.
-export const fixture=`create role anon;create role authenticated;create schema discovery_test_private;create table discovery_test_private.marker(identity text);insert into discovery_test_private.marker values('lumiscore-pr8-synthetic-v1');
+export const fixture=`create role anon;create role authenticated;create role service_role;
+alter default privileges in schema public grant execute on functions to service_role;
+create schema discovery_test_private;create table discovery_test_private.marker(identity text);insert into discovery_test_private.marker values('lumiscore-pr8-synthetic-v1');
 create schema auth;grant usage on schema auth to anon,authenticated;
 create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
 create function auth.jwt() returns jsonb language sql stable as $$select coalesce(nullif(current_setting('request.jwt.claims',true),''),'{}')::jsonb$$;

@@ -200,9 +200,9 @@ grant usage on schema product_metrics_test to anon,authenticated;
 grant execute on function product_metrics_test.valid_context(jsonb) to anon,authenticated;
 grant execute on function product_metrics_test.record_event(uuid,text,jsonb) to anon,authenticated;
 grant execute on function product_metrics_test.consent(text,uuid,timestamptz) to anon,authenticated;
-revoke all on function public.product_analysis_consent_test_v3(text,uuid,timestamptz) from public,anon,authenticated;
+revoke all on function public.product_analysis_consent_test_v3(text,uuid,timestamptz) from public,anon,authenticated,service_role;
 grant execute on function public.product_analysis_consent_test_v3(text,uuid,timestamptz) to anon,authenticated;
-revoke all on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb),public.record_product_sign_in_test_v1(jsonb) from public,anon,authenticated;
+revoke all on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb),public.record_product_sign_in_test_v1(jsonb) from public,anon,authenticated,service_role;
 grant execute on function public.record_product_event_test_v1(uuid,text,jsonb),public.record_product_events_test_v1(jsonb) to anon,authenticated;
 grant execute on function public.record_product_sign_in_test_v1(jsonb) to authenticated;
 -- Canonical events require trigger depth (or a verified session for sign-in),
