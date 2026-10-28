@@ -1,0 +1,137 @@
+PR56 — DEFINITIEF RELEASEPAKKET TER GOEDKEURING — 28 OKTOBER 2026
+
+Status: positief codeadvies; alleen na afzonderlijk releaseakkoord uitvoeren.
+PR blijft Draft. Geen productiewrites, merge, publicatie of socialactie uitgevoerd.
+
+1. Exacte basis en bewijs
+Repository:greenf88/lumiscore. Branch:editorial/top10-campaigns-20261028.
+Remote main:2651c364eb879dc6ec7416034744b3e947458449, opnieuw opgehaald en ongewijzigd.
+Actieve productie:dezelfde SHA,Ready dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n,
+https://lumiscore-pvc1x0jgs-rgkgroeneveld-9102.vercel.app (alias lumisco.re).
+Geteste applicatiecommit:0f633e0ca37d9eae0dab38f2587281df33565ed2.
+Ready testdeployment:dpl_5GJKAvqEbFbJvEJTeTg2zrDgSp32.
+https://lumiscore-ldcixjklh-rgkgroeneveld-9102.vercel.app.
+Applicatie-CI:LumiScore quality run79 /40717600841 volledig SUCCESS.
+De definitieve bewijscommit en bijbehorende Ready URL staan exact in PR56 en de oplevering;
+die latere commit verandert uitsluitend bewijs/documentatie, niet app/lib/public/configuratie.
+
+Daadwerkelijke diff en bestaande selectie/bronnen/import/rollback/review gelezen.
+De enige extra applicatiewijziging sinds16d8874 is één exact gebonden uitgeverscover.
+Geen nieuwe routes, gewijzigde lijsten, smaakregels, SQL-functies of stylingrefactor.
+PR51 en andere werkbomen/PR's ongemoeid.
+
+2. Productiedekking:geen noodzakelijke data-import
+Bron:uitsluitend read-only openbare bibliografie op qvplwejffhjvxaypmjut.
+Alle86unieke Works zijn aanwezig met exact dezelfde numerieke én Open Library Work-identiteit.
+Alle86auteurskoppelingen kloppen.172/172 NL/EN-presentaties hebben een toegestane editie,
+passende geselecteerde titel/ISBN/taal en een exact gebonden,gereviewde cover in de PR-code.
+De93nieuwe coverbewijzen uit PR56 zijn code,geen wijzigingen in de productiedatabase.
+Geen dubbele Work-bronidentiteiten of ISBN's gekoppeld aan verschillende Works aangetroffen
+binnen de afgebakende selectie en de gecontroleerde ISBN's.
+NL:9Nederlandse geselecteerde edities,77duidelijk gelabelde Engelse fallbacks.
+EN:86Engelse edities. Geen taal afgeleid uit titel,schrift of ISBN-prefix.
+
+Categorieën:
+- Reeds aanwezige,voor deze release geschikte Work-/editie-/auteursrecords:86Works.
+- Noodzakelijke productiecorrecties:0.
+- Werkelijk ontbrekende Works,edities of auteurs die deze release nodig heeft:0.
+- Onopgeloste identity-/coverconflicten binnen de geselecteerde presentaties:0.
+Overige bronmetadata:1bekende bestaande Work-jaarafwijking bij197,afzonderlijk beschreven in4;
+geen stilzwijgende claim dat alle oorspronkelijke publicatiejaren volledig zijn gecontroleerd.
+De eerdere73Works/80edities/54auteurs zijn uitsluitend testaanvullingen en mogen NIET
+op productie worden herhaald. Geen productie-importbestand,migratie of datarollback nodig.
+
+Per Work zijn NL/EN-editie-ID,titel,ISBN,taal,Work-koppeling,cover/source,inhoudelijke
+bronnotities en testverschil vastgelegd in editorial-production-coverage-20261028.json.
+Reproduceerbare read-only queries:catalog/editorial-campaigns-20261028/production-readonly-checks.sql.
+Ze bevatten geen individuele ratings of gebruikersdata. Dit bestand is geen installatiepakket.
+
+3. Publieke scores en overeenkomst
+De centrale openbare get_work_rating_summaries_v2 gaf86samenvattingen terug:
+10publiceerbare scores,76onvoldoende bewijs. Alleen bestaande score/band,geen exacte aantallen
+of individuele ratings. Dezelfde centrale mapping/formatter levert172/172gelijke lijst/detail
+scorepresentaties;dit deel is offline replay van echte openbare productiesamenvattingen.
+Geen fictieve beoordelingen geschreven. Lege status blijft behouden.
+Aanvullende actuele productie-HTML:NL/EN book1 en book197,allemaal HTTP200.
+Book1:9.0 en band5–9,book197:lege score;canonical en Engelse fallback correct.
+Zie editorial-live-readonly-examples-20261028.json.
+Nieuwe lijsten zijn nog niet live:dit is GEEN claim van172live productielijst/detailcontroles.
+Het bestaande hosted testbewijs voor de ongewijzigde centrale componenten blijft geldig.
+
+4. Het laatste rijk:beperking opgelost zonder databasewijziging
+Work:productie197 / test8800309,Open Library OL5738148W.
+Test heeft extra Nederlandse editie614:Het laatste rijk,Brandon Sanderson,
+ISBN9789024581269,nld,geen Open Library edition-ID. Die bestaande waarden zijn niet gewijzigd.
+Uitgever Luitingh-Sijthoff bevestigt exact ISBN,Nederlands,paperback,deel1 en de productcover.
+KB/Bibliotheek.nl bevestigt dat exact deze editie een vertaling van The Final Empire is.
+De bestaande veilige override ondersteunt reeds uitgeversbewijs zonder een verzonnen OL-ID.
+Eén nieuwe override matcht Work-bron,titel,auteur,ISBN én taal;NL-only,geen verruimde guard.
+Hosted op0f633e0:NL-lijst en detail laden dezelfde officiële320x499-cover;EN-lijst en detail
+laden de bestaande Engelse Open Library-cover14811583. Titels/lege scores gelijk.
+Geen placeholder als geslaagde cover meegeteld. Gerichte negatieve identity-/taaltests groen.
+
+Productie heeft alleen bestaande Engelse editie197:Mistborn,9780765350381,eng,OL24945060M.
+Deze heeft al goed coverbewijs en wordt in NL terecht als Engelse editie gelabeld.
+Geen Nederlandse editie toevoegen uitsluitend om test en productie identiek te maken.
+Geen alternatief boek nodig;alle100plaatsen en tien socialconcepten blijven ongewijzigd.
+Bronbewijs:catalog/editorial-campaigns-20261028/final-empire-cover-evidence.json.
+SHA256:6f6f7ab554f10cf7c85aee210c5c22eab1fade396d205846453c111d800a3b94.
+Dit is een bewijsbestand,geen productie-import.
+
+Afzonderlijk bestaande metadata-observatie:Work197.first_publish_year=2001,terwijl de KB-bron
+het oorspronkelijke boek op2006dateert. Niet gebruikt voor editie-/reeksidentiteit,geen
+jaarclaim in de campagne en geen stilzwijgende correctie. Deze Work-jaarafwijking blijft
+een afzonderlijk datavoorstel;deze release is geen volledige publicatiejaren-audit.
+
+5. Werkelijk gerenderd ontwerp
+Geen globale kleuren of styles gewijzigd:de afgesproken gedeelde tokens werken al.
+Ink:pagina rgb(7,23,32),kaart en secundair rgb(23,56,68),primair rgb(53,95,102),tekst wit.
+Paper:pagina rgb(244,239,230),kaart en secundair rgb(255,253,248),primair rgb(66,100,107),tekst wit.
+Kaarten/secundaire acties hebben dus daadwerkelijk een lichtere vulling dan de pagina.
+Hoofdacties gebruiken dezelfde bestaande petrolgroene merktoon als de smaaktest.
+Beide redactionele acties44pxhoog,padding10px18px,radius6px,border≈1px,zelfde uitlijning.
+Smaaktest primaire inlog-CTA48px,padding12px16px,radius6px,identieke primaire kleur:
+een bewuste ruimere CTA,geen claim dat ieder bestaand bedieningselement exact dezelfde maat heeft.
+Toetsenbordfocus daadwerkelijk waargenomen;hoverregels ongewijzigd in gedeelde stylesheet.
+Geen formele WCAG-audit of fysieke telefoontest geclaimd.
+Nieuwe screenshots en computed styles:editorial-release-preview-20261028/:
+overzicht mobiel Paper/Ink,overzicht desktop Paper/Ink,lijstacties Paper/Ink,
+en Nederlandse cover op lijst/detail. BijgehorendeJSON bevat exacte appcommit/deployment.
+
+6. Relevante verificatie en hergebruik
+Lokale gerichte cover/editorial/paritytests13/13groen;TypeScript,lint,Vercel-productiebuild
+en secretscan groen. Volledige CI op0f633e0groen. Bestaande20route-,80layout-,172detail-,
+metadata/canonical/hreflang/sitemap-/terugnavigatiecontroles hergebruikt waar ongewijzigd.
+Alleen de gewijzigde Nederlandse cover en gerelateerde NL/EN-navigatie opnieuw hosted getest.
+Daarmee is de eerdere neutrale testfallback opgelost:geen open covergeval in dit codepakket.
+Socialbestand ongewijzigd:dezelfde tien onderwerpen,Work-IDs,bestemmingen en UTM-links.
+Eerdere snelheidsmetingen blijven Previewmetingen,geen bewezen productiewinst of cold-LCP.
+In deze vervolgopdracht zijn geen remote meet-,rating-,account- of cataloguswrites uitgevoerd.
+
+7. Veilige uitvoering uitsluitend na akkoord
+1) Controleer afgesproken PR-head,groeneCI,actuelemain/actieveproductie en bronvoorwaarden.
+   Bij afwijking:stop en herbeoordeel,neem geen andere PR's automatisch mee.
+2) Voer GEEN productie-SQL,migratie of testcatalogus-import uit:0datamutaties goedkeuren.
+3) Merge alleen goedgekeurde PR56versie via bestaande workflow. Leg merge-SHA vast.
+4) Bevestig Ready productiedeployment met die merge-SHA en correcte lumisco.re-alias.
+   Preview/testconfiguratie niet promoveren;productiebuild gebruikt bestaande productieconfiguratie.
+5) Live acceptatie:20taalroutes200,10unieke Works elk,NL/EN-edities,geladen covers,
+   lijst/detail-titel/publieke-score/band,links,terug/herladen,Paper/Ink,mobiel/desktop.
+   Controleer Work197NL als expliciete Engelse fallback en EN als Engelse editie.
+   Controleer canonicals,hreflang,sitemap,OG-beelden,indexeringsbeleid en serverfouten.
+6) Meet representatieve live routes afzonderlijk van Preview;geen accounts/ratings aanmaken.
+7) Start pas daarna een afzonderlijk goedgekeurde campagne;dit akkoord publiceert geen post.
+
+Bij onverwachte selectie-,score-,cover- of serverfouten:stop campagne en release-afronding.
+Herstel zo nodig de vooraf vastgelegde productie-deployment2651c364… via de bestaande veilige
+rollbackprocedure;controleer alias en automatische deploymenttoewijzing. Alternatief:reviewbare
+Git-revert van uitsluitend PR56,geen reset/rewrite van main. Er zijn geen databaseafhankelijkheden,
+geen data te verwijderen/terug te zetten en geen incompatibele migraties. Ratings/voortgang blijven.
+Openbare caches alleen gericht vernieuwen indien aantoonbaar nodig;nooit persoonlijke caches delen.
+
+8. Advies
+GEREED VOOR RELEASEAKKOORD:code/assets-only,0productiedatamutaties,met resterende liveacceptatie
+na publicatie en de afzonderlijk gemelde bestaande Work-jaarafwijking. Externe coverdiensten
+kunnen tijdelijk uitvallen;een geslaagde test is geen permanente beschikbaarheidsgarantie.
+De exacte overneembare akkoordtekst met definitievePR-head staat in de oplevering/PR56.
+PR51,meetinstallatie,tijdelijke gebruikersgegevens en socialpublicatie blijven buiten scope.

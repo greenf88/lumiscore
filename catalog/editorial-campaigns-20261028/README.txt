@@ -39,10 +39,12 @@ Recovery now checks all relevant FK dependencies before deletion, including casc
 it aborts on later dependent data, changed identities, or an unknown composite dependency.
 Local PGlite recovery regression passed. No hosted recovery/delete was executed.
 
-Preview-only mismatch retained intentionally:existing test Work8800309 (production197) has
-Dutch edition614,ISBN9789024581269,nld,without OL edition identity/cover. NL safely shows its
-neutral fallback. Production's reviewed English edition197,9780765350381,OL24945060M exists
-on the same Work and works on EN test. No existing test metadata was overwritten.
+Preview-only edition difference retained intentionally:existing test Work8800309 (production197)
+has Dutch edition614,ISBN9789024581269,nld,without an OL edition ID. Initial neutral fallback
+is now solved with exact official publisher cover evidence in code. No OL ID was invented.
+Production retains English edition197,9780765350381,OL24945060M;NL labels its English fallback.
+All four test list/detail NL/EN images loaded on0f633e0. No test metadata was overwritten.
+See final-empire-cover-evidence.json and docs/editorial-release-approval-20261028.txt.
 
 Separate data gaps — no production corrections proposed for automatic execution
 Work 2383 Contact: selected English edition has no positively bound cover; alternative used.
