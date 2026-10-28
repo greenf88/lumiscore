@@ -72,3 +72,9 @@ test('missing editions do not become fake Book entries and statuses use portable
   assert.match(ui,/statuses.get\(book.workId!\)/);
   assert.match(ui,/book.editionAvailable === false/);
 });
+
+test('editorial reasons cannot inherit the narrow six-column catalogue grid', () => {
+  const css=readFileSync(new URL('../../app/globals.css',import.meta.url),'utf8');
+  assert.match(css,/\.editorial-books\s*\{[^}]*minmax\(min\(100%, 220px\), 1fr\)/);
+  assert.match(css,/\.editorial-reason\s*\{[^}]*overflow-wrap: anywhere/);
+});
