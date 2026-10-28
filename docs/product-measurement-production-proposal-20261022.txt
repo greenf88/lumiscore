@@ -112,10 +112,22 @@ CollectorHTTP n3:accept mediaan183.224ms(min178.240,max187.809); deny n3:
 of causale prestatievergelijking; sequentiële Windows/curl/Previewmetingen.
 Twee gelijktijdige grants verwerken40events in4batches;188.361–228.375ms/batch.
 Geen bewijs van volledige campagnecapaciteit of meerdere appinstances.
-Nog open: tijdelijke login, nieuwe/gewijzigde rating, ronde/resultaatreadback,
-ratingfoutisolatie en vergelijkbare hosted ratingoverhead. Publieke test-signup
-staat uit(signup_disabled); geen Auth-instelling veranderd. Dashboardformulier
-voor exact één toegestaan tijdelijk testaccount voorbereid voor gebruikersinvoer.
+Ingelogd aanvullend bewezen: nieuwe/gewijzigde rating apart teruggelezen, starten
+van rondegoal10,één ronde-rating, geldige voorlopige resultaatweergave NL/EN,
+geen extra afronding op herladen. HostedSQL21updates/stand:deny mediaan0.311ms
+(0.274–15.258),accept1.113ms(1.038–34.287); dit is GEEN volledige API/browser-
+opslagoverhead. Gerichte optionele storagefout blokkeert de businessrating niet.
+Nog open: volledige ronde10/10 wegens slechts1NL/0ENgeldig inventarisrecord;
+blind verversen niet toegestaan: slechts4Works met inhoudelijk bewijs,3hebben
+door tijdelijke reviewcollectie ongeschikte memberships. Geen inventariswrite.
+Post-consent echte aanmelding eveneens nog niet gemeten (eerste login was vóór
+toestemming en telt terecht niet). Geen terugwerkende loginmeting.
+Testaccount normaal uitgelogd/analyse ingetrokken. Gerichte cleanup via connector
+strandde opnieuw op Invalid or expired requestState; waargenomen09:01:03UTC,
+28oktober. Read-only09:01:11.863437UTC: account1,sessies0,ratings3,statussen3,
+offer1,ronde1,countercellen21(46bijdragen),receipts46,actievegrants0.
+Geen identieke retry/omweg; cleanup blijft open. Na herstel opnieuw exacte
+preflight/rowguards wegens normale cronexpiry, dan alleen eigenfixture wissen.
 PR51 blijft Draft, NIET gereed voor release. Geen uitvoerbaar productie-SQL of
 activatiediff goedgekeurd: de bestaande test-origin-gate blijft hard uit op prod.
 

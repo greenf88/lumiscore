@@ -1,3 +1,85 @@
+PR51 — INGELOGDE READBACK EN HOSTED SQL-OVERHEAD; NOG GEBLOKKEERD
+28 oktober 2026. Vervangt de open-loginstatus in het checkpoint hieronder.
+
+Applicatie ongewijzigd3bf06b9e02a63308ce35276e7728819f491d41e8.
+Code/testpakket3b8a25b95ab11f946075b59c8c98105950ce15d6 gepusht;
+quality40656784464 success, Vercel success/Ready. Nieuwe Ready-preview
+https://lumiscore-fln9ei785-rgkgroeneveld-9102.vercel.app,
+dpl_FxA9YewVy3phJzDcqq6313jg61Vz. Uitgevoerde browserroute bleef bewust op
+p66zy1mg0 (zelfde applicatiecode en bestaande branch-testconfiguratie); geen
+onnodige herhaling van vormgeving/build. Latere commits uitsluitend verslag.
+
+EEN TIJDELIJK ACCOUNT, ECHTE RATINGS
+Rick maakte het expliciet toegestane synthetische account aan/bevestigde het
+en meldde de Preview aan. Exact eigen account read-only bevestigd; geen andere
+gebruikers/emails/hashes gelezen. Password niet gelezen/opgevraagd/opgeslagen.
+- Zonder analyse: Work921100102 rating4 opgeslagen, optionele events0.
+- Met analyse: Work921100199 rating8→9; DB-readback new1,updated1, campagne
+  facebook/organic_social/dystopie_202610 op beide. Geen scorewaarde in event.
+- Rondegoal10 daadwerkelijk gestart: taste_round_started1; Work8800306 score7
+  bevestigd met rating_saved/new1. Daarna eerlijk uitgeput op1/10.
+- Twee identieke echte backend-RPC-retries onder eigen synthetische SQL-authcontext
+  produceren geen extra rating of event; ongeldige retry afgewezen. Dit is hosted
+  canonical-RPC-bewijs, niet twee browser-netwerkrequests.
+- Resultaat rechtstreeks geopend: taste_result_opened NL2(incl.herladen)/EN1;
+  campagneherkomst behouden. Geldig voorlopig resultaat is geen afgeronde ronde.
+  Voltooide rondes en taste_round_completed blijven0, ook na herladen.
+- Normale aanmelding vond vóór analysetoestemming plaats: terecht geen login-event.
+  Post-consent aanmeldroute nog niet bewezen; geen terugwerkend event aangemaakt.
+
+OPSLAGOVERHEAD EN FOUTISOLATIE
+Echte hosted Postgres, eigen tijdelijke actor onder authenticated/RLS,21
+afwisselende updates per stand in één transactie, geen netwerk/commit/browser:
+deny mediaan0.311ms,min0.274,max15.258;accept mediaan1.113ms,min1.038,max34.287.
+Verschilmedianen0.802ms is beschrijvend, niet de volledige API-/browseroverhead.
+Role/bookkeeping zit in deze microbenchmark; geen causaliteitsclaim of loadtest.
+21synthetische benchmarkevents hebben campaignnone/direct_unknown, afzonderlijk
+van de echte Facebook-route. Geen interpretatie alsbezoekers/groei/conversie.
+Gerichte CHECK-fout voor uitsluitend de benchmarkcel in dezelfde transactie:
+businessrating opgeslagen, optionele counter ongewijzigd,storage_error1; CHECK
+weer verwijderd en rating9hersteld. Geen blijvende constraint-/functiewijziging.
+Alle opgeslagen dimensionkeys allowlisted; geen namen/emails/tokens/zoekteksten.
+Provider/Authlogs vallen buiten dit meetrecordbewijs en hun retentie is onbekend.
+
+INVENTARISAKKOORD NIET BLIND TOEGEPAST
+Read-only actuele voorraad4NL/3EN opgeslagen,1NL/0EN geldig. Slechts4Works hebben
+bruikbaar bestaand inhoudelijk bewijs;3daarvan hebben extra tijdelijke universe-
+reviewlidmaatschappen die de huidige policy uitsluit. Alleen snapshots verversen
+zou ongeschikte inventaris goedkeuren en nog steeds geen10Works leveren.
+Daarom GEEN inventariswrite, nieuwe catalogusrecords/evidence of gewijzigde
+taal-/selectieregels. Zie product-measurement-test-inventory-blocker-20261028.txt.
+Volledige hosted rondeafronding blijft hierdoor onbewezen. PR38 niet gewijzigd.
+
+OPRUIMING OPNIEUW GEBLOKKEERD OP CONNECTOR
+Voor cleanup: browseranalyse ingetrokken, testaccount normaal uitgelogd;
+SQL-readback sessies0,actievegrants0. Eerste guarded cleanup had SQL42702
+(ambigue n) vóór enigeDELETE; gehele transactie niet uitgevoerd. Na alleen die
+SQL-correctie geeft execute_sql via dezelfde koppeling opnieuw:
+McpServerError: Invalid or expired requestState; INVALID_ARGUMENT;
+JSON-RPC-32602,reason invalid_request_state; geenrequest-ID.
+Resultaat uiterlijk09:01:03UTC/10:01:03CET waargenomen; exacte aanvraagtijd
+niet apart vastgelegd. GEEN identieke retry of alternatieve schrijfroute.
+Read-only09:01:11.863437UTC: account1,sessies0,ratings3,statussen3,offer1,ronde1,
+countercellen21/46bijdragen,receipts46,actievegrants0. Geen gedeeltelijke cleanup.
+Dit maakt de eerdere echte installatie/cron/opslagbewijzen niet ongedaan; het
+bewijst evenmin algemene Supabaseuitval, OAuth-expiry of een RLS-weigering.
+Account en ingelogde testfixture zijn dus NOG NIET verwijderd. De eerder apart
+opgeruimde gastfixture blijft wel opgeruimd. Bewaar exacte private cleanup-ID
+alleen lokaal voor later gericht herstel; geen credentials in Git of verslag.
+Na aantoonbaar connectorherstel eerst actuele rowcounts/expiry opnieuw lezen:
+de normale cron kan grants/budgets al hebben verwijderd; oude guards niet blind
+aanpassen of dezelfde query opnieuw aanbieden. Dan exact eigenaccount/data wissen.
+
+UITKOMST
+PR51 blijft Draft, GEBLOKKEERD op voldoende policy-goedgekeurde testvoorraad voor
+een volledige ronde én gerichte cleanup via herstelde connector. Aanmelding-na-
+optin en volledige browser/API-ratingoverhead zijn eveneens nog geen bewezen
+releaseacceptaties. Geen productiecontact/writes,merge ofpublicatie.
+Geanonimiseerd bewijs:outputs/product-measurements-20261028/authenticated-proof.json.
+Actueel supportbericht:support-cleanup-requeststate.txt (niet verstuurd).
+Alle nodige bron-/appchecks blijven groen/herbruikbaar; geen appwijziging in deze
+afronding. Productieactivatie blijft apart voorstel, niet stil aangezet.
+
 PR51 — RECHTENHERSTEL, ECHTE CRON EN GASTOPSLAG BEWEZEN, 28 oktober 2026
 
 Scope: uitsluitend hlvujbrmfdlrfxdjwsmb. Productie niet benaderd. Geen appcode,
