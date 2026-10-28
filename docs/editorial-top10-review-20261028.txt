@@ -1,5 +1,5 @@
 EDITORIAL TOP10 REVIEW — 28 OCTOBER 2026
-Status: local implementation complete; hosted verification pending.
+Status: Draft PR56 ready for review; hosted verification completed with one explicit test-data limitation.
 Base remote main: 2651c364eb879dc6ec7416034744b3e947458449 (rechecked unchanged).
 Branch: editorial/top10-campaigns-20261028. Separate worktree; PR51 untouched.
 
@@ -36,11 +36,14 @@ hlvujbrmfdlrfxdjwsmb only:73Works+80Editions+54Authors.
 Dry-run then exact commit; repeat was zero insert. Existing public row digests unchanged.
 No users, ratings, statuses, taste inventory or PR51 fixtures were changed.
 Test-only dry-run/receipt/recovery and data gaps are in catalog/editorial-campaigns-20261028/.
-No production import is needed or included. Recovery is rollback-only and never CASCADE.
+No production import is needed or included. Recovery defaults to ROLLBACK and explicitly refuses
+later Work/edition/author changes or referencing data, including ON DELETE CASCADE dependencies.
+A local PGlite regression test proved rollback preservation, dependent-rating protection and
+refusal of a later legitimate title change. Recovery was NOT executed on hosted test.
 
 Local checks
 TypeScript and lint passed after correcting test-only types.
-18 final editorial/parity/sitemap tests passed;74 catalogue/SEO tests passed before final type cleanup.
+19 final editorial/parity/sitemap tests passed;74 catalogue/SEO tests passed before final type cleanup.
 Full unit run:847 passed,16 skipped,0 failed,1 timed out during concurrent bulk-fixture tests.
 The unchanged timed-out test passed alone:45.175s. No timeout limit was increased.
 vinext production build passed;Vite/Vercel build passed (before the small client-prop split);
@@ -48,7 +51,59 @@ remote Vercel build will verify the final app. Existing Vinext dynamic-import wa
 Secretscan:92clientfiles,no server secret identifiers/values; local config has public test keys only.
 First3NL mobile local routes:10 cards/10 loaded covers each,0 unavailable,0 horizontal overflow.
 These development-server observations are NOT hosted timings or production performance claims.
-Hosted matrix, raw HTML/metadata, all covers/detail parities, CI and measurements still to append.
+Final hosted evidence
+PR: https://github.com/greenf88/lumiscore/pull/56 (Draft, separate from PR51).
+Application commit:05120ec13b4c541819be778151782b88cdcfef0c.
+Ready deployment:dpl_2iPbYvBMe5X2CFFUZoTkKtFDsqND.
+Preview:https://lumiscore-iurak95zy-rgkgroeneveld-9102.vercel.app.
+Application CI:LumiScore quality run77 /40705496782 completed SUCCESS.
+Later evidence/recovery-test changes do not change the application or Preview configuration.
+
+All20new NL/EN URLs:HTTP200,original server content,10cards,one H1,unique localized title and
+description,self-canonical,reciprocal en/nl-NL/x-default,one WebSite,WebPage/Breadcrumb/10-item
+ItemList. All20routes in the actual200 sitemap. Own OG image sampled HTTP200;20local PNGs
+1200x630 and30–42KB. Production-site OG URLs are intentional; assets are not live until release.
+Preview HTTP X-Robots-Tag:noindex;HTML robots:index,follow. The HTTP header prevents indexing.
+Production metadata remains index,follow; this is code/Preview evidence, not a production check.
+See editorial-hosted-seo-20261028.json.
+
+All10lists x NL/EN x Paper/Ink x390x844/1440x1000:80DOM layout checks,10cards each,
+no page/card horizontal overflow. The 15px browser scrollbar reduces content width to375/1425.
+Eight representative overview/list screenshots plus one full desktop list are in
+editorial-preview-20261028/. Language-switch route,keyboard Enter/Tab focus,book click,
+selection return and reload checked. Native focus styles retained; no formal WCAG audit claimed.
+This was browser viewport testing, NOT a physical phone or mobile mail-app test.
+
+200list positions:199actual images loaded and one intentional neutral fallback.
+172unique Work/language detail combinations:title,public score/ratings band and selection
+return links all match.171actual detail images loaded;their cover IDs equal list IDs (M/L sizes).
+No synthetic scores were inserted;empty public score status was retained. Positive-score and
+insufficient-evidence behavior are additionally covered by the central local regression tests.
+
+EXPLICIT TEST DATA LIMITATION:existing test Work8800309 (production197,OL5738148W) has an extra
+Dutch edition614,Het laatste rijk,ISBN9789024581269,nld,without an Open Library edition ID or
+bound cover. NL correctly prefers it and shows the neutral fallback on both list and detail.
+It was not overwritten or made to prefer English merely to pass a test. Production's reviewed
+record is English edition197,Mistborn,ISBN9780765350381,OL24945060M;that English edition loads
+on EN test. A final production NL acceptance check remains required after a separate release.
+This is NOT proof that every production page already has a loaded cover, nor a new data-fix approval.
+Browser details/loaded-image/score/matrix evidence:editorial-preview-20261028/browser-final-evidence.json.
+
+Representative performance,guest/unthrottled Windows HTTP client,three separate requests per URL:
+route                                      TTFB median[min–max]ms /HTML-complete median ms
+NL existing dystopia                       308[221–397] /334
+NL after Project Hail Mary                  250[244–268] /274
+NL fantasy beginners                       233[230–285] /273
+EN existing dystopia                       230[227–247] /264
+EN after Project Hail Mary                  248[236–300] /260
+EN fantasy beginners                       233[223–244] /244
+See editorial-hosted-http-20261028.json and scripts/measure-editorial-http.mjs.
+First-in-sample is NOT guaranteed cold Vercel/cache state. CLI startup excluded from curl times.
+Warm browser navigation/DOM verification on20routes:median570ms,481–802ms;this is an observation
+upper bound through the browser tool,NOT paint,FCP or LCP. Actual loaded images checked separately
+after scrolling;no precise cold cover-paint timing or throttled-network result is claimed.
+Compared with the existing list under the same Preview conditions,no added server-delay signal
+was observed in this small sample. Not a production performance guarantee or statistical conclusion.
 
 Social
 docs/editorial-social-concepts-20261028.json holds10 Dutch draft posts, questions, destinations,
@@ -58,4 +113,7 @@ No posting/planning/IndexNow/analytics changes. PR51 remains a separate Draft.
 
 Release boundary
 DraftPR + testPreview only. No merge, production release or production database/configuration writes.
-Release advice remains conditional on hosted completion and final CI, not campaign-ready yet.
+Release advice:ready for editorial/technical review as Draft. No production import required.
+The code's tested application CI is green; verify final PR-head CI before a later release decision.
+Do not start campaigns against Preview links. After separate release approval,check all production
+routes/covers,especially NL Work197,then choose a first campaign. No merge/publication performed.

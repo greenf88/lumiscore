@@ -35,6 +35,14 @@ test-recovery.sql is also rollback-only and has NOT been executed. Review later 
 and identities first; any FK failure or changed metadata means STOP, not CASCADE.
 Only change the final ROLLBACK to COMMIT after approving that exact recovery transaction.
 Do not remove catalogue records while the review Preview still needs them.
+Recovery now checks all relevant FK dependencies before deletion, including cascading ones;
+it aborts on later dependent data, changed identities, or an unknown composite dependency.
+Local PGlite recovery regression passed. No hosted recovery/delete was executed.
+
+Preview-only mismatch retained intentionally:existing test Work8800309 (production197) has
+Dutch edition614,ISBN9789024581269,nld,without OL edition identity/cover. NL safely shows its
+neutral fallback. Production's reviewed English edition197,9780765350381,OL24945060M exists
+on the same Work and works on EN test. No existing test metadata was overwritten.
 
 Separate data gaps — no production corrections proposed for automatic execution
 Work 2383 Contact: selected English edition has no positively bound cover; alternative used.
