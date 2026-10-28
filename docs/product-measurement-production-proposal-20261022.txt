@@ -1,4 +1,21 @@
 PR51 v3 — installatie- en releasevoorstel, NIET OP PRODUCTIE UITVOEREN
+Actueel28oktober2026: volledige echte hosted ronde10/10, aanmelden-na-optin,
+new/updated,completion1,resultaatreload zonder dubbele completion en intrekken
+zonder extra events teruggelezen. Browserbevestiging n5/stand: aanmediaan680ms
+(654–807),uit675ms(650–878); DOM-resultaat n3/stand:aan1042ms(985–1816),
+uit1040ms(902–1198). Inclusief automatiseringstransport; geen LCP/HTTP-claim.
+Laatste cleanup via connector opnieuw Invalid or expired requestState:
+aanvraag11:04:12UTC,resultaat11:11:32UTC. Eén poging, geen identieke retry/omweg.
+Account uitgelogd, maar12eigen ratings(incl.3oude),9fixtureWorks/edities en
+meetrijen blijven op test. Exacte private manifesten en actueel supportbericht
+lokaal bewaard. Zie hoofdreview voor volledige bewijs-/restantenmatrix.
+HIERONDER STAAT HET EXACTE GETESTE TESTPAKKET, GEEN PRODUCTIE-ACTIVATIE.
+Hashes/rechten/retentie/rollback zijn ongewijzigd. De app houdt productie uit;
+een uitvoerbare productiemigratie én activatiediff zijn nog niet voorbereid of
+gevalideerd. Geen fictieve productiehash/akkoordtekst leveren. Na testcleanup
+vereist dit een afzonderlijk concreet productie-reviewpakket, geen blind rename
+of verwijdering van de testmarker. In deze acceptatie geen nieuwe functionaliteit.
+
 22 oktober 2026. Geen merge, productie-SQL, productiescheduler of publicatie.
 Test: hlvujbrmfdlrfxdjwsmb. Productie qvplwejffhjvxaypmjut buiten schrijfscope.
 

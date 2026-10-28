@@ -2,7 +2,9 @@
 
 22 oktober 2026. Dit vervangt de historische v2-implementatiebeschrijving.
 Eventnamen en definities zijn behouden; toestemming, retentie en capaciteit zijn
-nu technisch uitgewerkt. Alleen geïsoleerd testdoel; hosted opslag nog onbewezen.
+nu technisch uitgewerkt. Alleen geïsoleerd testdoel. Op28oktober zijn echte
+hosted opslag,10/10-rondeafronding, normale cron en browserbevestiging bewezen;
+gerichte testcleanup blijft geblokkeerd. Zie het actuele installatie-reviewverslag.
 De oudere reviews blijven checkpoints, geen actuele bewijsclaim.
 
 ## Optionele gebeurtenissen
@@ -110,8 +112,10 @@ conversie. Ratio's tonen teller/noemer/periode en kunnen >1 zijn; cohort onbeken
 report.coverage.complete is false, bekende verliezen zichtbaar, onbekend is niet0.
 517beoordelingen/19rondes blijven historische meldingen zonder gevalideerde herkomst.
 
-Scripts product-metrics-* testen echt SQL lokaal. Hosted opslag/cron/overhead blijven
-onbewezen door McpServerError: Invalid or expired requestState. Leestoegang werkt;
-oorzaak onbekend, geen bewezen sessie-expiry of beveiligingsweigering. Geen herhaalde
-installatiepoging of alternatieve toegang zonder aantoonbare toegangsverandering.
+Scripts product-metrics-* testen echt SQL lokaal. Echte testopslag/cron en volledige
+browserronde zijn28oktober teruggelezen. SQL-,collectorHTTP- en DOM-browsermetingen
+blijven afzonderlijke meetsoorten; geen pure browserpaint/LCP- of productieclaim.
+De latere gerichte cleanup faalt opnieuw met Invalid or expired requestState;
+oorzaak onbekend, geen bewezen sessie-expiry of beveiligingsweigering. Geen
+identieke retry of alternatieve toegang; eerst aantoonbaar herstel en verse guards.
 Zie privacy-capaciteitsanalyse en productievoorstel voor hashes, volgorde en rollback.

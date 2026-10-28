@@ -1,8 +1,10 @@
 PR51 v3 — toestemming, retentie en capaciteit — 22 oktober 2026
 Vervangt de v2-analyse; eerdere checkpoints zijn historische feiten.
 28oktober2026: testinstallatie/rechtenherstel en echte vijfminuten-cron bevestigd.
-Gastmetingen teruggelezen. Ingelogde route en ratingoverhead nog open; geen
-productieactivatie. Historische lokale ramingen hieronder zijn geen hosted loadtest.
+Gastmetingen en volledige ingelogde10/10-ronde teruggelezen. Hosted SQL-overhead
+en DOM-browserbevestiging afzonderlijk gemeten; geen productieactivatie.
+Historische lokale ramingen hieronder zijn geen hosted loadtest. Exacte cleanup
+blijft geblokkeerd; zie het actuele installatie-reviewverslag.
 
 TOESTEMMING
 Optionele analyse is standaard UIT. Onbekende/ongeldige/verlopen keuze, DNT/GPC,
@@ -129,8 +131,16 @@ Alleen bevoegde operator via private SQL; alle7tabellen FORCE RLS en geen
 client-tablegrants. Functie-ACLs expliciet, lege search_path, geen publiek rapport.
 Contractevents/dimensions ongewijzigd; events zijn geen bezoeken/personen.
 Eerdere517ratings/19rondes blijven onbekende herkomst, geen valide baseline.
-SQL- en browsertransporttests lokaal geslaagd; schedulercommando lokaalfixture
-getest, geen echte pg_cron-daemon/hosted opslag bewezen.
-Connectorfout ongewijzigd: McpServerError: Invalid or expired requestState.
-Oorzaak onbekend; read-only werkt. Geen nieuwe installatiepoging zonder aantoonbaar
-gewijzigde sessie. Niet bewezen dat dit OAuth-expiry of beveiligingsweigering is.
+SQL- en browsertransporttests lokaal geslaagd. Op28oktober tevens normale echte
+cron07:55UTC metexpiry-readback en volledige browserronde/completion1 bewezen.
+Browserupdate n5/stand:aanmediaan680ms(654–807),uit675ms(650–878); resultaat-H1
+n3/stand:aan1042ms(985–1816),uit1040ms(902–1198). Inclusief UI-automatisering,
+niet LCP/paint/HTTP; kleine sequentiële proef, geen causaliteits-/snelheidsclaim.
+Geen direct gemeten browserrequestaantallen via deze toegang. SQLobserver voegt
+volgens code/transporttests geen apart browserrequest toe; synchrone DB-writes
+en batch-/consentverkeer blijven afzonderlijk. Hosted SQL0.311/1.113ms betreft
+21updates/stand binnen één transactie, zonder netwerk/commit/API.
+Na intrekken geen extra optionele events ondanks echte reloads/ratingwijzigingen.
+De latere exact guarded cleanup geeft opnieuw Invalid or expired requestState,
+11:04:12UTCaanvraag/11:11:32UTCwaargenomen. Read-only werkt, oorzaak onbekend;
+geen bewezen OAuth-expiry of beveiligingsweigering. Geen identieke retry/omweg.
