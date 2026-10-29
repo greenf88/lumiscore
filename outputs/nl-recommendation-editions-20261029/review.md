@@ -63,7 +63,27 @@ scripts/recommendation-edition-language.test.mjs draait echte Supabase-client + 
 - Client/API-locale, expliciete labels en private-cachecontracten bewaakt.
 - Bestaande editie-, taalvoorkeur- en catalogue-performance-regressies apart uitgevoerd.
 
-Hosted bewijs, exacte PR-head en beperkingen worden na de Previewcontrole toegevoegd. Een lokale fixture is geen bewijs van een bestaande accountlogin op de Preview.
+## Hosted bewijs en beperkingen
+
+Draft-PR: https://github.com/greenf88/lumiscore/pull/60
+Geteste applicatiecommit: 552337f588c30029a75d78e8097e0f6ca3b1f47a (runtime identiek aan main; uitsluitend tests/bewijs toegevoegd).
+Ready-Preview: https://lumiscore-67u332p29-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_GtrdavWjhbeEdQ3mHMjDCX93i51k, target=null/Preview, dezelfde commit.
+Alleen de twee goedgekeurde publieke branchvariabelen zijn op test ingesteld. De eerste Git-build startte vóór de URL was ingesteld; één noodzakelijke rebuild is uitgevoerd. Deployment Protection bleef intact; HTTP-controles gebruikten de officiële vercel curl-toegang.
+
+hosted-api.json bevat de drie daadwerkelijk teruggelezen HTTP-API-uitkomsten met dezelfde tien synthetische questionnairekeuzes. NL → EN → NL gaf telkens twintig kaarten; alle NL-keuzes waren nld/nl, alle EN-keuzes eng/en. Beide NL-uitkomsten zijn exact gelijk, inclusief Workvolgorde, titel en editie-ID. Deze testcatalogus heeft veel synthetische NL/EN-paren en is **geen kopie van de productiecatalogus**: hij hoort de verhouding 8/12 niet te reproduceren. De verhoudingsverklaring is aanvullend gereproduceerd met de openbare momentopname in de geïsoleerde lokale PostgreSQL-test.
+
+Totale CLI-aanvraagduur was respectievelijk 6.395 / 6.464 / 3.437 ms. Dit omvat CLI-start, toegangscontrole en transport; het is geen TTFB-/LCP- of productiesnelheidsclaim.
+
+Browser, desktop 1265×712, Paper/Ink:
+- NL-test Work 924100151: Gideon the Ninth, ISBN 9781250313195, geladen Engelse cover en zichtbaar 'Engelse editie'; EN dezelfde identiteit zonder fallbacklabel.
+- NL-test Work 928101411: gedeelde boekkaart kiest De moord op Roger Ackroyd, editie 928201463, ISBN 9789024511624. Doorklikken/herladen behoudt die identiteit en de cover. EN kiest The Murder of Roger Ackroyd, editie 928201464, ISBN 9780735105850; terug naar NL herstelt de Nederlandse editie. Zoekterm/teruglink blijven behouden.
+- Screenshots: nl-english-fallback-ink.png, en-edition-paper.png, nl-preferred-card-paper.png, nl-preferred-detail-paper.png, en-preferred-detail-paper.png.
+- De Ackroyd-beschrijving gaf tijdelijk een bronfout. Geen verkeerde taaledities teruggevallen; beschrijvingsherstel/PR58 blijft afzonderlijk.
+
+Geen toegestane bestaande Preview-login beschikbaar en geen nieuw account aangemaakt. De guest-antwoorden zijn via de echte hosted read-only API aangeboden; er is geen volledige ingelogde smaaktestronde opgeslagen. Legacy-account en oude ronde zijn met de echte loaders en lokale synthetische accountstate getest, **niet als hosted accountbewijs**. Het gast-vragenformulier vereist de oorspronkelijke anchor-Work-ID's, die op deze testcatalogus ontbreken. Er zijn daarvoor geen extra catalogusrecords toegevoegd. Geen fysieke telefooncontrole of nieuwe volledige layoutcampagne geclaimd; geen vormgevingswijziging in dit pakket.
+
+CI 40945838780 op de geteste commit: success (LumiScore quality). Nieuwe regressies 2/2, bestaande gerichte regressies 21/21, TypeScript, ESLint, gewone lokale productiebuild en secretscan geslaagd. Vercel-productiepackaging op Windows strandde op de bestaande gedeelde node_modules-junction/file tracing; de Linux hosted Vercel-build en CI-build zijn wel geslaagd.
 
 ## Afzonderlijk datavoorstel
 
