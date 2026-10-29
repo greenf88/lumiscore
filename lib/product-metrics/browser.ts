@@ -1,5 +1,5 @@
 'use client';
-import {BROWSER_METRIC_EVENTS,campaignContext,measurementTestTarget,METRIC_CONTEXT_HEADER,parseMetric,parseMetricContext,type MetricContext,type MetricEvent,type MetricProperties,type MetricEnvelope} from './contract.ts';
+import {BROWSER_METRIC_EVENTS,campaignContext,measurementTarget,METRIC_CONTEXT_HEADER,parseMetric,parseMetricContext,type MetricContext,type MetricEvent,type MetricProperties,type MetricEnvelope} from './contract.ts';
 export const CAMPAIGN_STORAGE_KEY='lumiscore-campaign-v1';
 const MAX_AGE=30*60_000;
 let active=false,expires=0,revision=0;
@@ -26,13 +26,15 @@ export function applyAnalysisPermission(enabled:boolean,until=0,why:typeof reaso
  revision++;for(const listener of listeners)listener();
 }
 export function browserMetricsEnabled():boolean{
- return typeof window!=='undefined'&&active&&Date.now()<expires&&measurementTestTarget(process.env.NEXT_PUBLIC_SUPABASE_URL)&&navigator.doNotTrack!=='1'&&!(navigator as Navigator&{globalPrivacyControl?:boolean}).globalPrivacyControl;
+ return typeof window!=='undefined'&&active&&Date.now()<expires&&!!measurementTarget(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED)&&navigator.doNotTrack!=='1'&&!(navigator as Navigator&{globalPrivacyControl?:boolean}).globalPrivacyControl;
 }
 export function browserMetricContext(locale:'nl'|'en',surface?:MetricContext['surface']):MetricContext|null{
  if(!browserMetricsEnabled())return null;
  let prior:MetricContext|null=null;
  try{const saved=JSON.parse(sessionStorage.getItem(CAMPAIGN_STORAGE_KEY)??'null');if(saved&&typeof saved.expires==='number'&&saved.expires>Date.now()&&saved.expires<=Date.now()+MAX_AGE)prior=parseMetricContext(saved.context);else sessionStorage.removeItem(CAMPAIGN_STORAGE_KEY);}catch{/* No identifier fallback. */}
- const context=campaignContext(location.href,document.referrer,locale,prior);if(surface)context.surface=surface;
+ const target=measurementTarget(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED);
+ if(!target)return null;
+ const context=campaignContext(location.href,document.referrer,locale,prior,target.traffic);if(surface)context.surface=surface;
  try{sessionStorage.setItem(CAMPAIGN_STORAGE_KEY,JSON.stringify({expires:Math.min(expires,Date.now()+MAX_AGE),context}));}catch{/* Attribution can be unknown. */}
  return context;
 }

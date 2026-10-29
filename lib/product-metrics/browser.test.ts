@@ -15,7 +15,7 @@ test('versioned necessary choice is not an analytics ID; missing/invalid/expired
 test('no pre-consent IDs, attribution or replay; bounded batches; revocation aborts and clears; privacy wins',async()=>{
  const names=['window','navigator','location','document','sessionStorage','fetch'] as const;
  const previous=new Map(names.map(n=>[n,Object.getOwnPropertyDescriptor(globalThis,n)]));
- const env=process.env.NEXT_PUBLIC_SUPABASE_URL,storage=new Map<string,string>(),sent:Array<{body:{events:unknown[]};signal:AbortSignal}>=[];
+ const env=process.env.NEXT_PUBLIC_SUPABASE_URL,flag=process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED,storage=new Map<string,string>(),sent:Array<{body:{events:unknown[]};signal:AbortSignal}>=[];
  const install=(name:string,value:unknown)=>Object.defineProperty(globalThis,name,{value,writable:true,configurable:true});
  try{
   process.env.NEXT_PUBLIC_SUPABASE_URL='https://hlvujbrmfdlrfxdjwsmb.supabase.co';install('window',{});install('navigator',{doNotTrack:'0'});
@@ -37,9 +37,14 @@ test('no pre-consent IDs, attribution or replay; bounded batches; revocation abo
   assert.doesNotMatch(JSON.stringify(sent),/PRIVATE|returnTo|user_id|email|password|rating_saved/);
   install('navigator',{doNotTrack:'1'});assert.equal(browserMetricsEnabled(),false);assert.deepEqual(measurementHeaders('en'),{});
   install('navigator',{globalPrivacyControl:true});assert.equal(browserMetricsEnabled(),false);
-  install('navigator',{});process.env.NEXT_PUBLIC_SUPABASE_URL='https://qvplwejffhjvxaypmjut.supabase.co';assert.equal(browserMetricsEnabled(),false);
+  install('navigator',{});process.env.NEXT_PUBLIC_SUPABASE_URL='https://qvplwejffhjvxaypmjut.supabase.co';delete process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED;
+  applyAnalysisPermission(true,Date.now()+60_000,'accepted');assert.equal(browserMetricsEnabled(),false);
+  process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED='true';assert.equal(browserMetricsEnabled(),true);
+  assert.equal(browserMetricContext('nl')?.traffic,'production');
+  applyAnalysisPermission(false);assert.equal(browserMetricsEnabled(),false);assert.equal(storage.size,0);
  }finally{
   applyAnalysisPermission(false);if(env===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_URL;else process.env.NEXT_PUBLIC_SUPABASE_URL=env;
+  if(flag===undefined)delete process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED;else process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=flag;
   for(const n of names){const descriptor=previous.get(n);if(descriptor)Object.defineProperty(globalThis,n,descriptor);else Reflect.deleteProperty(globalThis,n);}
  }
 });

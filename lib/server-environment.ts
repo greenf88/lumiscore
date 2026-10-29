@@ -1,4 +1,5 @@
 export type LumiScoreServerEnvironmentName =
+  | 'NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED'
   | 'NEXT_PUBLIC_SUPABASE_URL'
   | 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'
   | 'NEXT_PUBLIC_SITE_ORIGIN'
@@ -19,7 +20,9 @@ export function readServerEnvironment(
   name: LumiScoreServerEnvironmentName,
 ): string | null {
   const value =
-    name === 'NEXT_PUBLIC_SUPABASE_URL'
+    name === 'NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED'
+      ? process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED
+    : name === 'NEXT_PUBLIC_SUPABASE_URL'
       ? process.env.NEXT_PUBLIC_SUPABASE_URL
       : name === 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'
         ? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY

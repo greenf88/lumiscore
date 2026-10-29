@@ -3,18 +3,25 @@ export const METRIC_SURFACES = ['home', 'recommendations', 'taste_result', 'book
 export const RANKER_VERSION = '8f337dd';
 export const METRIC_CONTEXT_HEADER = 'x-lumiscore-product-context';
 export type MetricEvent = typeof METRIC_EVENTS[number];
-export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' };
-export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: 'synthetic'; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated' };
+export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' | 'production' };
+export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated' };
 export type MetricEnvelope = { event_id: string; event: MetricEvent; properties: MetricProperties };
 export const isMetricReceipt = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 const exact = (object: Record<string, unknown>, keys: readonly string[]) => Object.keys(object).every(k => keys.includes(k));
 export function measurementTestTarget(url: string | undefined | null): boolean {
   try { return new URL(url ?? '').origin === 'https://hlvujbrmfdlrfxdjwsmb.supabase.co'; } catch { return false; }
 }
+/** Production requires an explicit release switch; unknown targets always fail closed. */
+export function measurementTarget(url: string | undefined | null, productionEnabled?: string | null): {origin:string;traffic:MetricContext['traffic'];suffix:string} | null {
+  if(measurementTestTarget(url))return {origin:'https://hlvujbrmfdlrfxdjwsmb.supabase.co',traffic:'synthetic',suffix:'_test'};
+  if(productionEnabled!=='true')return null;
+  try {if(new URL(url??'').origin==='https://qvplwejffhjvxaypmjut.supabase.co')return {origin:'https://qvplwejffhjvxaypmjut.supabase.co',traffic:'production',suffix:''};} catch { /* Default off. */ }
+  return null;
+}
 export function parseMetricContext(value: unknown): MetricContext | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const p = value as Record<string, unknown>;
-  if (!exact(p, ['locale', 'surface', 'source', 'medium', 'campaign', 'traffic']) || !['nl', 'en'].includes(String(p.locale)) || !METRIC_SURFACES.includes(p.surface as MetricContext['surface']) || p.traffic !== 'synthetic') return null;
+  if (!exact(p, ['locale', 'surface', 'source', 'medium', 'campaign', 'traffic']) || !['nl', 'en'].includes(String(p.locale)) || !METRIC_SURFACES.includes(p.surface as MetricContext['surface']) || !['synthetic','production'].includes(String(p.traffic))) return null;
   const attributed = p.source === 'facebook' && p.medium === 'organic_social' && p.campaign === 'dystopie_202610';
   const search = ['google', 'bing', 'other_search'].includes(String(p.source)) && p.medium === 'organic_search' && p.campaign === 'none';
   const unknown = p.source === 'direct_unknown' && p.medium === 'unknown' && p.campaign === 'none';
@@ -59,9 +66,9 @@ export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   if (p.startsWith('/collection/')) return 'collection';
   return 'other';
 }
-export function campaignContext(url: string, referrer: string, locale: 'nl' | 'en', prior: MetricContext | null = null): MetricContext {
+export function campaignContext(url: string, referrer: string, locale: 'nl' | 'en', prior: MetricContext | null = null, traffic:MetricContext['traffic']='synthetic'): MetricContext {
   const current = new URL(url), surface = metricSurfaceForPath(current.pathname);
-  const base: MetricContext = { locale, surface, source: 'direct_unknown', medium: 'unknown', campaign: 'none', traffic: 'synthetic' };
+  const base: MetricContext = { locale, surface, source: 'direct_unknown', medium: 'unknown', campaign: 'none', traffic };
   if (current.searchParams.get('utm_source') === 'facebook' && current.searchParams.get('utm_medium') === 'organic_social' && current.searchParams.get('utm_campaign') === 'dystopie_202610') return { ...base, source: 'facebook', medium: 'organic_social', campaign: 'dystopie_202610' };
   if ([...current.searchParams.keys()].some(k => k.startsWith('utm_'))) return base;
   try {
@@ -69,7 +76,7 @@ export function campaignContext(url: string, referrer: string, locale: 'nl' | 'e
     const source = ['google.com', 'www.google.com', 'google.nl', 'www.google.nl'].includes(host) ? 'google' : ['bing.com', 'www.bing.com'].includes(host) ? 'bing' : ['duckduckgo.com', 'www.duckduckgo.com'].includes(host) ? 'other_search' : null;
     if (source) return { ...base, source, medium: 'organic_search' };
   } catch { /* Absent/private referrer remains unknown. */ }
-  return prior ? { ...prior, locale, surface } : base;
+  return prior && prior.traffic===traffic ? { ...prior, locale, surface } : base;
 }
 export function impressionTimer(send: () => void, schedule: (f: () => void) => ReturnType<typeof setTimeout> = f => setTimeout(f, 1000), cancel: (id: ReturnType<typeof setTimeout>) => void = clearTimeout) {
   let timer: ReturnType<typeof setTimeout> | null = null, impressed = false;

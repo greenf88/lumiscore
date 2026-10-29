@@ -2,9 +2,11 @@
 
 22 oktober 2026. Dit vervangt de historische v2-implementatiebeschrijving.
 Eventnamen en definities zijn behouden; toestemming, retentie en capaciteit zijn
-nu technisch uitgewerkt. Alleen geïsoleerd testdoel. Op28oktober zijn echte
-hosted opslag,10/10-rondeafronding, normale cron en browserbevestiging bewezen;
-gerichte testcleanup blijft geblokkeerd. Zie het actuele installatie-reviewverslag.
+nu technisch uitgewerkt. Op28oktober zijn echte hosted opslag,10/10-rondeafronding,
+normale cron en browserbevestiging bewezen op het geïsoleerde testdoel.
+Op29oktober is de gerichte cleanup via het expliciet toegestane dashboard voltooid.
+Het exacte productie-installatie/activatievoorstel is voorbereid, niet uitgevoerd.
+Zie het actuele installatie-reviewverslag.
 De oudere reviews blijven checkpoints, geen actuele bewijsclaim.
 
 ## Optionele gebeurtenissen
@@ -30,7 +32,8 @@ classificeren. Normale rating-, account- en voortgangsopslag staat hiervan los.
 | sign_in_succeeded | Geslaagde normale wachtwoordlogin, receipt per geverifieerde Auth-sessie | surface |
 
 Common allowlist: locale(nl/en), surface, source, medium, campaign,
-traffic=synthetic. Alleen facebook/organic_social/dystopie_202610 als campagne;
+traffic=synthetic op test en production op het expliciet geactiveerde productiedoel.
+Server en SQL bewaken de doelscheiding. Alleen facebook/organic_social/dystopie_202610 als campagne;
 Google/Bing/andere bekende zoekreferrers worden vaste enums. Onbekende herkomst
 blijft onbekend. Geen raw URL/referrer/zoektekst, naam, e-mail, user-ID, token,
 ratingcijfer of vrije properties. Ranker-versie blijft 8f337dd; geen nieuw algoritme.
@@ -115,7 +118,7 @@ report.coverage.complete is false, bekende verliezen zichtbaar, onbekend is niet
 Scripts product-metrics-* testen echt SQL lokaal. Echte testopslag/cron en volledige
 browserronde zijn28oktober teruggelezen. SQL-,collectorHTTP- en DOM-browsermetingen
 blijven afzonderlijke meetsoorten; geen pure browserpaint/LCP- of productieclaim.
-De latere gerichte cleanup faalt opnieuw met Invalid or expired requestState;
-oorzaak onbekend, geen bewezen sessie-expiry of beveiligingsweigering. Geen
-identieke retry of alternatieve toegang; eerst aantoonbaar herstel en verse guards.
+De eerdere connectorcleanup faalde met Invalid or expired requestState; oorzaak
+onbekend. De nu expliciet toegestane dashboardroute heeft op29oktober alle eigen
+tijdelijke gegevens verwijderd met verse rowguards; geen identieke connectorretry.
 Zie privacy-capaciteitsanalyse en productievoorstel voor hashes, volgorde en rollback.

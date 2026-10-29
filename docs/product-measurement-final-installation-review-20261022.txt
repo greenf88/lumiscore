@@ -1,3 +1,92 @@
+PR51 — GERICHTE AFRONDING 29 OKTOBER 2026
+Dit checkpoint vervangt de oudere blokkadestatussen hieronder.
+Definitieve PR-head, Ready-Preview en CI worden in de actuele PR-beschrijving
+vastgelegd; historische applicatiecommit blijft 3bf06b9 voor het hergebruikte bewijs.
+
+OPRUIMING VOLTOOID
+Nieuwe expliciete opdracht stond de ingelogde Supabase-dashboardroute toe.
+Geen nieuwe falende connectorwrite aangeboden, geen beveiligingsweigering omzeild.
+18:18:39UTC verse exacte actoridentiteit en volledige businessrijen gelijk aan
+het afgeschermde manifest. Meetfingerprints uitsluitend bekende synthetische rijen:
+38cellen/83bijdragen,3receipts,18health;80receipts al regulier verlopen.
+Geen actieve grants/sessies/refreshtokens. Alle9fixture-Works,edities,traits en
+inventaris ongewijzigd;geen gebruik door andere accounts.
+18:21UTC één bewaakte dashboardtransactie:12ratings/12statussen/10offers/1ronde,
+9Works/9edities/9traits/9inventaris/1auteur en genoemde meetrestanten verwijderd.
+SQLbody/hash intern vergeleken met private bestand; target zichtbaar hlvujbrmfdlrfxdjwsmb.
+Externe referenties, rowfingerprints en expected counts stoppen atomair bij afwijking.
+Tijdelijk Auth-account daarna via ondersteunde Authentication→Delete user verwijderd.
+Geen Authinstellingen gewijzigd. Geen wachtwoord/hash/token gelezen.
+
+Readback18:26:16.749650UTC: eigen Auth/identities/rounds/fixturetraits/inventaris/
+edities/auteur0;countercellen/receipts/health0. Twee bestaande accounts behouden.
+Ongewijzigde huidige restcatalogus604Works/847edities/123auteurs/inventaris7;
+andere ratings68/statussen68/rondes5/offers69 behouden. De hogere catalogusaantallen
+versus28oktober zijn vooraf bestaande latere, afzonderlijk toegestane aanvullingen,
+niet cleanupverlies. Geen automatische nummering teruggezet.
+Meetinstallatie7FORCE-RLS-tabellen/9privatefuncties/3observers en normale5min-cron
+behouden.18:25UTC laatste zelfstandige cron:success,geen backlog/error.
+Geanonimiseerd bewijs:docs/product-measurement-cleanup-20261029.json.
+Private manifest/SQL blijven buiten Git; oude foutbewijzen niet overschreven.
+
+ACTUELE COMPATIBILITEIT EN CONCREET PRODUCTIEPAKKET
+Remote main en actieve productie246c379db1c674ac14e2959893f874c00b9330b2.
+Main samengevoegd in eigen branch. Het enige conflict EditorialTopList houdt
+zowel actuele editorial-back/layout als data-product-list. CSSmobiele2kolommen
+behouden;nieuwe tienlijsten,herstelroute en recente assets blijven intact.
+Rating-/smaaktestopslag/routes zijn sinds eerder bewijs niet veranderd.
+Login normaal staat los van de nieuwe recoveryroute; geen herstelcredentials gemeten.
+Nieuwe lokale controles: sharedgrid/herstelcontract, opt-in/defaultoff/revoke,
+productionreleaseflag/trafficisolatie, exacte SQLbodynormalisatie,prodACLs,
+scheduleruniqueness en rollback met behoud van rating/tellerdata.
+
+Productie read-only18:21:56UTC: geen meetobjecten/triggers;pg_cron nog afwezig.
+Versie1.6.4 beschikbaar,preloaded; businesskolommen compatibel.
+Nieuw exact voorstel:supabase/operations/pr51-product-metrics/. ZevenprivateRLS-
+tabellen,13functies,3observers,eigen5minjob. Afwezige-baselineguard en minimale
+expliciete rechten;geen afhankelijkheid van automatische service_rolegrants.
+De13SQLbodies zijn gelijk aan bewezen testbodies na uitsluitend namen/traffic/
+jobmapping. Production-only NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=true is de
+voorgestelde releaseactivatie;NU NIET ingesteld. Productie zonder dezeflag uit;
+testsynthetic blijft hetzelfde. Client/server/SQLtoestemming blijft altijd vereist.
+Geen productieDDL/writes,productiescheduler,config,merge ofpublicatie uitgevoerd.
+Exactehashes/volgorde/rollback en beperkte livechecks staan in
+docs/product-measurement-production-proposal-20261022.txt.
+De uitvoerbare rollback stopt ook bij nieuwe privatefuncties/gewijzigde body ofACL.
+
+GELDIG BEWIJS HERGEBRUIKT, NIET OPNIEUW NAGEBOOTST
+Hosted28oktober op p66zy1mg0/dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx,app3bf06b9:
+campagne→lijst→kaart→detail→echte login-na-optin→10/10→resultaat.
+Readbacknew/updated apart,1start/1completion;resultaatreloadgeenextracompletion.
+Na intrekken3reloads+5echte ratingwijzigingen metongewijzigde83events/83receipts.
+Defaultoff/deny/retrydedup/failureisolation/privacy en normalecron07:55UTC
+behouden. Geen nieuwe account/ratings/completebrowsercampagne nodig of uitgevoerd.
+Het nieuwe productiepad is lokaal exact getest; daadwerkelijke productieopslag
+kan pas ná afzonderlijke goedkeuring/liveactivatie worden bevestigd.
+
+METINGEN EN BEPERKINGEN ONGEWIJZIGD
+DOMratingbevestiging,n5/stand:aanmediaan680ms(654–807),uit675ms(650–878).
+Resultaat-H1,n3:aan1042ms(985–1816),uit1040ms(902–1198).
+Inclusief UItransport;geen LCP/paint/causale snelheidswinst.
+HostedSQLn21:deny0.311ms(0.274–15.258),accept1.113ms(1.038–34.287).
+Geen netwerk/commit/API in SQLmicrobenchmark. CollectorHTTPn3apart:
+accept183.224ms(178.240–187.809),deny133.629ms(132.403–136.409).
+Code:ratingobservergeen extra browserrequest,wel synchrone meetwrites.
+Geen volledige hosted600/min/multiinstancepiek of completeverliesmeting bewezen.
+Events/pageviews zijn geen unieke personen of gekoppelde funnelconversie.
+Providerlog/backuptijden onder bestaande providerafspraken,nietappSQLretentie.
+Normale90dagen+5min+3s geldt alleen tijdig/geenbacklog;beheerder monitort.
+
+CONTROLES EN ADVIES
+Gerichte tests groen;TypeScript/lint/build/secretscan uitgevoerd op nieuwecode.
+Lokale pnpmweigering wegens bestaand gedeeld node_modules-pad veilig omzeild
+door bestaande Node-entrypoints te gebruiken;geen dependencies/andereworktree
+verwijderd of gewijzigd. CI draait op schone checkout en blijft vereiste releasegate.
+Definitieve CIconclusie/ReadyPreview in PRbody,geen voorlopige groenclaim.
+GEREED VOOR RELEASEAKKOORD zodra actuele CI/Ready groen bevestigd zijn;
+de inhoudelijke cleanupblokkade is weg. PRblijftDraft tot apart akkoord.
+
+----- HISTORISCHE CHECKPOINTS HIERONDER -----
 PR51 — READ-ONLY OPRUIMNACONTROLE; GEEN NIEUWE AANLEIDING VOOR WRITE
 28oktober2026,12:31:13–12:32:27UTC /13:31:13–13:32:27Europe/Amsterdam(CET).
 Head6354e56adf7a0e0e8de6bff8d2f37a5c5f0973ce opnieuw open/Draft,mergeable;

@@ -1,8 +1,19 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {parseMetric,measurementTestTarget,impressionTimer,RANKER_VERSION,campaignContext,parseMetricContext} from './contract.ts';
+import {parseMetric,measurementTestTarget,measurementTarget,impressionTimer,RANKER_VERSION,campaignContext,parseMetricContext} from './contract.ts';
 import {productMeasurementReport} from './report.ts';
 const event=()=>({event_id:'b0000000-0000-4000-8000-000000000001',event:'recommendation_impression',properties:{locale:'nl',surface:'home',work_id:1,position:1,ranker_version:RANKER_VERSION}});
+test('production activation is explicit, exact-target and keeps synthetic traffic isolated',()=>{
+ const prod='https://qvplwejffhjvxaypmjut.supabase.co';
+ assert.equal(measurementTarget(prod),null);assert.equal(measurementTarget(prod,'false'),null);
+ assert.equal(measurementTarget(prod+'.attacker.invalid','true'),null);
+ assert.equal(measurementTarget(undefined,'true'),null);
+ assert.equal(measurementTarget(prod,'true')?.traffic,'production');
+ assert.equal(measurementTarget('https://hlvujbrmfdlrfxdjwsmb.supabase.co','true')?.traffic,'synthetic');
+ const c=campaignContext('https://lumisco.re/nl','','nl',null,'production');assert.equal(c.traffic,'production');assert.ok(parseMetricContext(c));
+ const old=campaignContext('https://preview.invalid/nl?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610','','nl');
+ assert.equal(campaignContext('https://lumisco.re/en','','en',old,'production').campaign,'none');
+});
 test('allowlisted contract rejects identity, free text, unknown dimensions and bad types',()=>{
  assert.ok(parseMetric(event()));
  for(const extra of ['email','user_id','ip','session_id','url','returnTo','query','score'])assert.equal(parseMetric({...event(),properties:{...event().properties,[extra]:'denied'}}),null);

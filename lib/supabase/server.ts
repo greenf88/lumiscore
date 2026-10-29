@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies, headers } from 'next/headers';
 import { readServerEnvironment } from '@/lib/server-environment';
-import { measurementTestTarget, METRIC_CONTEXT_HEADER, parseMetricContext } from '@/lib/product-metrics/contract';
+import { measurementTarget, METRIC_CONTEXT_HEADER, parseMetricContext } from '@/lib/product-metrics/contract';
 import {CHOICE_COOKIE,GRANT_COOKIE,GRANT_HEADER,grantedAnalysisToken} from '@/lib/product-metrics/consent';
 
 function getSupabaseEnvironment() {
@@ -24,10 +24,11 @@ export async function createServerSupabaseClient() {
   const { url, publishableKey } = getSupabaseEnvironment();
   let context = null;
   const grant=grantedAnalysisToken(cookieStore.get(CHOICE_COOKIE)?.value,cookieStore.get(GRANT_COOKIE)?.value);
-  if (measurementTestTarget(url)) {
+  const metricTarget=measurementTarget(url,readServerEnvironment('NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED'));
+  if (metricTarget) {
     const h = await headers(), raw = h.get(METRIC_CONTEXT_HEADER);
     if (grant && raw && raw.length <= 512 && h.get('sec-gpc') !== '1' && h.get('dnt') !== '1') {
-      try { context = parseMetricContext(JSON.parse(raw)); } catch { /* Optional metrics never prevent authentication or writes. */ }
+      try { const parsed=parseMetricContext(JSON.parse(raw));context=parsed?.traffic===metricTarget.traffic?parsed:null; } catch { /* Optional metrics never prevent authentication or writes. */ }
     }
   }
 
