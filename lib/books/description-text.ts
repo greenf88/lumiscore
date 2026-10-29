@@ -62,7 +62,11 @@ export function normalizeBookDescription(value: unknown): string | null {
     .map((paragraph) => paragraph.replace(/[\t ]+/g, ' ').replace(/\s*\n\s*/g, ' ').trim())
     .filter(Boolean);
 
-  return paragraphs.length > 0 ? paragraphs.join('\n\n') : null;
+  const text = paragraphs.join('\n\n');
+  // Some catalogue records put physical extent in `description`, not a synopsis.
+  // Reject only a complete bibliographic extent, never numbers inside real prose.
+  if (/^(?:[ivxlcdm]+,\s*)?\d+\s+(?:pages|p\.?|blz\.?)(?:\s*;\s*\d+\s*cm\.?)?[.;]?$/i.test(text)) return null;
+  return text || null;
 }
 
 export function normalizeVerifiedBookDescription(

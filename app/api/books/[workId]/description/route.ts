@@ -1,6 +1,5 @@
 import { isCatalogWorkId } from '@/lib/books/book-detail';
-import { resolveBookDescription } from '@/lib/books/description-resolution';
-import { normalizeVerifiedBookDescription } from '@/lib/books/description-text';
+import { loadPublicBookDescriptionState } from '@/lib/books/public-description';
 import { isLocale } from '@/lib/i18n/config';
 import { loadCatalogBook } from '@/lib/supabase/books';
 
@@ -27,33 +26,17 @@ export async function GET(request: Request, { params }: DescriptionRouteProps) {
     );
   }
 
-  const resolution = await resolveBookDescription({
-    workId: book.workId, editionId: book.editionId, author: book.author, editionTitle: book.editionTitle,
-    openLibraryWorkId: book.openLibraryWorkId,
-    openLibraryEditionId: book.openLibraryEditionId,
-    isbn13: book.isbn13,
-    editionLanguage: book.editionLanguage,
-    editionCandidates: book.descriptionCandidates,
-    locale,
-  });
-  const description = normalizeVerifiedBookDescription(
-    resolution.description,
-  );
-  const normalizedResolution = {
-    description,
-    state: description
-      ? ('resolved' as const)
-      : resolution.state === 'temporary_failure'
-        ? ('temporary_failure' as const)
-        : ('confirmed_missing' as const),
-  };
+  // Same edition, language and four-second budget as SSR; never expose a
+  // different synopsis or let direct API requests run an unbounded source chain.
+  const resolution = await loadPublicBookDescriptionState(book, locale);
+  const {description} = resolution;
   const cacheControl = description
     ? 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
     : resolution.state === 'temporary_failure'
       ? 'public, max-age=0, s-maxage=60'
       : 'public, max-age=300, s-maxage=3600';
 
-  return Response.json(normalizedResolution, {
+  return Response.json(resolution, {
     headers: { 'Cache-Control': cacheControl },
   });
 }

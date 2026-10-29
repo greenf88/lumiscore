@@ -419,9 +419,10 @@ test('splits a long unpunctuated paragraph so the disclosure always reveals cont
 });
 
 test('book detail receives server copy without a robots-blocked hydration request', async () => {
-  const [component, route] = await Promise.all([
+  const [component, route, loader] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreBookDescription.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/api/books/[workId]/description/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('./public-description.ts', import.meta.url), 'utf8'),
   ]);
 
   assert.doesNotMatch(component, /fetch\(|useEffect|\/api\//);
@@ -431,6 +432,7 @@ test('book detail receives server copy without a robots-blocked hydration reques
   assert.match(component, /geverifieerde Nederlandse beschrijving/);
   assert.match(route, /isLocale\(requestedLocale\)/);
   assert.match(route, /loadCatalogBook\(workId, locale\)/);
-  assert.match(route, /openLibraryEditionId: book\.openLibraryEditionId/);
-  assert.match(route, /editionLanguage: book\.editionLanguage/);
+  assert.match(route, /loadPublicBookDescriptionState\(book, locale\)/);
+  assert.match(loader, /openLibraryEditionId: book\.openLibraryEditionId/);
+  assert.match(loader, /editionLanguage: book\.editionLanguage/);
 });
