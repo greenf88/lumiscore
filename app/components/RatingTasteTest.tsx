@@ -12,6 +12,7 @@ import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
+import { preloadTasteCover } from '@/lib/taste-test/cover-preload';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
 import { canOpenRoundResult, createRoundActionGate, roundProgress, type PendingWorkScore } from '@/lib/taste-test/direct-rating';
 
@@ -40,7 +41,9 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const searchButton = useRef<HTMLButtonElement>(null);
   const focusNext = useRef(false);
   const returnFromSearch = useRef(false);
+  const coverHintsAttempted = useRef(new Set<string>());
   const round = data?.state?.round;
+  const roundId = round?.id;
   const book = data?.book?.strictEditionLanguage && data.book.strictEditionLanguage !== locale ? null : data?.book;
   const workId = book?.workId;
   const progress = roundProgress(data?.state ?? null);
@@ -48,6 +51,21 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const hasResult = canOpenRoundResult(data?.state ?? null);
 
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  useEffect(() => {
+    if (!active || searchOpen || !roundId || !workId || !book?.editionAvailable || book.strictEditionLanguage !== locale) return;
+    const key = `${locale}:${roundId}:${workId}`;
+    const attempted = coverHintsAttempted.current;
+    if (attempted.has(key)) return;
+    attempted.add(key);
+    if (attempted.size > 32) attempted.delete(attempted.values().next().value!);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5500);
+    let settled = false;
+    void preloadTasteCover({ roundId, fromWorkId: workId, locale }, controller.signal, {
+      fetcher: fetch, createImage: () => new window.Image(),
+    }).finally(() => { settled = true; });
+    return () => { clearTimeout(timeout); controller.abort(); if (!settled) attempted.delete(key); };
+  }, [active, searchOpen, roundId, workId, book?.editionAvailable, book?.strictEditionLanguage, locale]);
   useEffect(() => {
     const controller = new AbortController();
     const version = revision.current;
