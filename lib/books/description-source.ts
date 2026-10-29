@@ -2,7 +2,9 @@ import type { VerifiedBookDescription } from '@/app/data/books';
 import { reviewedDescriptionSource } from './reviewed-descriptions.ts';
 
 export function publicDescriptionSource(description: VerifiedBookDescription): { name: string; href: string } | null {
-  if (description.source === 'official_publisher') return reviewedDescriptionSource(description.sourceKey);
+  if (description.source === 'official_publisher' || description.source === 'official_catalog') {
+    return reviewedDescriptionSource(description.sourceKey, description.source);
+  }
   if (description.source === 'open_library' && /^OL\d+[WM]$/.test(description.sourceKey)) return {
     name: 'Open Library', href: `https://openlibrary.org/${description.sourceKey.endsWith('W') ? 'works' : 'books'}/${description.sourceKey}`,
   };

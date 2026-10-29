@@ -1,5 +1,6 @@
 import { normalizeIsbn13 } from './covers.ts';
 import { normalizeEditionLanguage } from './edition-ranking.ts';
+import editorialCovers from './reviewed-editorial-covers-20261028.json' with { type: 'json' };
 
 export type ReviewedCoverOverride = {
   workId: string;
@@ -16,6 +17,25 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Exact Dutch paperback; publisher confirms ISBN/language, KB catalogue confirms
+  // translation of The Final Empire. No OL edition ID is invented or required here.
+  {workId:'197',openLibraryWorkId:'OL5738148W',title:'Het laatste rijk',author:'Brandon Sanderson',isbn13:'9789024581269',editionLanguage:'nld',coverUrl:'https://www.lsuitgeverij.nl/wp-content/uploads/2026/10/9789024581269_frontcover-320x499.jpg',source:'official_publisher',evidenceUrl:'https://www.lsuitgeverij.nl/boek/het-laatste-rijk/',reviewedAt:'2026-10-28'},
+  // Three proposed additional print editions, validated on the isolated test catalog.
+  // Existing editions remain intact. Source/author conflicts: catalog/remaining-covers-20261023.
+  {workId:'148',openLibraryWorkId:'OL71042W',title:"The Magician's Nephew (The Chronicles of Narnia)",author:'C. S. Lewis',isbn13:'9780064471107',editionLanguage:'eng',openLibraryEditionId:'OL7292690M',coverUrl:'https://covers.openlibrary.org/b/id/52093-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7292690M',reviewedAt:'2026-10-23'},
+  {workId:'228',openLibraryWorkId:'OL28996W',title:'The Amber Spyglass',author:'Philip Pullman',isbn13:'9780440418566',editionLanguage:'eng',openLibraryEditionId:'OL7521619M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780440418566',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouse.com/books/136441/his-dark-materials-the-amber-spyglass-book-3-by-philip-pullman/',reviewedAt:'2026-10-23'},
+  {workId:'553',openLibraryWorkId:'OL34113490W',title:"The Housemaid's Secret",author:'Freida McFadden',isbn13:'9781837901326',editionLanguage:'eng',openLibraryEditionId:'OL46530123M',coverUrl:'https://covers.openlibrary.org/b/id/14840896-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46530123M',reviewedAt:'2026-10-23'},
+  // Exact-edition image review; no eligibility, rating or edition changes.
+  // Identity/source audit: catalog/covers-silver-flames-20261023/review.json.
+  {"workId":"126","openLibraryWorkId":"OL257948W","title":"A feast for crows","author":"George R. R. Martin","isbn13":"9780553582024","editionLanguage":"eng","openLibraryEditionId":"OL22236422M","coverUrl":"https://images.penguinrandomhouse.com/cover/9780553582024","source":"official_publisher","evidenceUrl":"https://prhinternationalsales.com/book/?isbn=9780553582024","reviewedAt":"2026-10-23"},
+  {"workId":"138","openLibraryWorkId":"OL27479W","title":"Two Towers","author":"J.R.R. Tolkien","isbn13":"9781484490334","editionLanguage":"eng","openLibraryEditionId":"OL34091192M","coverUrl":"https://books.google.nl/books/content?id=P1BszQEACAAJ&printsec=frontcover&img=1&zoom=1","source":"reviewed_google_books","evidenceUrl":"https://books.google.com/books?vid=ISBN9781484490334","reviewedAt":"2026-10-23"},
+  {"workId":"178","openLibraryWorkId":"OL28993W","title":"Subtle Knife (His Dark Materials)","author":"Philip Pullman","isbn13":"9780613722551","editionLanguage":"eng","openLibraryEditionId":"OL10953480M","coverUrl":"https://books.google.com/books/content?id=K1qUPwAACAAJ&printsec=frontcover&img=1&zoom=1","source":"reviewed_google_books","evidenceUrl":"https://books.google.com/books/about/The_Subtle_Knife.html?id=K1qUPwAACAAJ","reviewedAt":"2026-10-23"},
+  {"workId":"683","openLibraryWorkId":"OL24390422W","title":"Twisted Love","author":"Ana Huang","isbn13":"9781087939278","editionLanguage":"eng","openLibraryEditionId":"OL35152719M","coverUrl":"https://books.google.nl/books/content?id=HN1ozgEACAAJ&printsec=frontcover&img=1&zoom=1","source":"reviewed_google_books","evidenceUrl":"https://books.google.com/books?vid=ISBN9781087939278","reviewedAt":"2026-10-23"},
+  {"workId":"688","openLibraryWorkId":"OL27245843W","title":"Twisted Hate - Special Edition","author":"Ana Huang","isbn13":"9781735056692","editionLanguage":"eng","openLibraryEditionId":"OL36978096M","coverUrl":"https://cdn.agapea.com/Boba-Press/Twisted-Hate-Special-Edition-i1n21576925.jpg","source":"reviewed_bookseller","evidenceUrl":"https://www.agapea.com/Ana-Huang/Twisted-Hate-Special-Edition-9781735056692-i.htm","reviewedAt":"2026-10-23"},
+  {"workId":"699","openLibraryWorkId":"OL29330646W","title":"King of Pride","author":"Ana Huang","isbn13":"9780349436340","editionLanguage":"eng","openLibraryEditionId":"OL40323055M","coverUrl":"https://books.google.com/books/content?id=gCl5zwEACAAJ&printsec=frontcover&img=1&zoom=1","source":"reviewed_google_books","evidenceUrl":"https://books.google.com/books/about/King_of_Pride.html?id=gCl5zwEACAAJ","reviewedAt":"2026-10-23"},
+  {"workId":"772","openLibraryWorkId":"OL28744393W","title":"King of Wrath","author":"Ana Huang","isbn13":"9781957464084","editionLanguage":"eng","openLibraryEditionId":"OL39449247M","coverUrl":"https://books.google.nl/books/content?id=p4tIzwEACAAJ&printsec=frontcover&img=1&zoom=1","source":"reviewed_google_books","evidenceUrl":"https://books.google.com/books?vid=ISBN9781957464084","reviewedAt":"2026-10-23"},
+  {"workId":"1116","openLibraryWorkId":"OL45476471W","title":"Het Gulden Vlies van Thule","author":"Thea Beckman","isbn13":"9789047750505","editionLanguage":"nld","openLibraryEditionId":"OL61957924M","coverUrl":"https://lemniscaat.nl/pac-upload/thumbs/os9789047750505.jpg","source":"official_publisher","evidenceUrl":"https://lemniscaat.nl/boeken/het-gulden-vlies-van-thule","reviewedAt":"2026-10-23"},
+  {"workId":"1251","openLibraryWorkId":"OL24343787W","title":"Kinderen van Moeder Aarde","author":"Thea Beckman","isbn13":"9789060696125","editionLanguage":"nld","openLibraryEditionId":"OL32228770M","coverUrl":"https://covers.openlibrary.org/b/id/10866505-L.jpg?default=false","source":"reviewed_open_library","evidenceUrl":"https://openlibrary.org/books/OL32228770M","reviewedAt":"2026-10-23"},
   // PR48 exact-edition evidence, not Work-ID eligibility/ranking exceptions.
   // Bibliographic cross-checks and old/new data proposal: three-book-evidence.json.
   {workId:'114',openLibraryWorkId:'OL18766691W',title:'Where the Crawdads Sing',author:'Delia Owens',isbn13:'9780735219090',editionLanguage:'eng',openLibraryEditionId:'OL26702293M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780735219090',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouseretail.com/book/?isbn=9780735219090',reviewedAt:'2026-10-21'},
@@ -284,6 +304,7 @@ export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
     evidenceUrl: 'https://metadata.isbn.nl/1426132/de-mitsukoshi-troostbaby-company.html',
     reviewedAt: '2026-10-17',
   },
+  ...editorialCovers.map(entry => ({ ...entry, source: 'reviewed_open_library' as const, editionLanguage: entry.editionLanguage as 'eng' | 'nld' })),
 ] as const;
 
 function normalizeIdentityText(value: string | null | undefined): string {

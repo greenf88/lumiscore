@@ -33,6 +33,7 @@ export async function proxy(request: NextRequest) {
   if (['/account', '/login', '/forgot-password', '/update-password'].includes(path) || path.startsWith('/auth/')) {
     for (const [name, value] of Object.entries(PRIVATE_RESPONSE_HEADERS)) response.headers.set(name, value);
   }
+  if (path === '/update-password' || path === '/auth/callback') response.headers.set('Referrer-Policy', 'no-referrer');
   return response;
 }
 

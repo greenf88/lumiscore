@@ -1,0 +1,126 @@
+EDITORIAL TOP10 REVIEW — 28 OCTOBER 2026
+Status: release approval package complete; see editorial-release-approval-20261028.txt.
+Latest application:0f633e0ca37d9eae0dab38f2587281df33565ed2,Ready ldcixjklh Preview,CI run79 green.
+Fresh read-only production coverage:86/86Works,172/172suitable edition/cover presentations,
+0necessary data mutations. The Dutch Final Empire test cover below is now solved by exact
+official publisher evidence;all four NL/EN list/detail images loaded. No remote data writes.
+Rendered Paper/Ink colours,light cards/secondary actions,focus and new screenshots are in
+editorial-release-preview-20261028/. Earlier unchanged evidence below is retained as history.
+One separate existing Work197 publication-year discrepancy is documented,not silently corrected.
+Base remote main: 2651c364eb879dc6ec7416034744b3e947458449 (rechecked unchanged).
+Branch: editorial/top10-campaigns-20261028. Separate worktree; PR51 untouched.
+
+Scope and decisions
+10 additional Top10s, 86 unique existing Works / 100 list places; original two lists preserved.
+Titles/criteria/reasons and routes: lib/catalog/editorial-campaigns-20261028.json.
+“Short novels” includes novellas; survival explicitly distinguishes nine novels and one nonfiction book.
+No two new lists share five or more Works. Older fantasy/SF list overlaps are intentional connections,
+not a new copy of its ranking. No readers, reviews, bestsellers or personal matches invented.
+Most NL cards necessarily use labelled English fallbacks; see exact source/edition register.
+Source synopsis/edition identity and targeted official content/series review: selection-register.json.
+Sources do not become new stored taste traits, and no catalogue eligibility rules are relaxed.
+
+Design
+Raised light cards in Paper/Ink; serif headings; compact mobile introduction.
+Shared opt-in ui-action variant, green primary and filled lighter secondary actions, minimum44px.
+Book-specific reasons are visible without opening a disclosure; source/selection remains collapsible.
+Taste CTA and relevant other lists retain crawlable ordinary links and focus styles.
+20 own 1200x630 PNGs, all below300KB. No cover collage or external image generator.
+The complete list registry remains server-only for the editorial component; only the current list,
+10 catalogue books and small source/link props are serialized, not all ten lists' book notes.
+
+Data, scores and performance
+Existing PR48 loadCatalogBooksBySourceIds + strict edition selection + public score summary RPC.
+One bounded Work query by up to10 exact source IDs; one stored-edition batch and public summary batch.
+No full catalogue read on list rendering, external metadata per book, new personal cache, or fake score.
+93 exact edition-bound public image records use the existing reviewed override mechanism.
+Some source print editions intentionally are large print (documented in the catalogue README).
+A missing catalogue/edition is explicit, not a silently short Top10 or a foreign-language fallback.
+Status lookup now uses actual database Work-ID, not the production-only editorial numeric identity.
+
+Test installation (separately authorized)
+hlvujbrmfdlrfxdjwsmb only:73Works+80Editions+54Authors.
+Dry-run then exact commit; repeat was zero insert. Existing public row digests unchanged.
+No users, ratings, statuses, taste inventory or PR51 fixtures were changed.
+Test-only dry-run/receipt/recovery and data gaps are in catalog/editorial-campaigns-20261028/.
+No production import is needed or included. Recovery defaults to ROLLBACK and explicitly refuses
+later Work/edition/author changes or referencing data, including ON DELETE CASCADE dependencies.
+A local PGlite regression test proved rollback preservation, dependent-rating protection and
+refusal of a later legitimate title change. Recovery was NOT executed on hosted test.
+
+Local checks
+TypeScript and lint passed after correcting test-only types.
+19 final editorial/parity/sitemap tests passed;74 catalogue/SEO tests passed before final type cleanup.
+Full unit run:847 passed,16 skipped,0 failed,1 timed out during concurrent bulk-fixture tests.
+The unchanged timed-out test passed alone:45.175s. No timeout limit was increased.
+vinext production build passed;Vite/Vercel build passed (before the small client-prop split);
+remote Vercel build will verify the final app. Existing Vinext dynamic-import warnings remain.
+Secretscan:92clientfiles,no server secret identifiers/values; local config has public test keys only.
+First3NL mobile local routes:10 cards/10 loaded covers each,0 unavailable,0 horizontal overflow.
+These development-server observations are NOT hosted timings or production performance claims.
+Final hosted evidence
+PR: https://github.com/greenf88/lumiscore/pull/56 (Draft, separate from PR51).
+Application commit:05120ec13b4c541819be778151782b88cdcfef0c.
+Ready deployment:dpl_2iPbYvBMe5X2CFFUZoTkKtFDsqND.
+Preview:https://lumiscore-iurak95zy-rgkgroeneveld-9102.vercel.app.
+Application CI:LumiScore quality run77 /40705496782 completed SUCCESS.
+Later evidence/recovery-test changes do not change the application or Preview configuration.
+
+All20new NL/EN URLs:HTTP200,original server content,10cards,one H1,unique localized title and
+description,self-canonical,reciprocal en/nl-NL/x-default,one WebSite,WebPage/Breadcrumb/10-item
+ItemList. All20routes in the actual200 sitemap. Own OG image sampled HTTP200;20local PNGs
+1200x630 and30–42KB. Production-site OG URLs are intentional; assets are not live until release.
+Preview HTTP X-Robots-Tag:noindex;HTML robots:index,follow. The HTTP header prevents indexing.
+Production metadata remains index,follow; this is code/Preview evidence, not a production check.
+See editorial-hosted-seo-20261028.json.
+
+All10lists x NL/EN x Paper/Ink x390x844/1440x1000:80DOM layout checks,10cards each,
+no page/card horizontal overflow. The 15px browser scrollbar reduces content width to375/1425.
+Eight representative overview/list screenshots plus one full desktop list are in
+editorial-preview-20261028/. Language-switch route,keyboard Enter/Tab focus,book click,
+selection return and reload checked. Native focus styles retained; no formal WCAG audit claimed.
+This was browser viewport testing, NOT a physical phone or mobile mail-app test.
+
+200list positions:199actual images loaded and one intentional neutral fallback.
+172unique Work/language detail combinations:title,public score/ratings band and selection
+return links all match.171actual detail images loaded;their cover IDs equal list IDs (M/L sizes).
+No synthetic scores were inserted;empty public score status was retained. Positive-score and
+insufficient-evidence behavior are additionally covered by the central local regression tests.
+
+EXPLICIT TEST DATA LIMITATION:existing test Work8800309 (production197,OL5738148W) has an extra
+Dutch edition614,Het laatste rijk,ISBN9789024581269,nld,without an Open Library edition ID or
+bound cover. NL correctly prefers it and shows the neutral fallback on both list and detail.
+It was not overwritten or made to prefer English merely to pass a test. Production's reviewed
+record is English edition197,Mistborn,ISBN9780765350381,OL24945060M;that English edition loads
+on EN test. A final production NL acceptance check remains required after a separate release.
+This is NOT proof that every production page already has a loaded cover, nor a new data-fix approval.
+Browser details/loaded-image/score/matrix evidence:editorial-preview-20261028/browser-final-evidence.json.
+
+Representative performance,guest/unthrottled Windows HTTP client,three separate requests per URL:
+route                                      TTFB median[min–max]ms /HTML-complete median ms
+NL existing dystopia                       308[221–397] /334
+NL after Project Hail Mary                  250[244–268] /274
+NL fantasy beginners                       233[230–285] /273
+EN existing dystopia                       230[227–247] /264
+EN after Project Hail Mary                  248[236–300] /260
+EN fantasy beginners                       233[223–244] /244
+See editorial-hosted-http-20261028.json and scripts/measure-editorial-http.mjs.
+First-in-sample is NOT guaranteed cold Vercel/cache state. CLI startup excluded from curl times.
+Warm browser navigation/DOM verification on20routes:median570ms,481–802ms;this is an observation
+upper bound through the browser tool,NOT paint,FCP or LCP. Actual loaded images checked separately
+after scrolling;no precise cold cover-paint timing or throttled-network result is claimed.
+Compared with the existing list under the same Preview conditions,no added server-delay signal
+was observed in this small sample. Not a production performance guarantee or statistical conclusion.
+
+Social
+docs/editorial-social-concepts-20261028.json holds10 Dutch draft posts, questions, destinations,
+one top-level campaign toplijsten_202610 and a different utm_content per list.
+First recommendations:fantasy entry,spoiler-free thrillers,after ProjectHailMary.
+No posting/planning/IndexNow/analytics changes. PR51 remains a separate Draft.
+
+Release boundary
+DraftPR + testPreview only. No merge, production release or production database/configuration writes.
+Release advice:ready for editorial/technical review as Draft. No production import required.
+The code's tested application CI is green; verify final PR-head CI before a later release decision.
+Do not start campaigns against Preview links. After separate release approval,check all production
+routes/covers,especially NL Work197,then choose a first campaign. No merge/publication performed.

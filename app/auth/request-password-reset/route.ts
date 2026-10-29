@@ -12,7 +12,8 @@ import {
 } from '@/lib/auth/request';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { measureServerOperation } from '@/lib/performance/server-timing';
-import { absoluteLumiScoreUrl } from '@/lib/seo/site-origin';
+import { localizedHref } from '@/lib/i18n/paths';
+import { recoveryLocale } from '@/lib/auth/recovery-link';
 
 const PENDING_RECOVERY_MAX_AGE_SECONDS = 60 * 60;
 
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
 
   const formData = await request.formData();
   const email = String(formData.get('email') ?? '').trim();
+  const locale = recoveryLocale(formData.get('locale'));
   const recoveryState = randomUUID();
 
   if (email) {
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
         'auth.password_reset_request',
         'private',
         () => supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: createPasswordRecoveryCallbackUrl(recoveryState),
+          redirectTo: createPasswordRecoveryCallbackUrl(recoveryState, request.url, locale),
         }),
       );
     } catch {
@@ -44,7 +46,7 @@ export async function POST(request: NextRequest) {
   }
 
   const response = NextResponse.redirect(
-    absoluteLumiScoreUrl(PASSWORD_RESET_REQUEST_DESTINATION),
+    new URL(localizedHref(PASSWORD_RESET_REQUEST_DESTINATION, locale), request.nextUrl.origin),
     { status: 303, headers: PRIVATE_RESPONSE_HEADERS },
   );
   response.cookies.set(

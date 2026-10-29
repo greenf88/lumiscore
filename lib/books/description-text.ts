@@ -84,7 +84,7 @@ export function normalizeVerifiedBookDescription(
   if (
     !text ||
     (source !== 'open_library' && source !== 'google_books' &&
-      !(source === 'official_publisher' && reviewedDescriptionSource(sourceKey))) ||
+      !((source === 'official_publisher' || source === 'official_catalog') && reviewedDescriptionSource(sourceKey, source))) ||
     !sourceKey ||
     !verifiedAt
   ) {
