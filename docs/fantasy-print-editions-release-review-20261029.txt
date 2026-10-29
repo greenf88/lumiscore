@@ -1,0 +1,79 @@
+PR58 final two-edition follow-up — 29 October 2026
+This supplements the original23-Work/46-combination review; it does not repeat that campaign.
+No production writes, PR merge, production deployment, account or rating writes. PR51 untouched.
+
+Read-only production baseline confirmed
+Work14/OL450063W MaryShelley(author11): only edition14/OL26385062M/ISBN9788415089452,
+title FRANKENSTEIN. Bilingüe, publisherPlutón Ediciones, languageNULL. Bilingual; leave intact.
+Work22/OL59798W UrsulaK.LeGuin(author17): only edition22/OL10635933M/ISBN9780563389163,
+title A Wizard of Earthsea (The Earthsea Cycle, Book 1), publisherBBC Pubns, languageNULL. Audio; leave intact.
+No proposed ISBN10/13 or OL edition duplicate found. Production editions has identity sequence,
+increment1/cache1/noCycle, last_value10314 equal maxID; no non-internal edition triggers.
+
+Exact additive proposals — NO existing field UPDATE
+1. Work14: Frankenstein, MaryShelley, ISBN9780141439471/0141439475, eng,
+   PenguinBooks paperback2003-05-06, OL3701481M -> OL450063W/authorOL25342A.
+   Official Penguin page and image verified; cover visibly title/author correct.
+2. Work22: A Wizard of Earthsea (The Earthsea Cycle, Book 1), UrsulaK.LeGuin,
+   ISBN9780553383041/0553383043, eng, Spectra paperback2004-09-28,
+   OL7826592M -> OL59798W/authorOL31353A. Exactly one sourceISBN; CiNiiBA87394714
+   independently gives text/title languageeng, author, exactISBN and Bantam tradepaperback.
+   Exact edition cover370100 inspected: title/author correct. Publisher ISBN-image200 is only
+   CoverComingSoon and is rejected, not treated as cover proof.
+   Prior9780547773742/OL26214273M candidate is superseded, NOT imported; it combines3formats.
+Source URLs, minimal facts, image hashes, production baseline and testmapping: print-editions-evidence.json.
+
+Code/data boundary
+Only add two exact identities to existing reviewed description and controlled-cover registries.
+Two short own English summaries; no runtime translation or full protected flaptext.
+NL retains English-edition and English-description labels, EN English only.
+No schema/rights/sequence reset/Work-type/collection/rating/progress change. Publication dates are evidence,
+not new columns: production has no edition publish_date/cover_id. Work years1818/1968 unchanged.
+Test neweditionIDs929214014/929214022; testWorkIDs929100014/929100022.
+Actual test dry-run2/add2/replay0 passed; original rows compared unchanged inside transaction.
+Exact production SQL also passed local PGlite dryrun/apply/replay/rollback tests with synthetic Work ratings
+and progress preserved, including stop-on-changed-value and stop-on-dependent-edition cases.
+SQL is additive and compatible with current production code during transition; final code supplies durable
+own synopses and directly verified covers. No dependency on PR51 or optional external metadata for titles.
+
+Existing proof retained
+The original23 reviewed entries compare exactly to fa19bbcea98fc2be4f667f54593185abef4d6382;
+same texts, keys, languages and source links. Covers for those identities unchanged.
+Reuse their46 hosted click/reload cases, score parity and NL/EN label evidence. No broad retest campaign.
+New local browser checks: all4 new combinations via actual list click/reload/back, correct ISBN/title,
+English source and actual cover loading. Top25 has25 distinct clickable bookcards and0 unavailable slots
+in BOTH languages. Hosted acceptance is recorded in the final PR body/external completion report.
+Targeted59 description/cover tests and4 SQL tests passed; TypeScript and changed-file lint passed;
+production build passed. Final CI and deployment identity recorded at handoff.
+
+Future release order — requires separate release approval
+1. Recheck exact PRhead/currentmain/liveSHA and SQLhashes. The already-published PR59 mobile grid must
+   remain in main; PR58 does not modify globals.css. Stop if unrelated changes or conflicts appear.
+2. Verify projectqvplwejffhjvxaypmjut explicitly, save old two-edition rows/Work-author identities and current
+   production deployment. Recheck ISBN duplicates, schema identity and sequence. Stop on any drift.
+3. Run print-editions-production.sql dryrun(ROLLBACK). Expect exactly2 additions, unchanged originals;
+   or0 only for complete exact replay. Partial prior state/collision stops. Save output; dryrunIDs are not
+   COMMIT IDs because identity sequences intentionally advance even on ROLLBACK. Never reset sequence.
+4. Only after approval execute exact print-editions-production-apply.sql(COMMIT), save FULL returned
+   two-row receipt including generatedIDs/created_at/fullafter_row. Minimal catalogue DML only.
+5. Read back both exact new editions and original rows, no duplicateWork/edition. Stop before apprelease
+   if identities/counts differ. Existing production code remains compatible with additive data.
+6. Merge only approved PR58head and confirm the resulting Ready PRODUCTION deployment owns lumisco.re.
+   Do not promote the test-configured Preview into production; use existing main Git deployment.
+7. Only if needed wait/refresh the relevant public catalogue cache; never clear private caches broadly.
+8. Live NL/EN Top25:25 distinct books, four new descriptions/covers/ISBNs and labels after click/reload/back.
+   Recheck rating/publicscore state read-only; no account/rating creation. Existing46 proof reused where valid.
+
+Rollback / stop rules
+Before COMMIT any failed assertion rolls back the entire transaction; no repair by loosening guards.
+Application rollback: revert only the approved PR58 changes on currentmain, preserving published PR59
+and other legitimate work, or restore the captured prior production deployment via the normal release route.
+The two additive editions are compatible and can safely remain during an application rollback.
+Optional DATA rollback: print-editions-rollback.sql requires the actual COMMIT receipt; default[] refuses.
+It checks the full current row against savedafter_row, ISBN identity and new FKdependencies, then removes
+only those two newly inserted editionIDs. Stops on later legitimate edits/dependencies; no blind deletion,
+no Work/author/user/rating/progress deletion and no sequence reset. DefaultROLLBACK; inspect before COMMIT.
+The rollback is validated locally, not executed on production or on the retained test additions.
+
+Release advice: code and minimal two-row catalogue package are reviewable; release remains conditional on
+final hosted four-case/25-card proof and CI for the exact final SHA. No production changes authorized now.

@@ -3,6 +3,19 @@ import test from 'node:test';
 import { getInitialBookCoverUrls } from './book-cover-state.ts';
 import { getReviewedCoverOverride, REVIEWED_COVER_OVERRIDES } from './reviewed-cover-overrides.ts';
 
+test('Frankenstein and Earthsea print additions never borrow the bilingual/audio or other-format cover', () => {
+  const rows = REVIEWED_COVER_OVERRIDES.filter(e => e.reviewedAt === '2026-10-29' && ['14','22'].includes(e.workId));
+  assert.equal(rows.length, 2);
+  for (const row of rows) {
+    assert.equal(getReviewedCoverOverride({...row,workId:'999999'})?.coverUrl,row.coverUrl);
+    for (const patch of [{isbn13:'9788415089452'},{isbn13:'9780563389163'},{isbn13:'9780547773742'},
+      {editionLanguage:null},{editionLanguage:'spa'},{openLibraryEditionId:'OL26385062M'},
+      {openLibraryWorkId:'OL999W'},{title:'Another title'},{author:'Another author'}]) {
+      assert.equal(getReviewedCoverOverride({...row,...patch}),null);
+    }
+  }
+});
+
 const festival = {
   id: 'work-1296',
   workId: '1296',

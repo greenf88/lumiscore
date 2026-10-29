@@ -3,6 +3,22 @@
 // Numeric database IDs intentionally omitted: isolated test IDs differ from production.
 export const REVIEWED_FANTASY_DESCRIPTIONS = [
   {
+    title: 'Frankenstein', author: 'Mary Shelley', isbn13: '9780141439471',
+    openLibraryWorkId: 'OL450063W', openLibraryEditionId: 'OL3701481M',
+    editionLanguage: 'eng', language: 'en', reviewedAt: '2026-10-29',
+    source: 'open_library', sourceKey: 'OL450063W', sourceName: 'Open Library',
+    sourceUrl: 'https://openlibrary.org/works/OL450063W',
+    text: 'Victor Frankenstein creates a living being through a scientific experiment. His inability to accept responsibility for his creation sets them on a destructive course.'
+  },
+  {
+    title: 'A Wizard of Earthsea (The Earthsea Cycle, Book 1)', author: 'Ursula K. Le Guin',
+    isbn13: '9780553383041', openLibraryWorkId: 'OL59798W', openLibraryEditionId: 'OL7826592M',
+    editionLanguage: 'eng', language: 'en', reviewedAt: '2026-10-29',
+    source: 'open_library', sourceKey: 'OL59798W', sourceName: 'Open Library',
+    sourceUrl: 'https://openlibrary.org/works/OL59798W',
+    text: 'Young Ged\'s hunger for magical power releases a dangerous shadow. His journey through Earthsea becomes a test of what he has learned and how he faces the consequences.'
+  },
+  {
     "title": "Project Hail Mary",
     "author": "Andy Weir",
     "isbn13": "9780593135204",

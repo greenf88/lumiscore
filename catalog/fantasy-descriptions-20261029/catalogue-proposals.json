@@ -1,5 +1,5 @@
 {
-  "status": "UNAPPLIED; separate catalogue review, NOT part of automatic application installation",
+  "status": "VALIDATED ON TEST ONLY; production additions require separate release approval",
   "productionProject": "qvplwejffhjvxaypmjut",
   "checkedAt": "2026-10-29",
   "productionWrites": false,
@@ -39,7 +39,7 @@
         "language": "en",
         "text": "Victor Frankenstein creates a living being through a scientific experiment. His inability to accept responsibility for his creation sets them on a destructive course."
       },
-      "cover": "Candidate only: use neutral fallback until edition-specific cover has been checked; no ISBN image assumed correct.",
+      "cover": "Official Penguin cover inspected and matches the exact English edition; https://images.penguinrandomhouse.com/cover/9780141439471 . Existing controlled-cover registry binds Work, author, title, ISBN, edition ID and language.",
       "rollback": "If separately approved later, delete only an exactly matching newly inserted edition with no new dependencies; stop on later changes or use. Never delete Work/ratings/statuses."
     },
     {
@@ -58,28 +58,28 @@
       "reason": "Existing record is an audiobook, not an unverified print language repair. Do not set its language to solve a printedition gap.",
       "proposedAction": "Review a separate English printedition on the same existing Work; retain the audio edition unchanged.",
       "candidate": {
-        "title": "A Wizard of Earthsea",
+        "title": "A Wizard of Earthsea (The Earthsea Cycle, Book 1)",
         "author": "Ursula K. Le Guin",
-        "isbn13": "9780547773742",
-        "olid": "OL26214273M",
+        "isbn13": "9780553383041",
+        "olid": "OL7826592M",
         "language": "eng",
-        "format": "Mass market paperback",
-        "publisher": "Houghton Mifflin Harcourt",
-        "year": 2012
+        "format": "Paperback",
+        "publisher": "Spectra",
+        "year": 2004
       },
       "sources": [
-        "https://openlibrary.org/isbn/9780547773742.json",
+        "https://openlibrary.org/books/OL7826592M.json",
+        "https://ci.nii.ac.jp/ncid/BA87394714",
         "https://d1ks1q58ecczx4.cloudfront.net/folio-harpercollins-us/teaching-guides/TG-9780063285767.pdf",
-        "https://catalog.minlib.net/GroupedWork/17968480-3fe4-3311-b479-10927553ff3c-eng/Home",
-        "https://ppl.catalog.yln.info/Record/397795"
+        "https://books.google.com/books/about/A_Wizard_of_Earthsea.html?id=hwlCPgAACAAJ"
       ],
-      "identity": "OL26214273M links OL59798W, English; publisher guide explicitly lists 9780547773742 as mass-market paperback. Library record confirms title, author, format and ISBN.",
-      "uncertainty": "OL26214273M combines three format ISBNs. Edition-specific cover and precise ISBN/format modelling still need source review before any production import.",
+      "identity": "OL7826592M links OL59798W and OL31353A with only ISBN9780553383041, eng and Paperback. CiNii BA87394714 independently confirms exact ISBN, text language eng, Bantam trade paperback, author and year2004.",
+      "supersededCandidate": "9780547773742/OL26214273M is excluded from this import because that OL record combines three format ISBNs. No edition or language correction to that record is proposed.",
       "summary": {
         "language": "en",
         "text": "Young Ged's hunger for magical power releases a dangerous shadow. His journey through Earthsea becomes a test of what he has learned and how he faces the consequences."
       },
-      "cover": "Unverified across the combined OL formats; keep neutral fallback, not the audio cover.",
+      "cover": "Visually inspected exact OL7826592M cover370100 shows A Wizard of Earthsea, Ursula K. Le Guin; https://covers.openlibrary.org/b/id/370100-L.jpg?default=false . Publisher image returned HTTP200 but only Cover Coming Soon; rejected. No ISBN-image response alone treated as evidence.",
       "rollback": "An eventual additive edition must have a guarded inverse preserving all old editions, Works and user data."
     }
   ],

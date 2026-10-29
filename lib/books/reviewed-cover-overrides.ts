@@ -17,6 +17,9 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Additive print proposals only; do not relabel the bilingual/audio originals.
+  {workId:'14',openLibraryWorkId:'OL450063W',title:'Frankenstein',author:'Mary Shelley',isbn13:'9780141439471',editionLanguage:'eng',openLibraryEditionId:'OL3701481M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780141439471',source:'official_publisher',evidenceUrl:'https://www.penguinrandomhouseretail.com/book/?isbn=9780141439471',reviewedAt:'2026-10-29'},
+  {workId:'22',openLibraryWorkId:'OL59798W',title:'A Wizard of Earthsea (The Earthsea Cycle, Book 1)',author:'Ursula K. Le Guin',isbn13:'9780553383041',editionLanguage:'eng',openLibraryEditionId:'OL7826592M',coverUrl:'https://covers.openlibrary.org/b/id/370100-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL7826592M',reviewedAt:'2026-10-29'},
   // Exact Dutch paperback; publisher confirms ISBN/language, KB catalogue confirms
   // translation of The Final Empire. No OL edition ID is invented or required here.
   {workId:'197',openLibraryWorkId:'OL5738148W',title:'Het laatste rijk',author:'Brandon Sanderson',isbn13:'9789024581269',editionLanguage:'nld',coverUrl:'https://www.lsuitgeverij.nl/wp-content/uploads/2026/10/9789024581269_frontcover-320x499.jpg',source:'official_publisher',evidenceUrl:'https://www.lsuitgeverij.nl/boek/het-laatste-rijk/',reviewedAt:'2026-10-28'},
