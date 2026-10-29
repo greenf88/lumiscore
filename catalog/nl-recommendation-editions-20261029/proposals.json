@@ -1,0 +1,96 @@
+{
+  "status": "review-only; no database writes or ready-to-apply SQL",
+  "checkedAt": "2026-10-29",
+  "preserve": [
+    "Works",
+    "ratings",
+    "read status",
+    "taste rounds"
+  ],
+  "proposals": [
+    {
+      "workId": 125,
+      "openLibraryWorkId": "OL15168588W",
+      "author": "Justin Cronin",
+      "existingEditionId": 125,
+      "proposed": {
+        "title": "De oversteek",
+        "language": "nld",
+        "isbn13": "9789023425540",
+        "publisher": "Cargo",
+        "format": "paperback",
+        "publishDate": "2016-10-03"
+      },
+      "sources": [
+        "https://metadata.isbn.nl/138134/de-oversteek.html",
+        "https://www.bibliotheek.nl/catalogus/titel.322880777.html/de-oversteek/"
+      ],
+      "identityEvidence": "Both sources name Justin Cronin, Dutch printed translation of The Passage; ISBN and format explicit.",
+      "pending": [
+        "exact edition-bound cover evidence",
+        "import dry-run/idempotency/rollback",
+        "test application"
+      ]
+    },
+    {
+      "workId": 1993,
+      "openLibraryWorkId": "OL1089297W",
+      "author": "Niccolò Machiavelli",
+      "existingEditionId": 2187,
+      "proposed": {
+        "title": "De heerser",
+        "language": "nld",
+        "isbn13": "9789025310950",
+        "publisher": "Athenaeum",
+        "format": "hardback",
+        "publishDate": "2019-10-01"
+      },
+      "sources": [
+        "https://metadata.isbn.nl/431768/de-heerser.html",
+        "https://www.singeluitgeverijen.nl/athenaeum/boek/de-heerser/"
+      ],
+      "identityEvidence": "Publisher explicitly identifies Il Principe; Bureau ISBN explicitly labels this exact 2019 hardcover Dutch. Do not substitute the 2026 ISBN, which has conflicting Italian language metadata.",
+      "pending": [
+        "exact edition-bound cover evidence",
+        "import dry-run/idempotency/rollback",
+        "test application"
+      ]
+    },
+    {
+      "workId": 199,
+      "openLibraryWorkId": "OL20129837W",
+      "author": "Margaret Atwood",
+      "existingEditionId": 199,
+      "proposed": {
+        "title": "De testamenten",
+        "language": "nld",
+        "isbn13": "9789044641882",
+        "publisher": "Prometheus",
+        "format": "paperback",
+        "publishYear": 2019
+      },
+      "sources": [
+        "https://www.bibliotheek.nl/catalogus/titel.421752998.html/de-testamenten/",
+        "https://rozet.nl/catalogus/1947771/"
+      ],
+      "identityEvidence": "Library catalogues explicitly connect the Dutch printed edition and exact ISBN to The Testaments, author and named translators.",
+      "pending": [
+        "exact edition-bound cover evidence",
+        "import dry-run/idempotency/rollback",
+        "test application"
+      ]
+    }
+  ],
+  "deduplication": "Production read-only SELECT on 2026-10-29 found none of the proposed ISBNs; existing Work source identities retained. Recheck before import.",
+  "unresolved": [
+    1397,
+    2130,
+    2825,
+    180,
+    1894,
+    164,
+    151,
+    189,
+    1951
+  ]
+}
