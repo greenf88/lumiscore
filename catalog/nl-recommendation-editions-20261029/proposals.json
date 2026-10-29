@@ -79,18 +79,63 @@
         "import dry-run/idempotency/rollback",
         "test application"
       ]
+    },
+    {
+      "workId": 2825,
+      "openLibraryWorkId": "OL712025W",
+      "author": "Roberto Bolaño",
+      "existingEditionId": 2984,
+      "proposed": { "title": "2666", "language": "nld", "isbn13": "9789048818501", "publisher": "Lebowski Publishers", "format": "paperback", "publishYear": 2013 },
+      "sources": ["https://www.bibliotheek.nl/catalogus/titel.317723286.html/2666/"],
+      "identityEvidence": "National library catalogue explicitly identifies Dutch text, Spanish original 2666, the author, exact 2013 ISBN and translators.",
+      "pending": ["exact edition-bound cover evidence", "import dry-run/idempotency/rollback", "test application"]
+    },
+    {
+      "workId": 1894,
+      "openLibraryWorkId": "OL3171069W",
+      "author": "Shirley Jackson",
+      "existingEditionId": 2068,
+      "proposed": { "title": "De geesten van Hill house", "language": "nld", "isbn13": "9789020415742", "publisher": "L.J. Veen Klassiek", "format": "paperback" },
+      "sources": ["https://www.atlascontact.nl/boek/de-geesten-van-hill-house/"],
+      "identityEvidence": "Official publisher explicitly identifies author, Dutch language, paperback, ISBN and translator Rob van Moppes. Synopsis identifies the original novel, not a Netflix screenplay or a different author's continuation.",
+      "pending": ["exact edition-bound cover evidence", "import dry-run/idempotency/rollback", "test application"]
+    },
+    {
+      "workId": 1951,
+      "openLibraryWorkId": "OL14942956W",
+      "author": "Jack London",
+      "existingEditionId": 2134,
+      "proposed": { "title": "De roep van de wildernis", "language": "nld", "isbn13": "9789020415629", "publisher": "L.J. Veen Klassiek", "format": "paperback", "publishYear": 2018 },
+      "sources": ["https://www.atlascontact.nl/boek/de-roep-van-de-wildernis/", "https://www.bibliotheek.nl/catalogus/titel.458309869.html/de-roep-van-de-wildernis/"],
+      "identityEvidence": "Publisher explicitly identifies Dutch language, exact ISBN, paperback and translator Margot Bakker. Library identifies this edition as a translation of The Call of the Wild. Do not substitute a Stilton adaptation, comic or two-novel omnibus.",
+      "pending": ["exact edition-bound cover evidence", "import dry-run/idempotency/rollback", "test application"]
+    },
+    {
+      "workId": 180,
+      "openLibraryWorkId": "OL81626W",
+      "author": "Stephen King",
+      "existingEditionId": 180,
+      "proposed": { "title": "Carrie", "language": "nld", "isbn13": "9789021022789", "publisher": "Luitingh-Sijthoff", "format": "paperback" },
+      "sources": ["https://www.lsuitgeverij.nl/boek/carrie-paperback/", "https://www.bibliotheek.nl/catalogus/titel.417464258.html/carrie/"],
+      "identityEvidence": "Official publisher explicitly identifies Dutch language, exact paperback ISBN and translator Ingrid Nijkerk; library connects to the English original. ISBN appears to have been reused across printings, so cover/printing cannot be selected on ISBN success alone.",
+      "pending": ["printing-specific cover evidence; do not mix 2018 POD and later cover", "import dry-run/idempotency/rollback", "test application"]
+    },
+    {
+      "workId": 189,
+      "openLibraryWorkId": "OL17332479W",
+      "author": "Leigh Bardugo",
+      "existingEditionId": 189,
+      "proposed": { "title": "List & leugens", "language": "nld", "isbn13": "9789463492478", "publisher": "Blossom Books", "format": "paperback" },
+      "sources": ["https://www.blossombooks.nl/product/de-kraaien-list-en-leugens/", "https://www.nbdbiblion.nl/sites/nbdbiblion.nl/files/vo_1602.pdf"],
+      "identityEvidence": "Publisher identifies the Dutch translation by Merel Leene, exact paperback ISBN, author and first Kraaien volume. NBD Biblion links the original Dutch edition to Six of Crows; different format ISBNs remain separate.",
+      "pending": ["exact edition-bound cover evidence", "import dry-run/idempotency/rollback", "test application"]
     }
   ],
   "deduplication": "Production read-only SELECT on 2026-10-29 found none of the proposed ISBNs; existing Work source identities retained. Recheck before import.",
   "unresolved": [
-    1397,
-    2130,
-    2825,
-    180,
-    1894,
-    164,
-    151,
-    189,
-    1951
+    { "workId": 1397, "editionId": 1443, "isbn13": "9789076268644", "source": "https://metadata.isbn.nl/108062/robinson-crusoe.html", "finding": "Exact language is Dutch, but official record explicitly names an adapter and youth/readability editions. Do not apply a language-only fix before reviewing adaptation identity and suitability." },
+    { "workId": 2130, "candidateEdition": "OL25420691M", "candidateIsbn10": "9064077576", "source": "https://openlibrary.org/works/OL16798915W/Zonen_en_minnaars", "finding": "Dutch translation explicitly linked to Sons and Lovers, but source edition belongs to another Open Library Work OL16798915W instead of stored OL81295W. Resolve source Work identity before linking or using that cover." },
+    { "workId": 164, "finding": "No exact Dutch printed edition verified in this bounded research. Keep verified English fallback; do not infer a Dutch title from German/French editions or claim none exists." },
+    { "workId": 151, "finding": "No exact Dutch printed edition verified in this bounded research. Keep verified English fallback; do not invent a Dutch title or claim none exists." }
   ]
 }

@@ -33,7 +33,7 @@ Een begrensde, publieke read-only guest-aanvraag met locale=nl, limit=20 en tien
 | 19 | 1951 | geen vastgelegd | 2134 | 2134 — The Call of the Wild | EN-fallback; geen geschikte vastgelegde NL-editie |
 | 20 | 199 | geen vastgelegd | 199 | 199 — The Testaments | EN-fallback; geen geschikte vastgelegde NL-editie |
 
-Bij Work 1397 bestaat daarnaast editie 1443 (Robinson Crusoë, ISBN 9789076268644, OL47115090M) met language=NULL. De titel/cover/ISBN-prefix zijn geen taalbewijs. Een gevonden secundaire vermelding betreft een geïllustreerde uitgave van 123 pagina's; mogelijke bewerking vereist aparte identityreview. **Niet blind naar nld corrigeren.**
+Bij Work 1397 bestaat daarnaast editie 1443 (Robinson Crusoë, ISBN 9789076268644, OL47115090M) met language=NULL. De titel/cover/ISBN-prefix zijn geen taalbewijs. [Bureau ISBN](https://metadata.isbn.nl/108062/robinson-crusoe.html) bevestigt nu de exacte taal Nederlands, maar noemt ook expliciet een bewerker en een jeugd-/leeshulpuitgave. **Niet blind naar nld corrigeren:** de geschikte Work-/bewerkingsidentiteit moet eerst worden beoordeeld.
 Bij Works 164 en 1951 bestaan eveneens onbekende-taaledities (164 en 2133), maar geen vastgelegde geschikte NL-editie. De overige negen fallback-Works hebben alleen een vastgelegde EN-editie. 'Ontbreekt in catalogus' betekent niet 'bestaat niet in de wereld'.
 
 ## Volledige keten
@@ -87,7 +87,22 @@ CI 40945838780 op de geteste commit: success (LumiScore quality). Nieuwe regress
 
 ## Afzonderlijk datavoorstel
 
-catalog/nl-recommendation-editions-20261029/proposals.json bevat drie onderbouwde Nederlandse printedities die de huidige fallback kunnen vervangen zonder nieuw Work. Geen uitvoerbare import of productieakkoord; coverbinding, import-dry-run, testtoepassing en gerichte rollback moeten vóór een latere datarelease worden afgerond. De overige negen gevallen blijven onderzoekspunten. Onbewezen taalvelden worden niet aangepast.
+catalog/nl-recommendation-editions-20261029/proposals.json bevat acht onderbouwde Nederlandse printedities voor bestaande Works:
+
+| Work | Nederlandse editie | Exact ISBN |
+|---|---|---|
+|125|De oversteek|9789023425540|
+|1993|De heerser|9789025310950|
+|199|De testamenten|9789044641882|
+|2825|2666|9789048818501|
+|1894|De geesten van Hill house|9789020415742|
+|1951|De roep van de wildernis|9789020415629|
+|180|Carrie|9789021022789|
+|189|List & leugens|9789463492478|
+
+Bronnen per exacte editie staan in het voorstel: officiële uitgevers, Bureau ISBN en bibliotheekcatalogi met expliciete taal-/vertalingsgegevens. Alle acht ISBN's ontbreken in de read-only productie-deduplicatiecontrole. Geen uitvoerbare import of productieakkoord; coverbinding, import-dry-run, testtoepassing en gerichte rollback moeten vóór een latere datarelease worden afgerond. Bij Carrie moet een hergebruikt ISBN bovendien niet tot een cover van een andere druk leiden.
+
+Vier afgebakende onzekerheden: Robinson Crusoe is een bewerking; de gevonden Nederlandse Sons and Lovers-editie verwijst naar een ander Open Library Work (bronduplicaat nog te beoordelen); bij Leviathan Falls en Gideon the Ninth is geen exacte Nederlandse printeditie geverifieerd. Dat bewijst niet dat die niet bestaan. Onbewezen taalvelden, Work-koppelingen en covers worden niet aangepast.
 
 ## Releaseadvies
 
