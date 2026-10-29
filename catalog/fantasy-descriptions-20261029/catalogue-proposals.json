@@ -1,0 +1,88 @@
+{
+  "status": "UNAPPLIED; separate catalogue review, NOT part of automatic application installation",
+  "productionProject": "qvplwejffhjvxaypmjut",
+  "checkedAt": "2026-10-29",
+  "productionWrites": false,
+  "changes": [
+    {
+      "workId": 14,
+      "workOlid": "OL450063W",
+      "currentEdition": {
+        "id": 14,
+        "isbn13": "9788415089452",
+        "olid": "OL26385062M",
+        "storedLanguage": null,
+        "sourceLanguages": [
+          "spa",
+          "eng"
+        ],
+        "format": "bilingual"
+      },
+      "reason": "No permitted edition; bilingual text must not be relabelled English.",
+      "proposedAction": "Review an additive English print edition on the same existing Work; keep current edition/ratings/statuses unchanged.",
+      "candidate": {
+        "title": "Frankenstein",
+        "author": "Mary Shelley",
+        "isbn13": "9780141439471",
+        "olid": "OL3701481M",
+        "language": "eng",
+        "format": "Paperback",
+        "publisher": "Penguin Books",
+        "year": 2003
+      },
+      "sources": [
+        "https://openlibrary.org/isbn/9780141439471.json",
+        "https://www.penguinrandomhouseretail.com/book/?isbn=9780141439471"
+      ],
+      "identity": "OL3701481M explicitly links OL450063W, ISBN 9780141439471, eng; publisher independently confirms title/author/paperback.",
+      "summary": {
+        "language": "en",
+        "text": "Victor Frankenstein creates a living being through a scientific experiment. His inability to accept responsibility for his creation sets them on a destructive course."
+      },
+      "cover": "Candidate only: use neutral fallback until edition-specific cover has been checked; no ISBN image assumed correct.",
+      "rollback": "If separately approved later, delete only an exactly matching newly inserted edition with no new dependencies; stop on later changes or use. Never delete Work/ratings/statuses."
+    },
+    {
+      "workId": 22,
+      "workOlid": "OL59798W",
+      "currentEdition": {
+        "id": 22,
+        "isbn13": "9780563389163",
+        "olid": "OL10635933M",
+        "storedLanguage": null,
+        "sourceLanguages": [
+          "eng"
+        ],
+        "format": "Audio Cassette"
+      },
+      "reason": "Existing record is an audiobook, not an unverified print language repair. Do not set its language to solve a printedition gap.",
+      "proposedAction": "Review a separate English printedition on the same existing Work; retain the audio edition unchanged.",
+      "candidate": {
+        "title": "A Wizard of Earthsea",
+        "author": "Ursula K. Le Guin",
+        "isbn13": "9780547773742",
+        "olid": "OL26214273M",
+        "language": "eng",
+        "format": "Mass market paperback",
+        "publisher": "Houghton Mifflin Harcourt",
+        "year": 2012
+      },
+      "sources": [
+        "https://openlibrary.org/isbn/9780547773742.json",
+        "https://d1ks1q58ecczx4.cloudfront.net/folio-harpercollins-us/teaching-guides/TG-9780063285767.pdf",
+        "https://catalog.minlib.net/GroupedWork/17968480-3fe4-3311-b479-10927553ff3c-eng/Home",
+        "https://ppl.catalog.yln.info/Record/397795"
+      ],
+      "identity": "OL26214273M links OL59798W, English; publisher guide explicitly lists 9780547773742 as mass-market paperback. Library record confirms title, author, format and ISBN.",
+      "uncertainty": "OL26214273M combines three format ISBNs. Edition-specific cover and precise ISBN/format modelling still need source review before any production import.",
+      "summary": {
+        "language": "en",
+        "text": "Young Ged's hunger for magical power releases a dangerous shadow. His journey through Earthsea becomes a test of what he has learned and how he faces the consequences."
+      },
+      "cover": "Unverified across the combined OL formats; keep neutral fallback, not the audio cover.",
+      "rollback": "An eventual additive edition must have a guarded inverse preserving all old editions, Works and user data."
+    }
+  ],
+  "existingCandidateDuplicates": "Read-only production check found neither proposed ISBN nor OL edition already stored. Recheck immediately before any future separately approved import.",
+  "additionalContentSource21": "https://www.ursulakleguin.com/left-hand-darkness"
+}

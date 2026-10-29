@@ -1,0 +1,90 @@
+FANTASY/SCIENCEFICTION DESCRIPTION RECOVERY — 29 OCTOBER 2026
+Scope: 25 editorial Work identities, NL/EN; separate branch fix/fantasy-book-descriptions-20261029.
+Remote main and live Ready production at start: 0c0470e1e401cad5f8e178ca3bc521df5f098c5b.
+PR51 and PR57, other worktrees, ratings and reading progress untouched. No production writes.
+
+Observed baseline
+- Actual live HTTP for all 50 combinations: 16 resolved-source sections, 24 missing, 10 temporary failures.
+- Two of the 16 show only physical extent for All Systems Red, not a synopsis.
+- Priority reproduction: Hobbit6 and FifthSeason30 temporary_failure; Dune8 confirmed_missing;
+  ProjectHailMary1 resolved from OL30036715M. NL shows English copy only with permitted fallback.
+- 75 bounded public source probes: 25 OL editions +25 OL Works +25 Google exact-ISBN requests.
+  All editions and Works returned200. Public Google returned429 RESOURCE_EXHAUSTED/rateLimitExceeded.
+  That public probe is NOT proof of production's configured Google-key response or account quota.
+- Most exact editierecords lack description; Dune OL7878673M also lacks source language.
+  Existing Dune language evidence from earlier reviewed exact-ISBN catalogue investigation retained.
+- Work-level synopsis language is unlabelled: automatic reuse is intentionally NOT enabled.
+- Existing process cache can explain repeated fast errors but is not durable across instances.
+  Temporary failures already have a2min in-process TTL /60sec HTTP CDN TTL, not a permanent absence.
+  No observed source timeout in this audit; controlled timeout behaviour is tested separately.
+  Raw complete HTTP durations are not browser paint/TTFB, and not causal production performance proof.
+
+Solution
+- Existing reviewed-descriptions registry extended with23 short own English summaries, explicitly
+  identity-bound to OL Work + exact OL edition + ISBN + author + editiontitle + verified eng.
+  Durable versioned public text, not a new database/cache service or runtime scraper.
+- Source links refer to the actual Open Library Work used for manually checked content facts.
+  No complete publisher flaptext copied; no automatic title/description translation or AI endpoint.
+- NL uses these only for the selected English fallback, with both English-edition and English-description
+  labels. EN remains English. Missing language, changed identity or unavailable edition cannot borrow copy.
+- Existing functioning descriptions (including Work1) become short own summaries as well, making every
+  covered identity independent of an upstream call even after a cold start. Longer provider copy is not
+  claimed unchanged; no ratings, cover selection or edition selection is changed.
+- SSR and description API now use the SAME public loader: edition availability, explicit fallback rule
+  and total4sec upstream budget. Previously API bypassed that loader and its budget.
+- Physical-extent-only strings such as '152 pages ; 21 cm' are rejected as non-narrative.
+- New text can be tree-shaken from browser-only attribution code; no new client fetch or dependency.
+  Existing title/actions streaming remains unchanged and is not gated by the optional synopsis.
+- Generic source success/failure cache policy unchanged; reviewed text checked before negative cache.
+  No shared private data or user keys in text/cache.
+
+Remaining catalogue gaps — separate UNAPPLIED proposal
+- Work14: original edition14/OL26385062M/9788415089452 is bilingual Spanish/English with stored languageNULL.
+  Do not relabel it eng. Candidate separate printISBN9780141439471/OL3701481M explicitly links OL450063W,
+  English, paperback, MaryShelley; publisher confirms title, author and format.
+- Work22: original edition22/OL10635933M/9780563389163 is an English audio cassette with stored languageNULL.
+  Do not solve the print gap by setting this edition eng. Candidate printedISBN9780547773742 links
+  OL59798W through OL26214273M; publisher guide confirms mass-market paperback, library corroborates.
+  That OL record combines three formatISBNs; exact format/cover modelling remains a review limit.
+- No suitable edition means no displayed synopsis or foreign cover. Neither candidate was installed on
+  production OR test. Source-based own English proposal summaries are in catalogue-proposals.json.
+  Specific cover verification is still required; neutral fallback must win over an unverified ISBN image.
+- No proposed ISBN/OL edition duplicate found in production, read-only; recheck before any future import.
+
+Test fixtures (separately authorized)
+- Testproject hlvujbrmfdlrfxdjwsmb confirmed ACTIVE_HEALTHY; target guard anchors existing testDune91021001.
+- Added ONLY missing original public Works929100014/929100022 and original editions929200014/929200022.
+  Existing unsuitable/null languages preserved. Reused Ursula author921300017; only new author929300014 MaryShelley.
+- Exact dry-run rollback, application and replay with no duplicate records succeeded. No user-table DML,
+  no accounts, scores, traits/inventory or progress copied. Test-recovery.sql is guarded proposal, not executed.
+
+Local evidence
+- 84 targeted description/identity/language/source/failure tests passed.
+- Full suite915:899passed,16intentional skips,0fail. TypeScript and full lint passed.
+- Local production build passed outside Windows tracing sandbox; initial sandbox EPERM readlink was
+  environmental, not an application code error. Final build/client-bundle check recorded separately.
+- Existing public isolated configuration only; no server key in local build.
+- Actual testcatalogue SSR+API:50 combinations checked;46resolved English with correct attribution,
+  NL fallback label and returnlink;4remain unavailable as dictated by unchanged edition rules.
+- New raw source text snippets are NOT committed. Minimal responses, language/identity data, hashes,
+  rejection reasons and per-Work/locale baseline are in work-language-audit.json.
+- Human content review supplementary source: https://www.ursulakleguin.com/left-hand-darkness .
+  No claimed physical phone or production speedup. Hosted browser click/reload proof follows in PR.
+
+Files / reproduction
+- lib/books/reviewed-fantasy-descriptions.ts:23 exact edition entries and short text.
+- lib/books/reviewed-descriptions.ts:reuse existing register and safe source keys.
+- lib/books/description-text.ts:reject physical extent only.
+- app/api/books/[workId]/description/route.ts:reuse same bounded SSR loader.
+- lib/books/fantasy-descriptions.test.ts plus updated contract test.
+- scripts/probe-fantasy-descriptions.mjs: bounded read-only public baseline/source audit.
+- scripts/verify-fantasy-descriptions.mjs:actual isolated test SSR/API, loopback only.
+- catalog/fantasy-descriptions-20261029/:50-row audit, original catalogue snapshots, local evidence,
+  test-only fixtures/recovery and separate unapplied catalogue proposals.
+
+Release boundary / rollback
+Code only: no migration or catalogue data prerequisite for the23 restored identities.
+Application rollback: revert the single approved future application commit; no DB rollback required.
+Two remaining Work repairs require separate data review/approval, not implicit release of this PR.
+Test data recovery stops if identities changed or new dependencies exist; preserve later legitimate data.
+No merge, production publication, production SQL, indexing request or social post authorized.

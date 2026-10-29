@@ -2,13 +2,14 @@ import type { VerifiedBookDescription } from '../../app/data/books.ts';
 import type { Locale } from '../i18n/config.ts';
 import { normalizeEditionLanguage } from './edition-ranking.ts';
 import { normalizeIsbn13 } from './covers.ts';
+import { REVIEWED_FANTASY_DESCRIPTIONS } from './reviewed-fantasy-descriptions.ts';
 
 /** Own short summaries, reviewed against an exact edition and named primary source. */
 type ReviewedDescription = {
   workId?:string; editionId?:string; title:string; author:string; isbn13:string;
   openLibraryWorkId?:string; openLibraryEditionId?:string; editionLanguage?:'eng'|'nld';
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
-  source?:'official_publisher'|'official_catalog';
+  source?:'official_publisher'|'official_catalog'|'open_library'; sourceKey?:string;
 };
 const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   workId: '1305', editionId: '1305', title: 'Madonna', author: 'Suzanne Vermeer',
@@ -47,6 +48,8 @@ const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   sourceUrl:'https://bookouture.com/books/2903/',
   text:'A housemaid takes a job with the wealthy Garricks, hoping to keep her past hidden. The mysterious absence of Mrs Garrick and signs of distress lead her to investigate what is happening behind a closed bedroom door.',
 }];
+// Provider attribution in the browser needs only the existing named-source
+// registry. Keep the new public synopsis text tree-shakeable from client bundles.
 
 export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBookDescription['source']): { name: string; href: string } | null {
   const entry = REVIEWED_DESCRIPTIONS.find(row => row.isbn13 === sourceKey &&
@@ -60,13 +63,14 @@ export function getReviewedDescription(input: {
   openLibraryWorkId?: string | null; openLibraryEditionId?: string | null;
 }, locale: Locale): VerifiedBookDescription | null {
   const normalize = (text?: string | null) => text?.trim().normalize('NFC').toLocaleLowerCase('nl');
-  const entry = REVIEWED_DESCRIPTIONS.find(row => (!row.workId || row.workId === input.workId) &&
+  const entries:readonly ReviewedDescription[] = [...REVIEWED_DESCRIPTIONS, ...REVIEWED_FANTASY_DESCRIPTIONS];
+  const entry = entries.find(row => (!row.workId || row.workId === input.workId) &&
     (!row.editionId || row.editionId === input.editionId) && row.isbn13 === normalizeIsbn13(input.isbn13) &&
     (!row.openLibraryWorkId || row.openLibraryWorkId === input.openLibraryWorkId) &&
     (!row.openLibraryEditionId || row.openLibraryEditionId === input.openLibraryEditionId) &&
     normalize(row.title) === normalize(input.editionTitle) && normalize(row.author) === normalize(input.author) &&
     row.language === locale && normalizeEditionLanguage(input.editionLanguage ?? '') ===
       (row.editionLanguage ?? (row.language === 'nl' ? 'nld' : 'eng')));
-  return entry ? { text: entry.text, source: entry.source ?? 'official_publisher', sourceKey: entry.isbn13,
+  return entry ? { text: entry.text, source: entry.source ?? 'official_publisher', sourceKey: entry.sourceKey ?? entry.isbn13,
     verifiedAt: entry.reviewedAt, language: entry.language } : null;
 }
