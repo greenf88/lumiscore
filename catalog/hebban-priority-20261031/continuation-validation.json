@@ -1,0 +1,13 @@
+{
+  "date":"2026-10-31",
+  "environment":"local exact-schema PGlite, not Supabase committed recovery",
+  "targetedTests":{"command":"node --experimental-strip-types --test scripts/nl-availability-register.test.mjs scripts/nl-availability-research.test.mjs scripts/hebban-title-alias.test.mjs scripts/hebban-test-package.test.mjs","passed":5,"failed":0,"skipped":0,"finalAliasRerun":"passed with missing-receipt-field and fixed-scope regressions"},
+  "typeScript":"tsc --noEmit passed",
+  "lint":"six changed offline script/test files passed; final changed alias pair rechecked",
+  "secretScan":{"passed":true,"clientFiles":92,"serverSecretValuesConfiguredOrBundled":false},
+  "hashes":{"coreProductionFiles":5,"aliasFiles":8,"verifiedAgainstGitBlobs":true,"note":"Final rollback hash manifest changes only strict receipt guard; core17 hashes unchanged"},
+  "runtimeDeltaAgainst13451a60":"none in app/lib/components/supabase",
+  "browserEvidenceReused":"34 existing observations +32 prior unchanged-runtime authenticated checks only within their original scope",
+  "newBrowserEvidence":"seven-sisters-title-browser-proof.json",
+  "hostedCommittedRecovery":"NOT PROVEN: one expired confirmation, no retry/alternate route"
+}

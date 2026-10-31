@@ -1,0 +1,167 @@
+PR63 DEFINITIEF REVIEWPAKKET — 31 OKTOBER 2026
+STATUS: GEBLOKKEERD VOOR RELEASEAKKOORD door ontbrekend hosted COMMIT-herstelbewijs.
+Dit verslag vervangt verouderde herstel-/zoekstatus in ACCEPTANCE.txt en REVIEW.txt.
+Geen productie-import, merge, publicatie, account- of ratingwrite uitgevoerd.
+
+VERSIES EN GELDIG BEWIJS
+Uitgebreid getest pakket e63cea05e158882ddeb73bab5b8d8c04116e28e2;
+gerichte eind-/aliasacceptatie op2007e8cb6c095e775c66dbf74c75d5141b5ccd54.
+Beide app/lib/CSS/supabase exact gelijk aan main/productie
+13451a60e6f9399204aa625036942afa0b6c5380. Deze vervolgcommit wijzigt uitsluitend
+offline import-/registertests, afzonderlijk aliasvoorstel en bewijs/documentatie.
+Ready geteste eind-Preview dpl_45xshRmaFTQTu6tQJK1JQQCPvPAS:
+https://lumiscore-er2mzjpwl-rgkgroeneveld-9102.vercel.app
+CI2007e8c volledig success run41223308475. Volledige nieuwe PR-head en CI/Ready
+worden na push in de PRbeschrijving vastgelegd; geen zelfreferentiële SHA/hash.
+Alleen bestaande branchgebonden publieke TESTconfig; geen nieuwe env/rebuild/
+securitywijziging in deze vervolgactie. Geen nieuwe database-installatie vereist.
+
+EXACT PRODUCTIEVOORSTEL — CORE17 + APARTE ALIAS1
+Originele17acties blijven byte-identiek aan hashes.json:
+  2nieuwe NLprintedities op bestaande Works9530/1006;
+  3editierijen2113/1504/1499 NULL->nld (titelopruiming1504 in dezelfde rij);
+  6exacte coverbindings en6oorspronkelijke Nederlandse samenvattingen.
+Netto VIJF extra Nederlandstalig beschikbare bestaande Works:
+1936,9530,1006,1440,1435. Harry93was al NL; alleen presentatie hersteld.
+Geen nieuwe productieWorks/auteurs; geen persoonlijke-/score-/smaakwijziging.
+De zes goede bestaande prioriteitspresentaties/teksten blijven behouden.
+
+production-plan.json
+a15e9b9d263c50a862b30f54cd1333724ce11a9841e04bb7ea414f2167ca9b86
+production-import.sql
+570aede796670ea5ac840e0bbf2c25e383daa47025f24de2757b24f902f26b6f
+production-dry-run.sql
+8ad12fbf8060c7b38a9ebc3eea1e7bc54d4678a4fe0ff4b1918fee422119008c
+production-rollback.sql
+ba4c70035994456bf46d25373267a06e489c23a572ef8dc81bfb0f1651dd8567
+Exacte oude/nieuwe rijen, ISBNs, bronbesluiten, teksten:production-plan.json en
+reviewed-changes.json; overige hashes in hashes.json.
+
+Nieuw, EXPLICIET apart: één oorspronkelijke-titelalias
+public.catalog_work_title_aliases: ontbrekend -> (work_id1435,title'The Seven Sisters').
+Geen taalbewijs door alias, geen Workmerge, geen zesde NL-uitbreiding.
+seven-sisters-alias-production-import.sql
+7b60de23760eaf5e6f2149bf9f3f3be49a478c4a700ecfaddbfc8d9f09494ffd
+seven-sisters-alias-production-dry-run.sql
+8bcd732ea1dc5066f4bb9aa904c254eb85f55e29f60e4c7dd459b9f76172e936
+seven-sisters-alias-production-rollback.sql
+ded0b432fc641cc4a12b612588a96a9f7c0dc2491659e7cc3ffe85556c0d15f4
+Volledig8bestandmanifest:seven-sisters-alias-hashes.json. Core17niet vervangen
+door een stil gewijzigd18actie-script; voer elk goedgekeurd onderdeel éénmaal uit.
+
+THE SEVEN SISTERS / DUBBELING
+KB koppelt9789401609371expliciet aan The seven sisters,Macmillan2014,Maia's
+verhaal; Bureau ISBN bevestigt de exacte Nederlandse paperback. TESTalias op
+eigen962100006 gecommitteerd, teruggelezen; herhaling0writes. Beide NLzoekvragen
+vinden exact dezelfde Work/ISBN/cover. DesktopInk en mobiel390Paper/Ink, klik,
+herladen, taalwissel en teruglink geslaagd;0overflow. EN blijft expliciet zonder
+geschikte editie op dit Nederlandse Work. Geen Nederlandstalige cover in EN.
+seven-sisters-title-browser-proof.json +screenshots zijn daadwerkelijk DOM/
+decodebewijs, geen HTTP200-als-afbeeldingclaim.
+Productie1435 en8476hebben DEZELFDE auteur758/OL7758106A, andere OLWorkIDs.
+Beide0ratings/0statussen/0collectieleden bij read-only controle;8476heeft wel
+1trait-evidencerij. Exact AtriaISBN9781501108877niet nieuw uitgever-geverifieerd;
+sterke dubbelingsaanwijzing, geen complete veilige merge-adjudicatie. Geen merge/
+editieverplaatsing/jaarcorrectie voorgesteld. Work1435jaar2018versus origineel
+2014staat afzonderlijk geregistreerd. Zie seven-sisters-identity-review.json.
+
+HERSTELCONTROLE — WAT IS WEL/NIET BEWEZEN
+Lokale echte Postgres/PGlite bewijst gecommitteerde18fixture+17correctie-import,
+replay0, receiptundo17dan18, volledig identieke begintabellen, weigeren bij latere
+wijziging of FKdependency. Nieuwe alias: COMMIT/replay0/receiptundo lokaal getest,
+lege receipt en later gewijzigde editie weigeren. Dit is GEEN hosted undo-bewijs.
+Een laatste gerichte SQLreview vond dat ontbrekende receiptvelden door SQLNULL
+niet streng genoeg werden afgewezen. IS DISTINCT FROM en regressie voor ontbrekende
+target/batch toegevoegd; vaste Work/edition/projectscope ook in offlinegenerator
+afgedwongen. Alleen alias-rollbackSQL/hashes aangepast, geen import-/runtimewaarde.
+Een transactionele undo gevolgd door ROLLBACK bewijst alleen transactioneel herstel
+van die dry-run, niet het later terugdraaien van een gecommitteerde import.
+
+Actuele hosted voorcontrole18:22:31.611414UTC:17/17exact,0drift,0inventory-
+dependencies,0ongemanifesteerde metadata; inkomende FKs gecontroleerd. Alleen
+edities629/630en hun eigen metadata zouden verdwijnen; andere eigen correcties
+terug naar before. Geen Work/author/alias/account/rating/statusdeletes.
+Na expliciet'klaar' precies ÉÉN aanvraag18:22:41UTC, onmiddellijk gemeld.
+De normale koppeling retourneerde expired/INVALID_ARGUMENT:
+"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation."
+Nacontrole18:38:57.306251UTC:alle17nog exact aanwezig,0drift/deps; identieke
+volledige aggregate fingerprints van803Works/266auteurs/68ratings/68statussen/
+146collectieleden en de toen2aliases. Geen uitgevoerd gecommitteerd herstel en
+dus geen herstelherimport nodig. Geen identieke retry/omweg. Kaartzichtbaarheid
+en oorzaak onbekend, geen login- of beveiligingsweigeringclaim.
+recovery-attempt-20261031.json bevat exacte aanvraag/resultaat/voor-/nacontrole;
+SUPPORT-RECOVERY.txt bevat het niet-verstuurde supportconcept en minimale stap.
+
+Afzonderlijke toegestane nieuwe TESTalias daarna1write/replay0; alleen aliases
+2->3, overige preservationhashes identiek. Niet als geslaagde destructieve route
+voorgesteld. Voor een TOEKOMSTIGE volledige fixtureopruiming:
+  1undo SevenSisters-alias met eigen eerste receipt zolang editie nog nldis;
+  2undo17corecorrecties met exacte eerste coreCOMMITreceipt;
+  3undo eigenLaSombra-alias;
+  4undo18fixtures met eigen eerste fixtureCOMMITreceipt.
+Dit is een volgordevoorstel, niet een nu toegestane bredere verwijderactie.
+Latere gewijzigde identiteit/rij/afhankelijkheid doet alles stoppen. Geen reset
+van sequences. Op de tweekolomsaliastabel is identiek verwijderen/opnieuw toevoegen
+door een latere actor zonder auditkolom niet detecteerbaar; verse voorcontrole en
+eerste receipt verplicht, geen blinde cleanup. Bestaande privégegevens blijven staan.
+
+HOSTED CONTENT / BEPERKINGEN
+Bestaande34detailobservaties geldig:12/12NLdetails met geselecteerdeISBN,
+brongebonden samenvatting en echt gedecodeerde cover; zesgewijzigdepresentaties
+ook desktopInk;320/390/1280Paper/Ink. NL/ENbrowse1–3elk16/48uniekeWorks.
+Geen nieuwe authenticated-routeclaim; PR61's32ongewijzigde runtimecontroles zijn
+alleen daarvoor hergebruikt. Scores testfixtures centraal leeg/onvoldoende; geen
+ratings verzonnen. Positieve score/bandpariteit via bestaande regressietests.
+EN3geschikt/9eerlijke unavailable. Bestaande HarryENcover/PilgrimENbronproblemen
+blijven afzonderlijk; niet door deze NLbatch gerepareerd. Tijdelijke externe
+coververtraging heeft geen bewezen oorzaak/structurele oplossing.
+SevenSisterskaart mobiel19878B; detail834318B,1688x2538daadwerkelijkgeladen.
+Dat detail blijft>300kB. Geen willekeurige resizehost of gefingeerde optimalisatie.
+Timings in ACCEPTANCE.txt zijn browser/DOM-bovengrenzen, geen LCP/TTFB/prodwinst.
+
+PR62OVERLAP / UITVOERINGSVOLGORDE NA LATER APART AKKOORD
+PR62Draft33801703b33e4bee2fa80a50de5cb7229897f8ab:46productieacties,
+11edities/12coverbindings/23teksten,netto10NLWorks en5CSSregels covertekst.
+PR63core17enalias1hebben0gedeeldeWorkIDs,0gedeeldeeditieISBNs ofrijsleutels.
+Geen PR63runtime-afhankelijkheid van PR62. Beide vereisen reeds gepubliceerde
+PR61opslag/guards/selectie; geen nieuwefunctie/migratie/ACL voor PR63.
+1Eerst ontbrekend hosted herstelbewijs via gerepareerde normale bevestiging;
+  geen herhaalde vensters zonder aantoonbaar veranderde omstandigheden.
+2Na apart concreet releaseakkoord: actuele heads/main/prod/Ready/hashes/project,
+  volle beforewaarden/ouders/ISBN10+13-duplicaten en rechten opnieuw controleren.
+  Drift/nieuwe dependencies/gewijzigde scope:STOP, geen blind bijwerken.
+3Veilige before-snapshot en receiptlocatie; core17dry-run, geen bestaande data
+  buiten exact voorstel. COMMIT17, eerste niet-lege receipt onveranderlijk bewaren.
+4Readback17/12NL/identiteits-/preservationcontrole. Alleen daarna apart goedgekeurde
+  aliasdry-run/COMMIT1; eigen eerste receipt bewaren. Geen appdeploy nodig voor data.
+5PR62mag onafhankelijk na eigen akkoord; aanbevolen eerst PR62data/code als ook
+  dystopie/Dunecampagne vrijgegeven moet worden. Nooit PR62automatisch meereleasen.
+6Eventuele goedgekeurde PRmerge alleen exacte head; nooit TESTPreview promoveren.
+  Openbare30scache laten verversen/gericht controleren; geen globale cachepleister.
+7Live12NL, beideSeven-titels, geladen covers/bron/ISBN/score/taal/returncontext en
+  relevanteDiscoverpagina's. Previewbewijs is geen live productieacceptatie.
+Rollback: eerst eigenaliasreceiptundo, dan core17receiptundo. Bij drift/deps STOP
+voor herstelreview; geen legitieme latere wijziging overschrijven. Application
+rollback is onafhankelijk: PR63wijzigt geen runtime/schema, PR62CSS is additief.
+
+VERVOLGONDERZOEK, NIET STIL ONDERDEEL VAN RELEASE
+Alle10223Works hebben een per-aspect onderzoeksstatus in centraal register.
+Dat is geen claim dat10223wereldwijde brononderzoeken afgerond zijn:
+6actueel volledig bewezenNLpresentaties;16goedgekeurde correctievoorstelWorks;
+304deels onderzocht met goedgekeurde opgeslagen inhoud;26identiteitsconflicten;
+9871nog onvoldoende inhoudelijk/editiemateriaal om af te sluiten.
+Historische10210bronpogingen behouden;13nieuweWorks niet zonder bewijs oudonderzoek
+toegeschreven. TechnischeNL2758is geen bewijs dat andereWorks geen NLeditie hebben.
+Vervolg research-batch-002.json:7oudevoorstellen reeds productie, niet dubbel tellen;
+5concreteNLprintkandidaten(1/17/23/30/1993), exactISBN/taal/bron;0nieuw goedgekeurde
+imports/0productiegroei; covers/test en bij1993dubbelidentiteit nog expliciet open.
+Twee reeds goedeNLteksten behouden; één originele NLconcepttekst, niet geïnstalleerd
+of als gerepareerde tekst geteld. Dit vervolg vertraagt het afgebakende pakket niet.
+PR51, oorspronkelijke22pilotblokkades en anderecatalogus-/codevoorstellen apart.
+
+ADVIES
+Reviewbaar pakket:netto+5NLWorks, core17ongewijzigd +alias1expliciet apart,
+bron-/testacceptatie geldig. NIET vragen om productie-releaseakkoord zolang de
+vereiste hosted gecommitteerde herstelcontrole niet aantoonbaar geslaagd is.
+Geen hernieuwde algemene loginvraag: de concrete open stap is herstel van het
+bevestigingsvenster/afhandeling bij support, daarna één gecoördineerde verse test.
