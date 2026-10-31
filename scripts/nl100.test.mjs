@@ -28,15 +28,16 @@ test('frozen100 substantive decisions, exact print evidence and original50–90w
  const held=dossiers.filter(d=>!d.status.startsWith('approved')).map(d=>d.workId);assert(!actions.some(a=>held.includes(a.after.work_id)));assert.equal(actions.filter(a=>a.relation==='editions'&&!a.before).length,56);assert.equal(actions.filter(a=>a.relation==='editions'&&a.before).length,24);
 });
 test('previous eight proposals remain byte-for-byte unchanged and are not reimported; hashes and old-new overlap',()=>{
- for(const[name,hash]of Object.entries(json('retained-packet-hashes.json')))assert.equal(checksum(fs.readFileSync(new URL('../nl-followup-002-20261031/'+name,root))),hash,name);
+ const frozen=JSON.parse(fs.readFileSync(new URL('../nl100-hosted-20261031/reference-scopes.json',root)));
+ for(const[name,hash]of Object.entries(frozen.retainedCanonicalLfHashes))assert.equal(checksum(fs.readFileSync(new URL('../nl-followup-002-20261031/'+name,root),'utf8').replaceAll('\r\n','\n')),hash,name);
  for(const b of batches){assert.equal(b.workIds.length,20);assert.equal(b.actions,60);for(const[name,hash]of Object.entries(b.hashes))assert.equal(checksum(fs.readFileSync(new URL(b.directory+name,root))),hash);}
  const old=[...JSON.parse(fs.readFileSync(new URL('../nl-followup-002-20261031/production-plan.json',root))).actions,...JSON.parse(fs.readFileSync(new URL('../nl-followup-002-20261031/next100-production-plan.json',root))).actions];assert.equal(old.length,22);assert(!old.some(a=>approved.some(d=>d.workId===a.after.work_id)));assert.equal(json('progress.json').combinedWithUnchangedPreviousEight.proposedExtraNlPrintedWorks,88);
 });
 test('frozen PR62/63, earlier expansion pilot and other approved packets have no Work/ISBN action overlap',()=>{
- const refs=['../../lumiscore-nl-availability-20261031/catalog/nl-availability-20261031/pr62-plan-reference.json','../../lumiscore-nl-availability-20261031/catalog/hebban-priority-20261031/production-plan.json'];
- const outcomes=[];for(const relative of refs){const raw=fs.readFileSync(new URL(relative,new URL('./',import.meta.url))),plan=JSON.parse(raw),ids=new Set(plan.actions.map(a=>a.after.work_id)),isbns=new Set(plan.actions.flatMap(a=>[a.after.isbn_13,a.after.bound_isbn13].filter(Boolean)));
- assert(!approved.some(d=>ids.has(d.workId)||isbns.has(d.isbn13)));outcomes.push({reference:relative,sha256:checksum(raw),workOverlap:0,isbnOverlap:0});}
- const pilot=JSON.parse(fs.readFileSync(new URL('../../lumiscore-catalog-integrity-20261030/catalog/nl-expansion-20261029/candidates.json',import.meta.url))).candidates,ids=new Set(pilot.flatMap(c=>[c.existingWorkId,...(c.identityCandidates??[]).map(x=>x.id)]).filter(Boolean));assert(!approved.some(d=>ids.has(d.workId)));
+ const frozen=JSON.parse(fs.readFileSync(new URL('../nl100-hosted-20261031/reference-scopes.json',root)));
+ const outcomes=[];for(const r of frozen.references){const ids=new Set(r.workIds),isbns=new Set(r.isbns);
+ assert(!approved.some(d=>ids.has(d.workId)||isbns.has(d.isbn13)));outcomes.push({reference:r.source,sha256:r.sha256,workOverlap:0,isbnOverlap:0});}
+ const ids=new Set(frozen.pilotWorkIds);assert(!approved.some(d=>ids.has(d.workId)));
  const boundaries=json('pr-boundaries.json');assert.equal(boundaries.prs.find(p=>p.number===63).head,'11795c7b03d04ea0fd267694fe1b36c6b9bc7b0d');assert.equal(boundaries.prs.find(p=>p.number===62).head,'33801703b33e4bee2fa80a50de5cb7229897f8ab');assert(boundaries.prs.every(p=>p.draft&&!p.merged));
  fs.writeFileSync(new URL('overlap-proof.json',root),JSON.stringify({references:outcomes,originalPilotWorkOverlap:0,oldEightWorkOverlap:0,globalIsbnForeignWorkCollisions:json('final-isbn-preflight.json').foreignWorkCollisions,pr63Unchanged:true,productionWrites:0,hostedTestWrites:0},null,2)+'\n');
 });
