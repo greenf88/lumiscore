@@ -26,7 +26,14 @@ test('real public baseline: repeat-safe import, committed rollback, later-edit/d
  for(const [t,key] of [['catalog_work_descriptions','descriptions'],['catalog_edition_metadata','metadata']])await db.query(`insert into ${t} select * from jsonb_populate_recordset(null::${t},$1::jsonb)`,[JSON.stringify(b[key])]);
  await db.exec("insert into synthetic_ratings values(311,8);insert into synthetic_progress values(311,'read');");
  const originals=Object.fromEntries(await Promise.all(['authors','works','editions'].map(async t=>[t,(await db.query(`select to_jsonb(t) value from ${t} t order by id`)).rows])));
- const imported=await db.exec(fs.readFileSync(new URL('production-import.sql',root),'utf8')),receipt=imported.find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;
+ const sql=fs.readFileSync(new URL('production-import.sql',root),'utf8');
+ // A single later ISBN10-only record is already a conflicting identity, not
+ // merely a duplicate once a second row has been inserted by this package.
+ const candidate=read('reviewed-editions.json').editions[0],body=candidate.isbn.slice(3,12),check=(11-[...body].reduce((a,d,i)=>a+Number(d)*(10-i),0)%11)%11;
+ const legacy=(await db.query('insert into editions(work_id,title,isbn_10) values($1,$2,$3) returning id',[candidate.workId,'Synthetic legacy identifier',body+(check===10?'X':check)])).rows[0].id;
+ await assert.rejects(db.exec(sql),/Equivalent identifier requires review/);await db.exec('rollback');
+ await db.query('delete from editions where id=$1',[legacy]);
+ const imported=await db.exec(sql),receipt=imported.find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;
  assert.equal(receipt.rows.length,46);
  const replay=await db.exec(fs.readFileSync(new URL('production-import.sql',root),'utf8'));assert.equal(replay.find(r=>r.rows?.[0]?.receipt).rows[0].receipt.rows.length,0);
  const counts=await db.query(`select count(distinct work_id)::int n from editions where language in('nld','dut','nl') and work_id in(102,2718,208,2600,100,2717,179,2724,2846,199)`);assert.equal(counts.rows[0].n,10);

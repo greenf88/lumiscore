@@ -118,7 +118,9 @@ Draft PR62: https://github.com/greenf88/lumiscore/pull/62
 Tested application: c61e8ee6ac3e07a527f9186d5fb10ec55f85cfe2.
 Ready deployment dpl_92RNo7pgDXNcysvY2XZKoK7EM8u3:
 https://lumiscore-7rt9gbpcp-rgkgroeneveld-9102.vercel.app
-Later evidence-only commits do not change the tested application/import files.
+Later evidence commits and an offline ISBN-guard correction do not change the
+tested runtime or planned data values. The final SQL hashes below supersede c61
+SQL, even though production-plan.json and test-plan.json remain identical.
 CI quality run41214076537 passed unit tests, TypeScript, plain lint, synthetic
 profile SSR, Vercel build, client secret scan and diff check on this SHA.
 Branch-only public TEST URL/publishable key configured after explicit approval.
@@ -195,8 +197,28 @@ Remote main and active production remain13451a60e6f9399204aa625036942afa0b6c5380
 All16bound Works/authors match the saved full public rows. None of the11new
 ISBN13 records, Ketters metadata or23proposed description keys already exists.
 Production import/dry-run/rollback hashes match both working files and c61 Git
-blobs (hashes.json). Scoped .gitattributes preserves LF for SQL/JSON checkouts.
+blobs at the initial checkpoint. The final guarded SQL supersedes initial SQL:
+production-import.sql SHA256
+f0854b334c03fdf5376ac55816509df9c9dfafbf40bb2f6584a56548bd6fe8d8
+production-dry-run.sql SHA256
+efa2f2067baab7cfbd82b4a21228e95bd4e0d099ff12096f76cf019c05b0b230
+production-rollback.sql remains SHA256
+ccc47fe5a42f9c52f669465935aef1fedaf2a08f33c2413a27cc8bf3b5223f5a.
+All final hashes in hashes.json. Do not execute initial c61 SQL additionally.
+Scoped .gitattributes preserves LF for SQL/JSON checkouts.
 No production writes, merges, deployments or sharing have been performed.
+
+FINAL IMPORT SAFETY CORRECTION
+Review found a single newly arrived ISBN10-only legacy row could pass a
+count>1 duplicate guard before insertion. Added an explicit refusal of any
+equivalent identifier without the exact approved canonical ISBN13. It also
+refuses differently formatted ISBN13 values that need reconciliation, rather
+than silently importing a second identity. Local actual-baseline regression
+inserts one synthetic legacy row and proves the entire import refuses it;
+committed rollback/private-data protection tests still pass. Normal TEST
+replay of the final guarded import succeeded with0changed rows. Final read-only
+production SELECT found0equivalent ISBN13/ISBN10 records across all11proposals.
+This guard changes no accepted data values, browser code or existing test rows.
 
 ADVICE / SHARE READINESS
 Code and reviewed contents ready for review in Draft PR62. Keep Draft pending

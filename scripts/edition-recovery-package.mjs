@@ -42,7 +42,7 @@ function plan(snapshot,target){
 function importSql(p,dryRun=false){
  // Guard all equivalent identifiers, including null-ISBN13 legacy rows. Replay
  // must also refuse duplicates that appeared after the initial preflight.
- const guard=`do $identities$ begin\n${reviews.editions.map(e=>` if (select count(*) from public.editions where regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')='${e.isbn}' or upper(regexp_replace(coalesce(isbn_10,''),'[-[:space:]]','','g'))='${isbn10(e.isbn)}')>1 then raise exception 'Duplicate ISBN identity ${e.isbn}';end if;`).join('\n')}\nend;$identities$;\n`;
+ const guard=`do $identities$ begin\n${reviews.editions.map(e=>` if exists(select 1 from public.editions where (regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')='${e.isbn}' or upper(regexp_replace(coalesce(isbn_10,''),'[-[:space:]]','','g'))='${isbn10(e.isbn)}') and isbn_13 is distinct from '${e.isbn}') then raise exception 'Equivalent identifier requires review ${e.isbn}';end if;\n if (select count(*) from public.editions where regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')='${e.isbn}' or upper(regexp_replace(coalesce(isbn_10,''),'[-[:space:]]','','g'))='${isbn10(e.isbn)}')>1 then raise exception 'Duplicate ISBN identity ${e.isbn}';end if;`).join('\n')}\nend;$identities$;\n`;
  return renderImport(p,{dryRun,canary:p.summary.target==='hlvujbrmfdlrfxdjwsmb'}).replace('create temporary table catalog_release_receipt',guard+'create temporary table catalog_release_receipt');
 }
 for(const [label,snapshot,target] of [['production',production,'qvplwejffhjvxaypmjut'],['test',test,'hlvujbrmfdlrfxdjwsmb']]){
