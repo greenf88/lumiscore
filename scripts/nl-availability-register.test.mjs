@@ -9,4 +9,9 @@ test('entire current public inventory has one traceable Work status; production,
  assert.equal(rows.find(r=>r.workId===1936).presentations.nl.eligible,false,'test correction is not production availability');assert.equal(rows.find(r=>r.workId===1936).proposal.batch,'Hebban12');
  assert.equal(rows.find(r=>r.workId===93).status,'NL_present_presentation_incomplete','stored edition is not proof of a working summary');
  assert.equal(summary.proposalOverlap.sharedWorkIds.length,0);assert.equal(summary.totals.orphanEditions,0);
+ assert(rows.every(r=>r.research.assessment?.outcome&&r.research.assessment.finalUnresolvableException===false));
+ assert.equal(Object.values(summary.researchCoverage.assessments).reduce((a,b)=>a+b,0),10223);
+ assert.equal(rows.find(r=>r.workId===1993).research.assessment.outcome,'identity_conflict');
+ assert.equal(rows.find(r=>r.workId===125).research.reconciledPriorProposal.newExpansion,0);
+ assert(rows.find(r=>r.workId===1).research.previousSourceAttempts.length>0);
 });

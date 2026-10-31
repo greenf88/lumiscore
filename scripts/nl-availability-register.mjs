@@ -4,6 +4,7 @@ import {selectStrictEdition,withStrictEdition} from '../lib/books/strict-edition
 import {normalizeEditionLanguage,getSuspiciousEditionReasons} from '../lib/books/edition-ranking.ts';
 import {applyStoredPresentation} from '../lib/books/stored-presentation.ts';
 import {normalizeBookDescription} from '../lib/books/description-text.ts';
+import {inheritWorkResearch,substantiveAssessment} from './nl-availability-research.mjs';
 const root=new URL('../catalog/nl-availability-20261031/',import.meta.url);
 const read=n=>JSON.parse(fs.readFileSync(new URL(n,root),'utf8'));
 const write=(n,v)=>fs.writeFileSync(new URL(n,root),typeof v==='string'?v:JSON.stringify(v,null,2)+'\n');
@@ -17,6 +18,7 @@ const byWork=new Map(),authors=new Map(current.authors.map(a=>[a.id,a]));
 for(const e of current.editions){const rows=byWork.get(e.work_id)??[];rows.push(e);byWork.set(e.work_id,rows);}
 const hebban=JSON.parse(fs.readFileSync(new URL('../catalog/hebban-priority-20261031/reviewed-changes.json',import.meta.url),'utf8'));
 const pr62=read('pr62-plan-reference.json');
+const followup=read('research-batch-002.json');
 const plannedNL=new Map();
 const verifiedLive=new Map(JSON.parse(fs.readFileSync(new URL('../catalog/hebban-priority-20261031/live-readonly-proof.json',import.meta.url),'utf8')).observations.map(r=>[r.workId,r]));
 for(const a of pr62.actions.filter(a=>a.relation==='editions'&&normalizeEditionLanguage(a.after.language??'')==='nld'))plannedNL.set(a.after.work_id,{batch:'PR62',isbn:a.after.isbn_13,source:a.origin});
@@ -51,10 +53,20 @@ for(const w of current.works){
  bump(totals.statuses,status);
  rows.push({key:'work:'+w.id,workId:w.id,title:w.title,authorId:w.author_id,author:authors.get(w.author_id)?.name??null,openLibraryWorkId:w.open_library_id,editionIds:eds.map(e=>e.id),storedDutchEdition:storedNL,presentations,status,technicalSelection:presentations.nl.eligible?'NL_eligible_visibility_not_globally_verified':presentations.en.eligible?'EN_only':'neither_NL_nor_EN',research:{inheritedIdentityMatches:!!compatibleResearch,previousKey:old?.key??null,previousSourceAttempts:compatibleResearch?old.sourceAttempts:[],previousSourcePoorStatus:compatibleResearch?old.sourcePoorResearch?.researchStatus??null:null,previousConflictDecision:compatibleResearch?old.additionalSourceAdjudication??old.authorAuthorityDecision??null:null},proposal:plannedNL.get(w.id)??null,editions:eds.map(e=>{const prior=previous.get('edition:'+e.id);return {...e,normalizedLanguage:normalizeEditionLanguage(e.language??'')||'unknown',identityResearch:prior?.title===e.title&&prior?.isbn13===e.isbn_13?{previousKey:prior.key,sourceAttempts:prior.sourceAttempts,sourceIdentity:prior.identity,format:prior.format,sourceDecision:prior.sourceDecision??null}:null};}),nextAction:presentations.nl.eligible?'Validate substantive edition/cover identity and actual presentation; complete stored Dutch text where evidence permits':plannedNL.has(w.id)?'Execute separately reviewed test batch; production remains unchanged':'Research exact Dutch edition independently; do not infer from title/author or description'});
 }
+for(const row of rows){
+ row.research=inheritWorkResearch(previous.get(row.key),current.works.find(w=>w.id===row.workId));
+ row.research.assessment=substantiveAssessment(row,followup.candidates.find(c=>c.workId===row.workId));
+ const reconciled=followup.priorProposalReconciliation.find(p=>p.workId===row.workId);
+ if(reconciled)row.research.reconciledPriorProposal={...reconciled,checkedAt:followup.checkedAt,file:'research-batch-002.json',newExpansion:0};
+}
 for(const c of current.collections){const ids=current.collectionLinks.filter(x=>x.collection_id===c.id).map(x=>x.work_id);collections.push({id:c.id,slug:c.slug,total:ids.length,locales:Object.fromEntries(['nl','en'].map(l=>[l,{visible:ids.filter(id=>rows.find(r=>r.workId===id)?.presentations[l].eligible).length,missing:ids.filter(id=>!rows.find(r=>r.workId===id)?.presentations[l].eligible)}]))});}
 totals.storedDutchWorks=totals.storedDutchWorkIds.length;delete totals.storedDutchWorkIds;
 totals.ENOnly=rows.filter(r=>r.technicalSelection==='EN_only').length;totals.neither=rows.filter(r=>r.technicalSelection==='neither_NL_nor_EN').length;
 totals.duplicateIsbn13=[...Map.groupBy(current.editions.filter(e=>e.isbn_13),e=>e.isbn_13).entries()].filter(([,e])=>e.length>1).map(([isbn,editions])=>({isbn,editionIds:editions.map(e=>e.id),workIds:[...new Set(editions.map(e=>e.work_id))]}));
 const lists=['top-lists.json','editorial-campaigns-20261028.json'].flatMap(file=>JSON.parse(fs.readFileSync(new URL('../lib/catalog/'+file,import.meta.url),'utf8')).lists).map(l=>({slug:l.slug,total:l.workIds.length,locales:Object.fromEntries(['nl','en'].map(locale=>[locale,{visible:l.workIds.filter(id=>rows.find(r=>String(r.workId)===id)?.presentations[locale].eligible).length,missing:l.workIds.filter(id=>!rows.find(r=>String(r.workId)===id)?.presentations[locale].eligible)}]))}));
 const summary={at:current.at,application:current.main,inventoryCoverage:{checked:rows.length,total:current.works.length,percent:100,scope:'complete public database inventory and current JS/SQL eligibility, NOT full substantive or visual review'},researchCoverage:{concludedCurrentNLPresentationCases:rows.filter(r=>r.status==='suitable_NL_present_correctly_visible').length,note:'Only known complete substantive/visible proof counted; other prior research retained per identity, not silently discarded or promoted to complete'},userCoverage:{selectorEligibleNL:totals.locales.nl.eligibleWorks,actualCurrentVisualProof:'only separately recorded browser cases'},historicalReference:{date:'2026-10-29',works:10210,eligibleNL:2649,currentEligibleDelta:totals.locales.nl.eligibleWorks-2649,expansionTarget:5000},totals,mismatches,collections,editorialLists:lists,proposalOverlap:{pr62WorkIds:[...new Set(pr62.actions.map(a=>a.after.work_id).filter(Number.isInteger))],hebbanWorkIds:hebban.priorities.map(p=>p.workId),sharedWorkIds:[...plannedNL].filter(([id,v])=>v.batch==='Hebban12'&&pr62.actions.some(a=>a.after.work_id===id)).map(([id])=>id)}};
-write('repair-register.jsonl',rows.map(r=>JSON.stringify(r)).join('\n')+'\n');write('inventory-summary.json',summary);console.log(JSON.stringify(summary,null,2));
+summary.researchCoverage.assessments=rows.reduce((o,r)=>(bump(o,r.research.assessment.outcome),o),{});
+summary.researchCoverage.worksWithRetainedSourceAttempts=rows.filter(r=>r.research.previousSourceAttempts.length).length;
+summary.researchCoverage.note='Every Work has an explicit per-aspect research state. Insufficient evidence means research remains, NOT proof of no Dutch edition or a finished exception. Technical eligibility, approved text, cover identity and actual browser evidence remain separate.';
+summary.researchCoverage.followupBatch=followup.counting;
+write('repair-register.jsonl',rows.map(r=>JSON.stringify(r)).join('\n')+'\n');write('inventory-summary.json',summary);console.log(JSON.stringify({counts:summary.totals.locales,research:summary.researchCoverage},null,2));
