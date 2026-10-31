@@ -11,12 +11,17 @@ for(const r of review.changes){
     const next:StrictEditionRow={id:r.testEditionId,work_id:r.testWorkId,title:r.title,language:'eng',isbn_10:r.isbn10,isbn_13:r.isbn13,open_library_edition_id:r.editionOlid,publisher:r.publisher};
     const book:Book={id:'work-'+r.testWorkId,workId:String(r.testWorkId),openLibraryWorkId:r.workOlid,title:r.workTitle,author:r.author,source:'supabase',cover:'orbit',score:8.2,ratingsCount:12,match:null};
     for(const language of ['en','nl'] as const){
+      if(language==='nl'){
+        assert.equal(selectStrictEdition([old,next],language,book.title),null);
+        assert.equal(withStrictEdition(book,next,language),null);
+        continue;
+      }
       const chosen=selectStrictEdition([old,next],language,book.title);
       assert.equal(chosen?.id,next.id);
       const presented=withStrictEdition(book,chosen,language)!;
       assert.equal(presented.workId,book.workId);assert.equal(presented.score,8.2);assert.equal(presented.ratingsCount,12);
       assert.equal(presented.title,r.title);assert.equal(presented.isbn13,r.isbn13);assert.equal(presented.openLibraryEditionId,r.editionOlid);
-      assert.equal(presented.englishEditionFallback,language==='nl');assert.deepEqual(presented.coverUrls,[r.coverUrl]);
+      assert.equal(presented.englishEditionFallback,false);assert.deepEqual(presented.coverUrls,[r.coverUrl]);
       assert.deepEqual(withStrictEdition(book,old,language)?.coverUrls,[],'new edition image must not leak onto old binding');
       for(const change of [{openLibraryWorkId:'OL999W'},{openLibraryEditionId:r.oldOlid},{isbn13:r.oldIsbn},{editionLanguage:null},{editionLanguage:'ger'},{title:r.oldTitle},{author:'Another author'}]){
         assert.equal(getReviewedCoverOverride({...presented,...change}),null);

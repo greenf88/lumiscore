@@ -6,16 +6,16 @@ import { splitBookDescriptionParagraphs } from '@/lib/books/description-text';
 import { publicDescriptionSource } from '@/lib/books/description-source';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 
-export function LumiScoreBookDescription({ description, englishEditionFallback=false, state='confirmed_missing' }: { description: VerifiedBookDescription | null; englishEditionFallback?:boolean; state?:BookDescriptionResolution['state'] | 'loading' }) {
+export function LumiScoreBookDescription({ description, state='confirmed_missing' }: { description: VerifiedBookDescription | null; englishEditionFallback?:boolean; state?:BookDescriptionResolution['state'] | 'loading' }) {
   const { locale, t } = useLumiScoreLocale();
   const source = description ? publicDescriptionSource(description) : null;
-  const paragraphs = description?.language === (locale==='nl' && englishEditionFallback?'en':locale) && source ? splitBookDescriptionParagraphs(description.text) : [];
+  const allowed=description?.language === locale;
+  const paragraphs = allowed && source && description ? splitBookDescriptionParagraphs(description.text) : [];
   const isLong = paragraphs.length > 2 && (description!.text.length > 500 || paragraphs.length > 4);
   const visible = paragraphs.slice(0, isLong ? 2 : paragraphs.length);
   return <section className="book-description" aria-labelledby="book-description-heading">
     <h2 id="book-description-heading">{t('description.about')}</h2>
     {paragraphs.length ? <>
-      {locale==='nl' && englishEditionFallback && <p className="edition-language-label">Engelse beschrijving bij de Engelse editie</p>}
       {visible.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
       {isLong && <details><summary className="description-toggle">{t('description.readMore')}</summary>
         {paragraphs.slice(2).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
@@ -26,7 +26,7 @@ export function LumiScoreBookDescription({ description, englishEditionFallback=f
       : state==='temporary_failure'
         ? locale==='nl'?'De beschrijving kon tijdelijk niet worden geladen. Probeer later opnieuw.':'The description could not load right now. Please try again later.'
         : locale==='nl'
-          ? englishEditionFallback?'Er is nog geen geverifieerde Engelse beschrijving bij deze editie beschikbaar.':'Er is nog geen geverifieerde Nederlandse beschrijving beschikbaar.'
+          ? 'Er is nog geen geverifieerde Nederlandse beschrijving beschikbaar.'
           : 'A verified English description is not available yet.'}</p>}
   </section>;
 }

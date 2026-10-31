@@ -6,6 +6,7 @@ import { normalizeVerifiedIsbn13 } from './google-books-covers.ts';
 import type { Locale } from '../i18n/config.ts';
 import { readServerEnvironment } from '../server-environment.ts';
 import { getReviewedDescription } from './reviewed-descriptions.ts';
+import { sourceDescriptionLocale } from './description-language.ts';
 
 export type DescriptionResolutionState =
   | 'resolved'
@@ -41,10 +42,13 @@ type OpenLibraryWorkResponse = {
 
 type OpenLibraryEditionResponse = OpenLibraryWorkResponse & {
   works?: Array<{ key?: string }>;
+  title?:string; isbn_13?:string[];
 };
 
 type GoogleBooksVolume = {
   volumeInfo?: {
+    title?: string;
+    authors?: string[];
     description?: unknown;
     industryIdentifiers?: Array<{ type?: string; identifier?: string }>;
     language?: unknown;
@@ -58,7 +62,9 @@ type GoogleBooksResponse = {
 const OPEN_LIBRARY_BASE_URL = 'https://openlibrary.org';
 const GOOGLE_BOOKS_URL = 'https://www.googleapis.com/books/v1/volumes';
 const SUCCESS_TTL_MS = 30 * 24 * 60 * 60 * 1_000;
-const CONFIRMED_MISSING_TTL_MS = 12 * 60 * 60 * 1_000;
+// Unknown/unsuitable source text is not durable evidence of missing content.
+// Align negative process caching with the public five-minute correction window.
+const CONFIRMED_MISSING_TTL_MS = 5 * 60 * 1_000;
 const TEMPORARY_FAILURE_TTL_MS = 2 * 60 * 1_000;
 const MAX_CACHE_ENTRIES = 2_000;
 const RETRY_DELAYS_MS = [100, 250] as const;
@@ -195,22 +201,26 @@ function resolveOpenLibraryEditionDescription(
   workId: string | null,
   locale: Locale,
   fetchImplementation: typeof fetch,
+  identity?:{title?:string|null;isbn?:string|null},
 ): Promise<BookDescriptionResolution> {
-  return cachedResolution(`edition_description_v2:${editionId}:${workId}:${locale}`, async () => {
+  return cachedResolution(`edition_description_v4:${editionId}:${workId}:${locale}:${identity?.isbn??''}:${identity?.title??''}`, async () => {
     const url = new URL(`/books/${editionId}.json`, OPEN_LIBRARY_BASE_URL);
     const response = await fetchJsonWithRetry<OpenLibraryEditionResponse>(url, fetchImplementation);
     if (response.state !== 'ok') return { state: response.state, description: null };
 
     const parentWorkIds = (response.data.works ?? []).flatMap(({ key }) =>
       normalizeOpenLibraryId(key, 'work') ?? []);
-    if (workId && !parentWorkIds.includes(workId)) {
+    if (workId && (parentWorkIds.length!==1 || parentWorkIds[0]!==workId)) {
       return { state: 'confirmed_missing', description: null };
     }
     if (response.data.languages?.length!==1 || !openLibraryLanguages(response.data.languages).includes(locale)) {
       return { state: 'confirmed_missing', description: null };
     }
+    const title=(s:string)=>s.normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('en');
+    if(identity?.title&&(!response.data.title||title(identity.title)!==title(response.data.title)))return {state:'confirmed_missing',description:null};
+    if(identity?.isbn&&!response.data.isbn_13?.some(i=>normalizeVerifiedIsbn13(i)===identity.isbn))return {state:'confirmed_missing',description:null};
     const text = normalizeBookDescription(response.data.description);
-    return text
+    return text && sourceDescriptionLocale(text) === locale
       ? resolvedDescription(text, 'open_library', editionId, locale)
       : { state: 'confirmed_missing', description: null };
   });
@@ -220,8 +230,9 @@ function resolveGoogleBooksDescription(
   isbn13: string,
   locale: Locale,
   fetchImplementation: typeof fetch,
+  identity:{title?:string|null;author?:string|null}={},
 ): Promise<BookDescriptionResolution> {
-  return cachedResolution(`google_books:${isbn13}:${locale}`, async () => {
+  return cachedResolution(`google_books_v3:${isbn13}:${locale}:${identity.title??''}:${identity.author??''}`, async () => {
     const url = new URL(GOOGLE_BOOKS_URL);
     url.searchParams.set('q', `isbn:${isbn13}`);
     url.searchParams.set('maxResults', '5');
@@ -231,8 +242,11 @@ function resolveGoogleBooksDescription(
 
     const response = await fetchJsonWithRetry<GoogleBooksResponse>(url, fetchImplementation);
     if (response.state !== 'ok') return { state: response.state, description: null };
+    const normalized=(s:string)=>s.normalize('NFKC').toLocaleLowerCase('en').replace(/[^\p{L}\p{N}]/gu,'');
     const exactVolume = (response.data.items ?? []).find((volume) =>
       localeFromLanguage(volume.volumeInfo?.language) === locale &&
+      (!identity.title || Boolean(volume.volumeInfo?.title && normalized(volume.volumeInfo.title)===normalized(identity.title))) &&
+      (!identity.author || Boolean(volume.volumeInfo?.authors?.some(a=>normalized(a)===normalized(identity.author!)))) &&
       volume.volumeInfo?.industryIdentifiers?.some(
         ({ type, identifier }) =>
           type === 'ISBN_13' && normalizeVerifiedIsbn13(identifier) === isbn13,
@@ -240,7 +254,7 @@ function resolveGoogleBooksDescription(
     );
     if (!exactVolume) return { state: 'confirmed_missing', description: null };
     const text = normalizeBookDescription(exactVolume.volumeInfo?.description);
-    return text
+    return text && sourceDescriptionLocale(text) === locale
       ? resolvedDescription(text, 'google_books', isbn13, locale)
       : { state: 'confirmed_missing', description: null };
   });
@@ -251,9 +265,10 @@ export async function resolveBookDescription(
   fetchImplementation: typeof fetch = fetch,
 ): Promise<BookDescriptionResolution> {
   const locale = lookup.locale ?? 'en';
-  // An allowed English fallback edition in NL retains an explicitly English
-  // synopsis. Reviewed copy uses the same language rule as provider copy.
-  const descriptionLanguage:Locale = locale==='nl' && localeFromLanguage(lookup.editionLanguage)==='en' ? 'en' : locale;
+  // Interface, edition and synopsis language are independent facts. Under the
+  // current strict policy only an exact-locale synopsis may be displayed.
+  const descriptionLanguage:Locale = locale;
+  if(lookup.editionLanguage!=null&&localeFromLanguage(lookup.editionLanguage)!==locale)return {state:'confirmed_missing',description:null};
   const reviewed = getReviewedDescription(lookup, descriptionLanguage);
   if (reviewed) return { state: 'resolved', description: reviewed };
   const workId = normalizeOpenLibraryId(lookup.openLibraryWorkId, 'work');
@@ -286,6 +301,7 @@ export async function resolveBookDescription(
         workId,
         descriptionLanguage,
         fetchImplementation,
+        {title:lookup.editionTitle,isbn:candidate.isbn13},
       );
       if (openLibraryEdition.description) return openLibraryEdition;
       states.push(openLibraryEdition.state);
@@ -295,6 +311,7 @@ export async function resolveBookDescription(
         candidate.isbn13,
         descriptionLanguage,
         fetchImplementation,
+        {title:lookup.editionTitle,author:lookup.author},
       );
       if (googleBooks.description) return googleBooks;
       states.push(googleBooks.state);

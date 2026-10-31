@@ -1,0 +1,17 @@
+{
+  "project":"hlvujbrmfdlrfxdjwsmb",
+  "productionWrites":0,
+  "engine":"scripts/catalog-release-sql.mjs",
+  "firstImport":"COMMIT; two own explicitly synthetic public catalogue rows",
+  "freshReadbackAtUtc":"2026-10-31 12:44:30.889591",
+  "committedRowsReadBack":[{"relation":"works","id":959100031},{"relation":"editions","id":959200031}],
+  "replayChanges":0,
+  "laterEditAttempt":{"status":"expired","message":"This confirmation expired after 2 minutes. Call execute_sql again to get a new confirmation.","functionalProof":false},
+  "laterDependencyAttempt":{"status":"refused_by_database_guard","error":"Failed to run sql query: ERROR: P0001: Later dependency in public.editions; recovery refused","ownDependencyEdition":959200032,"subsequentlyCasRemoved":true},
+  "finalUndoAttempt":{"status":"declined","message":"SQL execution was declined.","committedUndoProved":false},
+  "lastReadbackAtUtc":"2026-10-31 12:59:28.378031",
+  "ownRowsStillPresent":[959100031,959200031],
+  "testCounts":{"works":798,"editions":1053,"priorWorks":797,"priorEditions":1052},
+  "noIdenticalRetryOrAlternativeRouteAfterDecline":true,
+  "limitation":"No assertion that remote committed recovery succeeded. Earlier full dry-run plus ROLLBACK and new full local committed recovery remain distinct proof. No account/rating/progress SQL used."
+}

@@ -1,0 +1,171 @@
+LUMISCORE — BOUNDED CATALOGUE RELEASE, 31 OCTOBER 2026
+====================================================
+Draft review package. NO production import, merge or publication authorized.
+PR51, the other pilot worktree and the1900 open research dossiers are excluded.
+
+IDENTITY AND SCOPE
+Fresh remote main and active Ready production:246c379db1c674ac14e2959893f874c00b9330b2,
+deployment dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9. No newer main changes found.
+Reviewed runtime copied byte-for-byte from application10f8cb0801aed2ba1bf3034685e9e636447ae5cd;
+source/evidence checkpoint1d16d9c5a9d556b11cbed844d192ac319280fae2 retained locally.
+Separate release branch review/catalog-integrity-release-20261031 starts on current
+main, not another open PR. Only approved runtime, focused regressions and this
+consolidated release proposal are included. No CSS/font/layout/navigation change.
+The original broad research branch remains available, without a duplicate PR.
+
+CODE
+One strict, normalized edition-language choice across catalog/search/collections/
+recommendations/detail; NL requires confirmed NL, EN requires confirmed EN.
+Unknown/multilingual records are not guessed from title, description or author.
+Selection/count/page use the same versioned SQL before pagination. Stable tie-ID,
+bounded page IDs; no new full-catalogue request. Scoring and ranking unchanged.
+Work/locale reviewed summaries and exact-edition format/cover bindings use two
+indexed public reads for visible items; locale and edition IDs enter the short
+cache key. No personal profile, rating, match or Auth client enters that cache.
+Failed reads are evicted, not cached as missing content. Stored approved text
+avoids an external description fetch on every book opening.
+Language/source validation rejects bibliography-only/error text. A single bounded
+Google Books volume-ID source URL is accepted; arbitrary queries remain rejected.
+Existing cover containers use bounded load/fallback without layout redesign.
+Importer respects reviewed bindings; weaker/missing metadata cannot overwrite them.
+
+EXACT DATA DELTA, NOT TEST-CATALOGUE GROWTH
+Read-only production preflight:31Oct12:33:02.436169UTC;10210Works/10304editions.
+Production has neither new presentation table. Relevant old edition rows match
+the reviewed51-row correction snapshots exactly. Full public expected rows are
+in production-readback.json; no accounts or individual ratings were retrieved.
+
+687 guarded actions, all public catalogue only:
+  authors:5 inserts
+  Works:13 inserts;1 existing year correction (2031:1971->2016)
+  editions:67 inserts;56 existing-row updates (only reviewed changed fields)
+  summaries:335 inserts, NL216/EN119,313 unique Work identities
+  edition metadata:210 inserts,95 exact-edition verified-cover bindings
+Existing reviews/progress remain attached to their original Works; no merge,
+reparent of user records, synthetic popularity, trait or score writes.
+Work1204/Knorrende beesten is held: reviewed internal text is NOT released while
+the edition language remains unconfirmed. No blocked pilot change is imported.
+
+335 is NOT335 additional Dutch books. The merge contains259 approved integrity
+texts plus76 nonduplicated pilot texts; the two equal NL Hobbit/Dune texts occur
+once. The TEST335/313 totals and production335/313 happen to match, but the plan
+rebases checked identities, not synthetic test IDs. No test IDs enter production.
+Original pilot100:78 approved/22 held;65 existing Work identities+13 new.
+The fixed Dutch reference remains29Oct20:46:39.793509UTC:2649eligible Works.
+110 newly Dutch-available Work identities,97 existing+13 new, overlap2 between
+pilot and integrity. One incorrectly Dutch DoingResearch Work5227 becomes English.
+NET Dutch availability:2649->2758 (+109), NOT+110 net. Format-confirmed availability
+includes paperback/hardcover/ebook; it is not a claim that all are printed books.
+The plan lists every row, source/evidence, old/new values and dynamic parent ref.
+
+Three added English printeditions are explicit catalogue dependencies:
+Hobbit6/9780261103344/OL10236414M;
+Frankenstein14/9780141439471/OL3701481M;
+Earthsea22/9780553383041/OL7826592M.
+The last two reuse the already reviewed PR58 DATA proposal, not PR58 code/merge.
+Do not execute that older two-edition proposal and this consolidated import blindly
+together. If PR58 data is installed first, refresh/review this plan before execution.
+Original bilingual/audio/Turtleback records remain for separate review.
+
+DATABASE INSTALLATION PROPOSAL — NOT EXECUTED ON PRODUCTION
+1 supabase/migrations/20261030063949_nl_pilot_reviewed_presentation.sql
+  Two public reviewed tables; exact Work/author/edition FKs, approved-only SELECT
+  RLS for anon/authenticated. Explicit REVOKE/GRANT; no client write privileges.
+2 supabase/migrations/20261030120602_catalog_integrity_presentation_guards.sql
+  Nonblank usable-text constraint, explicit unknown format, identity/author locks.
+  Invoker trigger function, empty search_path; owner-only direct EXECUTE.
+  service_role gets SELECT for server import review locks, not table writes.
+3 supabase/operations/catalog-integrity-release-20261031.sql
+  New catalog_browse_page_v3(text,...), catalog_search_selection_v2(text,...),
+  exact signatures/bodies in file; STABLE INVOKER, empty search_path, public data.
+  Explicit owner/anon/authenticated EXECUTE only; default/custom grants revoked.
+  Old v2 browse/v1 search remain unchanged for compatibility during transition.
+  No private table exposure or account/Auth/RLS-policy weakening.
+Production default grants were read31Oct13:03UTC: only standard postgres/anon/
+authenticated/service_role; the install explicitly removes unintended defaults.
+TEST has the two tables, RLS and guards already. Do not reinstall blindly.
+Use install-preconditions.sql and fresh function/table/grant snapshots first.
+
+IMPORT AND RECOVERY
+production-dry-run.sql:ROLLBACK, but sequence values can advance; never reset them.
+production-import.sql:COMMIT; dynamic new IDs, exact unique identities, complete-row
+CAS for corrections, reviewed parent bindings and author-corpus drift checks.
+The only permitted change count is0(exact replay)or687(full first execution).
+Partial installations or unexpected values stop atomically for explicit review.
+Save FIRST nonempty complete receipt securely with the execution record.
+production-rollback.sql requires that receipt; reverse child-first operations,
+full-row comparison, parent locks and every incoming FK including CASCADE.
+It stops on later legitimate modifications or dependencies; it never erases those.
+Reused rows are never recorded as inserted. Repeated successful recovery is safe.
+Original/older partial proposal files are SUPERSEDED by this combined plan; never
+sum or concatenate them. This PR intentionally omits the old executable imports.
+
+WHAT RECOVERY EVIDENCE DOES / DOES NOT PROVE
+Earlier full TEST257-text batch: actual transaction undid own rows and ROLLBACK
+restored all public rows/counts/checksums. That is NOT a committed-undo proof.
+New local PGlite: fresh production public rows,687 committed actions, replay0,
+committed undo and repeated undo; later-edit and FK refusal; synthetic ratings/
+progress preserved. Same SQL renderer, not an alternative cleanup implementation.
+New hosted canary:2 explicitly synthetic own TEST rows COMMITTED and read back,
+replay0; later edition dependency actually refused by the same recovery engine.
+Final committed undo was declined by connector: `SQL execution was declined`.
+An earlier guard attempt expired after2minutes. No identical retry or UI bypass.
+Canary Work959100031/Edition959200031 remain intact on TEST pending the approved
+recovery action. Own later-dependency Edition959200032 was CAS-removed; no other
+test row was targeted. Do NOT call hosted committed recovery complete yet.
+
+RITA
+Exact Dutch paperback9789023458753 reconfirmed on official BureauISBN page.
+Only offered variants:detail1563x2407/879166bytes and card162x250/18733bytes.
+No verified sharper medium variant found; do not invent resize URLs or borrow a
+different ISBN's cover. Keep sharp detail and small card. No new host/storage.
+Direct network3visits each:detail complete64–374ms,median205ms;
+card33–47ms,median33ms. DetailTTFB25–277ms,median102ms.
+This is this desktop network, NOT mobile throttling/physical phone/LCP/Preview.
+Actual detail image loaded, source/title/ISBN correct, no horizontal overflow.
+The >300kB detail remains a documented nonblocking optimisation opportunity.
+
+REMAINING RESEARCH IS NOT A RELEASE DEPENDENCY
+Frozen1992source-poor cohort:92approved,1900open; no unsupported text generated.
+22blocked pilot dossiers remain, with source attempts/reasons in original register.
+Saved identity references establish one overlap with open Work1935;7pilot identities
+remain unaligned. Do not claim1900+22 independent books or zero overlap.
+No new identity merge/summary approval follows from a title/name reference alone.
+The original branch retains repair-register.jsonl and release-backlog-reconciliation.
+Known unverified covers/formats outside this bounded plan remain open, not repaired.
+
+ACCEPTANCE AND CURRENT LIMITS
+Runtime TypeScript/lint/build/secretscan and16 synthetic profile SSR checks passed.
+The original broad-suite first run had two stale test expectations and one local
+load-related120s timeout; copied existing reviewed updated expectations and the
+isolated10 affected tests pass without raised timeout. Final full CI/recheck pending.
+Synthetic SSR is NOT an authenticated hosted browser session.
+Actual permitted test login is requested; no account/credentials created or read.
+Complete hosted acceptance and exact application SHA are recorded separately.
+No physical phone or production speed improvement is claimed.
+
+FUTURE SEPARATELY APPROVED EXECUTION ORDER
+1 Recheck exact PR/app/main/ReadySHA, hashes, target and expected public rows.
+  Save original public rows, function definitions/grants, prior deployment and receipt
+  destination. Stop on drift; update/retest proposal, never overwrite new work.
+2 Validate/install compatible storage then guards then additive locale functions.
+  Stop on unexpected existing definitions/rights or permission errors. No app release.
+3 Run the consolidated dry-run. Expect687or complete replay0. Preserve original
+  state; do not use dry-run generated IDs as an import/recovery receipt.
+4 After separate exact data approval, COMMIT import; save first receipt, read back
+  identities/counts, approved RLS/public access, no cross-language/duplicate bindings.
+  Unexpected delta:stop; receipt-bound undo only if all current rows still match.
+5 Merge only approved PR commit; Vercel builds using EXISTING PRODUCTION config.
+  NEVER promote a TEST-configured Preview. Confirm active productionSHA/alias.
+6 Existing short public caches expire; refresh only affected keys if demonstrably
+  stale. Never cache personal data or globally flush private state.
+7 Live NL/EN list/search/Discover/recommendations/detail, pagination/counts, loaded
+  covers, source/text and score parity, back/reload/themes/viewports; measure live
+  separately from TEST. No production test rating or account.
+Application recovery:revert only this package on current main/prior legitimate
+deployment. Additive tables/functions remain compatible; retain old RPCs.
+Data recovery:receipt-bound child-first script; stop on any later dependency/edit.
+Do not drop/recreate shared schema or remove original Works/ratings/progress.
+
+ADVICE: Draft is a concrete reviewable release candidate, NOT yet release-ready
+while authenticated hosted checks and committed hosted recovery remain unproved.

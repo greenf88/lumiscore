@@ -15,7 +15,7 @@ export type PublicSearchSelection = {
 /** Page/size are deliberately absent: all pages share ONE eligible selection.
  * Locale, filters and database order must never cross cache boundaries. */
 export function searchSelectionKey(state: EditorialQuery, locale: Locale) {
-  return JSON.stringify([locale, state.query, [...state.categories].sort(), [...state.languages].sort(),
+  return JSON.stringify(['strict-edition-locale-v2',locale, state.query, [...state.categories].sort(), [...state.languages].sort(),
     state.author, state.selection, state.sort]);
 }
 

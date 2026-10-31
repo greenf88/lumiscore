@@ -270,7 +270,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           )}
         </p>
         {unavailableEditionCount > 0 && <p className="collection-edition-availability">{locale==='nl'
-          ? `${books.length} van ${progressBooks.length} gekoppelde boeken beschikbaar in deze taal. Voor ${unavailableEditionCount} boeken ontbreekt een passende Nederlandse of Engelse editie. Je leesvoortgang blijft behouden.`
+          ? `${books.length} van ${progressBooks.length} gekoppelde boeken beschikbaar in deze taal. Voor ${unavailableEditionCount} boeken ontbreekt een passende Nederlandse editie. Je leesvoortgang blijft behouden.`
           : `${books.length} of ${progressBooks.length} linked books available in this language. ${unavailableEditionCount} books have no suitable English edition. Your reading progress is retained.`}</p>}
         {collection.description && <p>{collection.description}</p>}
         {authenticated ? (

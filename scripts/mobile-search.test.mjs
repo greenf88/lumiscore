@@ -14,14 +14,14 @@ test('homepage general search stays results; explicit book choice stays a book; 
 test('search loads matching identities once, paginates before rating/cover enrichment; errors stay errors',async()=>{
   const src=await read('lib/supabase/search-catalog.ts');
   assert.match(src,/const selection = await readSelection[\s\S]*?const window = searchWindow\(selection.books/);
-  assert.match(src,/return \{ books: candidates, aliases: aliasesByWorkId/);
+  assert.match(src,/return \{ \.\.\.selected, categories, selectedAuthor/);
   assert.ok(src.indexOf('const window = searchWindow')<src.indexOf('const scoreRead ='));
   assert.match(src,/loadPublicRatingSummariesBatched\(supabase, window.books/);
   assert.match(src,/deferEditionCoverEvidence\(applyRatingSummaries\(books/);
   assert.match(src,/validateProjectedPage\(keys, mapCatalogWorks/);
-  assert.match(src,/projection.error.code !== 'PGRST202'/);
+  assert.match(src,/if \(projection.error\) throw projection.error/);
   assert.doesNotMatch(src,/searchCatalog\(|\.from\('ratings'\)|\.from\('user_/);
   assert.match(src,/if \(error\) throw error/);
   assert.match(src,/AbortSignal.timeout\(5000\)/);
-  assert.match(src,/readSearchIdentityBatches<Book>/);
+  assert.doesNotMatch(src,/loadMatchingIdentities|readSearchIdentityBatches/);
 });

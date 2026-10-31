@@ -7,12 +7,13 @@ import { localizedHref } from '@/lib/i18n/paths';
 import Image from 'next/image';
 import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
+import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
   getVerifiedCoverAttempts,
-  isUsableCoverImageDimensions,
   type CoverPresentation,
 } from '@/lib/books/covers';
+import { watchCoverImage } from '@/lib/books/cover-image-watch';
 import {
   getBookCoverIdentity,
   getInitialBookCoverUrls,
@@ -130,7 +131,9 @@ function BookCoverForIdentity({
   );
   const [coverIndex, setCoverIndex] = useState(0);
   const [variantIndex, setVariantIndex] = useState(0);
+  const [cardVariantFailed,setCardVariantFailed]=useState(false);
   const resolvedRequested = useRef(false);
+  const coverImage = useRef<HTMLImageElement>(null);
   const coverUrl = coverUrls[coverIndex] ?? null;
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
   const imageSource = imageAttempts[variantIndex] ?? null;
@@ -155,7 +158,8 @@ function BookCoverForIdentity({
     if (!coverUrl) requestResolvedCovers();
   }, [coverUrl, requestResolvedCovers]);
 
-  const handleCoverFailure = () => {
+  const handleCoverFailure = useCallback((failedUrl?:string) => {
+    if(!cardVariantFailed&&book.cardCoverUrl&&failedUrl===book.cardCoverUrl){setCardVariantFailed(true);return;}
     if (variantIndex + 1 < imageAttempts.length) {
       setVariantIndex(variantIndex + 1);
     } else {
@@ -163,7 +167,13 @@ function BookCoverForIdentity({
       setCoverIndex(coverIndex + 1);
       requestResolvedCovers();
     }
-  };
+  },[cardVariantFailed,book.cardCoverUrl,variantIndex,imageAttempts.length,coverIndex,requestResolvedCovers]);
+
+  useEffect(() => {
+    const image = coverImage.current;
+    if (!image || !displayedCoverUrl) return;
+    return watchCoverImage(image,handleCoverFailure,presentation==='detail');
+  },[displayedCoverUrl,handleCoverFailure,presentation]);
 
   return (
     <div
@@ -178,8 +188,11 @@ function BookCoverForIdentity({
       <span className="cover-author" aria-hidden="true">{book.author}</span>
       {displayedCoverUrl && (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
+        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&(presentation==='card'||presentation==='compact')&&
+          <source media="(max-width: 430px)" srcSet={book.cardCoverUrl}/>}
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
+          ref={coverImage}
           key={displayedCoverUrl}
           className="book-cover-image"
           src={displayedCoverUrl}
@@ -188,18 +201,6 @@ function BookCoverForIdentity({
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading={presentation==='detail'?'eager':'lazy'}
           unoptimized
-          onLoad={(event) => {
-            if (
-              !isUsableCoverImageDimensions(
-                event.currentTarget.naturalWidth,
-                event.currentTarget.naturalHeight,
-              )
-            ) {
-              handleCoverFailure();
-              return;
-            }
-          }}
-          onError={handleCoverFailure}
         />
         </picture>
       )}
@@ -846,7 +847,7 @@ export function LumiScoreHome({
       {deferred?<Suspense fallback={null}><DeferredSeries data={deferred.series}/></Suspense>:seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}
-      {deferred?<Suspense fallback={<FeaturedPending/>}><DeferredFeatured data={deferred.catalog} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} authenticated={authState.authenticated}/></Suspense>:<FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>!b.strictEditionLanguage||b.strictEditionLanguage===locale)} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />}
+      {deferred?<Suspense fallback={<FeaturedPending/>}><DeferredFeatured data={deferred.catalog} query={query} searchResults={searchResults.filter(b=>isBookPresentationAllowed(b,locale))} searchStatus={searchStatus} authenticated={authState.authenticated}/></Suspense>:<FeaturedBooks books={catalogBooks} query={query} searchResults={searchResults.filter(b=>isBookPresentationAllowed(b,locale))} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalogUnavailable} />}
       <DutchDiscoveryBooks discovery={dutchDiscovery} wanted={wanted} statuses={statuses} onToggle={toggleWanted} />
       <ValueStrip />
       <p className="home-comparison-note"><LocaleLink href="/imdb-for-books">{locale === 'nl' ? 'Een IMDb voor boeken? Ontdek wat LumiScore biedt.' : 'Looking for an IMDb for books? See what LumiScore offers.'}</LocaleLink></p>

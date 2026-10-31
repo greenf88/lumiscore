@@ -10,12 +10,18 @@ export type StrictEditionRow = {
 };
 export type EditionBoundCover = { state: string; source_key: string; cover_url: string | null; editionVerified?:boolean };
 export function permittedEditionLanguage(edition: Pick<StrictEditionRow, 'language'>, locale: Locale): boolean {
-  return editionHasLanguage(edition,locale) || (locale==='nl' && editionHasLanguage(edition,'en'));
+  return editionHasLanguage(edition,locale);
 }
 export function editionHasLanguage(edition: Pick<StrictEditionRow, 'language'>, language: Locale): boolean {
   return Boolean(edition.language && normalizeEditionLanguage(edition.language.trim()) === (language === 'nl' ? 'nld' : 'eng'));
 }
-/** NL first, then explicit EN; EN only EN. No title/script/ISBN-prefix inference. */
+/** Reject stale browser responses produced under the superseded NL fallback
+ * policy. A UI-locale marker alone is not edition-language evidence. */
+export function isBookPresentationAllowed(book:Pick<Book,'editionAvailable'|'strictEditionLanguage'|'editionLanguage'>,locale:Locale):boolean {
+  return book.editionAvailable===true && book.strictEditionLanguage===locale &&
+    permittedEditionLanguage({language:book.editionLanguage??null},locale);
+}
+/** Both catalogues are edition-language strict. Unknown/multilingual stays out. */
 export function selectStrictEdition(editions: readonly StrictEditionRow[], language: Locale, title: string): StrictEditionRow | null {
   const possible = editions.filter(e => permittedEditionLanguage(e, language) && e.id != null && String(e.id).trim() && e.title?.trim() && !isSuspiciousRepresentativeEdition(e));
   const preferred=possible.filter(e=>editionHasLanguage(e,language));
@@ -39,11 +45,12 @@ export function withStrictEdition(book: Book, edition: StrictEditionRow | null, 
   // An ISBN endpoint returning an image is NOT edition/image evidence. Existing
   // Work-keyed caches are not evidence either. Only reviewed or edition-bound assets.
   const coverUrls = uniqueCoverUrls([reviewed?.coverUrl, ...verified]);
-  return { ...book, title: edition.title.trim(), editionTitle: edition.title.trim(),
-    editionId: String(edition.id), editionLanguage: edition.language, editionPublisher: edition.publisher ?? null,
+  return { ...book, storedDescription:undefined,cardCoverUrl:undefined,editionFormat:undefined,
+    title: edition.title.trim(), editionTitle: edition.title.trim(),
+    editionId: String(edition.id), editionLanguage: normalizeEditionLanguage(edition.language??''), editionPublisher: edition.publisher ?? null,
     openLibraryEditionId: editionOlid, isbn10: isbn10 ?? null, isbn13,
     coverUrls, backCover:null, descriptionCandidates:[], strictEditionLanguage: language,
-    editionAvailable:true, englishEditionFallback:language==='nl' && editionHasLanguage(edition,'en') };
+    editionAvailable:true, englishEditionFallback:false };
 }
 
 /** Direct links remain valid even when no permitted edition can be presented. */
@@ -51,5 +58,6 @@ export function unavailableEdition(book:Book, locale:Locale):Book {
   return {...book,
     editionAvailable:false,englishEditionFallback:false,strictEditionLanguage:locale,
     editionId:null,editionTitle:null,editionLanguage:null,editionPublisher:null,
-    openLibraryEditionId:null,isbn10:null,isbn13:null,coverUrls:[],backCover:null,descriptionCandidates:[]};
+    openLibraryEditionId:null,isbn10:null,isbn13:null,coverUrls:[],backCover:null,descriptionCandidates:[],
+    storedDescription:undefined,cardCoverUrl:undefined,editionFormat:undefined};
 }
