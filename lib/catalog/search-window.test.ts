@@ -44,7 +44,7 @@ test('strict language/identity eligibility precedes count and paging; neutral co
     const rows=[1,2,3,4].flatMap(id=>{const b=book(id),e=selectStrictEdition(editions.filter(e=>e.work_id===id),locale,b.title);
       const result=withStrictEdition(b,e,locale);return result?[result]:[]});
     const result=searchWindow(rows,searchQuery({q:'Dune'}),new Map([['1',['Dune']]]));
-    assert.equal(result.total,2);assert.deepEqual(result.books.map(b=>b.workId),['1','2']);
+    assert.equal(result.total,locale==='nl'?1:2);assert.deepEqual(result.books.map(b=>b.workId),locale==='nl'?['1']:['1','2']);
     assert.equal(result.books[0].title,locale==='nl'?'Duin':'Dune');assert.deepEqual(result.books[0].coverUrls,[]);
   }
 });

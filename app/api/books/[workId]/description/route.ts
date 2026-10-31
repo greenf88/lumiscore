@@ -1,6 +1,7 @@
 import { isCatalogWorkId } from '@/lib/books/book-detail';
-import { resolveBookDescription } from '@/lib/books/description-resolution';
+import { loadPublicBookDescriptionState } from '@/lib/books/public-description';
 import { normalizeVerifiedBookDescription } from '@/lib/books/description-text';
+import { publicDescriptionCacheControl } from '@/lib/books/description-cache';
 import { isLocale } from '@/lib/i18n/config';
 import { loadCatalogBook } from '@/lib/supabase/books';
 
@@ -19,7 +20,7 @@ export async function GET(request: Request, { params }: DescriptionRouteProps) {
     );
   }
 
-  const book = await loadCatalogBook(workId, locale);
+  const book = await loadCatalogBook(workId, locale, false, {skipExternalCovers:true});
   if (!book) {
     return Response.json(
       { description: null, state: 'confirmed_missing' },
@@ -27,15 +28,7 @@ export async function GET(request: Request, { params }: DescriptionRouteProps) {
     );
   }
 
-  const resolution = await resolveBookDescription({
-    workId: book.workId, editionId: book.editionId, author: book.author, editionTitle: book.editionTitle,
-    openLibraryWorkId: book.openLibraryWorkId,
-    openLibraryEditionId: book.openLibraryEditionId,
-    isbn13: book.isbn13,
-    editionLanguage: book.editionLanguage,
-    editionCandidates: book.descriptionCandidates,
-    locale,
-  });
+  const resolution = await loadPublicBookDescriptionState(book,locale);
   const description = normalizeVerifiedBookDescription(
     resolution.description,
   );
@@ -47,11 +40,7 @@ export async function GET(request: Request, { params }: DescriptionRouteProps) {
         ? ('temporary_failure' as const)
         : ('confirmed_missing' as const),
   };
-  const cacheControl = description
-    ? 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
-    : resolution.state === 'temporary_failure'
-      ? 'public, max-age=0, s-maxage=60'
-      : 'public, max-age=300, s-maxage=3600';
+  const cacheControl = publicDescriptionCacheControl(normalizedResolution.state);
 
   return Response.json(normalizedResolution, {
     headers: { 'Cache-Control': cacheControl },

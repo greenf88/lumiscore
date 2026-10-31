@@ -1,4 +1,5 @@
 import type { Book } from '../../app/data/books.ts';
+import { normalizeEditionLanguage } from './edition-ranking.ts';
 
 export type BookLanguageClassification = 'dutch' | 'non_dutch' | 'unknown';
 export type BookLanguageSource = 'representative_edition' | 'reviewed_catalog_seed' | 'unknown';
@@ -39,10 +40,8 @@ const KNOWN_NON_DUTCH_LANGUAGE_CODES = new Set([
   'la', 'lat', 'latin',
 ]);
 
-// These ISBNs already carry reviewed `language: nld` metadata in
-// scripts/lumiscore-native-seeds-nl.ts. Keeping the fallback ISBN-based avoids
-// treating every future LumiScore-native work as Dutch when its edition language
-// is missing.
+// Curated seed membership only. These ISBNs never substitute for edition-language
+// evidence; the exact reviewed language must be stored on the edition itself.
 export const REVIEWED_DUTCH_LANGUAGE_ISBN13 = [
   '9789044622805', '9789044652901', '9789041416841', '9789059652040',
   '9789021049236', '9789048854943', '9789021480954', '9789047750567',
@@ -61,22 +60,9 @@ export const REVIEWED_DUTCH_LANGUAGE_ISBN13 = [
 
 export const DUTCH_LANGUAGE_DATABASE_CODES = ['nl', 'nld', 'dut'] as const;
 
-const REVIEWED_DUTCH_ISBNS = new Set<string>(REVIEWED_DUTCH_LANGUAGE_ISBN13);
-
 function normalizeLanguageCode(value: string | null | undefined): string | null {
-  const normalized = value
-    ?.trim()
-    .toLowerCase()
-    .replaceAll('_', '-')
-    .split('/')
-    .filter(Boolean)
-    .at(-1);
+  const normalized = value ? normalizeEditionLanguage(value) : null;
   return normalized || null;
-}
-
-function normalizeIsbn13(value: string | null | undefined): string | null {
-  const normalized = value?.replace(/[^0-9]/g, '') ?? '';
-  return /^97[89][0-9]{10}$/.test(normalized) ? normalized : null;
 }
 
 export function classifyStructuredLanguage(
@@ -98,15 +84,6 @@ export function resolveBookLanguage(
       classification: structured,
       languageCode,
       source: 'representative_edition',
-    };
-  }
-
-  const isbn13 = normalizeIsbn13(book.isbn13);
-  if (isbn13 && REVIEWED_DUTCH_ISBNS.has(isbn13)) {
-    return {
-      classification: 'dutch',
-      languageCode: 'nld',
-      source: 'reviewed_catalog_seed',
     };
   }
 

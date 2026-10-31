@@ -10,6 +10,7 @@ import { DirectRatingScores } from './DirectRatingScores';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
+import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
@@ -41,7 +42,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
   const focusNext = useRef(false);
   const returnFromSearch = useRef(false);
   const round = data?.state?.round;
-  const book = data?.book?.strictEditionLanguage && data.book.strictEditionLanguage !== locale ? null : data?.book;
+  const book = data?.book && isBookPresentationAllowed(data.book,locale) ? data.book : null;
   const workId = book?.workId;
   const progress = roundProgress(data?.state ?? null);
   const active = Boolean(round && !round.complete && !paused);
@@ -210,7 +211,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                     onChange={e => { setQuery(e.target.value); setResults([]); setSearchError(false); }} />
                   <button type="button" disabled={pending} onClick={closeSearch}>{t('directTaste.closeSearch')}</button>
                   {searchError && <p role="status">{t('directTaste.searchError')}</p>}
-                  <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== workId && b.strictEditionLanguage === locale).map(b => <li key={b.workId}>
+                  <ul className="taste-search-results">{results.filter(b => b.workId && b.workId !== workId && isBookPresentationAllowed(b,locale)).map(b => <li key={b.workId}>
                     <button type="button" disabled={pending} onClick={() => act('choose', b.workId!)}>{b.title} — {b.author}</button>
                   </li>)}</ul>
                 </div>}

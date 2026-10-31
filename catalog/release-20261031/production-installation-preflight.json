@@ -1,0 +1,73 @@
+[
+  {
+    "checked_at": "2026-10-31 13:03:22.423068",
+    "storage": {
+      "metadata": null,
+      "descriptions": null
+    },
+    "functions": [
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "anon=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "md5": "a8d63c0f16b97bd40e02e1ad0a150a5f",
+        "name": "catalog_browse_page_v2",
+        "definer": false,
+        "settings": [
+          "search_path=\"\""
+        ]
+      },
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "anon=X/postgres",
+          "authenticated=X/postgres",
+          "service_role=X/postgres"
+        ],
+        "md5": "657fcfec50b3cf7800419b1f66a6bae5",
+        "name": "catalog_search_selection_v1",
+        "definer": false,
+        "settings": [
+          "search_path=\"\""
+        ]
+      }
+    ],
+    "default_acl": [
+      {
+        "acl": [
+          "postgres=rwU/postgres",
+          "anon=rwU/postgres",
+          "authenticated=rwU/postgres",
+          "service_role=rwU/postgres"
+        ],
+        "kind": "S",
+        "role": "postgres",
+        "schema": "public"
+      },
+      {
+        "acl": [
+          "postgres=X/postgres",
+          "anon=X/postgres",
+          "authenticated=X/postgres",
+          "service_role=X/postgres"
+        ],
+        "kind": "f",
+        "role": "postgres",
+        "schema": "public"
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "anon=arwdDxtm/postgres",
+          "authenticated=arwdDxtm/postgres",
+          "service_role=arwdDxtm/postgres"
+        ],
+        "kind": "r",
+        "role": "postgres",
+        "schema": "public"
+      }
+    ]
+  }
+]

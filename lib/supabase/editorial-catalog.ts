@@ -19,7 +19,7 @@ export async function loadEditorialCatalog(state: EditorialQuery, locale: Locale
   const [categories, selectedAuthor, response] = await Promise.all([
     loadPublicCategories(), state.author ? supabase.from('authors').select('id,name').eq('id', state.author).maybeSingle()
       .then(({ data, error }) => { if (error) throw error; return data ? { id: String(data.id), name: String(data.name) } : null; }) : null,
-    supabase.rpc('catalog_browse_page_v2', eligibleBrowseArgs(state, locale)).abortSignal(AbortSignal.timeout(5000)),
+    supabase.rpc('catalog_browse_page_v3', eligibleBrowseArgs(state, locale)).abortSignal(AbortSignal.timeout(5000)),
   ]);
   // A backend awaiting this reviewed RPC is unavailable, not an incorrectly
   // counted fallback. Public eligibility/count/order/page share one SQL snapshot.

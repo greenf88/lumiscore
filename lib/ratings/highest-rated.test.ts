@@ -71,6 +71,6 @@ test('homepage uses the global aggregate ranking and Highest rated label', async
   assert.match(home, /t\('home\.highestRated'\)/);
   assert.doesNotMatch(home, /Featured today/);
   assert.match(catalog, /loadPublicRatingSummariesBatched/);
-  assert.match(catalog, /rpc\('catalog_discovery_page'/);
+  assert.match(catalog, /rpc\('catalog_browse_page_v3'/);
   assert.match(catalog, /readHighestRatedPage/);
 });

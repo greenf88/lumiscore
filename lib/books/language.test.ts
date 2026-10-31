@@ -35,15 +35,15 @@ test('structured Dutch and English edition languages are classified without gues
   assert.equal(classifyStructuredLanguage('made-up-language'), 'unknown');
 });
 
-test('reviewed Dutch seed metadata fills only known ISBN gaps', () => {
+test('an ISBN seed never substitutes for edition-language evidence', () => {
   const reviewed = resolveBookLanguage({
     editionLanguage: null,
     isbn13: '9789044933192',
   });
   assert.deepEqual(reviewed, {
-    classification: 'dutch',
-    languageCode: 'nld',
-    source: 'reviewed_catalog_seed',
+    classification: 'unknown',
+    languageCode: null,
+    source: 'unknown',
   });
   assert.equal(isDutchLanguageBook({ editionLanguage: null, isbn13: '9780000000000' }), false);
 });
@@ -65,11 +65,11 @@ test('Dutch discovery is Dutch-only, deterministic and available in both UI loca
   const first = selectDutchDiscoveryBooks(candidates, new Set(['4']), 6);
   const second = selectDutchDiscoveryBooks(candidates, new Set(['4']), 6);
 
-  assert.deepEqual(first.map(({ workId }) => workId), ['1', '3']);
+  assert.deepEqual(first.map(({ workId }) => workId), ['3']);
   assert.deepEqual(first, second);
   assert.ok(first.every(isDutchLanguageBook));
   assert.equal(shouldShowDutchDiscovery('nl', first.length), true);
-  assert.equal(shouldShowDutchDiscovery('en', first.length), true);
+  assert.equal(shouldShowDutchDiscovery('en', first.length), false);
 });
 
 test('Dutch discovery excludes coverless and placeholder-only books', () => {

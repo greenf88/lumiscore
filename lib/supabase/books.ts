@@ -5,9 +5,7 @@ import { withEditionCoverEvidence, deferEditionCoverEvidence } from '@/lib/books
 import { getWorkFirstPublishYear } from '@/lib/books/edition-ranking';
 import type { Locale } from '@/lib/i18n/config';
 import {
-  DUTCH_LANGUAGE_DATABASE_CODES,
   isDutchLanguageBook,
-  REVIEWED_DUTCH_LANGUAGE_ISBN13,
 } from '@/lib/books/language';
 import {
   applyRatingSummaries,
@@ -19,17 +17,12 @@ import { highestRatedPageArgs, readHighestRatedPage } from '@/lib/ratings/highes
 import {
   CATALOG_BROWSE_PAGE_SIZE,
   type CatalogBrowsePageSize,
-  clampCatalogBrowsePage,
-  getCatalogBrowseOrder,
-  getCatalogBrowsePageCount,
-  getCatalogBrowseRange,
-  normalizeCatalogBrowsePage,
   type CatalogBrowseSort,
 } from '@/lib/books/catalog-browse';
 import { supabase } from './client';
+import { hydrateStoredPresentation } from './stored-presentation';
 import {loadEditionRows} from './edition-rows.ts';
 import {
-  loadPublicRatingSummaries,
   loadPublicRatingSummariesBatched,
 } from './public-rating-summaries';
 
@@ -190,48 +183,6 @@ function getRelatedEditions(
   );
 }
 
-async function loadCatalogRows(limit: number): Promise<{
-  works: DatabaseRow[];
-  authors: DatabaseRow[];
-  editions: DatabaseRow[];
-  total: number | null;
-}> {
-  const joined = await supabase
-    .from('works')
-    .select(HOMEPAGE_CATALOG_SELECT, { count: 'exact' })
-    .order('title', { ascending: true })
-    .limit(limit);
-
-  if (!joined.error) {
-    return {
-      works: asRows(joined.data),
-      authors: [],
-      editions: [],
-      total: joined.count,
-    };
-  }
-
-  const [worksResult, authorsResult, editionsResult] = await Promise.all([
-    supabase
-      .from('works')
-      .select('*', { count: 'exact' })
-      .order('title', { ascending: true })
-      .limit(limit),
-    supabase.from('authors').select('*'),
-    supabase.from('editions').select('*'),
-  ]);
-
-  if (worksResult.error) throw worksResult.error;
-  if (authorsResult.error) throw authorsResult.error;
-  if (editionsResult.error) throw editionsResult.error;
-
-  return {
-    works: asRows(worksResult.data),
-    authors: asRows(authorsResult.data),
-    editions: asRows(editionsResult.data),
-    total: worksResult.count,
-  };
-}
 
 function mapCatalogBook(
   work: DatabaseRow,
@@ -250,6 +201,7 @@ function mapCatalogBook(
   const base:Book={id:`work-${workId}`,source:'supabase',workId,
     sourceType:readString(work,['source_type']),openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
     title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
+    authorId:readString(work,['author_id'])??(author?readString(author,['id']):null),
     firstPublishYear:getWorkFirstPublishYear(readNumber(work,['first_publish_year','first_published_year'])),
     score:null,ratingsCount:null,match:null,cover:COVER_STYLES[index%COVER_STYLES.length]};
   return withStrictEdition(base,edition,locale);
@@ -290,7 +242,8 @@ export async function loadCatalogBooksByIds(
   const catalogBooks = asRows(result.data)
     .map((work, index) => mapCatalogBook(work, [], editionRows, index, locale) ?? (keepUnavailable ? mapUnavailableWork(work, locale) : null))
     .filter((book): book is Book => book !== null);
-  return applyRatingSummaries(catalogBooks, summaries);
+  const scored=applyRatingSummaries(catalogBooks, summaries);
+  return scored.length<=200?hydrateStoredPresentation(scored,locale):scored;
 }
 
 export async function loadCatalogBooksByIdsWithStoredCovers(
@@ -319,7 +272,7 @@ export async function loadCatalogBooksBySourceIds(sourceIds:readonly string[],lo
   const workIds=works.flatMap(work=>getWorkId(work)?[getWorkId(work)!]:[]);
   const [editions,summaries]=await Promise.all([loadEditionRows(supabase,workIds),loadPublicRatingSummariesBatched(supabase,workIds)]);
   const books=works.map((work,index)=>mapCatalogBook(work,[],asRows(editions),index,locale)??mapUnavailableWork(work,locale)).filter((b):b is Book=>b!==null);
-  return applyRatingSummaries(books,summaries);
+  return hydrateStoredPresentation(applyRatingSummaries(books,summaries),locale);
 }
 
 export type CatalogBrowsePage = {
@@ -331,121 +284,32 @@ export type CatalogBrowsePage = {
   sort: CatalogBrowseSort;
 };
 
-async function queryCatalogBrowseRows(
-  page: number,
-  sort: CatalogBrowseSort,
-  pageSize: CatalogBrowsePageSize,
-) {
-  const { from, to } = getCatalogBrowseRange(page, pageSize);
-  let query = supabase
-    .from('works')
-    .select(HOMEPAGE_CATALOG_SELECT, { count: 'exact' });
-
-  for (const order of getCatalogBrowseOrder(sort)) {
-    query = query.order(order.column, {
-      ascending: order.ascending,
-      ...(order.nullsFirst === undefined
-        ? {}
-        : { nullsFirst: order.nullsFirst }),
-    });
-  }
-
-  return query.range(from, to);
-}
-
+/** All catalogue windows share the same locale-eligible SQL selection before
+ * count/offset. Never repair a short page by fetching the whole catalogue. */
 export async function loadCatalogBrowsePage(
-  requestedPage: number,
-  sort: CatalogBrowseSort,
-  pageSize: CatalogBrowsePageSize = CATALOG_BROWSE_PAGE_SIZE,
-  locale: Locale = 'en',
-): Promise<CatalogBrowsePage> {
-  const normalizedPage = normalizeCatalogBrowsePage(requestedPage);
-  let result = await queryCatalogBrowseRows(normalizedPage, sort, pageSize);
-  if (result.error) throw result.error;
-
-  const total = result.count ?? result.data?.length ?? 0;
-  const page = clampCatalogBrowsePage(
-    normalizedPage,
-    total,
-    pageSize,
-  );
-  if (page !== normalizedPage) {
-    result = await queryCatalogBrowseRows(page, sort, pageSize);
-    if (result.error) throw result.error;
-  }
-
-  const catalogBooks = (await completeEditions(asRows(result.data)))
-    .map((work, index) => mapCatalogBook(work, [], [], index, locale))
-    .filter((book): book is Book => book !== null);
-  const workIds = catalogBooks.flatMap((book) =>
-    book.workId ? [book.workId] : []);
-  const summaries = await loadPublicRatingSummariesBatched(supabase, workIds);
-
-  return {
-    books: await withEditionCoverEvidence(applyRatingSummaries(catalogBooks, summaries)),
-    total,
-    page,
-    pageSize,
-    pageCount: getCatalogBrowsePageCount(total, pageSize),
-    sort,
-  };
+  requestedPage:number,sort:CatalogBrowseSort,pageSize:CatalogBrowsePageSize=CATALOG_BROWSE_PAGE_SIZE,locale:Locale='en',
+):Promise<CatalogBrowsePage>{
+  const [{loadEditorialCatalog},{editorialQuery}]=await Promise.all([import('./editorial-catalog'),import('../catalog/editorial-query')]);
+  const page=await loadEditorialCatalog(editorialQuery({page:String(requestedPage),pageSize:String(pageSize),sort}),locale);
+  return {books:page.books,total:page.total,page:page.page,pageSize,pageCount:page.pageCount,sort};
 }
-
-export async function loadHomepageCatalog(limit = 18, locale:Locale='en'): Promise<{
-  books: Book[];
-  total: number;
-}> {
-  const safeLimit = Math.min(100, Math.max(1, Math.trunc(limit)));
-  const { works, authors, editions, total } = await loadCatalogRows(safeLimit);
-
-  const catalogBooks = (await completeEditions(works))
-    .map((work, index) => mapCatalogBook(work, authors, editions, index,locale))
-    .filter((book): book is Book => book !== null)
-    .sort((left, right) =>
-      left.title.localeCompare(right.title, 'en', { sensitivity: 'base' }),
-    );
-
-  const summaries = await loadPublicRatingSummaries(
-    supabase,
-    catalogBooks.flatMap((book) => (book.workId ? [book.workId] : [])),
-  );
-
-  return {
-    books: applyRatingSummaries(catalogBooks, summaries),
-    total: total ?? catalogBooks.length,
-  };
+export async function loadHomepageCatalog(limit=18,locale:Locale='en'):Promise<{books:Book[];total:number}>{
+  const safeLimit=Math.min(100,Math.max(1,Math.trunc(limit)));
+  const size:CatalogBrowsePageSize=safeLimit<=16?16:safeLimit<=32?32:safeLimit<=64?64:128;
+  const page=await loadCatalogBrowsePage(1,'az',size,locale);
+  return {books:page.books.slice(0,safeLimit),total:page.total};
 }
 
 export async function loadDutchDiscoveryCatalogCandidates(): Promise<Book[]> {
-  const [structuredLanguageEditions, reviewedSeedEditions] = await Promise.all([
-    supabase
-      .from('editions')
-      .select('work_id')
-      .in('language', [...DUTCH_LANGUAGE_DATABASE_CODES]),
-    supabase
-      .from('editions')
-      .select('work_id')
-      .in('isbn_13', [...REVIEWED_DUTCH_LANGUAGE_ISBN13]),
-  ]);
-  if (structuredLanguageEditions.error) throw structuredLanguageEditions.error;
-  if (reviewedSeedEditions.error) throw reviewedSeedEditions.error;
-
-  const workIds = [...new Set([
-    ...(structuredLanguageEditions.data ?? []),
-    ...(reviewedSeedEditions.data ?? []),
-  ].flatMap((row) => {
-    const workId = String(row.work_id ?? '').trim();
-    return workId ? [workId] : [];
-  }))];
-  const books = await loadCatalogBooksByIds(workIds,undefined,'nl');
-  return withEditionCoverEvidence(books.filter(isDutchLanguageBook));
+  const page=await loadCatalogBrowsePage(1,'highest',128,'nl');
+  return page.books.filter(isDutchLanguageBook);
 }
 
 export async function loadHighestRatedCatalog(limit = 8, locale:Locale='en', streamCovers = false): Promise<{
   books: Book[];
   total: number;
 }> {
-  const rankedPage = await supabase.rpc('catalog_discovery_page', highestRatedPageArgs(limit));
+  const rankedPage = await supabase.rpc('catalog_browse_page_v3', {...highestRatedPageArgs(limit),p_locale:locale});
   if (rankedPage.error) throw rankedPage.error;
   const { ids, total } = readHighestRatedPage(rankedPage.data, limit);
   if (ids.length === 0) return { books: [], total };
@@ -477,6 +341,7 @@ export async function loadCatalogBook(
   workId: string,
   locale: Locale = 'en',
   streamCovers = false,
+  options:{skipExternalCovers?:boolean}={},
 ): Promise<Book | null> {
   const result = await supabase
     .from('works')
@@ -489,7 +354,10 @@ export async function loadCatalogBook(
   if (!rawWork) return null;
   const work=(await completeEditions([rawWork]))[0];
   const book=mapCatalogBook(work,[],[],0,locale);
-  if(book)return streamCovers ? deferEditionCoverEvidence([book])[0] : (await withEditionCoverEvidence([book]))[0];
+  if(book){const stored=await hydrateStoredPresentation([book],locale);
+    // Description-only callers need bibliographic identity, never a cover API.
+    if(options.skipExternalCovers)return stored[0];
+    return streamCovers ? deferEditionCoverEvidence(stored)[0] : (await withEditionCoverEvidence(stored))[0];}
   return mapUnavailableWork(work,locale);
 }
 

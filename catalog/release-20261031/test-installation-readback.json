@@ -1,0 +1,58 @@
+[
+  {
+    "proof": {
+      "triggers": [
+        {
+          "name": "catalog_preserve_reviewed_edition_identity",
+          "enabled": "O"
+        },
+        {
+          "name": "catalog_preserve_reviewed_work_author",
+          "enabled": "O"
+        }
+      ],
+      "functions": [
+        {
+          "acl": [
+            "postgres=X/postgres",
+            "anon=X/postgres",
+            "authenticated=X/postgres"
+          ],
+          "name": "catalog_browse_page_v3",
+          "config": [
+            "search_path=\"\""
+          ],
+          "definer": false,
+          "body_md5": "8a018863e8f71c70d6136396844610db",
+          "signature": "catalog_browse_page_v3(text,text,text[],text,text[],text,integer,integer,bigint[],bigint)"
+        },
+        {
+          "acl": [
+            "postgres=X/postgres"
+          ],
+          "name": "catalog_guard_reviewed_identity",
+          "config": [
+            "search_path=\"\""
+          ],
+          "definer": false,
+          "body_md5": "0e0e51fac98d32239ddf2efd11212475",
+          "signature": "catalog_guard_reviewed_identity()"
+        },
+        {
+          "acl": [
+            "postgres=X/postgres",
+            "anon=X/postgres",
+            "authenticated=X/postgres"
+          ],
+          "name": "catalog_search_selection_v2",
+          "config": [
+            "search_path=\"\""
+          ],
+          "definer": false,
+          "body_md5": "22d828c503e8b36cdd86a16602e594e4",
+          "signature": "catalog_search_selection_v2(text,text,text[],text,text[],text,bigint[],bigint)"
+        }
+      ]
+    }
+  }
+]

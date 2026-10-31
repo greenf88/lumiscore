@@ -21,3 +21,14 @@ catalog/expansion-5134/*.json -text
 # PR48 approved release SQL bytes must be identical on Windows and Linux.
 supabase/operations/pr48-eligible-browse*.sql text eol=lf
 catalog/technical-recovery-20261021/three-book-production-*.sql text eol=lf
+# The Dutch pilot dry-run/recovery proposals are byte-hashed across platforms.
+catalog/nl-expansion-20261029/*.sql text eol=lf
+# Catalogue repair evidence and executable SQL are hash-bound across platforms.
+catalog/integrity-repair-20261030/*.sql text eol=lf
+catalog/integrity-repair-20261030/*.json text eol=lf
+catalog/integrity-repair-20261030/*.txt text eol=lf
+# Bounded release hashes are raw UTF-8/LF bytes on every platform.
+catalog/release-20261031/*.sql text eol=lf
+catalog/release-20261031/*.json text eol=lf
+catalog/release-20261031/*.txt text eol=lf
+supabase/operations/catalog-integrity-release-20261031.sql text eol=lf
