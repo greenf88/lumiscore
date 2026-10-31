@@ -2,7 +2,8 @@
 import fs from'node:fs';import path from'node:path';import{fileURLToPath}from'node:url';import{createHash}from'node:crypto';
 const root=fileURLToPath(new URL('../catalog/nl100-completion-20261031/',import.meta.url));
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
-const files=[...walk(root).filter(f=>!['packet-scan.json','package-hashes.json'].includes(path.basename(f))),...fs.readdirSync(fileURLToPath(new URL('./',import.meta.url))).filter(n=>/^nl100.*\.(mjs|ps1)$/.test(n)).map(n=>fileURLToPath(new URL(n,import.meta.url)))];
+const packetRoots=[root,fileURLToPath(new URL('../catalog/nl100-hosted-20261031/',import.meta.url)),fileURLToPath(new URL('../catalog/nl-followup-008-20261031/',import.meta.url))];
+const files=[...packetRoots.flatMap(walk).filter(f=>!['packet-scan.json','package-hashes.json'].includes(path.basename(f))),...fs.readdirSync(fileURLToPath(new URL('./',import.meta.url))).filter(n=>/^(?:nl100.*|nl-followup008.*)\.(mjs|ps1)$/.test(n)).map(n=>fileURLToPath(new URL(n,import.meta.url)))];
 // Mechanical newline normalization is limited to this new packet/own scripts.
 // Scoped .gitattributes keeps these raw byte hashes stable across checkouts.
 for(const file of files){const raw=fs.readFileSync(file,'utf8'),lf=raw.replaceAll('\r\n','\n');if(raw!==lf)fs.writeFileSync(file,lf);}

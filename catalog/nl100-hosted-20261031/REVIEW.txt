@@ -1,0 +1,173 @@
+PR64 — NEDERLANDSE CATALOGUSBATCH REVIEWBAAR, HOSTED ACCEPTATIE NOG GEBLOKKEERD
+31oktober2026. Vervangt de actuele-gereedheids- en covercijfers uit het historische
+catalog/nl100-completion-20261031/REVIEW.txt, niet de bewaarde bron-/testhistorie.
+
+AFBAKENING EN VERSIES
+https://github.com/greenf88/lumiscore/pull/64 — Draft, eigen branch
+catalog/nl-availability-batch002-20261031. Uitgangscommit46d2b274195d6997fe6d4a9a9988e47463fec7b9.
+Runtime/applicatiebasis13451a60e6f9399204aa625036942afa0b6c5380, ook de opnieuw gelezen
+remote main. Geen applicatie-, ontwerp-, score-, smaak- of routeringswijziging.
+De exacte uiteindelijke PR-head staat in de PR/eindoplevering; importversie wordt
+ondubbelzinnig bepaald door de vier import-hashes.json/batches.json in deze head.
+Voorbereidingscommit4d87d0398e7546a87658ba50a5e712cc5105a3d8 had volledige groene CI,
+inclusief unit,TypeScript,lint,SSR,productiebuild,secretscan; opvolgende CI apart lezen.
+PR62 Draft33801703b33e4bee2fa80a50de5cb7229897f8ab en PR63 Draft
+11795c7b03d04ea0fd267694fe1b36c6b9bc7b0d blijven ongewijzigd. PR51 buiten scope.
+
+TELLING — GEEN DUBBELTEL OF PRODUCTIECLAIM
+De afgeronde100-cohort:80nieuwe goedgekeurde voorstellen,4hergebruikte goedgekeurde
+dossiers,5identiteitsconflicten,11onvoldoende bewijs na gedocumenteerd onderzoek.
+De4hergebruikte dossiers zitten REEDS in de8oudere voorstellen;80+8=88, niet92.
+Nieuw releasevoorstel:240acties op80bestaande Works;56Nederlandse printedities erbij,
+24editietaalcorrecties NULL→nld,80editiegebonden cover/formaatrecords,80eigenNLteksten.
+Twee bestaande editie-titels worden daarbij bewezen gecorrigeerd:1011Damokles,
+1131De Griezelbus7. Geen Work/auteur toevoegen, samenvoegen of verwijderen.
+Oude8blijven byte-ongewijzigd en afzonderlijk:22acties,4edities erbij,4taalcorrecties,
+8metadata,6nieuweNLteksten,2behouden goede teksten. Gecombineerd262acties,88Works,
+60edities erbij,28taalcorrecties,88metadata,86nieuweNLteksten,2behoudenNLteksten.
+Dit gecombineerde overzicht geeft NIET automatisch akkoord voor de oude22acties.
+Netto daadwerkelijke groei op productie/test door deze opdracht:0. Alle88 zijn
+voorstellen, geen reeds gerealiseerde NL-dekking. Referentie29oktober2649 behouden.
+De5identiteitsconflicten en11onvoldoende-bewijsdossiers staan niet in enige import.
+De heerser en De avonden blijven afzonderlijke onbesliste identiteitdossiers.
+
+ACTUELE VOORCONTROLE EN AFHANKELIJKHEDEN
+production-readback/preflight.json:31okt21:17:44.565088UTC, productie uitsluitend
+SELECT. Volledige verwachte bestaande Work/auteur/edities/teksten/metadata gecontroleerd;
+0afwijkingen voor240nieuwe en22oude acties. Exacte globaleISBN13/ISBN10-equivalenten:
+24bedoelde bestaande edities,56afwezig,0koppelingen aan een ander Work.
+0Work-/ISBN-/rijsleuteloverlap met PR62/63, oude8of oorspronkelijke pilot.
+Geen runtimeafhankelijkheid van PR62/63; geen reden hun imports hier mee te nemen.
+Voor ieder bestaand record staat de volledige beforewaarde in production-plan.json;
+nieuwe rijen hebben before:null. Vier onafhankelijke20Work/60actietransacties,
+geen automatische batchlus. Bestaande gepubliceerde opslag en identityguards
+hergebruikt:geen migratie, geen rechten-/Auth-/schedulerwijziging nodig.
+Publicatie van code alleen installeert deze gegevens niet.
+
+COVERS — WERKELIJKE PIXELS IN PLAATS VAN URLAANNAMES
+Alle34zware detailcovers opnieuw op daadwerkelijk gepubliceerde varianten onderzocht.
+De URLsuffix_2_710_130 betekent NIET710x130pixels. Werkelijk decoderen toont710px
+breed en1048–1221pxhoog. De eerdere afwijzing op uitsluitend de suffix was te vroeg;
+de ontdekking en correctie zijn vastgelegd, geen foutieve claim in de eindselectie.
+19kleinere varianten handmatig op beide QA-contactbladen gecontroleerd:zelfde exacte
+bronasset/ISBN/omslag, leesbare titel/auteur, verhouding behouden, geen uitsnede.
+Deze19zijn nu de voorgestelde detail-cover_url:87987–242214B, allemaal<300000B.
+Dezelfde240acties blijven gelden; geen19extra acties. Alle betrokken SQL/rollback-
+hashes zijn opnieuw gegenereerd en lokaal getest. Oud46d2-SQL niet óók uitvoeren.
+De overige15hebben in de geïnspecteerde exacte bronpagina geen passende gepubliceerde
+detailvariant. Correcte volledige cover behouden:341144–744872B. Geen gok-URL,
+130pxkaart tot detail oprekken, nieuwe host/opslag of onjuiste cover als vervanging.
+Zie detail-variants/*.json en detail-cover-selections.json voor alle34besluiten.
+Totaal van80geselecteerde detailbestanden24.089.331→15.925.675B(-33,9%); dit is
+een som van bronbestanden, NIET verkeer per bezoek of bewezen productiewinst.
+Alle80voorgestelde mobiele kaartassets<300000B; de34kleine varianten9575–23962B
+zijn dezelfde uitgeversassets. Desktopkaarten kunnen via bestaande componenten de
+detailvariant laden; claim dus niet dat alle desktopkaartrequests<300kB zijn.
+De bestaande vormgeving en beeldverhouding zijn niet gewijzigd.
+
+BRONTRANSPORTMETINGEN — GEEN HOSTED LCP/TTFB
+Drie metingen per oorspronkelijke en vervangende detail-URL op dezelfde computer,
+normale verbinding, geen fysieke telefoon of mobiele netwerkvertraging. Bezoeken
+in volgorde eerste/herhaald; echte CDN/origin-coldstaat niet gecontroleerd.
+Work1369:1564827→242214B; oud mediaan182ms(165–365), nieuw137ms(101–271).
+Work1337:471445→98362B; oud126ms(113–134), nieuw78ms(74–78).
+Work1155:300304→87987B; oud96ms(93–111), nieuw75ms(62–81).
+Dit meet volledige afbeeldingsdownload vanaf de bron. Geen bewijs voor pagina-LCP,
+TTFB, mobiele gebruikservaring of hosted prestaties na catalogusimport.
+
+PREVIEW EN TESTTOESTAND — GEEN80/80-HOSTEDCLAIM
+Ready: https://lumiscore-cq4xlr35j-rgkgroeneveld-9102.vercel.app
+deployment dpl_4a8yRRdFTPH5kD7swuzmdP4CTJpq, git4d87d0398e7546a87658ba50a5e712cc5105a3d8.
+Alleen deze branch heeft de reeds toegestane publieke testconfiguratie; geen keys
+in dit pakket. Eén noodzakelijke daadwerkelijke nieuwe Previewbuild, geen productie-
+of gedeelde-stagingdeployment, geen bescherming aangepast. De eerste build vóór
+configuratie is niet als geslaagde acceptatie meegeteld.
+Nieuwe PreviewHTTP200,X-Robots-Tag:noindex. Database-aansluiting aantoonbaar met
+bestaand testWork924100148:ENtitel,ISBN9780064471107,tekst+bron en geladen309x500cover;
+Paper/Ink bekeken. NL meldt terecht ontbrekende geverifieerde editie/tekst.
+Dat is alleen verbindings-/referentiebewijs, NIET acceptatie van dit nieuwe pakket.
+De80nieuwe presentaties zijn nergens hosted geïmporteerd en staan alle80als pending
+in hosted-acceptance-manifest.json. Geen rating/account/voortgang gewijzigd.
+De14bestaande testidentiteiten zijn op Work/ISBN/auteur gecontroleerd, niet op gelijke
+numerieke ID's aangenomen. Voor66ontbrekende Works,15ontbrekende auteurs en24baseline-
+edities ligt een minimaal openbaar testmanifest klaar. Vrije IDs read-only gecontroleerd
+21:32UTC; dat reserveert ze niet. Alle240catalogusacties gemapt,0identiteitholds.
+Dit is OFFLINE_PREPARATION_NOT_EXECUTABLE_SQL:na eventuele seed-COMMIT eerst gegenereerde
+timestamps/rijwaarden teruglezen en een exacte TEST-import renderen. Geen productie-
+SQL naar test kopiëren. EN-vergelijkingsfixtures/collecties niet stilzwijgend meeseeden.
+
+BEVESTIGINGSFLOW EN HERSTELBEWIJS
+Testproject hlvujbrmfdlrfxdjwsmb lezen/gezondheid werkt; RLS en bestaande identityguards
+bevestigd. Dat bewijst geen herstel van bevestigingsvensters. Geen aantoonbare nieuwe
+sessie-/support-/bevestigingsverandering gevonden, dus0nieuwe schrijf-/herstelpogingen.
+Laatste vastgelegde fout31okt18:22:41UTC:expired / INVALID_ARGUMENT:
+"This confirmation expired after 2 minutes. Call execute_sql again to get a new confirmation."
+Geen niet-gevoelige request-ID beschikbaar. Oorzaak/zichtbaarheid van venster onbekend;
+geen bewezen beveiligingsweigering of verlopen login. Niet identiek herhaald, geen omweg.
+Lokaal PGlite:vier echte COMMITs, replay0, receiptundo na COMMIT en herhaald undo groen;
+latere tekstwijziging of inkomende afhankelijkheid(inclusiefCASCADE) stopt alles.
+Afzonderlijke dry-run metROLLBACK houdt tabellen ongewijzigd; geensequenceresetclaim.
+Deze lokale bewijzen zijn GEEN gecommitteerd hosted herstelbewijs; dat blijft open.
+
+CONTROLES
+13gerichte nieuwe/bestaande NL100tests groen,0overslagen; onder andere80gedeelde
+NLpresentaties, ongewijzigdeENselectie(45beschikbaar/35eerlijk niet beschikbaar),
+score/bandpariteit met uitsluitend lokale synthetische scores, taalcacheisolatie,
+originele+NLtitelzoekvragen, stabiele filtering/telling/paginering en exacte receiptscope.
+3afzonderlijke vervolgregistertests groen. GerichteESLint enTypeScript noEmit groen.
+Geen runtimefetch toegevoegd; geen bronaanvraag bij boekopening door deze dossiers.
+Volledige CI/build/secretscan van de definitieve PR-head apart controleren.
+De gevraagde80hosted kaart/detail-/zoek-/cover-/broncontroles en mobiele/desktop/
+Paper/Ink/pagineringacceptatie zijn NIET uitgevoerd:de benodigde data ontbreken nog.
+Het verslag claimt geen lokale controle als hosted resultaat en geen screenshot als
+bewijs van een niet-geïmporteerd dossier.
+
+VERVOLGONDERZOEK APART
+catalog/nl-followup-008-20261031:volgende100nog niet in deze cohort onderzochte Works,
+allen bronzoekgang én exacte bronpagina-inspectie;10223blijft inventaris,niet afgerond.
+5dossiers inhoudelijk beoordeeld met identiteit, Nederlandse print, taal/formaat,
+cover, eigen60–65woordensamenvatting en verse productie-/ISBNvoorcontrole:
+1409,1911,1912,2228,2532. Geen productie/testwrites; geen uitvoerbare import toegevoegd.
+95blijven in onderzoek:38NLprintkandidaten,52verdereNLbronnen,1verkeerdeauteur-hit,
+3bundel/gesplitste-vertalingvragen,1pseudoniemvraag. Niet als 'geen NLeditie' markeren.
+Het cumulatieve register houdt deze stand los van de88goedkeuringen/240acties.
+
+VEILIGE VOLGORDE — PAS NA HERSTEL/AFZONDERLIJK PRODUCTIEAKKOORD
+1.Bevestigingsflow aantoonbaar herstellen;tot dan geen identieke writeprobe.
+2.Project-ID, actuele main/PR62/63, alle pakketbytes/hashes en beforewaarden opnieuw
+  lezen. Nieuwe ISBNbotsing, Work/auteurdrift of latere presentatie:stop en review.
+3.Test-IDruimte/afhankelijkheden opnieuw controleren; minimale publieke seed met
+  exacte aparte receipt, geen gebruikers/rating/voortgang/kenmerken kopiëren.
+4.Seed teruglezen; TEST-specifieke60actie-import per batch met actuele beforewaarden
+  renderen. Dry-run apart, dan COMMIT, eerste niet-lege receipt veilig vastleggen.
+5.Alle80rijen en gedeelde presentatie teruglezen; vervolgens browseracceptatie conform
+  manifest, correcte identiteit/cover/tekst/bron/score/zoeken en NL/ENthema/viewport.
+6.Gecommitteerd hosted undo uitsluitend eigen receipt+rijwaarden+alle inkomende
+  afhankelijkheden controleren. Stop bij afwijking;geenCASCADE-delete ofsequencereset.
+  Gerichte herinstallatie van alleen de goedgekeurde testtoestand, daarna nacontrole.
+7.Pas dan concreet releaseakkoord voor exact gekozen productieSQLhashes vragen.
+  Oud002/003,PR62/63en volgende008NOOIT automatisch meedraaien.
+8.Na later akkoord:verse productievoorcontrole/snapshot;per goedgekeurde batch
+  dry-run→COMMIT→receipt/readback;stop bij fout. Bij herstel omgekeerde batchvolgorde,
+  eigen tekst/metadata vóór eigen nieuwe editie, bestaande editie exact terug naar
+  before. Latere legitieme wijzigingen/afhankelijkheden blokkeren herstel.
+  Geen Work/auteur/account/rating/status/voortgang verwijderen. Korte transacties,
+  lock_timeout3s,statement_timeout30s. Publieke caches alleen indien nodig gericht.
+
+ADVIES: DRAFT LATEN — REVIEWBAAR MAAR NIET RELEASEGEREED.
+Open acceptatiegate:werkende normale bevestigingsflow, begrensde testimport,
+80/80hostedacceptatie en afzonderlijk gecommitteerd hosted herstel. Geen productie-
+installatie, merge, publicatie of nieuw releaseakkoord gevraagd.
+
+KOPIEERBARE SUPPORTNOTITIE — NIET VERSTUURD
+Bij de bestaande Supabase-koppeling in Codex verloopt de bevestiging van een
+afgebakende herstelactie na twee minuten; het venster is niet betrouwbaar zichtbaar.
+Testproject:hlvujbrmfdlrfxdjwsmb. Laatste fout:31oktober2026 18:22:41UTC
+(19:22:41Europe/Amsterdam). Status:expired;code:INVALID_ARGUMENT.
+Exact:"This confirmation expired after 2 minutes. Call execute_sql again to get a new confirmation."
+Tool:Supabase execute_sql;actie:uitsluitend vooraf gemanifesteerd gecommitteerd herstel
+van eigen testcataloguswijzigingen. Request-ID:niet beschikbaar. SELECT/gezondheid
+werkt, maar dat bewijst niet dat de bevestigingsroute werkt. Geen identieke retries,
+alternatieve credentials of beveiligingsomweg gebruikt. Kunt u onderzoeken waarom
+de bevestiging niet zichtbaar/afhandelbaar is en een concrete herstelstap voor deze
+bestaande verbinding geven? Geen credentials of volledige catalogusdata bijgevoegd.

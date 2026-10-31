@@ -5,6 +5,18 @@ import{applyStoredPresentation,storedPresentationSelection,safePublicSource,safe
 const root=new URL('../catalog/nl100-completion-20261031/',import.meta.url),json=n=>JSON.parse(fs.readFileSync(new URL(n,root))),sql=n=>fs.readFileSync(new URL(n,root),'utf8');
 const before=json('production-before.json'),dossiers=json('dossiers.json').dossiers,approved=dossiers.filter(d=>d.status==='approved_local_proposal'),batches=json('batches.json').batches;
 const checksum=x=>createHash('sha256').update(x).digest('hex');
+test('hosted preparation is explicitly unexecuted;19 decoded readable exact-edition detail variants replace heavy assets without URL-size inference',()=>{
+ const hosted=n=>JSON.parse(fs.readFileSync(new URL('../nl100-hosted-20261031/'+n,root)));
+ const variants=json('detail-cover-selections.json').approved;
+ assert.equal(variants.length,19);assert.equal(approved.filter(d=>d.cover.bytes>=300000).length,15);
+ for(const v of variants){const p=hosted('detail-covers/'+v.workId+'.json'),actual=hosted('detail-variants/'+v.workId+'.json'),d=approved.find(d=>d.workId===v.workId);assert(p.publishedVariants.some(p=>p.url===v.url));assert(v.approvedForDetail&&v.samePublishedAssetKey);assert.equal(v.status,200);assert(v.bytes<300000);assert.equal(v.dimensions.width,710);assert(v.dimensions.height>=900);assert.equal(actual.qualityReview,'approved_same_edition_readable_detail_variant');assert.equal(d.cover.url,v.url);assert.equal(d.cover.sha256,v.sha256);assert.equal(d.cover.isbn,v.isbn);assert.equal(d.cover.detailVariant.original.url,v.original.url);}
+ assert.equal(fs.readdirSync(new URL('../nl100-hosted-20261031/detail-covers/',root)).length,34);
+ const m=hosted('test-execution-manifest.json');assert.equal(m.project,'hlvujbrmfdlrfxdjwsmb');assert.equal(m.state,'OFFLINE_PREPARATION_NOT_EXECUTABLE_SQL');assert.equal(m.writeAttempts,0);assert.equal(m.summary.existingTestWorks,14);assert.equal(m.fixtures.works.length,66);assert.equal(m.mappedActions.length,240);assert.equal(Object.keys(m.workMap).length,80);assert.equal(m.holds.length,0);assert.equal(new Set(Object.values(m.workMap)).size,80);assert(!m.mappedActions.some(a=>!['editions','catalog_work_descriptions','catalog_edition_metadata'].includes(a.relation)));
+ const knownWorks=[...hosted('test-before.json').works,...m.fixtures.works.map(f=>f.record)];
+ for(const a of m.mappedActions.filter(a=>a.after.bound_author_id))assert.equal(a.after.bound_author_id,knownWorks.find(w=>w.id===a.after.work_id)?.author_id,'TEST bindings must remap author as well as Work/edition');
+ assert.equal(hosted('test-global-isbn-check.json').length,80);assert(hosted('test-global-isbn-check.json').every(c=>c.matches.length===0));
+ const prepared=hosted('hosted-acceptance-manifest.json');assert.equal(prepared.rows.length,80);assert(prepared.rows.every(r=>r.checks.coverDecoded==='pending'));assert.equal(hosted('connection-readiness.json').newWriteOrRecoveryAttempts,0);
+});
 async function fixture(){const db=new PGlite();await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
  create sequence editions_seq start300000;
  create table authors(id bigint primary key,open_library_id text unique,name text,created_at timestamptz);
