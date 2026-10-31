@@ -10,6 +10,8 @@ test('source-bound alias COMMIT/replay/receipt undo is isolated; stale identitie
   const replay=(await db.exec(renderAliasImport(plan))).flatMap(r=>r.rows).find(r=>r.receipt)?.receipt;assert.deepEqual(replay.changes,[]);
   const undo=async receipt=>{await db.query("select set_config('app.pr63_alias_receipt',$1,false)",[JSON.stringify(receipt)]);try{await db.exec(renderAliasRollback(plan));}catch(e){await db.exec('rollback');throw e;}};
   await assert.rejects(undo(replay),/Exact own alias receipt/);
+  await assert.rejects(undo({changes:first.changes}),/Exact own alias receipt/);
+  assert.throws(()=>renderAliasImport({...plan,work:{...plan.work,id:8476}}),/Unreviewed alias scope/);
   await db.exec("update editions set language='eng' where id=962200008");
   await assert.rejects(undo(first),/Later edition change/);
   await assert.rejects(db.exec(renderAliasImport(plan)),/Alias edition drift/);await db.exec('rollback');

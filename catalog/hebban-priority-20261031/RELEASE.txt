@@ -45,7 +45,7 @@ seven-sisters-alias-production-import.sql
 seven-sisters-alias-production-dry-run.sql
 8bcd732ea1dc5066f4bb9aa904c254eb85f55e29f60e4c7dd459b9f76172e936
 seven-sisters-alias-production-rollback.sql
-dedaec95b6bc8ec8f92e8dcf0ae8f8a8684572fb2760acdf41926d1902a8fd8c
+ded0b432fc641cc4a12b612588a96a9f7c0dc2491659e7cc3ffe85556c0d15f4
 Volledig8bestandmanifest:seven-sisters-alias-hashes.json. Core17niet vervangen
 door een stil gewijzigd18actie-script; voer elk goedgekeurd onderdeel éénmaal uit.
 
@@ -70,6 +70,10 @@ Lokale echte Postgres/PGlite bewijst gecommitteerde18fixture+17correctie-import,
 replay0, receiptundo17dan18, volledig identieke begintabellen, weigeren bij latere
 wijziging of FKdependency. Nieuwe alias: COMMIT/replay0/receiptundo lokaal getest,
 lege receipt en later gewijzigde editie weigeren. Dit is GEEN hosted undo-bewijs.
+Een laatste gerichte SQLreview vond dat ontbrekende receiptvelden door SQLNULL
+niet streng genoeg werden afgewezen. IS DISTINCT FROM en regressie voor ontbrekende
+target/batch toegevoegd; vaste Work/edition/projectscope ook in offlinegenerator
+afgedwongen. Alleen alias-rollbackSQL/hashes aangepast, geen import-/runtimewaarde.
 Een transactionele undo gevolgd door ROLLBACK bewijst alleen transactioneel herstel
 van die dry-run, niet het later terugdraaien van een gecommitteerde import.
 
