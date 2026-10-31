@@ -12,14 +12,14 @@ async function fixture() {
   type Cookie = { name:string; value:string; path?:string; httpOnly?:boolean; secure?:boolean };
   const response = (kind:string, target?:URL, options?:{request?:{headers:Headers}}) => {
     const cookies:Cookie[]=[];
-    return {kind,target,options,headers:new Headers(),cookies:{getAll:()=>cookies,set:(cookie:Cookie)=>cookies.push(cookie)}};
+    return {kind,target,options,status:undefined as number|undefined,headers:new Headers(),cookies:{getAll:()=>cookies,set:(cookie:Cookie)=>cookies.push(cookie)}};
   };
   let refreshes=0;
   const runtimeExports:Record<string, (request:unknown)=>Promise<ReturnType<typeof response>>>={};
   const source=await readFile(new URL('../../proxy.ts',import.meta.url),'utf8');
   const compiled=ts.transpile(source,{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022});
   runInNewContext(compiled, {exports:runtimeExports,Headers,require:(name:string)=>{
-    if(name==='next/server') return {NextResponse:{next:(options:Parameters<typeof response>[2])=>response('next',undefined,options),rewrite:(target:URL,options:Parameters<typeof response>[2])=>response('rewrite',target,options),redirect:(target:URL)=>response('redirect',target)}};
+    if(name==='next/server') return {NextResponse:{next:(options:Parameters<typeof response>[2])=>response('next',undefined,options),rewrite:(target:URL,options:Parameters<typeof response>[2])=>response('rewrite',target,options),redirect:(target:URL,status:number)=>Object.assign(response('redirect',target),{status})}};
     if(name==='./lib/i18n/paths') return paths;
     if(name==='@/lib/auth/request') return {PRIVATE_RESPONSE_HEADERS};
     if(name==='@/lib/supabase/proxy') return {refreshSupabaseSession:async(request:{headers:Headers})=>{
@@ -65,4 +65,20 @@ test('legacy redirect remains fixed; neutral actions receive no caller-supplied 
   assert.equal(action.kind,'next');
   assert.equal(action.options?.request?.headers.get(paths.LOCALE_REQUEST_HEADER),null);
   assert.equal(action.options?.request?.headers.get(paths.PATH_REQUEST_HEADER),null);
+});
+
+test('old English list links redirect once with 308 and retain campaign parameters; canonical paths use existing content',async()=>{
+  const f=await fixture();
+  for(const suffix of ['','/dystopie-vanaf-1990','/fantasy-om-mee-te-beginnen']){
+    const query='?utm_source=facebook&utm_medium=organic_social&utm_campaign=toplijsten_202610';
+    const redirect=await f.proxy(f.request('/en/toplijsten'+suffix+query));
+    assert.equal(redirect.kind,'redirect');assert.equal(redirect.status,308);
+    assert.equal(redirect.target?.pathname,'/en/toplists'+suffix);
+    assert.equal(redirect.target?.search,query);
+    const next=await f.proxy(f.request(redirect.target!.pathname+query));
+    assert.equal(next.kind,'rewrite');assert.equal(next.target?.pathname,'/toplijsten'+suffix);
+    assert.equal(next.target?.search,query);
+    assert.equal(next.options?.request?.headers.get(paths.LOCALE_REQUEST_HEADER),'en');
+    assert.equal(next.options?.request?.headers.get(paths.PATH_REQUEST_HEADER),'/en/toplists'+suffix+query);
+  }
 });

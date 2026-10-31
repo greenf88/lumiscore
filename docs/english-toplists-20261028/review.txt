@@ -1,0 +1,61 @@
+ENGELSE LEESLIJSTROUTE — LOKAAL GEÏMPLEMENTEERD — 28 OKTOBER 2026
+
+Basis:remote main0c0470e1e401cad5f8e178ca3bc521df5f098c5b.
+Afzonderlijke branch:fix/english-toplists-route-20261028.
+
+Gewijzigd
+-Engelse publieke overzichtsroute:/en/toplists.
+-Engelse lijstpagina's:/en/toplists/<bestaande-lijstslug>.
+-Nederlands blijft /nl/toplijsten en /nl/toplijsten/<slug>.
+-Bestaande taalrouter uitgebreid;dezelfde fysieke app/toplijsten-componenten en
+ dezelfde catalogusloaders blijven gebruikt. Geen tweede implementatie/routekopie.
+-Oude /en/toplijsten en alle onderliggende adressen verwijzen permanent308naar
+ de Engelse canonical. Campagnequery's blijven behouden;geen redirectlus.
+-Ook de verkeerde /nl/toplists-alias gaat naar /nl/toplijsten. Bestaande routes
+ zonder taalprefix volgen de bestaande vaste Engelse standaard.
+-Gedeelde LocaleLink,taalwissel,metadata,canonicals,OpenGraph,WebPage/ItemList/
+ BreadcrumbList en sitemap volgen dezelfde mapping. Eén WebSite-entiteit behouden.
+-Bestaande lijstslugs blijven gelijk;deze opdracht vertaalt alleen de routeprefix.
+-Veilige returnTo-identiteiten blijven intern /toplijsten/<slug>,maar de zichtbare
+ Engelse teruglink wordt /en/toplists/<slug>. Geen verruimde input- of membershipregels.
+-Geen CSS-,boek-,score-,editie-,gebruikers-,privacy- of configuratiewijzigingen.
+
+Controles
+-147gerichte unittests groen:70routing/i18n/SEO/redactionele/navigatietests plus
+ 77auth/launch/editorial-parity-regressies. Geen volledige suite als CI geclaimd.
+-TypeScript tsc--noEmit groen;volledige lint groen;gerichte lint incl.nieuw HTTP-script groen.
+-Productiebuild via bestaande Vercel/Nitro-opzet lokaal groen;GEEN deployment.
+ Niet-blokkerende build-/optimizerwaarschuwingen zichtbaar;geen nieuwe dependency toegevoegd.
+-Client-secretscan90bestanden:geen server-secret-identifiers of waarden gebundeld;
+ voor deze lokale build waren geen serverkeys ingesteld.
+-Werkelijke lokale HTTP-responses:26canonicalpagina's200(2overzichten+12lijsten×2talen),
+ 26oude/verkeerde taalaliases308met querybehoud,sitemap200met26nieuwe taaladressen,
+ geen Engelse toplijsten-canonicals of sitemapentries,twee echte boekdetailteruglinks.
+-Twintig nieuwe lijstpagina's bevatten nog exact10kaartlinks;overzichten bevatten12lijsten.
+-Server-HTML:één H1,self-canonical,wederkerig en/nl-NL-hreflang,index/follow,
+ og:url en og:site_name LumiScore. Geen client-JS nodig voor deze SEO-controle.
+-Browser:boek→Engelse lijst,EN→NL→EN en oude Engelse campagnelink daadwerkelijk gevolgd.
+ Navigatie pas gemeten na voltooide URL-wissel,niet een vroeg gelezen vorige URL.
+-Paper/Ink op390x844en1440x1000:12canonical Engelse lijstlinks,geen overflow;
+ dezelfde lichte kaarten en petrolgroene primaire acties. Geen fysieke telefooncontrole.
+
+Herhaalbaar
+node --experimental-strip-types --test lib/i18n/*.test.ts lib/seo/*.test.ts lib/catalog/top-lists.test.ts lib/catalog/editorial-campaigns.test.ts lib/navigation/*.test.ts
+node --experimental-strip-types --test lib/auth/*.test.ts lib/launch-readiness.test.ts lib/catalog/editorial-parity.test.ts
+node --experimental-strip-types scripts/test-editorial-language-routes.mjs http://127.0.0.1:3026 <optioneel-rapport.json>
+De HTTP-controle weigert niet-lokale targets en verricht uitsluitend leesaanvragen.
+
+Lokale preview:http://127.0.0.1:3026/en/toplists.
+De preview gebruikt alleen bestaande publieke configuratie van geïsoleerd testproject
+hlvujbrmfdlrfxdjwsmb;geen productieconfiguratie of databasewrites,geen accounts/ratings.
+Er zijn geen nieuwe .env-bestanden,Vercelvariabelen of beveiligingsinstellingen aangepast.
+Lokale browser-/HTTP-controles zijn GEEN hosted/productionbewijs.
+Voor toekomstige hosted controle is een afzonderlijke PR/Preview nog nodig.
+
+Geen push,merge of publicatie in deze opdracht. Geen productiedata of migraties.
+PR51en de afzonderlijke Mistborn-jaarcorrectie blijven buiten deze branch.
+Voor een toekomstige release:alleen deze routewijziging reviewen;oude gedeelde Engelse
+URL's en UTM-links na publicatie live controleren. Google/Bing moeten nieuwe canonicals
+opnieuw crawlen;geen ranking- of indexeringsgarantie en geen indexeringsverzoek gedaan.
+
+Bewijs:http-checks.json,browser-checks.json en screenshots in deze map.

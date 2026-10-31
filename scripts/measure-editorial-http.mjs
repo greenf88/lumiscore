@@ -9,7 +9,7 @@ if (url.protocol !== 'https:' || !/^lumiscore-[a-z0-9]+-rgkgroeneveld-9102\.verc
 const measurements=[];
 for (const locale of ['nl','en']) for (const slug of ['dystopie-vanaf-1990','na-project-hail-mary','fantasy-om-mee-te-beginnen']) {
   for (let attempt=0;attempt<3;attempt++) {
-    const path='/'+locale+'/toplijsten/'+slug;
+    const path='/'+locale+(locale==='en'?'/toplists/':'/toplijsten/')+slug;
     const {stdout}=await run(process.execPath,[cli,'curl',path,'--deployment',url.origin,'--scope','rgkgroeneveld-9102','--','--silent','--show-error','--max-time','25','--output','NUL','--write-out','%{http_code} %{time_starttransfer} %{time_total} %{size_download}'],{timeout:40000,maxBuffer:20000});
     const match=stdout.trim().match(/(\d{3}) ([\d.]+) ([\d.]+) (\d+)$/);
     if(!match)throw new Error('No bounded HTTP measurement; stop rather than retry');
