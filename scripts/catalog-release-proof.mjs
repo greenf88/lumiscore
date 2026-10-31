@@ -27,4 +27,6 @@ const lineage=read('summary-lineage-and-code-proof.json');
 assert.equal(lineage.releaseRecords,334);assert.equal(lineage.releaseUniqueWorks,312);assert(lineage.canonicalRuntimeBlobsEqual);
 const browser=read('hosted-validation-summary.json');assert.equal(browser.pagination.length,6);
 assert(browser.pagination.every(p=>p.uniqueCards===16&&p.allHaveConfirmedLocale));
-console.log(JSON.stringify({actions:686,texts:334,works:312,netNlWorks:109,hashedFiles:hashes.length,gitVerified:process.argv.includes('--git'),hostedPublicChecks:browser.checks,authenticatedBrowserProved:browser.authSessionProved}));
+const authFile=new URL('authenticated-validation-summary.json',dir);
+const auth=fs.existsSync(authFile)?JSON.parse(fs.readFileSync(authFile,'utf8')):null;
+console.log(JSON.stringify({actions:686,texts:334,works:312,netNlWorks:109,hashedFiles:hashes.length,gitVerified:process.argv.includes('--git'),hostedPublicChecks:browser.checks,authenticatedBrowserProved:Boolean(auth?.themeLocaleDeviceCases===8&&auth?.verifiedLocaleSelections===40)}));

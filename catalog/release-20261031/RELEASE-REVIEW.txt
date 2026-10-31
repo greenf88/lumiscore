@@ -138,15 +138,30 @@ The original broad-suite first run had two stale test expectations and one local
 load-related120s timeout; copied existing reviewed updated expectations and the
 isolated10 affected tests pass without raised timeout. CI41204067722 on application9d3b9a85123b5fe0679c80ec266ae47481cd075a passed ALL steps. Final data-only334-text revision is locally rechecked separately.
 Synthetic SSR is NOT an authenticated hosted browser session.
-One disposable synthetic TEST account is now explicitly authorized. Its dashboard
-form is prepared; initial credential entry/submission requires user handoff. No
-account has yet been created and no existing credentials have been read.
+One authorized disposable synthetic TEST account was created by the user and used
+in an actual logged-in browser.32 hosted checks now cover recommendations, real
+existing/new catalogue pages, language/theme/device changes and reload/back.
+One synthetic rating on pre-existing Synthetic Book001 was saved/read back only
+to create a profile, not public score evidence.20 recommendation Work identities
+use20NL and20EN confirmed editions; the8locale/theme/device cases pass. Synthetic
+fixture placeholders are NOT counted as verified covers or production coverage.
+Real De oversteek/The Passage and De buitenjongen separately prove stored text,
+source, correct-language cover and safe unavailable-EN state while authenticated.
+After removal of the own rating/read-status, recommendations return to the honest
+empty-profile state. Sign-out succeeded; the own disposable account was deleted
+through the official TESTdashboard. Readback31Oct13:44:02.404528UTC confirms no own
+account, sessions, ratings or statuses. Existing test accounts/records were untouched.
+No password was read or saved. See authenticated-validation-summary.json and
+authenticated-cleanup-readback.json; every capture names tested application9d3b9a8.
+Runtime remains byte-identical to release application45f3314; only evidence follows.
 Ready Preview https://lumiscore-331m41drq-rgkgroeneveld-9102.vercel.app
 Deployment dpl_awJAZsnbvezYGmiUoa33FcKUSCd3, application9d3b9a85123b5fe0679c80ec266ae47481cd075a.
 Hosted guest NL/EN,390x844/1280x720,Paper/Ink: old Work De oversteek/The Passage and new De buitenjongen; actual covers/source/text, strict absent-EN state, reload and back/filter preservation. Dune collection shows3NL/6EN cards and keeps6 linked Works; all6ENcovers actually loaded after scrolling. Central empty score stays empty. No synthetic ratings created.
 One immediate ENreload capture has an image pending; later desktop reload positively confirms it loaded. Do not count the pending frame as a loaded cover.
 The guest preference questionnaire is unavailable on TEST. One read-only production public-route visit shows the SAME existing error. First-question anchor Eragon143 has NULL edition language on production; this is not proof of a new selector regression. Current release does not certify complete questionnaire coverage or relax language gates.
-Authenticated hosted recommendations remain unproved until the separately requested test login.
+Authenticated hosted recommendations are now demonstrated with existing synthetic
+fixtures and one temporary owner, not a claim about production ranking quality or
+all newly imported Works' trait coverage. No traits/ranker/selection were changed.
 Complete hosted checks and exact application SHA are in hosted-browser-checks.json.
 Six actual hosted Browse pages (NL1-3/EN1-3) each contain16 unique Works,48 distinct
 per language across three pages. Exact public edition readback confirms each
@@ -181,5 +196,7 @@ deployment. Additive tables/functions remain compatible; retain old RPCs.
 Data recovery:receipt-bound child-first script; stop on any later dependency/edit.
 Do not drop/recreate shared schema or remove original Works/ratings/progress.
 
-ADVICE: Draft is a concrete reviewable release candidate, NOT yet release-ready
-while authenticated hosted checks and committed hosted recovery remain unproved.
+ADVICE: Draft is a concrete reviewable release candidate. Authenticated hosted
+acceptance and own account/rating cleanup are now proved. The remaining release
+gate is the explicitly declined committed hosted canary recovery: own catalogue
+Work959100031/Edition959200031 remain on TEST. No identical retry or bypass.
