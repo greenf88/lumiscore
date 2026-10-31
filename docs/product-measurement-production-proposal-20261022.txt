@@ -1,0 +1,162 @@
+PR51 — definitief productievoorstel, 29 oktober 2026 — NIET UITGEVOERD
+Dit vervangt de eerdere uitsluitend testgerichte productievoorstellen.
+Geen productie-installatie, configuratie, merge, publicatie of socialactie uitgevoerd.
+
+BASIS
+Productie en remote main: 246c379db1c674ac14e2959893f874c00b9330b2.
+Actieve productie Ready dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9.
+PR51 blijft Draft. Main is gecontroleerd samengevoegd; uitsluitend conflict in
+EditorialTopList: behoud zowel editorial-back als data-product-list. De compacte
+tweekoloms mobiele toplijsten, herstelroute en recente catalogusassets blijven.
+Geteste eerdere applicatie: 3bf06b9e02a63308ce35276e7728819f491d41e8.
+Nieuwste code-SHA/Ready-Preview/CI staan in het definitieve reviewcheckpoint.
+
+READ-ONLY PRODUCTIEVOORCONTROLE
+29 oktober 18:21:56 UTC: geen product_metric*-schema, publieke meetfuncties
+of product_metric*-observers. pg_cron nog niet geïnstalleerd; versie1.6.4 is
+beschikbaar en pg_cron staat al in shared_preload_libraries. Geen restart vereist
+volgens deze huidige metadata. Rating/status/roundkolommen passen bij de observers.
+Dit is geen bewijs van een geïnstalleerde productiescheduler of productieopslag.
+
+EXACTE BESTANDEN — supabase/operations/pr51-product-metrics/
+install.sql
+SHA256 c7a7fe62d539af6b19d12e968a837034a5a81385f87e5d95a66dc0f452d524a7
+scheduler.sql
+SHA256 e0db5a11b2e0fdcd9016f1df045e1b14ef5003586664665416f418cb6bfcbd63
+report.sql
+SHA256 0510c8911b068d79919a8dd9302f38cb1451916d1b9f2cac51ead63b31516cc0
+monitor.sql
+SHA256 5e69fd947d1927f6710dbf1155e2a94ec007e14bb65ecc0fc03793390cc62bd9
+verify-install.sql
+SHA256 a6cca8d28b8cb896807d66a132aeda56d0fffae38d7863918e1a9e424a40e06c
+rollback.sql
+SHA256 daa1e6b78caa00bf0fc16e455c07f833c35038a72e01edc0a1e566165554bdc1
+package-manifest.json bevat de dertien functie-bodyhashes, settings en ACLs.
+De renderer scripts/prepare-product-metrics-production.mjs doet geen remote
+verzoeken of writes; de gegenereerde bestanden zijn lokaal exact getest.
+SQL-bytes zijn LF vastgelegd via .gitattributes.
+Installer is voor een afwezige baseline: herhalen stopt vóór mutatie wanneer
+de schema/functies/triggers bestaan. Geen blind CREATE OR REPLACE of dubbeltelling.
+Scheduler herhaalt veilig bij exact gelijk eigen job/schedule/command/owner/database.
+Elk afwijkend object of gedeeltelijke installatie: STOP en snapshot beoordelen.
+
+OBJECTEN / MINIMALE RECHTEN
+Private schema product_metrics; zeven ENABLE+FORCE-RLS-tabellen:
+daily_counters,receipts,budgets,consent_grants,grant_budgets,operational_counts,
+maintenance_state. Zes expiry-indexen, zeven primaire sleutels; geen nieuwe views.
+Geen anon/authenticated/service_role tablegrants of rapportage-API.
+Vier publieke SECURITY INVOKER-wrappers met lege search_path:
+product_analysis_consent_v3(text,uuid,timestamptz)->jsonb;
+record_product_event_v1(uuid,text,jsonb)->text;
+record_product_events_v1(jsonb)->jsonb;
+record_product_sign_in_v1(jsonb)->text.
+Anon/authenticated: EXECUTE op de eerste drie; alleen authenticated op sign-in.
+Beide krijgen private schema USAGE en uitsluitend EXECUTE op valid_context,
+record_event en consent, nodig door de invokerwrappers. Overige private functies
+hebben geen client-EXECUTE. PUBLIC- en service_role-defaults expliciet ingetrokken.
+Negen private functies: current_time,operational,request_grant,consent,valid_context,
+request_context,record_event,observe_transition,cleanup.
+Definers alleen voor gecontroleerde private writes/observer/cleanup, lege search_path.
+Observer controleert auth.uid()=NEW.user_id; canonieke events eisen echte transition;
+login eist geverifieerde auth-session. Geen owner/RLS-rechten voor clientratings
+gewijzigd. Drie AFTER-observers op ratings, user_book_status, taste_rating_rounds:
+de enige bron voor committed rating/status/ronde-events; browsercollectors weigeren
+deze events. Bestaande publieke scoreberekening en smaakberekening ongewijzigd.
+Rapporten alleen via bestaande bevoegde databaseoperator (postgres), geen nieuwe
+beheerrol of publiek rapport. Geen e-mail, naam, user-ID, scorewaarde, vrije tekst,
+token of volledige URL in counterdimensies; receipts/grants zijn wel pseudoniem.
+
+ACTIVATIE EN TOESTEMMING
+Bestaande NEXT_PUBLIC_SUPABASE_URL en publishable key blijven voor productie
+qvplwejffhjvxaypmjut; geen service-rolekey nodig of toevoegen.
+Nieuw exact releasevoorstel: NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=true uitsluitend
+in de Vercel Production-omgeving. Nu NIET ingesteld. Ontbrekend/false/ongeldig:
+productie blijft uit. Exacte targetallowlist; testproject blijft altijd synthetic.
+Productieroute gebruikt eigen RPCs en traffic=production; server en SQL weigeren
+synthetic op productie. Bestaande test-Previewconfiguratie blijft ongemoeid.
+Eén productiebuild na dit toekomstige akkoord moet de publieke schakelaar in
+client en server meenemen. Geen rebuild van unrelated branches.
+Deze activatie vervangt GEEN bezoekerstoestemming: onbekend/deny/verlopen/DNT/GPC
+blijft uit; geen analyse-ID/context/buffer vóór opt-in, geen retroactieve replay.
+Na intrekken lokaal uit/abort/wissen; DB-revoke lockt dezelfde grant als ingest.
+Alle twaalf contractevents optioneel; normale rating/login/voortgang onafhankelijk.
+Noodzakelijke keuze-cookie versie1 90dagen, grant30min. Reeds opgeslagen totalen
+volgen retentie en worden niet persoonsgericht verwijderd na intrekken.
+
+RETENTIE / CAPACITEIT / OPERATIONEEL BEHEER
+Productbesluit ter goedkeuring, geen wettelijke standaard:
+dagcellen UTC-dagstart+90dagen (bijdrage89–90dagen), random receipts24uur;
+round/loginreceipts90dagen; grants30min; budgets1uur; health/eigen cronhistory7dagen.
+Zelfstandige pg_cron-job lumiscore-product-metrics-cleanup-v3:
+*/5 * * * *, SET statement_timeout='3s'; SELECT product_metrics.cleanup();
+max5000 perzes expiratietabellen, SKIP LOCKED, lock_timeout100ms.
+Normaal bij tijdige start zonder backlog maximaal90dagen+5min+3s; geen garantie
+bij storing/schedulervertraging. Monitor: ontbrekend/stale succes>10min,
+SQLSTATE/backlog/cronhistory. Geen nieuwe alarmdienst: bestaande beheerder moet
+deze SQL-check bewaken. Inhalen met dezelfde begrensde batches; geen massadelete.
+Productiescheduler draait onder bestaande installowner; geen publieke cronrechten.
+600events/min/project,60/min/grant,60grants/min. SQLbudget gedeeld over instances.
+Browserqueue20,batch10,max2inflight,3s abort,geen retries. Verlies/busy/storage
+best-effort zichtbaar zonder eventinhoud; netwerk/clientverlies blijft onbekend.
+Geen unieke bezoekers of persoonsfunnel; teller/noemer zijn ongekoppelde events.
+Providerlogs/backups vallen onder bestaande providerafspraken; deze applicatie
+kan hun retentie niet garanderen. Geen langere gedragsaggregaten toevoegen.
+
+INSTALLATIEVOLGORDE NA TOEKOMSTIG RELEASEAKKOORD
+1. PR-head/main/productie en hashes opnieuw bevestigen; STOP bij onverwachte code.
+   Bevestig project qvplwejffhjvxaypmjut in tool/dashboard, niet alleen SQL-latch.
+   Maak afgeschermde snapshot van afwezige of eventuele bestaande objecten,
+   ACLs, triggers, cron en function bodies. Bij aanwezige objecten: STOP, geen
+   absent-baselinepad; voorgeschreven oude definities/rechten bewaren.
+2. Op dezelfde operatorverbinding: SET lumiscore.metrics.release_target =
+   'qvplwejffhjvxaypmjut'; voer exact install.sql uit (transactie,2s lock,30s statement).
+   Nieuwe tabellen/expiry-indexen leeg, drie korte trigger-DDL-locks op brontabellen.
+   Geen gegevensmigratie of catalogus-/account-/ratingwrite. Locktimeout/fout:
+   transactie stopt; inspecteer objecten vóór verdere actie, geen blinde retry.
+   Oude app heeft geen grant en blijft functioneel zonder optionele events.
+3. scheduler.sql installeren; pg_cron alleen indien afwezig toevoegen, één eigen
+   job. Geen bestaande jobs veranderen. Bij fout niet activeren; exacte metadata
+   lezen en alleen eigen installatie terugnemen met bewaakte rollback.
+4. verify-install.sql en manifest:7tabellen/13functies/3observers,FORCE RLS,
+   geen client-tabletoegang en alleen boven genoemde EXECUTE. Normale cronrun
+   afwachten en monitor.sql lezen; geen versnelde taak of handmatige run als bewijs.
+   Bij afwijking STOP vóór appactivatie. Rapportage blijft onbekend, niet0.
+5. Na dezelfde goedkeuring Production-only releaseflag=true toevoegen en exact
+   goedgekeurde PR mergen/bouwen. Bevestig Ready productie-SHA en lumisco.re-alias.
+   Andere branches/testconfig niet veranderen. Geen productie-testaccount/ratings.
+6. Gastcontroles NL/EN: keuze standaarduit/deny, privé no-store consentresponses,
+   canonicals zonder UTM, buttons/native navigation, geen dubbelen. Een vrijwillige
+   echte gebruikershandeling met expliciete consent is nodig voor productie-
+   rating/login/completion-readback; nooit stil synthetische productieratings maken.
+   Alleen vaste meetdimensies teruglezen; geen gebruikerslog doorzoeken.
+7. monitor/report met periode/bron/traffic=production. Controleer intakefouten,
+   stale cron en bekende verliezen; rapporteer onbekende persoonconversie als onbekend.
+   Geen historische517/19 als baseline, geen brede indexering/socialpublicatie.
+
+ROLLBACK / STOPBEVEILIGING
+Bij incident eerst Production-only flag=false + rebuild of vorige appdeployment
+terugzetten: normale login/ratings/voortgang blijven werken. Oude code geeft geen
+grant; nieuwe DBobjecten zijn additief en compatibel. Het terugzetten van een
+deployment kan Vercel-autoassignment pauzeren; afzonderlijk gecontroleerd herstellen.
+Vervolgens exacte rollback.sql: expliciete targetlatch én
+SET lumiscore.metrics.absent_baseline='confirmed' alleen bij bewezen afwezige
+oude baseline. Alle13bodyhashes,3triggers en eigenjobcommand/schedule/owner/database
+moeten overeenkomen. Default ROLLBACK; na review bewust COMMIT voor de disable.
+Verwijdert uitsluitend drie eigen observers, unschedulet uitsluitend eigenjob,
+trekt eigen EXECUTE/USAGE in; geen DROP SCHEMA, CASCADE, businessDELETE of seqreset.
+Meetgegevens behouden voor afzonderlijke gerichte beslissing. Bij latere
+rechtmatige objectwijzigingen stopt rollback; herstel dan afgeschermde oude
+definities/ACLs na beoordeling, niet blind verwijderen. pg_cron niet droppen.
+Geen herinstallatie via fresh-installer over behouden schema heen.
+
+BEWIJS EN BEPERKINGEN
+Echte hosted10/10-route/nieuwe+gewijzigde ratings/completion1/withdrawal/foutisolatie/
+cronreadback28oktober blijven geldig; geen nieuwe accountcampagne herhaald.
+Nieuwe lokale tests normaliseren de13productiefuncties naar het bewezen testpakket:
+exact dezelfde bodies afgezien van namespace/traffic/jobnaam. Consent,synthetic-
+afwijzing,dedup,transition,privileges,scheduleruniqueness en rollback getest.
+Nieuwe targetreleaseflag en mainconflict gericht getest; definitieve CI/Preview
+worden in review ingevuld. Productie is NU NIET geïnstalleerd/geactiveerd.
+Geen volledige hosted600/min-piek of automatische alarmdienst bewezen.
+Bewaartermijnen voor providerlogs/backups zijn niet met SQL te bewijzen en blijven
+onder bestaande providerafspraken. Geen garantie op volledige campagnetelling.

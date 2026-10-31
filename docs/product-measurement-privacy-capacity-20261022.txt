@@ -1,0 +1,146 @@
+PR51 v3 — toestemming, retentie en capaciteit — 22 oktober 2026
+Vervangt de v2-analyse; eerdere checkpoints zijn historische feiten.
+28oktober2026: testinstallatie/rechtenherstel en echte vijfminuten-cron bevestigd.
+Gastmetingen en volledige ingelogde10/10-ronde teruggelezen. Hosted SQL-overhead
+en DOM-browserbevestiging afzonderlijk gemeten; geen productieactivatie.
+Historische lokale ramingen hieronder zijn geen hosted loadtest. Exacte cleanup
+blijft geblokkeerd; zie het actuele installatie-reviewverslag.
+
+TOESTEMMING
+Optionele analyse is standaard UIT. Onbekende/ongeldige/verlopen keuze, DNT/GPC,
+ontbrekende grant of meetdienst: geen events, contextheaders, UUIDs, UTM-storage
+of replaybuffer. Ratings, authenticatie en leesvoortgang blijven onafhankelijk.
+Alle contractevents (zie contract.md) zijn optionele analyse. Er is geen door
+clients te kiezen categorie 'operationeel noodzakelijk'.
+
+Twee gelijkwaardige lichte knoppen, NL/EN, Paper/Ink. Permanente footerknop
+'Analysevoorkeuren / Analytics preferences'; intrekken op dezelfde plaats.
+Noodzakelijke HttpOnly/SameSite=Strict keuze-cookie bevat alleen versie1,
+accepted/denied en vervaldatum90dagen. Geen ID, campagne of gedragsinhoud.
+Afzonderlijke HttpOnly30min-autorisatie pas NA expliciet accepteren. Private
+consent_grants bevat willekeurige token, versie, created_at, expires_at, revoked_at.
+Token is een kortlevend pseudoniem bearer-autorisatiemiddel, geen bezoeker-ID;
+niet als eventdimensie opgeslagen of voor een funneljoin gebruikt.
+Geen claim van anonimiteit: bevoegde beheerders hebben technische toegang.
+
+Browser ontvangt alleen active/choice/expiry, nooit token. Server valideert
+keuze+grant-cookie; database controleert grant op opslagmoment. Ook AFTER-triggers
+en vertraagde loginmeting vereisen actieve grant, geen browser-only schakelaar.
+Revoke en event locken dezelfde grant-rij. Na bevestigde revoke-commit worden
+oude requests geweigerd. Een eerder gecommit event is niet terug te halen.
+Bij netwerkfout: lokaal direct uit; UI vermeldt dat serverbevestiging ontbreekt.
+Geen belofte van onmiddellijke remote intrekking bij een onbereikbare dienst.
+
+Intrekken/expiry wist queue+campagnecontext en abort lopende verzending; geen
+automatische retry/offline replay. Andere tabs ontvangen alleen stopsignaal.
+Fresh accept registreert GEEN eerdere paginabezoeken; uitsluitend toekomstige
+handelingen. Bij geldig herstelde eerdere keuze mag de huidige route tellen.
+Campagnecontext (uitsluitend vaste enums) wordt alleen actief gelezen/opgeslagen
+na toestemming, maximaal tot grantverval30min. Vooraf bekeken herkomst niet
+bufferen. Op intrekken/expiry gewist in actieve tab. Een gesuspendeerde/gesloten
+tab kan geen tijdige fysieke timer garanderen; hergebruik controleert expiry,
+verwijdert verlopen context; sessionStorage verdwijnt bij sessie/tabbeëindiging.
+Geen namen/e-mails/tokens/zoekteksten/URLs in counters, receipts of healthcounts.
+Noodzakelijke consent-cookie staat los van analyse en kan90dagen blijven bestaan.
+
+Eerdere gegevens worden niet op basis van intrekken uit totalen teruggezocht:
+geen ondersteunde persoonskoppeling. Ze volgen onderstaande bewaartermijnen.
+Bestaande Speed Insights-bootstrap uit deze app verwijderd: geen afzonderlijk
+niet-intrekbaar SDK-script naast deze opt-in. Dependency ongewijzigd; geen
+dashboardconfiguratie aangepast. Operationele providerlogs/backups staan los
+hiervan; toegangsrechten/retentie daarvan blijven productie-beslispunt.
+
+GEGEVENS EN RETENTIE — PRODUCTVOORSTEL, GEEN WETTELIJKE STANDAARD
+daily_counters: UTC-datum,event,allowlisted dimensions,n,expires_at.
+Geen ruwe eventinhoudtabel. Kleine geaggregeerde cellen zijn niet vanzelf anoniem.
+Expiry is START van UTC-bucketdatum+90dagen: individuele bijdrage89–90dagen.
+receipts: opaque event_id,recorded_at,expires_at. Browser/rating/status24uur;
+round-start/completion/login90dagen voor begrensde dedup. Round/session-receipts
+deterministische hashes; geen anonimiteitsclaim, geen user/round-ID in teller.
+consent_grants: maximaal30min (eerder ingetrokken blijven slechts tot expiry).
+grant_budgets/project budgets: timestamp-minute,n,expires na1uur.
+operational_counts: vaste reden/minuut/aantal,7dagen; geen eventinhoud of IDs.
+maintenance_state: één overschreven rij met tijden, SQLSTATE, aantallen/backlog;
+geen historische gedragsgegevens. Alleen eigen cron-runhistory ouder7dagen wissen.
+
+pg_cron-voorstel: iedere5min, zelfstandig zonder ingest/verkeer. Max5000rijen
+perzes expiratietabellen perrun, FOR UPDATE SKIP LOCKED, expiry-indexen,
+100ms lock_timeout; jobcommand statement_timeout3s. Eigen cronhistory nog
+max5000rijen. Geen ratings/accounts/books/voortgang geraakt.
+Normaal, zonder achterstand en bij tijdige taakstart: raw maximaal90dagen+5min
+plus maximaal3s uitvoering. Schedulervertraging is niet in die bovengrens gedekt.
+Geen exacte90dagen-garantie. Bij storing/backlog langer totdat hersteld.
+monitor.sql: laatste succes >10min, ontbrekende status, SQLSTATE of backlog is
+alarmsignaal. Cron job/runstatus afzonderlijk controleren; querycancellation
+buiten functie kan statuswrite terugrollen, daarom stale-successcontrole nodig.
+Geen nieuwe externe notificatie-integratie: bevoegde operator moet deze bestaande
+SQL-check daadwerkelijk uitvoeren/monitoren; unattended alarmering niet bewezen.
+Inhalen: dezelfde5min-taak metbegrensde batches doorlaten, backlog controleren;
+eventueel handmatig1run/keer max5000/table, niet één onbeperkte DELETE.
+Backups/providerlogs: onbekende bewaartermijn, geen SQL-DELETE-belofte daarvoor.
+
+CAPACITEIT
+V2:120events/min PROJECTBREED, gedeelde DB-budgetrij, niet perclient/proces/IP.
+Bovendien globale niet-wachtende advisorymutex: unrelated gelijktijdigheid kon
+events verliezen. V3 verwijdert die mutex, behoudt atomische gedeelde DB-budgets:
+600events/min/project,60/min/30min-grant, maximaal60nieuwe grants/min/project.
+Geen permanente bezoekersidentificatie. Pergrant-rowlock serialiseert met revoke;
+projectbudget blijft atomisch ook over meerdere appinstanties. Lockwait25ms,
+best-effort health-counter5ms; verlies 'busy' expliciet, niet gebruikershandeling.
+Queue20/batch10/max8192bytes/100ms flush, maximaal2 requests tegelijk,3s abort,
+nul retries. Lokale tijdelijke transporttellers tonen queueverlies/failed/rejected
+batches zonder inhoud of IDs; geen extra healthrequests, reset bij intrekken.
+Bots kunnen publieke metingen nog vervalsen/uitputten; geen ranking/populariteit/
+autorisatie afleiden. Limieten blijven een bewuste ondertelgrens, geen SLA.
+
+Onderbouwing:20logische10-boekroutes x28events=560/min synthetische campagnepiek;
+extra40=600,volgendeweigering; pergrant60limiet en reset volgende minuut getest.
+PGlite serialiseert transacties: twee logische applicatieinstanties/multiclients
+delen cap in lokale test, maar GEEN bewezen parallel hosted lockthroughput.
+Bekende weigeringen: project_rate_limited,grant_rate_limited,busy,storage_error.
+Daarnaast consent_denied/invalid_payload/duplicate/accepted en grant_issued.
+Alleen vaste reason+minuut+n,7dagen. Healthwrite kan ook mislukken; browserqueue,
+clientuitval/netwerkverlies niet volledig observeerbaar. Geen volledige telling,
+unieke personen of gekoppelde conversie claimen. report.ts coverage.complete=false.
+Geen eventinhoud bewaren om meetuitval te verklaren.
+
+LOKAAL GEMETEN (PGlite/WASM win32/x64 Node24.20; niet hosted)
+21new-ratingwrites/variant:
+baseline mediaan1,53ms (1,10–2,23); mettrigger geweigerd1,89ms (1,14–9,59);
+metactieve grant4,29ms (3,12–19,20). Geen extra netwerkrequest op ratingpad;
+wel synchroon werk in dezelfde transactie. Geen TTFB/LCP-/productieclaim.
+Peraccepted event5logische writes: grantbudget,projectbudget,receipt,counter,
+accepted-health; plus grant SELECT FOR UPDATE en index/WALwerk niet apartgemeten.
+Extra consent GET na hydration, accept/revoke POST, batchcollectors alleen actief;
+geen nieuwe catalogus/externe boekrequests op kritieke laadroute.
+
+1000unieke cellen/receipts/grants lokaal, inclusief indexallocatie:
+counter622,592bytes/rij; receipt163,84; grant172,032. Kleinproef paginavulling,
+geen hosted grootte/kosten. Model80%5-event/20%28-eventroutes=9,6events/route,
+max90dagen unieke cellen;24h kortere receipts,3langere/28events90dagen.
+Routes/dag  modelsubtotalMiB  3xplanmargeMiB
+100         52,28            156,85
+1000        522,85           1568,54
+10000       5228,47          15685,42
+Exclusief bounded budget/health/history enWAL/backups; geen prognose of kosten.
+Werkelijke aggregatie kan cellen sterk beperken. Gemiddelde belasting bewijst
+geen piekgeschiktheid. Geen abonnement/extra kosten aangegaan.
+
+RAPPORTAGE/BEWIJS
+Alleen bevoegde operator via private SQL; alle7tabellen FORCE RLS en geen
+client-tablegrants. Functie-ACLs expliciet, lege search_path, geen publiek rapport.
+Contractevents/dimensions ongewijzigd; events zijn geen bezoeken/personen.
+Eerdere517ratings/19rondes blijven onbekende herkomst, geen valide baseline.
+SQL- en browsertransporttests lokaal geslaagd. Op28oktober tevens normale echte
+cron07:55UTC metexpiry-readback en volledige browserronde/completion1 bewezen.
+Browserupdate n5/stand:aanmediaan680ms(654–807),uit675ms(650–878); resultaat-H1
+n3/stand:aan1042ms(985–1816),uit1040ms(902–1198). Inclusief UI-automatisering,
+niet LCP/paint/HTTP; kleine sequentiële proef, geen causaliteits-/snelheidsclaim.
+Geen direct gemeten browserrequestaantallen via deze toegang. SQLobserver voegt
+volgens code/transporttests geen apart browserrequest toe; synchrone DB-writes
+en batch-/consentverkeer blijven afzonderlijk. Hosted SQL0.311/1.113ms betreft
+21updates/stand binnen één transactie, zonder netwerk/commit/API.
+Na intrekken geen extra optionele events ondanks echte reloads/ratingwijzigingen.
+De latere exact guarded cleanup geeft opnieuw Invalid or expired requestState,
+11:04:12UTCaanvraag/11:11:32UTCwaargenomen. Read-only werkt, oorzaak onbekend;
+geen bewezen OAuth-expiry of beveiligingsweigering. Geen identieke retry/omweg.

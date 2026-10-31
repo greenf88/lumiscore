@@ -1,0 +1,837 @@
+PR51 — GERICHTE AFRONDING 29 OKTOBER 2026
+Dit checkpoint vervangt de oudere blokkadestatussen hieronder.
+Definitieve PR-head, Ready-Preview en CI worden in de actuele PR-beschrijving
+vastgelegd; historische applicatiecommit blijft 3bf06b9 voor het hergebruikte bewijs.
+
+OPRUIMING VOLTOOID
+Nieuwe expliciete opdracht stond de ingelogde Supabase-dashboardroute toe.
+Geen nieuwe falende connectorwrite aangeboden, geen beveiligingsweigering omzeild.
+18:18:39UTC verse exacte actoridentiteit en volledige businessrijen gelijk aan
+het afgeschermde manifest. Meetfingerprints uitsluitend bekende synthetische rijen:
+38cellen/83bijdragen,3receipts,18health;80receipts al regulier verlopen.
+Geen actieve grants/sessies/refreshtokens. Alle9fixture-Works,edities,traits en
+inventaris ongewijzigd;geen gebruik door andere accounts.
+18:21UTC één bewaakte dashboardtransactie:12ratings/12statussen/10offers/1ronde,
+9Works/9edities/9traits/9inventaris/1auteur en genoemde meetrestanten verwijderd.
+SQLbody/hash intern vergeleken met private bestand; target zichtbaar hlvujbrmfdlrfxdjwsmb.
+Externe referenties, rowfingerprints en expected counts stoppen atomair bij afwijking.
+Tijdelijk Auth-account daarna via ondersteunde Authentication→Delete user verwijderd.
+Geen Authinstellingen gewijzigd. Geen wachtwoord/hash/token gelezen.
+
+Readback18:26:16.749650UTC: eigen Auth/identities/rounds/fixturetraits/inventaris/
+edities/auteur0;countercellen/receipts/health0. Twee bestaande accounts behouden.
+Ongewijzigde huidige restcatalogus604Works/847edities/123auteurs/inventaris7;
+andere ratings68/statussen68/rondes5/offers69 behouden. De hogere catalogusaantallen
+versus28oktober zijn vooraf bestaande latere, afzonderlijk toegestane aanvullingen,
+niet cleanupverlies. Geen automatische nummering teruggezet.
+Meetinstallatie7FORCE-RLS-tabellen/9privatefuncties/3observers en normale5min-cron
+behouden.18:25UTC laatste zelfstandige cron:success,geen backlog/error.
+Geanonimiseerd bewijs:docs/product-measurement-cleanup-20261029.json.
+Private manifest/SQL blijven buiten Git; oude foutbewijzen niet overschreven.
+
+ACTUELE COMPATIBILITEIT EN CONCREET PRODUCTIEPAKKET
+Remote main en actieve productie246c379db1c674ac14e2959893f874c00b9330b2.
+Main samengevoegd in eigen branch. Het enige conflict EditorialTopList houdt
+zowel actuele editorial-back/layout als data-product-list. CSSmobiele2kolommen
+behouden;nieuwe tienlijsten,herstelroute en recente assets blijven intact.
+Rating-/smaaktestopslag/routes zijn sinds eerder bewijs niet veranderd.
+Login normaal staat los van de nieuwe recoveryroute; geen herstelcredentials gemeten.
+Nieuwe lokale controles: sharedgrid/herstelcontract, opt-in/defaultoff/revoke,
+productionreleaseflag/trafficisolatie, exacte SQLbodynormalisatie,prodACLs,
+scheduleruniqueness en rollback met behoud van rating/tellerdata.
+
+Productie read-only18:21:56UTC: geen meetobjecten/triggers;pg_cron nog afwezig.
+Versie1.6.4 beschikbaar,preloaded; businesskolommen compatibel.
+Nieuw exact voorstel:supabase/operations/pr51-product-metrics/. ZevenprivateRLS-
+tabellen,13functies,3observers,eigen5minjob. Afwezige-baselineguard en minimale
+expliciete rechten;geen afhankelijkheid van automatische service_rolegrants.
+De13SQLbodies zijn gelijk aan bewezen testbodies na uitsluitend namen/traffic/
+jobmapping. Production-only NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=true is de
+voorgestelde releaseactivatie;NU NIET ingesteld. Productie zonder dezeflag uit;
+testsynthetic blijft hetzelfde. Client/server/SQLtoestemming blijft altijd vereist.
+Geen productieDDL/writes,productiescheduler,config,merge ofpublicatie uitgevoerd.
+Exactehashes/volgorde/rollback en beperkte livechecks staan in
+docs/product-measurement-production-proposal-20261022.txt.
+De uitvoerbare rollback stopt ook bij nieuwe privatefuncties/gewijzigde body ofACL.
+
+GELDIG BEWIJS HERGEBRUIKT, NIET OPNIEUW NAGEBOOTST
+Hosted28oktober op p66zy1mg0/dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx,app3bf06b9:
+campagne→lijst→kaart→detail→echte login-na-optin→10/10→resultaat.
+Readbacknew/updated apart,1start/1completion;resultaatreloadgeenextracompletion.
+Na intrekken3reloads+5echte ratingwijzigingen metongewijzigde83events/83receipts.
+Defaultoff/deny/retrydedup/failureisolation/privacy en normalecron07:55UTC
+behouden. Geen nieuwe account/ratings/completebrowsercampagne nodig of uitgevoerd.
+Het nieuwe productiepad is lokaal exact getest; daadwerkelijke productieopslag
+kan pas ná afzonderlijke goedkeuring/liveactivatie worden bevestigd.
+
+METINGEN EN BEPERKINGEN ONGEWIJZIGD
+DOMratingbevestiging,n5/stand:aanmediaan680ms(654–807),uit675ms(650–878).
+Resultaat-H1,n3:aan1042ms(985–1816),uit1040ms(902–1198).
+Inclusief UItransport;geen LCP/paint/causale snelheidswinst.
+HostedSQLn21:deny0.311ms(0.274–15.258),accept1.113ms(1.038–34.287).
+Geen netwerk/commit/API in SQLmicrobenchmark. CollectorHTTPn3apart:
+accept183.224ms(178.240–187.809),deny133.629ms(132.403–136.409).
+Code:ratingobservergeen extra browserrequest,wel synchrone meetwrites.
+Geen volledige hosted600/min/multiinstancepiek of completeverliesmeting bewezen.
+Events/pageviews zijn geen unieke personen of gekoppelde funnelconversie.
+Providerlog/backuptijden onder bestaande providerafspraken,nietappSQLretentie.
+Normale90dagen+5min+3s geldt alleen tijdig/geenbacklog;beheerder monitort.
+
+CONTROLES EN ADVIES
+Gerichte tests groen;TypeScript/lint/build/secretscan uitgevoerd op nieuwecode.
+Lokale pnpmweigering wegens bestaand gedeeld node_modules-pad veilig omzeild
+door bestaande Node-entrypoints te gebruiken;geen dependencies/andereworktree
+verwijderd of gewijzigd. CI draait op schone checkout en blijft vereiste releasegate.
+Definitieve CIconclusie/ReadyPreview in PRbody,geen voorlopige groenclaim.
+GEREED VOOR RELEASEAKKOORD zodra actuele CI/Ready groen bevestigd zijn;
+de inhoudelijke cleanupblokkade is weg. PRblijftDraft tot apart akkoord.
+
+----- HISTORISCHE CHECKPOINTS HIERONDER -----
+PR51 — READ-ONLY OPRUIMNACONTROLE; GEEN NIEUWE AANLEIDING VOOR WRITE
+28oktober2026,12:31:13–12:32:27UTC /13:31:13–13:32:27Europe/Amsterdam(CET).
+Head6354e56adf7a0e0e8de6bff8d2f37a5c5f0973ce opnieuw open/Draft,mergeable;
+applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd. Bestaande
+quality40678865703success(856pass/16skip/0fail),Ready4y18xiv1a en volledige
+hosted10/10-acceptatie hieronder hergebruikt. Geen nieuwe testcampagne/appcode.
+
+GEEN nieuwe cleanup aangeboden: geen aantoonbaar connectorherstel, vernieuwde
+sessie of concrete herstelstap van support. Supabase installed/ENABLED en
+get_project/SELECT werken; dit werkte eerder ook en bewijst geen writeherstel.
+Tools bieden geen sessievernieuwingstijd of concrete requestState-herstelactie.
+Geen alternatieve toegang, installatie, accounts, ratings of productiemutaties.
+
+Exacte bestaande manifestidentiteit/aanmaaktijd en alle volledige businessrijen
+opnieuw gelijk bevonden (ratings,statussen,offers,ronde,voorkeuren).
+Nog aanwezig/te verwijderen:eigen Auth-account1,ratings12(inclusief3oude),
+leesstatussen12,offers10,afgeronde ronde1;voorkeuren/responses0;sessies/refresh0.
+FixtureWorks9/edities9/auteur1/traitrijen9/inventaris9. Geen andere gebruiker
+heeft deze Works in ratings/statussen/offers;geen onverwachte collectie-,cover-,
+categorie-,selectie-,alias-,editorial- of auteurafhankelijkheden gevonden.
+Meetrijen:38countercellen/83bijdragen,83receipts,18operationele rijen;alle
+fingerprints passen bij het eerdere exacte manifest. Verlopen grant/budgets/
+grantbudgets zijn door de normale cron inmiddels0: geen geslaagde actorcleanup.
+Oud cleanup-SQL NIET opnieuw gebruiken; de rowguards moeten na herstel vers zijn.
+
+Behouden oorspronkelijke catalogus529Works/763edities/68auteurs/inventaris7;
+andere ratings68/statussen68/rondes5/offers69. Meetinstallatie7FORCE-RLS-tabellen,
+9private functies,3enabled observers; eigen vijfminutenjob1actief. Laatste normale
+runs12:25en12:30UTCsucceeded. Geen volledige nieuwe installatie-audit geclaimd.
+Eén read-only vergelijkings-SELECT had een syntaxfout42601; alleen die SELECT
+gecorrigeerd en geslaagd. Geen mutatie, requestState-retry of beveiligingsweigering.
+
+Exacte private restanten:outputs/product-measurements-20261028/
+cleanup-residuals-123227.private.json. Geanonimiseerd bewijs:
+cleanup-readonly-followup.json. Bestaand support-cleanup-requeststate.txt
+bijgewerkt; niets verzonden. Oude manifesten/foutbewijzen niet overschreven.
+
+Laatste ECHT uitgevoerde cleanupfout blijft de aanvraag11:04:12UTC/resultaat
+11:11:32UTC:Invalid or expired requestState,INVALID_ARGUMENT,JSON-RPC-32602,
+geenrequest-ID. Geen nieuwe foutwaarneming/uitvoerduurclaim in deze nacontrole.
+Minimale vervolghandeling: support bevestigt herstel van deze write-requestState
+of geeft een concrete ondersteunde herstelstap. Dan eerst actuele waarden/expiry
+en identiteit controleren, vervolgens één gerichte toegestane cleanup.
+GEBLOKKEERD; PR51 blijft Draft. Geen productieakkoordtekst afgeven: de bestaande
+installatiebestanden zijn TEST-only, met harde test-origin-gate. Het ontbreken
+van een gevalideerd productie-install/activatiepakket is ongewijzigd expliciet
+beschreven in productievoorstel. Niet stil omzetten in productiemigraties in
+deze connectorgeblokkeerde afronding. Bestaande hashes/rollback blijven gelijk.
+
+----- EERDER CHECKPOINT -----
+PR51 — VOLLEDIGE HOSTED RONDE BEWEZEN; EXACTE OPRUIMING GEBLOKKEERD
+28 oktober 2026, aanvullend acceptatiecheckpoint. Oudere checkpoints hieronder
+zijn historische feiten; dit blok geeft de actuele uitkomst.
+
+BASIS EN ONGEWIJZIGDE APPLICATIE
+Remote main2651c364eb879dc6ec7416034744b3e947458449 opnieuw gecontroleerd.
+PR-head bij aanvang13f7fef13f0efe70d44d11905aa228311c2ad159, open/Draft,
+mergeable. Quality40661696566 success; Ready dpl_7MNS8tyjqMHZnWMwPDfeRevkDRZ8
+https://lumiscore-g065y4mg8-rgkgroeneveld-9102.vercel.app.
+Eerder opgegeven fln9ei785/dpl_FxA9YewVy3phJzDcqq6313jg61Vz eveneens Ready
+op3b8a25b. Werkelijk browserbewijs bleef op p66zy1mg0/dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx:
+dezelfde applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 en bestaande
+branchgebonden testconfiguratie. Geen app-, environment- of Auth-wijziging.
+Nieuwe bestanden zijn uitsluitend fixture/cleanup/test/verslag, geen tweede meetsysteem.
+
+WERKELIJK TEKORT EN MINIMALE FIXTURE
+De expliciet verruimde opdracht staat nu synthetische testboeken toe. Negen
+aparte, duidelijk SYNTHETISCH PR51 genoemde NL-Works toegevoegd aan alleen test,
+elk met één exacte nld-editie, native identiteit en één handmatig vastgelegd
+synthetisch genre. Eén eigen synthetische auteur. Geen ISBN, uitgeversidentiteit,
+Open Library-ID, cover, ratings of echte publicatiegegevens verzonnen.
+Het bronbewijs is de expliciete fixturedefinitie, geen claim over bestaande boeken.
+Elk is aantoonbaar een standalone binnen deze definitie, geen reeksdeel/bundel.
+Manifest:test-support/product-metrics/acceptance-fixture-v1.json met alle exacte
+Work/Edition/author-ID's, standalonebewijs en opruimvolgorde. Negen is minimaal:
+bestaande reguliere ronde1/10 kon hiermee met9nieuwe ratings worden afgerond.
+
+Validatie gebruikt ONGEWIJZIGDE bestaande tasteEligibility uit aparte PR38-worktree,
+zonder code over te nemen/PR38 te wijzigen. PolicySHA256
+ec0e1301c68af4e08a14723a2193d2c388f70bc88142eadd865d4545cdfd7962.
+Negen NL pass; EN afgewezen. Ontbrekend standalone-/genre-bewijs en omnibus
+blijven afgewezen. Geen accountuitzondering of verslappen productiecriteria.
+Install-template met exacte manifestinhoud gerenderd, SHA256
+df27f88c223b29300f6efd399c1127959ca209a05d65186abff4f04c5a03dbae.
+Via bestaande execute_sql-koppeling geslaagd; resultaat10:50:21UTC,
+readback10:51:02.959304UTC alle9snapshot/current=true.
+Voor/bestaand na:529Works/763edities/68auteurs/7inventarisregels ongewijzigd;
+ratings71/statussen71/rondes6/offers70 bij installatie ongewijzigd.
+Lokale echte SQL: installatie tweemaal, metadata-collision rollback,
+cleanup tweemaal, onverwachte referentie/gewijzigde editie stopt; bestaande
+lokale records behouden. Geen tweede hosted install om idempotentie te claimen.
+
+ECHTE BROWSERROUTE EN TERUGGELEZEN OPSLAG
+Campagne-URL→expliciet accepteren→reload(niet retroactief)→Hongerspelen-kaart
+→detail→normale aanmelding door Rick met het bestaande tijdelijke testaccount.
+sign_in_succeeded1 metfacebook/organic_social/dystopie_202610 teruggelezen.
+Deelroute vervolgde dezelfde eerder echt gestarte goal10-ronde; geen nieuwe
+ronde/vervalste afronding gemaakt. Meer boeken controleren bood9NLfixtures aan.
+Alle9via echte scoreknoppen beoordeeld, elke volgende kaart neutraal en pas na
+bevestigde opslag. Bestaande eerste ronde-rating behouden. Bestaande detailrating
+gewijzigd; new/updated worden afzonderlijk geteld.
+Readback10:58:41UTC:10ratedoffers,goal10,completed_at10:58:17.738836UTC,
+exact1taste_round_started en1taste_round_completed,10nieuwe ronde-events met
+de juiste Work-ID's en campagne. Eigen ratings12=3oude+9fixture; geen andere actor.
+Resultaat verscheen automatisch; drie bewuste herladingen leverden3extra
+resultaat/pageviews conform contract, maar completion bleef1 en completed_at gelijk.
+NLresultaat-events6/EN1 bevatten ook de al vastgelegde eerdere voorlopige views;
+die NIET als extra afgeronde rondes of nieuwe personen interpreteren.
+
+Na intrekken:3resultaatreloads en5echte ratingwijzigingen zonder optionele analyse.
+Readback11:00:27UTC:events83/receipts83, ongewijzigd t.o.v. de
+voorcontrole10:59:14.462138UTC: eveneens83/83; actievegrants0. Businessrating
+wel gewijzigd4→5. Geen replay, geen nieuwe optionele events na intrekking.
+Geen namen/emails/tokens/vrije zoekteksten in counterdimensies. De geanonimiseerde
+bewijsbestanden bevatten alleen synthetische ratings en openbare Work-ID's.
+Geldig bestaand bewijs hergebruikt: defaultoff/deny, malformed/oversize400/413,
+misgelopen rating geen succes, canonical RPC-retrydedup, fail-open storagefout,
+normale cronrun07:55UTC met6verwijderingen/currentreceipt behouden, capaciteit.
+Geen nieuwe browser-dubbelklikcampagne of volledige cloudpiek geclaimd; bestaande
+750ms-klikkarakteristiek/lokale regressies en echte RPC-retries zijn apart bewijs.
+
+BROWSER- EN DATABASEMETINGEN — APART HOUDEN
+IAB-browser op Windowsdesktop, bestaande viewport/netwerk, geen throttling,
+geen fysieke telefoon. Wandklok vanaf UI-actie tot DOM-zichtbare bevestiging;
+inclusief automatiseringstransport/wait. GEEN LCP, paint of pure HTTP-latency.
+Zelfde boek/detail, afwisselend4/5,5updates perstand:
+analyse aan807,680,699,659,654ms; mediaan680,spreiding654–807ms.
+analyse uit878,651,675,698,650ms; mediaan675,spreiding650–878ms.
+Resultaatreload tot data-afhankelijke zichtbare H1,3perstand:
+aan1816,1042,985ms; mediaan1042,spreiding985–1816ms;
+uit1198,1040,902ms; mediaan1040,spreiding902–1198ms.
+Kleine sequentiële niet-gerandomiseerde proef, warme/onbekende caches;
+geen causale overhead- of snelheidsgarantie afleiden uit mediaanverschillen.
+Eerste losse pilotupdate niet in deze5metingen; apart als werkelijke update geteld.
+Eerdere hosted SQL-microbenchmark21perstand blijft apart:0.311ms versus1.113ms,
+geen netwerk/commit/API/browser. CollectorHTTP183.224/133.629ms is weer apart.
+Geen browsernetwerkregistratie beschikbaar via deze toegang; extra requestaantal
+niet gemeten. Code/lokale transporttests: ratingobserver doet geen apart
+browsermeetrequest, wel synchrone SQL-meetwrites; batch-/consentverkeer apart.
+Geen SQL-writeaantal of LCP verzonnen uit een DOM-bevestiging.
+
+ÉÉN GERICHTE CLEANUP, OPNIEUW REQUESTSTATE
+De geslaagde fixturewrite was aantoonbaar herstelde schrijfroute, geen bewijs
+van oorzaak/vernieuwde OAuth-sessie. Na normale logout en remote revoke:
+sessies0,refresh_tokens0,actievegrants0,voorkeuren0.
+Afgeschermd manifest bevat exacte eigen actor/businessrecords en fingerprints
+van elke eigen meetrij; niet alleen namen/datums/e-mails. De eerdere gastfixture
+was aantoonbaar leeg/opgeruimd vóór deze eigen metingen. Install/cleanup geen
+seqreset, brede DELETE, CASCADE of verwijdering van bestaande testcatalogus.
+Nieuwe lokale cleanup-regressie: gewijzigde rij stopt vóór delete; eigenrecords
+verwijderd, overige rating en eigen cron behouden; tweede run stopt veilig.
+
+Eén atomaire cleanup met eigen actor+meetrijen+9catalogusfixtures aangeboden
+via dezelfde bestaande execute_sql-koppeling: aanvraag11:04:12UTC/12:04:12CET,
+resultaat waargenomen11:11:32UTC/12:11:32CET. Geen DB-duurclaim uit deze tijdspanne.
+SHA2563bcc8010424d0949ccae6aae894e479e165715ca1cbe7510123a01759093db1e.
+Opnieuw McpServerError: Invalid or expired requestState; INVALID_ARGUMENT,
+JSON-RPC-32602,reasoninvalid_request_state,geenrequest-ID. Geen identieke retry
+of alternatieve schrijfroute. Oorzaak onbekend; niet bewezen OAuth/RLS/storing.
+Readback11:12:03.923808UTC: eigenaccount1,sessies0,ratings12(incl.3oude),
+statussen12,voorkeuren0,offers10,ronde1/afgerond,fixtureWorks9/edities9/auteur1,
+38countercellen/83bijdragen,83receipts,actievegrants0. Geen gedeeltelijke cleanup.
+Andere ratings68/statussen68/rondes5/offers69 en oorspronkelijke529Works/
+763edities/68auteurs/7inventarisregels behouden; eigencron1actief behouden.
+Exacte lokale herstelbestanden alleen in ignored outputs/product-measurements-20261028:
+final-cleanup-manifest.private.json,final-exact-cleanup.private.sql en bijgewerkt
+support-cleanup-requeststate.txt. Na herstel eerst verse expiry/rowfingerprints
+lezen; oud manifest nooit blind opnieuw aanbieden. Niets automatisch verstuurd.
+
+CONTROLES EN RELEASEADVIES
+12gerichte lokale tests groen, TypeScript groen; lint/secretscan/diffcheck en
+nieuwe CI-status bij deze verslagpush vastleggen. App/build/layout ongewijzigd;
+geen brede refactor of herhaling van geldige hosted vormgevingscampagne.
+Geanonimiseerd bewijs:final-acceptance-proof.json,browser-acceptance-measurements.json,
+full-round-result-nl.png en final-round-logged-out-analysis-off.png.
+
+GEBLOKKEERD op de exact vastgelegde testcleanup via de herstelde requestState.
+Minimale vervolghandeling: connector/support bevestigt herstel of een concrete
+ondersteunde herstelstap; daarna verse guarded cleanup éénmaal uitvoeren.
+Geen credentials delen of andere SQL-route inzetten. PR51 blijft Draft.
+Het bestaande installatiepakket blijft expliciet TEST-only met harde origin-
+gate. Geen uitvoerbaar/gevalideerd productie-activatiepakket beschikbaar: dit
+feit staat in productievoorstel en mag niet als campagne-meetrelease worden
+voorgesteld. Geen uitbreiding naar productie toegevoegd in deze acceptatie.
+Voor productie is daarna het aparte, exact te reviewen install/activatiepakket
+nodig; geen akkoordtekst voor productie afgeven op basis van alleen testscripts.
+Geen productiecontact/writes,merge,publicatie ofsocialactie.
+
+----- EERDER CHECKPOINT -----
+PR51 — INGELOGDE READBACK EN HOSTED SQL-OVERHEAD; NOG GEBLOKKEERD
+28 oktober 2026. Vervangt de open-loginstatus in het checkpoint hieronder.
+
+Applicatie ongewijzigd3bf06b9e02a63308ce35276e7728819f491d41e8.
+Code/testpakket3b8a25b95ab11f946075b59c8c98105950ce15d6 gepusht;
+quality40656784464 success, Vercel success/Ready. Nieuwe Ready-preview
+https://lumiscore-fln9ei785-rgkgroeneveld-9102.vercel.app,
+dpl_FxA9YewVy3phJzDcqq6313jg61Vz. Uitgevoerde browserroute bleef bewust op
+p66zy1mg0 (zelfde applicatiecode en bestaande branch-testconfiguratie); geen
+onnodige herhaling van vormgeving/build. Latere commits uitsluitend verslag.
+
+EEN TIJDELIJK ACCOUNT, ECHTE RATINGS
+Rick maakte het expliciet toegestane synthetische account aan/bevestigde het
+en meldde de Preview aan. Exact eigen account read-only bevestigd; geen andere
+gebruikers/emails/hashes gelezen. Password niet gelezen/opgevraagd/opgeslagen.
+- Zonder analyse: Work921100102 rating4 opgeslagen, optionele events0.
+- Met analyse: Work921100199 rating8→9; DB-readback new1,updated1, campagne
+  facebook/organic_social/dystopie_202610 op beide. Geen scorewaarde in event.
+- Rondegoal10 daadwerkelijk gestart: taste_round_started1; Work8800306 score7
+  bevestigd met rating_saved/new1. Daarna eerlijk uitgeput op1/10.
+- Twee identieke echte backend-RPC-retries onder eigen synthetische SQL-authcontext
+  produceren geen extra rating of event; ongeldige retry afgewezen. Dit is hosted
+  canonical-RPC-bewijs, niet twee browser-netwerkrequests.
+- Resultaat rechtstreeks geopend: taste_result_opened NL2(incl.herladen)/EN1;
+  campagneherkomst behouden. Geldig voorlopig resultaat is geen afgeronde ronde.
+  Voltooide rondes en taste_round_completed blijven0, ook na herladen.
+- Normale aanmelding vond vóór analysetoestemming plaats: terecht geen login-event.
+  Post-consent aanmeldroute nog niet bewezen; geen terugwerkend event aangemaakt.
+
+OPSLAGOVERHEAD EN FOUTISOLATIE
+Echte hosted Postgres, eigen tijdelijke actor onder authenticated/RLS,21
+afwisselende updates per stand in één transactie, geen netwerk/commit/browser:
+deny mediaan0.311ms,min0.274,max15.258;accept mediaan1.113ms,min1.038,max34.287.
+Verschilmedianen0.802ms is beschrijvend, niet de volledige API-/browseroverhead.
+Role/bookkeeping zit in deze microbenchmark; geen causaliteitsclaim of loadtest.
+21synthetische benchmarkevents hebben campaignnone/direct_unknown, afzonderlijk
+van de echte Facebook-route. Geen interpretatie alsbezoekers/groei/conversie.
+Gerichte CHECK-fout voor uitsluitend de benchmarkcel in dezelfde transactie:
+businessrating opgeslagen, optionele counter ongewijzigd,storage_error1; CHECK
+weer verwijderd en rating9hersteld. Geen blijvende constraint-/functiewijziging.
+Alle opgeslagen dimensionkeys allowlisted; geen namen/emails/tokens/zoekteksten.
+Provider/Authlogs vallen buiten dit meetrecordbewijs en hun retentie is onbekend.
+
+INVENTARISAKKOORD NIET BLIND TOEGEPAST
+Read-only actuele voorraad4NL/3EN opgeslagen,1NL/0EN geldig. Slechts4Works hebben
+bruikbaar bestaand inhoudelijk bewijs;3daarvan hebben extra tijdelijke universe-
+reviewlidmaatschappen die de huidige policy uitsluit. Alleen snapshots verversen
+zou ongeschikte inventaris goedkeuren en nog steeds geen10Works leveren.
+Daarom GEEN inventariswrite, nieuwe catalogusrecords/evidence of gewijzigde
+taal-/selectieregels. Zie product-measurement-test-inventory-blocker-20261028.txt.
+Volledige hosted rondeafronding blijft hierdoor onbewezen. PR38 niet gewijzigd.
+
+OPRUIMING OPNIEUW GEBLOKKEERD OP CONNECTOR
+Voor cleanup: browseranalyse ingetrokken, testaccount normaal uitgelogd;
+SQL-readback sessies0,actievegrants0. Eerste guarded cleanup had SQL42702
+(ambigue n) vóór enigeDELETE; gehele transactie niet uitgevoerd. Na alleen die
+SQL-correctie geeft execute_sql via dezelfde koppeling opnieuw:
+McpServerError: Invalid or expired requestState; INVALID_ARGUMENT;
+JSON-RPC-32602,reason invalid_request_state; geenrequest-ID.
+Resultaat uiterlijk09:01:03UTC/10:01:03CET waargenomen; exacte aanvraagtijd
+niet apart vastgelegd. GEEN identieke retry of alternatieve schrijfroute.
+Read-only09:01:11.863437UTC: account1,sessies0,ratings3,statussen3,offer1,ronde1,
+countercellen21/46bijdragen,receipts46,actievegrants0. Geen gedeeltelijke cleanup.
+Dit maakt de eerdere echte installatie/cron/opslagbewijzen niet ongedaan; het
+bewijst evenmin algemene Supabaseuitval, OAuth-expiry of een RLS-weigering.
+Account en ingelogde testfixture zijn dus NOG NIET verwijderd. De eerder apart
+opgeruimde gastfixture blijft wel opgeruimd. Bewaar exacte private cleanup-ID
+alleen lokaal voor later gericht herstel; geen credentials in Git of verslag.
+Na aantoonbaar connectorherstel eerst actuele rowcounts/expiry opnieuw lezen:
+de normale cron kan grants/budgets al hebben verwijderd; oude guards niet blind
+aanpassen of dezelfde query opnieuw aanbieden. Dan exact eigenaccount/data wissen.
+
+UITKOMST
+PR51 blijft Draft, GEBLOKKEERD op voldoende policy-goedgekeurde testvoorraad voor
+een volledige ronde én gerichte cleanup via herstelde connector. Aanmelding-na-
+optin en volledige browser/API-ratingoverhead zijn eveneens nog geen bewezen
+releaseacceptaties. Geen productiecontact/writes,merge ofpublicatie.
+Geanonimiseerd bewijs:outputs/product-measurements-20261028/authenticated-proof.json.
+Actueel supportbericht:support-cleanup-requeststate.txt (niet verstuurd).
+Alle nodige bron-/appchecks blijven groen/herbruikbaar; geen appwijziging in deze
+afronding. Productieactivatie blijft apart voorstel, niet stil aangezet.
+
+PR51 — RECHTENHERSTEL, ECHTE CRON EN GASTOPSLAG BEWEZEN, 28 oktober 2026
+
+Scope: uitsluitend hlvujbrmfdlrfxdjwsmb. Productie niet benaderd. Geen appcode,
+environment, Auth-instellingen, catalogus, merge of productiepublicatie gewijzigd.
+Remote PR-head opnieuw c9c274eb61be947e397a99c0913b8bc9dddacd55,open/Draft;
+applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Ready dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx, https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app.
+
+RECHTEN
+Oorzaak aangetoond: Supabase default-function-ACLs in public gaven service_role
+extra EXECUTE op4nieuwe invokerwrappers. Alleen die4EXECUTE-grants ingetrokken;
+geen globale defaults, andere rollen, function bodies of clienttablegrants.
+Migratie product_metrics_test_wrapper_acl_20261028 geslaagd, teruggelezen07:51:09.991942UTC:
+alle4service_role_execute=false, exacte13functiehashes/ACLs behouden.
+Nieuwe installer en guarded rollback trekken dit voortaan expliciet in.
+Lokale fixture bootst de echte default-ACL na; repair tweemaal veilig getest.
+
+Definitieve LF-bestanden/manifest:
+install.sql 16bf7718f3dee4aeae5a8747e0867033e7830f60302e52d3169ac1d75b0bff0c
+scheduler-test.sql c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
+rollback.sql b7e14587e7aba69b19d8304f127d8978a0a006f27eb1fa9ad3ea10f18e8bb92b
+repair-service-role-acl.sql b63ff48a905517a3ce7d4dff1806412f3890930a0da5bb3b8f7d92d9b35dc8ef
+Geïnstalleerd: oorspronkelijke installer fddb6c... + exact bovenstaande ACL-repair;
+functionele inhoud en effectieve rechten gelijk aan nieuwe installer.
+
+WERKELIJKE SCHEDULER
+Migratie product_metrics_test_scheduler_v3_20261028, job1
+lumiscore-product-metrics-test-cleanup-v3, */5 * * * *, postgres/postgres;
+SET statement_timeout='3s'; SELECT product_metrics_test.cleanup();
+Geen versneld schema of handmatige cleanup gebruikt als schedulerbewijs.
+Kleine seed:1verlopen rij per6expiratietabellen en1actuele receipt.
+Daemonrun07:55:00.118436–07:55:00.138395UTC,succeeded; maintenance success
+07:55:00.124987UTC, deleted6x1,backlogfalse,errorNULL; verlopen receipt0,
+actuele receipt1. Volgende normale runs08:00,08:05,08:10 eveneens succeeded.
+Normale retentiegrens90dagen+5min+max3s bij tijdige start/geenbacklog;
+geen harde garantie bij storing. Lokale UTC-grenzen/backlog/fouttests behouden.
+Geen ratings/accounts/leesstatussen door cleanup geraakt; SQL beperkt tot eigen
+private meettabellen en eigen cronhistorie. Geen productiecron geïnstalleerd.
+
+HOSTED GASTBEWIJS EN RAPPORTAGE
+Browser:geenkeuze/weigeren0events; accepteren activegrant1,events0(geenreplay).
+Reloadcampagne:page_opened1/editorial_list_opened1; echte boekklik:
+book_card_opened1/book_detail_opened1/page_opened1, allemetfacebook/
+organic_social/dystopie_202610/synthetic,Work921100102. Na intrekken enEN-
+taalwissel0EN-events; geen actieve grants. Campagne blijft binnen de route.
+Gecontroleerde HTTP-harness31checks: defaultoff/deny/revoke/DNT204,
+valid202, te groot413, verboden extra veld/forged ratingevent400.
+Retry zelfde receipt telt eenmaal; DBhealth duplicate2 omvat2harnesspogingen.
+2gelijktijdige grants:40events/4batches geslaagd; één grant daarna tot60,
+61e event429 en exact1grant_rate_limited in privatehealthtelling.
+Dit bewijst geen volledige campagnecapaciteit/multiinstanceallocatie.
+SQL-readback08:14:35.458414UTC:91bijdragen/5countercellen/92receipts;
+91=5echte browserroute-events+2gedeeltelijke harnesspogingen+84volledigeharness.
+Rapport:editorial87,bookclick1,bookdetail1,pagevieweditorial1/pageviewdetail1.
+Niet presenteren als87bezoeken/personen of een gelinkteconversiefunnel.
+HTTPchecks en counters afzonderlijk geanonimiseerd bewaard. Testscores0.
+Rapportquery gebruikt nu instelbare periode/defaultUTCvandaag i.p.v.22oktober.
+
+METINGEN (GEEN RATINGOVERHEAD)
+Windowsdesktop, bestaande netwerkaansluiting, officiële vercel curl toegang,
+geen throttling,CLI-opstart niet meegerekend. CollectorHTTPaccept n3:mediaan
+183.224ms,min178.240,max187.809;deny n3:133.629ms,min132.403,max136.409.
+Verschilmedianen49.595ms is beschrijvend, geen causale ratingoverheadclaim.
+Parallelle10-eventbatches188.361–228.375ms. Geen browserpaint/LCP uitHTTP afgeleid.
+Gemiddelde actuele tuple:counter243.2B,receipt55.97B,grant71.4B(excl.index).
+Kleine hosted tabellen hebben8KiBheap/16–32KiBindex; page-rounding verhindert
+betrouwbare per-event-indexextrapolatie. Lokale1000rijenraming blijft lokaal.
+
+OPSCHONING
+08:20:40.216892UTC: eigen synthetische countercellen5,receipts92,grants5,
+budgets6,grantbudgets7,health13 gericht verwijderd na exacte snapshot/rowcount-
+guards, revoked-grantcontrole en geldige testmarker. Bij extra records zou alles
+stoppen. Counters/receipts/grants0; eigenjob en maintenancestate behouden.
+Geanonimiseerd bewijs:outputs/product-measurements-20261028/hosted-cron-guest-proof.json;
+guarded cleanupquery:cleanup-guest-proof.sql. Cookiejars/credentials niet inGit.
+
+OPEN — NOG GEEN RELEASEGEREEDCLAIM
+Publieke signup geeft signup_disabled. Geen registratie/Auth-instelling geopend.
+Rick heeft exact één synthetisch account in test aangemaakt/bevestigd08:20:31UTC;
+geen andere gebruikers gelezen. Previewlogin nog nodig; wachtwoord niet opgevraagd.
+Ingelogde signup/login→nieuwe/gewijzigde rating→rondeafronding→resultaatreadback,
+meetfoutisolatie en vergelijkbare hostedratingoverhead blijven open.
+Account blijft uitsluitend voor afronding; na test revoke/logout en gericht
+verwijderen volgens bestaand plan. PR blijft Draft. De oude connectorblokkade
+hieronder is historisch en niet meer het actuele releaseobstakel.
+
+PR51 — EEN EXPLICIET GEVRAAGDE TESTINSTALLATIE GESLAAGD, 28 oktober 2026
+
+Rick gaf expliciet opdracht om nu één voorbereide installatiepoging te doen,
+ook zonder vooraf bewezen connectorherstel. Precies één apply_migration via de
+bestaande Supabase-koppeling; geen fallback of retry. Alleen hlvujbrmfdlrfxdjwsmb.
+Voorcontrole07:40:00.764430UTC: marker1,metrics_schemaNULL,cron.jobNULL,
+metric_functions0,metric_triggers0,metric_migrations0. PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55
+opnieuw open/Draft; applicatie3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Install.sql exact fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Aanvraag07:40:27.455UTC /08:40:27CET; successresultaat waargenomen
+07:41:59.367UTC /08:41:59CET. Toolresultaat {success:true}; geen requestState-fout.
+Migratieregistratie product_metrics_test_v3_20261022,version20261028074159.
+
+Werkelijke metadatareadback:7tabellen,13functies,3enabled triggers; alle13body-
+hashes,definer/invokerkeuzes en search_path/timeoutsettings conform manifest.
+Alle7tabellen ENABLE+FORCE RLS, geen anon/authenticated SELECT of schrijfrechten.
+AFWIJKING:4publieke invokerwrappers behouden extra service_role EXECUTE t.o.v.
+het lokale manifest; overige ACLs en alle functie-inhoud gelijk. Vastgelegd voor
+gerichte rechtenreview; geen tweede migratie of privilegewijziging uitgevoerd.
+Definities/ACLs en default-function-ACLmetadata opgeslagen in het bewijsbestand.
+
+Nacontrole07:43:33.864325UTC:counterrows0,receipts0,grants0;cron.jobNULL.
+Geen testaccounts,ratings,leesstatussen,rondes of events aangemaakt. Alleen
+voorbereide meetobjecten en migratieregistratie op test toegevoegd; productie
+is niet benaderd. Geen schedulerinstallatie of hosted metingen binnen deze
+één-pogingopdracht. Geen codewijziging,rebuild,push,merge of publicatie.
+
+CONCLUSIE: de bestaande Supabase-installatieroute werkte voor deze poging.
+De eerdere foutoorzaak is daarmee niet verklaard. Hosted opslagreadback, echte
+cronrun en opslagoverhead blijven onbewezen; geen releasegereed-claim.
+Eerst de concrete ACL-afwijking beoordelen, daarna de bestaande testafronding.
+PR51 blijft Draft. Bewijs:outputs/product-measurements-20261028/test-installation-proof.json.
+Historische blokkades hieronder blijven uitsluitend historische checkpoints.
+
+PR51 — AFZONDERLIJKE SUPABASE-TOEGANGSCONTROLE, 27 oktober 2026
+
+Vercel-teamtoegang is afzonderlijk hersteld. Dit is geen bewijs van vernieuwde
+Supabase-sessie of herstelde apply_migration-requestState. De gebruiker staat
+één installatiepoging uitsluitend na aantoonbaar vernieuwde toegang toe.
+In deze controle daarom GEEN apply_migration aangeroepen: die voorwaarde is
+niet aangetoond. Geen identieke retries of alternatieve schrijfroute gebruikt.
+
+PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55, open/Draft, ongewijzigd.
+Applicatiecommit 3bf06b9e02a63308ce35276e7728819f491d41e8. Latere commits
+betreffen verslag en lokale capaciteit-/operatietests, niet de applicatie/SQL.
+Actuele remote main via GitHub:2651c364eb879dc6ec7416034744b3e947458449;
+de historische mainverwijzingen hieronder zijn geen actuele stand.
+CI quality39782654443 success; Vercel success. Bestaande deployment
+dpl_Gn2UZ2RaANaESXMrnSfwjKFRr6vx opnieuw READY, head exact c9c274e:
+https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app
+Geen rebuild of applicatiewijziging; geldig lokaal/UI-bewijs hergebruikt.
+
+Supabase get_project bevestigt uitsluitend test hlvujbrmfdlrfxdjwsmb,
+ACTIVE_HEALTHY. Expliciete metadata-SELECT 2026-10-27 12:48:48.363293 UTC
+(13:48:48 Europe/Amsterdam/CET): expected_marker1; product_metrics_testNULL;
+cron.jobNULL; metric_functions0; metric_triggers0; metric_migrations0.
+Geen gedeeltelijke meetinstallatie aangetoond. Geen persoonsgegevens gelezen.
+Plugin discovery: Supabase installed/ENABLED; geen sessievernieuwingstijd,
+schrijf-requestState, herstelactie of bevestiging van connectorherstel zichtbaar.
+Werkende reads en ENABLED-status werkten al vóór de historische installatiefout.
+Zij bewijzen dus geen vernieuwde installatieautorisatie.
+
+Alle drie SHA256-hashes opnieuw exact gelijk aan manifest/proposal:
+install.sql fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3
+scheduler-test.sql c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf
+rollback.sql 549d6325362598b09e0e656bab62e6eadcda8b54ee80d87e3d53fc186cc6d4bc
+Testguard, expliciete ACLs/FORCE RLS, begrensde5min-cron en gerichte rollback
+behouden. Geen accounts/ratings/status/events aangemaakt, dus geen cleanup.
+
+Laatste ECHT uitgevoerde installatiefout blijft23oktober: aanvraag07:20:13UTC,
+resultaatbeschikbaar07:25:16UTC, McpServerError: Invalid or expired requestState,
+INVALID_ARGUMENT/JSON-RPC-32602/reason invalid_request_state, geen request-ID.
+Dit is geen nieuwe foutwaarneming op27oktober. Oorzaak blijft onbekend; geen
+bewezen OAuth-expiry, RLS-weigering of beveiligingsweigering.
+
+RELEASEADVIES: GEBLOKKEERD op aantoonbaar herstel van Supabase-installatietoegang.
+Minimale vervolgactie: support bevestigt herstel van de bestaande Supabase-
+apply_migration-requestState of levert een concrete, ondersteunde herstelstap.
+Daarna één testinstallatie, metadatareadback, echte hosted opslagroute,
+daadwerkelijke cronrun en opslagoverhead. Tot dan blijven deze drie onbewezen.
+Geen productiecontact/writes, migraties, scheduler, merge of publicatie.
+Supportvervolg lokaal:outputs/product-measurements-20261027/support-followup.txt.
+Bestaande on-gecommitteerde verslagaanvullingen zijn behouden.
+
+PR51 — TWEEDE BEVESTIGDE VERBINDINGSVERNIEUWING, 23 oktober 2026
+
+User meldde opnieuw ingelogd te zijn en vroeg nogmaals te proberen. Eén nieuwe
+apply_migration-aanvraag voor hlvujbrmfdlrfxdjwsmb, geen alternatieve toegang.
+Voorcontrole 07:19:44.742346 UTC: marker1, metrics_schemaNULL, cron.jobNULL,
+metric_functions0, metric_triggers0, metric_migrations0. Install.sql onveranderd:
+fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Aanvraag geregistreerd 2026-10-23 07:20:13 UTC (09:20:13 CEST), resultaat
+beschikbaar 07:25:16 UTC (09:25:16 CEST); intern fouttijdstip onbekend.
+Tool Supabase apply_migration; name product_metrics_test_v3_20261022.
+Resultaat exact: McpServerError: Invalid or expired requestState.
+INVALID_ARGUMENT; JSON-RPC -32602; reason invalid_request_state; geen request-ID.
+Lezen werkt; oorzaak onbekend. Geen bewezen verlopen OAuth of veiligheidsweigering.
+Geen verdere installatiepoging zonder aantoonbaar herstel door ondersteuning.
+Geen schedulerinstallatie, meetwrites, accounts of productieacties uitgevoerd.
+Nacontrole 07:25:45.185894 UTC: dezelfde afwezige objecten, marker1.
+Hosted meetopslag, cronwerking en overhead blijven onbewezen; PR blijft Draft.
+
+PR51 — CONNECTORHERPROEF NA OPNIEUW VERBINDEN, 23 oktober 2026
+
+UITKOMST: GEBLOKKEERD. User bevestigde 'Supabase verbonden'. Daarna exact één
+nieuwe apply_migration-aanvraag, geen alternatieve SQL-/credentialroute.
+PR-head c9c274eb61be947e397a99c0913b8bc9dddacd55 blijft Draft/open; main
+b4ac64d1166831f3578616f9288680d11275f916. Beide CI-checks opnieuw success.
+Applicatiecommit 3bf06b9e02a63308ce35276e7728819f491d41e8 ongewijzigd.
+Preview https://lumiscore-p66zy1mg0-rgkgroeneveld-9102.vercel.app.
+
+Testidentiteit get_project: hlvujbrmfdlrfxdjwsmb, ACTIVE_HEALTHY, eu-west-1.
+Voorcontrole 2026-10-22 17:34:06.206069 UTC (19:34:06 CEST): marker1,
+metrics_schemaNULL, metric_functions0, metric_triggers0, metric_migrations0,
+cron.jobNULL. Bestaande securityadviezen en logbron-aantallen read-only gelezen.
+Aanvraag geregistreerd 2026-10-22 17:34:25 UTC (19:34:25 CEST), tool
+Supabase apply_migration, name product_metrics_test_v3_20261022, alleen test.
+install.sql SHA256 fddb6cadbda824a590ef84d65b3f21d7e51143955dbbbb24f322bb741b7adbd3.
+Resultaat beschikbaar 2026-10-23 07:14:07 UTC (09:14:07 CEST):
+McpServerError: Invalid or expired requestState
+error_code INVALID_ARGUMENT; JSON-RPC -32602; reason invalid_request_state.
+Geen request-ID teruggegeven. Exact intern fouttijdstip/aanvraagduur onbekend:
+de tool leverde het resultaat pas bij hervatten; geen netwerkduurmeter hiervan.
+Nacontrole 2026-10-23 07:14:26.575350 UTC (09:14:26 CEST): zelfde afwezige
+objecten en marker1. Geen gedeeltelijke installatie aantoonbaar. Scheduler niet
+aangeboden omdat de vereiste meetobjecten ontbreken. Geen testaccount/writes.
+
+Oorzaak onbekend: lezen werkt; OAuth-verloop of beveiligingsweigering niet bewezen.
+Opnieuw verbinden heeft dit niet opgelost. Geen nieuwe herhaalpoging zonder
+aantoonbaar gewijzigde toegang. Minimale vervolgactie: app-/connectorondersteuning
+deze Supabase apply_migration-requestState laten onderzoeken/herstellen. Geen
+credentials nodig in de chat. Hosted opslagreadback, echte cronruns en hosted
+opslagoverhead blijven onbewezen. Geldig lokaal/visueel bewijs hieronder hergebruikt.
+Pakket-hashes onveranderd; geen applicatiewijziging of rebuild nodig.
+
+PR51 — ACTUEEL V3-VERVOLG, 22 oktober 2026
+
+PR blijft Draft. Geteste applicatiecommit:
+3bf06b9e02a63308ce35276e7728819f491d41e8
+Remote main ongewijzigd: b4ac64d1166831f3578616f9288680d11275f916.
+Ready Preview voor deze applicatie:
+https://lumiscore-iqkxa5d2v-rgkgroeneveld-9102.vercel.app
+Latere verslagcommits veranderen applicatie, SQL en configuratie niet.
+
+AFGEROND BINNEN DE DRIE PUNTEN
+- Expliciete opt-in standaard uit, noodzakelijke versie-cookie90dagen zonder ID,
+  HttpOnly30min-grant alleen na acceptatie. Client/server/DB-triggers controleren
+  toestemming; DB-rowlock serialiseert revoke met vertraagde opslag. Geen replay.
+  Bij netwerkstoring is remote intrekken eerlijk pending. Ratings blijven werken.
+- Zelfstandige5min pg_cron-installatie voorbereid, max5000rijen per expiratietabel,
+  indexen/SKIP LOCKED/3s uitvoering. Normale bovengrens90dagen+5min+3s bij tijdige
+  start en zonder backlog; geen garantie bij scheduler-/opslagstoring. Monitor en
+  gerichte hash-beveiligde rollback in het pakket. Niet remote geïnstalleerd.
+- Oude120/min was projectbreed, plus globale advisorymutex. V3 atomisch600/min
+  project,60/min/grant,60grantmints/min. Geen permanente bezoekers-ID. Lokale
+  campagnepiek20x28=560, daarna40 tot600, volgende weigering zichtbaar. Pergrant,
+  reset/dedup en expiry getest. Geen bewezen echte parallelle cloudthroughput.
+  Browser queue20/batch10/max2inflight/3s/geen retries; inhoudloze lokale/DB-health.
+- Bestaande Speed Insights-bootstrap verwijderd om geen apart optioneel script
+  buiten de toestemming/intrekking actief te houden. Geen nieuwe tracker.
+
+LOKAAL BEWEZEN
+Volledige suite:843tests,827geslaagd,16bewustovergeslagen,0fouten. Daarna10gerichte
+v3-tests opnieuw groen op definitieve code; TypeScript, volledige lint,
+Vercel-productiebuild en secretscan groen. Bouwsandbox vereiste leesrechten op
+bestaande Node-dependencies; geen productie- of environmentwijziging.
+Werkelijke SQL draait lokaal in PGlite; RLS/ACLs, missing/deny/revoked grants,
+ratingno-op/mislukking/new/update, roundreceipt, storage-errorfailopen, UTC-grenzen,
+batchbacklog, cronconflict en guarded rollback/herinstallatie getest.
+Cronfixture verifieert commando/configuratie, niet de echte daemon.
+Twee logische instanties delen SQL-budgetten, PGlite serialiseert transacties.
+Lokale21-writevergelijking medianen baseline1,53ms, triggerzondertoestemming1,89ms,
+actieveanalyse4,29ms; spreiding in privacy/capaciteitsanalyse. Niet hosted/LCP.
+Allocatiemodel en installatiehashes reproduceerbaar; exacte LF-blobhashes bevestigd.
+
+HOSTED BEWEZEN — GEEN MEETOPSLAGCLAIM
+16 HTTP-checks via bestaande officiële Vercel-CLI-toegang groen:
+NL/EN campagne+boekdetail200, canonicals zonderUTM, preview-noindex behouden;
+consent GET standaardactive=false; geenkeuze204; deny200/inactive; accept200/inactive
+bij ontbrekende RPC; ongeldigeversie/129bytebody400; crossorigin403;
+geenconsent verwerktbody niet204; DNT/GPC204; rating0=400; gastrondestart401.
+Geen accounts, ratings of meetrecords aangemaakt. Noodzakelijke synthetische
+keuzecookie getest. Geen remote grant zolang RPC ontbreekt.
+Werkelijke browser: NL/EN, Paper/Ink, mobiele320/390 en desktop1440. Keuze,
+weigeren/intrekken, taalwissel, herladen, blijvende voorkeurenknop, Enter en Escape
+met focus-terugkeer gecontroleerd. Knoppen44px; accept/deny even hoog; geen
+zijdelingse overflow. Screenshots in outputs/product-measurements-20261022/v3:
+nl-paper-320.png, nl-ink-390-denied.png, en-paper-390.png, en-ink-390.png,
+nl/en-paper-desktop.png en nl/en-ink-desktop.png. Browseremulatie, geen telefoon.
+DOM toont geen Speed Insights-script. Geen claim over volledige providerlogs.
+Vercel-connector gaf scope403; officiële bestaande CLI-toegang werkte voor exact
+dezelfde team/projectscope. Deployment Protection en environment ongemoeid.
+
+CONNECTOR EN RELEASEBLOKKADE
+Alleen read-only metadata opnieuw: testmarker1,metrics_schemaNULL,metric_triggers0,
+pg_cron niet geïnstalleerd maar wel beschikbaar. Geen gedeeltelijke metricobjecten.
+Geen nieuwe installatiepoging: geen aantoonbare wijziging van sessie/toegang.
+Bestaande fout blijft McpServerError: Invalid or expired requestState, oorzaak
+onbekend. Niet bewezen als verlopen OAuth-login of beveiligingsweigering.
+Supabase-plugin installed/ENABLED; tools bieden geen herstelactie of exacte UI-route.
+Minimale handeling: bestaande Supabase-pluginverbinding in Codex herstellen/opnieuw
+verbinden als die optie aanwezig is; anders connector/app-ondersteuning om de
+requestState te herstellen. Geen credentials delen, geen alternatieve SQL-route.
+Pas daarna project/partiële staat controleren, idempotent testpakket+cron installeren,
+volledige hosted route met geldige toestemming+opslagreadback en overhead meten.
+Rechten, hashes, retentiebeleid, capaciteitsbeperkingen, volgorde en rollback staan
+in het bijgewerkte productievoorstel. Test-SQL nooit blind naar productie vertalen;
+productie blijft door harde testorigin/synthetic-gate uit.
+RELEASEADVIES: GEBLOKKEERD op hosted installatie/readback/cron/overhead. Niet mergen.
+
+----- HISTORISCH V2-CHECKPOINT HIERONDER; NIET DE ACTUELE IMPLEMENTATIE -----
+PR51 — definitieve installatiecontrole en releasebesluit, vervolg22oktober2026
+
+UITKOMST: GEBLOKKEERD. Geen hosted counteropslag bewezen. Geen productie-SQL,
+merge, publicatie, nieuwe tracker of functionele uitbreiding uitgevoerd.
+
+ACTUELE BASIS
+PR-head bij aanvang:7d7460f45f199682d9151a7958ff371219e2ba25, Draft/open.
+Main:b4ac64d1166831f3578616f9288680d11275f916, opnieuw via GitHub bevestigd.
+Geteste applicatie:916ebf1131c19f6e308f52401693e435fbea18ac.
+Ready Preview van verslagcommit7d7460f:
+https://lumiscore-9dcyfbg38-rgkgroeneveld-9102.vercel.app
+deployment dpl_AXw6QkMye32fiFU3eU7xYce9r3kd, opnieuw Ready bevestigd.
+Team rgkgroeneveld-9102, project prj_44WeKduJU042ZAI85eAifSWwoY0i.
+Geen lokale werkmaplink aangemaakt; expliciete project/deployment-read gebruikt.
+Latere ops-/verslagcommit verandert geen appbestand of installatiebestand.
+Bestaande volledige CI39753652341 groen op7d7460f; geen brede lokale herhaling.
+
+IDENTITEIT EN VOOR-/NACONTROLE
+Supabase get_project:hlvujbrmfdlrfxdjwsmb,
+lumiscore-pr8-discovery-test, ACTIVE_HEALTHY, eu-west-1, PostgreSQL17.11.
+Marker lumiscore-pr8-synthetic-v1 exact1. Beveiligingsadviezen read-only gelezen.
+Vooraf: meetschema=NULL, countertabel=NULL, publieke collectors=[], private
+functies=[], meettriggers=[]. Bestaande rating-/status-beschermings- en sync-
+triggers zijn alleen gelezen, niet vervangen. Geen bestaande gebruikers opgehaald.
+
+Precies één nieuwe apply_migration-aanvraag:
+project_id=hlvujbrmfdlrfxdjwsmb; name=product_metrics_test_v2_20261022.
+Bestand:test-support/product-metrics/install.sql (12997tekens, LF).
+SHA256:b6487dbfa521bb9f6acf77df6e3842d625ad4597a58f017798e6ed0f332c84fc.
+Resultaat exact:
+McpServerError: Invalid or expired requestState
+error_code=INVALID_ARGUMENT; JSON-RPC=-32602; reason=invalid_request_state.
+
+Nacontrole via read-only SELECT: schema/counters/receipts/budgets=NULL,
+public_collectors=0, private_functions=0, metric_triggers=0.
+Dus NIETS van deze meetinstallatie als uitgevoerd rapporteren. Geen loop,
+execute_sql-DDL, dashboardSQL, directe DB-verbinding of CLI-schrijfroute gebruikt.
+Geen account/ratings/status/rondes/catalogus voor deze controle aangemaakt.
+Geen cleanup van bestaande gegevens uitgevoerd; lokale fixtures afgesloten.
+
+WAT DE FOUT WEL/NIET BEWIJST
+De geïnstalleerde Supabase-plugin is ENABLED en reads zijn bruikbaar. De
+schrijfactie strandt op requestState. Geen aangetoonde401/token-expiry,
+403/permission_denied, RLS-weigering of ontbrekende menselijke scopeautorisatie.
+Een verlopen bevestigings-/aanvraagstatus is aannemelijk, maar exacte oorzaak
+en werking van opnieuw verbinden zijn niet bewezen. Geen bredere rechten vragen.
+
+MINIMALE HANDMATIGE HERSTELACTIE
+Open in de lokale Codex-app Plugins, kies de bestaande Supabase-plugin en open
+de gekoppelde accountverbinding. Ververs/herverbind die verbinding waar de app
+dat aanbiedt, rond de eventuele provider-autorisatie zelf af en herlaad de
+Codex-sessie. Sluit eventueel achtergebleven oude Supabase-bevestigingsvensters.
+Geen wachtwoord/token in chat, geen API-/servicekey toevoegen, geen beveiliging
+uitschakelen of skip-elicitations instellen. Dit vraagt geen nieuw inhoudelijk
+installatieakkoord: de testscope is al toegestaan. Na werkelijk herstel één
+nieuwe normale installatieaanvraag met dezelfde hash en nieuwe readback.
+Als reads werken maar requestState blijft falen: stop writes en geef de exacte
+foutcode en deze bewijsgegevens aan connector/Codex-support; geen retryloop.
+
+Bronnen voor herstelrichting, niet als bewijs van de specifieke interne oorzaak:
+https://developers.openai.com/training/walkthroughs/plugins-and-skills
+https://developers.openai.com/plugins/deploy/troubleshooting
+https://supabase.com/docs/guides/ai-tools/mcp
+
+EXACT TESTINSTALLATIEPAKKET
+Ongewijzigde install.sql met bovengenoemde hash. Private schema product_metrics_test:
+daily_counters(day date,event text,dimensions jsonb,n bigint; samengestelde PK),
+receipts(event_id uuid PK,day date; extra day-index),budgets(minute timestamptz PK,n int).
+Drie tables ENABLE+FORCE RLS, clientrollen geen table-reads/writes.
+Functies (lege search_path; alle parameters expliciet):
+product_metrics_test.valid_context(p jsonb) -> boolean, invoker
+product_metrics_test.request_context() -> jsonb, invoker
+product_metrics_test.record_event(p_event_id uuid,p_event text,p_dimensions jsonb) -> text, definer
+product_metrics_test.observe_transition() -> trigger, definer
+public.record_product_event_test_v1(p_event_id uuid,p_event text,p_dimensions jsonb) -> text, invoker
+public.record_product_events_test_v1(p_events jsonb) -> jsonb, invoker
+public.record_product_sign_in_test_v1(p_dimensions jsonb) -> text, invoker
+PUBLIC-execute expliciet ingetrokken. anon/authenticated: private-schemaUSAGE,
+valid_context/record_event-EXECUTE en twee browserwrappers-EXECUTE. Alleen
+authenticated sign-inwrapper. Geen clientexecute op context-/triggerfunctie.
+Canonieke successen zijn niet forgeable via browserwrapper; helper eist echte
+triggerdiepte, loginreceipt geverifieerde Auth-sessie. Geen privérapport-RPC.
+Drie named AFTER-observers: product_metric_rating_v1 op ratings,
+product_metric_status_v1 op user_book_status, product_metric_round_v1 op
+taste_rating_rounds. Ze observeren alleen de actor, schrijven niet aan NEW en
+vangen gewone meetfouten op. Geen dubbele observers op test: nu0, gewenst exact3.
+
+REPRODUCEERBARE CONTROLE/HERSTEL
+test-support/product-metrics/verify-install.sql: alleen metadata; werkelijke
+projectidentiteit ook via toolargument/get_project verifiëren. Controleer exact3
+tables/7functions/3triggers, RLS, grants, config en bodyhashes vóór herinstallatie.
+Stop bij onbekende schema/functie/trigger of afwijkende oude definitie; bewaar
+dan definitie/rechten en wijzig niets blind. Install.sql behoudt counterdata.
+test-support/product-metrics/rollback.sql: alleen test, standaard ROLLBACK,
+expliciete absent-baseline-latch, marker/comment/bodyhash- en triggercontroles.
+Verwijdert alleen drie eigen observers en trekt eigen clientexecute/USAGE in;
+behoudt functies/tellers en alle bedrijfsdata. Bij bestaande baselineobjecten
+juist de opgeslagen oude definities/rechten herstellen, niet dit absent-pad.
+Lokaal bewezen: herinstallatie met bestaande rijen behoudt data; rollback zonder
+latch stopt, standaardrollback houdt triggers, bewuste lokale commit deactiveert
+alleen eigen observers, gewijzigde body wordt geweigerd. Geen rollback op hosted.
+
+BEWIJSMATRIX HOSTED — NIET BESCHIKBAAR, GEEN NULCONVERSIE
+Stap   Verwacht volgens contract                         Gevonden hosted record
+1      page_opened + editorial_list_opened campagne      niet leesbaar: schema ontbreekt
+2      book_card_opened, list_id + Work                  niet leesbaar: schema ontbreekt
+3      page_opened + book_detail_opened juiste Work      niet leesbaar: schema ontbreekt
+4      sign_in_succeeded,1receipt/geverifieerde sessie    niet uitgevoerd met nieuwe testlogin
+5      taste_round_started, echte INSERT                niet uitgevoerd
+6      rating_saved operation=new                       niet uitgevoerd
+7      rating_saved operation=updated                   niet uitgevoerd
+8      taste_round_completed, echte doelovergang        niet uitgevoerd
+9      taste_result_opened, geldig getoond resultaat     niet uitgevoerd
+Voor10-doel zijn in totaal10 verschillende nieuwe ratings nodig; één wijzigen
+verhoogt de rondevoortgang niet. Geen vervalste afronding of losse klik als bewijs.
+Er is geen opgeslagen bezoeker-/funnel-ID om deze events tot unieke mensen te
+koppelen. Campagnecontext is gedeelde herkomst, geen betrouwbare persoonjoin.
+
+Bestaande hosted UI/privacybewijs op ongewijzigde app hergebruikt: NL/EN Paper/Ink,
+mobiel/desktop, native navigatie en collectorvalidatie. Geldige batch503 bij
+ontbrekende collector is geen succes. Ongeldige origin/type/grootte/properties en
+forged ratingevent zijn geweigerd; DNT/GPC levert geen collection. Geen claim dat
+alle9stappen, retries, nieuwe/wijzigingscounts, meetuitval en login op hosted
+opslag opnieuw bewezen zijn. Payloadallowlist/loggeencredentials alleen lokaal
+en eerder afgebakend deploymentbewijs; geen bestaande gebruikerslogs doorzocht.
+
+LOKAAL AANVULLEND BEWIJS
+Zeven gerichte tests: contract/report/clientprivacy/attributie/impression,
+werkelijke PGlite-installatie/idempotentie/ACL/transition/noop/retry/fail-open,
+en nieuw ops-verificatie/guardedrollback. Geen lokale simulatie als hosted bewijs.
+Capaciteit: scripts/product-metrics-capacity-local.mjs;1000 lokale countercellen
+en receipts, inclusief echte indexallocatie. Analyse en concrete consent/retentie:
+docs/product-measurement-privacy-capacity-20261022.txt.
+Meetoverhead op hosted blijft onbekend. Geen belastingtest op productie of test
+uitgevoerd omdat de toegestane installatie niet beschikbaar kwam.
+
+RAPPORTAGE
+Voorbereide SQL:test-support/product-metrics/report.sql; niet uitgevoerd tegen
+niet-bestaande tabellen om geen nul of succesvol rapport te verzinnen.
+CLIvoorbeeld: node --experimental-strip-types scripts/product-measurement-report.mjs --synthetic-example
+Alleen lokaal synthetisch voorbeeld:2lijstopeningen/1boekklik/10nieuwe/1wijziging/
+1start/1afronding.1/2 is eventratio, niet50% bezoekersconversie. Testtraffic is
+synthetic en standaard uitgesloten; actuele productiecollectie unavailable, niet0.
+
+PRODUCTIEVOORSTEL EN VOLGORDE — GEBLOKKEERD, NIET GOEDGEKEURD
+Productieproject qvplwejffhjvxaypmjut niet benaderd met SQL en geen productiewrites.
+Het exacte installeerbare/geteste artefact is uitsluitend het bovenstaande
+TEST-pakket. Het testmarker/script nooit op productie draaien. Er is nog geen
+geteste productieactivatie of definitieve uitvoerbare productiemigratie; die als
+klaar presenteren zou onjuist zijn. PR mergen activeert momenteel productie niet.
+
+Voor een toekomstig expliciet pakket: private schema product_metrics met dezelfde
+3tabellen/indexen; public record_product_event_v1(uuid,text,jsonb)->text,
+record_product_events_v1(jsonb)->jsonb en record_product_sign_in_v1(jsonb)->text;
+4zelfde private helpers en3named observers. Minimaal dezelfde clienttable-denial,
+expliciete executegrants, invoker wrappers/private definer en lege search_path.
+Dit is een exact naam/signature/rechtenvoorstel, geen reeds geteste prod-SQL.
+
+Uitvoeringsvolgorde na afzonderlijk releaseakkoord en vervulde gates:
+1. Connectorherstel→testinstallatie exactehash→metadata/idempotentie/ACLreadback.
+   Stop bij afwijkingen; geen extra accounts/data zolang doelinstallatie ontbreekt.
+2. Volledige echte synthetische hosted route; echte tellers teruglezen, negatieve
+   cases en begrensde met/zonder-meetoverhead bewijzen. Cleanup alleen eigen data;
+   geaggregeerde bewijsoutput bewaren zonder account/session/roundidentiteiten.
+3. Eén minimaal opt-in/retentiepakket besluiten en implementeren; capaciteit/piek/
+   verlies meten en doelbewust besluiten. Geen stilzwijgende120/min-ondertelling.
+4. Dan exacte productie-SQL én activatiecommit/hash vastleggen. Opnieuw read-only
+   productievoorcontrole/baseline defs/ACLs/waarden bewaren; stop bij verschillen.
+5. Additieve compatibele prodobjecten met minimale grants en bounded lock_timeout;
+   oude app doet zonder context niets. Gerichte privileges/data-isolatiecontrole.
+6. Exact goedgekeurde app activeren; toegestane livecontrole zonder andere users
+   te wijzigen. Bij fout eerst analyse uit/old app terug, dan eigen observers en
+   wrappers deactiveren of saved defs/rechten herstellen. Counters bewaren.
+Geen CASCADE, geen terugdraaien ratings/status/voortgang. Geen productiecleanup
+of nieuw retentiecron/extra kosten zonder afzonderlijk vastgesteld beleid.
+
+ÉÉN RELEASEADVIES
+GEBLOKKEERD. Eerst requestState-/connectorsessie herstellen en echte hosted
+readback bewijzen. Daarna consent/retentie en capaciteit als concreet product-
+releasebesluit afronden. Geen releaseakkoord vragen voor dit onvolledige pakket.

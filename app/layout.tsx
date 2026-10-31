@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ProductAnalysisConsent } from './components/ProductAnalysisConsent';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
 import { resolveRequestLocale, requestPagePath } from '@/lib/i18n/server';
@@ -7,6 +7,7 @@ import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { serializeWebsiteJsonLd } from '@/lib/seo/site-identity';
 import './globals.css';
 import { OverviewScrollMemory } from './components/OverviewScrollMemory';
+import { ProductMeasurements } from './components/ProductMeasurements';
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata: Metadata = await createLocalizedPageMetadata({ title: 'LumiScore — Find your next great read', canonicalPath: (await requestPagePath()).split('?')[0] });
@@ -64,8 +65,9 @@ export default async function RootLayout({
         >
           {children}
           <OverviewScrollMemory />
+          <ProductMeasurements />
+          <ProductAnalysisConsent />
         </LumiScoreLocaleProvider>
-        <SpeedInsights />
       </body>
     </html>
   );

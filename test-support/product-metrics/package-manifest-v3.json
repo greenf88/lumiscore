@@ -1,0 +1,131 @@
+{
+  "hashes": {
+    "install.sql": "16bf7718f3dee4aeae5a8747e0867033e7830f60302e52d3169ac1d75b0bff0c",
+    "scheduler-test.sql": "c1fd449e2f785b4d9bd0f35070ec61bbaeaf63320664da32f60f584ce4f30fbf",
+    "rollback.sql": "b7e14587e7aba69b19d8304f127d8978a0a006f27eb1fa9ad3ea10f18e8bb92b",
+    "repair-service-role-acl.sql": "b63ff48a905517a3ce7d4dff1806412f3890930a0da5bb3b8f7d92d9b35dc8ef"
+  },
+  "functions": [
+    {
+      "signature": "product_metrics_test.cleanup(timestamp with time zone, integer)",
+      "body_md5": "8891f5e5729d384d01f3c54320edf519",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=100ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.consent(text, uuid, timestamp with time zone)",
+      "body_md5": "4f55aa4157ef2f290935e87d3848e085",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=1s"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.current_time()",
+      "body_md5": "0f07466da6eaa28778c1857bfdde383d",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.observe_transition()",
+      "body_md5": "aedfe031193840152543c6ebe9bee28f",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.operational(text)",
+      "body_md5": "e218cc77e6ca60f5118dd657416cd76f",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=5ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.record_event(uuid, text, jsonb)",
+      "body_md5": "67c79487a391c693ae29f2a34e5c02c9",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=25ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.request_context()",
+      "body_md5": "4dca0a239c8aae2e73cdfc04624a7cb9",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.request_grant()",
+      "body_md5": "df834b387ae70986416c2a5f73e8fa3e",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics_test.valid_context(jsonb)",
+      "body_md5": "0313e1ecf9ba7b34709e9b136e710d90",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.product_analysis_consent_test_v3(text, uuid, timestamp with time zone)",
+      "body_md5": "e5017cd6fe79e95561bf7e5f3aac0718",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_event_test_v1(uuid, text, jsonb)",
+      "body_md5": "8c373b1093031520d683a1bdcf626572",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_events_test_v1(jsonb)",
+      "body_md5": "c1d64cce8930bd56218af5f8e00264ba",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_sign_in_test_v1(jsonb)",
+      "body_md5": "1827e4bf18acdd4b8dead177f298175f",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    }
+  ]
+}
