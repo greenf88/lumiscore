@@ -1,0 +1,108 @@
+Hebban priority follow-up — 31 October 2026
+SEPARATE FROM PR62 AND PR51. No production changes, merge or deployment.
+
+USER IMAGE / IDENTITY
+Use the twelve positions as user priorities, not a verified current Hebban
+ranking or a new LumiScore ranking. Hebban's list endpoint is robots-blocked;
+no bypass attempted. A published CPNB2025list differs from this artwork, so
+no list-year claim is made. Crop inspection identifies11as Haar naam was
+Sarah, not Als je het licht niet kunt zien.
+Harry Potter8is THE FIRST VOLUME: Harry Potter en de steen der wijzen,
+Work93, existing Dutch paperback edition1308 ISBN9789076174082. Its actual
+registry cover visually matches the user's artwork (broom,moon,redcloak,
+winged golden ball and printed subtitle). Bureau ISBN explicitly labels #1
+and the edition's own block Dutch; De Harmonie's official2025catalogue
+separately corroborates the exact paperback ISBN. West-Frisian9789056151553
+is a different edition and excluded. Not Azkaban or a series omnibus.
+
+READ-ONLY PRODUCTION BASELINE / EACH BOOK
+Photo position | Work | edition/ISBN | current NL summary/cover | proposal
+1 10232 Al het blauw van de hemel |10421/9789022340479 |both good |retain
+2 114 Daar waar de rivierkreeften zingen |10307/9789041716149 |both good |retain
+3 409 Een klein leven |10411/9789046822708 |both good |retain
+4 10231 Het achtste leven (voor Brilka) |10420/9789025448417 |both good |retain
+5 1936 De schaduw van de wind |2113/9789056723101 |no confirmed NL |langNULL->nld,cover,summary
+6 9530 Ik ben Pelgrim |only EN9689 now |no NL |add NL9789022997130,cover,summary
+7 327 De vliegeraar |10419/9789023477327 |both good |retain
+8 93 Harry Potter en de steen der wijzen |1308/9789076174082 |cover good;temporary description source error |stored NLsummary,reviewed cover
+9 1006 De ontdekking van de hemel |only unclassified EN1006now |no NL |add NL9789023466840,cover,summary
+10 1100 De Camino |1100/9789024582273 |both good |retain
+11 1440 Haar naam was Sarah |1504/9789047201793 |no confirmed NL |langNULL->nld,clean edition title,cover,summary
+12 1435 De zeven zussen |1499/9789401609371 |no confirmed NL |langNULL->nld,cover,summary
+
+All twelve content identities already exist: ZERO new Works. Current verified
+NLavailability7/12; proposed12/12 (+5existing Works). Current approved stored
+NLsummaries6/12, proposed12/12 (+6). Seven approved existing text rows (including
+one ENrow) are retained. Actual production guest browser checks:12books,
+6visible sourced summaries,7actually loaded correct-language covers. Missing
+edition cases are not counted as image transport failures. Harry's temporary
+description error is distinguished from lack of an approved stored summary.
+Evidence:production-public-snapshot.json, existing-approved-descriptions.json,
+live-readonly-proof.json. Individual ratings/account data never retrieved.
+
+EXACT PROPOSAL / INDEPENDENT OF PR62
+17receipt-tracked actions:
+2new Dutch printeditions (existing Works9530,1006);
+3edition-language corrections (2113,1504,1499) NULL->nld;
+1edition-title cleanup is INCLUDED in correction1504, not a separate action:
+'Haar naam was Sarah / druk 59' -> 'Haar naam was Sarah'. Work title untouched.
+6reviewed exact-edition coverbindings;6original sourced Dutch summaries.
+No author/Work/user/rating/status/collection/taste-inventory DML. No new schema.
+No new content traits, score changes or source language guesses.
+Exact old/new rows, ISBNs, formats, sources, conflict decisions and summary
+texts:reviewed-changes.json and production-plan.json. All SQL/hashes are
+separate from PR62; NEVER append them to its approved46-action proposal.
+
+IDENTITY EXCEPTIONS / SAFETY
+Existing Dutch Seven Sisters Work1435 and English Work8476 may duplicate
+the first volume under different source Works. No merge/relink/delete proposed;
+use the existing Dutch record and flag identity/dependency review separately.
+No new duplicate is created. Harry's Spanish unknown record is untouched.
+Sarah's regular paperback is not the abridged Marian Hoefnagel adaptation,
+ebook or another ISBN's cover. Registry mixed Work-level formats/languages
+are never sufficient: each selected exact edition's own block is checked.
+Heaven is the single-volume paperback, not a1997two-volume set.
+
+SOURCES / COVER QUALITY
+Six exact edition pages saved with retrieval dates and SHA256. Independent
+KB/library/publisher corroboration recorded per edition. Sources verified
+again31October2026. Six new full-cover responses HTTP200, visually inspected:
+correct title/author/edition; HP matches the user's artwork. Existing six good
+presentations loaded live and are not rewritten.
+Six observed same-asset card variants also HTTP200:12,324–29,651bytes.
+The Seven Sisters full detail original is834,318bytes (not below300kB);
+its verified card variant is19,878bytes. No guessed resize URL or new host.
+Keep readable detail image and record this remaining size limit; no false
+claim that all images are below300kB. Other five new originals70–211kB.
+
+LOCAL VALIDATION — NOT HOSTED REPAIR
+build-proposal.mjs reuses the existing reviewed CAS/receipt SQL renderer and
+the existing strict selector. Local PGlite loads the actual public baseline,
+installs the existing guard migrations only locally, applies17actions with
+COMMIT, replays0changes, verifies12/12exact intended Dutch ISBN selections,
+then executes committed receipt-based rollback and compares EVERY baseline
+table byte-for-byte as canonical JSON. Synthetic rating/progress preserved.
+Result PASS; local-validation.json. No Supabase test write performed for this
+follow-up. This leaves the PR62 test baseline/preservation proof unchanged.
+This is NOT proof of post-repair hosted covers, descriptions or performance.
+
+FUTURE TEST / RECOVERY / STOP RULES
+Existing test has six exact source-identity matches. Before hosted follow-up,
+resolve translated-title/ISBN matches for the six missing fixtures as well;
+add only minimal public fixtures with free IDs if required. Never copy users,
+ratings or progress. Recheck production/test current values and equivalent
+ISBN10/13 globally. Stop on drift/identity conflict; do not invent a new Work.
+Install the separate TESTmapped proposal only after that mapping review.
+Retain the FIRST nonempty committed receipt. Test rereun must change0rows.
+Verify twelve book/detail/search presentations on test before requesting any
+production approval. No new preview/env/rebuild/account required or performed.
+Rollback uses exact receipt, reverse order, full-row CAS and incoming FK checks;
+later changed rows/dependencies must stop restoration rather than deleting
+unrelated data. Never reset sequences. Readback protected data afterwards.
+No production import authorised or executed. No social publication.
+
+STATUS
+Research and local17-action proposal complete; hosted installation/after-repair
+acceptance remain a separate next batch. PR62 release review was completed
+first but remains blocked by its independent Supabase confirmation failure.
+Do not delay or expand PR62 with any of these Hebban changes.
