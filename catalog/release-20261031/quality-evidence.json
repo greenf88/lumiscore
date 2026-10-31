@@ -1,0 +1,40 @@
+{
+  "applicationSha": "9d3b9a85123b5fe0679c80ec266ae47481cd075a",
+  "sourceApplication": "10f8cb0801aed2ba1bf3034685e9e636447ae5cd",
+  "runtimeBlobsUnchangedByFinalDataRevision": true,
+  "ci": {
+    "run": 41204067722,
+    "url": "https://github.com/greenf88/lumiscore/actions/runs/41204067722",
+    "conclusion": "success",
+    "steps": ["unit", "TypeScript", "lint", "16 synthetic profile SSR cases", "production build", "client secretscan", "diff check"]
+  },
+  "localFullRerun": {
+    "tests": 885,
+    "passed": 869,
+    "skipped": 16,
+    "failed": 0,
+    "durationMs": 761373.9093,
+    "skips": "Profile SSR integration cases require their dedicated server runner; all16 separately passed. Not real logged-in hosted browser evidence."
+  },
+  "final334TextRevision": {
+    "focusedTests": 2,
+    "passed": 2,
+    "failed": 0,
+    "durationMs": 26504.9485,
+    "actions": 686,
+    "committedImportReplayAndUndo": "local PGlite, full public preflight fixture plus synthetic private stand-ins"
+  },
+  "otherLocalChecks": {
+    "TypeScript": "passed",
+    "lint": "passed",
+    "productionBuild": "passed",
+    "clientSecretScan": "passed;92 built client files",
+    "syntheticProfileSsr": "16/16 passed"
+  },
+  "limitations": [
+    "An initial broad local run failed stale test expectations and one load-related120s timeout; reviewed existing expectation updates and an isolated10-case rerun passed without increasing timeouts.",
+    "Authenticated hosted recommendations are pending the permitted TEST session.",
+    "Hosted committed canary undo was explicitly declined; no bypass or identical retry."
+  ],
+  "productionWrites": 0
+}

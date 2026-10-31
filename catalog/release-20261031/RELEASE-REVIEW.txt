@@ -35,21 +35,19 @@ Production has neither new presentation table. Relevant old edition rows match
 the reviewed51-row correction snapshots exactly. Full public expected rows are
 in production-readback.json; no accounts or individual ratings were retrieved.
 
-687 guarded actions, all public catalogue only:
+686 guarded actions, all public catalogue only:
   authors:5 inserts
   Works:13 inserts;1 existing year correction (2031:1971->2016)
   editions:67 inserts;56 existing-row updates (only reviewed changed fields)
-  summaries:335 inserts, NL216/EN119,313 unique Work identities
+  summaries:334 inserts, NL215/EN119,312 unique Work identities
   edition metadata:210 inserts,95 exact-edition verified-cover bindings
 Existing reviews/progress remain attached to their original Works; no merge,
 reparent of user records, synthetic popularity, trait or score writes.
 Work1204/Knorrende beesten is held: reviewed internal text is NOT released while
 the edition language remains unconfirmed. No blocked pilot change is imported.
 
-335 is NOT335 additional Dutch books. The merge contains259 approved integrity
-texts plus76 nonduplicated pilot texts; the two equal NL Hobbit/Dune texts occur
-once. The TEST335/313 totals and production335/313 happen to match, but the plan
-rebases checked identities, not synthetic test IDs. No test IDs enter production.
+The335 stored TEST texts span313 TEST Works:231 original,26 migrated good texts,78 retained pilot texts. Excluding the internally approved but language-unavailable Knorrende text leaves334texts/312Works:230 original,26 migrated,78 retained.
+The release merges258 tested integrity texts and76 nonduplicated pilot texts; the equal NL Hobbit/Dune texts occur once. An older Madonna migration in the first Draft is removed: its already-good production static text stays unchanged, rather than substituting it for the held TEST text. No test IDs enter production.
 Original pilot100:78 approved/22 held;65 existing Work identities+13 new.
 The fixed Dutch reference remains29Oct20:46:39.793509UTC:2649eligible Works.
 110 newly Dutch-available Work identities,97 existing+13 new, overlap2 between
@@ -90,7 +88,7 @@ IMPORT AND RECOVERY
 production-dry-run.sql:ROLLBACK, but sequence values can advance; never reset them.
 production-import.sql:COMMIT; dynamic new IDs, exact unique identities, complete-row
 CAS for corrections, reviewed parent bindings and author-corpus drift checks.
-The only permitted change count is0(exact replay)or687(full first execution).
+The only permitted change count is0(exact replay)or686(full first execution).
 Partial installations or unexpected values stop atomically for explicit review.
 Save FIRST nonempty complete receipt securely with the execution record.
 production-rollback.sql requires that receipt; reverse child-first operations,
@@ -103,7 +101,7 @@ sum or concatenate them. This PR intentionally omits the old executable imports.
 WHAT RECOVERY EVIDENCE DOES / DOES NOT PROVE
 Earlier full TEST257-text batch: actual transaction undid own rows and ROLLBACK
 restored all public rows/counts/checksums. That is NOT a committed-undo proof.
-New local PGlite: fresh production public rows,687 committed actions, replay0,
+New local PGlite: fresh production public rows,686 committed actions, replay0,
 committed undo and repeated undo; later-edit and FK refusal; synthetic ratings/
 progress preserved. Same SQL renderer, not an alternative cleanup implementation.
 New hosted canary:2 explicitly synthetic own TEST rows COMMITTED and read back,
@@ -138,10 +136,26 @@ ACCEPTANCE AND CURRENT LIMITS
 Runtime TypeScript/lint/build/secretscan and16 synthetic profile SSR checks passed.
 The original broad-suite first run had two stale test expectations and one local
 load-related120s timeout; copied existing reviewed updated expectations and the
-isolated10 affected tests pass without raised timeout. Final full CI/recheck pending.
+isolated10 affected tests pass without raised timeout. CI41204067722 on application9d3b9a85123b5fe0679c80ec266ae47481cd075a passed ALL steps. Final data-only334-text revision is locally rechecked separately.
 Synthetic SSR is NOT an authenticated hosted browser session.
-Actual permitted test login is requested; no account/credentials created or read.
-Complete hosted acceptance and exact application SHA are recorded separately.
+One disposable synthetic TEST account is now explicitly authorized. Its dashboard
+form is prepared; initial credential entry/submission requires user handoff. No
+account has yet been created and no existing credentials have been read.
+Ready Preview https://lumiscore-331m41drq-rgkgroeneveld-9102.vercel.app
+Deployment dpl_awJAZsnbvezYGmiUoa33FcKUSCd3, application9d3b9a85123b5fe0679c80ec266ae47481cd075a.
+Hosted guest NL/EN,390x844/1280x720,Paper/Ink: old Work De oversteek/The Passage and new De buitenjongen; actual covers/source/text, strict absent-EN state, reload and back/filter preservation. Dune collection shows3NL/6EN cards and keeps6 linked Works; all6ENcovers actually loaded after scrolling. Central empty score stays empty. No synthetic ratings created.
+One immediate ENreload capture has an image pending; later desktop reload positively confirms it loaded. Do not count the pending frame as a loaded cover.
+The guest preference questionnaire is unavailable on TEST. One read-only production public-route visit shows the SAME existing error. First-question anchor Eragon143 has NULL edition language on production; this is not proof of a new selector regression. Current release does not certify complete questionnaire coverage or relax language gates.
+Authenticated hosted recommendations remain unproved until the separately requested test login.
+Complete hosted checks and exact application SHA are in hosted-browser-checks.json.
+Six actual hosted Browse pages (NL1-3/EN1-3) each contain16 unique Works,48 distinct
+per language across three pages. Exact public edition readback confirms each
+selected Work has an eligible edition in that language. NLpage1 includes our
+explicitly synthetic canary, not production catalogue growth. See hosted-validation-summary.json.
+Local full rerun:885 tests,869passed,16skipped,0failed. The334-text/686-action
+revision additionally passes the2 focused SQL/accounting tests. The16 unit-runner
+skips are profile SSR integration cases, separately passed by the dedicated16-case
+synthetic SSR check. Neither is an authenticated hosted browser flow.
 No physical phone or production speed improvement is claimed.
 
 FUTURE SEPARATELY APPROVED EXECUTION ORDER
@@ -150,7 +164,7 @@ FUTURE SEPARATELY APPROVED EXECUTION ORDER
   destination. Stop on drift; update/retest proposal, never overwrite new work.
 2 Validate/install compatible storage then guards then additive locale functions.
   Stop on unexpected existing definitions/rights or permission errors. No app release.
-3 Run the consolidated dry-run. Expect687or complete replay0. Preserve original
+3 Run the consolidated dry-run. Expect686or complete replay0. Preserve original
   state; do not use dry-run generated IDs as an import/recovery receipt.
 4 After separate exact data approval, COMMIT import; save first receipt, read back
   identities/counts, approved RLS/public access, no cross-language/duplicate bindings.

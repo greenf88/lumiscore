@@ -17,9 +17,9 @@ async function fixture(){const db=new PGlite();await db.exec(`create role anon;c
 test('consolidated release: committed import, replay, later edit/dependency refusal and committed receipt undo',async()=>{const db=await fixture();try{
  const originals={};for(const t of ['authors','works','editions'])originals[t]=(await db.query(`select * from ${t} order by id`)).rows;
  const receipt=(await db.exec(renderImport(plan))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;
- assert.equal(receipt.rows.length,687);
+ assert.equal(receipt.rows.length,686);
  const replay=(await db.exec(renderImport(plan))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;assert.equal(replay.rows.length,0);
- assert.equal((await db.query('select count(*)::int n from catalog_work_descriptions')).rows[0].n,335);
+ assert.equal((await db.query('select count(*)::int n from catalog_work_descriptions')).rows[0].n,334);
  assert.equal((await db.query('select count(*)::int n from catalog_edition_metadata')).rows[0].n,210);
  const useReceipt=()=>db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);
  await useReceipt();await db.exec("update catalog_work_descriptions set text=text||' Later legitimate review.' where work_id=8 and language='nl'");
@@ -31,6 +31,6 @@ test('consolidated release: committed import, replay, later edit/dependency refu
  await db.exec(renderRollback(plan));await db.exec(renderRollback(plan));
  for(const t of ['authors','works','editions'])assert.deepEqual((await db.query(`select * from ${t} order by id`)).rows,originals[t]);
  assert.deepEqual((await db.query('select * from synthetic_ratings')).rows,[{work_id:8,score:9}]);assert.deepEqual((await db.query('select * from synthetic_progress')).rows,[{work_id:8,status:'read'}]);
- fs.writeFileSync(new URL('consolidated-local-proof.json',root),JSON.stringify({environment:'Local PGlite; fresh public production preflight plus synthetic private stand-ins only',actions:687,descriptions:335,metadata:210,replayChanges:0,committedUndo:true,repeatUndo:true,laterEditRefused:true,laterDependencyRefused:true,existingRowsPreserved:true,syntheticScoresAndProgressPreserved:true,productionWrites:0},null,2)+'\n');
+ fs.writeFileSync(new URL('consolidated-local-proof.json',root),JSON.stringify({environment:'Local PGlite; fresh public production preflight plus synthetic private stand-ins only',actions:686,descriptions:334,metadata:210,replayChanges:0,committedUndo:true,repeatUndo:true,laterEditRefused:true,laterDependencyRefused:true,existingRowsPreserved:true,syntheticScoresAndProgressPreserved:true,productionWrites:0},null,2)+'\n');
  }finally{await db.close();}});
-test('bounded package accounting: 110 newly NL available minus one confirmed English correction, no held summary',()=>{assert.equal(plan.summary.texts.nl,216);assert.equal(plan.summary.texts.en,119);assert.equal(plan.summary.texts.uniqueWorks,313);assert.equal(plan.summary.nlAvailability.added,110);assert.equal(plan.summary.nlAvailability.removed,1);assert.equal(plan.summary.nlAvailability.net,109);assert(!plan.actions.some(a=>a.relation==='catalog_work_descriptions'&&a.after.work_id===1204));});
+test('bounded package accounting: 334 of335TESTtexts, 110 newly NL available minus one confirmed English correction',()=>{assert.equal(plan.summary.texts.nl,215);assert.equal(plan.summary.texts.en,119);assert.equal(plan.summary.texts.uniqueWorks,312);assert.equal(plan.summary.nlAvailability.added,110);assert.equal(plan.summary.nlAvailability.removed,1);assert.equal(plan.summary.nlAvailability.net,109);assert(!plan.actions.some(a=>a.relation==='catalog_work_descriptions'&&[1204,1305].includes(a.after.work_id)));});
