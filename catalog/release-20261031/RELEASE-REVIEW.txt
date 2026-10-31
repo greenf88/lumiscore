@@ -104,25 +104,29 @@ restored all public rows/counts/checksums. That is NOT a committed-undo proof.
 New local PGlite: fresh production public rows,686 committed actions, replay0,
 committed undo and repeated undo; later-edit and FK refusal; synthetic ratings/
 progress preserved. Same SQL renderer, not an alternative cleanup implementation.
-New hosted canary:2 explicitly synthetic own TEST rows COMMITTED and read back,
-replay0; later edition dependency actually refused by the same recovery engine.
-Final committed undo was declined by connector: `SQL execution was declined`.
-An earlier guard attempt expired after2minutes. No identical retry or UI bypass.
-After explicit renewed human authorization31Oct, the SAME Supabase connector was
-used for a fresh bounded attempt. Preflight13:59:29.706524UTC exactly matched both
-committed rows and receipt hashes.16FKrelations checked; only own Edition959200031
-depends on own Work959100031, intentionally removed child-first. All15other FK
-relations have0target rows; no DELETEtriggers/rules and no uncovered work/edition
-identifier columns were found. Ratings/readstatus/taste/collection/metadata stay out.
-The one new write request EXPIRED: `This confirmation expired after 2 minutes.
-Call execute_sql again to get a new confirmation.` This is NOT a new security
-refusal and NOT a successful execution. No identical retry or alternative access.
-Independent readback14:03:19.313072UTC confirms both rows still present,798Works/
-1053editions.16preserved-table row counts/content fingerprints and4public sequence
-last/increment/cycle values are unchanged. No production action was requested.
-Canary Work959100031/Edition959200031 remain intact on TEST. Own later-dependency
-Edition959200032 had already been CAS-removed. Do NOT call hosted committed
-recovery complete. See recovery-renewal-20261031.json and its read-only SQL files.
+Hosted canary:2 explicitly synthetic own TEST rows COMMITTED and read back,
+replay0; a later edition dependency actually refused by the same recovery engine.
+Historical final attempts were declined/expired and remained unexecuted; those
+outcomes are preserved in recovery-renewal-20261031.json, not reclassified.
+The user then requested coordination before the two-minute confirmation window
+and replied "klaar". One new request via the SAME Supabase connector succeeded.
+Fresh project check:hlvujbrmfdlrfxdjwsmb,ACTIVE_HEALTHY,Postgres17.11.
+Metadata14:15:38UTC and full preflight14:15:43.720342UTC matched the original
+FIRST committed receipt, both complete rows and unchanged manifest/template hashes.
+16 incoming FK relations:only own Edition959200031 depended on Work959100031;
+all15others0. No DELETEtriggers/rules or uncovered identifier columns.
+Request14:15:49.788UTC; successful tool result14:15:53.846UTC; independent readback
+14:16:00.926510UTC (15:16:00.926510CET) proves both own rows ABSENT.
+Counts798->797Works/1053->1052editions. All16preserved-table count/content
+fingerprints and all4public sequence last/increment/cycle values are UNCHANGED.
+All16target dependency counts now0. No rating/status/account/sequence DML.
+This is a real committed hosted undo using the existing receipt-bound renderer,
+NOT merely a dry-run/ROLLBACK or an HTTP200. It proves only the two own canary
+rows on TEST; full686-action COMMIT/replay/undo remains separately local evidence.
+No production writes or alternate credentials/route. No repeated write request.
+Exact raw response, metadata, before/after and checks:recovery-committed-20261031.json.
+Exact submitted request:recovery-committed-request.txt. Proof hashes are separate
+from the11unchanged release artifact hashes.
 
 RITA
 Exact Dutch paperback9789023458753 reconfirmed on official BureauISBN page.
@@ -208,14 +212,18 @@ deployment. Additive tables/functions remain compatible; retain old RPCs.
 Data recovery:receipt-bound child-first script; stop on any later dependency/edit.
 Do not drop/recreate shared schema or remove original Works/ratings/progress.
 
-ADVICE: Draft is a concrete reviewable release candidate. Authenticated hosted
-acceptance and own account/rating cleanup are proved and reused without repeating
-the32valid browser checks. Application/data commit45f331419156927034434c94e36bc05717193206
-and runtime9d3b9a85123b5fe0679c80ec266ae47481cd075a remain unchanged.
-The remaining release gate is committed hosted canary recovery: after the earlier
-decline, this explicitly renewed attempt expired at the confirmation step. Own
-Work959100031/Edition959200031 remain on TEST; fresh readback proves unchanged state.
-Needed: a fresh confirmation through the SAME connector, approved within its
-2-minute lifetime. If the normal confirmation UI is not presented, investigate
-that confirmation flow with support. No invented reconnect/auth cause, no other
-credentials or route, no automatic retry. No production release approval requested.
+ADVICE: READY FOR SEPARATE RELEASE APPROVAL of this BOUNDED package.
+Authenticated32hosted browser checks and account/rating cleanup are valid and
+reused. The last hosted committed-recovery gate is now successfully proved.
+Application/data commit45f331419156927034434c94e36bc05717193206 and hosted-tested
+runtime9d3b9a85123b5fe0679c80ec266ae47481cd075a remain unchanged. Subsequent
+commits contain only evidence/docs/offline proof checks; no application/import/
+migration changes. CI on2ef7e97ae1fd9b29ed2c25ad24a9dceb77d3c89e is fully green
+(run41208558712). The final evidence commit and its CI/Ready deployment must
+also be recorded in the PR before release approval; never infer green status.
+All11production artifact hashes remain fixed in artifact-hashes.json.
+No claim that all1900open research dossiers are repaired, that the questionnaire
+anchor gap is fixed, or that Preview timings demonstrate production gain.
+Production snapshots are dated; fresh drift/ACL/schema checks immediately before
+any separately approved installation remain mandatory. Stop on any mismatch.
+No production import, merge, publication or PR51 action has been executed.
