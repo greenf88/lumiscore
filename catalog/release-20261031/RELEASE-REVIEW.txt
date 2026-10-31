@@ -108,9 +108,21 @@ New hosted canary:2 explicitly synthetic own TEST rows COMMITTED and read back,
 replay0; later edition dependency actually refused by the same recovery engine.
 Final committed undo was declined by connector: `SQL execution was declined`.
 An earlier guard attempt expired after2minutes. No identical retry or UI bypass.
-Canary Work959100031/Edition959200031 remain intact on TEST pending the approved
-recovery action. Own later-dependency Edition959200032 was CAS-removed; no other
-test row was targeted. Do NOT call hosted committed recovery complete yet.
+After explicit renewed human authorization31Oct, the SAME Supabase connector was
+used for a fresh bounded attempt. Preflight13:59:29.706524UTC exactly matched both
+committed rows and receipt hashes.16FKrelations checked; only own Edition959200031
+depends on own Work959100031, intentionally removed child-first. All15other FK
+relations have0target rows; no DELETEtriggers/rules and no uncovered work/edition
+identifier columns were found. Ratings/readstatus/taste/collection/metadata stay out.
+The one new write request EXPIRED: `This confirmation expired after 2 minutes.
+Call execute_sql again to get a new confirmation.` This is NOT a new security
+refusal and NOT a successful execution. No identical retry or alternative access.
+Independent readback14:03:19.313072UTC confirms both rows still present,798Works/
+1053editions.16preserved-table row counts/content fingerprints and4public sequence
+last/increment/cycle values are unchanged. No production action was requested.
+Canary Work959100031/Edition959200031 remain intact on TEST. Own later-dependency
+Edition959200032 had already been CAS-removed. Do NOT call hosted committed
+recovery complete. See recovery-renewal-20261031.json and its read-only SQL files.
 
 RITA
 Exact Dutch paperback9789023458753 reconfirmed on official BureauISBN page.
@@ -156,7 +168,7 @@ authenticated-cleanup-readback.json; every capture names tested application9d3b9
 Runtime remains byte-identical to release application45f3314; only evidence follows.
 Ready Preview https://lumiscore-331m41drq-rgkgroeneveld-9102.vercel.app
 Deployment dpl_awJAZsnbvezYGmiUoa33FcKUSCd3, application9d3b9a85123b5fe0679c80ec266ae47481cd075a.
-Hosted guest NL/EN,390x844/1280x720,Paper/Ink: old Work De oversteek/The Passage and new De buitenjongen; actual covers/source/text, strict absent-EN state, reload and back/filter preservation. Dune collection shows3NL/6EN cards and keeps6 linked Works; all6ENcovers actually loaded after scrolling. Central empty score stays empty. No synthetic ratings created.
+Hosted guest NL/EN,390x844/1280x720,Paper/Ink: old Work De oversteek/The Passage and new De buitenjongen; actual covers/source/text, strict absent-EN state, reload and back/filter preservation. Dune collection shows3NL/6EN cards and keeps6 linked Works; all6ENcovers actually loaded after scrolling. Central empty score stays empty. No synthetic ratings were created in those guest checks; the subsequent one own rating in the authenticated test was separately removed.
 One immediate ENreload capture has an image pending; later desktop reload positively confirms it loaded. Do not count the pending frame as a loaded cover.
 The guest preference questionnaire is unavailable on TEST. One read-only production public-route visit shows the SAME existing error. First-question anchor Eragon143 has NULL edition language on production; this is not proof of a new selector regression. Current release does not certify complete questionnaire coverage or relax language gates.
 Authenticated hosted recommendations are now demonstrated with existing synthetic
@@ -197,6 +209,13 @@ Data recovery:receipt-bound child-first script; stop on any later dependency/edi
 Do not drop/recreate shared schema or remove original Works/ratings/progress.
 
 ADVICE: Draft is a concrete reviewable release candidate. Authenticated hosted
-acceptance and own account/rating cleanup are now proved. The remaining release
-gate is the explicitly declined committed hosted canary recovery: own catalogue
-Work959100031/Edition959200031 remain on TEST. No identical retry or bypass.
+acceptance and own account/rating cleanup are proved and reused without repeating
+the32valid browser checks. Application/data commit45f331419156927034434c94e36bc05717193206
+and runtime9d3b9a85123b5fe0679c80ec266ae47481cd075a remain unchanged.
+The remaining release gate is committed hosted canary recovery: after the earlier
+decline, this explicitly renewed attempt expired at the confirmation step. Own
+Work959100031/Edition959200031 remain on TEST; fresh readback proves unchanged state.
+Needed: a fresh confirmation through the SAME connector, approved within its
+2-minute lifetime. If the normal confirmation UI is not presented, investigate
+that confirmation flow with support. No invented reconnect/auth cause, no other
+credentials or route, no automatic retry. No production release approval requested.
