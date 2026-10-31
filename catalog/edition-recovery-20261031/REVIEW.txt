@@ -1,0 +1,120 @@
+Dystopia / Dune: bounded edition recovery after PR61 — 31 October 2026
+
+BASE / SCOPE
+Remote main and active production: 13451a60e6f9399204aa625036942afa0b6c5380.
+Ready production dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr owns lumisco.re.
+New isolated branch fix/dystopia-dune-editions-20261031 starts exactly there.
+PR51, broader 1900 dossiers, NL5000 expansion and other worktrees untouched.
+Production is READ ONLY. No application merge/publication, accounts or ratings.
+
+WHY THREE DUTCH DYSTOPIA CARDS
+The older evidence catalog/technical-recovery-20261021/pr48-cover-recovery.json
+records ten presentations inside the NL interface, not ten Dutch editions.
+At positions2–10 the saved visible text explicitly says "Engelse editie".
+Only102 had a Dutch selected edition in that historical test. PR61 adds valid
+Dutch editions for2718 and199, making the current three genuinely Dutch.
+The other seven have only EN/unknown records in production. Strict NL-only
+selection was intentional; no membership deletion/pagination regression found.
+Old loaded-cover evidence must not be reused as Dutch edition-language proof.
+
+Work | Now NL | Missing reviewed print edition / action
+102  | yes | De Hongerspelen ISBN9789000399284 retained unchanged
+2718 | yes | Laat me nooit alleen ISBN9789025452483 retained unchanged
+208  | no  | De zaaier ISBN9789056727116, paperback,nld
+2600 | no  | Oryx en Crake ISBN9789035125414,paperback,nld
+100  | no  | Gever ISBN9789045340104,hardcover,nld
+2717 | no  | Zeis ISBN9789059248427,hardcover,nld
+179  | no  | Inwijding ISBN9789047516835,paperback,nld
+2724 | no  | Gesplitst ISBN9789047704010,paperback,nld
+2846 | no  | Het jaar van de vloed ISBN9789044613988,paperback,nld
+199  | yes | De testamenten ISBN9789044641882 retained unchanged
+
+DUNE
+Collection50 still links8,2165,2169,2176,311,2182 in positions1–6.
+NL currently8/2165/311. EN currently8/2165/2169/2176/2182.
+Add Dutch print editions only to2169/2176/2182 (exact ISBNs in manifest).
+Add EN paperback Heretics9780593201763 to311; reuse test91021201 (already
+created in the earlier reviewed PR46 package). Do not rerun the superseded
+standalone Heretics production proposal together with this import.
+No collection_links/sequence/progress-scope changes. All6linked Works continue
+to count in progress whether or not an edition is visible.
+No omnibus, audio or multilingual edition is being made eligible.
+
+PLACEHOLDER / ROOT CAUSE
+The production NL placeholder is Work311, edition2376, Ketters van Duin,
+ISBN9789029043151, OL37806976M. Open Library wrongly parents that exact
+fifth-volume edition to Children of Dune OL893516W. LumiScore's corrected
+internal Work311 OL893502W must NOT be reversed. Automatic cover evidence
+properly refuses the source parent mismatch. Exact ISBN/title/author/scanned
+cover plus independent original-title evidence support a reviewed metadata
+binding for this edition, without weakening automatic identity checks.
+
+SOURCE CONFLICTS — NOT GUESSED
+Inwijding: registry labels both2012 and2026 print rows Engels. The official
+publisher explicitly says Taal boek Nederlands, paperback, ISBN9789047516835;
+NBD Biblion's2012 bibliographic review identifies the Maria Postema Dutch
+translation of Divergent under the same ISBN. Use only that independently
+adjudicated2012 edition. Do not trust title, prefix or Dutch marketplace alone.
+Oryx: OL47294457M has no language and a duplicate Work parent. Do not import
+that parent. Exact Dutch single-volume ISBN/title/Atwood/Tinke Davids print
+identity is corroborated by booktrade records and publisher translation credits.
+Omnibus9789044612967 and trilogy9789044641912 explicitly excluded.
+All edition facts, URLs, retrieval hashes and remaining source discrepancies:
+reviewed-editions.json and sources/. Summaries are original source-reviewed
+Work-language content, not edition-language evidence. Existing texts retained.
+
+CODE
+Five CSS lines wrap only fallback cover lettering (title/author/kicker).
+At390px the live body was397px wide: hidden Waterschapsheuvel fallback text
+scrollWidth176 inside110px propagated to the card/body even under a loaded
+image. Score seal overflow remains visible. No global body clipping, layout,
+font, dimension, navigation, ranking, taste/score or language-rule changes.
+Local shared-component geometry fixture is loopback-only, not an app route.
+
+DATA PACKAGE / SAFETY
+Production PROPOSAL:46 actions =11new editions,12metadata rows,23summaries.
+New Works/authors:0. Metadata includes exact existing Ketters edition2376.
+Test:45actions because EN Heretics edition already exists; replay changed0.
+No existing edition fields are updated and no row is merged/deleted by import.
+Source-specific production/test IDs are separated in the two immutable plans.
+Runtime public metadata stays in the existing secured presentation tables.
+No new migration, infrastructure or source lookup on page load is introduced.
+Sources/HTTP proof:12exact cover responses200; visual inspection of all12.
+Three >300kB originals have observed smaller same-asset mobile variants, no
+new cover host. Full detail originals remain available. A small watermarked
+Oryx scan is correctly identified but limited in sharpness; not a new failure.
+
+INSTALL AFTER SEPARATE FUTURE APPROVAL
+1 Recheck exact PR SHA/main/Ready build and current full public row bindings,
+  all equivalent ISBNs/OLIDs and selected Work-author pairs. Stop on drift.
+2 Retain current reviewed metadata/descriptions and first nonempty COMMIT
+  receipt securely. Hash-check hashes.json and all approved SQL files.
+3 Existing PR61 presentation tables/guards/RPCs are dependencies, not new
+  migrations. Check their presence/rights; do not reinstall or weaken them.
+4 Run production-dry-run.sql only after approval; it ROLLBACKs. Sequence gaps
+  are normal; never reset identity sequences. Stop on mismatch/dependency.
+5 Run exact production-import.sql (46 or0 changes only). Preserve FIRST receipt.
+6 Read back all46actions, duplicates, NL10/EN10 dystopia, NL6/EN6Dune,
+  public scores and unchanged collection links. Never invent ratings.
+7 Merge only approved code; confirm production alias/SHA. Public identity cache
+  refresh is bounded; no global/private cache purge without demonstrated need.
+8 Live NL/EN Paper/Ink 320px/desktop acceptance before any sharing.
+
+ROLLBACK
+Application: revert only targeted CSS commit (no schema incompatibility).
+Data: production-rollback.sql requires exact FIRST nonempty committed receipt
+via set_config('lumiscore.catalog_release_receipt', receipt, false). It reverses
+only receipt rows, with full-row CAS and every incoming FK (including CASCADE).
+Later changed data or dependencies stop the whole transaction; never cascade
+delete, remove unrelated editions or reset sequences. Restore in reverse
+order: own summaries/metadata then own inserted editions; existing Works,
+accounts, ratings and progress remain. An identical import replay is a no-op.
+Local tests prove committed undo and later-edit/dependency refusal. Hosted
+transactional undo/ROLLBACK proof and subsequent readback are recorded
+separately; do not confuse a ROLLBACK with a committed production rollback.
+
+HOSTED ACCEPTANCE
+Pending final application SHA / Preview verification. Test installation has
+45confirmed changed rows and0on repeat. Production remains unchanged.
+No statement that production NL10 or Dune6/6 is repaired until separately
+approved data import and live acceptance actually occur.

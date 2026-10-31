@@ -1506,6 +1506,11 @@ button, input, select, textarea { font-family: var(--sans); }
 
 /* One badge per actual cover, including Browse and all compact variants. */
 .book-cover { container-type: inline-size; overflow: visible; }
+/* Fallback lettering stays inside its own cover; keep the score seal free to
+   cross the cover edge. This also applies while a real image hides the text. */
+.book-cover .cover-title,
+.book-cover .cover-author,
+.book-cover .cover-kicker { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
 .book-cover-image, .detail-back-cover > img { border-radius: inherit; }
 .book-cover .cover-rating-badge {
   /* Keep the seal across the lower-right cover edge, as on the original cover. */
