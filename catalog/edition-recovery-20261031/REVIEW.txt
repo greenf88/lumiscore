@@ -113,8 +113,97 @@ Local tests prove committed undo and later-edit/dependency refusal. Hosted
 transactional undo/ROLLBACK proof and subsequent readback are recorded
 separately; do not confuse a ROLLBACK with a committed production rollback.
 
-HOSTED ACCEPTANCE
-Pending final application SHA / Preview verification. Test installation has
-45confirmed changed rows and0on repeat. Production remains unchanged.
-No statement that production NL10 or Dune6/6 is repaired until separately
-approved data import and live acceptance actually occur.
+HOSTED ACCEPTANCE — COMPLETED 31 OCTOBER
+Draft PR62: https://github.com/greenf88/lumiscore/pull/62
+Tested application: c61e8ee6ac3e07a527f9186d5fb10ec55f85cfe2.
+Ready deployment dpl_92RNo7pgDXNcysvY2XZKoK7EM8u3:
+https://lumiscore-7rt9gbpcp-rgkgroeneveld-9102.vercel.app
+Later evidence-only commits do not change the tested application/import files.
+CI quality run41214076537 passed unit tests, TypeScript, plain lint, synthetic
+profile SSR, Vercel build, client secret scan and diff check on this SHA.
+Branch-only public TEST URL/publishable key configured after explicit approval.
+Normal Git build used the configuration; no manual rebuild was necessary.
+Deployment protection, production configuration and all other branches intact.
+
+hosted-browser-proof.json records126 observations and32 Work/language cases.
+Every one of the ten dystopia Works and six Dune Works has a visible sourced
+description, actually loaded matching cover, matching list/detail title and
+public empty-score/band in BOTH languages. This is an insufficient-rating
+test-catalogue proof, NOT a claim about numeric production scores. No ratings
+were created. Existing score/ranking tests provide synthetic positive cases.
+NL/EN Paper/Ink at320/390px and1280px checked; local shared-component fixture
+also checks375/430px (20geometry cases). No physical-phone claim.
+Dystopia lists10/10; Dune lists6/6. All six collection links still count.
+Guest browser cannot prove authenticated progress persistence anew; unchanged
+collection rows/hashes and existing language-progress regression tests cover
+the unchanged denominator. No user progress or account writes were performed.
+
+Test results by production Work (both NL/EN: identity, description/source,
+loaded cover, list/detail score status PASS):
+102 De Hongerspelen;2718 Laat me nooit alleen;208 De zaaier;
+2600 Oryx en Crake;100 Gever;2717 Zeis;179 Inwijding;2724 Gesplitst;
+2846 Het jaar van de vloed;199 De testamenten.
+Dune8/2165/2169/2176/311/2182: both languages PASS, six parts visible.
+Exact selected ISBN/publisher/language and mapped test IDs: proof.acceptance.
+The three existing Dutch dystopia editions were retained, not replaced.
+
+Search De zaaier and Parable of the Sower both find the same Work, with the
+Dutch presentation in NL. Also checked Inwijding, Ketters/Heretics and Oryx.
+Detail reload, corresponding-language switch, search back link and mobile
+page3 -> detail -> page3 preserve returnTo, query, sort and page size.
+Three consecutive Browse pages per language each contain16unique Works;
+48unique across each set, stable totals NL536/EN506 on TEST. Test catalogue
+is smaller than production and uses mapped IDs. No pagination/RPC code changed.
+Preview HTTP200 server HTML contains10Dutch cards; X-Robots-Tag:noindex
+preserved (preview-response-proof.json). No SEO/publication changes requested.
+
+IMAGE DELIVERY LIMITATIONS
+Lazy images immediately after navigation/scroll are not failed-cover evidence.
+The final loaded observations and screenshots distinguish this explicitly.
+Four EN mobile detail visits reached the bounded network-idle wait and passed
+one fresh bounded recheck. One EN Ink list visit showed a Never Let Me Go
+fallback; subsequent EN Paper loaded all10. External delivery cause unknown:
+do not claim this CSS/data package structurally fixes upstream availability.
+Several Open Library requests remain variably slow. No global performance
+gain or TTFB/LCP benchmark was established by this acceptance run.
+New reviewed metadata/summaries require no extra external description lookup;
+CSS has no requests. Twelve source-cover HTTP200 responses and visual identity
+checks are separate from application observations, not page-speed metrics.
+Oryx's verified small scan has limited sharpness; use of a wrong cover would
+not be an acceptable way to improve it. Pre-existing unknown Dune year fields
+on test fixtures are not production changes and are outside this data proposal.
+
+TEST EXECUTION / RECOVERY LIMITATION
+Test installation:45confirmed changes, identical replay0. Aggregate full-row
+hashes/counts for Works797, authors262, ratings68, statuses68, collection links146
+are unchanged before/after (test-execution-proof.json). No private rows exported.
+An official execute_sql request for test-current-recovery-dry-run.sql returned:
+status expired; error_code INVALID_ARGUMENT;
+"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation."
+No request-ID was supplied. Hosted undo was NOT proved/executed. Do not confuse
+the connector response with a successful transaction. No identical retry or
+alternate access was used. Local committed rollback, no-op rerun and refusal
+of later changes/FK dependencies passed on the actual public baseline.
+Before data release, complete one freshly confirmed bounded TEST rollback
+dry-run/readback through the normal approval route (user ready beforehand).
+If no confirmation window appears or expires again, stop and report this
+connector issue; do not repeat or bypass it. This limitation blocks unconditional
+production-data release advice, not review of this Draft or the code fix.
+
+FINAL READ-ONLY PRODUCTION CHECK
+Remote main and active production remain13451a60e6f9399204aa625036942afa0b6c5380.
+All16bound Works/authors match the saved full public rows. None of the11new
+ISBN13 records, Ketters metadata or23proposed description keys already exists.
+Production import/dry-run/rollback hashes match both working files and c61 Git
+blobs (hashes.json). Scoped .gitattributes preserves LF for SQL/JSON checkouts.
+No production writes, merges, deployments or sharing have been performed.
+
+ADVICE / SHARE READINESS
+Code and reviewed contents ready for review in Draft PR62. Keep Draft pending
+the explicit hosted recovery proof and separate approval of the46-action
+production import. The only runtime change is five CSS lines; no new migration.
+TEST NL/EN dystopia10/10 and Dune6/6 are content-complete with the stated image
+delivery/quality limitations. Production NL dystopia remains3/10 and Dune3NL/5EN:
+NOT yet fully share-ready as repaired lists. Existing EN dystopia availability
+does not prove the Dutch repair is live. Only after approved import, code release
+and live acceptance may the repaired NL list be declared campaign-ready.
