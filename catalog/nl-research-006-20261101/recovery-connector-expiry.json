@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-01 14:38:30 UTC",
+  "tool": "supabase_execute_sql",
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "action": "batch-07-test exact receipt-bound committed recovery",
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"status\":\"expired\",\"message\":\"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation.\"}"
+      }
+    ],
+    "structuredContent": {
+      "status": "expired",
+      "message": "This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation.",
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "writesExecutedByThisCall": false,
+  "classification": "Confirmation expired, no security denial observed. No identical connector retry. Normal authenticated same-project dashboard route checked."
+}
