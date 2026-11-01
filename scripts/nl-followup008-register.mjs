@@ -1,6 +1,7 @@
 // Resume cumulative research honestly: discovery is not approval and never proves absence.
 import fs from'node:fs';import{createHash}from'node:crypto';
 const root=new URL('../catalog/nl-followup-008-20261031/',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL(n,root))),write=(n,x)=>fs.writeFileSync(new URL(n,root),JSON.stringify(x,null,2)+'\n');
+if(fs.existsSync(new URL('completed-dossiers.json',root)))throw Error('Historical discovery-only builder retired. Use nl-followup008-complete.mjs; never reset completed100 decisions to5.');
 const frozen=read('frozen100.json').rows,content=read('reviewed-content.json').dossiers,production=read('five-production-before.json'),covers=read('five-cover-proof.json'),equivalence=read('five-isbn-equivalence-check.json');
 const original=read('../nl100-completion-20261031/dossiers.json').dossiers,refs=read('../nl100-hosted-20261031/reference-scopes.json'),forbidden=new Set([...original.map(d=>d.workId),...refs.references.flatMap(p=>p.workIds),...refs.pilotWorkIds]);
 const clean=s=>s.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
