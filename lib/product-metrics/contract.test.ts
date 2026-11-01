@@ -4,10 +4,10 @@ import {parseMetric,measurementTestTarget,measurementTarget,impressionTimer,RANK
 import {productMeasurementReport} from './report.ts';
 const event=()=>({event_id:'b0000000-0000-4000-8000-000000000001',event:'recommendation_impression',properties:{locale:'nl',surface:'home',work_id:1,position:1,ranker_version:RANKER_VERSION}});
 
-test('canonical English toplists and Dutch editorial routes share the existing event surface',()=>{
- for(const path of ['/nl/toplijsten/dystopie-vanaf-1990','/en/toplists/dystopie-vanaf-1990','/en/toplists/dystopie-vanaf-1990/','/en/toplijsten/dystopie-vanaf-1990'])assert.equal(metricSurfaceForPath(path),'editorial');
- for(const path of ['/en/toplists','/nl/toplijsten','/en/toplists/a/other','/en/toplists-extra/a'])assert.equal(metricSurfaceForPath(path),'other');
- const c=campaignContext('https://lumisco.re/en/toplists/dystopie-vanaf-1990?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610','','en');
+test('current NL and EN editorial routes share the existing event surface without importing another draft route',()=>{
+ for(const path of ['/nl/toplijsten/dystopie-vanaf-1990','/en/toplijsten/dystopie-vanaf-1990','/en/toplijsten/dystopie-vanaf-1990/'])assert.equal(metricSurfaceForPath(path),'editorial');
+ for(const path of ['/en/toplists','/en/toplists/dystopie-vanaf-1990','/nl/toplijsten','/en/toplijsten/a/other','/en/toplijsten-extra/a'])assert.equal(metricSurfaceForPath(path),'other');
+ const c=campaignContext('https://lumisco.re/en/toplijsten/dystopie-vanaf-1990?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610','','en');
  assert.equal(c.surface,'editorial');assert.equal(c.campaign,'dystopie_202610');assert.ok(parseMetricContext(c));
 });
 test('production activation is explicit, exact-target and keeps synthetic traffic isolated',()=>{

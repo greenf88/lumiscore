@@ -57,7 +57,7 @@ export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   const p = path.replace(/^\/(nl|en)(?=\/|$)/, '') || '/';
   if (p === '/') return 'home';
   if (/^\/books?\/\d+\/?$/.test(p)) return 'book_detail';
-  if (/^\/(?:toplijsten|toplists)\/[^/]+\/?$/.test(p)) return 'editorial';
+  if (/^\/toplijsten\/[^/]+\/?$/.test(p)) return 'editorial';
   if (p === '/taste-test/result') return 'taste_result';
   if (p === '/taste-test') return 'taste_test';
   if (p === '/login') return 'login';
