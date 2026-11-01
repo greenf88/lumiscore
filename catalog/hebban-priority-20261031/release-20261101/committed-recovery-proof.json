@@ -1,0 +1,34 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "route": "Existing signed-in Supabase dashboard SQL Editor, browser UI only, no new credentials or rights",
+  "historical": {
+    "actions": 18,
+    "committedAt": "2026-11-01T16:15:55.749063Z",
+    "readback": "historical-recovery-readback.json",
+    "preservation": "historical-recovery-preservation.json"
+  },
+  "current": {
+    "actions": 21,
+    "core": 17,
+    "aliases": 4,
+    "committedAt": "2026-11-01T16:19:09.381505Z",
+    "readback": "current-committed-undo-readback.json",
+    "preservation": "current-committed-undo-preservation.json"
+  },
+  "final": {
+    "exact": true,
+    "preserved": true,
+    "coreReceipt": "final-restored-core-receipt.json",
+    "aliasReceipt": "final-restored-alias-receipt.json",
+    "currentRecovery": "final-test-recovery-manifest.sql"
+  },
+  "allBeforeValuesRecovered": true,
+  "allUnrelatedRowsPreserved": true,
+  "protectedUnchanged": true,
+  "notATransactionRollbackClaim": true,
+  "noNewWorks": true,
+  "noProductionWrites": true,
+  "noRightsChanged": true,
+  "technicalNote": "One Monaco insertion failure produced SQL42601 unterminated dollar quote; readback confirmed zero mutation. The editor was explicitly cleared and correct SQL verified before executing. No repeated expired MCP confirmations.",
+  "temporaryTables": "Only pg_temp ON COMMIT DROP receipts; no public exposed table or RLS setting changed."
+}

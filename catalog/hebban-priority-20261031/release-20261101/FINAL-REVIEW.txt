@@ -1,0 +1,107 @@
+PR63 — ACTUEEL HEBBAN-PAKKET, 1 NOVEMBER 2026
+Doel: alle12 boeken uit de gebruikersafbeelding; dit zijn prioriteiten, geen
+gecontroleerde actuele Hebbanrangschikking. Geen socialpublicatie.
+Basis main/actieve productie:2b1d72340e5dc3dbe8d889a50b2de11c08235bbe,
+VercelReady dpl_6fhJ1bYmHLJhsUNUgonsDAwg5C9T via lumisco.re alias bevestigd.
+PR63 is met actuele main samengevoegd, zonder runtime/app/lib/CSS/schemawijziging
+tegenover die basis. Productie uitsluitend read-only; PR51 buiten scope.
+
+HUIDIGE WIJZIGINGSSCOPE
+Alle12 bestaande Work-identiteiten behouden.0nieuweWorks/0auteurs.
+7/12 nu Nederlandse editie,5nog herstel nodig. Geen van17kernacties overbodig:
+2nieuwe NLprintedities;3bestaande editierijcorrecties(NULL->nld,één titelopruiming
+in dezelfde rij);6exacte editiegebonden cover/formatbindings;6oorspronkelijke NLteksten.
+Netto+5NLWorks:1936,9530,1006,1440,1435.3007->3012 verwacht bij onveranderde productie.
+HarryWork93,ISBN9789076174082,eerste deel/Steen der Wijzen:NLeditie blijft behouden,
+alleen gecontroleerde cover/formatbinding en NLtekst toegevoegd.
+Geen beoordelingen,accounts,leesstatussen,reeks-/collectiekoppelingen of voortgangDML.
+
+Exact17corebestanden in bovenliggende map blijven byte-identiek:
+production-plan.json
+production-import.sql
+production-dry-run.sql
+production-rollback.sql
+Volledige beforewaarden/verwachteafwezigheden en zesWork/auteurbindings
+op1nov opnieuw gecontroleerd;alle17nodig,0drift. Beide toe te voegenISBNs ook
+globaal via ISBN10/13 afwezig. Overige bestaande ISBNs blijven op juisteWork.
+
+NIEUW AFZONDERLIJK ALIASBLOK4
+The Seven Sisters->1435;Sarah's Key->1440;
+Das achte Leben (Für Brilka)->10231;Tout le bleu du ciel->10232.
+Bronnen/identity/actuele Work- en editievoorwaarde peralias in
+aliases-production-plan.json. Alleen titelsynoniemen,geen taalbewijs of merges.
+Bestaande La sombra del viento->1936 wordt hergebruikt,niet opnieuw geschreven.
+Het oude seven-sisters-alias-production-*.sql ALIAS1-blok is VERVANGEN door
+aliases-production-*.sql ALIAS4 in deze map. NOOIT beide uitvoeren.
+Core17 wordt niet vervangen door een stil gewijzigd21actie-script.
+Totale huidige uitvoering17+4=21acties,netto nog steeds+5NLWorks.
+
+MOGELIJKE DUBBELING
+1435en8476De zeven zussen/The Seven Sisters blijven afzonderlijke dossiers;
+geen Workmerge,editieverplaatsing of voortgangherkoppeling. Alias richt alleen
+geverifieerde oorspronkelijke-titelzoekvraag op de bestaande NederlandseWork1435.
+Bestaande bronIDs/first_publish_year behouden;jaaraanpassing valt buiten deze release.
+
+TESTIMPORT EN HERSTEL — DAADWERKELIJK HOSTED
+Uitsluitend hlvujbrmfdlrfxdjwsmb,bestaande aangemelde Supabase-dashboard SQL Editor.
+Geen nieuwe credentials,privileges,Authconfig of beveiligingswijziging.
+17historische core-rijen vóór herstel exact gelijk aan eersteCOMMITreceipt.
+18historische eigenacties(core17+oudealias1)op1nov16:15:55.749063UTC gecommitteerd
+hersteld,alle beforewaarden teruggelezen. Alle overige globale catalogusrijen en
+beschermde aggregatevingerafdrukken ongewijzigd.
+Daarna core17+actuelealias4 daadwerkelijk gecommitteerd en teruggelezen;
+beide herhalingen0writes. Het volledige actuele21actie-pakket op16:19:09.381505UTC
+transactioneel met COMMIT hersteld.17beforewaarden exact,4aliassen weg,
+overige rijen/ratings/accounts/statussen/collecties/tastegegevens ongewijzigd.
+Dit is NIET slechts een dry-run met ROLLBACK.
+Daarna exact goedgekeurde toestand weer gecommitteerd voor Preview;verse receipts:
+final-restored-core-receipt.json,final-restored-alias-receipt.json.
+final-test-recovery-manifest.sql gebruikt uitsluitend deze ACTUELE receipts,
+niet oude631/632 of historische629/630. Geen sequencesreset.
+committed-recovery-proof.json en readback/preservationJSONs zijn het bewijs.
+Private data uitsluitend aggregatecounts/digests;geen wachtwoorden/e-mails/tokens.
+Tijdelijke receipttabellen zijn pg_temp/ON COMMIT DROP,niet publiek/RLSverlaagd.
+
+Lokale tests:COMMIT/replay,aliasdryrunROLLBACK,herstelCOMMIT,behoud alle oude rijen,
+weigering bij latere wijziging,FK-afhankelijkheid(inclusiefCASCADE),lege/verkeerde
+receipt of scope.6gerichte tests,TypeScript,gerichte lint en secretscan groen.
+Eén technische Monaco-invoegfout gafSQL42601;readback0mutaties. Editor daarna
+explicietleeg gecontroleerd. Geen identieke verlopen connectorbevestiging geprobeerd.
+
+HOSTED ACCEPTATIE
+Nog te vervangen door het nieuwe testbewijs en Ready-SHA vóór definitief advies.
+Bestaande bronbewijzen blijven bewaard,oude browserresultaten alleen historisch.
+Geen32-oudere-authchecks aan nieuweapplicatie toegeschreven.
+Geen testaccount of ratingwrites nodig voor de gevraagde openbare12boekflows.
+
+VOLGORDE NA AFZONDERLIJK RELEASEAKKOORD
+1Actuele head/main/Ready/projectIDs,manifest en individuele hashes herverifiëren.
+2Alle production-beforewaarden,Work/auteur/ISBN10+13/alias- en FKstates opnieuw
+ read-onlycontroleren. Drift/partiëleinstallatie/nieuweidentiteitsconflicten:STOP.
+3Veilige snapshot en aparte eerste-committed-receiptlocatie vastleggen.
+4Core17dryrunROLLBACK->gecontroleerdeCOMMIT17->exacte readback/preservation.
+5Alias4dryrun->COMMIT4->exacte readback->herhaal beideimports,0writes.
+6Uitsluitend goedgekeurdePRheadmergen;Readyproductiedeployment/alias/SHA bevestigen.
+ GeenTESTPreviewpromotie;geen nieuwe migratie/functie/rechten nodig.
+7Bestaande korte openbare caches gecontroleerd laten verversen;geen globaleflush.
+8Livealle12NL:exacteISBN/titel/cover/bron/tekst/zoekbeidetitels/scorepariteit/
+ reload/return;representatiefNL/EN/PaperInk/mobiel/desktop/paginering.
+
+ROLLBACK
+Eerst alias4met uitsluitend eigen eerste niet-legeCOMMITreceipt en exacte
+Work/edition/CASvoorwaarden;dan core17met eigen eersteCOMMITreceipt,reverseactions.
+Alle inkomende FKs inclCASCADE gecontroleerd;stopbij latere wijziging/dependency,
+nooit legitieme gebruikersdataoverschrijven. Geen Work-/userdeletes of seqreset.
+Aliastabel heeft twee kolommen,geen editrevision:identiek verwijderen/herinvoegen
+door een latere actor is zonder audit niet aantoonbaar. Daarom verse voorcontrole,
+volledige identityguard en immutableeerste receipt vereist;geen blinde cleanup.
+Approllback onafhankelijk:runtime/schema onveranderd tegen actieveproductie.
+
+BEPERKINGEN APART
+Grotere correcte covers geen automatische blokkade;actuele maten/geladenbeeld
+worden in browserbewijs vastgelegd. Geen nieuwe opslag/resizehost.
+Fall of Giants1425Engelse tijdelijke externe beschrijvingsfout en22PR67grotecovers
+staan buiten dit onafhankelijkeHebbanpakket. Geen reparatie daarvan geclaimd.
+PR62nietautomatischimporteren/mergen;geen gedeelde productierijsleutels van core17.
+Breder catalogusonderzoek/historische nulmeting blijven afzonderlijke bestanden.
+Productie in deze opdracht niet veranderd. Definitief advies pas na nieuwePreview/CI.

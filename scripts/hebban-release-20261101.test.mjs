@@ -1,0 +1,46 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import{PGlite}from'@electric-sql/pglite';
+import{renderImport}from'./catalog-release-sql.mjs';
+import{renderAliasImport}from'./hebban-title-alias.mjs';
+import{aliasImport,aliasRollback,composeRecovery}from'./hebban-release-20261101.mjs';
+const root='catalog/hebban-priority-20261031/',dir=root+'release-20261101/',read=n=>JSON.parse(fs.readFileSync(n));
+test('current Hebban aliases and core17 commit/replay/committed undo preserve unrelated data and stop on drift/dependencies',async()=>{
+ const db=new PGlite(),baseline=read('catalog/nl-availability-20261031/test-before-public.json');
+ try{
+ await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
+ create sequence editions_seq start 600000;
+ create table authors(id bigint primary key,name text,open_library_id text unique);
+ create table works(id bigint primary key,open_library_id text unique,title text,author_id bigint references authors,first_publish_year int,cover_id bigint,source_type text,work_type text,native_identity_key text unique);
+ create table editions(id bigint primary key default nextval('editions_seq'),work_id bigint references works,open_library_edition_id text unique,isbn_10 text,isbn_13 text,language text,publisher text,publish_date text,cover_id bigint,title text);
+ create table catalog_work_title_aliases(work_id bigint references works,title text,primary key(work_id,title));
+ create table synthetic_ratings(work_id bigint references works,score int);
+ create table synthetic_progress(work_id bigint references works,status text);
+ create table synthetic_dependency(edition_id bigint references editions on delete cascade);`);
+ for(const name of ['authors','works','editions'])await db.query(`insert into ${name} select * from jsonb_populate_recordset(null::${name},$1::jsonb)`,[JSON.stringify(baseline[name])]);
+ for(const f of ['20261030063949_nl_pilot_reviewed_presentation.sql','20261030120602_catalog_integrity_presentation_guards.sql'])await db.exec(fs.readFileSync('supabase/migrations/'+f,'utf8'));
+ for(const [t,k]of[['catalog_edition_metadata','metadata'],['catalog_work_descriptions','descriptions']])await db.query(`insert into ${t} select * from jsonb_populate_recordset(null::${t},$1::jsonb)`,[JSON.stringify(baseline[k])]);
+ const exec=async sql=>(await db.exec(sql)).flatMap(r=>r.rows??[]).find(r=>r.receipt)?.receipt;
+ const fixtures=read(root+'test-fixture-plan.json'),core=read(root+'test-plan.json'),aliases=read(dir+'aliases-test-plan.json');
+ await exec(renderImport(fixtures));await db.exec("insert into synthetic_ratings values(921100114,8);insert into synthetic_progress values(921100114,'read');insert into catalog_work_title_aliases values(962100001,'La sombra del viento')");
+ const tables=['authors','works','editions','catalog_work_descriptions','catalog_edition_metadata','catalog_work_title_aliases','synthetic_ratings','synthetic_progress'];
+ const snapshot=async()=>Object.fromEntries(await Promise.all(tables.map(async t=>[t,(await db.query(`select to_jsonb(t)r from ${t} t order by to_jsonb(t)::text`)).rows])));
+ const start=await snapshot(),oldCore=await exec(renderImport(core)),oldAlias=await exec(renderAliasImport(read(root+'seven-sisters-alias-test-plan.json')));
+ await db.exec(composeRecovery(core,oldCore,null,oldAlias,{historical:true}));assert.deepEqual(await snapshot(),start);
+ const coreReceipt=await exec(renderImport(core));assert.equal(coreReceipt.rows.length,17);assert.equal((await exec(renderImport(core))).rows.length,0);
+ const beforeDry=await snapshot(),dry=await exec(aliasImport(aliases,{dryRun:true}));assert.equal(dry.changes.length,4);assert.deepEqual(await snapshot(),beforeDry);
+ const aliasReceipt=await exec(aliasImport(aliases));assert.equal(aliasReceipt.changes.length,4);
+ assert.equal((await exec(aliasImport(aliases))).changes.length,0);
+ const undo=()=>db.exec(composeRecovery(core,coreReceipt,aliases,aliasReceipt));
+ await db.exec("update catalog_work_descriptions set text=text||' legitimate later revision'where work_id=962100003 and language='nl'");
+ await assert.rejects(undo(),/Later legitimate change/);await db.exec('rollback');
+ const row=coreReceipt.rows.find(r=>r.relation==='catalog_work_descriptions'&&r.key.work_id===962100003);
+ await db.query("update catalog_work_descriptions set text=$1 where work_id=962100003 and language='nl'",[row.after_row.text]);
+ const edition=coreReceipt.rows.find(r=>r.relation==='editions'&&r.before_row===null).after_row.id;
+ await db.query('insert into synthetic_dependency values($1)',[edition]);await assert.rejects(undo(),/Later dependency/);await db.exec('rollback');
+ await db.query('delete from synthetic_dependency where edition_id=$1',[edition]);await undo();assert.deepEqual(await snapshot(),start);
+ const c2=await exec(renderImport(core)),a2=await exec(aliasImport(aliases));assert.equal(c2.rows.length,17);assert.equal(a2.changes.length,4);
+ await db.query("select set_config('app.pr63_current_alias_receipt',$1,false)",[JSON.stringify({...a2,changes:[]})]);
+ await assert.rejects(db.exec(aliasRollback(aliases)),/Exact first committed/);await db.exec('rollback');
+ assert.throws(()=>aliasImport({...aliases,project:'other'}));assert.throws(()=>aliasImport({...aliases,aliases:aliases.aliases.map((a,i)=>i? a:{...a,work:{...a.work,id:8476}})}));
+ }finally{await db.close();}
+});
