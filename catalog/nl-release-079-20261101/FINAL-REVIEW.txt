@@ -104,13 +104,51 @@ onbekende taal wordt niet automatisch Engels. Geen ongemerkte rankingwijziging.
 
 32 bestaande ingelogde controles op applicatie9d3b9a85123b5fe0679c80ec266ae47481cd075a
 zijn hergebruikt: app/lib/package/lock/config zijn bytegelijk aan de geteste3976-build.
-Een NIEUWE persoonlijke aanbevelingssessie op deze Preview is niet uitgevoerd.
-De gebruiker heeft blijvend toestemming voor synthetische testaccounts gegeven;
-dit is geen toestemmingsblokkade. De connector biedt geen account-aanmaakactie,
-de Dashboardroute vraagt nieuwe wachtwoordinvoer die de browser aan de gebruiker
-moet overlaten. Geen wachtwoorden uitgelezen/reset, geen echte accounts gemaakt.
-Nieuwe79 persoonlijk gerangschikte aanbevelingen worden dus niet als hosted bewezen
-geclaimd. Bestaand ingelogd bewijs en nieuwe openbare dataselectie zijn apart benoemd.
+Aanvullend is op 1 november een NIEUWE ingelogde sessie uitgevoerd op applicatie
+5e919664e20f408e950c07b490cd1e638b2ed431 / Ready-deployment
+dpl_ETokDkzBMSusrUFwQ1A2DfxVQXrU:
+https://lumiscore-bwtsbx7wk-rgkgroeneveld-9102.vercel.app.
+De gebruiker heeft het synthetische account aangemaakt en zelf ingelogd. Via de
+normale detailbediening is één synthetische beoordeling8/10 opgeslagen en uit de
+testdatabase teruggelezen. Aanbevelingen én persoonlijke resultaatpagina tonen elk
+20 Nederlandse kaarten in NL en20 Engelse kaarten in EN. Work8800132 toont op
+kaart/detail dezelfde identiteit, NLD-editie432 of ENG-editie132; scorestatus/band
+blijven gelijk. Taalwissel, terugnavigatie en afzonderlijk herladen zijn gecontroleerd.
+320/390/1440CSS-px en Paper/Ink; geen horizontale overflow in de geldige waarnemingen.
+Eén geannuleerde navigatie door te vroeg herladen is expliciet uitgesloten, geen
+NL-succesbewijs. De afgeronde taalwissel en herlaadcontrole zijn daarna wel vastgelegd.
+
+Project Hail Mary en de nieuwe Follett-editie zijn daarnaast ingelogd gecontroleerd:
+juiste NL-titel/ISBN/NLD, geladen cover en bronvermelde Nederlandse samenvatting.
+FollettEN houdt de juiste Engelse editie/ISBN en toont na de aanvankelijke loader
+een Engelse bronbeschrijving en geladen cover. Niet als storingsoorzaak opgelost
+of als nieuwe opgeslagen Engelse tekst gepresenteerd.
+
+Fixturebeperking: de standaard beoordelingsronde heeft geen geschikte kandidaten;
+de handmatig gekozen bestaande synthetische zoekfixture wordt geweigerd. De bestaande
+voorkeurenvragenlijst mist ankerboeken op test. Daarom GEEN nieuwe volledige ronde
+van10beoordelingen of voltooiing geclaimd; de opgeslagen ronde blijft onvoltooid/NL.
+De verse aanbevelingscontrole gebruikt bestaande synthetische kenmerken, niet
+verzonnen kenmerken voor de79 echte catalogusboeken. De synthetische aanbevelingen
+hebben placeholders en geen geverifieerde samenvattingen: deze tellen niet als
+gevonden covers/teksten. Nieuwe79 persoonlijk gerangschikte aanbevelingen worden
+niet als bewezen geclaimd; hun aparte79/79 identiteit-/cover-/tekstbewijs blijft geldig.
+Geen selectie-, inventaris-, smaak- of rankingregels aangepast voor de test.
+
+Na afloop eerst uitgelogd; daarna uitsluitend het eigen tijdelijke testaccount met
+zijn1rating,1leesstatus en1onvoltooide ronde gericht verwijderd. Teruglezing: alle
+eigen rijen nul, de68 bestaande ratings/statussen en twee bestaande accounts hebben
+exact dezelfde aantallen/fingerprints als vóór deze controle. Testcatalogus blijft
+942Works/285auteurs/1332edities. Bewijs: hosted-authenticated.json, auth-cleanup.json
+en de aanvullende screenshots. Geen credentials in dit bewijs, geen echte accounts
+gemaakt of gewijzigd. De opruiming van het wegwerpaccount is niet herstelbaar via de
+normale Auth-interface; het bevatte uitsluitend voor deze controle gemaakte testdata.
+Vijf aanvullende bewijsconsistentietests slagen, samen met de33 bestaande gerichte
+regressies:38geslaagd/0fouten/0overgeslagen. Dit zijn bewijscontroles, geen vervanging
+voor de uitgevoerde browserflow. Gerichte lint groen; applicatie-/stijl-/dependencydiff
+blijft leeg. TypeScript/build/secretscan blijven geldig en draaien tevens in de CI.
+auth-evidence-hashes.json bindt de nieuwe geanonimiseerde browser- en opruimingsbewijzen.
+De235productieacties, hunSQL/planbestanden en release-hashes.json zijn ongewijzigd.
 
 5. Prestaties en beperkingen
 
@@ -182,6 +220,7 @@ vorige productiebuild blijft de bestaande databasepresentatiestructuur compatibe
 
 Advies: het afgebakende cataloguspakket is reviewbaar en op test geïmporteerd, herhaald,
 gecommitteerd hersteld en opnieuw geaccepteerd. Houd Draft tot expliciet akkoord.
-Claim geen nieuwe ingelogde aanbevelingssessie, volledige SEO-bestemmingen, mobiele
-snelheidswinst of afronding van de gehele catalogus. Geen productiehandeling toegestaan
+De aanvullende ingelogde aanbevelingssessie is nu bewezen binnen de genoemde
+fixturegrenzen. Claim geen nieuwe volledige beoordelingsronde, volledige SEO-
+bestemmingen, mobiele snelheidswinst of afronding van de gehele catalogus. Geen productiehandeling toegestaan
 op basis van dit verslag alleen.
