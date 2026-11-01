@@ -1,0 +1,10 @@
+// Explicit, human-selected bibliography targets. Discovery does not approve an edition.
+import fs from 'node:fs';
+const root='catalog/nl-research-005-20261101/';
+const chosen={117:1355176,185:1879524,1220:330318,1229:24274,1243:1494202,1287:1536827,1299:1441875,1300:1701915,1383:1965125,4316:1976366,26:1568196,166:1810348,2144:431723,2674:76761,2710:1946734,2931:1880137,3301:1959061,4963:1965052,4970:371599,6079:550783,7:1990533,18:1841758,22:1019294,24:1261663,25:224777,48:47348,102:24842,121:129346,126:1786926,138:1415835,146:845012,157:1810347,171:1566929,222:1766688,226:1821903,232:771701,253:1398801,512:1715925,553:1818286,580:463579,673:77043,675:1667290,682:1765666,683:1783383,688:1651270,698:77053,699:1804575,715:1799012,772:1771828,1112:158094,1116:1221991,1221:553692,1223:256681,1224:51134,1225:330315,1227:1469614,1228:1545951,1230:24251,1235:24233,1236:740211,1237:811362,1238:905355,1240:1113299,1241:995910,1242:1176949,1244:1790556,1259:1207492,1282:1183682,1283:1207495,1284:1248159,1285:1297770,1288:1491267,1289:1566593,1290:1617771,1291:1658445,1292:1713749,1293:1713720,1294:1805103,1295:1914577,1297:1998249,1298:2042097,1302:790002};
+const known={185:'https://metadata.isbn.nl/1879524/the-long-way-to-a-small-angry-planet.html',4316:'https://metadata.isbn.nl/1976366/all-systems-red.html'};
+const pages=Object.entries(chosen).map(([id,target])=>{const s=JSON.parse(fs.readFileSync(root+'sources/search-'+id+'.json'));const url=known[id]??s.links.find(l=>l.url.includes('/'+target+'/'))?.url;if(!url)throw Error('Missing explicit target '+id);return{candidateId:id,name:'edition-'+id,url};});
+for(let i=0;i<pages.length;i+=8)fs.writeFileSync(root+'requests-page-'+String(i/8+1).padStart(2,'0')+'.json',JSON.stringify(pages.slice(i,i+8),null,2)+'\n');
+const remaining=JSON.parse(fs.readFileSync(root+'frozen100.json')).rows.filter(r=>!chosen[r.workId]);
+fs.writeFileSync(root+'pending-second-source.json',JSON.stringify(remaining.map(r=>({id:r.workId,title:r.originalTitle,author:r.author})),null,2)+'\n');
+console.log({namedPages:pages.length,needsAlternativeResearch:remaining.length});

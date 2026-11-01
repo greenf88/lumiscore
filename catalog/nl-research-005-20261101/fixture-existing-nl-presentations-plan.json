@@ -1,0 +1,130 @@
+{
+  "summary": {
+    "target": "hlvujbrmfdlrfxdjwsmb",
+    "batch": "nl005-existing-fixture-covers-only-20261101"
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 8800307,
+        "title": "Outlander",
+        "cover_id": null,
+        "author_id": 8800014,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL3261155W",
+        "first_publish_year": 1991,
+        "native_identity_key": null
+      },
+      "author": {
+        "id": 8800014,
+        "name": "Diana Gabaldon",
+        "open_library_id": "OL531502A"
+      }
+    },
+    {
+      "work": {
+        "id": 8800306,
+        "title": "The Girl with the Dragon Tattoo",
+        "cover_id": null,
+        "author_id": 8800013,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL5784622W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      },
+      "author": {
+        "id": 8800013,
+        "name": "Stieg Larsson",
+        "open_library_id": "OL1414302A"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "fixture-metadata:9789022574492",
+      "key": {
+        "edition_id": 610
+      },
+      "before": null,
+      "after": {
+        "edition_id": 610,
+        "work_id": 8800307,
+        "bound_author_id": 8800014,
+        "bound_title": "De reiziger",
+        "bound_language": "nld",
+        "bound_isbn13": "9789022574492",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000521852_De_reiziger_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/162775/de-reiziger.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T11:32:04.867Z",
+        "review_batch": "nl005-existing-fixture-covers-only-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/162775/de-reiziger.html",
+            "sha256": "037c6adc1cfd42b779e0e3ba6773af6072e212a9af80b5c4454f696ce91e77bd",
+            "checkedAt": "2026-11-01",
+            "fact": "Exact printed ISBN-to-image block; artwork visually reviewed; existing test language/Work identity retained."
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000521852_De_reiziger_0_0.jpg",
+            "sha256": "c338f1e90fc51cd65c33e4b28ea19f6776eaec4286ace1d4d3a9ddf4f5087650",
+            "bytes": 544138,
+            "checkedAt": "2026-11-01T11:32:04.867Z",
+            "fact": "Real image; title/author visual check, not HTTP alone."
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/literatuur-romans/de-reiziger-9789022574492",
+            "checkedAt": "2026-11-01",
+            "facts": [
+              "Exact9789022574492,De reiziger,DianaGabaldon,Dutch,paperback,2015; explicitly corrects contradictory Bureau ENG field."
+            ],
+            "role": "Independent publisher language/format/identity, lines316–336; no full source text copied."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "fixture-metadata:9789056727659",
+      "key": {
+        "edition_id": 609
+      },
+      "before": null,
+      "after": {
+        "edition_id": 609,
+        "work_id": 8800306,
+        "bound_author_id": 8800013,
+        "bound_title": "Mannen die vrouwen haten",
+        "bound_language": "nld",
+        "bound_isbn13": "9789056727659",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/1730692/mannen-die-vrouwen-haten-millennium-1.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T11:32:06.666Z",
+        "review_batch": "nl005-existing-fixture-covers-only-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/1730692/mannen-die-vrouwen-haten-millennium-1.html",
+            "sha256": "4e66bade1d7be8ffb9c3e3d146e63a1a1a3431161f0767449f8e8f5d21fe6d06",
+            "checkedAt": "2026-11-01",
+            "fact": "Exact printed ISBN-to-image block; artwork visually reviewed; existing test language/Work identity retained."
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+            "sha256": "ab0e270bc7e8f7bc4ef25d41e694157090396585fa767a1e23adf250f9466a5a",
+            "bytes": 75660,
+            "checkedAt": "2026-11-01T11:32:06.666Z",
+            "fact": "Real image; title/author visual check, not HTTP alone."
+          }
+        ]
+      }
+    }
+  ]
+}
