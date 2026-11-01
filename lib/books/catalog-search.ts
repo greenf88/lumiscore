@@ -16,7 +16,12 @@ export type CatalogSearchAliasEntry = {
 export type CatalogSearchAliases = ReadonlyMap<string, readonly string[]>;
 
 export function normalizeCatalogSearchQuery(query: string): string {
-  return query.normalize('NFKC').trim().replace(/\s+/g, ' ').slice(0, 100);
+  // NFKC expands a terminal Unicode ellipsis into three dots. The SQL
+  // candidate lookup uses literal edition titles, so that otherwise misses
+  // titles ending in the original ellipsis. Omit only a terminal ellipsis;
+  // retain meaningful internal punctuation and the existing search limit.
+  return query.normalize('NFKC').trim().replace(/\.{3,}$/u, '').trimEnd()
+    .replace(/\s+/g, ' ').slice(0, 100);
 }
 
 export function isCatalogSearchQuery(query: string): boolean {

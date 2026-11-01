@@ -1,0 +1,234 @@
+{
+  "at": "2026-11-01T11:20:35.545558+00:00",
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "foreignKeys": [
+    {
+      "name": "catalog_edition_metadata_bound_author_id_fkey",
+      "pairs": [
+        {
+          "child": "bound_author_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_edition_metadata",
+      "childSchema": "public",
+      "parentTable": "authors"
+    },
+    {
+      "name": "catalog_edition_metadata_edition_id_fkey",
+      "pairs": [
+        {
+          "child": "edition_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_edition_metadata",
+      "childSchema": "public",
+      "parentTable": "editions"
+    },
+    {
+      "name": "catalog_edition_metadata_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_edition_metadata",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_selection_members_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_selection_members",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_work_descriptions_bound_author_id_fkey",
+      "pairs": [
+        {
+          "child": "bound_author_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_work_descriptions",
+      "childSchema": "public",
+      "parentTable": "authors"
+    },
+    {
+      "name": "catalog_work_descriptions_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_work_descriptions",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_work_title_aliases_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "catalog_work_title_aliases",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "collection_books_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "collection_books",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "editions_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "editions",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "editorial_records_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "editorial_records",
+      "childSchema": "catalog_private",
+      "parentTable": "works"
+    },
+    {
+      "name": "eligible_inventory_v1_edition_id_fkey",
+      "pairs": [
+        {
+          "child": "edition_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "eligible_inventory_v1",
+      "childSchema": "taste_private",
+      "parentTable": "editions"
+    },
+    {
+      "name": "eligible_inventory_v1_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "eligible_inventory_v1",
+      "childSchema": "taste_private",
+      "parentTable": "works"
+    },
+    {
+      "name": "ratings_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "ratings",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "taste_rating_offers_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "taste_rating_offers",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "user_book_status_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "user_book_status",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_catalog_categories_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "work_catalog_categories",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_cover_resolutions_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "work_cover_resolutions",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_trait_evidence_work_id_fkey",
+      "pairs": [
+        {
+          "child": "work_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "work_trait_evidence",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "works_author_id_fkey",
+      "pairs": [
+        {
+          "child": "author_id",
+          "parent": "id"
+        }
+      ],
+      "childTable": "works",
+      "childSchema": "public",
+      "parentTable": "authors"
+    }
+  ]
+}

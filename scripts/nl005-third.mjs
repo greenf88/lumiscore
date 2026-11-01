@@ -1,0 +1,4 @@
+import fs from'node:fs';const root='catalog/nl-research-005-20261101/';
+const chosen={7:797103,22:1019295,24:1876638,65:162775,138:1566930,151:1874077,178:409699,228:409699,239:1844674,303:1890031,1113:1261238,1114:223326,1115:1221992,1222:411960,1227:46044,1251:1109256,1609:464231};
+const rows=Object.entries(chosen).map(([id,page])=>{const files=['second-','search-'].map(p=>root+'sources/'+p+id+'.json').filter(f=>fs.existsSync(f));const link=files.flatMap(f=>JSON.parse(fs.readFileSync(f)).links).find(l=>l.url.includes('/'+page+'/'));if(!link)throw Error('Missing observed link '+id);return{candidateId:id,name:'exact-'+id,url:link.url};});
+for(let i=0;i<rows.length;i+=8)fs.writeFileSync(root+'requests-third-'+String(i/8+1).padStart(2,'0')+'.json',JSON.stringify(rows.slice(i,i+8),null,2)+'\n');

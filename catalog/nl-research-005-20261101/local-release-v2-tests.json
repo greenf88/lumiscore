@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-01T13:08:49.930Z",
+  "applicationSha": "bb706297b1c9bebbfbaa067e11a8f95ca158b1f3",
+  "tests": 22,
+  "passed": 22,
+  "failed": 0,
+  "skipped": 0,
+  "command": "node --experimental-strip-types --test scripts/nl005-package.test.mjs scripts/nl005-review-collection.test.mjs scripts/nl005-mobile-title.test.mjs lib/books/catalog-search.test.ts",
+  "proof": [
+    "exact v2 production SQL dryrun/COMMIT/replay0/committed undo on local Postgres/PGlite",
+    "48 exact NL selection/cover/summary,unchanged EN/scores",
+    "late change and FK-CASCADE recovery refusal",
+    "cleanup full other-public/protected digests unchanged"
+  ],
+  "browserReuse": "Runtime app unchanged;48 exact prior flows and12 responsive cases reused;24large covers newly observed complete on Ready Preview.",
+  "noHostedWritesBeyondExplicitGroupingCleanup": true
+}

@@ -1,0 +1,52 @@
+{
+  "state": "CURRENT REVIEW ONLY; no production approval. Supersedes v1 manifest0cb3636b... in its entirety; never combine.",
+  "applicationSha": "bb706297b1c9bebbfbaa067e11a8f95ca158b1f3",
+  "productionBase": "77d68bda6a73deab86fef6530065b4009ef6b004",
+  "productionProject": "qvplwejffhjvxaypmjut",
+  "scope": {
+    "existingWorks": 38,
+    "newWorks": 10,
+    "newCatalogueAuthors": 6,
+    "newPrintedNlEditions": 44,
+    "coverFormatBindings": 48,
+    "newOriginalNlSummaries": 48,
+    "actions": 156,
+    "netExtraNlWorksIfApproved": 43
+  },
+  "productionFiles": {
+    "batch01-v2-production-plan.json": "597b843cd70f1dff63014b67de922f9f3f1d40362c1bf54091e371962bd3352b",
+    "batch01-v2-production-apply.sql": "e304d8486837f75638de13b6f7829ad70cc4dcd3cf31e8f1f2745b08ae0860bb",
+    "batch01-v2-production-dry-run.sql": "a71eb98c0772fcafa639cef3f90ab9b8e6385b8b247264c3bef29c47e0c99025",
+    "batch01-v2-production-rollback.sql": "3384d2f323164a5695a1f4656bd00a8f2f92cf46a32fbe5ea8cb51961146e0b6",
+    "batch02-v2-production-plan.json": "178c097685c4ba5c3be49352624b7659f329b5dfa37d2f17dbc53b198d5ae2d8",
+    "batch02-v2-production-apply.sql": "093d96a74e4c26fbca4d4925efa9a9ec475241c3221ee5955356bc583e9ede52",
+    "batch02-v2-production-dry-run.sql": "352908bb011bdcec3f7367d9f2e8333ecc56ad5fd070f0b68cb34d0574d90d3d",
+    "batch02-v2-production-rollback.sql": "7907d192bd87716988b2c08a50595abf22af057aeaf2d35a3016bbb6ac9ae0fc",
+    "batch03-v2-production-plan.json": "a326fcb24435f6d14ebe32ac9068d0f4e80aaf559b7cffbc24d8c1f00b26b7e2",
+    "batch03-v2-production-apply.sql": "202240153ae843ea615e609dbb20f1f9dcb2fd4bb8209fbb39bb150ba1a36c3e",
+    "batch03-v2-production-dry-run.sql": "d6230e99f3aed371d16ccc82cfe24ae9ab0b76b4c154943367be4f35fe291bc1",
+    "batch03-v2-production-rollback.sql": "b0cb74f4d1446f9bdf4466b34cd8812eec5bfa08314b1bb62fba238b8cb4b129",
+    "batch04-v2-production-plan.json": "e214b14b2ee4119b906b7c5647f87fa17deadadc604122f9096b48273252d2c5",
+    "batch04-v2-production-apply.sql": "f731d12b49fb157b858c3fd5a3cf07dc94f668c3348649b5fb00af7bebd55cfa",
+    "batch04-v2-production-dry-run.sql": "72de33a4f03d13210fba9d63d238ea935427a4889c6bb04b1c80d7c8b74340f5",
+    "batch04-v2-production-rollback.sql": "a1f9e8cdca5b5005db31363c2ed2b19230152b6b13f1ff62fc1bf4a45edf6d4d",
+    "batch05-v2-production-plan.json": "d23ab09efa4dfad5e1ba83cec61d2395e3c2e3cfc9ec52eca9b2020133c63e5c",
+    "batch05-v2-production-apply.sql": "90cd856fdec30344583df66234bd7fcc1b501cee96a6ed246e4d8d3068518bd6",
+    "batch05-v2-production-dry-run.sql": "3308020265f3b7b75e6356fe21c2d9622e876e282c468252cba4c6b516e937cd",
+    "batch05-v2-production-rollback.sql": "ba4ddf2c3b8498812b4a620e71c632fbe8e873492a67bde50eb4b3e74fba7fda"
+  },
+  "sourceFiles": {
+    "release-candidates-v2.json": "bba85a682fafd782ed4e77b699e30730ca4adf2643e6d082256ca8e80c02268f",
+    "excluded-variant-proposals.json": "1dfa8573f7ead85dfcf014c087d5257c63453387d8ca816ab5681f6fce69d88b",
+    "production-import-index-v2.json": "f090d27e7a59cbb72579c69a14ad7c7ce499577e2ab58ae3371d8e8d68676788",
+    "production-release-review-readonly.json": "1b94a8327ad7e39064a4f4e85b8e685bcee865dc9a4876a81b5d4461ea454fad",
+    "release-v2-global-identity-readonly.json": "d7fb015dabacd109aebb9ab4cc6caeb0cad4ec762e84ba744e516345da9e3746",
+    "hosted-release-48-presentations.json": "c385d7e1ce590b09817828c69bb87d5898e02f1b92fa1199c6a84b6274e16f18",
+    "test-review-collection-cleanup-proof.json": "2d06ee97d65df07cf29f4450376f0e7b937b6d586ecb6415a92a28755ed69831",
+    "cover-size-review-24.json": "8da83b002a895de261013dcf5f3ebb5a45362fe2b958fa7000a1d7bf66de3f42",
+    "hosted-large-cover-loads.json": "ea6b1110e1c59726c2ecc000d0710cbf40c3c16507d9c0c9388dd2831fcd534d"
+  },
+  "installation": "No new migration/DDL. Five v2 chunks only after future approval. Never execute v1, test seed, fixture or review grouping SQL on production.",
+  "recovery": "First committed receipts required. Reverse v2 chunks05 to01, full-row CAS/all incoming FKs. Original186+2 actual committed recovery retained; exact v2 subset also tested locally.",
+  "testOnlyExtraRows": "32 seeds +154 original test core +2 existing fixture bindings. Four excluded test-only catalogue rows remain deliberately untouched. Review grouping51 removed and remaining public/protected digests unchanged."
+}
