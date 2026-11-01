@@ -1,6 +1,7 @@
 // Reconcile evidence, not a database client. Production execution remains forbidden.
 import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
 const dir='catalog/nl-research-005-20261101/',read=n=>JSON.parse(fs.readFileSync(dir+n)),save=(n,v)=>fs.writeFileSync(dir+n,JSON.stringify(v,null,2)+'\n'),hash=n=>createHash('sha256').update(fs.readFileSync(dir+n)).digest('hex');
+if(fs.existsSync(dir+'release-hashes-v2.json'))throw Error('Historical v1 finalizer frozen; use nl005-release-review.mjs and current FINAL-REVIEW.txt.');
 const appSha='bb706297b1c9bebbfbaa067e11a8f95ca158b1f3',contentSha='96f9413b63278e4081d7d9c4847caa1b70e9f9f0',index=read('production-import-index.json'),candidates=read('release-candidates.json').dossiers,browser=read('hosted-50-presentations.json'),responsive=read('hosted-responsive-language-reload.json');
 const switches=read('hosted-language-switches.json');for(const r of switches){if(r.englishVisibleText){r.restoredNlVisibleText=r.englishVisibleText;delete r.englishVisibleText;}}save('hosted-language-switches.json',switches);
 for(const r of read('hosted-english-checks.json')){const c=candidates.find(c=>c.candidateId===String(Object.entries(read('execution-manifest.json').workMap).find(([,id])=>id===r.testWorkId)?.[0]));assert(c);assert(!r.description?.replace(/\s+/g,' ').includes(c.summary.text.replace(/\s+/g,' ')));}
