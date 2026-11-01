@@ -1,0 +1,398 @@
+{
+  "columns": [
+    {
+      "data_type": "bigint",
+      "table_name": "authors",
+      "column_name": "id",
+      "is_identity": "YES",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "authors",
+      "column_name": "name",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "authors",
+      "column_name": "open_library_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "edition_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "work_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "bound_author_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "bound_title",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "bound_language",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "bound_isbn13",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "format",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "cover_url",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "card_cover_url",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "evidence_url",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "jsonb",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "evidence",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "review_status",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "timestamp with time zone",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "reviewed_at",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_edition_metadata",
+      "column_name": "review_batch",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "work_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "language",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "bound_author_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "text",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "source_type",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "source_name",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "source_url",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "jsonb",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "evidence",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "provenance",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "review_status",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "timestamp with time zone",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "reviewed_at",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "catalog_work_descriptions",
+      "column_name": "review_batch",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "editions",
+      "column_name": "id",
+      "is_identity": "YES",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "editions",
+      "column_name": "work_id",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "title",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "language",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "open_library_edition_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "isbn_10",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "isbn_13",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "publisher",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "editions",
+      "column_name": "publish_date",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "editions",
+      "column_name": "cover_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "works",
+      "column_name": "id",
+      "is_identity": "YES",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "works",
+      "column_name": "title",
+      "is_identity": "NO",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "works",
+      "column_name": "author_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "integer",
+      "table_name": "works",
+      "column_name": "first_publish_year",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "works",
+      "column_name": "open_library_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "bigint",
+      "table_name": "works",
+      "column_name": "cover_id",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "works",
+      "column_name": "source_type",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "works",
+      "column_name": "work_type",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "data_type": "text",
+      "table_name": "works",
+      "column_name": "native_identity_key",
+      "is_identity": "NO",
+      "is_nullable": "YES",
+      "column_default": null
+    }
+  ],
+  "triggers": [
+    {
+      "definition": "CREATE TRIGGER catalog_preserve_reviewed_edition_identity BEFORE UPDATE OF work_id, title, language, isbn_13, isbn_10, open_library_edition_id ON public.editions FOR EACH ROW EXECUTE FUNCTION catalog_guard_reviewed_identity()",
+      "table_name": "editions"
+    },
+    {
+      "definition": "CREATE TRIGGER catalog_preserve_reviewed_work_author BEFORE UPDATE OF author_id ON public.works FOR EACH ROW EXECUTE FUNCTION catalog_guard_reviewed_identity()",
+      "table_name": "works"
+    }
+  ]
+}
