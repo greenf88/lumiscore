@@ -5,6 +5,7 @@ import {
   CATALOG_SEARCH_PAGE_LIMIT,
   collectCatalogSearchAliases,
   isCatalogSearchQuery,
+  normalizeCatalogSearchQuery,
   rankCatalogSearchResults,
 } from './catalog-search.ts';
 
@@ -54,6 +55,21 @@ test('finds exact and partial titles case-insensitively', () => {
   assert.equal(rankCatalogSearchResults(catalog, 'ATOMIC')[0]?.title, 'Atomic Habits');
   assert.equal(rankCatalogSearchResults(catalog, 'harry')[0]?.workId, '1');
   assert.equal(rankCatalogSearchResults(catalog, 'honger')[0]?.workId, '5');
+});
+
+test('terminal ellipsis titles produce the same literal SQL candidate query', () => {
+  const title = 'Nick en Charlie worden verliefd…';
+  for (const query of [title, title.normalize('NFKC'), `${title}  `]) {
+    const normalized = normalizeCatalogSearchQuery(query);
+    assert.equal(normalized, 'Nick en Charlie worden verliefd');
+    assert.ok(title.toLowerCase().includes(normalized.toLowerCase()));
+    assert.equal(rankCatalogSearchResults([fixture('512', title, 'Alice Oseman')], query)[0]?.workId, '512');
+  }
+  assert.equal(normalizeCatalogSearchQuery('...'), '');
+  assert.equal(isCatalogSearchQuery('…'), false);
+  assert.equal(normalizeCatalogSearchQuery('Dr. No'), 'Dr. No');
+  assert.equal(normalizeCatalogSearchQuery('So... This Is Love'), 'So... This Is Love');
+  assert.equal(normalizeCatalogSearchQuery('x'.repeat(110)).length, 100);
 });
 
 test('finds authors and includes native works without an Open Library ID', () => {
