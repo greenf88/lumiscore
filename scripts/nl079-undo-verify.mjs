@@ -1,0 +1,7 @@
+import fs from'node:fs';import assert from'node:assert/strict';
+const root=new URL('../catalog/nl-release-079-20261101/',import.meta.url),read=f=>JSON.parse(fs.readFileSync(new URL(f,root))),expected=structuredClone(read('first-installed-full.json')),actual=read(process.argv[2]),n=Number(process.argv[3]),recovery=read('committed-recovery-manifest.json'),m=read('execution-manifest.json'),ids=new Set(Object.values(m.workMap)),table={authors:'authors',works:'works',editions:'editions',catalog_edition_metadata:'metadata',catalog_work_descriptions:'descriptions'};
+let removed=0;for(const job of recovery.undoOrder.slice(0,n))for(const r of read(job.receipt).rows){assert.equal(r.before_row,null);expected[table[r.relation]]=expected[table[r.relation]].filter(x=>!Object.entries(r.key).every(([k,v])=>x[k]===v));removed++;}
+assert.deepEqual(actual.protected,read('test-before.json').protected);
+const scope=actual.works.length===read('test-before.json').works.length&&n===5?'full':'scoped';
+for(const key of['works','authors','editions','metadata','descriptions']){let rows=expected[key];if(scope==='scoped'){if(key==='works')rows=rows.filter(w=>ids.has(w.id));else if(key==='authors'){const authors=new Set(expected.works.filter(w=>ids.has(w.id)).map(w=>w.author_id));rows=rows.filter(a=>authors.has(a.id));}else rows=rows.filter(r=>ids.has(r.work_id));}assert.deepEqual(actual[key],rows,key+' undo mismatch');}
+console.log(JSON.stringify({undoTransactions:n,removedOwnRows:removed,scope,allExpectedRowsExact:true,protectedUnchanged:true,old8Retained:true}));

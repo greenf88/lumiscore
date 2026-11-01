@@ -1,0 +1,103 @@
+AFZONDERLIJKE VERVOLGCOHORT — 100 DOSSIERS INHOUDELIJK BEOORDEELD
+1 november 2026 Europe/Amsterdam; bron-/databasecontroles deels31oktoberUTC.
+NIET mee-uitvoeren met PR64. Geen productie- of testwrites voor deze cohort.
+
+UITKOMST
+100 unieke dossiers hebben een onderbouwde eindstatus;0onbezochte dossiers.
+71 goedgekeurde lokale herstelvoorstellen:5 eerder beoordeelde behouden+66nieuw.
+7 identiteit-/editiescopeconflicten;22 onvoldoende bewijs na vastgelegd onderzoek.
+Alle29 buiten de import. Geen daarvan gecertificeerd als 'geen Nederlandse editie'.
+Het10223-register blijft een inventaris; deze100besluiten zijn geen afgeronde controle
+van de hele catalogus. research-register.jsonl en cumulative-register.jsonl zijn bijgewerkt.
+
+VOORGESTELDE MUTATIES
+71 bestaande Works;71nieuwe exact geverifieerde Nederlandse printedities;
+71 editiegebonden cover-/formaatbindings;71oorspronkelijke NLsamenvattingen50–90woorden.
+213acties in4begrensde transacties20/20/20/11Works. Geen nieuweWorks/auteurs,geen
+wijziging aan bestaande uitgaven, gebruikers, ratings, statussen, collectieposities,
+smaakkenmerken of selectie/rangschikking. Netto voorgesteld71extraNLWorks; werkelijk
+toegevoegd op test/produ​ctie0. De5vroegere voorstellen zitten al in71,niet nogmaals tellen.
+
+EIGEN BRONCONTROLE
+Exacte bibliografische editieblokken, canonicalWork/auteur/OLbinding, oorspronkelijke
+en vertaalde titel, inhoud en waar nodig onafhankelijke uitgevers-/bibliotheekbronnen
+naast elkaar gelezen.12onjuist als Engels gelabelde Bureau-uitgaven hebben afzonderlijk
+expliciet Nederlands bewijs; titels, covers en distributiemarkt waren nooit taalbewijs.
+38nieuwe eerste printkandidaten én28alternatieven handmatig op daadwerkelijke cover
+beoordeeld;5oude coverbewijzen behouden. Oorspronkelijke samenvattingen gebaseerd op
+gelezen inhoudelijke bronnen, niet automatisch vertaald of als flaptekst gekopieerd.
+Beschrijvingen en bronbinding blijven gescheiden van editietaal.
+
+Belangrijke onderschepte fouten:
+-2235:JudithLennox/Dubbelleven was een verkeerde zoekhit; niet gebruikt. Correct
+ RichardOsman/De man die twee keer doodging9789403129198 apart onderbouwd.
+-1466:Bureauverhaal past bijVoyager, nietDragonflyinAmber; samenvatting gebaseerd op
+ exact bibliotheekbewijs vanTerugkeer naar Inverness, geen overname verkeerde blurb.
+-2196/2199:onjuist uitgeverswoordBurgeroorlog rond1767 niet overgenomen. Samenvattingen
+ beperken zich tot gesteunde koloniale familie-/politieke situatie.
+-2174:ChrisStaplesLewis uit bron niet als nieuwe auteur of samenvoeging overgenomen.
+-2219:kleine3Dpackshot9789021049359 afgewezen; gecontroleerde vlakkeRainbowfrontcover
+ van exactISBN9789041716316 gekozen. Geen beeld van een andere editie onder hetzelfdeISBN.
+
+ONDERZOCHTE HOUDDOSSIERS
+researched-holds.json bevat perWork uitgevoerde broncontrole, exact ontbrekend bewijs
+en vervolgstap.7conflicten:2184,2188,2191,2203,2205,2224,2528. OmnibusISBN niet
+dupliceren op componentWorks; halve vertaling geen volledige editie; geen authormerge
+om een guard te passeren. Historische Asimov/French-printkandidaten expliciet gevonden,
+maar exacte onafhankelijke editie-/coverbinding nog niet voldoende bewezen. Aangekondigde
+KingofGluttony9789062228171(12nov2026) niet als al beschikbaar geteld.
+Resterende Sanderson/Kuang/Brown/French/Grace-sequels:originele bronnen en extra
+Nederlandse bron-/titelzoekgang beoordeeld, geen exact voldoende bewezenNLprinteditie;
+geen automatische Engels→Nederlandsconversie of stellige afwezigheidsclaim.
+Directe bibliotheek.nl-toegang gafrobotsweigering; niet omzeild. Beschikbare primaire
+bibliografische zoekresultaten apart als zodanig gebruikt; geen volledige boekteksten
+opgeslagen. Openbare Bureau-aanvragen begrensd, hervatbaar en1,7sgepauzeerd.
+
+ACTUELE PRODUCTIEVOORWAARDEN — ALLEEN GELEZEN
+cohort-production-readonly.json:100betrokkenWorks met volledige huidige publieke rijen.
+final71-production-preflight.json,31okt23:16:42UTC:71globaleISBN13/10-equivalenten,
+0bestaandeISBNbotsingen en0vreemdeWork/auteur/originele-NLtitel/OL-IDbotsingen.
+Geen overlap met oorspronkelijke pilot,PR62/63,PR64nieuwe80 of oudere8.
+De volledige actuele publicbeforewaarden en editiecorpora staan in de4plannen;
+opnieuw toetsen vóór enige latere uitvoering. Readback reserveert geen identiteit.
+
+LOKALE VALIDATIE
+7gerichte tests groen,0skip. EchtePGlite-transacties op publiekeproductiebaseline plus
+herkenbare lokale privéstand-ins:dry-runROLLBACK;213COMMITacties;iedere replay0;
+gecommitteerd receiptgebonden herstel in omgekeerde volgorde en herhaald herstel;
+volledige beginsituatie hersteld. Latere tekstwijziging,CASCADEafhankelijkheid en
+gemanipuleerde receipt stoppen atomair. Tijdzonecanonisatie van reviewtimestamps
+bij receiptcontrole gericht gecorrigeerd en opnieuw bewezen.
+Alle71 via dezelfde echte strict-edition/stored-presentation-functies:Nederlandse
+selectie/titel/ISBN/cover/samenvatting samenhangend; bestaandeENselectie behouden;
+synthetische8,25score/band5–9 blijft gelijk; taalcachekeys gescheiden.
+Dit is LOKAAL bewijs, GEEN hosted opslag/browser-/herstelacceptatie van dezecohort.
+ESLint gerichte scripts groen. App/runtime/vormgeving niet gewijzigd.
+
+COVERBEPERKING
+71inhoudelijk geverifieerde broncovers,32<300000B,39≥300000B;38192–1168063B.
+Bestandsgrootte en decodering gemeten,71covers visueel beoordeeld. Geen hosted
+laadprestatieclaim.39zware assets vragen vóór latere hosted release extra mobiele
+variant-/laadcontrole. Niet verwarren met de15afzonderlijke PR64detailcovers.
+Geen nieuwe host/opslag, geen geraden URLs, geen uitvergrote onleesbare thumbnails.
+
+ARTIFACTEN EN HERSTEL
+completed-dossiers.json,completed-batches.json,review-batch01–04 met exacteSQLhashes,
+completed-local-proof.json,bronbewijzen,narrative-review en coverhashes. Manifest
+completed-batches.jsonSHA256:
+451a8f1fc2c1709d9f8fbafbc0a0d89997142e44c69bbac1e790c21a343a610a
+Deze4plannen vervangen GEEN PR64bestand. five-reviewed-proposals.json is de behouden
+bronreferentie; de5dossiers zitten in de nieuwe213acties. Niet los naast213nogmaals importeren.
+
+Na aparte beoordeling:freshWork/author/ISBN/corpus/privé-afhankelijkheidsvoorcontrole;
+beperkt gemapt testmanifest met eigen IDs waar nodig;dry-run→COMMIT/eerste volledige
+receipt→teruglezen→replay0→hosted71acceptatie→echt gecommitteerd herstel/restore.
+Nog geen hostedwrites gedaan:geen ophoping van extra fixtures of synthetische accounts.
+Rollbackbestand accepteert alleen exacte eigen manifestreceipt, controleert volledige
+afterrij en alleinkomendeFK, stopt bij latere wijzigingen/afhankelijkheden. Geen CASCADE
+of sequence-reset. Productie blijft uitgesloten totdat concreet afzonderlijk akkoord bestaat.
+
+ADVIES
+Onderzoek en lokaal reviewbaar vervolgpakket afgerond; NIET productie-releasegereed.
+Hosteddedupe/acceptatie/herstel en zwarecoverlaadcontrole ontbreken expliciet.
+Dit vertraagt het volledig bewezen afgebakende PR64pakket niet. PR51/62/63 ongewijzigd.
