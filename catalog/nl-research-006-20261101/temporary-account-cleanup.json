@@ -1,0 +1,184 @@
+{
+  "precheck": {
+    "at": "2026-11-01T15:13:25.775964+00:00",
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ownAccount": {
+      "id": "233ca76b-88f4-40c6-bdbc-fd2f3474d670",
+      "signedIn": true,
+      "confirmed": true,
+      "syntheticEmailMatches": true
+    },
+    "otherAccounts": {
+      "count": 2,
+      "digest": "a2c8f560192dc59d679d6e9643745cdf"
+    },
+    "incomingAuthFks": [
+      {
+        "table": "identities",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "sessions",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "mfa_factors",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "one_time_tokens",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "oauth_authorizations",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "oauth_consents",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "webauthn_credentials",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "webauthn_challenges",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "scim_users",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL"
+      },
+      {
+        "table": "mfa_recovery_code_sets",
+        "schema": "auth",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "ratings",
+        "schema": "public",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "taste_test_responses",
+        "schema": "public",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "user_book_status",
+        "schema": "public",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "user_reading_preferences",
+        "schema": "public",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "table": "taste_rating_rounds",
+        "schema": "public",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      }
+    ]
+  },
+  "dependenciesBefore": {
+    "at": "2026-11-01T15:13:40.818714+00:00",
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ownDependencies": [
+      {
+        "count": 1,
+        "relation": "auth.identities"
+      },
+      {
+        "count": 1,
+        "relation": "auth.sessions"
+      },
+      {
+        "count": 0,
+        "relation": "auth.mfa_factors"
+      },
+      {
+        "count": 0,
+        "relation": "auth.one_time_tokens"
+      },
+      {
+        "count": 0,
+        "relation": "auth.oauth_authorizations"
+      },
+      {
+        "count": 0,
+        "relation": "auth.oauth_consents"
+      },
+      {
+        "count": 0,
+        "relation": "auth.webauthn_credentials"
+      },
+      {
+        "count": 0,
+        "relation": "auth.webauthn_challenges"
+      },
+      {
+        "count": 0,
+        "relation": "auth.scim_users"
+      },
+      {
+        "count": 0,
+        "relation": "auth.mfa_recovery_code_sets"
+      },
+      {
+        "count": 0,
+        "relation": "public.ratings"
+      },
+      {
+        "count": 0,
+        "relation": "public.taste_test_responses"
+      },
+      {
+        "count": 0,
+        "relation": "public.user_book_status"
+      },
+      {
+        "count": 0,
+        "relation": "public.user_reading_preferences"
+      },
+      {
+        "count": 0,
+        "relation": "public.taste_rating_rounds"
+      }
+    ],
+    "otherAccountBaseline": {
+      "count": 2,
+      "digest": "9f152fb5c020d15aa63c2a8c53ff6030"
+    }
+  },
+  "after": {
+    "at": "2026-11-01T15:15:13.490447+00:00",
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ratings": {
+      "count": 68,
+      "digest": "cb81f8f832556fd90c341e236f8591cf"
+    },
+    "accounts": {
+      "count": 2,
+      "digest": "9f152fb5c020d15aa63c2a8c53ff6030"
+    },
+    "statuses": {
+      "count": 68,
+      "digest": "1c7928e13bfc99ef5864ddb0d8ae5588"
+    },
+    "ownAccountRemaining": 0,
+    "ownSessionRemaining": 0,
+    "ownIdentityRemaining": 0
+  },
+  "ownSyntheticAccountOnly": true,
+  "loggedOutBeforeDeletion": true
+}

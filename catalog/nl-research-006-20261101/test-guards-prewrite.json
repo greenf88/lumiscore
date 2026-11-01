@@ -1,0 +1,153 @@
+{
+  "at": "2026-11-01T14:23:38.275968+00:00",
+  "rls": true,
+  "guards": 1,
+  "database": "postgres",
+  "triggers": [
+    {
+      "name": "catalog_preserve_reviewed_work_author",
+      "table": "works",
+      "enabled": "O"
+    },
+    {
+      "name": "catalog_preserve_reviewed_edition_identity",
+      "table": "editions",
+      "enabled": "O"
+    }
+  ],
+  "foreignKeys": [
+    {
+      "name": "works_author_id_fkey",
+      "childTable": "works",
+      "definition": "FOREIGN KEY (author_id) REFERENCES authors(id)",
+      "childSchema": "public",
+      "parentTable": "authors"
+    },
+    {
+      "name": "editions_work_id_fkey",
+      "childTable": "editions",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "ratings_work_id_fkey",
+      "childTable": "ratings",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_cover_resolutions_work_id_fkey",
+      "childTable": "work_cover_resolutions",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_trait_evidence_work_id_fkey",
+      "childTable": "work_trait_evidence",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "collection_books_work_id_fkey",
+      "childTable": "collection_books",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "user_book_status_work_id_fkey",
+      "childTable": "user_book_status",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE CASCADE",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_selection_members_work_id_fkey",
+      "childTable": "catalog_selection_members",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "work_catalog_categories_work_id_fkey",
+      "childTable": "work_catalog_categories",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_work_title_aliases_work_id_fkey",
+      "childTable": "catalog_work_title_aliases",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "editorial_records_work_id_fkey",
+      "childTable": "editorial_records",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "catalog_private",
+      "parentTable": "works"
+    },
+    {
+      "name": "taste_rating_offers_work_id_fkey",
+      "childTable": "taste_rating_offers",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_work_descriptions_work_id_fkey",
+      "childTable": "catalog_work_descriptions",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE RESTRICT",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_work_descriptions_bound_author_id_fkey",
+      "childTable": "catalog_work_descriptions",
+      "definition": "FOREIGN KEY (bound_author_id) REFERENCES authors(id) ON DELETE RESTRICT",
+      "childSchema": "public",
+      "parentTable": "authors"
+    },
+    {
+      "name": "eligible_inventory_v1_work_id_fkey",
+      "childTable": "eligible_inventory_v1",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id)",
+      "childSchema": "taste_private",
+      "parentTable": "works"
+    },
+    {
+      "name": "eligible_inventory_v1_edition_id_fkey",
+      "childTable": "eligible_inventory_v1",
+      "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id)",
+      "childSchema": "taste_private",
+      "parentTable": "editions"
+    },
+    {
+      "name": "catalog_edition_metadata_edition_id_fkey",
+      "childTable": "catalog_edition_metadata",
+      "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id) ON DELETE RESTRICT",
+      "childSchema": "public",
+      "parentTable": "editions"
+    },
+    {
+      "name": "catalog_edition_metadata_work_id_fkey",
+      "childTable": "catalog_edition_metadata",
+      "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE RESTRICT",
+      "childSchema": "public",
+      "parentTable": "works"
+    },
+    {
+      "name": "catalog_edition_metadata_bound_author_id_fkey",
+      "childTable": "catalog_edition_metadata",
+      "definition": "FOREIGN KEY (bound_author_id) REFERENCES authors(id) ON DELETE RESTRICT",
+      "childSchema": "public",
+      "parentTable": "authors"
+    }
+  ]
+}
