@@ -1,9 +1,17 @@
-import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import{createHash}from'node:crypto';
 import{PGlite}from'@electric-sql/pglite';
 import{renderImport}from'./catalog-release-sql.mjs';
 import{renderAliasImport}from'./hebban-title-alias.mjs';
 import{aliasImport,aliasRollback,composeRecovery}from'./hebban-release-20261101.mjs';
 const root='catalog/hebban-priority-20261031/',dir=root+'release-20261101/',read=n=>JSON.parse(fs.readFileSync(n));
+test('current release manifest bounds core17 plus alias4, preserves all Works and hashes every execution input',()=>{
+ const m=read(dir+'release-hashes.json');assert.equal(m.project,'qvplwejffhjvxaypmjut');assert.equal(m.actions.total,21);assert.equal(m.netExtraDutchWorks,5);assert.equal(m.actions.newWorks,0);
+ const core=read(root+'production-plan.json');assert.equal(core.actions.length,17);assert.ok(core.actions.every(a=>!['works','authors'].includes(a.relation)));
+ assert.equal(read(dir+'aliases-production-plan.json').aliases.length,4);
+ for(const [file,hash]of Object.entries(m.files))assert.equal(createHash('sha256').update(fs.readFileSync(file)).digest('hex'),hash,file);
+ assert.equal(read(dir+'core-replay-zero.json').rows.length,0);assert.equal(read(dir+'alias-replay-zero.json').changes.length,0);
+ assert.ok(read(dir+'committed-recovery-proof.json').notATransactionRollbackClaim);
+});
 test('current Hebban aliases and core17 commit/replay/committed undo preserve unrelated data and stop on drift/dependencies',async()=>{
  const db=new PGlite(),baseline=read('catalog/nl-availability-20261031/test-before-public.json');
  try{

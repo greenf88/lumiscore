@@ -1,0 +1,79 @@
+{
+  "scope": "PR63 Hebban all12; no production execution authorized yet",
+  "productionBase": "2b1d72340e5dc3dbe8d889a50b2de11c08235bbe",
+  "applicationCommit": "2ede641e07a2b022d7cb6afe5a891de688efd53d",
+  "project": "qvplwejffhjvxaypmjut",
+  "actions": {
+    "total": 21,
+    "core": 17,
+    "aliases": 4,
+    "newWorks": 0,
+    "newAuthors": 0,
+    "newEditions": 2,
+    "editionRowCorrections": 3,
+    "coverFormatBindings": 6,
+    "newNLSummaries": 6
+  },
+  "netExtraDutchWorks": 5,
+  "expectedNlBefore": 3007,
+  "expectedNlAfter": 3012,
+  "execution": {
+    "orderedImports": [
+      "catalog/hebban-priority-20261031/production-import.sql",
+      "catalog/hebban-priority-20261031/release-20261101/aliases-production-import.sql"
+    ],
+    "orderedRollback": [
+      "catalog/hebban-priority-20261031/release-20261101/aliases-production-rollback.sql",
+      "catalog/hebban-priority-20261031/production-rollback.sql"
+    ],
+    "dryRuns": [
+      "catalog/hebban-priority-20261031/production-dry-run.sql",
+      "catalog/hebban-priority-20261031/release-20261101/aliases-production-dry-run.sql"
+    ]
+  },
+  "superseded": {
+    "doNotAlsoExecute": [
+      "catalog/hebban-priority-20261031/seven-sisters-alias-production-import.sql",
+      "catalog/hebban-priority-20261031/seven-sisters-alias-production-dry-run.sql",
+      "catalog/hebban-priority-20261031/seven-sisters-alias-production-rollback.sql"
+    ],
+    "reason": "Old alias1 replaced by complete four-alias block; core17 unchanged. Other catalog dossiers/register files remain research only."
+  },
+  "files": {
+    "catalog/hebban-priority-20261031/production-plan.json": "a15e9b9d263c50a862b30f54cd1333724ce11a9841e04bb7ea414f2167ca9b86",
+    "catalog/hebban-priority-20261031/production-import.sql": "570aede796670ea5ac840e0bbf2c25e383daa47025f24de2757b24f902f26b6f",
+    "catalog/hebban-priority-20261031/production-dry-run.sql": "8ad12fbf8060c7b38a9ebc3eea1e7bc54d4678a4fe0ff4b1918fee422119008c",
+    "catalog/hebban-priority-20261031/production-rollback.sql": "ba4c70035994456bf46d25373267a06e489c23a572ef8dc81bfb0f1651dd8567",
+    "catalog/hebban-priority-20261031/reviewed-changes.json": "fd61c8c52d291c59018b5e3e6235addd7370301f96a87438a86d8032b34a9094",
+    "catalog/hebban-priority-20261031/sources/heaven.json": "cd654cad6fd10ecd0b785648e43bc065c6b9a33ce4455727413bd2167c852013",
+    "catalog/hebban-priority-20261031/sources/pilgrim-search.json": "aa02f3c30d7a23c044eac353e9ec49159e7d978a411adcf7552dc8de221c83fe",
+    "catalog/hebban-priority-20261031/sources/pilgrim.json": "080c7bc6ef1f8b0b4d4455118e7324c1003befeee9d568d7dc18ab31d610a2ae",
+    "catalog/hebban-priority-20261031/sources/potter-search.json": "aa6b401572a0156073626d4725b8434bcb7e68378e0234691e4b168b32f58f35",
+    "catalog/hebban-priority-20261031/sources/potter.json": "af89ab52348b5f0b16396dc379150c57289745a4577ff3ce11ead911112d036f",
+    "catalog/hebban-priority-20261031/sources/sarah-search.json": "1b2ce4422cfd6bc104f1a92e0e91a8e14bc1f9ae86161ef70f533fa63cb5df99",
+    "catalog/hebban-priority-20261031/sources/sarah.json": "4bd7c4a0b56ae060a70e034866e927137fbb4c8b5de89a4550a540156d555805",
+    "catalog/hebban-priority-20261031/sources/shadow-search.json": "9b48f8669d36c267088da51c5e3b4ec5eea7c9f450615428ec0483244752d1bc",
+    "catalog/hebban-priority-20261031/sources/shadow.json": "f72a007b7bf59dc3fef9dc735fcb3287ea29e4c8bd66828beec28f50b88a33dc",
+    "catalog/hebban-priority-20261031/sources/zeven-zussen.json": "bae99aa2a040784d387d692c520a66137039fc92ee0bb68017e56a7ed0336046",
+    "catalog/hebban-priority-20261031/release-20261101/aliases-production-plan.json": "1aabbf354c587b38e91e8772886f23fff9b60f05472c554d902055c815fb771b",
+    "catalog/hebban-priority-20261031/release-20261101/aliases-production-import.sql": "061b7d9496719f4705d97222d2fa3b1acf7a5ca2b15f0b1095dab81c783b6c18",
+    "catalog/hebban-priority-20261031/release-20261101/aliases-production-dry-run.sql": "50bd9eb09eab6d17d64c550b50902789508c6804066a1a552859ce7f92ddfd21",
+    "catalog/hebban-priority-20261031/release-20261101/aliases-production-rollback.sql": "55a16cd5380175397eb66304cc720403efcbf47219df82e1f7839f737c46e786",
+    "catalog/hebban-priority-20261031/release-20261101/aliases-test-plan.json": "e71d0b4df1d768ecdbb17e50db079ea4eb9a4c407efde04af4d50f45665c8b73",
+    "catalog/hebban-priority-20261031/release-20261101/committed-recovery-proof.json": "f004641d4b740860d7b0be3899a713e1f3a8a423e1eafcc4ae131d4d791329a2",
+    "catalog/hebban-priority-20261031/release-20261101/final-restored-core-receipt.json": "9a0b6b84afdf71c6f88043ade55ad9fe89deaa264687a359b989552ee9361f4a",
+    "catalog/hebban-priority-20261031/release-20261101/final-restored-alias-receipt.json": "dea763ffdb7dece689fa7d1acc70968778d261d03648024eb5962648e6feec89",
+    "catalog/hebban-priority-20261031/release-20261101/final-test-recovery-manifest.sql": "0cf879bf56399fa3243fbb2fee82310f4f18a453259c52396906579790021422",
+    "catalog/hebban-priority-20261031/release-20261101/acceptance-manifest.json": "b77786d7e85c5fd76099575ba4da566f06d37bd667c7885918c873f7b1d204f9",
+    "catalog/hebban-priority-20261031/release-20261101/hosted-12-current.json": "ff7650936e60c08f2785640c79fab1ecfaffa330ac7a9beb714a65667c6d43b7",
+    "catalog/hebban-priority-20261031/release-20261101/hosted-original-title-search.json": "48df7a73fa9c7fac18c826de0f7c5b78b91a363f4d3fa8d50e986167ba4e3653",
+    "catalog/hebban-priority-20261031/release-20261101/hosted-en-isolation.json": "b075c44a229e01cb680485e33d53134569b2b9df5addc9e596490b8139744da5",
+    "catalog/hebban-priority-20261031/release-20261101/hosted-responsive.json": "560f418f7930a6a56768ba01f36aedd2a5a0f13de54dfdc9713009f71697e51c",
+    "catalog/hebban-priority-20261031/release-20261101/hosted-pagination.json": "fc747c5496cbff526b62b5a8461afc3b91fbf4ce1e69d3b7541487f01bb13aaa",
+    "catalog/hebban-priority-20261031/release-20261101/production-final-readonly.json": "a5711459db7b60a47fafbe23e8d424c19bcdb803d74fa6a0d7efc40307ed8dfb",
+    "catalog/hebban-priority-20261031/release-20261101/cover-measurements-current.json": "e4fee55113639c467dedcaa29c95da99706c31a112ecab501c4e71a0e8b85afc",
+    "catalog/hebban-priority-20261031/release-20261101/runtime-compatibility.json": "4dce4a17c0185135f30cf7f24aeb9545d5e03e805b1dadb19e1fba6d458a7e0b",
+    "catalog/hebban-priority-20261031/release-20261101/release-summary.json": "b632ce6fd4be15a8102f6c13dd2c54bbde1c2c2023b85b7a07ca2f26c8f77032",
+    "catalog/hebban-priority-20261031/release-20261101/SOURCE-REVIEW.txt": "5f6eeb3194b548dec243a3fc2648ed3c0501af2cb64793246c16ed72d91a7a27"
+  }
+}
