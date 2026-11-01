@@ -3,8 +3,9 @@ Vervangt de v2-analyse; eerdere checkpoints zijn historische feiten.
 28oktober2026: testinstallatie/rechtenherstel en echte vijfminuten-cron bevestigd.
 Gastmetingen en volledige ingelogde10/10-ronde teruggelezen. Hosted SQL-overhead
 en DOM-browserbevestiging afzonderlijk gemeten; geen productieactivatie.
-Historische lokale ramingen hieronder zijn geen hosted loadtest. Exacte cleanup
-blijft geblokkeerd; zie het actuele installatie-reviewverslag.
+Historische lokale ramingen hieronder zijn geen hosted loadtest. Oude cleanup
+was29oktober voltooid;1november opnieuw bevestigd. Nieuwe tijdelijke acceptatie-
+gegevens op1november volledig gericht opgeruimd. Zie het actuele reviewverslag.
 
 TOESTEMMING
 Optionele analyse is standaard UIT. Onbekende/ongeldige/verlopen keuze, DNT/GPC,
@@ -141,6 +142,9 @@ volgens code/transporttests geen apart browserrequest toe; synchrone DB-writes
 en batch-/consentverkeer blijven afzonderlijk. Hosted SQL0.311/1.113ms betreft
 21updates/stand binnen één transactie, zonder netwerk/commit/API.
 Na intrekken geen extra optionele events ondanks echte reloads/ratingwijzigingen.
-De latere exact guarded cleanup geeft opnieuw Invalid or expired requestState,
-11:04:12UTCaanvraag/11:11:32UTCwaargenomen. Read-only werkt, oorzaak onbekend;
-geen bewezen OAuth-expiry of beveiligingsweigering. Geen identieke retry/omweg.
+De bovenstaande foutmelding van28oktober is historisch. Op1november verliep
+één nieuwe connectorfixturebevestiging; geen identieke retry. De reeds toegestane
+dashboardroute op hetzelfde testproject voerde import, replay en gerichte cleanup
+wel uit. Dat bewijst niet dat de connectorbevestigingsroute is hersteld.
+Nieuwe browserbevestiging n5/stand:aan321ms(308–368),uit323ms(291–457), inclusief
+automatisering/netwerk. Geen causaal overheadverschil aangetoond. Geen productieclaim.

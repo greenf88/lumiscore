@@ -1,18 +1,20 @@
-PR51 — definitief productievoorstel, 29 oktober 2026 — NIET UITGEVOERD
+PR51 — definitief productievoorstel, bijgewerkt 1 november 2026 — NIET UITGEVOERD
 Dit vervangt de eerdere uitsluitend testgerichte productievoorstellen.
 Geen productie-installatie, configuratie, merge, publicatie of socialactie uitgevoerd.
 
 BASIS
-Productie en remote main: 246c379db1c674ac14e2959893f874c00b9330b2.
-Actieve productie Ready dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9.
-PR51 blijft Draft. Main is gecontroleerd samengevoegd; uitsluitend conflict in
-EditorialTopList: behoud zowel editorial-back als data-product-list. De compacte
-tweekoloms mobiele toplijsten, herstelroute en recente catalogusassets blijven.
-Geteste eerdere applicatie: 3bf06b9e02a63308ce35276e7728819f491d41e8.
-Nieuwste code-SHA/Ready-Preview/CI staan in het definitieve reviewcheckpoint.
+Productie en remote main: ade477653f7471485a1bb503fe6e11eaa3bfd124.
+Actieve productie Ready dpl_7FrqX3K9qV8fXXYQBnSjTRkrSW1R; lumisco.re-alias gecontroleerd.
+PR51 blijft Draft. Actuele main zonder conflict samengevoegd; geen andere PR geïmporteerd.
+Geteste applicatie: 7a7a7e174c24073c3b7cc989d51690e80e71c581.
+Ready Preview: dpl_2QTzbYPLqhcv3ibYw4ShQp5oRhTX,
+https://lumiscore-9ybsm0vwi-rgkgroeneveld-9102.vercel.app.
+Latere bewijscommits, definitieve PR-head en CI staan in de actuele PR-beschrijving.
+Huidige Engelse route is /en/toplijsten; /en/toplists hoort bij een andere Draft.
+Geen route-, vormgevings-, catalogus-, score- of smaakberekeningswijziging meegenomen.
 
 READ-ONLY PRODUCTIEVOORCONTROLE
-29 oktober 18:21:56 UTC: geen product_metric*-schema, publieke meetfuncties
+1 november 17:38:39 UTC: geen product_metric*-schema, publieke meetfuncties
 of product_metric*-observers. pg_cron nog niet geïnstalleerd; versie1.6.4 is
 beschikbaar en pg_cron staat al in shared_preload_libraries. Geen restart vereist
 volgens deze huidige metadata. Rating/status/roundkolommen passen bij de observers.
@@ -150,13 +152,20 @@ definities/ACLs na beoordeling, niet blind verwijderen. pg_cron niet droppen.
 Geen herinstallatie via fresh-installer over behouden schema heen.
 
 BEWIJS EN BEPERKINGEN
-Echte hosted10/10-route/nieuwe+gewijzigde ratings/completion1/withdrawal/foutisolatie/
-cronreadback28oktober blijven geldig; geen nieuwe accountcampagne herhaald.
+Nieuwe hosted10/10-route op1november met echte opslag/readback:10nieuwe ratings,
+1start/1completion; dezelfde waarde opnieuw0; reloadgeenextracompletion.
+Voor opt-in rating6 opgeslagen met0meetrecords; na intrekken5wijzigingen met
+ongewijzigde47bijdragen/47receipts. Nieuwe proef volledig gericht opgeruimd;
+68bestaande ratings/statussen,2accounts,restcatalogus encron behouden.
+Geanonimiseerd bewijs: docs/product-measurement-acceptance-20261101.json.
+Historisch bewijs28oktober voor login-na-optin, mislukte opslag, transport/privacy,
+echte expiry-deletie via normalecron enSQL-overhead behouden tegen identieke SQLbodies.
 Nieuwe lokale tests normaliseren de13productiefuncties naar het bewezen testpakket:
 exact dezelfde bodies afgezien van namespace/traffic/jobnaam. Consent,synthetic-
 afwijzing,dedup,transition,privileges,scheduleruniqueness en rollback getest.
-Nieuwe targetreleaseflag en mainconflict gericht getest; definitieve CI/Preview
-worden in review ingevuld. Productie is NU NIET geïnstalleerd/geactiveerd.
+Targetreleaseflag afzonderlijk met/zondertrue gebouwd; actuele UI NL/EN,
+320/1280px enPaper/Ink op bovengenoemde appcommit gecontroleerd.
+Productie is NU NIET geïnstalleerd/geactiveerd.
 Geen volledige hosted600/min-piek of automatische alarmdienst bewezen.
 Bewaartermijnen voor providerlogs/backups zijn niet met SQL te bewijzen en blijven
 onder bestaande providerafspraken. Geen garantie op volledige campagnetelling.

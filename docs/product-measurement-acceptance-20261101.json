@@ -1,0 +1,245 @@
+{
+  "date": "2026-11-01",
+  "productionWrites": 0,
+  "pr": 51,
+  "applicationCommit": "7a7a7e174c24073c3b7cc989d51690e80e71c581",
+  "readyDeployment": {
+    "id": "dpl_2QTzbYPLqhcv3ibYw4ShQp5oRhTX",
+    "url": "https://lumiscore-9ybsm0vwi-rgkgroeneveld-9102.vercel.app",
+    "environment": "Preview",
+    "project": "hlvujbrmfdlrfxdjwsmb"
+  },
+  "freshAuthenticatedRoute": {
+    "applicationCommit": "744c5f792fc05519b14324864a5ee98ea7ac08e6",
+    "deployment": "dpl_SVk6u6QjsMnDn7Ne1Cj44mmQ9NWw",
+    "url": "https://lumiscore-l0vux5eul-rgkgroeneveld-9102.vercel.app",
+    "reuseOnFinalApp": "Only runtime difference in the final application is removal of an unused/unpublished /en/toplists metrics alias. All exercised current /nl/toplijsten and /en/toplijsten paths and rating/round/consent handlers are identical; final app has separate hosted NL/EN UI smoke.",
+    "expectedAndFound": {
+      "withoutChoice": "zero metrics; zero grants",
+      "declinedRating": "rating6 committed; zero metrics/receipts/grants",
+      "afterAcceptBeforeReload": "one active grant; zero events (no retroactive replay)",
+      "campaignReload": {
+        "page_opened_editorial": 1,
+        "editorial_list_opened": 1
+      },
+      "cardClick": {
+        "book_card_opened": 1,
+        "book_detail_opened": 1
+      },
+      "sameValueRatingRetry": "one updated rating after6->7; same7 again adds0",
+      "round": {
+        "goal": 10,
+        "fixtureRatings": 10,
+        "taste_round_started": 1,
+        "taste_round_completed": 1,
+        "taste_result_opened": 1
+      },
+      "reloadAndLanguageSwitch": "result views may count again; completion stays1",
+      "signIn": "fresh login happened before consent and is correctly not counted; prior verified post-opt-in login proof retained"
+    },
+    "beforeWithdrawal": {
+      "events": {
+        "page_opened": 8,
+        "rating_saved": 16,
+        "book_card_opened": 1,
+        "book_detail_opened": 2,
+        "taste_result_opened": 3,
+        "taste_round_started": 1,
+        "editorial_list_opened": 1,
+        "taste_round_completed": 1,
+        "recommendation_impression": 14
+      },
+      "rating": 8,
+      "receipts": 47,
+      "contributions": 47
+    },
+    "afterWithdrawal": {
+      "events": {
+        "page_opened": 8,
+        "rating_saved": 16,
+        "book_card_opened": 1,
+        "book_detail_opened": 2,
+        "taste_result_opened": 3,
+        "taste_round_started": 1,
+        "editorial_list_opened": 1,
+        "taste_round_completed": 1,
+        "recommendation_impression": 14
+      },
+      "rating": 7,
+      "receipts": 47,
+      "contributions": 47
+    },
+    "optionalContributionsUnchanged": true,
+    "postWithdrawalChanges": 5
+  },
+  "freshUiRatingTiming": {
+    "definition": "Node wall-clock from supported browser click to DOM acknowledgement after successful response; includes automation and network, excludes SQL-only timing; not LCP or paint",
+    "deployment": "lumiscore-l0vux5eul-rgkgroeneveld-9102.vercel.app",
+    "samplesOnMs": [
+      368,
+      367,
+      318,
+      308,
+      321
+    ],
+    "samplesOffMs": [
+      323,
+      436,
+      312,
+      457,
+      291
+    ],
+    "on": {
+      "n": 5,
+      "medianMs": 321,
+      "minMs": 308,
+      "maxMs": 368
+    },
+    "off": {
+      "n": 5,
+      "medianMs": 323,
+      "minMs": 291,
+      "maxMs": 457
+    },
+    "interpretation": "Sequential small sample; -2ms median difference is noise, not evidence of negative overhead or speed gain"
+  },
+  "cleanup": {
+    "at": "2026-11-01T18:53:56.138831+00:00",
+    "ownAccount": 0,
+    "ownRatings": 0,
+    "ownStatuses": 0,
+    "ownOffers": 0,
+    "ownRounds": 0,
+    "ownFixtureWorks": 0,
+    "ownEditions": 0,
+    "ownAuthor": 0,
+    "metrics": {
+      "grants": 0,
+      "health": 0,
+      "counters": 0,
+      "receipts": 0,
+      "contributions": 0
+    },
+    "removed": {
+      "account": 1,
+      "ratings": 11,
+      "statuses": 11,
+      "offers": 10,
+      "round": 1,
+      "fixtureWorks": 10,
+      "editions": 10,
+      "traits": 10,
+      "inventory": 10,
+      "author": 1,
+      "metricCells": 39,
+      "metricContributions": 47,
+      "receipts": 47,
+      "grants": 2,
+      "budgets": 4,
+      "grantBudgets": 5,
+      "healthRows": 6
+    },
+    "preserved": {
+      "ratings": {
+        "n": 68,
+        "digest": "cb81f8f832556fd90c341e236f8591cf"
+      },
+      "accounts": {
+        "n": 2,
+        "digest": "6116d452d294281549b8f46d7e6fbbdf"
+      },
+      "statuses": {
+        "n": 68,
+        "digest": "1c7928e13bfc99ef5864ddb0d8ae5588"
+      }
+    },
+    "catalogueBefore": {
+      "at": "2026-11-01T17:52:03.991224+00:00",
+      "works": {
+        "n": 1020,
+        "digest": "8b62c49269c52196f966d440d5cee556"
+      },
+      "traits": "c15f431092c441381aad5e50f5f2358b",
+      "authors": {
+        "n": 334,
+        "digest": "493230206f0138dfafaf780b720e2cb3"
+      },
+      "editions": {
+        "n": 1467,
+        "digest": "abec8101215de84274ddf06f6b81a564"
+      },
+      "inventory": "029dd69197c3c9640d07c65a6fa7650c"
+    },
+    "catalogueAfter": {
+      "at": "2026-11-01T18:52:52.716343+00:00",
+      "works": {
+        "n": 1020,
+        "digest": "8b62c49269c52196f966d440d5cee556"
+      },
+      "traits": "c15f431092c441381aad5e50f5f2358b",
+      "authors": {
+        "n": 334,
+        "digest": "493230206f0138dfafaf780b720e2cb3"
+      },
+      "editions": {
+        "n": 1467,
+        "digest": "abec8101215de84274ddf06f6b81a564"
+      },
+      "inventory": "029dd69197c3c9640d07c65a6fa7650c"
+    },
+    "method": "Exact manifest compare-and-stop transactions via approved logged-in dashboard of same testproject; account removed using supported Auth UI. No sequence reset. Shared-cell delta renderer separately tested with prior contributions and later-change refusal.",
+    "importReplay": "ten fixture rows unchanged; same Works digest02be13b15d9d0c800ebf12fcb72f47d7"
+  },
+  "scheduler": {
+    "task": "cleanup",
+    "backlog": false,
+    "deleted": {
+      "budgets": 0,
+      "receipts": 0,
+      "grant_budgets": 0,
+      "consent_grants": 0,
+      "daily_counters": 0,
+      "operational_counts": 0
+    },
+    "last_attempt_at": "2026-11-01T18:50:00.180341+00:00",
+    "last_error_code": null,
+    "last_success_at": "2026-11-01T18:50:00.180341+00:00",
+    "job": {
+      "jobid": 1,
+      "active": true,
+      "command": "SET statement_timeout='3s'; SELECT product_metrics_test.cleanup();",
+      "jobname": "lumiscore-product-metrics-test-cleanup-v3",
+      "database": "postgres",
+      "schedule": "*/5 * * * *",
+      "username": "postgres"
+    },
+    "runs": [
+      {
+        "status": "succeeded",
+        "end_time": "2026-11-01T18:50:00.191427+00:00",
+        "start_time": "2026-11-01T18:50:00.178559+00:00",
+        "return_message": "1 row"
+      },
+      {
+        "status": "succeeded",
+        "end_time": "2026-11-01T18:45:00.23545+00:00",
+        "start_time": "2026-11-01T18:45:00.173301+00:00",
+        "return_message": "1 row"
+      },
+      {
+        "status": "succeeded",
+        "end_time": "2026-11-01T18:40:00.080505+00:00",
+        "start_time": "2026-11-01T18:40:00.058896+00:00",
+        "return_message": "1 row"
+      }
+    ],
+    "newProof": "Normal scheduled18:40/18:45/18:50 runs, schedule unchanged. Boundary/deletion/backlog proof28October retained against13identical function body/ACL hashes."
+  },
+  "limitations": [
+    "Events are not unique people, visits or linked person-conversions.",
+    "Full hosted600-events/min multi-instance campaign and unobserved client/network loss are not proven.",
+    "Provider logs/backups retention is outside application SQL.",
+    "Actual production installation and activation still require separate release approval.",
+    "One new MCP fixture write expired; no identical retry. Approved dashboard succeeded; this is not proof the MCP confirmation path is repaired."
+  ]
+}
