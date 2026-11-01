@@ -1,0 +1,58 @@
+-- REVIEW ONLY. Exact target hlvujbrmfdlrfxdjwsmb. Separate production approval required.
+-- No accounts, ratings, progress, collections, taxonomy or taste-inventory DML.
+-- COMMIT: securely retain FIRST non-empty full receipt, never substitute a replay receipt.
+begin;set local lock_timeout='3s';set local statement_timeout='30s';
+lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
+create temporary table catalog_release_receipt(seq integer,relation text,key jsonb,before_row jsonb,after_row jsonb) on commit drop;
+do $release$ declare payload jsonb:='{"batch":"hebban-priority-fixtures-20261031","project":"hlvujbrmfdlrfxdjwsmb","actions":[{"relation":"authors","ref":"test-author:849","key":{"id":962300001},"before":null,"after":{"id":962300001,"name":"Carlos Ruiz Zafón","open_library_id":"OL2632116A"}},{"relation":"works","ref":"test-work:1936","key":{"id":962100001},"before":null,"after":{"id":962100001,"title":"De Schaduw van de Wind","cover_id":null,"author_id":962300001,"work_type":null,"source_type":"open_library","open_library_id":"OL34874211W","first_publish_year":2008,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:2113","key":{"id":962200001},"before":null,"after":{"id":962200001,"title":"De Schaduw van de Wind","isbn_10":"9056723103","isbn_13":"9789056723101","work_id":962100001,"cover_id":null,"language":null,"publisher":"SIGNATURE","publish_date":null,"open_library_edition_id":"OL47229610M"}},{"relation":"authors","ref":"test-author:5454","key":{"id":962300002},"before":null,"after":{"id":962300002,"name":"Terry Hayes","open_library_id":"OL1556669A"}},{"relation":"works","ref":"test-work:9530","key":{"id":962100002},"before":null,"after":{"id":962100002,"title":"I am Pilgrim","cover_id":null,"author_id":962300002,"work_type":null,"source_type":null,"open_library_id":"OL17354744W","first_publish_year":2013,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:9689","key":{"id":962200002},"before":null,"after":{"id":962200002,"title":"I am Pilgrim","isbn_10":"0552170518","isbn_13":"9780552170512","work_id":962100002,"cover_id":null,"language":"eng","publisher":"Corgi Books","publish_date":null,"open_library_edition_id":"OL28865431M"}},{"relation":"authors","ref":"test-author:80","key":{"id":962300003},"before":null,"after":{"id":962300003,"name":"J. K. Rowling","open_library_id":"OL23919A"}},{"relation":"works","ref":"test-work:93","key":{"id":962100003},"before":null,"after":{"id":962100003,"title":"Harry Potter and the Philosopher''s Stone","cover_id":null,"author_id":962300003,"work_type":null,"source_type":"open_library","open_library_id":"OL82563W","first_publish_year":1997,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:93","key":{"id":962200003},"before":null,"after":{"id":962200003,"title":"Harry Potter y la piedra filosofal","isbn_10":null,"isbn_13":"9788498384376","work_id":962100003,"cover_id":null,"language":null,"publisher":"Salamandra","publish_date":null,"open_library_edition_id":"OL25445781M"}},{"relation":"editions","ref":"fixture-edition:1307","key":{"id":962200004},"before":null,"after":{"id":962200004,"title":"Harry Potter and the Philosopher''s Stone","isbn_10":"0747573603","isbn_13":"9780747573609","work_id":962100003,"cover_id":null,"language":"eng","publisher":"Bloomsbury","publish_date":null,"open_library_edition_id":"OL7962603M"}},{"relation":"editions","ref":"fixture-edition:1308","key":{"id":962200005},"before":null,"after":{"id":962200005,"title":"Harry Potter en de steen der wijzen","isbn_10":"9076174083","isbn_13":"9789076174082","work_id":962100003,"cover_id":null,"language":"dut","publisher":"De Harmonie","publish_date":null,"open_library_edition_id":"OL23018382M"}},{"relation":"works","ref":"test-work:1006","key":{"id":962100004},"before":null,"after":{"id":962100004,"title":"De ontdekking van de hemel","cover_id":null,"author_id":930300017,"work_type":null,"source_type":"open_library","open_library_id":"OL659062W","first_publish_year":1993,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:1006","key":{"id":962200006},"before":null,"after":{"id":962200006,"title":"The Discovery of Heaven","isbn_10":null,"isbn_13":"9780141006116","work_id":962100004,"cover_id":null,"language":null,"publisher":"Penguin Books","publish_date":null,"open_library_edition_id":"OL10098933M"}},{"relation":"authors","ref":"test-author:761","key":{"id":962300004},"before":null,"after":{"id":962300004,"name":"Tatiana de Rosnay","open_library_id":"OL9123208A"}},{"relation":"works","ref":"test-work:1440","key":{"id":962100005},"before":null,"after":{"id":962100005,"title":"Haar naam was Sarah / druk 59","cover_id":null,"author_id":962300004,"work_type":null,"source_type":"open_library","open_library_id":"OL29271146W","first_publish_year":2010,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:1504","key":{"id":962200007},"before":null,"after":{"id":962200007,"title":"Haar naam was Sarah / druk 59","isbn_10":"9047201795","isbn_13":"9789047201793","work_id":962100005,"cover_id":null,"language":null,"publisher":"Artemis & Co","publish_date":null,"open_library_edition_id":"OL40250893M"}},{"relation":"works","ref":"test-work:1435","key":{"id":962100006},"before":null,"after":{"id":962100006,"title":"De zeven zussen","cover_id":null,"author_id":945300758,"work_type":null,"source_type":"open_library","open_library_id":"OL34536006W","first_publish_year":2018,"native_identity_key":null}},{"relation":"editions","ref":"fixture-edition:1499","key":{"id":962200008},"before":null,"after":{"id":962200008,"title":"De zeven zussen","isbn_10":"9401609373","isbn_13":"9789401609371","work_id":962100006,"cover_id":null,"language":null,"publisher":"Xander Uitgevers B.V.","publish_date":null,"open_library_edition_id":"OL46848848M"}}],"bindings":[],"authorCorpora":[]}'::jsonb;a jsonb;b jsonb;actual jsonb;oldrow jsonb;nextrow jsonb;k jsonb;kv record;ids jsonb:='{}';cols text;vals text;v_id bigint;i integer:=0;n integer;begin
+ for b in select value from jsonb_array_elements(payload->'bindings') loop
+  select to_jsonb(w) into actual from public.works w where id=(b->'work'->>'id')::bigint;
+  if actual is distinct from b->'work' and not exists(select 1 from jsonb_array_elements(payload->'actions') p where p->>'relation'='works' and p->'key'=jsonb_build_object('id',(b->'work'->>'id')::bigint) and actual=p->'after') then raise exception 'Work preflight drift';end if;
+  select to_jsonb(t) into actual from public.authors t where id=(b->'author'->>'id')::bigint;
+  if actual is distinct from b->'author' then raise exception 'Author preflight drift';end if;
+ end loop;
+ for b in select value from jsonb_array_elements(payload->'authorCorpora') loop
+  select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') into actual from public.works w where author_id=(b->>'author_id')::bigint and not exists(select 1 from jsonb_array_elements(payload->'actions') p where p->>'relation'='works' and p->'before'='null' and w.native_identity_key=p->'after'->>'native_identity_key');
+  select coalesce(jsonb_agg(to_jsonb(jsonb_populate_record(null::public.works,value)) order by (value->>'id')::bigint),'[]') into oldrow from jsonb_array_elements(b->'rows');
+  select coalesce(jsonb_agg(to_jsonb(jsonb_populate_record(null::public.works,coalesce((select p->'after' from jsonb_array_elements(payload->'actions') p where p->>'relation'='works' and p->'before'<>'null' and p->'key'=jsonb_build_object('id',(v.value->>'id')::bigint)),v.value))) order by (v.value->>'id')::bigint),'[]') into nextrow from jsonb_array_elements(b->'rows') v;
+  if actual is distinct from oldrow and actual is distinct from nextrow then raise exception 'New Work author corpus drift; repeat identity review';end if;
+ end loop;
+ for a in select value from jsonb_array_elements(payload->'actions') loop
+  i:=i+1;k:=a->'key';nextrow:=a->'after';oldrow:=a->'before';
+  if a->>'relation' not in ('authors','works','editions','catalog_work_descriptions','catalog_edition_metadata') then raise exception 'Unreviewed relation';end if;
+  for kv in select * from jsonb_each(nextrow) loop
+   if jsonb_typeof(kv.value)='string' and left(kv.value#>>'{}',1)='@' then
+    if not ids ? substring(kv.value#>>'{}',2) then raise exception 'Unresolved parent reference';end if;
+    nextrow:=jsonb_set(nextrow,array[kv.key],ids->substring(kv.value#>>'{}',2));
+   end if;
+  end loop;
+  for kv in select * from jsonb_each(k) loop
+   if jsonb_typeof(kv.value)='string' and left(kv.value#>>'{}',1)='@' then k:=jsonb_set(k,array[kv.key],ids->substring(kv.value#>>'{}',2));end if;
+  end loop;
+  execute format('select to_jsonb(t) from public.%I t where to_jsonb(t) @> $1 for update',a->>'relation') into actual using k;
+  if oldrow<>'null'::jsonb then
+   execute format('select to_jsonb(jsonb_populate_record(null::public.%I,$1))',a->>'relation') into oldrow using oldrow;
+   execute format('select to_jsonb(jsonb_populate_record(null::public.%I,$1))',a->>'relation') into nextrow using nextrow;
+   if actual is not distinct from nextrow then continue;end if;
+   if actual is distinct from oldrow then raise exception 'Changed existing row in % at action %',a->>'relation',i;end if;
+   select string_agg(format('%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,a->>'relation',key),',') into cols from jsonb_each(nextrow) where value is distinct from oldrow->key;
+   execute format('update public.%I t set %s where to_jsonb(t) @> $2 returning to_jsonb(t)',a->>'relation',cols) into actual using nextrow,k;
+   insert into catalog_release_receipt values(i,a->>'relation',k,oldrow,actual);
+  elsif actual is not null then
+   if a->>'relation' in ('catalog_work_descriptions','catalog_edition_metadata') then
+    execute format('select to_jsonb(jsonb_populate_record(null::public.%I,$1))',a->>'relation') into nextrow using nextrow;
+    if actual is distinct from nextrow then raise exception 'Existing reviewed presentation differs; never overwrite';end if;
+   elsif not actual @> nextrow then raise exception 'Existing natural identity differs';end if;
+  else
+   if a->>'relation'='editions' and exists(select 1 from public.editions e where (nextrow->>'isbn_13' is not null and regexp_replace(coalesce(e.isbn_13,''),'[-[:space:]]','','g')=nextrow->>'isbn_13') or (nextrow->>'isbn_10' is not null and upper(regexp_replace(coalesce(e.isbn_10,''),'[-[:space:]]','','g'))=nextrow->>'isbn_10') or (nextrow->>'open_library_edition_id' is not null and e.open_library_edition_id=nextrow->>'open_library_edition_id')) then raise exception 'Global edition identity collision';end if;
+   select string_agg(format('%I',key),',' order by key),string_agg(format('(jsonb_populate_record(null::public.%I,$1)).%I',a->>'relation',key),',' order by key) into cols,vals from jsonb_each(nextrow);
+   execute format('insert into public.%I(%s) select %s returning to_jsonb(%I)',a->>'relation',cols,vals,a->>'relation') into actual using nextrow;
+   insert into catalog_release_receipt values(i,a->>'relation',k,null,actual);
+  end if;
+  if actual ? 'id' then ids:=jsonb_set(ids,array[a->>'ref'],actual->'id');end if;
+ end loop;
+ select count(*) into n from catalog_release_receipt;
+ if n not in (0,18) then raise exception 'Partial install/replay; expected zero or all actions, got %',n;end if;
+end;$release$;
+select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','batch','hebban-priority-fixtures-20261031','rows',coalesce(jsonb_agg(to_jsonb(r) order by seq),'[]')) as receipt from catalog_release_receipt r;
+commit;

@@ -1,0 +1,108 @@
+ARCHIVAL INITIAL INVENTORY REVIEW: current continuation in REVIEW-CONTINUATION.txt;
+authoritative bounded PR63 release/recovery in ../hebban-priority-20261031/RELEASE.txt.
+NEDERLANDSE BESCHIKBAARHEID — 31 OCTOBER 2026
+Afgebakende eerste batch; geen volledige inhoudelijke catalogusreparatieclaim.
+
+BASIS
+Remote main en actieve Ready productie zijn 13451a60e6f9399204aa625036942afa0b6c5380,
+dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr met alias lumisco.re. Read-only gecontroleerd.
+Eigen branch fix/nl-availability-catalogue-20261031. PR51/PR62/andere werkbomen
+ongewijzigd. Geen app/lib/CSS/score/taste/rankingwijziging en geen migratie.
+
+VOLLEDIGE INVENTARIS, NIET VOLLEDIG ONDERZOCHT
+10223 unieke Works, 10371 edities, 5700 publieke auteurs. Productie 16:53UTC.
+Alle Works/edities opgehaald in begrensde pagina's; volledige fingerprints voor
+en na identiek. De eerste te grote aggregatie gaf Transport closed; vervangen
+door begrensde openbare SELECTs, niet door alternatieve credentials.
+Snapshot, SQL, hashcontrole, daadwerkelijke productie-functiedefinities en alle
+10223 centrale registerregels zijn versieerbaar. Geen gebruikersrijen geëxporteerd.
+repair-register.jsonl is de actuele vervolgregistratie; eerdere onderzoeksregisters
+blijven historische referenties. Eerdere bronpogingen worden per identiteit
+behouden, niet opnieuw als afgerond onderzoek of productieherstel geteld.
+
+2758 Works met opgeslagen NL-editie; alle2758 selectorgeschikt. 2762 NL-edities,
+6399 EN-edities,1201 onbekende,9 overige. Geen opgeslagen NL-edities door huidige
+titel/lang-selectie afgewezen. Geen JS/SQL-keuzeverschillen over beide talen.
+ENgeschikt6377;6141Works alleenEN;1324geenNLofEN. Onbekend blijft onbekend;
+geen taal afleiden.
+80edities zonderISBN10/13;3ongeldigeISBN13;0lege titels;0verweesde edities;
+geen dubbele exact opgeslagen ISBN13. Mogelijke Work-dubbels blijven afzonderlijk.
+Formaat onbekend/zonder gecontroleerde opslag10190; dit betekent NIET10190audio-
+of ongeschikte boeken. Huidig beleid laat bekende ebook/print toe, onbekend krijgt
+geen nieuwe printcertificering. Geen stilzwijgende beleidsverzwaring/versoepeling.
+
+334 opgeslagen approved teksten:215NL/119EN,312unieke Works (PR61).
+Daarvan op huidige geschikte selectie effectief211NL/118EN, met auteur/taal/bron.
+Geen approved opgeslagen tekst bij2547NL/6259ENselecties; dit bewijst niet dat
+externe tekst ontbreekt. Legacy statische tekst wordt niet als nieuwe tekst geteld.
+Geselecteerde stored geverifieerde coverbindings89NL/6EN; daarnaast14NL/106EN
+legacybindings. Geen databasecount geldt als actuele succesvolle afbeeldingdecode.
+Historische2451transportchecks worden niet opnieuw gestart. Nieuwe/gewijzigde
+bindingen en specifieke zichtbare controles zijn apart bewijs.
+57van61collecties hebben ten minste één verborgen NL-kaart; alle IDs/slugs en
+tien campagne-lijsten met ontbrekende kaarten staan in inventory-summary.json.
+Dit is een omvangmeting, niet57bewezen codefouten of57afgeronde brononderzoeken.
+
+OORZAKEN / GEDEELDE KETEN
+De publiek gebruikte v3 browse/v2 zoekfunctie hebben precies de beoordeelde
+PR61bodyhashes. Taal/titelgeschiktheid vóór tellen/pagineren, vaste IDtie, geen
+samenvattingsvoorwaarde, strict NL/EN. Volledige JS/SQLkeuzevergelijking:0afwijking.
+Edition-rows laadt alle edities voor bekende IDs via200-ID/1000-rij-pagina's.
+Stored presentatie leest uitsluitend zichtbare Work/editionIDs (max200), sleutel
+locale+IDs,30s publiekcache, fouten verwijderd. Zoeken hydrateert alleen zichtbare
+gekozen edities; scores worden niet in deze identiteitscache opgenomen.
+Homepage/Discover/search/auteur delen deze loaders; collecties/tastetest/recs/detail
+delen strict-edition. Aanbevelingsranker/evidence en privégegevens blijven apart.
+Een onbekende taal, titelalias of Nederlandse beschrijving is geen NL-taalbewijs.
+Bekend historisch verschil dystopie:1NL+9Engelse fallbacks werd ten onrechte als
+10Nederlandse beschikbaarheid gelezen. PR61maakt dit expliciet strict; PR62vult
+ontbrekende edities aan. Geen gezamenlijke selectorbug aangetoond die duizenden
+taalcorrecties rechtvaardigt. Geen nieuwe concurrerende selector geïmplementeerd.
+Normale bronimport gebruikt conservativeCatalogPatch en bestaande DBreviewguards;
+ontbrekende/zwakkere brondata mag bestaande gecontroleerde velden niet overschrijven.
+
+EERSTE UITGEVOERDE TESTBATCH: HEBBAN12
+Afzonderlijk catalog/hebban-priority-20261031; productievoorstel exact17acties:
+2NLprintedities +3taalupdates (één titelopruiming in dezelfde editierij) +6cover-
+bindings +6oorspronkelijke NLteksten. Geen nieuwe productieWorks/auteurs.
+Netto+5NLbestaandeWorks:7->12 voor deze prioriteitsgroep. HarryPotterisdeel1,
+ISBN9789076174082; West-Friese editie en andere delen expliciet uitgesloten.
+Alle verwachte productievelden en Work/auteurbindings read-only opnieuw gelijk.
+TEST:18minimale openbare fixtureacties (6Works,4auteurs,8bestaande editiereplica's)
+en daarna de17correcties afzonderlijk gecommitteerd/teruggelezen. Correctiereplay0.
+TestIDs zijn geen productiegroei. Geen traits,ratings,accounts of collectieleden.
+Eerste fixturepoging42703 door echte test/prodschemaverschil(created_at); gehele
+transactie teruggedraaid,0gereserveerde records. Generator gecorrigeerd op actuele
+TESTkolommen; echte lokale schemaregressie toegevoegd; daarna18/17geslaagd.
+68ratings/68statussen/146collectieleden vóór/na identieke volledige fingerprints.
+
+HERSTEL EN RELEASEGRENZEN
+Lokale echte Postgres/PGlite: COMMIT18fixtures+COMMIT17correcties; replay0;
+12NLkeuzes/teksten, ENisolatie; herstel17dan18 via afzonderlijke eerste COMMIT-
+receipts; latere wijziging en FKafhankelijkheid weigeren; alle beginwaarden gelijk.
+Dit is lokaal bewijs, GEEN gecommitteerd Supabaseherstelbewijs. De bekende
+PR62bevestiging verviel; geen identieke retry of andere schrijfroute gebruikt.
+Hebbanhosted terugzetten blijft een aparte tijdig te bevestigen testactie na
+verse voorcontrole. Geen onvoorwaardelijk productiedata-releaseadvies zolang dat
+vereiste bewijs ontbreekt. Previewacceptatie wordt apart aangevuld.
+
+Na eventueel later akkoord: actuele main/deployment/project/hashes/volle before-
+waarden/duplicaatisbn10en13 en bestaande rechten checken; snapshots veilig bewaren;
+approved productie-dry-run; alleen17acties COMMIT en eerste receipt bewaren;
+teruglezen, behoud/12NLselecties; geen nieuwe DBinstallatie nodig. Code is identiek
+aan main, dus geen applicatiemerge nodig voor data-effect. Nooit testPreview
+promoten. Alleen indien nodig relevante publieke caches na30s controleren.
+Rollback production-rollback.sql met exacte eerste COMMITreceipt; alleen eigen
+rijen, volledige CAS en ALLE inkomende FKs. Latere drift/deps stopt ALLES. Geen
+Workmerge, gebruikerwrite, sequentiereset of verwijderen van oude goede edities.
+
+VERVOLG / GEEN DUBBELTELING
+Vaste29oktoberreferentie2649NL blijft onveranderd. Actueel+109;5000doel niet
+bereikt. PR62netto+10 en Hebbannet+5 zijn disjunct; nog NIET productie. Hypothetisch
+2773na beide goedgekeurde imports is geen actuele dekking. 6nieuwe samenvattingen
+zijn geen6extra NLWorks. DeZevenZussen Work1435/8476 mogelijke dubbeling blijft
+afzonderlijk, geen automatische samenvoeging of verplaatsing van gebruikersdata.
+De1900bronarme dossiers/22geblokkeerde pilotdossiers blijven open met bestaande
+bronnen/redenen. Niet onderzochte uitgevers of onbewezen coveridentiteit zijn
+geen afgeronde uitzonderingen. Verdere batches uit centraal register: publiek
+zichtbare collecties/lijsten, herstelbare bestaande NL-edities, dan uitbreidingen.

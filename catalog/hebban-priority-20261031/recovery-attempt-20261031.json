@@ -1,0 +1,122 @@
+{
+  "submittedAt": {
+    "current_time": "2026-10-31 18:22:41 UTC"
+  },
+  "observedAt": {
+    "current_time": "2026-10-31 18:38:57 UTC"
+  },
+  "tool": "mcp__codex_apps__supabase_execute_sql",
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "scope": "Only17ownPR63cataloguecorrections; no Work/author/alias/ratings/account/status deletes",
+  "before": {
+    "at": "2026-10-31T18:22:31.611414+00:00",
+    "rows": 17,
+    "drift": [],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "matching": 17,
+    "incoming_foreign_keys": [
+      {
+        "name": "eligible_inventory_v1_edition_id_fkey",
+        "child": "taste_private.eligible_inventory_v1",
+        "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id)"
+      },
+      {
+        "name": "catalog_edition_metadata_edition_id_fkey",
+        "child": "catalog_edition_metadata",
+        "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id) ON DELETE RESTRICT"
+      }
+    ],
+    "inventory_dependencies": 0,
+    "unmanifested_metadata_dependencies": 0
+  },
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"status\":\"expired\",\"message\":\"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation.\"}"
+      }
+    ],
+    "structuredContent": {
+      "status": "expired",
+      "message": "This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation.",
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "isError": true
+  },
+  "after": {
+    "at": "2026-10-31T18:38:57.306251+00:00",
+    "rows": 17,
+    "drift": [],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "matching": 17,
+    "incoming_foreign_keys": [
+      {
+        "name": "eligible_inventory_v1_edition_id_fkey",
+        "child": "taste_private.eligible_inventory_v1",
+        "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id)"
+      },
+      {
+        "name": "catalog_edition_metadata_edition_id_fkey",
+        "child": "catalog_edition_metadata",
+        "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id) ON DELETE RESTRICT"
+      }
+    ],
+    "inventory_dependencies": 0,
+    "unmanifested_metadata_dependencies": 0
+  },
+  "protectedBefore": {
+    "works": {
+      "hash": "007f4a6fb013599d94e66f0dacd8eae0",
+      "count": 803
+    },
+    "status": {
+      "hash": "142604f9c7bf2392f42b43baab3f5d5a",
+      "count": 68
+    },
+    "aliases": {
+      "hash": "b46548d3b6208542ec2f609d44a4cd19",
+      "count": 2
+    },
+    "authors": {
+      "hash": "ee5c50f5766afc1e3ae8b7026c41209b",
+      "count": 266
+    },
+    "ratings": {
+      "hash": "0145fd2fc1c99994d34fd6ea0f3a1260",
+      "count": 68
+    },
+    "collection_links": {
+      "hash": "a4ff49e6d442dec5cfb6947182c4531c",
+      "count": 146
+    }
+  },
+  "protectedAfter": {
+    "works": {
+      "hash": "007f4a6fb013599d94e66f0dacd8eae0",
+      "count": 803
+    },
+    "status": {
+      "hash": "142604f9c7bf2392f42b43baab3f5d5a",
+      "count": 68
+    },
+    "aliases": {
+      "hash": "b46548d3b6208542ec2f609d44a4cd19",
+      "count": 2
+    },
+    "authors": {
+      "hash": "ee5c50f5766afc1e3ae8b7026c41209b",
+      "count": 266
+    },
+    "ratings": {
+      "hash": "0145fd2fc1c99994d34fd6ea0f3a1260",
+      "count": 68
+    },
+    "collection_links": {
+      "hash": "a4ff49e6d442dec5cfb6947182c4531c",
+      "count": 146
+    }
+  },
+  "retried": false,
+  "alternateRoute": false,
+  "committedRecoveryProven": false
+}

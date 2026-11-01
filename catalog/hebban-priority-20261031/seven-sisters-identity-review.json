@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-31T18:41:18.563395Z",
+  "production": "qvplwejffhjvxaypmjut — READ ONLY",
+  "dutch": {"workId":1435,"authorId":758,"author":"Lucinda Riley","sourceWork":"OL34536006W","editionId":1499,"isbn13":"9789401609371","sourceEdition":"OL46848848M","title":"De zeven zussen","storedLanguage":null,"proposedLanguage":"nld","storedFirstPublishYear":2018},
+  "english": {"workId":8476,"authorId":758,"author":"Lucinda Riley","sourceWork":"OL20779796W","editionId":8635,"isbn13":"9781501108877","sourceEdition":"OL28801278M","title":"The Seven Sisters","storedLanguage":"eng","storedFirstPublishYear":2014},
+  "sources":[
+    {"url":"https://metadata.isbn.nl/984567/de-zeven-zussen.html","evidence":"Exact Dutch paperback ISBN, title, author and Dutch language; previously saved HTTP200 source remains valid.","saved":"sources/zeven-zussen.json"},
+    {"url":"https://www.bibliotheek.nl/catalogus/titel.434916706.html/maia-s-verhaal/","evidence":"Exact 9789401609371 edition; translation of The seven sisters, Macmillan2014, Maia's story; first Dutch edition2017.","access":"Indexed bibliographic record; direct fetch cache miss, not claimed fresh HTTP200"},
+    {"url":"https://www.panmacmillan.com/authors/lucinda-riley/the-seven-sisters/9781447219101","evidence":"Official2014 original-title first novel about Maia; corroborates content/title identity, NOT a cover/ISBN verification for Atria9781501108877."}
+  ],
+  "decision":"Add one source-bound original-title alias to existing Dutch Work1435; do not create, merge, relink or delete Works/editions.",
+  "possibleDuplicate":{"state":"strong same-content indication, separate adjudication required","sameAuthorAuthority":true,"differentSourceWorkIds":true,"existingDependencies":{"1435":{"ratings":0,"statuses":0,"collectionLinks":0,"descriptions":0,"traitEvidence":0},"8476":{"ratings":0,"statuses":0,"collectionLinks":0,"descriptions":0,"traitEvidence":1}},"notProven":"Complete merge-dependency and all-source identity adjudication; exact Atria edition's original publisher fetch unavailable.","action":"No merge. Preserve English Work8476 and its trait evidence. Review the2018-versus2014Workyear separately; no year mutation in PR63."},
+  "test":{"workId":962100006,"editionId":962200008,"authorId":945300758,"newAlias":"The Seven Sisters","newWorks":0,"aliasChanges":1,"replayChanges":0,"browserProof":"seven-sisters-title-browser-proof.json"},
+  "scope":"Separate1alias supplement; original17core production actions and hashes remain unchanged. Net extra NLWorks remains5, not6. No production action executed."
+}
