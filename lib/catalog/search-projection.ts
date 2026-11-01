@@ -6,7 +6,7 @@ import { collectCatalogSearchAliases } from '../books/catalog-search.ts';
  * Keep JS relevance and en/base collation: SQL collation can differ at ties. */
 export function readSearchProjection(data: unknown, query: string): Pick<PublicSearchSelection, 'books' | 'aliases' | 'projected'> {
   const body = data as { contract?: string; candidates?: unknown[] } | null;
-  if (body?.contract !== 'strict-spine-v1' || !Array.isArray(body.candidates) || body.candidates.length > 10000) {
+  if (body?.contract !== 'strict-spine-v2' || !Array.isArray(body.candidates) || body.candidates.length > 10000) {
     throw new Error('Invalid public search projection');
   }
   const books: Book[] = [], titles: { workId: string; title: string }[] = [], seen = new Set<string>();

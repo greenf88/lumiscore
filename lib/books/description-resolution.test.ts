@@ -16,6 +16,8 @@ const jsonResponse = (body: unknown, status = 200) =>
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+const EN_COPY = 'A young reader discovers that the story of her family is not what she expected. With the help of a friend, she follows the clues through the city while the people around her try to keep their secrets. She must decide who she can trust and what the truth will mean for her future.';
+const NL_COPY = 'Een jonge lezer ontdekt dat het verhaal van haar familie anders is dan zij dacht. Met de hulp van een vriend volgt zij de aanwijzingen door de stad, terwijl de mensen om haar heen hun geheimen proberen te bewaren. Zij moet beslissen wie zij kan vertrouwen en wat de waarheid voor haar toekomst betekent.';
 
 test('normalizes Open Library string and object descriptions without keeping HTML', () => {
   assert.equal(
@@ -23,6 +25,17 @@ test('normalizes Open Library string and object descriptions without keeping HTM
     'First paragraph.\n\nSecond paragraph.',
   );
   assert.equal(normalizeBookDescription(' Plain text. '), 'Plain text.');
+});
+
+test('bibliographic containment links are not synopses, but surrounding story facts are preserved', () => {
+  for (const value of [
+    'Also contained in:\n\n- [Collected Novellas](https://openlibrary.org/works/OL274508W)',
+    { value: 'Included in: [Collected stories](https://example.org/collection)' },
+    'Ook opgenomen in:\n* [Verhalen](https://example.org/bundel)\n* [Alle verhalen](https://example.org/alles)',
+  ]) assert.equal(normalizeBookDescription(value), null);
+  const synopsis = 'A witness returns to investigate a murder. Also contained in: [Collected Novellas](https://example.org/collection)';
+  assert.equal(normalizeBookDescription(synopsis), synopsis);
+  assert.equal(normalizeBookDescription('A collection of linked stories follows a family through three generations.'), 'A collection of linked stories follows a family through three generations.');
 });
 
 test('removes unsafe and layout-breaking markup while retaining all readable text', () => {
@@ -88,7 +101,7 @@ test('accepts a Google Books description only for an exact valid ISBN-13', async
               industryIdentifiers: [
                 { type: 'ISBN_13', identifier: '9780441172719' },
               ],
-              description: '<p>Verified Google description.</p>',
+              description: `<p>${EN_COPY}</p>`,
             },
           },
         ],
@@ -98,7 +111,20 @@ test('accepts a Google Books description only for an exact valid ISBN-13', async
   assert.equal(resolution.state, 'resolved');
   assert.equal(resolution.description?.source, 'google_books');
   assert.equal(resolution.description?.sourceKey, '9780441172719');
-  assert.equal(resolution.description?.text, 'Verified Google description.');
+  assert.equal(resolution.description?.text, EN_COPY);
+});
+
+test('an exact ISBN with a contradictory title or author cannot supply another book description',async()=>{
+ const lookup={isbn13:'9780441172719',editionTitle:'Dune',author:'Frank Herbert',editionLanguage:'eng',locale:'en' as const};
+ const response=(title:string,authors:string[])=>async()=>jsonResponse({items:[{volumeInfo:{title,authors,language:'en',industryIdentifiers:[{type:'ISBN_13',identifier:lookup.isbn13}],description:EN_COPY}}]});
+ clearBookDescriptionCacheForTests();
+ assert.equal((await resolveBookDescription(lookup,response('Other book',['Frank Herbert']))).description,null);
+ clearBookDescriptionCacheForTests();
+ assert.equal((await resolveBookDescription(lookup,response('Dune',['Other author']))).description,null);
+ clearBookDescriptionCacheForTests();
+ assert.equal((await resolveBookDescription(lookup,response('Dune',['Frank Herbert']))).state,'resolved');
+ // A previous successful ISBN cache must not override a changed binding.
+ assert.equal((await resolveBookDescription({...lookup,author:'Other author'},response('Dune',['Frank Herbert']))).description,null);
 });
 
 test('ignores unlabelled Work copy and uses an exact language-labelled Google ISBN', async () => {
@@ -119,7 +145,7 @@ test('ignores unlabelled Work copy and uses an exact language-labelled Google IS
               industryIdentifiers: [
                 { type: 'ISBN_13', identifier: '9780441172719' },
               ],
-              description: 'Exact fallback description.',
+              description: EN_COPY,
             },
           },
         ],
@@ -129,7 +155,7 @@ test('ignores unlabelled Work copy and uses an exact language-labelled Google IS
 
   assert.equal(calls, 1);
   assert.equal(resolution.description?.source, 'google_books');
-  assert.equal(resolution.description?.text, 'Exact fallback description.');
+  assert.equal(resolution.description?.text, EN_COPY);
 });
 
 test('rejects Google Books descriptions when the exact ISBN-13 is absent', async () => {
@@ -228,7 +254,7 @@ test('Dutch exact-ISBN description beats an English edition description in NL mo
           volumeInfo: {
             language: 'nl',
             industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789048854943' }],
-            description: 'Exacte Nederlandse beschrijving.',
+            description: NL_COPY,
           },
         }],
       });
@@ -237,7 +263,7 @@ test('Dutch exact-ISBN description beats an English edition description in NL mo
 
   assert.equal(resolution.description?.source, 'google_books');
   assert.equal(resolution.description?.language, 'nl');
-  assert.equal(resolution.description?.text, 'Exacte Nederlandse beschrijving.');
+  assert.equal(resolution.description?.text, NL_COPY);
   assert.equal(requestedUrls.length, 2);
 });
 
@@ -258,7 +284,7 @@ test('English exact-ISBN description beats Dutch copy in EN mode', async () => {
           volumeInfo: {
             language: 'en',
             industryIdentifiers: [{ type: 'ISBN_13', identifier: '9780441172719' }],
-            description: 'English description.',
+            description: EN_COPY,
           },
         },
       ],
@@ -266,7 +292,7 @@ test('English exact-ISBN description beats Dutch copy in EN mode', async () => {
   );
 
   assert.equal(resolution.description?.language, 'en');
-  assert.equal(resolution.description?.text, 'English description.');
+  assert.equal(resolution.description?.text, EN_COPY);
 });
 
 test('wrong-language exact ISBN is not displayed and an edition cannot leak across works', async () => {
@@ -302,6 +328,27 @@ test('wrong-language exact ISBN is not displayed and an edition cannot leak acro
       : jsonResponse({}),
   );
   assert.equal(crossWork.description, null);
+});
+
+test('a Dutch edition label is not evidence that its source synopsis is Dutch', async () => {
+  for (const provider of ['open_library', 'google_books']) {
+    clearBookDescriptionCacheForTests();
+    const out = await resolveBookDescription({openLibraryWorkId:'OL42W',openLibraryEditionId:'OL42M',isbn13:'9789048854943',editionLanguage:'nld',locale:'nl'}, async input => {
+      if (String(input).includes('/books/')) return jsonResponse({works:[{key:'/works/OL42W'}],languages:[{key:'/languages/dut'}],description:provider==='open_library'?EN_COPY:null});
+      return jsonResponse({items:[{volumeInfo:{language:'nl',industryIdentifiers:[{type:'ISBN_13',identifier:'9789048854943'}],description:provider==='google_books'?EN_COPY:null}}]});
+    });
+    assert.equal(out.description,null);
+  }
+});
+
+test('uncertain source copy is reconsidered after five minutes, not retained as twelve-hour absence', async t => {
+  clearBookDescriptionCacheForTests();let now=1_000,calls=0;
+  t.mock.method(Date,'now',()=>now);
+  const fetcher=async()=>{calls++;return jsonResponse({items:[{volumeInfo:{language:'nl',industryIdentifiers:[{type:'ISBN_13',identifier:'9789048854943'}],description:calls===1?EN_COPY:NL_COPY}}]});};
+  const lookup={isbn13:'9789048854943',editionLanguage:'nld',locale:'nl' as const};
+  assert.equal((await resolveBookDescription(lookup,fetcher)).description,null);
+  now+=299_000;assert.equal((await resolveBookDescription(lookup,fetcher)).description,null);assert.equal(calls,1);
+  now+=1_001;assert.equal((await resolveBookDescription(lookup,fetcher)).description?.language,'nl');assert.equal(calls,2);
 });
 
 test('an English-only international edition cannot turn a Dutch route into English copy', async () => {
@@ -341,7 +388,7 @@ test('a bounded alternate edition ISBN of the same stored Work can supply the de
             language: 'nl',
             industryIdentifiers: [{ type: 'ISBN_13', identifier: isbn }],
             description: isbn === '9789044933192'
-              ? 'Nederlandse beschrijving van een andere geverifieerde editie.'
+              ? NL_COPY
               : undefined,
           },
         }],
@@ -353,7 +400,7 @@ test('a bounded alternate edition ISBN of the same stored Work can supply the de
   assert.equal(resolution.description?.language, 'nl');
   assert.equal(
     resolution.description?.text,
-    'Nederlandse beschrijving van een andere geverifieerde editie.',
+    NL_COPY,
   );
 });
 
@@ -362,7 +409,7 @@ test('deduplicates and caches repeated source requests in the server process', a
   let calls = 0;
   const fetchImplementation = async () => {
     calls += 1;
-    return jsonResponse({works:[{key:'/works/OL42W'}],languages:[{key:'/languages/eng'}],description: 'Cached description.' });
+    return jsonResponse({works:[{key:'/works/OL42W'}],languages:[{key:'/languages/eng'}],description: EN_COPY });
   };
 
   const lookup = { openLibraryWorkId: 'OL42W',openLibraryEditionId:'OL42M',editionLanguage:'eng', isbn13: null };
@@ -372,9 +419,9 @@ test('deduplicates and caches repeated source requests in the server process', a
   ]);
   const third = await resolveBookDescription(lookup, fetchImplementation);
 
-  assert.equal(first.description?.text, 'Cached description.');
-  assert.equal(second.description?.text, 'Cached description.');
-  assert.equal(third.description?.text, 'Cached description.');
+  assert.equal(first.description?.text, EN_COPY);
+  assert.equal(second.description?.text, EN_COPY);
+  assert.equal(third.description?.text, EN_COPY);
   assert.equal(calls, 1);
 });
 
@@ -387,7 +434,7 @@ test('temporary source failures expire instead of becoming permanent missing res
     calls += 1;
     return calls <= 3
       ? jsonResponse({ error: 'temporary upstream failure' }, 503)
-      : jsonResponse({works:[{key:'/works/OL4242W'}],languages:[{key:'/languages/eng'}], description: 'Recovered exact Work description.' });
+      : jsonResponse({works:[{key:'/works/OL4242W'}],languages:[{key:'/languages/eng'}], description: EN_COPY });
   };
   const lookup = { openLibraryWorkId: 'OL4242W',openLibraryEditionId:'OL4242M',editionLanguage:'eng', isbn13: null };
 
@@ -400,7 +447,7 @@ test('temporary source failures expire instead of becoming permanent missing res
   now += 2 * 60 * 1_000 + 1;
   const recovered = await resolveBookDescription(lookup, fetchImplementation);
   assert.equal(recovered.state, 'resolved');
-  assert.equal(recovered.description?.text, 'Recovered exact Work description.');
+  assert.equal(recovered.description?.text, EN_COPY);
   assert.equal(calls, 4);
 });
 
@@ -430,7 +477,6 @@ test('book detail receives server copy without a robots-blocked hydration reques
   assert.match(component, /publicDescriptionSource/);
   assert.match(component, /geverifieerde Nederlandse beschrijving/);
   assert.match(route, /isLocale\(requestedLocale\)/);
-  assert.match(route, /loadCatalogBook\(workId, locale\)/);
-  assert.match(route, /openLibraryEditionId: book\.openLibraryEditionId/);
-  assert.match(route, /editionLanguage: book\.editionLanguage/);
+  assert.match(route, /loadCatalogBook\(workId, locale, false, \{skipExternalCovers:true\}\)/);
+  assert.match(route, /loadPublicBookDescriptionState\(book,locale\)/);
 });

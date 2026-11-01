@@ -19,6 +19,7 @@ for(const row of changes){
     for(const ids of [{workId:book.workId,editionId:book.editionId},{workId:String(row.workId),editionId:String(productionEditionIds[row.workId])}]){
       for(const locale of ['en','nl'] as const){
         const result=await loadPublicBookDescriptionState({...book,...ids,englishEditionFallback:locale==='nl'},locale,unavailable);
+        if(locale==='nl'){assert.equal(result.description,null);continue;}
         assert.equal(result.state,'resolved');assert.equal(result.description?.language,'en');
         assert.ok(result.description!.text.length>50);assert.equal(result.description?.sourceKey,row.isbn13);
         const source=publicDescriptionSource(result.description!);assert.ok(source?.href.startsWith('https://'));
@@ -28,7 +29,7 @@ for(const row of changes){
       }
     }
     assert.equal(calls,0,'reviewed source requires no runtime provider requests, even during quota failures');
-    assert.equal((await loadPublicBookDescriptionState(book,'nl',unavailable)).description,null,'EN text still needs explicit NL English-edition fallback');
+    assert.equal((await loadPublicBookDescriptionState(book,'nl',unavailable)).description,null,'English never substitutes for Dutch description');
     assert.equal((await loadPublicBookDescriptionState({...book,editionAvailable:false},'en',unavailable)).description,null);
   });
   test(`description ${row.workId}: wrong edition, ISBN, Work, author, title and language cannot borrow reviewed text`,()=>{

@@ -1,0 +1,20 @@
+{
+  "checkedAt":"2026-10-31",
+  "method":"Individually reviewed public indexed source metadata, plus retained exact-ISBN source records. Facts only; no copied narrative or source credentials.",
+  "facts":[
+    {"workId":1064,"url":"https://www.deslegte.com/een-vlucht-regenwulpen-114959/","isbn":"9789029518215","language":"nl","format":"paperback","author":"Maarten 't Hart","title":"Een vlucht regenwulpen","pages":197},
+    {"workId":1087,"url":"https://www.bol.com/nl/nl/f/schaduwzuster/9200000079749721/","isbn":"9789041420343","language":"nl","format":"paperback","author":"Simone van der Vlugt","title":"Schaduwzuster","pages":340,"coverFinding":"Light blue heart pendant, matches inspected exact-OL image"},
+    {"workId":1096,"url":"https://www.bol.com/nl/nl/p/macht-van-meneer-miller/1001004002521463/","isbn":"9789044507881","language":"nl","format":"hardcover","author":"Charles den Tex","title":"De macht van meneer Miller","pages":349},
+    {"workId":1127,"url":"https://www.bol.com/nl/nl/p/paniek/1001004000112307/","isbn":"9789064940019","language":"nl","format":"hardcover","author":"Carry Slee","title":"Paniek","pages":159,"publicationDate":"2001-05-19"},
+    {"workId":1331,"url":"https://www.allbookstores.com/The-Lady-Lake-Andrzej-Sapkowski/9781357100117","isbn":"9781357100117","publisher":"Palala Press","publicationYear":2016,"authorConflict":["Sir Walter Scott","Florus A Barbour","Andrzej Sapkowski"],"decision":"Conflicting author aggregation; not reliable Sapkowski identity. No import."},
+    {"workId":1331,"url":"https://www.zvab.com/buch-suchen/autor/walter-scott-florus-a-barbour/","isbn":"9781357100117","authors":["Walter Scott","Florus A Barbour"],"decision":"Corroborates wrong English edition identity; retained OL parent alone insufficient"}
+  ],
+  "replacementPrintGlobalIsbnPreflight":{
+    "project":"qvplwejffhjvxaypmjut",
+    "checkedAt":"2026-10-31T20:48:00Z",
+    "method":"Existing authorized Supabase connector, read-only exact normalized ISBN13 and ISBN10 equivalents in all public.editions",
+    "candidates":[{"workId":1013,"isbn13":"9789403131252","isbn10":"940313125X"},{"workId":1014,"isbn13":"9789403187716","isbn10":"9403187719"}],
+    "matches":[],
+    "writes":0
+  }
+}

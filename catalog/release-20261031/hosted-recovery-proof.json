@@ -1,0 +1,67 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "productionWrites": 0,
+  "engine": "scripts/catalog-release-sql.mjs",
+  "firstImport": "COMMIT; two own explicitly synthetic public catalogue rows",
+  "freshReadbackAtUtc": "2026-10-31 12:44:30.889591",
+  "committedRowsReadBack": [
+    {
+      "relation": "works",
+      "id": 959100031
+    },
+    {
+      "relation": "editions",
+      "id": 959200031
+    }
+  ],
+  "replayChanges": 0,
+  "laterEditAttempt": {
+    "status": "expired",
+    "message": "This confirmation expired after 2 minutes. Call execute_sql again to get a new confirmation.",
+    "functionalProof": false
+  },
+  "laterDependencyAttempt": {
+    "status": "refused_by_database_guard",
+    "error": "Failed to run sql query: ERROR: P0001: Later dependency in public.editions; recovery refused",
+    "ownDependencyEdition": 959200032,
+    "subsequentlyCasRemoved": true
+  },
+  "finalUndoAttempt": {
+    "status": "declined",
+    "message": "SQL execution was declined.",
+    "committedUndoProved": false
+  },
+  "renewedHumanAuthorizedAttempt": {
+    "date": "2026-10-31",
+    "tool": "mcp__codex_apps__supabase_execute_sql",
+    "status": "expired",
+    "message": "This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation.",
+    "committedUndoProved": false,
+    "details": "recovery-renewal-20261031.json"
+  },
+  "lastReadbackAtUtc": "2026-10-31T14:16:00.92651+00:00",
+  "ownRowsStillPresent": [],
+  "testCounts": {
+    "works": 797,
+    "editions": 1052,
+    "priorWorks": 797,
+    "priorEditions": 1052
+  },
+  "noUnapprovedIdenticalRetryOrAlternativeRouteAfterDecline": true,
+  "limitation": "Earlier declines/expiry are retained above as historical outcomes, not the final state. The one new readiness-coordinated request succeeded. Hosted COMMIT undo proves only the two own canary rows using the same renderer. Earlier full dry-run plus ROLLBACK and full local 686-action COMMIT undo remain distinct proof. No account/rating/progress DML used.",
+  "readinessCoordinatedAttempt": {
+    "date": "2026-10-31",
+    "tool": "mcp__codex_apps__supabase_execute_sql",
+    "status": "committed_and_independently_read_back",
+    "committedUndoProved": true,
+    "details": "recovery-committed-20261031.json",
+    "onlyRemoved": {
+      "work": 959100031,
+      "edition": 959200031
+    },
+    "preservedTableFingerprints": 16,
+    "unchangedPublicSequences": 4
+  },
+  "committedUndoProved": true,
+  "noUncoordinatedRetryAfterRenewedConfirmationExpiry": true
+}

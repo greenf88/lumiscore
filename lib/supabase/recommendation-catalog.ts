@@ -24,7 +24,8 @@ export type RecommendationCatalog = {
 export const RECOMMENDATION_CATALOG_SELECT = [
   'id', 'title', 'first_publish_year', 'open_library_id', 'source_type',
   'work_type', 'author_id', 'cover_id', 'authors(id,name)',
-  'editions(id,work_id,title,open_library_edition_id,isbn_13,language,publisher)',
+  // Complete editions are loaded once below via the shared, paged reader.
+  // A second nested edition copy wastes payload and may be REST-truncated.
 ].join(',');
 
 export async function loadRecommendationCatalog(

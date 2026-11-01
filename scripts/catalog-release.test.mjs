@@ -1,0 +1,36 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {PGlite} from '@electric-sql/pglite';
+import {renderImport,renderRollback} from './catalog-release-sql.mjs';
+const root=new URL('../catalog/release-20261031/',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL(n,root)));
+const plan=read('release-plan.json'),before=read('production-readback.json');
+async function fixture(){const db=new PGlite();await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
+ create sequence authors_seq start 100000;create sequence works_seq start 200000;create sequence editions_seq start 300000;
+ create table authors(id bigint primary key default nextval('authors_seq'),open_library_id text unique,name text,created_at timestamptz default now());
+ create table works(id bigint primary key default nextval('works_seq'),open_library_id text unique,title text,subtitle text,author_id bigint references authors,first_publish_year int,cover_id bigint,subjects text[],created_at timestamptz default now(),source_type text,work_type text,native_identity_key text unique);
+ create table editions(id bigint primary key default nextval('editions_seq'),work_id bigint references works,open_library_edition_id text unique,isbn_10 text,isbn_13 text,language text,publisher text,created_at timestamptz default now(),title text);
+ create table synthetic_ratings(work_id bigint references works,score integer);create table synthetic_progress(work_id bigint references works,status text);`);
+ for(const t of ['authors','works','editions'])await db.query(`insert into ${t} select * from jsonb_populate_recordset(null::${t},$1)`,[JSON.stringify(before[t])]);
+ for(const f of ['20261030063949_nl_pilot_reviewed_presentation.sql','20261030120602_catalog_integrity_presentation_guards.sql'])await db.exec(fs.readFileSync(new URL('../supabase/migrations/'+f,import.meta.url),'utf8'));
+ await db.exec("insert into synthetic_ratings values(8,9);insert into synthetic_progress values(8,'read')");return db;}
+test('consolidated release: committed import, replay, later edit/dependency refusal and committed receipt undo',async()=>{const db=await fixture();try{
+ const originals={};for(const t of ['authors','works','editions'])originals[t]=(await db.query(`select * from ${t} order by id`)).rows;
+ const receipt=(await db.exec(renderImport(plan))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;
+ assert.equal(receipt.rows.length,686);
+ const replay=(await db.exec(renderImport(plan))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;assert.equal(replay.rows.length,0);
+ assert.equal((await db.query('select count(*)::int n from catalog_work_descriptions')).rows[0].n,334);
+ assert.equal((await db.query('select count(*)::int n from catalog_edition_metadata')).rows[0].n,210);
+ const useReceipt=()=>db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);
+ await useReceipt();await db.exec("update catalog_work_descriptions set text=text||' Later legitimate review.' where work_id=8 and language='nl'");
+ await assert.rejects(db.exec(renderRollback(plan)),/Later legitimate change/);await db.exec('rollback');
+ const d=receipt.rows.find(r=>r.relation==='catalog_work_descriptions'&&r.key.work_id===8&&r.key.language==='nl');await db.query('update catalog_work_descriptions set text=$1 where work_id=8 and language=\'nl\'',[d.after_row.text]);
+ const newWork=receipt.rows.find(r=>r.relation==='works'&&r.before_row===null).after_row.id;
+ await db.query('insert into synthetic_ratings values($1,7)',[newWork]);await assert.rejects(db.exec(renderRollback(plan)),/Later dependency/);await db.exec('rollback');
+ await db.query('delete from synthetic_ratings where work_id=$1',[newWork]);
+ await db.exec(renderRollback(plan));await db.exec(renderRollback(plan));
+ for(const t of ['authors','works','editions'])assert.deepEqual((await db.query(`select * from ${t} order by id`)).rows,originals[t]);
+ assert.deepEqual((await db.query('select * from synthetic_ratings')).rows,[{work_id:8,score:9}]);assert.deepEqual((await db.query('select * from synthetic_progress')).rows,[{work_id:8,status:'read'}]);
+ fs.writeFileSync(new URL('consolidated-local-proof.json',root),JSON.stringify({environment:'Local PGlite; fresh public production preflight plus synthetic private stand-ins only',actions:686,descriptions:334,metadata:210,replayChanges:0,committedUndo:true,repeatUndo:true,laterEditRefused:true,laterDependencyRefused:true,existingRowsPreserved:true,syntheticScoresAndProgressPreserved:true,productionWrites:0},null,2)+'\n');
+ }finally{await db.close();}});
+test('bounded package accounting: 334 of335TESTtexts, 110 newly NL available minus one confirmed English correction',()=>{assert.equal(plan.summary.texts.nl,215);assert.equal(plan.summary.texts.en,119);assert.equal(plan.summary.texts.uniqueWorks,312);assert.equal(plan.summary.nlAvailability.added,110);assert.equal(plan.summary.nlAvailability.removed,1);assert.equal(plan.summary.nlAvailability.net,109);assert(!plan.actions.some(a=>a.relation==='catalog_work_descriptions'&&[1204,1305].includes(a.after.work_id)));});

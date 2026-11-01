@@ -1,5 +1,6 @@
 import type { VerifiedBookDescription } from '@/app/data/books';
 import { reviewedDescriptionSource } from './reviewed-descriptions.ts';
+import { safePublicSource } from './stored-presentation.ts';
 
 const NAMED_ENTITIES: Readonly<Record<string, string>> = {
   amp: '&',
@@ -62,7 +63,20 @@ export function normalizeBookDescription(value: unknown): string | null {
     .map((paragraph) => paragraph.replace(/[\t ]+/g, ' ').replace(/\s*\n\s*/g, ' ').trim())
     .filter(Boolean);
 
-  return paragraphs.length > 0 ? paragraphs.join('\n\n') : null;
+  const text=paragraphs.join('\n\n');
+  // Some exact edition feeds put pagination and reading levels in the
+  // description field. Reject only a complete bibliographic stub: genuine
+  // prose may mention pages, an edition or a reading level and must survive.
+  if (/^(?:[ivxlcdm]+[,.]?\s*)?(?:\d+\s*(?:pages?|p\.|pagina['’]?s?|blz\.)|1\s+v\.\s*\(unpaged\))\s*(?::\s*(?:(?:col\.|color|colour)\s*)?ill(?:ustrations)?\.?\s*(?:,\s*map)?\s*)?(?:;\s*\d+(?:\s*x\s*\d+)?\s*cm\.?)?\s*(?:(?:[A-Z]{0,2}\d+L?)\s*Lexile[.;]?\s*)*(?:;?\s*Ages?\s+\d+\s+and\s+up\.?)?[.\s]*$/iu.test(text)) return null;
+  if (paragraphs.length>1&&paragraphs.every(p=>/^(?:(?:first|second|third|fourth|fifth)\s+(?:United States\s+)?(?:edition|printing)|includes bibliographical references and index|published\s+[A-Za-z]+\s+\d{1,2},\s+\d{4}|reprinted\s+(?:\d+|one|two|three|four|five)\s+times|(?:first|second|third|fourth|fifth)\s+printing,\s+[A-Za-z]+\s+\d{4})\.?$/iu.test(p))) return null;
+  // A containment link is bibliography, not a synopsis. Keep genuine prose
+  // that happens to mention an anthology; reject only the complete link stub.
+  if (/^(?:(?:also\s+)?(?:contained|included|collected)\s+in|(?:ook\s+)?opgenomen\s+in)\s*:\s*(?:(?:[-*]\s*)?\[[^\]\r\n]+\]\(https?:\/\/[^)\s]+\)\s*)+$/iu.test(text)) return null;
+  // Transport/error documents and empty boilerplate are not book summaries.
+  if(!text||/^(?:(?:error\s*)?(?:403|404|429|500|502|503|504)\b|access denied\b|too many requests\b|service unavailable\b|internal server error\b|captcha\b|just a moment\b)/i.test(text)
+    ||/^(?:no (?:book )?description(?: available| found)?|description (?:not available|unavailable|missing)|geen (?:boek)?beschrijving(?: beschikbaar| gevonden)?|samenvatting (?:ontbreekt|niet beschikbaar)|n\/?a|not available|unknown)[.!\s]*$/i.test(text)
+    ||/^(?:\d+(?:e|ste|de|st|nd|rd|th)?\s*(?:dr(?:uk)?|ed(?:ition)?)\.?\s*:?\s*\d{4}[.!\s]*|(?:first|originally) published(?: in)?\s+\d{4}[.!\s]*)$/i.test(text))return null;
+  return text;
 }
 
 export function normalizeVerifiedBookDescription(
@@ -84,14 +98,16 @@ export function normalizeVerifiedBookDescription(
   if (
     !text ||
     (source !== 'open_library' && source !== 'google_books' &&
-      !((source === 'official_publisher' || source === 'official_catalog') && reviewedDescriptionSource(sourceKey, source))) ||
+      !((source === 'official_publisher' || source === 'official_catalog') && (reviewedDescriptionSource(sourceKey, source) ||
+        safePublicSource(candidate.sourceUrl)&&candidate.sourceUrl===sourceKey&&typeof candidate.sourceName==='string'&&candidate.sourceName.length<=120))) ||
     !sourceKey ||
     !verifiedAt
   ) {
     return null;
   }
 
-  return { text, source, sourceKey, verifiedAt, language };
+  return { text, source, sourceKey, verifiedAt, language,
+    ...(safePublicSource(candidate.sourceUrl)?{sourceUrl:candidate.sourceUrl,sourceName:candidate.sourceName}:{}) };
 }
 
 export function splitBookDescriptionParagraphs(

@@ -14,22 +14,24 @@ test('resumed rounds retain stored selection language while presentation/search/
  const round=read('app/api/taste-test/rounds/route.ts'),ui=read('app/components/RatingTasteTest.tsx');
  assert.ok(round.includes('loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale)'));
  assert.ok(round.includes('loadCatalogBook(state.currentWorkId, locale)'));
- assert.match(ui,/b\.strictEditionLanguage === locale/);
+ assert.match(ui,/isBookPresentationAllowed\(b,locale\)/);
  assert.match(read('app/collection/[slug]/rate/page.tsx'),/CollectionQuickRating key=\{locale\}/);
  assert.match(read('app/taste-test/preferences/page.tsx'),/loadCatalogBooksByIdsWithStoredCovers\(TASTE_TEST_WORK_IDS,undefined,locale\)/);
  assert.match(read('app/components/LumiScoreHome.tsx'),/\$\{locale\}:\$\{normalizedQuery\.toLocaleLowerCase/);
  const css=read('app/globals.css');
  assert.match(css,/\.taste-direct-test \.taste-book-identity \.book-cover \{ width: clamp\([^\n]+height: auto; aspect-ratio: \.66; max-width: 35%/);
 });
-test('real Homo Deus identity: official EN title, NL labelled EN fallback; Work rating key unchanged',()=>{
- const english=withStrictEdition(base,selectStrictEdition([en],'en',base.title),'en')!,dutch=withStrictEdition(base,selectStrictEdition([en],'nl',base.title),'nl')!;
- assert.equal(english.title,'Homo Deus');assert.equal(dutch.title,'Homo Deus');assert.equal(dutch.englishEditionFallback,true);assert.equal(english.englishEditionFallback,false);
- assert.equal(english.workId,dutch.workId);assert.equal(english.editionId,'1523');assert.equal(english.isbn13,en.isbn_13);
+test('real Homo Deus identity: official EN title; EN-only Work is not a Dutch edition',()=>{
+ const english=withStrictEdition(base,selectStrictEdition([en],'en',base.title),'en')!;
+ assert.equal(withStrictEdition(base,selectStrictEdition([en],'nl',base.title),'nl'),null);
+ assert.equal(english.title,'Homo Deus');assert.equal(english.englishEditionFallback,false);
+ assert.equal(english.workId,base.workId);assert.equal(english.editionId,'1523');assert.equal(english.isbn13,en.isbn_13);
 });
 test('real Da Costa translation is one edition/title/ISBN, not French Work title',()=>{
  const book={...base,workId:'1342',title:'Je revenais des autres',author:'Mélissa Da Costa',openLibraryWorkId:'OL24343547W'};
  const edition={...en,id:1367,work_id:1342,title:'Waar de zon de sneeuw raakt',language:'dut',isbn_13:'9789022341674',open_library_edition_id:'OL61048815M'};
  assert.equal(withStrictEdition(book,selectStrictEdition([edition],'nl',book.title),'nl')!.title,edition.title);
+ assert.equal(withStrictEdition(book,edition,'nl')!.editionLanguage,'nld','public presentation normalizes dut to canonical ISO639-3; UI locale remains nl');
  assert.equal(selectStrictEdition([edition],'en',book.title),null);
 });
 test('Grunberg data correction is required: verified German edition excluded; no title/script/prefix heuristic',()=>{
@@ -56,11 +58,12 @@ test('cover evidence batch binds exact Work/edition/title/language/ISBN; no cros
  clearEditionCoverEvidenceCacheForTests();let calls=0;
  const source={key:'/books/OL26326058M',title:'Homo Deus',works:[{key:'/works/OL17641518W'}],languages:[{key:'/languages/eng'}],isbn_13:['9781910701874'],covers:[8001570]};
  const fetcher:typeof fetch=async input=>{calls++;assert.equal(new URL(String(input)).pathname,'/api/get_many');return new Response(JSON.stringify({status:'ok',result:{'/books/OL26326058M':source}}));};
- const english=withStrictEdition(base,en,'en')!,nlFallback=withStrictEdition(base,en,'nl')!;
- const [a,b]=await Promise.all([withEditionCoverEvidence([english],fetcher),withEditionCoverEvidence([nlFallback],fetcher)]);
+ const english=withStrictEdition(base,en,'en')!,again=withStrictEdition(base,en,'en')!;
+ const [a,b]=await Promise.all([withEditionCoverEvidence([english],fetcher),withEditionCoverEvidence([again],fetcher)]);
  assert.equal(calls,1);assert.equal(a[0].coverUrls!.length,1);assert.deepEqual(a[0].coverUrls,b[0].coverUrls);
  for(const change of [{works:[{key:'/works/OL999W'}]},{languages:[{key:'/languages/heb'}]},{languages:[]},{isbn_13:['9783462046601']},{title:'Different translation'},{covers:[]}])assert.deepEqual(editionSourceCoverUrls(english,{...source,...change}),[]);
- assert.notEqual(getBookCoverIdentity(a[0]),getBookCoverIdentity(b[0]));
+ assert.equal(withStrictEdition(base,en,'nl'),null);
+ assert.equal(getBookCoverIdentity(a[0]),getBookCoverIdentity(b[0]));
  assert.equal(getBookCoverIdentity(a[0]),getBookCoverIdentity((await withEditionCoverEvidence([english],fetcher))[0]));
 });
 test('EN→NL→EN identity and ratings stay Work-scoped; cross-Work edition rejected',()=>{
@@ -70,11 +73,11 @@ test('EN→NL→EN identity and ratings stay Work-scoped; cross-Work edition rej
  assert.equal(a.workId,b.workId);assert.equal(a.workId,c.workId);assert.equal(getBookCoverIdentity(a),getBookCoverIdentity(c));assert.notEqual(getBookCoverIdentity(a),getBookCoverIdentity(b));
  assert.equal(withStrictEdition(base,{...en,work_id:999},'en'),null);
 });
-test('description needs exact edition and language; NL English fallback is explicit, caches include Work',async()=>{
+test('description needs exact edition and language; no cross-language fallback, caches include Work',async()=>{
  clearBookDescriptionCacheForTests();
  const fetcher:typeof fetch=async()=>new Response(JSON.stringify({works:[{key:'/works/OL17641518W'}],languages:[{key:'/languages/eng'}],description:'Synthetic English copy.'}));
  const lookup={openLibraryWorkId:'OL17641518W',openLibraryEditionId:'OL26326058M',editionLanguage:'eng'};
- assert.equal((await resolveBookDescription({...lookup,locale:'nl'},fetcher)).description?.language,'en');
+ assert.equal((await resolveBookDescription({...lookup,locale:'nl'},fetcher)).description,null);
  assert.equal((await resolveBookDescription({...lookup,openLibraryWorkId:'OL999W',locale:'en'},fetcher)).description,null);
  clearBookDescriptionCacheForTests();
  for(const languages of [[],[{key:'/languages/ger'}],[{key:'/languages/eng'},{key:'/languages/fre'}]]){

@@ -8,10 +8,10 @@ function hasRealRating(book: Book): boolean {
 }
 
 export function shouldShowDutchDiscovery(
-  _locale: Locale,
+  locale: Locale,
   bookCount: number,
 ): boolean {
-  return bookCount > 0;
+  return locale === 'nl' && bookCount > 0;
 }
 
 export function selectDutchDiscoveryBooks(

@@ -1,0 +1,64 @@
+VOORSTEL — niet uitvoeren zonder nieuw, exact releaseakkoord voor PR67 en182 acties.
+
+1. Identiteit/scope
+   Controleer PR-head, Draft/CI, main/productie-SHA en Ready-deployment opnieuw.
+   Vergelijk release-hashes.json SHA256 en alle31 bestandshashes exact.
+   Alleen qvplwejffhjvxaypmjut na akkoord; test977*-IDs/fixtures nooit productie.
+   PR51, PR62/63, oudere acht, Works48/65 en33 holds uitgesloten.
+   Stop bij drift, overlap of mislukte CI. Geen databasewijziging in deze stap.
+
+2. Voorcontrole en snapshot
+   production-readonly.sql + global-identity-preflight.sql opnieuw read-only uitvoeren.
+   Vergelijk elke bestaande Work/auteur/editie/summary/metadata met production-current.json;
+   alle batchbindings omvatten volledige oude waarden. Controleer globale ISBN-duplidaten,
+   native identiteit en bestaande Robben/Op de Beeck auteurscorpora.
+   Controleer bestaande presentatie-tabellen en guards/rechten tegen production-counts-current.json.
+   Geen nieuwe migratie of rechtenverbreding; stop als een vereiste ontbreekt.
+   Bewaar actuele scope, voorafgaande NL-ID-set, bestaande afhankelijke relaties,
+   publieke/gebruikersdatadigests en actuele sequences veilig vóór eerste COMMIT.
+   Bij onverwachte waarden niet blind upserten: voorstel opnieuw beoordelen.
+
+3. Kleine imports
+   batch-01..07-production-apply.sql in volgorde uitvoeren:20,23,30,30,30,30,19 acties.
+   Per bestand één transactie; lock_timeout3s/statement_timeout30s.
+   Bewaar EERSTE niet-lege volledige COMMIT-receipt onmiddellijk buiten tijdelijke sessie.
+   Bevestig exact aantal acties en alle after-rows na elke batch.
+   Een timeout/fout rolt die batch terug; stop dan. Eerder gecommitteerde batches blijven
+   zichtbaar en worden alleen via hun eigen receipts hersteld als nodig.
+   Onverwachte nul-replay alleen accepteren als volledige eerder goedgekeurde installatie
+   onafhankelijk bewezen is. Nooit lege replayreceipt als eerste receipt gebruiken.
+
+4. Nacontrole vóór releasebesluit
+   Alle182 acties teruglezen, geen dubbele ISBN/Works,3 nieuwe Works/47 edities/
+   67 metadata/64 teksten; drie oude teksten exact behouden.
+   Elk apply-bestand nogmaals:0 acties. Geen gedeeltelijke installatie accepteren.
+   Meet werkelijke NL-ID-set: verwacht47 winstidentiteiten en0 onverwacht verlies
+   (2960→3007 uitsluitend als voorbaseline nog2960 is).
+   Controleer bestaande ratings/statussen/accounts/digests en alle afhankelijkheden.
+   Stop bij mismatch; gebruik receipt-undo, geen algemene DELETE/correctie.
+
+5. Applicatie / cache / live
+   Appbron is gelijk aan3cb7b9/694c0b; dit is geen aparte functionaliteitsmigratie.
+   Merge/publish alleen de dan expliciet goedgekeurde exacte PR-head bij groene CI.
+   Bevestig actieve productiealias, SHA en Ready-deployment onafhankelijk van browserbewijs.
+   Bestaande openbare presentatiecache loopt30s; wacht natuurlijke expiry of vernieuw
+   alleen relevante openbare caches indien aantoonbaar nodig. Geen persoonlijke cachepurge.
+   Controleer live67 exacteISBN/title/cover/summary/source/card-detail scoreparity,
+   oorspronkelijke+Nederlandse titel, NL/EN, pagina1–3, filters, mobiel en Paper/Ink.
+   Geen productieaccounts/ratings aanmaken of echte gebruikers wijzigen voor bewijs.
+   Browsermetingen apart van TTFB en externe coververtraging rapporteren.
+
+6. Gericht herstel na COMMIT
+   Stop nieuwe batches; noteer laatste succesvolle COMMIT. Gebruik alleen werkelijk
+   gecommitteerde eigen productiereceipts en bijbehorende batch-*-production-rollback.sql.
+   Zet lumiscore.catalog_release_receipt op die exacte EERSTE receipt. Volg07→01.
+   Volledige after-CAS en alle inkomende FK's (ook CASCADE) blokkeren latere wijzigingen/
+   extra afhankelijkheden. Bij blokkade STOP: geen gebruiker/voortgang verwijderen,
+   geen cascade forceren en geen alternatieve credentials of schemawijziging.
+   Verifieer dat alleen eigen INSERTS verdwijnen en alle andere digests gelijk blijven.
+   Geen sequences terugzetten; gaten zijn normaal. Approllback blijft schema-compatibel.
+
+Actueel TEST-herstel is anders: current-test-recovery-manifest.json plus
+test-final-committed-undo.sql gebruikt laatste werkelijke testreceipts,305 rijen.
+Historische test-dashboard-committed-undo.sql is alleen oud uitgevoerd bewijs.
+Niet uitvoeren tijdens normale Previewacceptatie: goedgekeurde testtoestand blijft staan.

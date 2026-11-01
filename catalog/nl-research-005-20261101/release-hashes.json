@@ -1,0 +1,55 @@
+{
+  "state": "REVIEW ONLY; no production approval",
+  "applicationSha": "bb706297b1c9bebbfbaa067e11a8f95ca158b1f3",
+  "productionBase": "77d68bda6a73deab86fef6530065b4009ef6b004",
+  "productionProject": "qvplwejffhjvxaypmjut",
+  "scope": {
+    "existingWorks": 40,
+    "newWorks": 10,
+    "newCatalogueAuthors": 6,
+    "newPrintedNlEditions": 46,
+    "coverFormatBindings": 50,
+    "newOriginalNlSummaries": 48,
+    "goodNlSummariesRetained": 2,
+    "actions": 160,
+    "netExtraNlWorksIfApproved": 45
+  },
+  "productionFiles": {
+    "batch01-production-plan.json": "c89b5304cb85a1fca7195a69b26ef350a6e33c72210dbce4136c813eb075ef1c",
+    "batch01-production-apply.sql": "1e06886f5377fda0efdb4e51410d81cdb6f75d1907c42d61795c4e891675d549",
+    "batch01-production-dry-run.sql": "2c90e691e21fa5c523856856ac545cb53c38f00095319a068169e5bd6fd97815",
+    "batch01-production-rollback.sql": "5b7187f2013d53ee4fffb65dde43b45603f08bad61a63b1822bed994e295b769",
+    "batch02-production-plan.json": "e1c656c0f0c5f51fc806c8794bd676335f9665df37acd22c20a6879732d0c92b",
+    "batch02-production-apply.sql": "e866a883b56ee03dd37c092b535d4a807535b41acb12063decb56f9fcd3d101f",
+    "batch02-production-dry-run.sql": "6f7d7808b390d0d20ee5a8767979f54453eb23b2e847d464cab1fc0b09c5e21f",
+    "batch02-production-rollback.sql": "40687fd44ad4b033a1b2d227ce5792c86381f566834d04f1f369b5a5c722ea09",
+    "batch03-production-plan.json": "ccebac72953ab167617381fea22925a35bcadb879fb0969288c68c9c1de7d060",
+    "batch03-production-apply.sql": "f8f54a13a1c5539c2fc7b9607fead76ce4fd0d9a698e9a67fa06d666ee3d4730",
+    "batch03-production-dry-run.sql": "d25acff28393f390203db48c406a6c35121634240264bbcd52627f5efd821413",
+    "batch03-production-rollback.sql": "6a931c4e093003c05dcb04b59b1d9a5c4331114fce5b31c23ffd0365c0060b87",
+    "batch04-production-plan.json": "7cfd26cb4c587906089a7c031fb07931fbeb10ac1bd6aeb0ea87216ed7c54dbc",
+    "batch04-production-apply.sql": "2688d30846c66f35dd57845c85a499a976a7f2dea00a092883866ce7c55bdb95",
+    "batch04-production-dry-run.sql": "9c15a9033257479f858e7bfb9acd12c17a13e72c7682ac89053724bb26922626",
+    "batch04-production-rollback.sql": "e5b76ecdae8583033573946edb449cfbfbf780484b0787f4ec982b62609373ff",
+    "batch05-production-plan.json": "bfaa6da4ab8793c9a66dd4f69b47cbb2ae56e516cc9e13911ce3ae163eeda94f",
+    "batch05-production-apply.sql": "35d7184ab32d4114e1d18052b095baaff0abc346eb2a3a7f3c2b6a4480cb379c",
+    "batch05-production-dry-run.sql": "301b0602caf0bdaa846dff91a583b2e9fa208b5c18f749c50062c6131e048755",
+    "batch05-production-rollback.sql": "e461495deba3df0cc9199136ee6e8ddf362745261a61fcf4410b652f496c19ee"
+  },
+  "sourceFiles": {
+    "release-candidates.json": "68948e461bb5ef0dd3c9923e4d6c7dfa7a5248d2157fc0567c993eba15851184",
+    "completed-dossiers.json": "4bcc957aa7cc8ee5bb9316799fd93f2d4d573cab8e1e86b8a7437755133c5931",
+    "independent-evidence.json": "61c691a2a73e3be6edaf599608e488a5ecbe44267e722a00cdd3855bf12e0af2",
+    "manual-cover-review.json": "95354537cc5617dd3eedf146746adcbaf1546cf2386d55673fd93840bbd0fce4",
+    "production-import-index.json": "bd0f4c574bb80c2a317c8841c58fd454d22cf5ce2a11c01b90f7c35b6994e1c7",
+    "production-final-readonly.json": "a589e9bd505251443b112d84b586d881d47563d3b9d0631eb459f1985b6d2e6f"
+  },
+  "installation": "No new schema/migration/function installation. Existing reviewed-presentation guards reused. Only five production plans/SQL chunks on future approval. NEVER execute test fixture/seed files on production.",
+  "testOnlyExcluded": [
+    "test-seed-*",
+    "batchNN-test-*",
+    "fixture-*",
+    "test-review-collection-*"
+  ],
+  "committedUndo": "Core186 and extra2 cover fixtures proven; isolated51 review-collection records remain after expired confirmation. Stop further write attempts until confirmation flow concretely restored."
+}

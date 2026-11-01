@@ -3,7 +3,9 @@ import { normalizeEditionLanguage } from './edition-ranking.ts';
 import editorialCovers from './reviewed-editorial-covers-20261028.json' with { type: 'json' };
 
 export type ReviewedCoverOverride = {
-  workId: string;
+  workId?: string;
+  /** Explicit reviewed exact-ISBN identity for native Works without an OL Work ID. */
+  editionIdentityOnly?: boolean;
   openLibraryWorkId?: string;
   title: string;
   author: string;
@@ -322,7 +324,9 @@ export function getReviewedCoverOverride(input: {
 }): ReviewedCoverOverride | null {
   const isbn13 = normalizeIsbn13(input.isbn13);
   return REVIEWED_COVER_OVERRIDES.find((entry) =>
-    (entry.openLibraryWorkId ? entry.openLibraryWorkId === input.openLibraryWorkId : entry.workId === input.workId?.trim()) &&
+    (entry.openLibraryWorkId ? entry.openLibraryWorkId === input.openLibraryWorkId : entry.workId
+      ? entry.workId === input.workId?.trim()
+      : entry.editionIdentityOnly === true && entry.editionLanguage != null && Boolean(isbn13)) &&
     entry.isbn13 === isbn13 &&
     (!entry.editionLanguage || entry.editionLanguage === normalizeEditionLanguage(input.editionLanguage ?? '')) &&
     (!entry.openLibraryEditionId || entry.openLibraryEditionId === input.openLibraryEditionId) &&

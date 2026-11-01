@@ -1,0 +1,3523 @@
+{
+  "at": "2026-10-31T13:18:40.254Z",
+  "sourceCheckpoint": "1d16d9c5a9d556b11cbed844d192ac319280fae2",
+  "sourceApplication": "10f8cb0801aed2ba1bf3034685e9e636447ae5cd",
+  "testedApplication": "9d3b9a85123b5fe0679c80ec266ae47481cd075a",
+  "testRecords": 335,
+  "testUniqueWorks": 313,
+  "releaseRecords": 334,
+  "releaseUniqueWorks": 312,
+  "heldTestText": {
+    "workId": 1204,
+    "reason": "Unconfirmed edition language"
+  },
+  "retainedOutsideRelease": {
+    "workId": 1305,
+    "reason": "Previously published good static summary; not silently substituted for held TEST text"
+  },
+  "byStatus": {
+    "retained_approved_pilot_text": 78,
+    "migrated_good_existing_text": 26,
+    "new_original_source_reviewed_text": 230
+  },
+  "canonicalRuntimeBlobsEqual": true,
+  "code": [
+    {
+      "path": "app/api/books/[workId]/description/route.ts",
+      "sourceBlob": "b011d539d1eaa097d3f845d97cbf28157c423d8d",
+      "releaseBlob": "b011d539d1eaa097d3f845d97cbf28157c423d8d"
+    },
+    {
+      "path": "app/components/EditionPresentationLabel.tsx",
+      "sourceBlob": "f56546610a59bf294a5530ca105ed55a966093e2",
+      "releaseBlob": "f56546610a59bf294a5530ca105ed55a966093e2"
+    },
+    {
+      "path": "app/components/LumiScoreBookDescription.tsx",
+      "sourceBlob": "a1177f2432fe9e9635c696ff3407ae89f2c7f02a",
+      "releaseBlob": "a1177f2432fe9e9635c696ff3407ae89f2c7f02a"
+    },
+    {
+      "path": "app/components/LumiScoreCollectionPage.tsx",
+      "sourceBlob": "4b861b656b33169b572d98bbe925e9020aa31e73",
+      "releaseBlob": "4b861b656b33169b572d98bbe925e9020aa31e73"
+    },
+    {
+      "path": "app/components/LumiScoreHome.tsx",
+      "sourceBlob": "703577b951b054249d51cffbd3353a25ce36abe4",
+      "releaseBlob": "703577b951b054249d51cffbd3353a25ce36abe4"
+    },
+    {
+      "path": "app/components/RatingTasteTest.tsx",
+      "sourceBlob": "6f890cdf70f9ee07d54df0205934a597c82b3efc",
+      "releaseBlob": "6f890cdf70f9ee07d54df0205934a597c82b3efc"
+    },
+    {
+      "path": "app/data/books.ts",
+      "sourceBlob": "67f900be7d9be8ff32551b83fefffa9cf16928c3",
+      "releaseBlob": "67f900be7d9be8ff32551b83fefffa9cf16928c3"
+    },
+    {
+      "path": "lib/books/cover-image-watch.ts",
+      "sourceBlob": "c8e6406dd16903e15b4e8cb112722fda5bcceb61",
+      "releaseBlob": "c8e6406dd16903e15b4e8cb112722fda5bcceb61"
+    },
+    {
+      "path": "lib/books/description-cache.ts",
+      "sourceBlob": "25caf565dc385b071952a845ff9b99bec8c96581",
+      "releaseBlob": "25caf565dc385b071952a845ff9b99bec8c96581"
+    },
+    {
+      "path": "lib/books/description-language.ts",
+      "sourceBlob": "e7de4db30847114ba80eaed4e4213307a8bc6264",
+      "releaseBlob": "e7de4db30847114ba80eaed4e4213307a8bc6264"
+    },
+    {
+      "path": "lib/books/description-resolution.ts",
+      "sourceBlob": "113852b8d43f1930cfd57a07529e606fc0b236af",
+      "releaseBlob": "113852b8d43f1930cfd57a07529e606fc0b236af"
+    },
+    {
+      "path": "lib/books/description-source.ts",
+      "sourceBlob": "f5462ad03f97c2086fe434fefffde3aed13459b1",
+      "releaseBlob": "f5462ad03f97c2086fe434fefffde3aed13459b1"
+    },
+    {
+      "path": "lib/books/description-text.ts",
+      "sourceBlob": "87d3d7822cb1cbe5e661d007e228b6ff07091ae7",
+      "releaseBlob": "87d3d7822cb1cbe5e661d007e228b6ff07091ae7"
+    },
+    {
+      "path": "lib/books/dutch-discovery.ts",
+      "sourceBlob": "c729b6d607e9ed4e4a16e0f6a6b892c225217ae4",
+      "releaseBlob": "c729b6d607e9ed4e4a16e0f6a6b892c225217ae4"
+    },
+    {
+      "path": "lib/books/edition-ranking.ts",
+      "sourceBlob": "56164937214a03003c01cc94626a940e6b313080",
+      "releaseBlob": "56164937214a03003c01cc94626a940e6b313080"
+    },
+    {
+      "path": "lib/books/language.ts",
+      "sourceBlob": "cf15120d49b68f119233f60ff1c84d479bfa0506",
+      "releaseBlob": "cf15120d49b68f119233f60ff1c84d479bfa0506"
+    },
+    {
+      "path": "lib/books/public-description.ts",
+      "sourceBlob": "6425a0ea2d1649c357323ddba99eb5645a20c9e4",
+      "releaseBlob": "6425a0ea2d1649c357323ddba99eb5645a20c9e4"
+    },
+    {
+      "path": "lib/books/reviewed-cover-overrides.ts",
+      "sourceBlob": "ef261bc93711cfc95b89f8aaf8c4b8511dc976ed",
+      "releaseBlob": "ef261bc93711cfc95b89f8aaf8c4b8511dc976ed"
+    },
+    {
+      "path": "lib/books/reviewed-descriptions.ts",
+      "sourceBlob": "2443c7c16c6087f45cafa64b454a5434ecd3da4e",
+      "releaseBlob": "2443c7c16c6087f45cafa64b454a5434ecd3da4e"
+    },
+    {
+      "path": "lib/books/stored-presentation.ts",
+      "sourceBlob": "1bca39c3f844122b767f11341c7a0a39211a29bc",
+      "releaseBlob": "1bca39c3f844122b767f11341c7a0a39211a29bc"
+    },
+    {
+      "path": "lib/books/strict-edition.ts",
+      "sourceBlob": "ac2068af1817cebff01e4977965e9c8a34e7ade8",
+      "releaseBlob": "ac2068af1817cebff01e4977965e9c8a34e7ade8"
+    },
+    {
+      "path": "lib/catalog/eligible-browse.ts",
+      "sourceBlob": "ed293c639c1db5e5225da294c86d9fd395d4bee7",
+      "releaseBlob": "ed293c639c1db5e5225da294c86d9fd395d4bee7"
+    },
+    {
+      "path": "lib/catalog/import-integrity.ts",
+      "sourceBlob": "9a9d274e09d92e8aecb572779b2c6f37f09b2a35",
+      "releaseBlob": "9a9d274e09d92e8aecb572779b2c6f37f09b2a35"
+    },
+    {
+      "path": "lib/catalog/search-projection.ts",
+      "sourceBlob": "7ab28f954ab3b580aac427c8f93d7eef906cad87",
+      "releaseBlob": "7ab28f954ab3b580aac427c8f93d7eef906cad87"
+    },
+    {
+      "path": "lib/catalog/search-selection-cache.ts",
+      "sourceBlob": "3f0f8185d6f4d2100ef2be28090d6bd4fb74f19a",
+      "releaseBlob": "3f0f8185d6f4d2100ef2be28090d6bd4fb74f19a"
+    },
+    {
+      "path": "lib/supabase/books.ts",
+      "sourceBlob": "a96f4610dcab7d2195a11ec1500e2839a106a584",
+      "releaseBlob": "a96f4610dcab7d2195a11ec1500e2839a106a584"
+    },
+    {
+      "path": "lib/supabase/catalog-search.ts",
+      "sourceBlob": "a8ec8e844791e887bf420c67f451416f24914b1d",
+      "releaseBlob": "a8ec8e844791e887bf420c67f451416f24914b1d"
+    },
+    {
+      "path": "lib/supabase/editorial-catalog.ts",
+      "sourceBlob": "e59ba53cf712be9ebae26668171669257eae78bf",
+      "releaseBlob": "e59ba53cf712be9ebae26668171669257eae78bf"
+    },
+    {
+      "path": "lib/supabase/recommendation-catalog.ts",
+      "sourceBlob": "c8fc1e2fea5fc86d36b6a10b2faaf640e4832f46",
+      "releaseBlob": "c8fc1e2fea5fc86d36b6a10b2faaf640e4832f46"
+    },
+    {
+      "path": "lib/supabase/search-catalog.ts",
+      "sourceBlob": "17cb4c7f72988dedc32bce769cb092635b944c33",
+      "releaseBlob": "17cb4c7f72988dedc32bce769cb092635b944c33"
+    },
+    {
+      "path": "lib/supabase/stored-presentation.ts",
+      "sourceBlob": "6e47a4bee07db38dd796279f3d9fde938a5c8726",
+      "releaseBlob": "6e47a4bee07db38dd796279f3d9fde938a5c8726"
+    }
+  ],
+  "rows": [
+    {
+      "work": 125,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        928100125
+      ],
+      "textSha256": "28db7b8daba2c4840886ba3f505fdcb3fc61908e1600dd17643f0c8722fba921",
+      "source": "https://metadata.isbn.nl/138134/de-oversteek.html"
+    },
+    {
+      "work": 199,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        921100199
+      ],
+      "textSha256": "2ab235a3e79301a3d56e0bf1d16f70bd679999d7214e5339a87855ac014c3129",
+      "source": "https://metadata.isbn.nl/1219767/de-testamenten.html"
+    },
+    {
+      "work": 2825,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100004
+      ],
+      "textSha256": "7a3e4ac5176d2a8640911c88dd6e7cec7dec9934f582e6963cc113f7b1040868",
+      "source": "https://metadata.isbn.nl/423967/2666.html"
+    },
+    {
+      "work": 1894,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100005
+      ],
+      "textSha256": "362285f1390ef68f6e23ed559728630571e99df31b70cceb59aa903f20a5ad6e",
+      "source": "https://metadata.isbn.nl/1114482/de-geesten-van-hill-house.html"
+    },
+    {
+      "work": 1951,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100006
+      ],
+      "textSha256": "e50e244f6d456837893d6ad5a3cb612f51949d64b6a02dacf4b0abf93da25f28",
+      "source": "https://www.atlascontact.nl/boek/de-roep-van-de-wildernis/"
+    },
+    {
+      "work": 189,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        924100189
+      ],
+      "textSha256": "d759fabdae7dd2cb17840a8c8be354239b2cbc0d2826742200f7e25a161dd640",
+      "source": "https://metadata.isbn.nl/61817/de-kraaien-list-leugens.html"
+    },
+    {
+      "work": 1141,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100009
+      ],
+      "textSha256": "b2c32642ecb44bdb02305faaa06aa8a7cfea4ffbc149426a135967b23fb3ed07",
+      "source": "https://metadata.isbn.nl/890528/lampje.html"
+    },
+    {
+      "work": 1100,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100010
+      ],
+      "textSha256": "4e6f729ba270a38dcbaa944dc50bcec7bb5ad2b880af244dbf4bb1af3767277f",
+      "source": "https://metadata.isbn.nl/1534884/de-camino-mp.html"
+    },
+    {
+      "work": 1153,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100011
+      ],
+      "textSha256": "203bcee659b57e9e7e7bcd764cdc19afd531ec360ecb489fbbd01156c6a5c477",
+      "source": "https://metadata.isbn.nl/1185373/de-meeste-mensen-deugen.html"
+    },
+    {
+      "work": 1033,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100012
+      ],
+      "textSha256": "0312ae3849ff1018f23a75e5717d6fa612737f3f38333da29ff773898f38d02f",
+      "source": "https://metadata.isbn.nl/2035787/het-diner-limited-edition-100e-druk.html"
+    },
+    {
+      "work": 1042,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100014
+      ],
+      "textSha256": "1739a2a6ed0a3a70277fafe61ba9e4d201ecf68eeca9d2602eb3c65dc76fc5cc",
+      "source": "https://www.singeluitgeverijen.nl/de-arbeiderspers/boek/grand-hotel-europa/"
+    },
+    {
+      "work": 1058,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100015
+      ],
+      "textSha256": "4cbfc1c687dacb5bb80ffba18332e78f67ebd39c594fe44524b4ae00862c008d",
+      "source": "https://www.atlascontact.nl/boek/de-avond-is-ongemak/"
+    },
+    {
+      "work": 1344,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100016
+      ],
+      "textSha256": "db50dfc21094ace01f708d513e35d9486c3ce9c33bfa4b0f137084dcabb0369a",
+      "source": "https://metadata.isbn.nl/1739564/oroppa.html"
+    },
+    {
+      "work": 1178,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100022
+      ],
+      "textSha256": "a7b9fb38d0f6d657f99e4f7d9d0ff6eaf9521b4c685752a235b3766c5340ec24",
+      "source": "https://metadata.isbn.nl/1623006/komt-een-vrouw-bij-de-dokter.html"
+    },
+    {
+      "work": "@work:wisselwachter::geertmak",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100061
+      ],
+      "textSha256": "24823920289246c5180ca8c72f2fe16dc1337917ddff8c77cebea22a7886856d",
+      "source": "https://metadata.isbn.nl/1919336/wisselwachter.html"
+    },
+    {
+      "work": "@work:demeisjes::annetschaap",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100100
+      ],
+      "textSha256": "ca45b2504c5ec50d6149be5f8bcba54183388ae2e2dfd1f3766fccb4074768e2",
+      "source": "https://www.zwijsen.nl/product/de-meisjes-9789045126692/"
+    },
+    {
+      "work": 1007,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100017
+      ],
+      "textSha256": "69f56259eb940efd54b0d545aa87df98aabab0a8e6f297bcf55229b9db54f610",
+      "source": "https://metadata.isbn.nl/441858/de-aanslag.html"
+    },
+    {
+      "work": 1021,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100019
+      ],
+      "textSha256": "0f96db6f0dd740d293cbc1fed7fb16ef5b4309ff9d498161dc521bc627540bc9",
+      "source": "https://metadata.isbn.nl/438962/het-verdriet-van-belgie.html"
+    },
+    {
+      "work": 6278,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100020
+      ],
+      "textSha256": "beead10e67bb34941d2179d0b6e1ebddcfa7cb06b33682bd1dd8e80bafbad9f8",
+      "source": "https://metadata.isbn.nl/55523/tonio.html"
+    },
+    {
+      "work": 1111,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100023
+      ],
+      "textSha256": "6168a6f9962a2e54b6b98435d711c9e4a944aa9de4783101aef3a34c320a2181",
+      "source": "https://metadata.isbn.nl/69629/kruistocht-in-spijkerbroek.html"
+    },
+    {
+      "work": 1105,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100024
+      ],
+      "textSha256": "03dedf6e882407d2aef92b0b5f8f66daadab1f44c225efadf87ee20d8964de0e",
+      "source": "https://metadata.isbn.nl/451367/de-brief-voor-de-koning.html"
+    },
+    {
+      "work": 1119,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100025
+      ],
+      "textSha256": "f3b506da4a1db541ce96bf6777f66ffcf3732971e094ce162cea4d5988618bee",
+      "source": "https://lemniscaat.nl/boeken/oorlogswinter"
+    },
+    {
+      "work": 1248,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100026
+      ],
+      "textSha256": "83b0471c415ed0019c31e741af588d506210f00dba54400eac6a5aa4e2d1ef6b",
+      "source": "https://metadata.isbn.nl/256734/pluk-van-de-petteflet.html"
+    },
+    {
+      "work": 1103,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100027
+      ],
+      "textSha256": "6daa3bde49a9847f7ebdcc37fab141d26b224d6cb03146ab1de23b577abfc330",
+      "source": "https://metadata.isbn.nl/324719/minoes.html"
+    },
+    {
+      "work": 1652,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100030
+      ],
+      "textSha256": "a0a69b9140009ecc540d98559a1ad7aa4411b0720f34c0b8eefd5267941f395a",
+      "source": "https://metadata.isbn.nl/310866/turks-fruit.html"
+    },
+    {
+      "work": 1051,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100032
+      ],
+      "textSha256": "8b9263ebb7f470e9158ca2cb506f391b59ba7c433fabab130c099ad4a152d088",
+      "source": "https://metadata.isbn.nl/114973/de-helaasheid-der-dingen.html"
+    },
+    {
+      "work": 2444,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100034
+      ],
+      "textSha256": "57be9a7ac6624210ee4f5dbf33c3fb9ff24d157bf211c96e1dcf344fb0640af2",
+      "source": "https://metadata.isbn.nl/1297023/hamnet.html"
+    },
+    {
+      "work": 652,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        924100652
+      ],
+      "textSha256": "cdd252a17cb88c625cd55007b5d0c343a481e609e78960352ba0cdea66ad974a",
+      "source": "https://metadata.isbn.nl/1299306/de-moordclub-op-donderdag.html"
+    },
+    {
+      "work": 105,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100037
+      ],
+      "textSha256": "7ed4990886837f7768b2df21e64a5c283fb4e7f63fc4bee04a3c34aa9fc3777b",
+      "source": "https://metadata.isbn.nl/1140829/normale-mensen.html"
+    },
+    {
+      "work": 180,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100007
+      ],
+      "textSha256": "724df81ac29713a46a8b889d0e0230ab99e4aadbe4f8b5a2d6a4a195e070faf6",
+      "source": "https://metadata.isbn.nl/178792/carrie.html"
+    },
+    {
+      "work": 1037,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100021
+      ],
+      "textSha256": "6f1d2bccd3f1ccbf8c49abe71b783fe8890b487ad617a06b32937f31b6824f1e",
+      "source": "https://metadata.isbn.nl/49470/joe-speedboot.html"
+    },
+    {
+      "work": 1118,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100028
+      ],
+      "textSha256": "bf9edfce319d51456cbd66bd31c5fe914039fda5c9f59db897f69bc15f0b2301",
+      "source": "https://metadata.isbn.nl/93759/koning-van-katoren.html"
+    },
+    {
+      "work": 13,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100040
+      ],
+      "textSha256": "2655ee379ffc93f35e4e7cbefa289412b6dbb3856e9c6bbcfbcab567996955d2",
+      "source": "https://metadata.isbn.nl/295163/de-alchemist.html"
+    },
+    {
+      "work": 336,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100043
+      ],
+      "textSha256": "b825c1e822f2ea82c4e44fc139f45a2efd144306c60943b4ddd37ad57a812e3f",
+      "source": "https://metadata.isbn.nl/215336/als-je-het-licht-niet-kunt-zien.html"
+    },
+    {
+      "work": 10,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100044
+      ],
+      "textSha256": "37f8555822461da7f5e9e9ac8abeb20fdf97e2367eb95b9150a4cb1bf3fc267e",
+      "source": "https://metadata.isbn.nl/356829/de-boekendief.html"
+    },
+    {
+      "work": 409,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100045
+      ],
+      "textSha256": "53e4d987cda4fcaae8a9da9317152e06eb1091cc40a1effa04ede165a85b00ad",
+      "source": "https://metadata.isbn.nl/739609/een-klein-leven.html"
+    },
+    {
+      "work": 2656,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100046
+      ],
+      "textSha256": "2639baa8ca81cbc350390014eef244d50d1a61596f4c12eb5ce4a68b473c5e49",
+      "source": "https://metadata.isbn.nl/164146/de-waarheid-over-de-zaak-harry-quebert.html"
+    },
+    {
+      "work": 2672,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100047
+      ],
+      "textSha256": "f9d989320ccb4e863244fc94abd4014bb55975a94f12ad0799678cf663fb7b01",
+      "source": "https://metadata.isbn.nl/1183183/het-parfum.html"
+    },
+    {
+      "work": 1054,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100048
+      ],
+      "textSha256": "86537c3504dafe32491b23356bc21b90e857de8babd2f3f8aa9034d43500f0b5",
+      "source": "https://metadata.isbn.nl/155547/kom-hier-dat-ik-u-kus.html"
+    },
+    {
+      "work": 3547,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100050
+      ],
+      "textSha256": "cb8dd2945667a5826541c7af90bbef9262e75f43bfb885a3a26e00ec8fb7ca3b",
+      "source": "https://metadata.isbn.nl/75732/de-niet-verhoorde-gebeden-van-jacob-de-zoet.html"
+    },
+    {
+      "work": 1099,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100053
+      ],
+      "textSha256": "44f9ab3584448f3ff608091e0e0a92c1099f75bccf0753ddab468fe3045678ac",
+      "source": "https://metadata.isbn.nl/1198624/het-bloemenmeisje.html"
+    },
+    {
+      "work": 1101,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100056
+      ],
+      "textSha256": "a5fdfb25f91915fae06291bd70f5c9a037c5c47e44d3fa0a4f1cacb95ccf58ee",
+      "source": "https://metadata.isbn.nl/1756137/de-nomade.html"
+    },
+    {
+      "work": 1363,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100058
+      ],
+      "textSha256": "7636cfa39919c154afc6fa3d73d117f8ab1f66973e36b9c83c0799d929591334",
+      "source": "https://metadata.isbn.nl/1669072/nirwana.html"
+    },
+    {
+      "work": 1345,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100059
+      ],
+      "textSha256": "34781ccd08604dc5ac8d9c1163b1e9ff710d6a193ded249c6868e6a75c1a9620",
+      "source": "https://metadata.isbn.nl/1516259/het-lied-van-ooievaar-en-dromedaris.html"
+    },
+    {
+      "work": 1350,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100060
+      ],
+      "textSha256": "c38c27e7cd0fdae8705260bc5f7128720d55236740822816ee88c28ee8054c77",
+      "source": "https://metadata.isbn.nl/1710983/ik-kom-hier-nog-op-terug.html"
+    },
+    {
+      "work": 1616,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100063
+      ],
+      "textSha256": "532ce52734d345d147ec125f4aa6f525dc0031c281d3c990f968d1b67ecfc683",
+      "source": "https://metadata.isbn.nl/360695/de-tweeling-grote-letter.html"
+    },
+    {
+      "work": 1162,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100065
+      ],
+      "textSha256": "37230ef9c537140d28d4077bc7b9a633cd15b2a294698e539880a2d2db0dffd5",
+      "source": "https://metadata.isbn.nl/1387507/het-zwijgen-van-maria-zachea.html"
+    },
+    {
+      "work": "@work:debuitenjongen::paolocognetti",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100033
+      ],
+      "textSha256": "49ee348efd7e86fc3d8065a952cae8f1eefe824ceae3b1d0e73c20f1ed59bab1",
+      "source": "https://metadata.isbn.nl/1079845/de-buitenjongen.html"
+    },
+    {
+      "work": "@work:detatoeeerdervanauschwitz::heathermorris",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100038
+      ],
+      "textSha256": "997be3461b9d8e1ce448d15580539d79056b1476237e217eb58fde9be0b289d9",
+      "source": "https://metadata.isbn.nl/1440207/de-tatoeeerder-van-auschwitz.html"
+    },
+    {
+      "work": 327,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100041
+      ],
+      "textSha256": "9e5092e1302f0911ffb8baf813f29500fd5e14c9be82820887b869ab78c9c687",
+      "source": "https://metadata.isbn.nl/164153/de-vliegeraar.html"
+    },
+    {
+      "work": "@work:hetachtstelevenvoorbrilka::ninoharatischwili",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100049
+      ],
+      "textSha256": "c5e23e7198329c68dda734c495e23d7fbcab9c27be30f7b138f0891cfe612cc7",
+      "source": "https://metadata.isbn.nl/1219105/het-achtste-leven-voor-brilka.html"
+    },
+    {
+      "work": "@work:alhetblauwvandehemel::melissadacosta",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100051
+      ],
+      "textSha256": "2df32b71e37ae9a64a16dc2efc9fd6cb2f1cdba54d79fc0e08880c09ca3abdde",
+      "source": "https://metadata.isbn.nl/1791920/al-het-blauw-van-de-hemel.html"
+    },
+    {
+      "work": "@work:gaalseenrivier::shelleyread",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100052
+      ],
+      "textSha256": "72befd2a1766536ee456772a56b27a3510af6c8b2f51ee0e2b7c1a8f237b3809",
+      "source": "https://metadata.isbn.nl/2085799/ga-als-een-rivier-special-bruna-2026.html"
+    },
+    {
+      "work": "@work:vrijuitzicht::anyaniewierra",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100054
+      ],
+      "textSha256": "aeda8287bc5bc38d2ccc8960807db09e775597e49f423b79a8befb47255e1619",
+      "source": "https://metadata.isbn.nl/276006/vrij-uitzicht.html"
+    },
+    {
+      "work": "@work:deengelenmaker::stefanbrijs",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100064
+      ],
+      "textSha256": "5eb40f26635d3a32c00e9f6d9b0112dc013170b25c6157ba2d8de1143afff139",
+      "source": "https://metadata.isbn.nl/127933/de-engelenmaker.html"
+    },
+    {
+      "work": "@work:totindehemel::richardpowers",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100066
+      ],
+      "textSha256": "39b7faa665f8660b35a40943a87e2204fdfb259025338753b110f6d9fe0a402f",
+      "source": "https://metadata.isbn.nl/1102340/tot-in-de-hemel.html"
+    },
+    {
+      "work": 43,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100069
+      ],
+      "textSha256": "49b78214629da0bc3dd2148ad8ba87ca6b29a5690513d37c12151a41f43449a1",
+      "source": "https://metadata.isbn.nl/311064/honderd-jaar-eenzaamheid.html"
+    },
+    {
+      "work": 197,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        8800309
+      ],
+      "textSha256": "f10e8f33dddbfca11c3d0197ca16ffe90cbc84f021288d3fae2cdfbdc6ae54ac",
+      "source": "https://metadata.isbn.nl/186727/het-laatste-rijk.html"
+    },
+    {
+      "work": 16,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100077
+      ],
+      "textSha256": "e5712e60320830451e3b01222d2531aeafcaae624b68d5d33aaf82f36c05a49c",
+      "source": "https://metadata.isbn.nl/935666/fahrenheit-451.html"
+    },
+    {
+      "work": 9,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100078
+      ],
+      "textSha256": "1962e630a940d79d06df5282b2116eb43894fb90a3e8879b0e790a1bf727d375",
+      "source": "https://metadata.isbn.nl/876755/verhaal-van-de-dienstmaagd.html"
+    },
+    {
+      "work": 2718,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        921102718
+      ],
+      "textSha256": "d687e8f312a6dc4a4dce73b55c8c8aeefec0fbe46eae0f0225f29192de9c741b",
+      "source": "https://metadata.isbn.nl/127860/laat-me-nooit-alleen.html"
+    },
+    {
+      "work": 1942,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100081
+      ],
+      "textSha256": "be9585a6fcf3f159559fcb12a48c97dc7b10e6240f4847d1b4e5d3ff713f829d",
+      "source": "https://metadata.isbn.nl/162030/het-ontstaan-van-soorten.html"
+    },
+    {
+      "work": 1442,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100082
+      ],
+      "textSha256": "c374951fdfcc9db27ba78acb7e5de5ab2a054c77a52027372cea6ce21c868d63",
+      "source": "https://metadata.isbn.nl/1105230/simpel.html"
+    },
+    {
+      "work": "@work:oersterk::richarddeleth",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100084
+      ],
+      "textSha256": "1aaa61f8ec912c3b42e5364664e5dc3f0f8fa22bbe68e0d5d0a45722cc4a1f7f",
+      "source": "https://metadata.isbn.nl/93042/oersterk.html"
+    },
+    {
+      "work": 90,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100088
+      ],
+      "textSha256": "7bd4eab941bd539a4b055a50eefe45efc82ecfdaf5efcdb321093b2c44eabcd6",
+      "source": "https://metadata.isbn.nl/1706368/de-zin-van-het-bestaan.html"
+    },
+    {
+      "work": 107,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100089
+      ],
+      "textSha256": "19d804606fb2f5c8636391620936e151c1de290a4e7e1d07ce8bcbc722b2e608",
+      "source": "https://metadata.isbn.nl/1185011/elementaire-gewoontes.html"
+    },
+    {
+      "work": "@work:deepdemocracy::jitskekramer",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100090
+      ],
+      "textSha256": "ca2f39722f744a9506939753f688a61c1eb08a27d6d945c50e111d4070c3a9da",
+      "source": "https://metadata.isbn.nl/1011530/deep-democracy.html"
+    },
+    {
+      "work": 1450,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100091
+      ],
+      "textSha256": "ccc88ba30e73727632f15d72a3119ba673b034dabbec8cd4548787cf463055cd",
+      "source": "https://metadata.isbn.nl/135562/bonita-avenue.html"
+    },
+    {
+      "work": 1644,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100092
+      ],
+      "textSha256": "2f34443fe93c34957019e693b4bff85e8bdb4dc62aca95b842732dedfad0679c",
+      "source": "https://metadata.isbn.nl/482367/hersenschimmen.html"
+    },
+    {
+      "work": 1165,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100094
+      ],
+      "textSha256": "67bf59b1eebcb6480d4bac7b5d758c4555f73158985d5e5a7894454a80a5bc72",
+      "source": "https://metadata.isbn.nl/1596000/het-zijn-net-mensen.html"
+    },
+    {
+      "work": 455,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100098
+      ],
+      "textSha256": "68690f1cd3a1cbb2a206feea6bf25e63f005054c6351fb12293f819f3d4414eb",
+      "source": "https://metadata.isbn.nl/1429964/dog-man-1-dog-man.html"
+    },
+    {
+      "work": 1451,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100099
+      ],
+      "textSha256": "5b8ff3e880d068704c97fc5145cdbee390cb11a79bdac113c2d66c9beabcff23",
+      "source": "https://metadata.isbn.nl/385958/de-gorgels.html"
+    },
+    {
+      "work": 1264,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100055
+      ],
+      "textSha256": "aa4d273f3aeb4847042d1582ff32d6ecd3a6a3e2ea8ca1c87ea3647a1cd25f81",
+      "source": "https://metadata.isbn.nl/1711370/het-dossier.html"
+    },
+    {
+      "work": "@work:luister::sachabronwasser",
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100057
+      ],
+      "textSha256": "2fefac4696bd69a7eefe0f0dfbb2512e2ec1691270961a9a4c6b8a3da049165e",
+      "source": "https://www.amboanthos.nl/wp-content/uploads/2023/11/Aanbiedingsbrochure-AmboAnthos-voorjaar-2024.pdf"
+    },
+    {
+      "work": 1171,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100086
+      ],
+      "textSha256": "7d0147c234edb3d6f5df2f7809549d4c4ef19af1f91e3ff35a38a0b083e1bb17",
+      "source": "https://metadata.isbn.nl/1545562/wij-zijn-ons-brein.html"
+    },
+    {
+      "work": 10172,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        930100095
+      ],
+      "textSha256": "30338a69205ecd15778cf8ecf0469b4309d4e3b2402776708e1c68b10e832aee",
+      "source": "https://metadata.isbn.nl/353100/oblomov.html"
+    },
+    {
+      "work": 1284,
+      "language": "nl",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        91021031
+      ],
+      "textSha256": "263b99daca53b6d57eade1ece2dcfea3d10eb0a78b9c27e69a1655863608e05d",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/souvenir/"
+    },
+    {
+      "work": 253,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        924100253
+      ],
+      "textSha256": "46d4ca8218a974f6c1d2b86d205a9315110649abc2a6e93adb5265a1d7a8c0ef",
+      "source": "https://www.bloomsbury.com/au/court-of-silver-flames-9781526602312/"
+    },
+    {
+      "work": 148,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        924100148
+      ],
+      "textSha256": "6cce5a843e886c7a7dbd72102465eb501842a91ec93c0938b40ba379f572f909",
+      "source": "https://online.education.nsw.gov.au/prc/booklist/listBooksByTitle.html?letter=M&levelId=3"
+    },
+    {
+      "work": 228,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        924100228
+      ],
+      "textSha256": "dd7e213c9fe3294a35f454264f0a3fc82b300f392187fa704cb9c299745b89d6",
+      "source": "https://www.penguinrandomhouse.com/books/136441/his-dark-materials-the-amber-spyglass-book-3-by-philip-pullman/9780440418566/"
+    },
+    {
+      "work": 553,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        924100553
+      ],
+      "textSha256": "a4a64029add79160e20d28d6203f07cfdc727918405c4b888baca74ef448bc30",
+      "source": "https://bookouture.com/books/2903/"
+    },
+    {
+      "work": 1,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928100001
+      ],
+      "textSha256": "1828dddf7f5ee763fbf6efc8ad8321bf04967b72157d6d5b24fa7517a23be6b4",
+      "source": "https://www.penguin.co.uk/books/440237/project-hail-mary-by-weir-andy/9781807840020"
+    },
+    {
+      "work": 1,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928100001
+      ],
+      "textSha256": "cdd915e38e98f21250071c57c590bc3d9fbc7f05e3d160d7972ed4af0d6a8fb3",
+      "source": "https://www.penguin.co.uk/books/440237/project-hail-mary-by-weir-andy/9781807840020"
+    },
+    {
+      "work": 6,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        921100006
+      ],
+      "textSha256": "716e42619709e10d05ba2237b0f01396c2fd4f1a6d54024187dceef2d511951f",
+      "source": "https://metadata.isbn.nl/162568/de-hobbit.html"
+    },
+    {
+      "work": 6,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100006
+      ],
+      "textSha256": "b42e93d669ce0eb1f0b5e0d9d95f78734262389c42039b4c7782642ddead7f3b",
+      "source": "https://metadata.isbn.nl/162568/de-hobbit.html"
+    },
+    {
+      "work": 8,
+      "language": "nl",
+      "status": "retained_approved_pilot_text",
+      "testWorks": [
+        91021001
+      ],
+      "textSha256": "6e31a830dc0bf0c4f04d27a59e921d62507406d7253ec4b4171688d082a7536c",
+      "source": "https://metadata.isbn.nl/1318002/duin.html"
+    },
+    {
+      "work": 8,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021001
+      ],
+      "textSha256": "1af1adb03bafa1211de816099574db6e8ed0b553217134b2f5987f60c16ea0d4",
+      "source": "https://metadata.isbn.nl/1318002/duin.html"
+    },
+    {
+      "work": 30,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100030
+      ],
+      "textSha256": "0c0dc11e25fe99fee15563235e8e3e4dc51a1ce13c179b8d898f51cdbffe4747",
+      "source": "https://www.hachette.co.uk/titles/n-k-jemisin/the-fifth-season/9780356508191/"
+    },
+    {
+      "work": 30,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100030
+      ],
+      "textSha256": "501b1dd5839ec82700366e31553372dcfe91fd333965b4b6b2271ccb90bd82d1",
+      "source": "https://www.hachette.co.uk/titles/n-k-jemisin/the-fifth-season/9780356508191/"
+    },
+    {
+      "work": 1049,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101049
+      ],
+      "textSha256": "920998b270dc5aacea4e0d0c413253806b080b790edad1a29b363a89d37140c7",
+      "source": "https://dasmag.nl/product/het-smelt/"
+    },
+    {
+      "work": 1050,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101050
+      ],
+      "textSha256": "2411f24b629d8dd8157a5081972482b8465da970e13ac8cc65f103e4c7c6d5a3",
+      "source": "https://metadata.isbn.nl/1403243/ik-ben-er-niet.html"
+    },
+    {
+      "work": 1055,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101055
+      ],
+      "textSha256": "64eedb65f99f85123573a431746a15cdf0ae0dcf3184d0e67a8c4d2b98eeccb9",
+      "source": "https://rozet.nl/catalogus/1869989/"
+    },
+    {
+      "work": 1076,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101076
+      ],
+      "textSha256": "a6988c273d1f63d744cf28ceed7ce0fb44662ac250c900809843011a59e83464",
+      "source": "https://metadata.isbn.nl/760644/huidpijn.html"
+    },
+    {
+      "work": 1086,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101086
+      ],
+      "textSha256": "13cc09991267fcd65d93c7b0c9688a2aa8be2084a3b0ccb8732a5ab7788b77f7",
+      "source": "https://metadata.isbn.nl/54569/de-reunie.html"
+    },
+    {
+      "work": 1112,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101112
+      ],
+      "textSha256": "2722f5e0405c95ebc72f9d66de408c4fea2a9ba3e370e0b96b3a2a0671596d22",
+      "source": "https://lemniscaat.nl/boeken/geef-me-de-ruimte"
+    },
+    {
+      "work": 1124,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101124
+      ],
+      "textSha256": "f3dff866e5584bd873f189613a8e0a6854bff08387cdd33b52b26576f08903d5",
+      "source": "https://metadata.isbn.nl/20015/spijt.html"
+    },
+    {
+      "work": 1151,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        936101151
+      ],
+      "textSha256": "9c7c324830e09b7b5f001b45fcde20021580f479d50482556c2fec62cb3410d4",
+      "source": "https://www.debezigebij.nl/boek/de-geschiedenis-van-de-vooruitgang/"
+    },
+    {
+      "work": 2031,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        935102031
+      ],
+      "textSha256": "43f421e4b82697ba075b97d04a007275dae2162bed5dc1350529a79d67aef30c",
+      "source": "https://rozet.nl/catalogus/1873744/"
+    },
+    {
+      "work": 860,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        938100860
+      ],
+      "textSha256": "bc62d28287f8e357af3ebc7683d38ce0aed9399ca2a34130a92d39b19abd0a7f",
+      "source": "https://www.simonandschuster.com/books/The-Secret/Rhonda-Byrne/The-Secret-Library/9781582701707"
+    },
+    {
+      "work": 1152,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        938101152
+      ],
+      "textSha256": "16aafc2b7f5ff9d579b31c7134ae207025b2587a4722f7f6ebf481d5c1219989",
+      "source": "https://rozet.nl/catalogus/1508405/"
+    },
+    {
+      "work": 1804,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        938101804
+      ],
+      "textSha256": "148cf6e2a829bc4adabf79a9aa4ffb4398ad9db7b82b607266a847d40b0d713c",
+      "source": "https://www.rijksmuseum.nl/en/collection/publication/Het-grote-VOC-boek--adff56a593ab275ed78fefc17c2d1862"
+    },
+    {
+      "work": 5227,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        938105227
+      ],
+      "textSha256": "1559ed3415423deeeca749cb50e6f925d7fefd411297847337d77ef499444c05",
+      "source": "https://www.boom.nl/media/21/9789024424757_inkijkexemplaar_doing_research_5edruk.pdf"
+    },
+    {
+      "work": 348,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939100348
+      ],
+      "textSha256": "e4642a1839c3f12faec7f1089014f45942a22217cbf33e9ad9d3b554541383fa",
+      "source": "https://openlibrary.org/works/OL59048W"
+    },
+    {
+      "work": 827,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939100827
+      ],
+      "textSha256": "f8fa876ac64e89dbd66cbca5ce1e7931ec8f2d450464a9a849788d3fb3db5430",
+      "source": "https://openlibrary.org/works/OL15474046W"
+    },
+    {
+      "work": 1042,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        930100014
+      ],
+      "textSha256": "e6448cb75d2004feb2c4b85c98b80cd461b6410b2b143f0c31509db780ee8f5f",
+      "source": "https://openlibrary.org/works/OL24320267W"
+    },
+    {
+      "work": 1047,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101047
+      ],
+      "textSha256": "abef0d8c101572711847a26ba788230ad481c4b7dcbf43ff8a8e898df2b1f270",
+      "source": "https://openlibrary.org/works/OL850956W"
+    },
+    {
+      "work": 1053,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101053
+      ],
+      "textSha256": "c6bbf9b3ed0ebadc41ab9770e5f9609d0fbfd3ea3dcb3ab103557e0e9bed4b22",
+      "source": "https://www.atlascontact.nl/boek/de-laatkomer-ebook/"
+    },
+    {
+      "work": 1070,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101070
+      ],
+      "textSha256": "27681a313bd483013978b66723bcc03b47cb61191ff5c06ba41212af1b89584f",
+      "source": "https://openlibrary.org/works/OL24302287W"
+    },
+    {
+      "work": 1071,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101071
+      ],
+      "textSha256": "00288f1ecec9d18869f86d8c54bafb9c6a7b8dfc46df029bce7f0d3e1137a38d",
+      "source": "https://openlibrary.org/works/OL20906472W"
+    },
+    {
+      "work": 1075,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101075
+      ],
+      "textSha256": "f4c0a548c0803732db850fe46d8d2f67b0da0c7159bad46a3076da4e80c3a16b",
+      "source": "https://openlibrary.org/works/OL24173760W"
+    },
+    {
+      "work": 1081,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101081
+      ],
+      "textSha256": "f6a01fa89c6bfcf80eacecf1ab611472e55229d728ffbe9f8660da1f94889edd",
+      "source": "https://metadata.isbn.nl/120743/tegenlicht.html"
+    },
+    {
+      "work": 1088,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101088
+      ],
+      "textSha256": "354895cfb8880ef041a21319d425ea7ca9ed63180f910985931c28900f012be6",
+      "source": "https://openlibrary.org/works/OL24269387W"
+    },
+    {
+      "work": 1090,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101090
+      ],
+      "textSha256": "5d6a408d5150ebb8395832b41c3041e0f3323c97ad0d1dc00f011f0b36080bc5",
+      "source": "https://www.bibliotheek.nl/catalogus/titel.338540385.html/herfstlied/"
+    },
+    {
+      "work": 1091,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101091
+      ],
+      "textSha256": "66898ae1d17e757f3028cda799d87415bbee5ec9b8384883d153d88b1d1e4fc9",
+      "source": "https://www.amboanthos.nl/boek/op-klaarlichte-dag/"
+    },
+    {
+      "work": 1102,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101102
+      ],
+      "textSha256": "5d80883180ca0eb9ffbae71d91c239b9fc93b8aa95dc4745595fd2edc0bf44c9",
+      "source": "https://openlibrary.org/works/OL27974484W"
+    },
+    {
+      "work": 1130,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101130
+      ],
+      "textSha256": "fc513870ebdd8d1c855c2cb6a97b3bbdbce387a5fac65ba4dea9c0970352b632",
+      "source": "https://openlibrary.org/works/OL24739344W"
+    },
+    {
+      "work": 1140,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101140
+      ],
+      "textSha256": "bde59e5d9add9a671690e6aed8852b749878e1173f97ef180dfe9be02cc17777",
+      "source": "https://openlibrary.org/works/OL19735880W"
+    },
+    {
+      "work": 1184,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101184
+      ],
+      "textSha256": "1ff1e05553e9ad3070db81acb4cad269f5bb298be569892ebfaa74b29c0bd715",
+      "source": "https://openlibrary.org/works/OL26181155W"
+    },
+    {
+      "work": 1186,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101186
+      ],
+      "textSha256": "4e9f7369e0a04b5b362208fc7924fc4d5e51428508f6bb7461fca350761b9983",
+      "source": "https://boekenbalie.nl/zomer-in-new-york/9789044341027"
+    },
+    {
+      "work": 1187,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101187
+      ],
+      "textSha256": "97efb5469d7f7c3d256580928e58ba8e39a5bb8386d9f37bcb2492d67eed505b",
+      "source": "https://www.lsuitgeverij.nl/boek/glazuur/"
+    },
+    {
+      "work": 1189,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101189
+      ],
+      "textSha256": "e940f11b8eae67fe59ab153e69f99c3bed0a7aeb37b87e0bb93f40a2bd5362d6",
+      "source": "https://openlibrary.org/works/OL26182328W"
+    },
+    {
+      "work": 1218,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        939101218
+      ],
+      "textSha256": "6d849dd2a7264e0031adbd89ef4d1bea415224cbdb8bdf35e436bf917985f180",
+      "source": "https://openlibrary.org/works/OL45029610W"
+    },
+    {
+      "work": 1082,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101082
+      ],
+      "textSha256": "d56fd061d8e0b1a057eacc5b918dab8697b5d8ccbdcb0b1c266605bfe3884dff",
+      "source": "https://www.amboanthos.nl/boek/de-kraamhulp/"
+    },
+    {
+      "work": 1083,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101083
+      ],
+      "textSha256": "2a86a9d1426af05eb581348548778e7b686ba3db6d3cf51a527bba945c4b0483",
+      "source": "https://uitgeverijprometheus.nl/boeken/lieve-mama-gebonden/"
+    },
+    {
+      "work": 1084,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101084
+      ],
+      "textSha256": "e6cc7c891fc42f2e984a144ba1036e3ae0623343a4104022fb747eec1c8fffa0",
+      "source": "https://rozet.nl/catalogus/1870724/"
+    },
+    {
+      "work": 1085,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101085
+      ],
+      "textSha256": "26cfcbca9655eb133b9cf40aa5279342411cba8cb7963eead15512e05ed516f6",
+      "source": "https://uitgeverijprometheus.nl/boeken/nachtdienst-paperback/"
+    },
+    {
+      "work": 1097,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101097
+      ],
+      "textSha256": "e38088f6d788c93fdf3f43e3cd1ab927d779138dc5326fecd572bb10676a5567",
+      "source": "https://www.singeluitgeverijen.nl/volt/boek/cel-2/"
+    },
+    {
+      "work": 1098,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101098
+      ],
+      "textSha256": "87b857f73bb1f81202d01cd95bf431c9c48562ff159a95bf491cebc72d63285d",
+      "source": "https://www.singeluitgeverijen.nl/volt/boek/wachtwoord-2/"
+    },
+    {
+      "work": 1139,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        940101139
+      ],
+      "textSha256": "c4534072ef649056c5f4483452855e12ecd14ecfebf4d93e8dfecc5e7d3cb155",
+      "source": "https://singeluitgeverijen.nl/querido/boek/gips/"
+    },
+    {
+      "work": 1040,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        941101040
+      ],
+      "textSha256": "6d4894f8eff8ac594f6ea34719f3774fb47b970c59886533054ac389692c34ed",
+      "source": "https://metadata.isbn.nl/993728/de-heilige-rita.html"
+    },
+    {
+      "work": 1043,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        941101043
+      ],
+      "textSha256": "bf0edb263a21da309db12841e8a69612a876e167f4af2b9246395b513d5c2de3",
+      "source": "https://metadata.isbn.nl/1698132/alkibiades.html"
+    },
+    {
+      "work": 1057,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101057
+      ],
+      "textSha256": "cd25c890dbdd9a7a673a869cc5cb948296afad2a5c6a3222a8f421b4a1bc6f54",
+      "source": "https://www.debezigebij.nl/boek/de-bekeerlinge/ebook/9789023499534/"
+    },
+    {
+      "work": 1060,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101060
+      ],
+      "textSha256": "0d840c1fc36b057363cb09dc25ae38799ea3e26734e0cf39611b1930ca030643",
+      "source": "https://openlibrary.org/works/OL24328099W"
+    },
+    {
+      "work": 1061,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101061
+      ],
+      "textSha256": "ee3bef81255953c2a924160b1c11f693d4638d39186d0d4e93c7362d42ef9675",
+      "source": "https://www.amboanthos.nl/boek/verloren-grond/"
+    },
+    {
+      "work": 1074,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101074
+      ],
+      "textSha256": "f86980aaaba5fbe78293cc6194bc46f64d56b0e48dc537ba9d0934580ddf04f3",
+      "source": "https://openlibrary.org/works/OL19964029W"
+    },
+    {
+      "work": 1188,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101188
+      ],
+      "textSha256": "265a84ae75858c4e52803a0c744000e433af7ecbf90344d538935eb155829c90",
+      "source": "https://www.lsuitgeverij.nl/boek/verkikkerd/"
+    },
+    {
+      "work": 1351,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101351
+      ],
+      "textSha256": "20b6cc0db6ef89b110d280fdfe5052034e59592879df76930bdd7a59503ae9cd",
+      "source": "https://openlibrary.org/works/OL15179541W"
+    },
+    {
+      "work": 1351,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942101351
+      ],
+      "textSha256": "1455f537bfbc85f5d29f22b17ae55c5411197d88983872033f21eb6151800cf3",
+      "source": "https://openlibrary.org/works/OL15179541W"
+    },
+    {
+      "work": 2322,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        942102322
+      ],
+      "textSha256": "584f66fbfc05adf1d1fe133897258a38408e487178dbaa8051287b44bded53b8",
+      "source": "https://openlibrary.org/works/OL24317781W"
+    },
+    {
+      "work": 1113,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        943101113
+      ],
+      "textSha256": "a7cb948ff75146a67a1490812d973e9dd5b2ee7e9643ff64aca5b4d38c434299",
+      "source": "https://lemniscaat.nl/boeken/triomf-van-de-verschroeide-aarde"
+    },
+    {
+      "work": 1114,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        943101114
+      ],
+      "textSha256": "cd054319933b63d67595926663eb16c5b3aaee0e27d07228308b53c4a796c636",
+      "source": "https://lemniscaat.nl/boeken/het-rad-van-fortuin"
+    },
+    {
+      "work": 1115,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924101115
+      ],
+      "textSha256": "3fbfa9b493ce7182eb25da521afad4a0620baca51da5a7aa79a02f5119362dfd",
+      "source": "https://lemniscaat.nl/boeken/het-helse-paradijs"
+    },
+    {
+      "work": 1116,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924101116
+      ],
+      "textSha256": "607d90fbbd1c0dcbefb4eeaceef977610370d4e2a35c85d64670db8d5b179e72",
+      "source": "https://lemniscaat.nl/boeken/het-gulden-vlies-van-thule"
+    },
+    {
+      "work": 1251,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924101251
+      ],
+      "textSha256": "b2085a831889ca83ee750c46d0cf23c29d1c8fed2c621bebf7e6f8b8f528d68a",
+      "source": "https://lemniscaat.nl/boeken/kinderen-van-moeder-aarde"
+    },
+    {
+      "work": 1343,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101343
+      ],
+      "textSha256": "c1cb397cefdfd1adaeaf276c02d889bdde73515a2abe0edf0bd8ee0fda9cbf5c",
+      "source": "https://openlibrary.org/books/OL61048849M"
+    },
+    {
+      "work": 1357,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101357
+      ],
+      "textSha256": "e925cd7513efcfb43c3ebd679a5153c41eb8b7048b9ea3c1ef9db146ccd4aeae",
+      "source": "https://openlibrary.org/books/OL61696789M"
+    },
+    {
+      "work": 1433,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101433
+      ],
+      "textSha256": "f0167f1d9620fc5a48083f0f20fdf72627604a2032913567101c10c95c689052",
+      "source": "https://openlibrary.org/books/OL47675803M"
+    },
+    {
+      "work": 1514,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101514
+      ],
+      "textSha256": "280e507f0227c82a3d51b36d9373016a0638c671f290fa693e2e3dcb22e93817",
+      "source": "https://openlibrary.org/books/OL60681600M"
+    },
+    {
+      "work": 1541,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101541
+      ],
+      "textSha256": "f27a9774f602a073a6abc0525ad58fd7c65d9d2027292738f5cd6e6a6aa72743",
+      "source": "https://openlibrary.org/books/OL62083313M"
+    },
+    {
+      "work": 1568,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101568
+      ],
+      "textSha256": "946db517d07e6b579c344e62b3a6de5fbd99ba1edc9ece375e15d060ce59b4a5",
+      "source": "https://openlibrary.org/books/OL27290510M"
+    },
+    {
+      "work": 1641,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101641
+      ],
+      "textSha256": "39ae1f7bb72f1d94b1f7c48e43bf38866c651b963eb2fe1ae8cc7211d9771662",
+      "source": "https://openlibrary.org/books/OL61279026M"
+    },
+    {
+      "work": 1692,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101692
+      ],
+      "textSha256": "ea6f3ed86e70d2997e096f2bb05ecd443ae184904228ffa12fad4268662a142e",
+      "source": "https://openlibrary.org/books/OL45730611M"
+    },
+    {
+      "work": 1789,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101789
+      ],
+      "textSha256": "15d64a1bde0aa3e992668e025ca22e2d03f3685056c22672c148d9a388319277",
+      "source": "https://openlibrary.org/books/OL26842026M"
+    },
+    {
+      "work": 1865,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        945101865
+      ],
+      "textSha256": "e9a61c32758f7f01c4777afd49f8ad5e2d1b43989b9d43d5f1d103067600498a",
+      "source": "https://openlibrary.org/books/OL41761836M"
+    },
+    {
+      "work": 1883,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946101883
+      ],
+      "textSha256": "d62a7ea5e20bc67a36fa7bce45fb188cc734750ceeccc3388b5e4f3c0b12a092",
+      "source": "https://openlibrary.org/books/OL62059363M"
+    },
+    {
+      "work": 2038,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946102038
+      ],
+      "textSha256": "7cdb5f1705432c439b76d3b9706b7d3263d35c7897e8c33f42b884c63ba6db0e",
+      "source": "https://openlibrary.org/books/OL61398636M"
+    },
+    {
+      "work": 3208,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103208
+      ],
+      "textSha256": "8d6f8b99180628707afcefaac8e0c298b2e293b50f08ecf2650be1aa5258a711",
+      "source": "https://openlibrary.org/books/OL61553450M"
+    },
+    {
+      "work": 3340,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103340
+      ],
+      "textSha256": "8a0667a85585e41f67ea7c9350367ac2dfbd4695ae78313ee4be20f1aadc4b82",
+      "source": "https://openlibrary.org/books/OL32986221M"
+    },
+    {
+      "work": 3450,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103450
+      ],
+      "textSha256": "4f101bc341d16fb6828a36e9d82ea359542a0c9e8e564ae316165c3633e6357e",
+      "source": "https://openlibrary.org/books/OL60586001M"
+    },
+    {
+      "work": 3457,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103457
+      ],
+      "textSha256": "066129ca6e7a4c2c5d27f0f3b257c02264e0b700dee67ff0108c96482ddbec0b",
+      "source": "https://openlibrary.org/books/OL62542425M"
+    },
+    {
+      "work": 3472,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103472
+      ],
+      "textSha256": "de4c2d274c6f3bc07b388bfb3fda06a9623c39acab2ed70b68ff895ce7c57304",
+      "source": "https://openlibrary.org/books/OL46534390M"
+    },
+    {
+      "work": 3532,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103532
+      ],
+      "textSha256": "4a9343d8074c420ded10c9d2007d946f43c13864cdcf3943ce075d1f4a8d8e7d",
+      "source": "https://openlibrary.org/books/OL41758461M"
+    },
+    {
+      "work": 5133,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946105133
+      ],
+      "textSha256": "13a223214767e2390420e8c4ca45bb3de30f021450f144a68e57372eaddce3f2",
+      "source": "https://openlibrary.org/books/OL61048982M"
+    },
+    {
+      "work": 5147,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946105147
+      ],
+      "textSha256": "36ce1d7a348e6acbfed4fa2dc05e0c905f45290d973f5872aa8cfbb5736f56d2",
+      "source": "https://openlibrary.org/books/OL62157897M"
+    },
+    {
+      "work": 5187,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946105187
+      ],
+      "textSha256": "21fc3a79c6b1ae1836a125f933f68a248f4dfad20cfc31b8c49f3d717261cf02",
+      "source": "https://openlibrary.org/books/OL61366385M"
+    },
+    {
+      "work": 5196,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946105196
+      ],
+      "textSha256": "09e7ca146be38151905cba6650df6bc1134ca3914a112dae04e8c25251fc6334",
+      "source": "https://openlibrary.org/books/OL51484966M"
+    },
+    {
+      "work": 5703,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946105703
+      ],
+      "textSha256": "3aaa8816cf6b437669c0d758616e8938428d8b8fcb9ed07e6d24d0ffe0858f71",
+      "source": "https://openlibrary.org/books/OL61329180M"
+    },
+    {
+      "work": 6123,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106123
+      ],
+      "textSha256": "8a28042aa047dbad968ad4493541d51c97b2c205db8cc3fd4b778cae024a7009",
+      "source": "https://openlibrary.org/books/OL24756256M"
+    },
+    {
+      "work": 6248,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106248
+      ],
+      "textSha256": "bcd297ef4e75c060d18ba879d5f629f260e30aae3d58256a2867ea5e7d2c471a",
+      "source": "https://openlibrary.org/books/OL62547692M"
+    },
+    {
+      "work": 6265,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106265
+      ],
+      "textSha256": "bd7f233402c1e2c7f9802d848972df6ee819332c839bce6573963691993470f5",
+      "source": "https://openlibrary.org/books/OL35337468M"
+    },
+    {
+      "work": 6334,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106334
+      ],
+      "textSha256": "7436cad53d31253922a34e63b90349dade624d0f187634275ed07b6fd2af1a06",
+      "source": "https://openlibrary.org/books/OL35329941M"
+    },
+    {
+      "work": 6339,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106339
+      ],
+      "textSha256": "2ccd82629008d9f8b8473ecc90f76987d706c825c98e0d731f25fa597dbb6d23",
+      "source": "https://openlibrary.org/books/OL38244609M"
+    },
+    {
+      "work": 6341,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106341
+      ],
+      "textSha256": "d118c091e82740e27d7ba17a70991e2753b132ca9b6369633c2412ce90150a50",
+      "source": "https://openlibrary.org/books/OL61027559M"
+    },
+    {
+      "work": 6351,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106351
+      ],
+      "textSha256": "ac9a6a57dfc2d3af31a5d671b0aa587b461ae29cf86cdf9c399aa702dcd05a44",
+      "source": "https://openlibrary.org/books/OL43195502M"
+    },
+    {
+      "work": 6386,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106386
+      ],
+      "textSha256": "5e09e9e151129c181bb982b5625483822d4301c027f0a885e26629c68ae1faf6",
+      "source": "https://openlibrary.org/books/OL61297901M"
+    },
+    {
+      "work": 6390,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106390
+      ],
+      "textSha256": "07f4e5098af09ab914c4ff7650eba682c6fe8820c10bb62e7a685f03278ad675",
+      "source": "https://openlibrary.org/books/OL60623675M"
+    },
+    {
+      "work": 2233,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946102233
+      ],
+      "textSha256": "4c83851945737a7cae3534811ac59de57edc2b40403380450a555adc79fb6a5d",
+      "source": "https://openlibrary.org/books/OL57592301M"
+    },
+    {
+      "work": 2253,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946102253
+      ],
+      "textSha256": "b8fe10d76a4c5a141ee8c888a271e31ddf340726fa47182f574f390cff2d0d4c",
+      "source": "https://openlibrary.org/books/OL29483638M"
+    },
+    {
+      "work": 2499,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946102499
+      ],
+      "textSha256": "5a5bb3e4c255be3ca01b8039f69c3990f7a52e603efa8989362e3f2dbecf3ff4",
+      "source": "https://openlibrary.org/books/OL57588776M"
+    },
+    {
+      "work": 2928,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946102928
+      ],
+      "textSha256": "c6c5c60d3a0871fb530312e8ff8bdcdb2f15c037c4b9744b6e9b259f21870158",
+      "source": "https://openlibrary.org/books/OL26454664M"
+    },
+    {
+      "work": 3102,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103102
+      ],
+      "textSha256": "e0ecee85de95bdae3c4e93c78a58159bd7dea294aa868da73a8f248318f71806",
+      "source": "https://openlibrary.org/books/OL49782722M"
+    },
+    {
+      "work": 3572,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103572
+      ],
+      "textSha256": "134e09ab7a25858cca4e7689ab1988b6d229afdd1ef1fcb43140173ac9dcbf6b",
+      "source": "https://openlibrary.org/books/OL38233686M"
+    },
+    {
+      "work": 3656,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103656
+      ],
+      "textSha256": "379551ad870559e577b5bd2e3af169d3c1aaa2727e74b6de13202ff45076c0cf",
+      "source": "https://openlibrary.org/books/OL30451398M"
+    },
+    {
+      "work": 3761,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103761
+      ],
+      "textSha256": "c074400d97d01abace3f2c42e2f810f49b3c50b35937c81883897820d173ea3f",
+      "source": "https://openlibrary.org/books/OL61421782M"
+    },
+    {
+      "work": 3905,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946103905
+      ],
+      "textSha256": "2cf7a37dd19b8ed02f6d5e9c46f0a700edff99fdc6ec396146efc2b01d2507d6",
+      "source": "https://openlibrary.org/books/OL51516353M"
+    },
+    {
+      "work": 4239,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946104239
+      ],
+      "textSha256": "52d39f8923afa99644a28c1ce41f3637706e0e1f46dc4b7d2dfca58c2859d456",
+      "source": "https://openlibrary.org/books/OL35505875M"
+    },
+    {
+      "work": 4571,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946104571
+      ],
+      "textSha256": "d4ec38ead4a9867bac005ba4471ef206f61e90cbef7b154efe773edaa45f0d22",
+      "source": "https://openlibrary.org/books/OL46125203M"
+    },
+    {
+      "work": 4779,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946104779
+      ],
+      "textSha256": "24cb3759d7f9b13b13f82e435158857f4014b3603f424b68b0e7b248edbc84df",
+      "source": "https://openlibrary.org/books/OL35727000M"
+    },
+    {
+      "work": 4887,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946104887
+      ],
+      "textSha256": "f95199cd9ef186946e0deda5c7f8775b66984e3a89763e2232cba37cad3b7ad7",
+      "source": "https://openlibrary.org/books/OL29891575M"
+    },
+    {
+      "work": 6806,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946106806
+      ],
+      "textSha256": "9a0ad617334cce97c7d270ecc3aa3c084a48ba77fbb7b2efcdd787166054aeff",
+      "source": "https://openlibrary.org/books/OL24766460M"
+    },
+    {
+      "work": 7167,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946107167
+      ],
+      "textSha256": "3da1ebd7aad5ead0fa5a221b975ff308dd977dc51e6ecb26b0d40f36694af923",
+      "source": "https://openlibrary.org/books/OL31848207M"
+    },
+    {
+      "work": 7263,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946107263
+      ],
+      "textSha256": "1ba8455e33175f3ddfc7481e57c6343c36c0b1932eac47e1a27144261dcf9ab1",
+      "source": "https://openlibrary.org/books/OL24947863M"
+    },
+    {
+      "work": 7343,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946107343
+      ],
+      "textSha256": "5fd65b09f3fc18bc413e0bad9ab7165567b8a4a5e79a66471daac5f63dd8fac9",
+      "source": "https://openlibrary.org/books/OL8369150M"
+    },
+    {
+      "work": 7519,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946107519
+      ],
+      "textSha256": "4987d77ede718cac65ef272be915df6e70e2170b046e75f97d31b63f8ed6a261",
+      "source": "https://openlibrary.org/books/OL24967147M"
+    },
+    {
+      "work": 8125,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946108125
+      ],
+      "textSha256": "c2202a33f6e6b697ea16a6fa1e7cb32df3a6767ed48223bef5c8bbf22cb5d334",
+      "source": "https://openlibrary.org/books/OL9652658M"
+    },
+    {
+      "work": 8173,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946108173
+      ],
+      "textSha256": "2ab03e37a7c8316a65c63b781e191936480487189eab6a183d526ed2cecc156a",
+      "source": "https://openlibrary.org/books/OL23936228M"
+    },
+    {
+      "work": 9225,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946109225
+      ],
+      "textSha256": "99b7e742e2b5cf2d7b19f92fc492dc15e383a658746f2d150a7535f55a5bdd2f",
+      "source": "https://openlibrary.org/books/OL57188709M"
+    },
+    {
+      "work": 10125,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        946110125
+      ],
+      "textSha256": "8973ee4057fe71a4de2fe374d6977e552df8efb3930fdcd83248d55a134f0824",
+      "source": "https://openlibrary.org/books/OL7541451M"
+    },
+    {
+      "work": 1203,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947101203
+      ],
+      "textSha256": "fb3b83818e2f1549a4911005096f1b5990f72bb0a4e85d1b1297c48c23c5b885",
+      "source": "https://openlibrary.org/books/OL24700930M"
+    },
+    {
+      "work": 1348,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947101348
+      ],
+      "textSha256": "0a6497a3213a7859b70839effd3ad26a41d1e3e699b2791b2c877f3a95b3ef5e",
+      "source": "https://www.arthurjapin.nl/een-schitterend-gebrek"
+    },
+    {
+      "work": 5935,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947105935
+      ],
+      "textSha256": "3ce0681be0948a55f30760f8e58c206157cb41d813ae9e237063af4b6f6a7b76",
+      "source": "https://www.awbruna.nl/boek/thrillers/eric-van-lustbader/het-testament-2/"
+    },
+    {
+      "work": 6189,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947106189
+      ],
+      "textSha256": "58666b8e116e0c1d4f059a2088f48b3ee49737ec657bb7c7aec7e46742196d24",
+      "source": "https://www.catranslation.org/video/marie-ndiayes-that-time-of-year-jordan-stump-and-imani-perry/"
+    },
+    {
+      "work": 6232,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947106232
+      ],
+      "textSha256": "fc5f837ef30c0ff7b43479c427333b02bc98f63644177e378e792ded8ea752e6",
+      "source": "https://singeluitgeverijen.nl/de-geus/boek/ladivine/"
+    },
+    {
+      "work": 6486,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947106486
+      ],
+      "textSha256": "fb8a0426b8cfbdeb452f020d8b3f27bd36e2bb20e7f27cabd1489b8d3d26fcb5",
+      "source": "https://www.dbnl.org/tekst/_uit016uitg14_01/_uit016uitg14_01_0012.php"
+    },
+    {
+      "work": 3575,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947103575
+      ],
+      "textSha256": "55a3f06fce11762b7122c1ae128a2e3371478f79de9b5fcb84303f0409a0dd0a",
+      "source": "https://robinsharma.com/books/"
+    },
+    {
+      "work": 3594,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947103594
+      ],
+      "textSha256": "37a833777c5df082dc334e47b9d26b5dc1bd78f41829f2519b44f74c0afbc774",
+      "source": "https://shop.hayhouse.com/products/good-vibes-good-life"
+    },
+    {
+      "work": 8588,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947108588
+      ],
+      "textSha256": "d2c7f5ca239e5f8bf32be4e609c46096c4898de750bdd6c43f9905596c76bd28",
+      "source": "https://natlib.govt.nz/records/22993379"
+    },
+    {
+      "work": 8953,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        947108953
+      ],
+      "textSha256": "4793fb2056c135533252bcdc5447e1ab3183b9e0a6d67dd99018a4ee047a5200",
+      "source": "https://www.hachettebookgroup.com/titles/darren-shan/lord-loss/9780316012331/"
+    },
+    {
+      "work": 1500,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948101500
+      ],
+      "textSha256": "d73cf11b7c110256c607bdcfab1eb937db516cb8946f1bb92fd3a95e21df935d",
+      "source": "https://www.penguinrandomhouse.com/books/328806/this-earth-of-mankind-by-pramoedya-ananta-toer/"
+    },
+    {
+      "work": 2268,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948102268
+      ],
+      "textSha256": "52035fc71d37db698e4d4d93fb046d45d9e64858cc2b4657a289d8e4a6723d46",
+      "source": "https://www.newyorker.com/magazine/1948/06/26/the-lottery"
+    },
+    {
+      "work": 3820,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948103820
+      ],
+      "textSha256": "560136886b8185d1b1665c4cd24a69ad0d13070ce438e6dedf71011441e14817",
+      "source": "https://openlibrary.org/books/OL9853296M"
+    },
+    {
+      "work": 7473,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948107473
+      ],
+      "textSha256": "13960442014d5a2eb0e7d70f210019cf3d9b7fe88db834ee794c7aaac6bb5a17",
+      "source": "https://www.hachettebookgroup.com/titles/jason-hawes/ghost-hunt/9780316129138/"
+    },
+    {
+      "work": 8665,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948108665
+      ],
+      "textSha256": "c07df05f6bbc2028e8ca96ec972b722318e1507274ebe437b0846102bd59b898",
+      "source": "https://books.google.com/books/about/Ghosts_in_the_Gallery.html?id=5hUViLO4kWgC"
+    },
+    {
+      "work": 9163,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        948109163
+      ],
+      "textSha256": "ef53a656f1bff531969e3f0a19778dc449a066e787382d619c95cf7047c84a80",
+      "source": "https://www.kensingtonbooks.com/shop/diary-of-a-street-diva/"
+    },
+    {
+      "work": 389,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        949100389
+      ],
+      "textSha256": "9aae03e15738e60f2517dabdd2f6f0f30c4e59028f92f958d8c93070c74b7e37",
+      "source": "https://www.shelsilverstein.com/9780060256654/the-giving-tree/"
+    },
+    {
+      "work": 1698,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        949101698
+      ],
+      "textSha256": "4312b0edb8ab4cc83a46db9e69d7ce08109207d09c40f28bbc85e0995d008e61",
+      "source": "https://rozet.nl/catalogus/2373868/"
+    },
+    {
+      "work": 14,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        929100014
+      ],
+      "textSha256": "e30197378c026091fd5df33c7e58d3822a19c5b0f35a1e79ee541eb1ca618e75",
+      "source": "https://openlibrary.org/works/OL450063W"
+    },
+    {
+      "work": 22,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        929100022
+      ],
+      "textSha256": "f5ca2b13125958c8c02318f39defd4679117f183caf05530817ae657d91855e4",
+      "source": "https://openlibrary.org/works/OL59798W"
+    },
+    {
+      "work": 17,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100017
+      ],
+      "textSha256": "267d261b72b6b1a4d92e2b09f0ef3451151921d43af2e852a30308606dca60b3",
+      "source": "https://openlibrary.org/works/OL17091839W"
+    },
+    {
+      "work": 18,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100018
+      ],
+      "textSha256": "6dac32b4cfb600f8b8e953c5cfe6a8c4d2d730f9fbfe38eb901573397428c7f7",
+      "source": "https://openlibrary.org/works/OL46125W"
+    },
+    {
+      "work": 19,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100019
+      ],
+      "textSha256": "50c80cbb223a47d0f0941bf696e57a3ec841aaa0ca7954597ea6daca9dace290",
+      "source": "https://openlibrary.org/works/OL27258W"
+    },
+    {
+      "work": 21,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100021
+      ],
+      "textSha256": "e9d436eba5507e82e1708f8325d52f3ee5596f661ab5a1b7fde5adcee0230f92",
+      "source": "https://openlibrary.org/works/OL59800W"
+    },
+    {
+      "work": 23,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100023
+      ],
+      "textSha256": "3d2c100f607ee5b42dcd12940f47e667c223326d9fa87157f5819782c6c53229",
+      "source": "https://openlibrary.org/works/OL8479867W"
+    },
+    {
+      "work": 24,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100024
+      ],
+      "textSha256": "2d24d2be1eaa27fac203653416552f64ba0b0416fc468fa92b7fb55b8b431fe4",
+      "source": "https://openlibrary.org/works/OL15358691W"
+    },
+    {
+      "work": 25,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100025
+      ],
+      "textSha256": "cd1f085a90933dc43d9b44a7d6050a5e3627ed441af95e5d31b627228fb41207",
+      "source": "https://openlibrary.org/works/OL257943W"
+    },
+    {
+      "work": 26,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100026
+      ],
+      "textSha256": "eb3a49945d8a30705bd3a474de02432d77acce674c17ae847c58cc10f59ddef0",
+      "source": "https://openlibrary.org/works/OL71037W"
+    },
+    {
+      "work": 27,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100027
+      ],
+      "textSha256": "0ad01e9c107bfe1f8fce2a0596a6fa1378fa5b2ae6a13f18143b2610fdaa479e",
+      "source": "https://openlibrary.org/works/OL453936W"
+    },
+    {
+      "work": 32,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100032
+      ],
+      "textSha256": "a4955c3a0e2b6ee64092f53a02b30d6e4cd1bbcee8b717845fd7f910e19e7bf0",
+      "source": "https://openlibrary.org/works/OL2163649W"
+    },
+    {
+      "work": 117,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100117
+      ],
+      "textSha256": "b9721b22ae6c35dc5814a305e3d30bd2a85b17a6af22fa18f41f1e1ba94770c3",
+      "source": "https://openlibrary.org/works/OL17267881W"
+    },
+    {
+      "work": 140,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100140
+      ],
+      "textSha256": "5049a2e80033d9bc3761f5942aeb458867edcb5c1ddbe7bf63d7946d4141834f",
+      "source": "https://openlibrary.org/works/OL59863W"
+    },
+    {
+      "work": 146,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100146
+      ],
+      "textSha256": "011ebde1d6b0a98554841785cefc69da777e95d493b01f681306e3bc92ad8ed5",
+      "source": "https://openlibrary.org/works/OL28988W"
+    },
+    {
+      "work": 171,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100171
+      ],
+      "textSha256": "4996929d8044da9079ad648a40c458f73800eba931f861314da7b7024a256823",
+      "source": "https://openlibrary.org/works/OL27513W"
+    },
+    {
+      "work": 185,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100185
+      ],
+      "textSha256": "ea58f702cba271d294509f716fffabe0fcb8215754f243d8a9ca620dd8fc35e4",
+      "source": "https://openlibrary.org/works/OL17716925W"
+    },
+    {
+      "work": 218,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100218
+      ],
+      "textSha256": "7d6368040993df9d54ebabf3159b3ea2ef97f76efdfc3230ef92ab0f8939db81",
+      "source": "https://openlibrary.org/works/OL453735W"
+    },
+    {
+      "work": 288,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100288
+      ],
+      "textSha256": "a7cfc92e04f3dc31f66338a89cde23bd0731441b63ab9ce441204b0592210719",
+      "source": "https://openlibrary.org/works/OL1963268W"
+    },
+    {
+      "work": 304,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921100304
+      ],
+      "textSha256": "876aa4885f61bc3f614ea3bb6ace23959544e67f3c1e3d92867d387d3ab8813b",
+      "source": "https://openlibrary.org/works/OL2707183W"
+    },
+    {
+      "work": 4316,
+      "language": "en",
+      "status": "migrated_good_existing_text",
+      "testWorks": [
+        921104316
+      ],
+      "textSha256": "cc7383d0d1d38f1c97f7103ab913affa002db89d7be3f7fcf84318e83bd23c9c",
+      "source": "https://openlibrary.org/works/OL17914663W"
+    },
+    {
+      "work": 7,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        923100007
+      ],
+      "textSha256": "49f7acdf509064a4cc228341b8eee68befb0c9add8fec5b37e4a472e64fd0448",
+      "source": "https://openlibrary.org/works/OL27448W"
+    },
+    {
+      "work": 48,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        8800306
+      ],
+      "textSha256": "289eec7a81d74b43942b4ca97dddf25e638369e4be4c35409432063911964854",
+      "source": "https://www.penguinrandomhouse.com/books/98144/the-girl-with-the-dragon-tattoo-by-stieg-larsson/"
+    },
+    {
+      "work": 65,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        8800307
+      ],
+      "textSha256": "840fd7ed182c4044bfeab4c66dd1949a187e4026ca64e9e60717b3929968ddeb",
+      "source": "https://openlibrary.org/works/OL3261155W"
+    },
+    {
+      "work": 102,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100102
+      ],
+      "textSha256": "78cb6f9e3dc5979989808ad273baad864897acd7b81e6b8e977c461b4ec1a085",
+      "source": "https://openlibrary.org/works/OL5735363W"
+    },
+    {
+      "work": 102,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100102
+      ],
+      "textSha256": "da4838554ccdd439e2c5e19ca9263f26347eba426d491ac9c905008550a4d3c6",
+      "source": "https://openlibrary.org/works/OL5735363W"
+    },
+    {
+      "work": 114,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100114
+      ],
+      "textSha256": "2dccf06d048bf41e9991759b30371aa6dbc0aff2dc74649387dba8f809acc0e1",
+      "source": "https://openlibrary.org/works/OL18766691W"
+    },
+    {
+      "work": 121,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100121
+      ],
+      "textSha256": "7e62fb9776f027497894d928590c18041e6e3f82bbb4bd279f7fcc9c1f1f4c24",
+      "source": "https://openlibrary.org/works/OL257939W"
+    },
+    {
+      "work": 125,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928100125
+      ],
+      "textSha256": "7ba3ad99139b6a8cb3ed66b0e14566a6efc08dee798b876804f5d6b5687c9c13",
+      "source": "https://www.penguinrandomhouse.com/books/33716/the-passage-tv-tie-in-edition-by-justin-cronin/paperback/"
+    },
+    {
+      "work": 126,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100126
+      ],
+      "textSha256": "67e49fe9b1b4670d31e4ad13030687a702bdcb6ebd7ea154571c1e1f80a7340f",
+      "source": "https://openlibrary.org/works/OL257948W"
+    },
+    {
+      "work": 138,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100138
+      ],
+      "textSha256": "4333e77837c0e42cdd802b20bf5cacf6909b63abadee553e4f798f5f03c90603",
+      "source": "https://openlibrary.org/works/OL27479W"
+    },
+    {
+      "work": 151,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100151
+      ],
+      "textSha256": "3e699f6b9ba774edc2a27a30dfd95f700ddb6a0097492f21db3b90f49a6d658c",
+      "source": "https://openlibrary.org/works/OL20128158W"
+    },
+    {
+      "work": 166,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100166
+      ],
+      "textSha256": "1fd98e89535c3ded053dbc8a09b4c528508800a35c29491303d38301765da84e",
+      "source": "https://openlibrary.org/works/OL21101115W"
+    },
+    {
+      "work": 178,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100178
+      ],
+      "textSha256": "27f989f8f50ca7ab01c76d8c1b14dabdab1d06128fcf65262c8753ec1ce75b1e",
+      "source": "https://openlibrary.org/works/OL28993W"
+    },
+    {
+      "work": 180,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        930100007
+      ],
+      "textSha256": "e0f6a1608379115653a58405b9140ae15037c5df9068c2fe23c7d16412d747de",
+      "source": "https://openlibrary.org/works/OL81626W"
+    },
+    {
+      "work": 189,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100189
+      ],
+      "textSha256": "4714f33110feaeb58aab0f4caa4e8747b008fd539c80ea4dbae17cad6e6b260e",
+      "source": "https://us.macmillan.com/books/9781627792127/sixofcrows/"
+    },
+    {
+      "work": 1220,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021002
+      ],
+      "textSha256": "f9960819bd52920cbc74d4c5ea79c2be5ac0c9d6f6144c3272934eb89bb68050",
+      "source": "https://openlibrary.org/works/OL24452795W"
+    },
+    {
+      "work": 1222,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021004
+      ],
+      "textSha256": "edb69e1bef7bb6af1627033a3d19c84c6ec2b6b438c437b0a2b9ad43c249d83c",
+      "source": "https://openlibrary.org/works/OL34868142W"
+    },
+    {
+      "work": 1361,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101361
+      ],
+      "textSha256": "9c8db70df7eae0bba823e9eec513dcd8ec7d51055d206e63005107dd5945e014",
+      "source": "https://openlibrary.org/works/OL17850410W"
+    },
+    {
+      "work": 1379,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101379
+      ],
+      "textSha256": "9715bd8906357161262740813e85e199faa909e5ebba46a8c5022d4f6ed18290",
+      "source": "https://openlibrary.org/works/OL17715454W"
+    },
+    {
+      "work": 1381,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921101381
+      ],
+      "textSha256": "3f070010f9e5dc4f730559f6ce2fb4dd2677af5226edf61ca0fb4451f2bd0a15",
+      "source": "https://openlibrary.org/works/OL1168007W"
+    },
+    {
+      "work": 1383,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101383
+      ],
+      "textSha256": "edfeab26c76cab9d6172ac0bd46a0676d1322c9064ab1846ba98400416b5c451",
+      "source": "https://openlibrary.org/works/OL24706481W"
+    },
+    {
+      "work": 1407,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101407
+      ],
+      "textSha256": "e1e24ce09a16c22dc3264c7187cd3cdf133bc6306e79199ae95b75aeb075a26a",
+      "source": "https://openlibrary.org/works/OL46241W"
+    },
+    {
+      "work": 1411,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101411
+      ],
+      "textSha256": "503bd135ef03b1ec140035f39dd278a39fbb50d38d358eba29606c8a3ca34015",
+      "source": "https://openlibrary.org/works/OL471932W"
+    },
+    {
+      "work": 1842,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101842
+      ],
+      "textSha256": "0fc156224a12d70c9a2a90494d8985910d8b7258a2cb05dd6f69b757e2162a6f",
+      "source": "https://openlibrary.org/works/OL9973101W"
+    },
+    {
+      "work": 48,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        8800306
+      ],
+      "textSha256": "7bd149259ac25969bd4a3487398f6191d41edafb6ab998fea6e391d9979dd19e",
+      "source": "https://www.awbruna.nl/boek/thrillers/stieg-larsson/mannen-die-vrouwen-haten-millennium/"
+    },
+    {
+      "work": 65,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        8800307
+      ],
+      "textSha256": "1b328d8fd2d29f89447117c587da169a87cebdef08969dc050deffcdc55c13f7",
+      "source": "https://www.lannoo.com/nl-be/literatuur-romans/de-reiziger-9789022574492"
+    },
+    {
+      "work": 114,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100114
+      ],
+      "textSha256": "cdf0f2d3ddee90b8e33693805566f1d54b2a68104aca01620ca4e978f20b3abd",
+      "source": "https://www.rainbow.nl/boek/3146/delia-owens-daar-waar-de-rivierkreeften-zingen.html"
+    },
+    {
+      "work": 1361,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101361
+      ],
+      "textSha256": "7d19e7ef2a187a682c22f6b9532eef911de3ea4169bd3d045ad27870c13895f5",
+      "source": "https://openlibrary.org/works/OL17850410W"
+    },
+    {
+      "work": 1379,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101379
+      ],
+      "textSha256": "3f49dcedd5473b55ac639e6b95bf52dab4e71762d1647752c986472e2b438825",
+      "source": "https://openlibrary.org/works/OL17715454W"
+    },
+    {
+      "work": 1381,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921101381
+      ],
+      "textSha256": "89a730cfa82e792c620bb2e112f3ef6748099e283d3d8a23a05961a1cb143f37",
+      "source": "https://openlibrary.org/works/OL1168007W"
+    },
+    {
+      "work": 1383,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101383
+      ],
+      "textSha256": "fb1faca4294620997ce3b2ab92ab36f013ac736fdd48dc2e1b1b755ef0e98e7f",
+      "source": "https://openlibrary.org/works/OL24706481W"
+    },
+    {
+      "work": 1407,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101407
+      ],
+      "textSha256": "ea7ce5d0720dc900a2d566d2a10ef116d3692db5d67d67f8cf84f20a209bc244",
+      "source": "https://openlibrary.org/works/OL46241W"
+    },
+    {
+      "work": 1411,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101411
+      ],
+      "textSha256": "19390bd97db6e964f2b438e7057a31bddbd9541b702bee33f0590e5773216649",
+      "source": "https://openlibrary.org/works/OL471932W"
+    },
+    {
+      "work": 1842,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928101842
+      ],
+      "textSha256": "f6c77d2c2ffbced794090b9cdc243bfc3d7a85511a0b0940f275c764a4c4f187",
+      "source": "https://openlibrary.org/works/OL9973101W"
+    },
+    {
+      "work": 1221,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021003
+      ],
+      "textSha256": "4b97a782e7c47296f51dc8c6acfe54cbab0188eb5e782fc3b7cf7c01066d8af7",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/de-vlucht/"
+    },
+    {
+      "work": 1224,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021006
+      ],
+      "textSha256": "e108e6f9954e45c663a8a1547bf3e07242cc0aee064a634d94a612dc9a75dd95",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/apres-ski/"
+    },
+    {
+      "work": 1225,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021007
+      ],
+      "textSha256": "031d2c585276d9c3c8327008f4ce30577ad376f52078c367b2d718ad3a43e24e",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/de-suite/"
+    },
+    {
+      "work": 1229,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021011
+      ],
+      "textSha256": "659aba7104b7331b7ce7dfcd006626a0801603221c2d5df9cb3bffcddeb00b17",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/noorderlicht/"
+    },
+    {
+      "work": 1230,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021012
+      ],
+      "textSha256": "0c3be48c5b0f86eb712052578c6ad1b1656f4bd2edbaedf32ac04dc578c8f991",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/het-chalet/"
+    },
+    {
+      "work": 1235,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021017
+      ],
+      "textSha256": "143526af36e9671f93bbaf794fd422f2b05228fe5fb01ef1492852e8b71635e2",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/sneeuwengelen/"
+    },
+    {
+      "work": 1236,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021018
+      ],
+      "textSha256": "41d09de23427cb64391e0f3bc7a3992bce752330364305e5585ae57b97e20f42",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/hittegolf/"
+    },
+    {
+      "work": 1237,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021019
+      ],
+      "textSha256": "14258b54da2329efe65ff65c025fe13e6fa0d3175d8e23e2a82352b9fdadf02a",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/lawinegevaar/"
+    },
+    {
+      "work": 1238,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021020
+      ],
+      "textSha256": "a5169b5c8b42bdf7f723ecc2b98e76dcadc798734256edf4a38defad92215056",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/het-paradijs/"
+    },
+    {
+      "work": 1240,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021022
+      ],
+      "textSha256": "e5464b2109836ac8bdc57d5a2eeb042ce1e32e9750115b9267d7e801896b4363",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/ijskoud/"
+    },
+    {
+      "work": 1241,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021023
+      ],
+      "textSha256": "3f30bf290199469f264ef5d15c5b2ef2c75af53bb4da3764f23c2a42f9a26f4e",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/winternacht/"
+    },
+    {
+      "work": 1242,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021024
+      ],
+      "textSha256": "fe903fd2c790917df4a8b189be0a8cf9aad1d562e221534d7b91cec880364651",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/het-strandhuis/"
+    },
+    {
+      "work": 1243,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021025
+      ],
+      "textSha256": "20a28026593795189e655c32815eeb813054c76e99a3427914c93e96a54bf7a1",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/roadtrip/"
+    },
+    {
+      "work": 1244,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021026
+      ],
+      "textSha256": "d66ddbc67a124e68df57e4592730f10eedde8940e526bf465b43446d6d3b206f",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/spoorloos/"
+    },
+    {
+      "work": 157,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100157
+      ],
+      "textSha256": "5fc86890bf4e9a48eea7d39c0d0ac5f13e3738b0974508985b8a696ee97998a1",
+      "source": "https://www.bloomsbury.com/us/house-of-earth-and-blood-9781635574043/"
+    },
+    {
+      "work": 199,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100199
+      ],
+      "textSha256": "e7f4f79ef63280a58187a72b3e1ca09ec1779d10b982d6718fb43ac7e7207e5b",
+      "source": "https://openlibrary.org/works/OL20129837W"
+    },
+    {
+      "work": 208,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        921100208
+      ],
+      "textSha256": "1798d4ba98ccbc63ef250b5a90964e466234c2578f0a685a6712ed0be7139884",
+      "source": "https://openlibrary.org/works/OL35623W"
+    },
+    {
+      "work": 222,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100222
+      ],
+      "textSha256": "3e29f739d409e5fd3f48c8b3bd8ba3d38372c7821aa4e629ec0149f5cabdda03",
+      "source": "https://openlibrary.org/works/OL34028551W"
+    },
+    {
+      "work": 226,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100226
+      ],
+      "textSha256": "f029c5e11201814d0b433aa4e9858fbba95bf8a70a62092b28f347cae831f70e",
+      "source": "https://openlibrary.org/works/OL41943074W"
+    },
+    {
+      "work": 232,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100232
+      ],
+      "textSha256": "4292ba23ba847296c1314b231ec33d89f5b68f9fd0c359ab57c13e017de6dcee",
+      "source": "https://openlibrary.org/works/OL17076473W"
+    },
+    {
+      "work": 239,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100239
+      ],
+      "textSha256": "9d87ec45c0713ea5d3baf79a31a5d61cb6167d7bef61523bbfab75b841bc5796",
+      "source": "https://openlibrary.org/works/OL20723256W"
+    },
+    {
+      "work": 512,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100512
+      ],
+      "textSha256": "67c5c5407ee27d583d4c6c97836a5b622ae1ab3dff18bd5ea3dabfeb4f989025",
+      "source": "https://www.hachette.co.nz/alice-oseman/heartstopper-volume-2-boy-meets-boy-in-the-phenomenal-graphic-novel-series-also-on-netflix"
+    },
+    {
+      "work": 580,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100580
+      ],
+      "textSha256": "998bed86d7b22f68eac8e203da650ec33f5ef403f5ab09fc0f4462131ef9c6ec",
+      "source": "https://openlibrary.org/works/OL7989979W"
+    },
+    {
+      "work": 652,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100652
+      ],
+      "textSha256": "4ec46465382cdb90edfdd10b10fda39af7732897e65badf79477af743f0ff0a1",
+      "source": "https://openlibrary.org/works/OL20878311W"
+    },
+    {
+      "work": 673,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100673
+      ],
+      "textSha256": "224a355a0c31004114c3433933a03f81dbea084d671b7b5acafc0c1cd691490c",
+      "source": "https://openlibrary.org/works/OL16550681W"
+    },
+    {
+      "work": 675,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100675
+      ],
+      "textSha256": "49c1f2b113185bdd83e1ceb6567eef8fa3e28372da356ceea4d2d0ba11daed53",
+      "source": "https://openlibrary.org/works/OL26955716W"
+    },
+    {
+      "work": 682,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100682
+      ],
+      "textSha256": "cd47af57d86edeacbc7c4c05ff0701c46244ccfb7d030b3659ebbf69fdfb6bd2",
+      "source": "https://openlibrary.org/works/OL34811234W"
+    },
+    {
+      "work": 683,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100683
+      ],
+      "textSha256": "92caa0ecdd7027b9277070ff8606f48277bb48952b01bfcb26d6e2e5a9e28cc5",
+      "source": "https://openlibrary.org/works/OL24390422W"
+    },
+    {
+      "work": 688,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100688
+      ],
+      "textSha256": "2096069d051b5a62e3a66d404ebe4a7f59d4c32fc7b593a47a3b04a2fdbb8cd2",
+      "source": "https://openlibrary.org/works/OL27245843W"
+    },
+    {
+      "work": 698,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100698
+      ],
+      "textSha256": "8c1cf7fd205809f79e7a2aae47099851bae50804521bdef66b21c2dfbc0675cb",
+      "source": "https://www.penguinrandomhouse.com/series/FS3/fifty-shades-of-grey-series/"
+    },
+    {
+      "work": 699,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100699
+      ],
+      "textSha256": "a95ae66cfa1ff99cde4d0f9c4b1640118f6dea911cd6453d332831112f3dbc7e",
+      "source": "https://openlibrary.org/works/OL29330646W"
+    },
+    {
+      "work": 715,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100715
+      ],
+      "textSha256": "aed5b9a78578f042768cc60f5b625c25d24efc2f6cefc3c799393c0c62dcc524",
+      "source": "https://openlibrary.org/works/OL34955908W"
+    },
+    {
+      "work": 772,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100772
+      ],
+      "textSha256": "a80db2cb1a9bcd5d13346d8394d2a03d8057ff14c3cd769574542fd1beaef8ee",
+      "source": "https://openlibrary.org/works/OL28744393W"
+    },
+    {
+      "work": 4143,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928104143
+      ],
+      "textSha256": "de7e35b579dd708afde89bb4807487f2a4f066e1a99ab63a8db7168b3f823800",
+      "source": "https://www.penguinrandomhouse.com/books/70667/i-claudius-by-robert-graves/9780679724773/"
+    },
+    {
+      "work": 4191,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928104191
+      ],
+      "textSha256": "cf64b38a34b67ccb9cc3afef5ad6fbe28cbf45b5a3a9496f0035b4980dd111c6",
+      "source": "https://www.penguin.co.uk/books/482991/chronicle-of-a-death-foretold-by-marquez-gabriel-garcia/9780241968628"
+    },
+    {
+      "work": 1259,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021028
+      ],
+      "textSha256": "0d4962af110b1804ece0a9fe1fa0c7d220b55b1b3e5af9c33c04ec113af4bcbf",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/sneeuwexpress/"
+    },
+    {
+      "work": 1282,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021029
+      ],
+      "textSha256": "65f35a26bba22956d5285af45988fd10c6c119d89a8e929cb9d5e7cf89bf86c7",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/zuidenwind/"
+    },
+    {
+      "work": 1283,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021030
+      ],
+      "textSha256": "6b439954afd90767c2f6ca330b319bb2997bdf9ab967c93da6867f6043c3d14f",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/lentevuur/"
+    },
+    {
+      "work": 1285,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021032
+      ],
+      "textSha256": "b85baf6812b0296524b0589ba57aa2f768026c9af513b2b538e9014617c31d5a",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/waterland/"
+    },
+    {
+      "work": 1287,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021033
+      ],
+      "textSha256": "2fc9ff61e3eab7b2eccd18adec1ab287182e9ffbc3c980b694c6599b78c9f9ab",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/koraalrif/"
+    },
+    {
+      "work": 1288,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021034
+      ],
+      "textSha256": "b33ee7e6303a3094aa0a038257e205fda9564d9c6a02dc85446eba3361669b4d",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/nachtvorst/"
+    },
+    {
+      "work": 1289,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021035
+      ],
+      "textSha256": "5075c26b9ea2c68a00e0bd919cc62e8451f80d3fdb1d8bde08ec5dace3892e18",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/gletsjer/"
+    },
+    {
+      "work": 1290,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021036
+      ],
+      "textSha256": "14f4b42960d71ca202a795056e3c9de31cc376b25e3f565c46118bc6db922f78",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/strandfeest/"
+    },
+    {
+      "work": 1291,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021037
+      ],
+      "textSha256": "47cd872d7218d289b25020121d81f463ca97c7424112a28cc877b1e18160cd49",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/de-vallei/"
+    },
+    {
+      "work": 1292,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021038
+      ],
+      "textSha256": "05c10dc2fa1ce882a23323f56158b7f8758b825a2680e5063515b0d927375bd4",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/mayday/"
+    },
+    {
+      "work": 1293,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021039
+      ],
+      "textSha256": "1e07b9304c3121d88b11562a694b8aea0d763d8d9c8a51b209f2ddbbfa608179",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/sneeuwstorm/"
+    },
+    {
+      "work": 1294,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021040
+      ],
+      "textSha256": "86325fd8a33165c85d430f30b835cdc821a97e863129ba84931ebc31ca3f823f",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/bloemeneiland/"
+    },
+    {
+      "work": 1295,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021041
+      ],
+      "textSha256": "aaa5a7c5d76447ea3df136b8167a2554bf2c9ef86a5fad67dcf8a574d1e7f9af",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/nachtvlucht/"
+    },
+    {
+      "work": 1297,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021042
+      ],
+      "textSha256": "bfc220709791a7ef571b9cff8013dd44307067f8df5fb28d413a18834c32dd05",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/ingesneeuwd/"
+    },
+    {
+      "work": 1298,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021043
+      ],
+      "textSha256": "8c698e49f145334a2ac230d6b2cbcdd0eb1ac4f6579861de37f23636f408ed18",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/onderstroom/"
+    },
+    {
+      "work": 1299,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021044
+      ],
+      "textSha256": "1b1bcd19dd1a6adac2a1a08d626c804bb1d8072486d6a33cab41574e448f36c0",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/zomeravond/"
+    },
+    {
+      "work": 1300,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021045
+      ],
+      "textSha256": "6ead6a50dfc7bbd43818c6a2a3877ad866d9e843b3236e6be8bef46ba97757e8",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/dwaalspoor-2/"
+    },
+    {
+      "work": 1302,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021046
+      ],
+      "textSha256": "77482b4f3def3f2d0d153c11c1403d987fd50e125df897be2c5723a886ec5b3d",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/vakantiegeld/"
+    },
+    {
+      "work": 1303,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021047
+      ],
+      "textSha256": "4504c781697b92b16e0b320e43badbbf14ac7ba0913bb40807e2e07b4a974045",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/de-scheiding/"
+    },
+    {
+      "work": 1304,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021048
+      ],
+      "textSha256": "745275a05d9fcba7193c64c829fcd7354704014bba99962c1f2ee9de649fb1dc",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/een-vluchtig-gebaar/"
+    },
+    {
+      "work": 1306,
+      "language": "nl",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021049
+      ],
+      "textSha256": "27bbd4763ad8a1a6ec11f221dfb99c37674eaf0b82be1f6e8c005e1409a15b49",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/in-de-mist/"
+    },
+    {
+      "work": 1223,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021005
+      ],
+      "textSha256": "ea5ae2c4fde5e73e9625d7fc37c13cd350832e696bfd704375c21339abca508d",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/cruise/"
+    },
+    {
+      "work": 1227,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021009
+      ],
+      "textSha256": "cf24234356e455260bb0018d04f3669327fbac7f1d9c59968b641d380e0b597f",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/bella-italia/"
+    },
+    {
+      "work": 1228,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        91021010
+      ],
+      "textSha256": "32ac0bf4946bdf7a4f71e640c09dc87f79a97b350e84edd7a1c07914d7103573",
+      "source": "https://www.awbruna.nl/boek/thrillers/suzanne-vermeer/bon-bini-beach/"
+    },
+    {
+      "work": 1456,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        8800312
+      ],
+      "textSha256": "2e074cf8de466881e2630717d05492d5db7c3870ca2a3f88bfc0bb0372f975ea",
+      "source": "https://www.wilibraries.org.uk/Record/102419"
+    },
+    {
+      "work": 9688,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928109688
+      ],
+      "textSha256": "03699acdf032f47bad32cbc3f583c693e8357deed7e7ad093a94046f5c76cb0c",
+      "source": "https://www.simonandschuster.com/books/This-Tender-Land/William-Kent-Krueger/9781476749303"
+    },
+    {
+      "work": 9761,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        928109761
+      ],
+      "textSha256": "9d5dd94e527344d0ff3e89901d2aece9dceca23db5097fd180b4765313f22e6e",
+      "source": "https://www.simonandschuster.com/books/Lady-Tans-Circle-of-Women/Lisa-See/9781982117085"
+    },
+    {
+      "work": 303,
+      "language": "en",
+      "status": "new_original_source_reviewed_text",
+      "testWorks": [
+        924100303
+      ],
+      "textSha256": "79d3677927160687542425cf837b833e96a1f0f50525d03a1cd894e44ddd453e",
+      "source": "https://openlibrary.org/books/OL25438720M"
+    }
+  ]
+}

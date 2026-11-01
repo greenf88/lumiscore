@@ -80,9 +80,16 @@ function normalizeText(value: string | null | undefined): string {
 }
 
 export function normalizeEditionLanguage(value: string): string {
-  const normalized = value.split('/').filter(Boolean).at(-1)?.toLowerCase() ?? '';
-  if (/^(?:en|eng|english)$/.test(normalized)) return 'eng';
-  if (/^(?:nl|nld|dut|dutch)$/.test(normalized)) return 'nld';
+  const raw=value.trim().toLowerCase().replaceAll('_','-');
+  // Only an actual Open Library language path is a path, not "nl/en".
+  const normalized=/^\/?languages\/[a-z-]+\/?$/.test(raw)?raw.replace(/^\/?languages\//,'').replace(/\/$/,''):raw;
+  if (/^(?:en(?:-us|-gb)?|eng|english)$/.test(normalized)) return 'eng';
+  if (/^(?:nl(?:-nl|-be)?|nld|dut|dutch|nederlands)$/.test(normalized)) return 'nld';
+  // Other verified metadata remains other, not an English/Dutch default.
+  // Bibliographic ISO639-2/B and terminology/ISO639-1 synonyms must not create
+  // a false source conflict (e.g. fre versus fr).
+  const aliases:Readonly<Record<string,string>>={fr:'fra',fre:'fra',fra:'fra',de:'deu',ger:'deu',deu:'deu',es:'spa',spa:'spa',it:'ita',ita:'ita',ja:'jpn',jpn:'jpn',he:'heb',heb:'heb',gu:'guj',guj:'guj'};
+  if(aliases[normalized])return aliases[normalized];
   return normalized;
 }
 
@@ -91,7 +98,7 @@ export function getPreferredEditionLanguages(
   sourceType?: string | null,
 ): readonly string[] {
   void sourceType; // Native origin is not an exception to the interface language.
-  return locale === 'nl' ? ['nld', 'eng'] : ['eng'];
+  return locale === 'nl' ? ['nld'] : ['eng'];
 }
 
 function editionText(edition: EditionCandidate): string {

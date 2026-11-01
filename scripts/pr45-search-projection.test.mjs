@@ -4,9 +4,14 @@ import {readFile} from 'node:fs/promises';
 import {PGlite} from '@electric-sql/pglite';
 import {selectStrictEdition} from '../lib/books/strict-edition.ts';
 import {normalizeIsbn13,normalizeOpenLibraryId} from '../lib/books/covers.ts';
-import {readSearchProjection} from '../lib/catalog/search-projection.ts';
+import {readSearchProjection as readCurrentSearchProjection} from '../lib/catalog/search-projection.ts';
 import {searchWindow} from '../lib/catalog/search-window.ts';
 import {searchQuery} from '../lib/catalog/editorial-query.ts';
+// Frozen PR45 installation/rollback evidence. This historical v1 contract
+// allowed English fallback in NL. The active strict-v2 function is separately
+// tested over the entire public snapshot in catalog-integrity.test.mjs.
+function readSearchProjection(body,q){assert.equal(body.contract,'strict-spine-v1');return readCurrentSearchProjection({...body,contract:'strict-spine-v2'},q);}
+const historicalEdition=(rows,locale,title)=>selectStrictEdition(rows,locale,title)??(locale==='nl'?selectStrictEdition(rows,'en',title):null);
 
 test('read-only SQL projection: JS edition parity, full counting, relevance, RLS and bounded page hydration', {timeout:120000}, async()=>{
  const db=new PGlite();await db.waitReady;
@@ -68,7 +73,7 @@ test('read-only SQL projection: JS edition parity, full counting, relevance, RLS
    // Same normalization as books.ts strictEditions, not raw database rows.
    const normalized=editions.map(e=>({...e,id:String(e.id),title:e.title?.trim()||null,language:e.language?.trim()||null,
      isbn_13:normalizeIsbn13(e.isbn_13),open_library_edition_id:normalizeOpenLibraryId(e.open_library_edition_id?.trim(),'edition')}));
-   const expected=ids.flatMap(id=>{const w=works.find(w=>w.id===id),e=w&&selectStrictEdition(normalized.filter(e=>e.work_id===id),locale,w.title);return e?[{workId:String(id),editionId:String(e.id),title:e.title.trim(),author:w.author}]:[]});
+   const expected=ids.flatMap(id=>{const w=works.find(w=>w.id===id),e=w&&historicalEdition(normalized.filter(e=>e.work_id===id),locale,w.title);return e?[{workId:String(id),editionId:String(e.id),title:e.title.trim(),author:w.author}]:[]});
    assert.deepEqual(body.candidates.map(({workId,editionId,title,author})=>({workId,editionId,title,author})),expected,'SQL/JS chosen identity '+JSON.stringify({locale,params}));
    const selection=readSearchProjection(body,state.query),page1=searchWindow(selection.books,state,selection.aliases),page2=searchWindow(selection.books,{...state,page:2},selection.aliases);
    assert.equal(page1.total,expected.length);assert.ok(page1.books.length<=16);

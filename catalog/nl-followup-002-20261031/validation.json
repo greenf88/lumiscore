@@ -1,0 +1,22 @@
+{
+  "date":"2026-10-31",
+  "environment":"Local separate worktree/PGlite; public production READ ONLY evidence, no hosted writes",
+  "runtimeApplication":"13451a60e6f9399204aa625036942afa0b6c5380",
+  "frozenPR63":"11795c7b03d04ea0fd267694fe1b36c6b9bc7b0d",
+  "frozenPR62":"33801703b33e4bee2fa80a50de5cb7229897f8ab",
+  "checks":[
+    {"command":"node --experimental-strip-types --test scripts/nl-followup.test.mjs","passed":8,"failed":0,"skipped":0},
+    {"command":"node node_modules/typescript/bin/tsc --noEmit","exitCode":0},
+    {"command":"node node_modules/eslint/bin/eslint.js scripts/nl-followup-*.mjs scripts/nl-next100-*.mjs (explicit file arguments)","exitCode":0},
+    {"command":"node scripts/nl-followup-packet-scan.mjs","resultFile":"packet-scan.json","passed":true},
+    {"command":"git diff --check","exitCode":0}
+  ],
+  "preservation":"Application/lib/components/styles/migrations/package manifests unchanged. Local committed rollback restored all pre-existing fixture rows, synthetic ratings and progress; later edits and incoming dependencies stop all recovery.",
+  "coverage":"Four exact NL editions and four existing-language corrections validated with unchanged selectors/presentation and actual existing SQL locally. Fifty/1000/10223-book browser coverage is not inferred.",
+  "notClaimed":["Hosted test installation or recovery","Actual LumiScore Preview card rendering for these new rows","Productive catalogue expansion","Production speed improvement","New production build","Client-bundle secret scan: zero bundles existed"],
+  "productionWrites":0,
+  "hostedTestWrites":0,
+  "newConfirmationRequests":0,
+  "newTemporaryAccounts":0,
+  "newTemporaryHostedFixtures":0
+}

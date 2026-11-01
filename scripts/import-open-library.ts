@@ -14,6 +14,7 @@ import {
   type OpenLibrarySearchDocument,
 } from './open-library-matching.ts';
 import { createOpenLibraryImportPlan } from './open-library-import-plan.ts';
+import {conservativeCatalogPatch,singleEditionLanguage,sourceEditionRejection} from '../lib/catalog/import-integrity.ts';
 import {
   REVIEWED_SERIES_SEED_BOOKS,
   SEED_BOOKS,
@@ -349,9 +350,13 @@ async function loadOpenLibraryBook(seed: SeedBook) {
   const editionResult = await fetchOpenLibraryJson<{
     entries?: OpenLibraryEdition[];
   }>(`/works/${workId}/editions.json?limit=500`);
-  const rankedEditions = (editionResult.entries ?? []).map(
-    toRankedOpenLibraryEdition,
-  );
+  const rejectedSources = new Map<string,number>();
+  const rankedEditions = (editionResult.entries ?? []).flatMap(edition=>{
+    const reason=sourceEditionRejection(edition,workId);
+    if(reason){rejectedSources.set(reason,(rejectedSources.get(reason)??0)+1);return [];}
+    return [toRankedOpenLibraryEdition(edition)];
+  });
+  if(rejectedSources.size)console.warn('Source editions held for identity review',Object.fromEntries(rejectedSources));
   let reviewedEdition = seed.expectedIsbn13
     ? rankedEditions.find((edition) => edition.isbn13
         .map(normalizeIsbn13)
@@ -361,6 +366,8 @@ async function loadOpenLibraryBook(seed: SeedBook) {
     const exactEdition = await fetchOpenLibraryJson<OpenLibraryEdition>(
       `/isbn/${seed.expectedIsbn13}.json`,
     );
+    const rejected=sourceEditionRejection(exactEdition,workId,seed.expectedIsbn13);
+    if(rejected)throw new Error('Exact edition requires source review: '+rejected);
     const parentWorkIds = (exactEdition.works ?? []).map((entry) =>
       normalizeOpenLibraryId(entry.key));
     if (!parentWorkIds.includes(workId)) {
@@ -415,17 +422,19 @@ async function loadOpenLibraryBook(seed: SeedBook) {
       title: getWorkDisplayTitle(seed, work),
       firstPublishYear,
     },
-    editions: editions.map(({ editionId, edition }) => ({
+    editions: editions.map(({ editionId, edition }) => {
+      if(!edition.title?.trim())throw new Error('No verified edition title; Work title is not a substitute');
+      return ({
       id: editionId,
-      title: edition.title ?? workTitle,
+      title: edition.title.trim(),
       isbn10: edition.isbn_10?.find((isbn) => /^\d{9}[\dX]$/i.test(isbn.replace(/[\s-]/g, '')))?.replace(/[\s-]/g, '') ?? null,
       isbn13: edition.isbn_13
         ?.map(normalizeIsbn13)
         .find((isbn): isbn is string => isbn !== null) ?? null,
       publishDate: edition.publish_date ?? null,
       publisher: edition.publishers?.[0] ?? null,
-      language: edition.languages?.[0]?.key?.split('/').filter(Boolean).at(-1) ?? null,
-    })),
+      language: singleEditionLanguage((edition.languages??[]).flatMap(l=>l.key?[l.key]:[])),
+    });}),
   };
 }
 
@@ -532,11 +541,11 @@ async function findExistingRow(
     .from(table)
     .select([idColumn, ...additionalColumns].join(','))
     .match(filters)
-    .limit(1)
-    .maybeSingle();
+    .limit(2);
 
   if (error) throw error;
-  return data as Row | null;
+  if(data&&data.length>1)throw new Error('Ambiguous existing catalog identity; explicit review required.');
+  return data?.[0] as unknown as Row | null ?? null;
 }
 
 async function saveWithoutDuplicates(options: {
@@ -565,14 +574,14 @@ async function saveWithoutDuplicates(options: {
   ];
   const { data: byOpenLibraryId, error: lookupError } = await supabase
     .from(table)
-    .select([idColumn, ...preserveExistingColumns].join(','))
+    .select([...new Set([idColumn, ...Object.keys(payload),...preserveExistingColumns])].join(','))
     .in(openLibraryIdColumn, idVariants)
-    .limit(1)
-    .maybeSingle();
+    .limit(2);
 
   if (lookupError) throw lookupError;
 
-  let existing = byOpenLibraryId as Row | null;
+  if(byOpenLibraryId&&byOpenLibraryId.length>1)throw new Error('Duplicate Open Library identity; explicit review required.');
+  let existing = byOpenLibraryId?.[0] as unknown as Row | null ?? null;
   for (const filters of fallbackFilters) {
     if (existing) break;
     existing = await findExistingRow(
@@ -580,22 +589,22 @@ async function saveWithoutDuplicates(options: {
       table,
       idColumn,
       filters,
-      preserveExistingColumns,
+      [...new Set([...Object.keys(payload),...preserveExistingColumns])],
     );
   }
 
   if (existing) {
-    const updatePayload = { ...payload };
-    for (const column of preserveExistingColumns) delete updatePayload[column];
+    const {patch:updatePayload,held}=conservativeCatalogPatch(existing,payload,preserveExistingColumns);
+    if(held.length)console.info(JSON.stringify({event:'catalog_import_preserved_existing',table,id:String(existing[idColumn]),fields:held}));
     if (Object.keys(updatePayload).length === 0) {
       return { id: String(existing[idColumn]), created: false };
     }
-    const { data, error } = await supabase
+    let update = supabase
       .from(table)
       .update(updatePayload)
-      .eq(idColumn, existing[idColumn])
-      .select(idColumn)
-      .single();
+      .eq(idColumn, existing[idColumn]);
+    for(const field of Object.keys(updatePayload))update=existing[field]==null?update.is(field,null):update.eq(field,existing[field]);
+    const {data,error}=await update.select(idColumn).single();
     if (error) throw error;
     return { id: String((data as unknown as Row)[idColumn]), created: false };
   }
@@ -881,14 +890,15 @@ async function importNativeBook(
   };
   let work = await findExistingRow(supabase, 'works', columns.works.id, {
     [columns.works.nativeIdentityKey]: identityKey,
-  });
+  },Object.keys(nativeWorkPayload));
   let workCreated = false;
   if (work) {
-    const { error } = await supabase
-      .from('works')
-      .update(nativeWorkPayload)
-      .eq(columns.works.id, work[columns.works.id]);
-    if (error) throw error;
+    const {patch}=conservativeCatalogPatch(work,nativeWorkPayload);
+    if(Object.keys(patch).length){
+      let update=supabase.from('works').update(patch).eq(columns.works.id,work[columns.works.id]);
+      for(const field of Object.keys(patch))update=work[field]==null?update.is(field,null):update.eq(field,work[field]);
+      const {error}=await update.select(columns.works.id).single();if(error)throw error;
+    }
   } else {
     const { data, error } = await supabase
       .from('works')

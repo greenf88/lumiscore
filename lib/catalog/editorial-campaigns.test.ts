@@ -86,6 +86,7 @@ test('publisher-proven Dutch Final Empire cover stays bound to ISBN, Work, autho
   assert.match(presented.coverUrls![0],/lsuitgeverij\.nl.*9789024581269_frontcover/);
   assert.equal(presented.openLibraryEditionId,null);
   assert.equal(withStrictEdition(base,nl,'en'),null);
-  for(const change of [{isbn_13:'9789024565306'},{language:'eng'}]) assert.deepEqual(withStrictEdition(base,{...nl,...change},'nl')?.coverUrls,[]);
+  assert.deepEqual(withStrictEdition(base,{...nl,isbn_13:'9789024565306'},'nl')?.coverUrls,[]);
+  assert.equal(withStrictEdition(base,{...nl,language:'eng'},'nl'),null);
   for(const change of [{author:'Another author'},{openLibraryWorkId:'OL999999W'}]) assert.deepEqual(withStrictEdition({...base,...change},nl,'nl')?.coverUrls,[]);
 });

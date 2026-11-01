@@ -6,7 +6,7 @@ import { clearBookDescriptionCacheForTests, resolveBookDescription } from './des
 
 test('nine exact images survive test-ID mapping without making other editions eligible', () => {
   const originalNine = new Set(['126','138','178','683','688','699','772','1116','1251']);
-  const entries = REVIEWED_COVER_OVERRIDES.filter(e => e.reviewedAt === '2026-10-23' && originalNine.has(e.workId));
+  const entries = REVIEWED_COVER_OVERRIDES.filter(e => e.reviewedAt === '2026-10-23' && originalNine.has(e.workId ?? ''));
   assert.equal(entries.length, 9);
   for (const entry of entries) {
     assert.equal(getReviewedCoverOverride({ ...entry, workId:'different-test-id' })?.coverUrl, entry.coverUrl);
@@ -27,11 +27,12 @@ const silver = {
   openLibraryWorkId:'OL21703979W',openLibraryEditionId:'OL29532409M',
 };
 
-test('Silver Flames has own publisher-attributed English copy, including the labelled NL fallback', async () => {
+test('Silver Flames has own publisher-attributed English copy; never substitutes for Dutch copy', async () => {
   for (const locale of ['en','nl'] as const) {
     const result = await resolveBookDescription({ ...silver, locale }, async () => {
       assert.fail('reviewed exact-edition summary must not wait for external providers');
     });
+    if(locale==='nl'){assert.equal(result.description,null);continue;}
     assert.equal(result.state, 'resolved');
     assert.equal(result.description?.language, 'en');
     assert.equal(result.description?.source, 'official_publisher');

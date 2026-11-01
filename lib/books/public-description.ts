@@ -11,6 +11,9 @@ export async function loadPublicBookDescription(book: Book, locale: Locale, fetc
 /** Preserve absence versus transport failure through to the public UI. */
 export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<BookDescriptionResolution> {
   if(book.editionAvailable===false)return {state:'confirmed_missing',description:null};
+  const stored=normalizeVerifiedBookDescription(book.storedDescription);
+  if(stored&&stored.language===locale)
+    return {state:'resolved',description:stored};
   const budget = AbortSignal.timeout(4_000);
   const boundedFetch: typeof fetch = (input, init) => {
     budget.throwIfAborted();
@@ -26,6 +29,5 @@ export async function loadPublicBookDescriptionState(book: Book, locale: Locale,
     editionCandidates: book.descriptionCandidates, locale,
   }, boundedFetch);
   const description = normalizeVerifiedBookDescription(result.description);
-  const allowed=book.englishEditionFallback && locale==='nl' ? 'en' : locale;
-  return description?.language === allowed ? {state:'resolved',description} : {state:result.state==='temporary_failure'?'temporary_failure':'confirmed_missing',description:null};
+  return description?.language === locale ? {state:'resolved',description} : {state:result.state==='temporary_failure'||book.storedPresentationUnavailable?'temporary_failure':'confirmed_missing',description:null};
 }

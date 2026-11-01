@@ -1,0 +1,19 @@
+{
+ "at":"2026-11-01",
+ "applicationTested":"3976a9c6680ee2ad1be7bf729de286eac76e53ab",
+ "mainReadOnly":"0bd394bf8f1812f790d9d6ad5a1a760cc96e8c2f",
+ "targetedTests":{"tests":38,"passed":38,"failed":0,"skipped":0,"command":"node --test scripts/nl079-auth-evidence.test.mjs scripts/nl079-release.test.mjs scripts/nl004-research.test.mjs lib/recommendations/language-preference.test.ts lib/books/edition-presentation.test.ts lib/catalog/search-selection-cache.test.ts lib/catalog/search-window.test.ts","additionalEvidenceConsistencyTests":5},
+ "typescript":{"command":"node node_modules/typescript/bin/tsc --noEmit","passed":true},
+ "targetedLint":{"command":"node node_modules/eslint/bin/eslint.js scripts/nl079*.mjs scripts/nl004*.mjs","passed":true,"errors":0,"warnings":0},
+ "productionBuild":{"command":"node node_modules/vite/bin/vite.js build","passed":true,"warning":"Existing ineffective dynamic import warnings in vinext default-global-error and slot; no new runtime imports."},
+ "clientSecretScan":{"command":"node scripts/scan-client-secrets.ts","clientFilesScanned":92,"secretIdentifiersBundled":[],"configuredSecretValuesBundled":[],"serverSecretConfiguredForThisLocalBuild":false,"passed":true},
+ "runtimeDiffAgainstPriorAuthenticatedEvidence":{"reference":"9d3b9a85123b5fe0679c80ec266ae47481cd075a","paths":["app","lib","package.json","pnpm-lock.yaml","next.config.ts","next.config.mjs","middleware.ts"],"diffEmpty":true},
+ "newAccountCreation":{"authorizedForSyntheticTestOnly":true,"created":true,"deletedAfterTest":true,"productionAccountsTouched":false,"reason":"User completed credential creation/sign-in; fresh authenticated browser evidence and read-back are recorded. Only own disposable account/rating/status/incomplete round were removed after sign-out; existing fingerprints unchanged."},
+ "newPersonalizedHostedFlow":true,
+ "newPersonalizedApplicationSha":"5e919664e20f408e950c07b490cd1e638b2ed431",
+ "newFullRatingRoundCompleted":false,
+ "fullRoundFixtureLimitation":"No eligible inventory candidates; manual synthetic offer declined; legacy preference anchors missing. No catalogue, inventory, trait or ranking changes made to manufacture completion.",
+ "reusedAuthenticatedChecks":32,
+ "new100ResearchHostedWrites":0,
+ "productionWrites":0
+}

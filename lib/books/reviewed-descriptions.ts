@@ -10,7 +10,7 @@ type ReviewedDescription = {
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
   source?:'official_publisher'|'official_catalog';
 };
-const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
+export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   workId: '1305', editionId: '1305', title: 'Madonna', author: 'Suzanne Vermeer',
   isbn13: '9789044970791', language: 'nl' as const, reviewedAt: '2026-10-18',
   sourceName: 'A.W. Bruna Uitgevers',

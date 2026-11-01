@@ -13,7 +13,7 @@ export function eligibleBrowseArgs(state: EditorialQuery, locale: Locale) {
 export function readEligibleBrowsePage(data: unknown, state: EditorialQuery, locale: Locale) {
   const d = data as Record<string, unknown> | null;
   const total = Number(d?.total), page = Number(d?.page), pageCount = Number(d?.pageCount);
-  if (d?.contract !== 'eligible-browse-v2' || d.locale !== locale || d.pageSize !== state.pageSize
+  if (d?.contract !== 'eligible-browse-v3' || d.locale !== locale || d.pageSize !== state.pageSize
     || !Number.isSafeInteger(total) || total < 0 || pageCount !== Math.max(1, Math.ceil(total / state.pageSize))
     || page !== Math.min(state.page, pageCount) || !Array.isArray(d.workIds)
     || d.workIds.length !== Math.min(state.pageSize, Math.max(0, total - (page - 1) * state.pageSize))) {

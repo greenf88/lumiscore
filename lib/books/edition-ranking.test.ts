@@ -168,5 +168,5 @@ test('EN locale prefers English and never lets Portuguese beat it', () => {
 
 test('native works obey the same NL/EN edition preference as all other Works', () => {
   assert.deepEqual(getPreferredEditionLanguages('en', 'lumiscore_native'), ['eng']);
-  assert.deepEqual(getPreferredEditionLanguages('nl', 'lumiscore_native'), ['nld', 'eng']);
+  assert.deepEqual(getPreferredEditionLanguages('nl', 'lumiscore_native'), ['nld']);
 });

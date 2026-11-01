@@ -1,0 +1,157 @@
+PR64 — DEFINITIEVE TESTACCEPTATIE EN GECOMMITTEERD HERSTEL
+31 oktober 2026. Vervangt de actuele gereedheidsclaims uit
+catalog/nl100-hosted-20261031/REVIEW.txt. Oude exports, receipts, bronbestanden en
+voorbereidingsmanifesten blijven historische nulmetingen, geen actuele pendingstatus.
+
+VERSIES EN AFBAKENING
+PR64 blijft Draft. Uitgangshead c049bc594fd89d62b34a6ce9ba8744d87e8c665b.
+Geteste Ready-deployment dpl_9guQJxdhjeUza294s8scBotE3RcD:
+https://lumiscore-1jwqr6jqb-rgkgroeneveld-9102.vercel.app
+Runtime ongewijzigd:13451a60e6f9399204aa625036942afa0b6c5380, huidige remote main.
+Definitieve gegevens/hulpscripts:5c1b402a5b16f33eeaafff3d202f3fd0991a4f16.
+Deze vervolgwijziging bevat uitsluitend testuitvoering, gerichte regressies en bewijs.
+Geen app-, ontwerp-, score-, taalregel-, Auth-, rechten- of migratiewijziging.
+Definitieve volledige PR-head en daaropvolgende CI staan in de PR/eindoplevering.
+Het runtimebestandverschil blijft leeg; geen reden om88ongewijzigde flows te herhalen
+na uitsluitend een bewijscommit. Iedere browsermeting noemt de daadwerkelijk geteste head.
+
+PRODUCTIEVOORSTEL — NIET UITGEVOERD
+Nieuwe80:240acties,56nieuwe NL-printedities,24NULL→nld-correcties,80cover/formaatbindings,
+80oorspronkelijkeNLsamenvattingen. Twee bestaande editie-titels bewezen gecorrigeerd.
+Geen Work/auteur toevoegen of samenvoegen. Netto voorgestelde extraNLWorks:80.
+Vier20Work/60actietransacties batch004–007. Importbytes en hashes ongewijzigd sinds5c1b402.
+Hashmanifest catalog/nl100-completion-20261031/batches.json:
+be652c659b118850a98bbae2a3bacc77cf62118d09477d3e12a61f5d1b0a7318.
+
+De oudere8 zijn ook hosted geaccepteerd, maar blijven een afzonderlijk22actievoorstel:
+4edities,4taalcorrecties,8bindings,6nieuweNLteksten,2goedeNLteksten behouden.
+De4hergebruikte dossiers zitten al in deze8:80+8=88, niet92.
+Gecombineerd alleen bij expliciet akkoord voor BEIDE pakketten:262acties,60edities,
+28taalcorrecties,88bindings,86nieuweNLteksten en2behouden teksten; netto88extraNLWorks.
+De22oudere acties zijn NIET stilzwijgend toegevoegd aan de240PR64-releaseacties.
+Vijf identiteitsconflicten,elf onvoldoende-bewijsdossiers,PR51/62/63 en de volgende
+onderzoekscohort blijven buiten iedere uitvoerbare PR64-productie-import.
+Productie31okt22:55:30UTC opnieuw uitsluitend SELECT:alle88Work/auteur/uitgave/
+metadata/tekst-baselines identiek aan de eerdere voorcontrole. Geen productiewrites.
+Voor toekomstig uitvoeren opnieuw globale ISBN13/ISBN10-equivalenten én beforewaarden
+controleren; deze readback is geen reservering en geen toekomstgarantie.
+
+ONDERSTEUNDE TESTROUTE EN VEILIGHEID
+Gewone aangemelde Supabase Dashboard SQL Editor, uitsluitend hlvujbrmfdlrfxdjwsmb.
+Projectnaam lumiscore-pr8-discovery-test; URL/project-ID vooraf en tijdens uitvoering
+gecontroleerd. De branchbadge 'main PRODUCTION' hoort bij dat TESTproject en is niet
+het echte productieproject qvplwejffhjvxaypmjut. Normale UI SELECT werkte22:15:38UTC.
+Geen expliciete beveiligingsweigering zichtbaar. Geen alternatieve credentials,
+rechten-/RLSwijziging, verborgen browserAPI of connector-bevestigingsretry gebruikt.
+De waarschuwing voor de tijdelijke receipttabel betrof uitsluitend een sessietabel
+met ON COMMIT DROP; geen publiek uitleesbare blijvende tabel of grant geïnstalleerd.
+De normale UI-waarschuwing voor gericht eigen testherstel is bevestigd binnen het
+expliciet toegestane herstelbare testproces. De verlopen connectorbevestigingsflow
+zelf is hierdoor NIET bewezen gerepareerd; PR51 is niet hervat.
+
+WERKELIJKE TESTINSTALLATIE
+Actuele voorcontrole22:17UTC:18bestaande geschikte testidentiteiten gekoppeld op
+Work-/auteur-/bronidentiteit, niet door gelijke numerieke productie-ID's aan te nemen.
+Eigen afgebakende seed:16auteurs+70Works+60basisuitgaven=146acties. Daarop262gemapte
+catalogusacties in6afzonderlijke transacties. Alle IDs expliciet, geen sequence-reset.
+Globale ISBN13/ISBN10-voorcontrole voor88:28bedoelde bestaande uitgaven,0vreemde
+Work-botsingen. Alle overige60ISBN's afwezig. Eerst aparte dry-runs metROLLBACK.
+Elke COMMIT gaf het exact verwachte actieaantal; eerste volledige receipt direct
+uit de zichtbare SQL-resultaatcel bewaard. Alle146+262rijen daarna SELECT-teruggelezen.
+Herhaalimport van iedere batch:0mutaties. Geen nieuwe accounts, ratings, statussen,
+collecties, smaakkenmerken of inventaris. Beschermde nulmeting68ratings/68leesstatussen/
+2accountidentiteiten en geaggregeerde controlesommen onveranderd.
+
+GEEN VERWARRING TUSSEN DRY-RUN EN ECHT HERSTEL
+Na de daadwerkelijke146+262COMMITs zijn alle6catalogusreceipts in omgekeerde volgorde
+hersteld en daarna de eigen seedreceipt:7echt gecommitteerde hersteltransacties.
+Volledige after-row CAS, exacte actie-/rijsleutels, Work/auteurbinding en iedere
+inkomende FK(inclusiefCASCADE) gecontroleerd. Latere wijzigingen/afhankelijkheden
+stoppen de gehele transactie. Geen brede delete, CASCADE-delete of automatische
+nummering aangepast. Voor de70eigen seedWorks:0ratings/statussen/collecties/traits.
+Nacontrole22:28:50UTC:alle oorspronkelijke18Works,33auteurs,20uitgaven,5bindings,
+7beschrijvingen exact gelijk aan de nulmeting; gereserveerde ID-ruimtes weer leeg;
+68ratings/68statussen/2accountidentiteiten met identieke controlesommen.
+Dit is afzonderlijk bewijs náCOMMIT, niet alleen eenROLLBACK van een dry-run.
+Daarna dezelfde goedgekeurde testtoestand opnieuw geïnstalleerd, teruggelezen en
+byte-/waardegelijk aan de eerste gecommitteerde toestand bevonden.
+
+Eén extra TEST-fixture buiten de262actie-import:bij testWork8800308(prod135) koos de
+stabiele selector terecht de al bestaande NLeditie612/9789024595495, niet de nieuwe
+voorgestelde productie-editie. Bestaande juiste editie NIET gewijzigd of gedegradeerd.
+Alleen de ontbrekende geverifieerde cover/formaatbinding toegevoegd met eigen manifest,
+bron en receipt. Exacte Bureau-ISBN-uitgave en matching omslag visueel gecontroleerd,
+254316B. COMMIT→SELECT→gericht gecommitteerd undo→SELECT0binding/bestaande editie
+ongewijzigd→herinstallatie→replay0. Geen extra productieactie of extraNLWork geteld.
+Voor latere volledige testopruiming eerst deze binding undoen, dan6batches, dan seed.
+
+HOSTED ACCEPTATIE —88/88
+Alle80nieuwe én8oudere voorstellen op de bestaande Ready-Preview werkelijk via
+Nederlandse zoekresultaten→kaartklik→detail→terug doorlopen. Per Work vastgelegd:
+Work-ID/auteur, gekozenISBN/titel, zichtbare Nederlandse tekst+bronlink, daadwerkelijk
+geladen afbeelding complete/naturalWidth>0, bronasset-identiteit, publieke score,
+terugnavigatie en geen horizontale overflow. Bewijs:hosted88-browser-results.json.
+Alle88hebben op deze testdata de centrale lege publieke scorestatus. Kaart en detail
+tonen beide'—'; tekst'Nog geen betrouwbare score'/'Onvoldoende beoordelingen'betekent
+dezelfde toestand. Geen ratings gemaakt om een getal zichtbaar te krijgen. Numerieke
+score/bandpariteit blijft aanvullend bewezen met de bestaande lokale synthetische test.
+Drie OpenLibrary-afbeeldingen waren bij de eerste vroege DOM-observatie nog aan het
+laden; latere detail- én kaartobservaties met afmetingen en screenshots bevestigen
+alle3juiste assets. MobieleM-variant van dezelfde geverifieerde broncover is toegestaan.
+Geen claim dat de oude tijdelijke externe uitval structureel opgelost of verklaard is.
+
+NL/EN,Paper/Ink,320/390px en1440px desktop gecontroleerd.12thema-/taal-/viewportstaten,
+plus aanvullende werkelijk geladen EN-covercontrole op desktop en320px na laden en
+herladen. NL=NLD/9789401614078/eigenNLtekst; EN=ENG/9780593135204/goedeENtekst; geen
+taalcachevermenging. Engelse covers hebben bij enkele zeer vroege matrixobservaties
+nog pendingwaarden; latere geladen bewijsbestanden zijn expliciet apart bewaard.
+Taalwissel blijft op overeenkomstig Work; herladen en terugnavigeren werken.
+8hosted oorspronkelijke-titelqueries vinden hetzelfde Nederlandse Work als deNLtitel;
+alle88Nederlandse titelqueries slagen. Lokale echteRPC160origineel/NLqueries hergebruikt.
+NL énEN:3opeenvolgende pagina's elk16kaarten/48uniekeWorks; pagina2herhaling identiek.
+Lege zoekvraagtest geeft0kaarten en juiste lege status. Geen catalogus-/serverfout gezien.
+Geen fysieke telefooncontrole of gesimuleerde mobiele netwerklatentie geclaimd.
+
+PRESTATIES EN OVERBLIJVENDE COVERS
+15correcte detailassets blijven341144–744872B. Alle30extra hosted herhaalbezoeken
+laden de juiste volledige asset. Desktop1440/normaal netwerk, mediaan695ms,
+spreiding612–1089ms van navigatiestart tot de vastgelegde DOM-observatie. Dit is
+GEEN afzonderlijkeTTFB/LCPmeting; browser/CDN-coldstaat is niet gecontroleerd.
+De eerste88waarnemingen bewaren afzonderlijk kaart-/detailnavigatieduur; drie vroege
+pendingcovers mogen niet als tijd-tot-geladen-cover worden gerapporteerd. Geen
+productiesnelheidswinst bewezen. Grote assets blijven een expliciete beperking,
+geen reden om correcte edities door een verkeerde of onleesbare cover te vervangen.
+Geen nieuwe runtimecode of externe boekverrijking bij boekopening toegevoegd.
+
+INSTALLATIEVOLGORDE NA LATER EXPLICIET RELEASEAKKOORD
+1. Exacte PR-/main-SHA, importbestanden/hashes, huidige productie-beforewaarden,
+   complete uitgavecorpora, globaleISBN/equivalenten en bestaande presentatie opnieuw
+   controleren. Afwijking=stop; geen minder betrouwbare bron over goede data schrijven.
+2. Volledige betrokken bibliografische before-rijen veilig bewaren. Geen gebruikers
+   kopiëren. Bestaande gepubliceerde presentatietabellen/identityguards zijn vereist;
+   deze PR vereist geen migratie, RLS-, Auth- of environmentinstallatie.
+3. Alleen de expliciet goedgekeurde4productiebatches004–007 uitvoeren:per batch
+   dry-run→COMMIT→eerste niet-lege receipt→SELECT/inhoudscontrole→replay0. De oude8
+   alleen uitvoeren indien hun22acties afzonderlijk in hetzelfde akkoord zijn benoemd.
+   Nooit TEST-seed/SQL, onderzoekscohort,PR62/63 of historische importversies meedraaien.
+4. Stop bij onverwachte waarden, identiteit, aantallen, bron-/FK-/rechtenfouten.
+   Reeds uitgevoerde batches niet blind opnieuw aanbieden; manifesteer de toestand.
+5. Zo nodig receiptgebonden rollback in omgekeerde batchvolgorde. Alleen eigen
+   tekst/metadata/nieuwe edities verwijderen; bestaande uitgaven exact naar before.
+   Volledige after-waarden en alle nieuwe afhankelijkheden opnieuw toetsen. Bij een
+   latere legitieme wijziging stoppen en gericht reviewen, nooit overschrijven.
+6. Pas na databasecontrole de goedgekeurde PR-versie mergen; juiste Ready-productie-
+   deployment/SHA bevestigen. Runtime is al gepubliceerd; een approllback draait
+   catalogusdata NIET terug. Omgekeerd blijft de data compatibel met de huidige app.
+7. Alleen indien nodig relevante openbare caches gericht vernieuwen. LiveNL/EN
+   zoeken/detail, covers, samenvattingen/bron, scorepariteit, paginaovergangen en
+   nieuwe gegevens tegenover testcondities controleren; geen productieratings maken.
+
+ADVIES
+De afgebakende80Works/240acties zijn functioneel en qua gecommitteerd hosted herstel
+gereed voor releasebeoordeling, onder voorbehoud van de definitieve groene CI en
+verse productievoorcontroles bij uitvoering. PR blijft Draft tot afzonderlijk akkoord.
+Vijftien grotere covers, onverklaarde tijdelijke externe coververtraging en het verschil
+in testeditie135 blijven transparant. De aparte volgende100cohort is geen releasegate
+en zit niet in deze productiebestanden. Geen productie-import, merge of publicatie
+uitgevoerd; PR51 ongewijzigd.

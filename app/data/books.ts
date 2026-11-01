@@ -13,6 +13,8 @@ export type VerifiedBookDescription = {
   sourceKey: string;
   verifiedAt: string;
   language?: 'en' | 'nl' | null;
+  sourceName?: string;
+  sourceUrl?: string;
 };
 
 export type BookDescriptionEditionCandidate = {
@@ -31,6 +33,11 @@ export type Book = {
   openLibraryEditionId?: string | null;
   title: string;
   author: string;
+  authorId?: string | null;
+  editionFormat?: 'paperback'|'hardcover'|'ebook'|'audio'|'other'|'unknown';
+  storedDescription?: VerifiedBookDescription;
+  /** Public bibliography read failed; never conflate with verified absence. */
+  storedPresentationUnavailable?: boolean;
   firstPublishYear?: number | null;
   score: number | null;
   ratingsCount: number | null;
@@ -48,6 +55,8 @@ export type Book = {
   editionAvailable?: boolean;
   englishEditionFallback?: boolean;
   coverUrls?: string[];
+  /** Exact-edition publisher-advertised small asset, mobile cards only. */
+  cardCoverUrl?: string;
   /** SSR only: verified cover evidence may stream after the real book card. Never emitted by JSON APIs. */
   editionCoverUrls?: Promise<string[]>;
   backCover?: VerifiedBookCoverAsset | null;

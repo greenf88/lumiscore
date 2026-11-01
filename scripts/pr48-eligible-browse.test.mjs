@@ -4,7 +4,12 @@ import { readFile } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 import { selectStrictEdition } from '../lib/books/strict-edition.ts';
 import { browseQuery } from '../lib/catalog/editorial-query.ts';
-import { readEligibleBrowsePage, eligibleBrowseArgs, alignEligibleBrowseBooks } from '../lib/catalog/eligible-browse.ts';
+import { readEligibleBrowsePage as readCurrentEligibleBrowsePage, eligibleBrowseArgs, alignEligibleBrowseBooks } from '../lib/catalog/eligible-browse.ts';
+// Historical PR48 v2 SQL stays byte-for-byte frozen. Active strict-v3 selection
+// and all its pages are checked by catalog-integrity.test.mjs, not inferred
+// from this superseded NL-with-English-fallback contract.
+function readEligibleBrowsePage(data,state,locale){if(data?.contract!=='eligible-browse-v2')throw Error('Invalid historical catalog page');return readCurrentEligibleBrowsePage({...data,contract:'eligible-browse-v3'},state,locale);}
+const historicalEdition=(rows,locale,title)=>selectStrictEdition(rows,locale,title)??(locale==='nl'?selectStrictEdition(rows,'en',title):null);
 
 test('eligible Browse: pre-page language/filter selection, full16, stable ties, bounded10k, RLS and fresh scores', {timeout:120000}, async () => {
   const db = new PGlite(); await db.waitReady;
@@ -56,7 +61,7 @@ test('eligible Browse: pre-page language/filter selection, full16, stable ties, 
     const editions=(await db.query('select * from editions order by id')).rows;
     for(const locale of ['nl','en']) {
       const eligible=[];
-      for(let id=1;id<=10020;id++)if(selectStrictEdition(editions.filter(e=>Number(e.work_id)===id),locale,'Synthetic Book '+String(id).padStart(5,'0')))eligible.push(String(id));
+      for(let id=1;id<=10020;id++)if(historicalEdition(editions.filter(e=>Number(e.work_id)===id),locale,'Synthetic Book '+String(id).padStart(5,'0')))eligible.push(String(id));
       const seen=[],times=[];
       for(let page=1;page<=3;page++) {
         const start=performance.now(),out=await read(locale,{page:String(page)});times.push(Math.round(performance.now()-start));

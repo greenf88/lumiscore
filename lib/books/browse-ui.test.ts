@@ -85,7 +85,7 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
     booksSource.indexOf('export async function loadHomepageCatalog'),
   );
 
-  assert.match(loader, /loadPublicRatingSummariesBatched\(supabase, workIds\)/);
+  assert.match(loader, /loadEditorialCatalog/);
   assert.doesNotMatch(booksSource, /loadStoredCoverResolutionsBatched|applyStoredCoverResolutions/);
   assert.doesNotMatch(loader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
@@ -95,7 +95,7 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
   const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
   const searchUi = await readFile(new URL('../../app/components/LumiScoreSearchPage.tsx', import.meta.url), 'utf8');
   assert.equal((editorialLoader.match(/supabase\.rpc\(/g) ?? []).length, 1);
-  assert.match(editorialLoader, /rpc\('catalog_browse_page_v2', eligibleBrowseArgs\(state, locale\)/);
+  assert.match(editorialLoader, /rpc\('catalog_browse_page_v3', eligibleBrowseArgs\(state, locale\)/);
   assert.match(editorialLoader, /alignEligibleBrowseBooks\(ids, books\)/);
   assert.match(editorialLoader, /if \(error\) throw error/);
   assert.doesNotMatch(editorialLoader, /catalog_editorial_page|catalog_discovery_page/);

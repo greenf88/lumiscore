@@ -22,9 +22,15 @@ test('three reviewed identities: EN NL EN binds one edition and cover; no forced
     const editions:StrictEditionRow[]=f.editions.map(e=>({...e,work_id:f.workId}));
     const present=(locale:'nl'|'en')=>withStrictEdition(base,selectStrictEdition(editions,locale,f.title),locale)!;
     const en=present('en'),nl=present('nl'),again=present('en');
-    assert.ok(en.coverUrls?.length);assert.ok(nl.coverUrls?.length);
+    assert.ok(en.coverUrls?.length);
+    if(f.workId==='8'){
+      assert.equal(nl,null,'fixture has no Dutch Dune edition; do not substitute English');
+      assert.equal(getBookCoverIdentity(en),getBookCoverIdentity(again));
+      continue;
+    }
+    assert.ok(nl.coverUrls?.length);
     assert.equal(en.workId,nl.workId);assert.equal(getBookCoverIdentity(en),getBookCoverIdentity(again));
-    assert.equal(nl.englishEditionFallback,f.workId==='8');
+    assert.equal(nl.englishEditionFallback,false);
     if(f.workId==='1381')assert.equal(en.isbn13,'9780451526342','normal stable edition ranking chooses verified printed edition');
     if(f.workId==='114')assert.equal(nl.title,'Daar waar de rivierkreeften zingen');
     for(const b of [en,nl]) {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readSearchProjection, validateProjectedPage } from './search-projection.ts';
 import { searchWindow } from './search-window.ts';
 import { searchQuery } from './editorial-query.ts';
-const projection = { contract: 'strict-spine-v1', candidates: [
+const projection = { contract: 'strict-spine-v2', candidates: [
   { workId: '1', editionId: '11', title: 'Dune Messiah', author: 'Frank Herbert', aliases: [] },
   { workId: '2', editionId: '21', title: 'Dune', author: 'Frank Herbert', aliases: ['Duin'] },
 ] };
