@@ -1,0 +1,187 @@
+PR #65 — afgebakend Nederlands cataloguspakket, 1 november 2026
+Draft: https://github.com/greenf88/lumiscore/pull/65
+Geen productie-import, merge, publicatie of socialactie uitgevoerd.
+PR #51, #62 en #63 blijven buiten dit pakket.
+
+1. Basis en exacte afbakening
+
+Actuele productie/main na PR64: 0bd394bf8f1812f790d9d6ad5a1a760cc96e8c2f.
+Ready-productiedeployment: dpl_BCGVaEyJj2kDS8axRmYfgWgBZagK.
+PR64: de 80 goedgekeurde Works/240 acties zijn gepubliceerd en live gecontroleerd;
+het bestaande verslag outputs/pr64-production-20261101/RELEASE-REPORT.txt blijft geldig.
+PR62 en PR63 zijn apart open/Draft op respectievelijk
+33801703b33e4bee2fa80a50de5cb7229897f8ab en 11795c7b03d04ea0fd267694fe1b36c6b9bc7b0d.
+
+71 volledig onderzochte voorstellen plus acht oudere voorstellen: 79 unieke bestaande
+Works, nul overlap met elkaar, de gepubliceerde PR64-batch en de PR62/63-recordscope.
+Precies 235 voorgestelde productieacties:
+75 nieuwe Nederlandse printedities; vier bestaande editiecorrecties NULL→nld;
+79 gecontroleerde cover-/formaatbindings; 77 nieuwe Nederlandse samenvattingen.
+Twee bestaande goede Nederlandse teksten blijven ongewijzigd. Geen nieuwe productie-
+Works of auteurs, geen merges, ratings, leesstatussen, collecties of smaakkenmerken.
+Netto voorstel: 79 extra Nederlandstalig beschikbare Works, niet 235 boeken.
+De zeven conflicten en 22 onvoldoende-bewijsdossiers uit de vorige cohort blijven apart.
+
+De zes oorspronkelijke productieplannen en SQL-bestanden blijven bytegetrouw.
+production-import-index.json noemt alle bestanden, volgorde, aantallen en SHA256's.
+release-hashes.json bindt het uitvoeringsmanifest. Alleen die zes SQL-imports behoren
+tot dit releasevoorstel; niet seed/test/restore-SQL en niet de onderzoeksbijlage004.
+Iedere actie heeft een expliciete oude/nieuwe waarde en bronbewijs. Globale ISBN-
+controle vindt vier bedoelde bestaande matches en geen van de 75 nieuwe ISBN's.
+Laatste read-only controle: 1 november 2026 08:31:34 UTC; alle 79 Work-, auteur-,
+editie-, presentatie- en ISBN-uitgangswaarden zijn exact gelijk aan de voorcontrole.
+
+2. Werkelijke productievoortgang, niet afgeleid van testfixtures
+
+10.223 Works; 10.427 edities; 2.838 Works voldoen aan de huidige NL-taalselectie.
+295 unieke Works hebben een goedgekeurde opgeslagen Nederlandse tekst, waarvan
+291 tevens een Nederlandse editie; 119 hebben een goedgekeurde Engelse tekst.
+Dit is geen verklaring dat alle legacy-formaten en covers inhoudelijk zijn geverifieerd.
+De historische referentie blijft 2.649 op 29 oktober: werkelijke netto uitbreiding 189.
+Na eventueel apart akkoord voor dit pakket: 2.917 / netto 268. Nog niet uitgevoerd.
+Een samenvatting of testrecord is nooit zelfstandig als extra NL-Work geteld.
+
+3. Testimport en bewezen gecommitteerd herstel
+
+Project hlvujbrmfdlrfxdjwsmb, via de bestaande aangemelde Supabase-dashboardroute.
+De acht oudere voorstellen waren al correct aanwezig: beide herhaalimports gaven nul
+mutaties. Ze zijn niet verwijderd om nieuw bewijs te fabriceren.
+Voor de 71 nieuwe voorstellen zijn alleen ontbrekende openbare fixtures toegevoegd:
+drie auteurs, 69 Works en 69 bestaande Engelse edities, met expliciet gereserveerde IDs.
+Dit zijn 141 testseed-acties, GEEN extra productieacties. Bronidentiteit/OL-parent en
+auteur zijn samen gebonden; gelijke naam alleen is niet als identiteit gebruikt.
+
+Vier nieuwe catalogusbatches: 60/60/60/33 acties. Elke batch is transactioneel droog
+getest, gecommit, teruggelezen en herhaald met nul nieuwe mutaties. Eerste niet-lege
+receipts zijn behouden, niet vervangen door lege replayreceipts.
+Daarna: vier catalogusbatches omgekeerd gecommit hersteld, gevolgd door de eigen seed.
+De volledige actuele testtabellen waren daarna exact gelijk aan de oorspronkelijke
+snapshot. Dit is herstel NA een COMMIT, niet alleen een ROLLBACK-dry-run.
+Vervolgens zijn dezelfde vijf stappen hersteld naar de goedgekeurde Preview-toestand,
+met de oorspronkelijke IDs en timestamps. Eindtoestand exact gelijk aan first-installed.
+942 test-Works, 285 auteurs, 1.332 edities; geen sequence-reset.
+
+68 bestaande ratings, 68 leesstatussen en twee bestaande accounts: aantallen en
+geanonimiseerde fingerprints zijn vóór/na gelijk. Ook overige openbare rijen en de
+acht oudere voorstellen zijn behouden. Herstel gebruikt volledige after-row-CAS,
+vastgelegde manifests, parent locks en controle van alle inkomende foreign keys,
+ook CASCADE. Een latere wijziging of afhankelijkheid stopt de gehele transactie.
+Bewijs: committed-recovery-manifest.json, dashboard-executions.json, alle eerste
+receipts, after-committed-undo-full.json en restored-preview-full.json.
+
+4. Hosted acceptatie en hergebruik
+
+Geteste applicatiecommit: 3976a9c6680ee2ad1be7bf729de286eac76e53ab.
+Ready Preview: https://lumiscore-fub9o6ye6-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_7ohQidn6AXCFNjAqVKinxc1iJgG9, uitsluitend branchgebonden testconfiguratie.
+Latere commits bevatten onderzoek, tests en verslag; geen applicatie-/stijlwijzigingen.
+Definitieve PR-head, CI en bijbehorende Ready-deployment staan in de actuele PR-body
+en het eindbericht. De ongewijzigde applicatie maakt het 3976-bewijs herbruikbaar.
+
+79/79 Nederlandse presentaties: zoeken→kaartklik→detail→terug. Per Work: juiste
+identiteit/auteur/ISBN/NLD, Nederlandse titel, daadwerkelijk geladen kaart- en
+detailafbeelding, juiste bronvermelde Nederlandse tekst, gelijke publieke scorestatus
+en beoordelingsband. Geen placeholder als gevonden cover geteld. Alle 79 oorspronkelijke
+titels vinden hetzelfde Work. Publieke testdata heeft vaak onvoldoende beoordelingen;
+daarom tevens lokale synthetische numerieke scorepariteit 8.25 / band5–9 bewezen,
+zonder echte of productiebeoordelingen aan te maken.
+
+320/390/1440 CSS-px, NL/EN, Paper/Ink, herladen en taalwissel gecontroleerd.
+Drie opeenvolgende Discover-pagina's per taal: telkens 16 unieke Works, 48 zonder
+overlap; pagina2→detail→terug stabiel. Lege zoekopdracht geeft een expliciete nulstaat.
+Layout en bediening ongewijzigd, geen horizontale overflow in deze controles.
+Testcatalogus is geen productiekopie: Top25 toont op test6/25NL en25/25EN;
+Middle-earth0/3NL door ontbrekende bestaande testmappings. Dit is vastgelegd als
+fixturebeperking, niet als bewijs van productievolledigheid of reden voor taalversoepeling.
+
+De gedeelde aanbevelingsketen is gelezen: locale blijft expliciet, volledige edities
+worden begrensd geladen, NL-selectie en detail gebruiken dezelfde strict selector,
+openbare caches scheiden talen; persoonlijke context blijft request-/gebruikergebonden.
+Catalogustoevoeging maakt een boek niet automatisch geschikt voor de smaaktest:
+zonder onderbouwde kenmerken blijft het bestaande rankerbeleid leidend.
+De huidige NL-regel is strikt bevestigd Nederlands, EN strikt bevestigd Engels;
+onbekende taal wordt niet automatisch Engels. Geen ongemerkte rankingwijziging.
+
+32 bestaande ingelogde controles op applicatie9d3b9a85123b5fe0679c80ec266ae47481cd075a
+zijn hergebruikt: app/lib/package/lock/config zijn bytegelijk aan de geteste3976-build.
+Een NIEUWE persoonlijke aanbevelingssessie op deze Preview is niet uitgevoerd.
+De gebruiker heeft blijvend toestemming voor synthetische testaccounts gegeven;
+dit is geen toestemmingsblokkade. De connector biedt geen account-aanmaakactie,
+de Dashboardroute vraagt nieuwe wachtwoordinvoer die de browser aan de gebruiker
+moet overlaten. Geen wachtwoorden uitgelezen/reset, geen echte accounts gemaakt.
+Nieuwe79 persoonlijk gerangschikte aanbevelingen worden dus niet als hosted bewezen
+geclaimd. Bestaand ingelogd bewijs en nieuwe openbare dataselectie zijn apart benoemd.
+
+5. Prestaties en beperkingen
+
+79 browserwaarnemingen: navigatie tot eerste gelezen DOM, inclusief automatisering,
+normaal desktopnetwerk, cachetoestand niet beheerst. Zoekmediaan643ms (547–4564);
+detailmediaan745ms (630–1088). Dit is GEEN server-TTFB, LCP, gecontroleerde koude/
+warme vergelijking of fysieke telefoonmeting. Zie performance-summary.json.
+Zestien begrensde downloads van acht exact geverifieerde bronassets: allemaal200JPEG.
+Eerste ronde: bronheadersmediaan56.8ms (42.4–229.7), body173.3ms (66.2–320.5).
+Herhaling: headers45.2ms (41.0–57.6), body146.2ms (46.5–189.9).
+Bronassetmetingen zijn geen applicatie-TTFB of zichtbaarheid in een browser.
+41 van de 79 detailcovers zijn >=300.000bytes; grootste1.168.063bytes.
+Daarom geen bewezen mobiele snelheidswinst; op beperkt mobiel netwerk blijft
+bandbreedte een risico. Geen juiste cover door een verkeerde of onleesbare vervangen.
+Een bestaande Engelse OpenLibrary-cover was in enkele matrixwaarnemingen nog niet
+geladen en in andere wel. Oorzaak onbekend; niet gepresenteerd als structureel opgelost.
+Alle 79 Nederlandse covers waren daadwerkelijk geladen in hun acceptatiecontrole.
+
+Geen extra kritieke applicatieaanvragen toegevoegd: runtime en dependencies ongewijzigd.
+Opgeslagen presentatie leest twee begrensde openbare selecties, 30s cache en1500ms
+timeout; fouten worden niet als blijvende afwezigheid gecachet. Zoekidentiteitcache15s,
+gastaanbevelingscatalogus5min per locale; geen persoonlijke gegevens in gedeelde cache.
+
+6. Onderzoeksbijlage en SEO — geen extra uitvoeringsscope
+
+catalog/nl-research-004-20261101 bevat 100/100 inhoudelijk afgewerkte dossiers:
+71 onderbouwde onderzoeksvoorstellen (61 bestaande Works,10 ontbrekende boeken),
+drie identiteitsconflicten en26 overige concrete onvoldoende-bewijsuitkomsten.
+25 al NL-beschikbare Works krijgen presentatieherstel;36 bestaande plus10 nieuwe
+kunnen later netto46 extra NL-Works leveren.71 eigen samenvattingen en71 coverbindings;
+één aanvullende concepttekst is na actuele ISBN-controle apart gezet bij2032/8538.
+Geen testwrites voor deze cohort; lokale validatie is geen hosted importbewijs.
+PR65 voert deze71 NIET mee uit. next-reviewed-batch.json is bewust niet uitvoerbaar.
+Bronnen, controledata, titel/auteur/taal/formaat/ISBN/cover en vervolgactie staan per dossier.
+
+SEO-bronmap20261030 is inhoudelijk voorbereid, niet geïmplementeerd; geen bewijs van
+afzonderlijk goedkeuren/inplannen. Bronbestanden en status ongewijzigd. Mapping28Works:
+Suzannecollectie live50/54, Fantasy-startlijst5/10, na-Hail-Mary0/10. PR65 vult alleen
+een deel van die bestemmingen; geen algemene claim dat SEO-content of lijsten deelklaar
+zijn. Zie SEO-CATALOGUS.txt/readiness.json. Geen keywordpagina's/socialpublicatie.
+Schaalbronnen en voorwaarden zijn uitgewerkt; geen betaalde toegang of bulkextractie
+aangeschaft/gestart. Het actuele register10223 is inventaris, geen volledige afronding.
+
+7. Uitvoeringsvolgorde na eventueel expliciet releaseakkoord
+
+a. Controleer exacte goedgekeurde PR-head, main/production-SHA, groene CI en alle
+   manifest-/SQL-hashes opnieuw. Bij iedere afwijking stoppen, geen ruimere import.
+b. Lees de79 Work-/auteur-/editiecorpora, ISBN-collisions, presentatiebindings en
+   beschermde aggregaten opnieuw; leg een herstelbare snapshot en de oude waarden vast.
+   Bevestig bestaande presentatie-/guardmigraties, functies, triggers en minimale rechten.
+   Deze zijn op productie aanwezig; dit pakket vereist GEEN nieuwe schema-/Authinstallatie.
+c. Voer uitsluitend de zes imports uit production-import-index.json in vastgelegde
+   volgorde uit:10,12,60,60,60,33acties. Korte transactionele locks, lock_timeout3s,
+   statement_timeout30s. Stop bij corpus-/oude-waardedrift of gedeeltelijke replay.
+   Bewaar iedere EERSTE volledige COMMIT-receipt veilig. Geen testseed naar productie.
+d. Lees alle235 acties terug, controleer aantallen/identiteit/taal/bronnen/formaten en
+   ongewijzigde beschermde gegevens. Herhaling moet nul nieuwe mutaties opleveren.
+e. Merge uitsluitend de goedgekeurde Draftversie nadat een apart releaseakkoord is
+   gegeven; bevestig juiste Ready-productiecommit/deployment. Geen brede cachepurge;
+   openbare caches gericht vernieuwen indien nodig, anders hun bekende TTL respecteren.
+f. Live79-presentatiecontrole, NL/EN, kaart/detail-scorepariteit, zoeken/oorspronkelijke
+   titels, paging en representatieve Paper/Ink/mobiele routes. Meet productie apart.
+
+Herstel: omgekeerde batchvolgorde met exact de eerste receipts en corresponderende
+production-rollback.sql. De row-CAS en inkomende afhankelijkheidscontroles stoppen
+bij legitieme latere wijzigingen; dan niet forceren of zomaar uit een snapshot overschrijven.
+Geen accounts/ratings/statussen/sequences terugzetten. Bij applicatieterugrol naar de
+vorige productiebuild blijft de bestaande databasepresentatiestructuur compatibel.
+
+Advies: het afgebakende cataloguspakket is reviewbaar en op test geïmporteerd, herhaald,
+gecommitteerd hersteld en opnieuw geaccepteerd. Houd Draft tot expliciet akkoord.
+Claim geen nieuwe ingelogde aanbevelingssessie, volledige SEO-bestemmingen, mobiele
+snelheidswinst of afronding van de gehele catalogus. Geen productiehandeling toegestaan
+op basis van dit verslag alleen.
