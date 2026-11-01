@@ -1,67 +1,161 @@
-NL006 — 1 november 2026 — afzonderlijk conceptpakket, GEEN productieakkoord
+NL006 / PR67 — definitief afgebakend reviewpakket — 1 november 2026
+GEEN productie-import, merge, publicatie of akkoord uitgevoerd. PR51 buiten scope.
 
-PR66 administratief gesloten: main/productie 3cb7b9cd4616e2cc5ad41ed7cd5a6a929eb846e6,
-Ready dpl_4yCPW1enpysv4vG7ZXadXk2Z8szg. Alleen 156 werkelijk uitgevoerde inserts:
-6 auteurs, 10 Works, 44 NL-edities, 48 editiebindings en 48 NL-samenvattingen.
-Netto 43 NL-Works, 2917→2960. Works 48/65 uitgesloten wegens afwijkende exacte
-testeditie; oude 160 acties vervangen, niet alsnog uitvoeren. Eerste receipts en
-alle werkelijke rijen staan in pr66-executed-closure.json.
+BASIS EN PR66
+Read-only main én Ready-productie: 3cb7b9cd4616e2cc5ad41ed7cd5a6a929eb846e6,
+deployment dpl_4yCPW1enpysv4vG7ZXadXk2Z8szg; 2960 NL-beschikbare Works.
+PR66: exact156 werkelijk gecommitteerde INSERTS =6 auteurs+10 Works+44 NL-edities+
+48 editiebindings+48 NL-samenvattingen. Netto43 NL-Works (2917→2960).
+Alle156 volledige actuele rijen en buiten-eigen publieke digests opnieuw gelijk.
+Works48/65 blijven uitgesloten wegens afwijkende exacte testeditie;160/v1 vervangen.
+Zie pr66-executed-closure.json, pr66-closure-final-proof.json.
+100-dossiers-productiesnapshot opnieuw ongewijzigd: production-final-readonly-proof.json.
 
-Vaste nulmeting 29 oktober: 2649 geschikte NL-Works volgens toenmalige selector.
-Nu 2960: telverschil +311, NIET 311 nieuwe Works of 2960 onafhankelijk print-
-gecertificeerde boeken. Publicatie niet uitsluitend uit browserbewijs afgeleid.
+VASTE NULMETING EN VOORTGANG
+29 oktober 2026 20:46:39.793509 UTC:10210 Works,2649 NL-beschikbare Works volgens
+de toenmalige selector. Nu10233 Works,2960 NL-beschikbaar. ID-vergelijking:312 gewonnen
+NL-identiteiten en1 terecht verwijderd =netto+311 tegenover het doel+5000.
+Verwijderd Work5227 Doing Research, ISBN9789024424757, was foutief NL en is inPR61
+terecht ENG gemaakt; niet terugdraaien.23 werkelijk nieuwe Works sinds de nulmeting.
+Dit zijn beschikbaarheidsaantallen, geen onafhankelijke printcertificering van2960 boeken.
+Cumulatief:596/10223 oorspronkelijke inventarisdossiers onderzocht. Met10 eenmaal
+toegevoegde gepubliceerde PR66-identiteiten:606/10233 huidige Works onderzocht,
+9627 nog niet afgerond. De eerdere9 dossiers zijn onderdeel van deze100, niet+9 erbij.
+Drie nieuwe voorgestelde identiteiten hebben nog geen productie-ID; apart geteld.
+Productie heeft420 goedgekeurde NL- en119 EN-samenvattingsrijen op484 unieke Works.
+Samenvattingen zijn geen nieuwe boeken. Test-ID's en testdekking zijn geen productiedekking.
 
-100/100 bestaande dossiers individueel inhoudelijk beoordeeld:
-64 goedgekeurde voorstellen, 3 bestaande presentaties behouden, 33 onvoldoende
-of tegenstrijdig bewijs na vastgelegde broncontroles. Geen daarvan heet 'geen
-Nederlandse editie'. Hieronder 3 bewezen ebooks zonder bewezen zelfstandige print,
-ISBN-taalconflicten, verkeerde auteurs/boeken/volumes/bundels/bewerkingen en een
-ontbrekende cover. Zie dossiers.json, concrete beslissing en bronpogingen per Work.
-Cumulatief 596/10223 oorspronkelijke inventarisdossiers beoordeeld; 9627 niet afgerond.
-De eerdere 9 NL006-dossiers zijn onderdeel van deze 100, niet opnieuw opgeteld.
-PR66-tien nieuwe Works blijven aparte identiteiten buiten die oorspronkelijke inventaris.
+100 DOSSIERS VOLLEDIG BESLIST
+64 goedgekeurde bestaande-Work-voorstellen,3 al correct behouden,33 onvoldoende of
+tegenstrijdig bewijs NA vastgelegde broncontroles. Nooit afwezigheid afleiden uit mislukte
+zoekopdracht. De33 worden NIET geïmporteerd; dossiers.json bevat concrete bronpogingen
+en resterend bewijs: onder meer ebook-zonder-zelfstandige-print, ISBN-taalconflict,
+andere auteur/volume/bundel/bewerking en ontbrekende exacte cover.
+Extra3 werkelijk ontbrekende boekidentiteiten: Schemerleven/Jaap Robben,
+Jij mag alles zijn/Griet Op de Beeck, De koning zonder paard/Levina van Teunenbroek.
+Auteur/ISBN/titelcorpus globaal gecontroleerd; geen dubbele Works door vertaalde titels.
+Uitleen, leesbevordering en redactionele selectie zijn onderscheiden, geen verkoopranglijst.
+SEO-bronmap read-only hergebruikt; vier bronbestanden onveranderd. Eerder geblokkeerde
+SEO-dossiers blijven open. Geen overlap van Work of ISBN met PR62/PR63.
 
-Extra 3 werkelijk ontbrekende boekidentiteiten onderzocht: Schemerleven (Jaap Robben),
-Jij mag alles zijn (Griet Op de Beeck), De koning zonder paard (Levina van Teunenbroek).
-Globale ISBN-, titel- en bestaande auteurscorpuscontrole uitgevoerd. Geen productienummers
-toegewezen. Uitleen, leesbevordering en redactionele selectie zijn afzonderlijke signalen,
-geen universele verkoopranglijst. Kinderboeken niet automatisch smaaktestgeschikt gemaakt.
+EXACT VOORSTEL
+67 presentaties;182 INSERTS in zeven kleine transacties:
+1 auteur +3 Works +47 NL-printedities +67 cover/formaatbindings +64 nieuwe eigen
+NL-samenvattingen (50–90 woorden).3 bestaande goede NL-teksten blijven behouden.
+Netto+47 NL-beschikbare Works =44 bestaande met eerste geschikte NL-editie +3 nieuwe.
+20 reeds NL-beschikbare presentaties verbeteren, niet opnieuw als uitbreiding tellen.
+Na ongewijzigde uitgangssituatie zou NL2960→3007 gaan; nu NIET uitgevoerd.
+Geen bestaande ratings, leesstatussen, accounts, reeksen of score-/smaakregels wijzigen.
+Geen nieuwe migratie, infrastructuur, appcode, CSS of zichtbare onderdelen.
+Per ISBN expliciete NL-taal, printformaat, auteur, titel en cover uit hetzelfde bronblok.
+Eigen feitelijke teksten met bron/hash/controledatum; geen volledige flappen opgeslagen.
+Work68 tekstbron is correct Penguin Random House/official_publisher, niet Bureau ISBN.
+Lannoo403 niet omzeild; Galbraith-conflict blijft buiten import.
 
-Voorstel: 67 presentaties, 182 acties = 1 auteur + 3 Works + 47 NL-printedities +
-67 cover/formaatbindings + 64 nieuwe oorspronkelijke NL-teksten; 3 goede teksten behouden.
-Netto +47 NL-beschikbare Works: 44 bestaande Works met eerste NL-editie en 3 nieuwe Works.
-20 al Nederlandstalig beschikbare presentaties verbeteren. Geen wijziging van scores,
-kenmerken, reeksen, accounts, ratings of voortgang. Geen nieuwe migratie of applicatiecode.
-Vormgeving, selectie en rangschikking blijven identiek aan actuele main.
+HASHES / VERVANGEN BESTANDEN
+Alleen release-hashes.json en batch-01..07-production-{plan,apply,dry-run,rollback}.
+SHA256 release-hashes.json:
+8a017eae0579544810c1b2d216667c0b14a764952dc3e56a0a09c9ad8a82f71b
+Afzonderlijke SQL-hashes staan daarin.20/23/30/30/30/30/19 acties =182.
+Oude local-proposal-* (9/18) volledig vervangen; NOOIT combineren.
+Testbestanden/IDs977*/openbare fixtures nooit op productie uitvoeren.
 
-Per exact ISBN expliciet Nederlands taalbewijs, printformaat, uitgever, titel, auteur en
-cover uit hetzelfde editieblok. 67 afbeeldingen opgehaald, gedecodeerd en visueel beoordeeld.
-22 groter dan 300 kB zijn een afzonderlijke optimalisatiebeperking, geen verkeerde substitutie.
-Geen volledige flappen opgeslagen. Eigen teksten 50–90 woorden, bron en identiteit vastgelegd.
-Lannoo gaf bij directe controle 403: niet omzeild; Galbraith-taalconflict blijft buiten import.
-SEO-prioritering hergebruikt via seo-catalog-readiness.json; bronmap blijft alleen referentie.
-Oudere geblokkeerde SEO-dossiers blijven open, niet als hersteld meegeteld.
+HOSTED TEST EN HERSTEL
+Uitsluitend hlvujbrmfdlrfxdjwsmb.305 eigen catalogusrijen =124 ontbrekende openbare
+baselinefixtures +181 gemapte releaseacties (nieuwe auteur reeds in seed).
+Volledige actuele305 rijen exact teruggelezen. Acht importherhalingen met strengere
+assertie veranderd==0 bereikten nl006_all_eight_replays_zero op15:22:07.593282 UTC.
+Geen nieuwe DDL/rechten/triggers/taxonomie/inventariswijzigingen.
+Eén connectorbevestiging verliep; geen expliciete beveiligingsweigering; niet identiek
+herhaald. Normale aangemelde dashboardroute van hetzelfde testproject gebruikt.
+Acht werkelijk gecommitteerde hersteltransacties verwijderden alle305 eigen rijen.
+Baseline en alle buiten-eigen publieke digests waren exact hersteld. Dit is herstel
+NA COMMIT, niet alleen een dry-run met ROLLBACK.
+Daarna305 hersteld voor Preview. Na de bronlabelcorrectie van Work68 is de definitieve
+batch06 van30 rijen afzonderlijk werkelijk gecommitteerd hersteld én opnieuw geïmporteerd.
+Daarmee hebben alle definitieve actievarianten werkelijk herstelbewijs; niet beweren dat
+de gehele laatste samengestelde acht-transactievariant nogmaals integraal is uitgevoerd.
+Huidige herstelmanifest:current-test-recovery-manifest.json,305 rijen, exact laatste receipts.
+test-final-committed-undo.sql SHA256:
+9aa24fe55b7ede3490e1e2c5f45b7588cfa313df38b8360e5cbc20b27fbc7eef
+Historische test-dashboard-committed-undo.sql/first-receipts niet opnieuw gebruiken.
+19 inkomende FK-controles: uitsluitend verwachte eigen relaties, geen externe afhankelijkheid.
+68 ratings,68 leesstatussen en2 bestaande accounts met exacte digests behouden.
+Eigen tijdelijk synthetisch account bevestigd/gebruikt/uitgelogd en gericht verwijderd:
+0 eigen accounts/identities/sessions over, geen rating/status/preferences/rounds geschreven.
+Zie temporary-account-cleanup.json, committed-recovery-proof.json, final-evidence-summary.json.
 
-Lokaal PostgreSQL/PGlite: 182 acties, COMMIT/teruglees, replay 0, dry-run ongewijzigd,
-gecommitteerd herstel exacte baseline; latere tekstwijziging en CASCADE-afhankelijkheid
-worden geweigerd. Dun testschema apart gevalideerd: 305 acties en exacte receipt-undo.
-Hosted test: 124 openbare seeds + 181 gemapte releaseacties; alle 305 volledige rijen gelijk.
-68 ratings, 68 leesstatussen, 2 accounts en hun digests ongewijzigd. Geen persoonlijke kopieën.
-Eén connectorbevestiging verlopen; geen expliciete beveiligingsweigering, niet herhaald.
-Normale aangemelde dashboardroute van hetzelfde testproject gebruikt: 8 gecommitteerde
-receipt-undo's, 305 eigen rijen verwijderd; volledige baseline en buiten-eigen publieke
-digests gelijk. Dit is herstel NA gecommitteerde import, niet uitsluitend ROLLBACK.
-Geen sequence resets. Goedgekeurde testtoestand wordt hersteld voor de Preview.
-Hosted browseracceptatie en definitieve Preview-SHA volgen; nu nog niet claimen.
+PREVIEW EN BROWSERBEWIJS
+DraftPR https://github.com/greenf88/lumiscore/pull/67
+Geteste applicatiecommit694c0b41030bfdd5704a767042e80e429031de7f,
+Ready dpl_BAcvqU9bxt2QJXNA4BdcS5uFDLKm:
+https://lumiscore-ga9rsqiro-rgkgroeneveld-9102.vercel.app
+Alle latere wijzigingen zijn dossiers, bronlabel/import/evidence/scripts; appbron identiek.
+Definitieve volledige PR-head en CI na push in PR-beschrijving vermelden.
+67/67 exacte Nederlandse presentaties: zoekklik→detail→herladen, juiste geselecteerde
+ISBN/editie, geladen passende cover, zichtbare eigen/behouden tekst en juiste bron.
+67/67 oorspronkelijke titels vinden hetzelfde Work met de Nederlandse editie.
+Publieke lege score op kaart/detail gelijk; geen gefingeerde ratings ingevoerd.
+Lokale67-presentatietest behoudt herkenbaar synthetische8.25/band5–9; geen productieclaim.
+Discover NL én EN: drie opeenvolgende pagina's16 kaarten,48 unieke zonder overlap,
+tellingen812 NL/630 EN gelijk. NL-filter en lege zoekopdracht werken.
+Werkelijke320 px én1280 px: NL/EN, Paper/Ink, cover, bron, taalwissel, herladen/terug.
+EN Frankenstein ISBN9780141439471 positief; geen EN-editie voor het nieuwe Nederlandse
+boek blijft expliciet niet beschikbaar en toont geen NL-samenvatting als Engels.
+Oude hosted-responsive.json en hosted-english-positive.json bevatten onjuist gelabelde
+gewenste breedtes: HISTORISCHE pogingen, niet geldig als320/390 bewijs. Gebruik uitsluitend
+hosted-mobile-final.json/hosted-desktop-final.json met werkelijk gemeten afmetingen.
+390 is niet afzonderlijk bewezen;320 en1280 wel.
+Geen app-/CSS-diff: bestaande vormgeving blijft behouden; screenshots in evidence/.
 
-Alleen huidige batch-01..07-production-* en release-hashes.json als productievoorstel.
-local-proposal-* (oude 9/18) zijn HISTORISCH en volledig vervangen, NOOIT combineren.
-test-* en *-test-* NOOIT op productie. Eerste niet-lege COMMIT-receipts veilig bewaren.
-Na eventueel toekomstig akkoord: actuele SHA/hashes/waarden/ISBN-corps opnieuw controleren;
-snapshot → 7 kleine imports → exact teruglezen → replay 0 → alleen indien nodig gerichte
-publieke cachevernieuwing → liveacceptatie. Stop bij elke afwijking of onverwachte koppeling.
-Herstel omgekeerd 07→01 met eerste receipts, volledige after-CAS en alle inkomende FK's;
-stop bij latere legitieme wijzigingen of afhankelijkheden. Gebruikersgegevens nooit overschrijven.
+AANBEVELINGEN / BEPERKINGEN
+Bevestigde synthetische login, ingelogde result NL/EN,20 geschikte taalgebonden kaarten,
+detail/herladen/terug geslaagd. Nieuwe account heeft0 ratings: bestaande synthetische
+fallbackkandidaten, GEEN bewijs van gepersonaliseerde rangschikking van67 nieuwe presentaties.
+Nieuwe testfixtures bevatten bewust geen gekopieerde/ongefundeerde smaakkenmerken.
+Gastvoorkeurroute faalt veilig omdat legacy canonieke anchor-ID's in remapped test ontbreken.
+Geen taalregels, anchor-ID's of inventaris/ranking gewijzigd om bewijs te forceren.
+Gezamenlijke editie/presentatiepad met alle67 lokaal bewezen; productie-kenmerken blijven intact.
 
-PR51, PR62/63 en oudere acht voorstellen buiten scope. Geen productie-import, merge of
-publicatie. Deze Draft is nog geen releaseklaaradvies zolang hosted acceptatie ontbreekt.
+COVERS / SNELHEID
+67 bronafbeeldingen technisch én inhoudelijk visueel gecontroleerd, werkelijk geladen in
+Preview.22 detailbestanden>300kB blijven aparte optimalisatiebeperking (max circa1.32MB).
+Geen onjuiste of onleesbare kleinere afbeelding als vervanging gekozen; geen nieuwe host.
+Acht aanvankelijk niet-geladen kaartbeelden gericht opnieuw gecontroleerd: allemaal geladen.
+Bestaande Engelse Frankenstein-cover verscheen na de eerste render; tijdelijke levering/
+rendervertraging waargenomen, precieze netwerk/decoder-oorzaak niet vastgesteld.
+Bestaande synthetische aanbevelingsplaceholders zijn testfixture-data, geen productiefixclaim.
+The Notebook63 blijft buiten import wegens ontbrekende passend bewezen cover.
+Geen nieuwe kritieke apprequests: bestaande twee begrensde presentatiequeries; locale+
+Work/editieselectiecache30s, max200 entries, fouten niet als permanente afwezigheid gecachet.
+67 toolgeobserveerde zoek→klik→detailcontroles: mediaan1110ms, min958,max1857ms.
+Dit omvat browserbediening/tooloverhead, NIET TTFB/LCP/koude-cachewinst of zuivere coverduur.
+Rechtstreekse HTTP-meting bereikte Vercel302-bescherming, dus geen app-TTFB geclaimd.
+Bescherming niet aangepast en geen credentials/share-bypass aangemaakt.
+
+LOKALE CONTROLES
+Werkelijke PostgreSQL/PGlite productie-SQL182: dry-run ongewijzigd, COMMIT/readback,
+replay0, gecommitteerd herstel exactbaseline. Latere tekstwijziging en CASCADE-afhankelijkheid
+worden geweigerd. Dun testschema305 apart commit/replay/receiptundo gevalideerd.
+11 gerichte tests (3 pakket +8 taalvoorkeur) groen; eerdere ongewijzigde zoek/teksttests
+en build hergebruikt. TypeScript, lint, secretscan en definitieve CI separaat vastleggen.
+Geen productiebelastingtest. Geen claim dat alle9627 resterende dossiers zijn hersteld.
+
+UITVOERINGSVOLGORDE NA AFZONDERLIJK AKKOORD
+Zie RELEASE-ORDER.txt. Eerst actuele head/main/productiedeployment, hashes en volledige
+verwachte oude rijen/auteurscorpora/globale ISBN-identiteit opnieuw controleren.
+Snapshot→batches01..07→exact teruglezen→replay0→actuele nettoNL-set meten→eventuele
+goedgekeurde PR-merge/deploymentbevestiging→cache30s laten verlopen/uitsluitend nodige
+publieke cache gericht vernieuwen→live67/zoek/NL-EN/paginering/scoreacceptatie.
+Geen installatie nodig: bestaande goedgekeurde presentatie-schema/guards vereist.
+Bij afwijking direct stoppen; geen SQL aanpassen of andere voorstellen meenemen.
+Herstel07→01 met EERSTE niet-lege echte productiereceipts, volledige after-CAS en alle
+inkomende FK's; stoppen bij latere wijzigingen of nieuwe afhankelijkheden. Geen sequencereset.
+Appterugzet blijft compatibel: uitsluitend extra openbare catalogusrijen, geen DDL.
+
+ADVIES
+Afgebakend datavoorstel gereed voor inhoudelijke releasebeoordeling; Draft laten staan.
+Exacte67-presentatie/import/herstelacceptatie geslaagd. Persoonlijke rangschikking van de67,
+390 px en app-TTFB niet als bewezen presenteren;22 grote covers en33 bronhouds apart.
+Geen goedkeuring voor automatische uitvoering. Overige oude acht, PR62/63, vervolgonderzoek
+en PR51 buiten scope. Productie blijft ongewijzigd tot concreet releaseakkoord.

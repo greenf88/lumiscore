@@ -1,0 +1,142 @@
+{
+  "at": "2026-11-01T15:13:12.135861+00:00",
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "outsideOwn": {
+    "works": {
+      "count": 960,
+      "digest": "c95d5d983cd15a39c29c50ca0ede5385"
+    },
+    "authors": {
+      "count": 301,
+      "digest": "620bf4b4f005016b3796b2ce9fca2ab9"
+    },
+    "editions": {
+      "count": 1386,
+      "digest": "bca524fd6840f661a57cbd56e9c1899e"
+    },
+    "catalog_edition_metadata": {
+      "count": 470,
+      "digest": "a4eeab9b9c1a90c5e5766aa26eb634a4"
+    },
+    "catalog_work_descriptions": {
+      "count": 569,
+      "digest": "b64fe8400302542a21ad6bf1bf59c626"
+    }
+  },
+  "dependencies": [
+    {
+      "name": "works_author_id_fkey",
+      "actual": 36,
+      "relation": "public.works",
+      "expected_own": 36
+    },
+    {
+      "name": "editions_work_id_fkey",
+      "actual": 77,
+      "relation": "public.editions",
+      "expected_own": 77
+    },
+    {
+      "name": "ratings_work_id_fkey",
+      "actual": 0,
+      "relation": "public.ratings",
+      "expected_own": 0
+    },
+    {
+      "name": "work_cover_resolutions_work_id_fkey",
+      "actual": 0,
+      "relation": "public.work_cover_resolutions",
+      "expected_own": 0
+    },
+    {
+      "name": "work_trait_evidence_work_id_fkey",
+      "actual": 0,
+      "relation": "public.work_trait_evidence",
+      "expected_own": 0
+    },
+    {
+      "name": "collection_books_work_id_fkey",
+      "actual": 0,
+      "relation": "public.collection_books",
+      "expected_own": 0
+    },
+    {
+      "name": "user_book_status_work_id_fkey",
+      "actual": 0,
+      "relation": "public.user_book_status",
+      "expected_own": 0
+    },
+    {
+      "name": "catalog_selection_members_work_id_fkey",
+      "actual": 0,
+      "relation": "public.catalog_selection_members",
+      "expected_own": 0
+    },
+    {
+      "name": "work_catalog_categories_work_id_fkey",
+      "actual": 0,
+      "relation": "public.work_catalog_categories",
+      "expected_own": 0
+    },
+    {
+      "name": "catalog_work_title_aliases_work_id_fkey",
+      "actual": 0,
+      "relation": "public.catalog_work_title_aliases",
+      "expected_own": 0
+    },
+    {
+      "name": "editorial_records_work_id_fkey",
+      "actual": 0,
+      "relation": "catalog_private.editorial_records",
+      "expected_own": 0
+    },
+    {
+      "name": "taste_rating_offers_work_id_fkey",
+      "actual": 0,
+      "relation": "public.taste_rating_offers",
+      "expected_own": 0
+    },
+    {
+      "name": "catalog_work_descriptions_work_id_fkey",
+      "actual": 60,
+      "relation": "public.catalog_work_descriptions",
+      "expected_own": 60
+    },
+    {
+      "name": "catalog_work_descriptions_bound_author_id_fkey",
+      "actual": 36,
+      "relation": "public.catalog_work_descriptions",
+      "expected_own": 36
+    },
+    {
+      "name": "eligible_inventory_v1_work_id_fkey",
+      "actual": 0,
+      "relation": "taste_private.eligible_inventory_v1",
+      "expected_own": 0
+    },
+    {
+      "name": "eligible_inventory_v1_edition_id_fkey",
+      "actual": 0,
+      "relation": "taste_private.eligible_inventory_v1",
+      "expected_own": 0
+    },
+    {
+      "name": "catalog_edition_metadata_edition_id_fkey",
+      "actual": 64,
+      "relation": "public.catalog_edition_metadata",
+      "expected_own": 64
+    },
+    {
+      "name": "catalog_edition_metadata_work_id_fkey",
+      "actual": 60,
+      "relation": "public.catalog_edition_metadata",
+      "expected_own": 60
+    },
+    {
+      "name": "catalog_edition_metadata_bound_author_id_fkey",
+      "actual": 36,
+      "relation": "public.catalog_edition_metadata",
+      "expected_own": 36
+    }
+  ]
+}

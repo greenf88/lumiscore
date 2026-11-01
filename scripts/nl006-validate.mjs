@@ -1,6 +1,6 @@
 // Actual SQL on local Postgres/PGlite. No hosted connection or network credentials.
 import fs from'node:fs';import assert from'node:assert/strict';import{createRequire}from'node:module';
-const require=createRequire(new URL('../../lumiscore-nl-batch002-20261031/package.json',import.meta.url)),{PGlite}=require('@electric-sql/pglite'),dir='catalog/nl-research-006-20261101/',read=n=>JSON.parse(fs.readFileSync(dir+n)),raw=n=>fs.readFileSync(dir+n,'utf8'),p=read('production-before.json'),plan=read('local-proposal-plan.json');
+const require=createRequire(new URL('../../lumiscore-nl-batch002-20261031/package.json',import.meta.url)),{PGlite}=require('@electric-sql/pglite'),dir='catalog/nl-research-006-20261101/',read=n=>JSON.parse(fs.readFileSync(dir+n)),raw=n=>fs.readFileSync(dir+n,'utf8'),p=read('production-before.json');
 const db=new PGlite();try{
 await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
 create table authors(id bigint primary key,open_library_id text,name text,created_at timestamptz);
