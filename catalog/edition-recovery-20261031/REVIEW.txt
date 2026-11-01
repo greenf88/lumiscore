@@ -1,0 +1,231 @@
+Dystopia / Dune: bounded edition recovery after PR61 — 31 October 2026
+
+BASE / SCOPE
+Remote main and active production: 13451a60e6f9399204aa625036942afa0b6c5380.
+Ready production dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr owns lumisco.re.
+New isolated branch fix/dystopia-dune-editions-20261031 starts exactly there.
+PR51, broader 1900 dossiers, NL5000 expansion and other worktrees untouched.
+Production is READ ONLY. No application merge/publication, accounts or ratings.
+
+WHY THREE DUTCH DYSTOPIA CARDS
+The older evidence catalog/technical-recovery-20261021/pr48-cover-recovery.json
+records ten presentations inside the NL interface, not ten Dutch editions.
+At positions2–10 the saved visible text explicitly says "Engelse editie".
+Only102 had a Dutch selected edition in that historical test. PR61 adds valid
+Dutch editions for2718 and199, making the current three genuinely Dutch.
+The other seven have only EN/unknown records in production. Strict NL-only
+selection was intentional; no membership deletion/pagination regression found.
+Old loaded-cover evidence must not be reused as Dutch edition-language proof.
+
+Work | Now NL | Missing reviewed print edition / action
+102  | yes | De Hongerspelen ISBN9789000399284 retained unchanged
+2718 | yes | Laat me nooit alleen ISBN9789025452483 retained unchanged
+208  | no  | De zaaier ISBN9789056727116, paperback,nld
+2600 | no  | Oryx en Crake ISBN9789035125414,paperback,nld
+100  | no  | Gever ISBN9789045340104,hardcover,nld
+2717 | no  | Zeis ISBN9789059248427,hardcover,nld
+179  | no  | Inwijding ISBN9789047516835,paperback,nld
+2724 | no  | Gesplitst ISBN9789047704010,paperback,nld
+2846 | no  | Het jaar van de vloed ISBN9789044613988,paperback,nld
+199  | yes | De testamenten ISBN9789044641882 retained unchanged
+
+DUNE
+Collection50 still links8,2165,2169,2176,311,2182 in positions1–6.
+NL currently8/2165/311. EN currently8/2165/2169/2176/2182.
+Add Dutch print editions only to2169/2176/2182 (exact ISBNs in manifest).
+Add EN paperback Heretics9780593201763 to311; reuse test91021201 (already
+created in the earlier reviewed PR46 package). Do not rerun the superseded
+standalone Heretics production proposal together with this import.
+No collection_links/sequence/progress-scope changes. All6linked Works continue
+to count in progress whether or not an edition is visible.
+No omnibus, audio or multilingual edition is being made eligible.
+
+PLACEHOLDER / ROOT CAUSE
+The production NL placeholder is Work311, edition2376, Ketters van Duin,
+ISBN9789029043151, OL37806976M. Open Library wrongly parents that exact
+fifth-volume edition to Children of Dune OL893516W. LumiScore's corrected
+internal Work311 OL893502W must NOT be reversed. Automatic cover evidence
+properly refuses the source parent mismatch. Exact ISBN/title/author/scanned
+cover plus independent original-title evidence support a reviewed metadata
+binding for this edition, without weakening automatic identity checks.
+
+SOURCE CONFLICTS — NOT GUESSED
+Inwijding: registry labels both2012 and2026 print rows Engels. The official
+publisher explicitly says Taal boek Nederlands, paperback, ISBN9789047516835;
+NBD Biblion's2012 bibliographic review identifies the Maria Postema Dutch
+translation of Divergent under the same ISBN. Use only that independently
+adjudicated2012 edition. Do not trust title, prefix or Dutch marketplace alone.
+Oryx: OL47294457M has no language and a duplicate Work parent. Do not import
+that parent. Exact Dutch single-volume ISBN/title/Atwood/Tinke Davids print
+identity is corroborated by booktrade records and publisher translation credits.
+Omnibus9789044612967 and trilogy9789044641912 explicitly excluded.
+All edition facts, URLs, retrieval hashes and remaining source discrepancies:
+reviewed-editions.json and sources/. Summaries are original source-reviewed
+Work-language content, not edition-language evidence. Existing texts retained.
+
+CODE
+Five CSS lines wrap only fallback cover lettering (title/author/kicker).
+At390px the live body was397px wide: hidden Waterschapsheuvel fallback text
+scrollWidth176 inside110px propagated to the card/body even under a loaded
+image. Score seal overflow remains visible. No global body clipping, layout,
+font, dimension, navigation, ranking, taste/score or language-rule changes.
+Local shared-component geometry fixture is loopback-only, not an app route.
+
+DATA PACKAGE / SAFETY
+Production PROPOSAL:46 actions =11new editions,12metadata rows,23summaries.
+New Works/authors:0. Metadata includes exact existing Ketters edition2376.
+Test:45actions because EN Heretics edition already exists; replay changed0.
+No existing edition fields are updated and no row is merged/deleted by import.
+Source-specific production/test IDs are separated in the two immutable plans.
+Runtime public metadata stays in the existing secured presentation tables.
+No new migration, infrastructure or source lookup on page load is introduced.
+Sources/HTTP proof:12exact cover responses200; visual inspection of all12.
+Three >300kB originals have observed smaller same-asset mobile variants, no
+new cover host. Full detail originals remain available. A small watermarked
+Oryx scan is correctly identified but limited in sharpness; not a new failure.
+
+INSTALL AFTER SEPARATE FUTURE APPROVAL
+1 Recheck exact PR SHA/main/Ready build and current full public row bindings,
+  all equivalent ISBNs/OLIDs and selected Work-author pairs. Stop on drift.
+2 Retain current reviewed metadata/descriptions and first nonempty COMMIT
+  receipt securely. Hash-check hashes.json and all approved SQL files.
+3 Existing PR61 presentation tables/guards/RPCs are dependencies, not new
+  migrations. Check their presence/rights; do not reinstall or weaken them.
+4 Run production-dry-run.sql only after approval; it ROLLBACKs. Sequence gaps
+  are normal; never reset identity sequences. Stop on mismatch/dependency.
+5 Run exact production-import.sql (46 or0 changes only). Preserve FIRST receipt.
+6 Read back all46actions, duplicates, NL10/EN10 dystopia, NL6/EN6Dune,
+  public scores and unchanged collection links. Never invent ratings.
+7 Merge only approved code; confirm production alias/SHA. Public identity cache
+  refresh is bounded; no global/private cache purge without demonstrated need.
+8 Live NL/EN Paper/Ink 320px/desktop acceptance before any sharing.
+
+ROLLBACK
+Application: revert only targeted CSS commit (no schema incompatibility).
+Data: production-rollback.sql requires exact FIRST nonempty committed receipt
+via set_config('lumiscore.catalog_release_receipt', receipt, false). It reverses
+only receipt rows, with full-row CAS and every incoming FK (including CASCADE).
+Later changed data or dependencies stop the whole transaction; never cascade
+delete, remove unrelated editions or reset sequences. Restore in reverse
+order: own summaries/metadata then own inserted editions; existing Works,
+accounts, ratings and progress remain. An identical import replay is a no-op.
+Local tests prove committed undo and later-edit/dependency refusal. Hosted
+transactional undo/ROLLBACK proof and subsequent readback are recorded
+separately; do not confuse a ROLLBACK with a committed production rollback.
+
+HOSTED ACCEPTANCE — COMPLETED 31 OCTOBER
+Draft PR62: https://github.com/greenf88/lumiscore/pull/62
+Tested application: c61e8ee6ac3e07a527f9186d5fb10ec55f85cfe2.
+Ready deployment dpl_92RNo7pgDXNcysvY2XZKoK7EM8u3:
+https://lumiscore-7rt9gbpcp-rgkgroeneveld-9102.vercel.app
+Later evidence commits and an offline ISBN-guard correction do not change the
+tested runtime or planned data values. The final SQL hashes below supersede c61
+SQL, even though production-plan.json and test-plan.json remain identical.
+CI quality run41214076537 passed unit tests, TypeScript, plain lint, synthetic
+profile SSR, Vercel build, client secret scan and diff check on this SHA.
+Branch-only public TEST URL/publishable key configured after explicit approval.
+Normal Git build used the configuration; no manual rebuild was necessary.
+Deployment protection, production configuration and all other branches intact.
+
+hosted-browser-proof.json records126 observations and32 Work/language cases.
+Every one of the ten dystopia Works and six Dune Works has a visible sourced
+description, actually loaded matching cover, matching list/detail title and
+public empty-score/band in BOTH languages. This is an insufficient-rating
+test-catalogue proof, NOT a claim about numeric production scores. No ratings
+were created. Existing score/ranking tests provide synthetic positive cases.
+NL/EN Paper/Ink at320/390px and1280px checked; local shared-component fixture
+also checks375/430px (20geometry cases). No physical-phone claim.
+Dystopia lists10/10; Dune lists6/6. All six collection links still count.
+Guest browser cannot prove authenticated progress persistence anew; unchanged
+collection rows/hashes and existing language-progress regression tests cover
+the unchanged denominator. No user progress or account writes were performed.
+
+Test results by production Work (both NL/EN: identity, description/source,
+loaded cover, list/detail score status PASS):
+102 De Hongerspelen;2718 Laat me nooit alleen;208 De zaaier;
+2600 Oryx en Crake;100 Gever;2717 Zeis;179 Inwijding;2724 Gesplitst;
+2846 Het jaar van de vloed;199 De testamenten.
+Dune8/2165/2169/2176/311/2182: both languages PASS, six parts visible.
+Exact selected ISBN/publisher/language and mapped test IDs: proof.acceptance.
+The three existing Dutch dystopia editions were retained, not replaced.
+
+Search De zaaier and Parable of the Sower both find the same Work, with the
+Dutch presentation in NL. Also checked Inwijding, Ketters/Heretics and Oryx.
+Detail reload, corresponding-language switch, search back link and mobile
+page3 -> detail -> page3 preserve returnTo, query, sort and page size.
+Three consecutive Browse pages per language each contain16unique Works;
+48unique across each set, stable totals NL536/EN506 on TEST. Test catalogue
+is smaller than production and uses mapped IDs. No pagination/RPC code changed.
+Preview HTTP200 server HTML contains10Dutch cards; X-Robots-Tag:noindex
+preserved (preview-response-proof.json). No SEO/publication changes requested.
+
+IMAGE DELIVERY LIMITATIONS
+Lazy images immediately after navigation/scroll are not failed-cover evidence.
+The final loaded observations and screenshots distinguish this explicitly.
+Four EN mobile detail visits reached the bounded network-idle wait and passed
+one fresh bounded recheck. One EN Ink list visit showed a Never Let Me Go
+fallback; subsequent EN Paper loaded all10. External delivery cause unknown:
+do not claim this CSS/data package structurally fixes upstream availability.
+Several Open Library requests remain variably slow. No global performance
+gain or TTFB/LCP benchmark was established by this acceptance run.
+New reviewed metadata/summaries require no extra external description lookup;
+CSS has no requests. Twelve source-cover HTTP200 responses and visual identity
+checks are separate from application observations, not page-speed metrics.
+Oryx's verified small scan has limited sharpness; use of a wrong cover would
+not be an acceptable way to improve it. Pre-existing unknown Dune year fields
+on test fixtures are not production changes and are outside this data proposal.
+
+TEST EXECUTION / RECOVERY LIMITATION
+Test installation:45confirmed changes, identical replay0. Aggregate full-row
+hashes/counts for Works797, authors262, ratings68, statuses68, collection links146
+are unchanged before/after (test-execution-proof.json). No private rows exported.
+An official execute_sql request for test-current-recovery-dry-run.sql returned:
+status expired; error_code INVALID_ARGUMENT;
+"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation."
+No request-ID was supplied. Hosted undo was NOT proved/executed. Do not confuse
+the connector response with a successful transaction. No identical retry or
+alternate access was used. Local committed rollback, no-op rerun and refusal
+of later changes/FK dependencies passed on the actual public baseline.
+Before data release, complete one freshly confirmed bounded TEST rollback
+dry-run/readback through the normal approval route (user ready beforehand).
+If no confirmation window appears or expires again, stop and report this
+connector issue; do not repeat or bypass it. This limitation blocks unconditional
+production-data release advice, not review of this Draft or the code fix.
+
+FINAL READ-ONLY PRODUCTION CHECK
+Remote main and active production remain13451a60e6f9399204aa625036942afa0b6c5380.
+All16bound Works/authors match the saved full public rows. None of the11new
+ISBN13 records, Ketters metadata or23proposed description keys already exists.
+Production import/dry-run/rollback hashes match both working files and c61 Git
+blobs at the initial checkpoint. The final guarded SQL supersedes initial SQL:
+production-import.sql SHA256
+f0854b334c03fdf5376ac55816509df9c9dfafbf40bb2f6584a56548bd6fe8d8
+production-dry-run.sql SHA256
+efa2f2067baab7cfbd82b4a21228e95bd4e0d099ff12096f76cf019c05b0b230
+production-rollback.sql remains SHA256
+ccc47fe5a42f9c52f669465935aef1fedaf2a08f33c2413a27cc8bf3b5223f5a.
+All final hashes in hashes.json. Do not execute initial c61 SQL additionally.
+Scoped .gitattributes preserves LF for SQL/JSON checkouts.
+No production writes, merges, deployments or sharing have been performed.
+
+FINAL IMPORT SAFETY CORRECTION
+Review found a single newly arrived ISBN10-only legacy row could pass a
+count>1 duplicate guard before insertion. Added an explicit refusal of any
+equivalent identifier without the exact approved canonical ISBN13. It also
+refuses differently formatted ISBN13 values that need reconciliation, rather
+than silently importing a second identity. Local actual-baseline regression
+inserts one synthetic legacy row and proves the entire import refuses it;
+committed rollback/private-data protection tests still pass. Normal TEST
+replay of the final guarded import succeeded with0changed rows. Final read-only
+production SELECT found0equivalent ISBN13/ISBN10 records across all11proposals.
+This guard changes no accepted data values, browser code or existing test rows.
+
+ADVICE / SHARE READINESS
+Code and reviewed contents ready for review in Draft PR62. Keep Draft pending
+the explicit hosted recovery proof and separate approval of the46-action
+production import. The only runtime change is five CSS lines; no new migration.
+TEST NL/EN dystopia10/10 and Dune6/6 are content-complete with the stated image
+delivery/quality limitations. Production NL dystopia remains3/10 and Dune3NL/5EN:
+NOT yet fully share-ready as repaired lists. Existing EN dystopia availability
+does not prove the Dutch repair is live. Only after approved import, code release
+and live acceptance may the repaired NL list be declared campaign-ready.
