@@ -1,0 +1,136 @@
+{
+  "project": "qvplwejffhjvxaypmjut",
+  "state": "PROPOSAL_NOT_INSTALLED",
+  "source": "test-support/product-metrics/install.sql; mechanical names/traffic mapping plus absent-baseline and explicit service_role rights",
+  "hashes": {
+    "install.sql": "c7a7fe62d539af6b19d12e968a837034a5a81385f87e5d95a66dc0f452d524a7",
+    "scheduler.sql": "e0db5a11b2e0fdcd9016f1df045e1b14ef5003586664665416f418cb6bfcbd63",
+    "report.sql": "0510c8911b068d79919a8dd9302f38cb1451916d1b9f2cac51ead63b31516cc0",
+    "monitor.sql": "5e69fd947d1927f6710dbf1155e2a94ec007e14bb65ecc0fc03793390cc62bd9",
+    "verify-install.sql": "a6cca8d28b8cb896807d66a132aeda56d0fffae38d7863918e1a9e424a40e06c",
+    "rollback.sql": "daa1e6b78caa00bf0fc16e455c07f833c35038a72e01edc0a1e566165554bdc1"
+  },
+  "functions": [
+    {
+      "signature": "product_metrics.cleanup(timestamp with time zone, integer)",
+      "body_md5": "6a16d6c599a51b018e7eca57142d2769",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=100ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.consent(text, uuid, timestamp with time zone)",
+      "body_md5": "274446b3a8bc910162a06b1e64c3ec62",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=1s"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.current_time()",
+      "body_md5": "0f07466da6eaa28778c1857bfdde383d",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.observe_transition()",
+      "body_md5": "c12ac03bfd16b52b7dff5bfc50a62707",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.operational(text)",
+      "body_md5": "7c25ee228f419ea81b09d7e19e507fc2",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=5ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.record_event(uuid, text, jsonb)",
+      "body_md5": "6defac60d9666fc12a8a55619f95054f",
+      "settings": [
+        "search_path=\"\"",
+        "lock_timeout=25ms"
+      ],
+      "definer": true,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.request_context()",
+      "body_md5": "3b9bb3cd1f073273812eba10c9a66d4e",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.request_grant()",
+      "body_md5": "df834b387ae70986416c2a5f73e8fa3e",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres}"
+    },
+    {
+      "signature": "product_metrics.valid_context(jsonb)",
+      "body_md5": "dbd4208e0de0a22889ca349e182c804a",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.product_analysis_consent_v3(text, uuid, timestamp with time zone)",
+      "body_md5": "505eda940ccc872aa2cf9c1048b9e0b4",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_event_v1(uuid, text, jsonb)",
+      "body_md5": "250c772c796fe4fbafff3ce2f8e9b9e3",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_events_v1(jsonb)",
+      "body_md5": "388765abd73b1a038aa0afdf55e963af",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}"
+    },
+    {
+      "signature": "public.record_product_sign_in_v1(jsonb)",
+      "body_md5": "5ccdcce95a5b4350af5666ea0ab747cd",
+      "settings": [
+        "search_path=\"\""
+      ],
+      "definer": false,
+      "acl": "{postgres=X/postgres,authenticated=X/postgres}"
+    }
+  ]
+}

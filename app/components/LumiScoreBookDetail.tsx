@@ -39,6 +39,7 @@ import {
   TASTE_TEST_GUEST_STORAGE_KEY,
 } from '@/lib/taste-test/guest-storage';
 import { useWantToRead } from './useWantToRead';
+import { measurementHeaders } from '@/lib/product-metrics/browser';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 import { MobileNavigation } from './MobileNavigation';
@@ -197,7 +198,7 @@ export function LumiScoreBookDetail({
     try {
       const response = await fetch(`/api/ratings/${book.workId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...measurementHeaders(locale, 'book_detail') },
         body: JSON.stringify({ rating }),
       });
       const payload = (await response.json()) as {
@@ -254,7 +255,7 @@ export function LumiScoreBookDetail({
   };
 
   return (
-    <main className="book-detail-shell">
+    <main className="book-detail-shell" data-product-work={book.workId}>
       <header className="detail-header">
         <LumiScoreWordmark />
         <div className="detail-header-actions">

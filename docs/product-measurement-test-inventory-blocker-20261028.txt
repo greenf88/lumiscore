@@ -1,0 +1,49 @@
+ACTUELE AANVULLING — 28oktober2026
+De nieuwste opdracht staat minimale synthetische boeken toe bij bewezen tekort.
+Negen afzonderlijke expliciete NL-standalonefixtures zijn met de ongewijzigde
+bestaande policy gevalideerd en uitsluitend op test toegevoegd. Manifest en
+gerichte cleanup:test-support/product-metrics/acceptance-fixture-v1.json,
+acceptance-fixture-install.sql,acceptance-fixture-cleanup.sql.
+Geen bestaande reviewcollecties, bronevidence of selectievoorwaarden veranderd.
+De bestaande echte ronde is hiermee10/10 afgerond en teruggelezen; dit specifieke
+voorraadtekort blokkeert de acceptatie dus NIET meer. Opruiming van deze exacte
+fixtures is nog geblokkeerd op requestState; zie het actuele hoofdreviewverslag.
+Hieronder blijft de oorspronkelijke diagnose van de echte catalogus intact.
+
+PR51 — gerichte inventariscontrole, uitsluitend test hlvujbrmfdlrfxdjwsmb
+
+Rick gaf op28oktober toestemming om alleen de afgeleide inventaris bij te werken
+voor reeds bestaande, aantoonbaar geschikte Works, zonder nieuwe Works/edities/
+kenmerken of gewijzigde policy. Voorwaarde: bestaande verificatie moet volstaan.
+Die voorwaarde is niet vervuld: GEEN inventariswrite uitgevoerd.
+
+Vastgelegd08:38–08:51UTC: stored4NL/3EN; current1NL/0EN.
+Het enige actuele Work is8800306, Mannen die vrouwen haten, editie609NL.
+De zes stale regels betreffen8800307(Outlander,610NL/611EN),8800308(The Eye of
+the World,612NL/613EN),8800309(The Final Empire,614NL/615EN).
+Exact snapshotverschil: uitsluitend memberships. De drie Works zijn sinds de
+oude approval tevens gekoppeld aan collection-languages-review-20261023,
+type universe,sequenceNULL. De bestaande TS seriesEligibility behandelt deze
+lidmaatschappen als series-position-unknown; zomaar een nieuwe snapshot bewaren
+zou dus ongeschikte inventaris goedkeuren. Geen koppeling verwijderd/versoepeld.
+
+Read-only inventarisatie van bestaande Works met aantoonbaar inhoudelijk bewijs
+(genretrait,confidence>=0.65,geen publication_year) en een NL/EN-editie levert
+slechts deze vier Works op. Zelfs hypothetisch herstel van drie snapshots zou
+geen tien unieke kandidaten opleveren. Cover/titel/ISBN zijn geen genre-bewijs.
+Er zijn geen nieuwe bibliografische of inhoudelijke claims verzonnen.
+
+Gevolg op de echte Preview: rondegoal10,start geslaagd, één rating bevestigd,
+daarna eerlijk uitgeput. Expliciete zoekkeuze van Never Let Me Go geweigerd,
+zonder rating/voortgang/succes-event. Geen completed_at of afgerond-event gefaket.
+Resultaatpagina is afzonderlijk als geldige voorlopige presentatie geopend;
+dat bewijst geen afgeronde ronde (ook na herladen blijven0afgeronde rondes).
+
+Gericht vervolgvoorstel, nog NIET uitgevoerd:
+een afzonderlijk testfixture-reviewpakket voor minimaal10bestaande geschikte
+Works in één taal. Dat vereist voldoende bestaande inhoudelijke én identiteit-
+en reeksbewijs; de huidige vier zijn onvoldoende. Eventuele aanvulling van
+inhoudelijke evidence of reparatie van tijdelijke testcollectiekoppelingen is
+een uitbreiding van het gegeven alleen-afgeleide-inventarisakkoord en hoort
+eerst afzonderlijk beoordeeld te worden. PR38/andere PRs niet wijzigen.
+Geen productiegegevens nodig of toegestaan voor deze afronding.

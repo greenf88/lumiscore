@@ -1,0 +1,66 @@
+Productmetingen — aparte lokale implementatie, 19 oktober 2026
+Contract: docs/product-measurement-contract.md; geen tweede meetmodel.
+
+Implementatie: vijf bestaande gebeurtenissen, begrensde dimensies en dagtellers.
+Impression: >=50% continu zichtbaar>=1s, eenmaal per gemounte kaart; verborgen
+tab/uit beeld onderbreekt de timer. Open: native primaire/middelste/keyboard-
+linkactivatie na impression; geen preventDefault of vervangende navigatie.
+Want-to-read: pas na geslaagde statusmutatie/reconciliatie, changed>0 en de
+werkelijk bewaarde status gelijk aan de gevraagde status. Rating-race met Read
+wordt niet als nieuwe leeswens geteld. Round-start/complete: bestaande RPC meldt
+een nieuw ronde-ID respectievelijk eerste incomplete→complete-transitie; ophalen,
+hervatten, bestaande complete staat en mislukte opslag geven geen nieuw event.
+Geen aparte ratingscores of nieuw smaakprofiel in meetdata.
+
+Alle verzending/opslag is hard begrensd tot bestaand testproject
+hlvujbrmfdlrfxdjwsmb. Productie blijft uit, zonder nieuwe environmentvariabele.
+Server-only events worden op het browserendpoint geweigerd. Origin/contenttype,
+werkelijke1024-bytebody, toegestane keys/waarden en databasevalidatie fail-closed.
+Opaque eventreceipt is geen user/session/visitor-ID en wordt begrensd bewaard;
+geen browsercookie/localStorageidentifier of automatische offline-retry.
+SQL dedup en globale120/minuutgrens zijn atomair, zonder IP- of usertracking.
+Tellers mogen geen scores, ranking, autorisatie of publieke populariteit sturen.
+Gemengde bron/versies en sparse data zijn geen conversie- of retentiemeting.
+
+Opslagontwerp alleen test-support/product-metrics/install.sql, GEEN automatische
+productiemigratie. Voorwaarde bestaande synthetische marker. Private tabellen
+met FORCE RLS/geen client-tablegrants; invokerwrapper naar beperkte private
+definerhelper, geen toegang tot accounts/ratings/catalogus. Alleen publieke
+clientcredential voor transport; nooit service-role/secretkey in de collector.
+Lokale rapportfunctie toont periode, dimensies, tellers, noemers en beperkingen;
+onbeschikbare instrumentatie/opslag is unavailable, niet nul.
+
+Bewijs: gerichte contract-, visibility-, transitie-, rapport- en echte lokale
+PostgreSQL/PGlite-opslagtests slagen. Dubbele ontvangst telt eenmaal; anon mag
+functie gebruiken maar geen teller lezen; onbekende velden/types en overlimiet
+schrijven geen extra teller. Reconciliatie-/roundfoutpaden blijven bestaande
+applicatiefouten, geen stilzwijgende succesclaims. Productie-round-POST blijft
+bytegelijk na uitsluitend exact afgebakende testtelemetrieblokken weg te laten;
+de ranker, rating-/roundcontracten en gedeelde smaakberekening zijn bytegelijk.
+PR38-storage/eligibility/series-bestanden blijven buiten deze branch.
+
+ECHTE BLOKKADE: Supabase apply_migration gaf tweemaal Invalid or expired
+requestState. Tussen beide pogingen en na afloop read-only gecontroleerd:
+product_metrics_test.daily_counters en record_product_event_test_v1 ontbreken.
+Geen andere schrijfroute gebruikt om dit te omzeilen. Geen installatie/migratie
+of echte browser→hosted telleropslag uitgevoerd. Lokaal/mocked bewijs is geen
+vervanging voor de expliciet gevraagde testdoelverificatie.
+
+Geen nieuwe accounts of bestaande testaccounts gebruikt/aangepast. Baseline-
+aantallen van accounts, ratings, statussen, rondes, offers, Works en edities op
+test zijn voor/na gelijk; private aantallen alleen in lokale bewijsmap, niet in
+publieke Git-documentatie. Geen opruimactie nodig op niet aangemaakte objecten.
+Geen productieconfiguratie, catalogus- of gebruikerswijziging of publicatie.
+
+Nog uit te voeren na herstel connector: exact voorgestelde testinstallatie;
+storage-/HTTP-/browserchecks incl. echte keyboard/native links, fouten/offline,
+dubbele renders en ontvangst; rapportage onafhankelijk teruglezen; uitsluitend
+eigen synthetische events opruimen. Provider-operatielogs/privacy vóór hosted
+activatie expliciet controleren. Echte rating-/statuswrites alleen met bestaande
+toegestane synthetische toegang en passende aparte testfixture, nooit productie.
+
+Herstel: appcommit gericht terugnemen (alleen testtelemetrie). Indien de test-
+installatie later slaagt: eerst exact eigen publieke wrapper intrekken, daarna
+eigen private helper/teller-/receipt-/budgettabellen verwijderen na controle op
+latere afhankelijken. Geen CASCADE of herstel van gebruikers-/catalogusgegevens.
+Op productie bestaat in deze opdracht niets om terug te draaien.

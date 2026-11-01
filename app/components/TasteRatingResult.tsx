@@ -11,6 +11,9 @@ import { BookCard, recommendationMatchLabel } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import { hasSupportedTasteSummary } from '@/lib/taste-test/result-presentation';
+import {RecommendationMeasurement} from './RecommendationMeasurement';
+import {emitBrowserMetric} from '@/lib/product-metrics/browser';
+import {useRef} from 'react';
 const EMPTY_BOOKS: never[] = [];
 export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
   const {locale} = useLumiScoreLocale(), nl=locale==='nl';
@@ -38,6 +41,8 @@ export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
 }
 export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:'result'}>}) {
   const {locale}=useLumiScoreLocale(), nl=locale==='nl', {profile}=result;
+  const measured = useRef(false);
+  useEffect(() => { if (!measured.current) { measured.current = true; emitBrowserMetric('taste_result_opened', {locale,surface:'taste_result'}); } }, [locale]);
   const books=useMemo(()=>result.recommendations.length ? result.recommendations.map(x=>x.book) : EMPTY_BOOKS,[result.recommendations]);
   const {wanted,statuses,toggleWanted}=useWantToRead(true,books);
   const hasSummary=hasSupportedTasteSummary(profile);
@@ -46,9 +51,9 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
       <h2>{nl?'Boeken voor jou':'Books for you'}</h2></>
       : <h1 id="taste-result-title">{nl?'Meer boeken voor jou':'More books for you'}</h1>}
     {result.recommendations.length===0 ? <p role="status">{nl?'Nu geen passende boeken beschikbaar.':'No suitable books available right now.'}</p>
-    : <div className="book-grid">{result.recommendations.map(x=><BookCard key={x.book.workId}
-      book={x.book} wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}
-      resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} />)}</div>}
+    : <div className="book-grid">{result.recommendations.map((x,index)=><RecommendationMeasurement key={`${locale}:${x.book.workId}`} workId={x.book.workId} locale={locale} surface="taste_result" position={index+1}><BookCard book={x.book}
+      wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}
+      resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} /></RecommendationMeasurement>)}</div>}
     <nav aria-label={nl?'Volgende stap':'Next step'} className="taste-next-steps"><LocaleLink href="/taste-test">{nl?'Verfijn je smaak':'Refine your taste'}</LocaleLink></nav>
   </section>;
 }

@@ -9,6 +9,7 @@ import { NEW_ACCOUNT_PASSWORD_MIN_LENGTH } from '@/lib/auth/credentials';
 import { ThemeToggle } from './LumiScoreHome';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
+import { MeasurementFormContext } from './ProductMeasurements';
 
 type LumiScoreLoginProps = {
   next: string;
@@ -59,6 +60,7 @@ export function LumiScoreLogin({
           method="post"
         >
           <input type="hidden" name="next" value={localizedHref(next, locale)} />
+          <MeasurementFormContext />
           {mode === 'sign-up' && (
             <label>
               <span>{t('auth.name')}</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import {EditionPresentationLabel} from './EditionPresentationLabel';
+import {RecommendationMeasurement} from './RecommendationMeasurement';
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
@@ -344,15 +345,15 @@ export function RecommendationsSection({ personalization, limit = 20, returnTo =
     <div className="section-heading"><h2 id="recommendations-title">{t('home.yourNextBooks')}</h2></div>
     {!personalization.hasEvidence ? <p>{nl ? 'We hebben nog geen bruikbaar smaakprofiel. Beoordeel gelezen boeken of hervat je smaaktest; we verzinnen geen persoonlijke matches.' : 'There is not enough taste evidence yet. Rate books you have read or resume your taste test; we do not invent personal matches.'} <LocaleLink href="/taste-test">{nl ? 'Smaaktest' : 'Taste test'}</LocaleLink></p>
       : items.length < 10 && <p role="status">{nl ? 'Er zijn momenteel minder dan tien geschikte, nog niet gelezen kandidaten met voldoende betrouwbare metadata. We tonen alleen de echte resultaten.' : 'There are currently fewer than ten suitable unread candidates with sufficiently reliable metadata. Only genuine results are shown.'}</p>}
-    <div className="book-grid">{items.map(item => <BookCard key={item.book.workId} book={item.book}
+    <div className="book-grid">{items.map((item,index) => <RecommendationMeasurement key={`${locale}:${item.book.workId}`} workId={item.book.workId} locale={locale} surface="recommendations" position={index+1}><BookCard book={item.book}
       wanted={wanted.has(getGuestWantedStorageId(item.book))} status={item.book.workId ? statuses.get(item.book.workId) : null}
       onToggle={toggleWanted} resolveMissingCover={false} matchLabel={recommendationMatchLabel(item, locale)}
-      detailReturnContext={returnTo === '/' ? { kind: 'home' } : { kind: 'recommendations', path: returnTo }} />)}</div>
+      detailReturnContext={returnTo === '/' ? { kind: 'home' } : { kind: 'recommendations', path: returnTo }} /></RecommendationMeasurement>)}</div>
   </section>;
 }
 
 const RecommendationPanel = memo(function RecommendationPanel({ personalization }: { personalization: HomepagePersonalization }) {
-  const { t } = useLumiScoreLocale();
+  const { t, locale } = useLumiScoreLocale();
   const personalized = personalization.hasEvidence
     ? personalization.recommendations.slice(0, 3)
     : [];
@@ -377,7 +378,7 @@ const RecommendationPanel = memo(function RecommendationPanel({ personalization 
             <span>{t('home.tryAgain')}</span>
           </div>
         ) : personalized.length
-          ? personalized.map((item) => <RecommendationRow key={item.book.id} book={item.book} recommendation={item} />)
+          ? personalized.map((item,index) => <RecommendationMeasurement key={`${locale}:${item.book.id}`} workId={item.book.workId} locale={locale} surface="home" position={index+1}><RecommendationRow book={item.book} recommendation={item} /></RecommendationMeasurement>)
           : <p className="recommendation-empty">{t('home.noPersonalEvidence')}</p>}
       </div>
       {!personalization.unavailable && <LocaleLink className="view-all ui-control ui-primary" href="/recommendations">{t('home.seeMore')} <span aria-hidden="true">→</span></LocaleLink>}

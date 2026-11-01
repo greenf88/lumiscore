@@ -8,6 +8,7 @@ import {createRoundActionGate, type PendingWorkScore} from '@/lib/taste-test/dir
 import {parseRating} from '@/lib/ratings/model';
 import {DiscoveryPageShell} from './DiscoveryPageShell';
 import {DirectRatingScores} from './DirectRatingScores';
+import {measurementHeaders} from '@/lib/product-metrics/browser';
 import {BookCover} from './LumiScoreHome';
 import {LocaleLink, useLumiScoreLocale} from './LumiScoreLocale';
 
@@ -65,7 +66,7 @@ export function CollectionQuickRating({initial, userId, authState}: {initial: Co
       if (!uniqueCollectionBooks(current.books).some(book => book.workId === chosen)) throw new Error('MEMBER_REMOVED');
       let created = false, canonical = current.userRatings[chosen];
       if (!current.ratedWorkIds.includes(chosen)) {
-        const response = await fetch(`/api/ratings/${encodeURIComponent(chosen)}`, {method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({rating: score, onlyIfUnrated: true, expectedUserId: userId})});
+        const response = await fetch(`/api/ratings/${encodeURIComponent(chosen)}`, {method: 'PUT', headers: {'Content-Type': 'application/json', ...measurementHeaders(locale, 'collection')}, body: JSON.stringify({rating: score, onlyIfUnrated: true, expectedUserId: userId})});
         if (!response.ok) throw new Error('SAVE_NOT_CONFIRMED');
         const payload = await response.json() as {state?: {authenticated?: boolean; userRating?: number; created?: boolean}};
         if (!payload.state?.authenticated || parseRating(payload.state.userRating) === null || typeof payload.state.created !== 'boolean') throw new Error('SAVE_NOT_CONFIRMED');
