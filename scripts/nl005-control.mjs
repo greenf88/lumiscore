@@ -2,7 +2,6 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {fileURLToPath} from 'node:url';
 const base=new URL('../',import.meta.url), root=new URL('catalog/nl-research-005-20261101/',base);
 const oldRoot=new URL('../lumiscore-nl-batch002-20261031/',base);
 const inventoryRoot=new URL('../lumiscore-nl-availability-20261031/catalog/nl-availability-20261031/',base);

@@ -1,0 +1,26 @@
+Onderwerp: Supabase-connectorbevestiging verloopt bij afgebakend testherstel LumiScore
+
+Accountomgeving: persoonlijke Codex/ChatGPT-verbinding met Supabase.
+Testproject:hlvujbrmfdlrfxdjwsmb. Productieqvplwejffhjvxaypmjut niet betrokken.
+Tool:Supabase execute_sql. Waargenomen en read-only nagecontroleerd op1 november2026
+11:52UTC(12:52Europe/Amsterdam);aanvraag gestart rond11:46UTC.
+Actie:transactioneel,receipt-/CAS-/FK-beveiligd herstel van uitsluitend eigen testcollectie
+976400001(nl005-review-20261101) en50 eigen lidmaatschappen,geen gebruikers/ratingwrites.
+
+Exact resultaat:
+{"status":"expired","message":"This confirmation expired after 2 minutes. Call `execute_sql` again to get a new confirmation."}
+error_code:INVALID_ARGUMENT. Geen niet-gevoelige request-ID door de connector geleverd.
+
+Lezen werkt. Eerder in dezelfde sessie slaagden gecommitteerd herstel van186 eigen
+catalogusrecords en2 extra coverbindings,met exacte teruglezing en behoud van68ratings,
+68leesstatussen,2accounts. De latere collectieherstelactie is NIET uitgevoerd:read-only
+nacontrole vindt nog de1collectie+50leden. Dus geen algemene login-/databaseweigering,
+geen bewezen beveiligingsweigering en niet de oudere Invalid/expired requestState-fout.
+Het bevestigingsvenster werd niet als bruikbaar resultaat aan de agent teruggeleverd;
+zonder aanvullende UIgegevens is de oorzaak onbekend. Geen identieke retries of andere
+toegang gebruikt. Geen credentials,tokens,volledige gebruikersdata of SQLpayload bijgevoegd.
+
+Verzoek:onderzoek of de normale tweeminutenbevestiging betrouwbaar zichtbaar/bedienbaar
+wordt aangeboden en na tijdige bevestiging wordt hervat. Geef een concrete herstelstap
+of wijzigingsbevestiging,waarna precieséén nieuwe afgebakende aanvraag zinvol is.
+Dit bericht is alleen voorbereid;de agent heeft niets aan support verstuurd.
