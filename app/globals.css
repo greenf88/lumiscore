@@ -1508,6 +1508,7 @@ button, input, select, textarea { font-family: var(--sans); }
 
 /* One badge per actual cover, including Browse and all compact variants. */
 .book-cover { container-type: inline-size; overflow: visible; }
+.book-cover .cover-title, .book-cover .cover-author { min-width: 0; overflow-wrap: anywhere; }
 .book-cover-image, .detail-back-cover > img { border-radius: inherit; }
 .book-cover .cover-rating-badge {
   /* Keep the seal across the lower-right cover edge, as on the original cover. */
