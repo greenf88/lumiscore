@@ -29,7 +29,7 @@ const themeScript = `
   try {
     let saved;
     try { saved = localStorage.getItem('lumiscore-theme'); } catch (_) {}
-    const theme = saved === 'paper' || saved === 'ink' ? saved : (matchMedia('(prefers-color-scheme: light)').matches ? 'paper' : 'ink');
+    const theme = saved === 'paper' || saved === 'ink' ? saved : 'paper';
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme === 'paper' ? 'light' : 'dark';
     if (['/en', '/nl', '/en/', '/nl/'].includes(location.pathname)) {
@@ -52,7 +52,7 @@ export default async function RootLayout({
   const { locale, hasPersistedChoice } = await resolveRequestLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} data-theme="paper" suppressHydrationWarning>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeWebsiteJsonLd() }} />
         <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
