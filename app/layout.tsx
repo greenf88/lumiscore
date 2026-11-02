@@ -11,6 +11,9 @@ import { ProductMeasurements } from './components/ProductMeasurements';
 
 export async function generateMetadata(): Promise<Metadata> {
   const metadata: Metadata = await createLocalizedPageMetadata({ title: 'LumiScore — Find your next great read', canonicalPath: (await requestPagePath()).split('?')[0] });
+  // Every HTML page owns its Metadata API title. The framework owns the
+  // unmatched-route title; a root fallback would add a second title there.
+  delete metadata.title;
   delete metadata.robots;
   metadata.alternates = { canonical: metadata.alternates?.canonical };
   return {

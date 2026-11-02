@@ -47,5 +47,8 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  assert.match(page,/loadCatalogBook\(workId, locale, true\)/);
  assert.match(page,/descriptionPromise=\{descriptionPromise\}/);
  assert.doesNotMatch(page,/await descriptionPromise/);
- assert.match(page,/book\.coverUrls\?\.\[0\] \?\? \(await book\.editionCoverUrls\)\?\.\[0\]/,'late verified cover is retained in social metadata using the shared promise');
+ const metadata=page.slice(page.indexOf('export async function generateMetadata'),page.indexOf('export default async function BookPage'));
+ assert.match(metadata,/const cover = book\.coverUrls\?\.\[0\]/,'stored exact cover remains available to social metadata');
+ assert.doesNotMatch(metadata,/await book\.editionCoverUrls/,'blocking head must not await optional external cover');
+ assert.match(metadata,/image: cover \?\? null/,'no unrelated image substitutes for an unstored cover');
 });

@@ -29,21 +29,22 @@ const modules = {
 // Explicit loopback-only fault/performance comparison. Neither the source
 // replacement nor this probe is part of a deployment or production build.
 if(process.argv.includes('--slow-cover')){
- modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return books.find(b=>b.workId===id)??null',"const book=books.find(b=>b.workId===id);return book?{...book,strictEditionLanguage:'en',editionAvailable:true,editionCoverUrls:new Promise(r=>setTimeout(()=>r(['https://example.invalid/reviewed-cover.jpg']),2000))}:null");
+ modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return books.find(b=>b.workId===id)??null',"const book=books.find(b=>b.workId===id);return book?{...book,strictEditionLanguage:'en',editionAvailable:true,...(id==='3'?{coverUrls:['https://example.invalid/stored-cover.jpg']}:{}),editionCoverUrls:new Promise(r=>setTimeout(()=>r(['https://example.invalid/reviewed-cover.jpg']),2000))}:null");
 }
+modules['lib/supabase/books.ts']+=`;export async function loadCatalogBooksBySourceIds(ids){return books.filter(b=>ids.includes(b.openLibraryWorkId))}`;
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];
- modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
+ modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));if(book.workId==='4')return {state:'temporary_failure',description:null};const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
  if(process.argv.includes('--baseline'))for(const file of ['app/book/[workId]/page.tsx','app/components/LumiScoreBookDetail.tsx','app/components/LumiScoreBookDescription.tsx']){
   modules[file]=execFileSync('git',['-c','safe.directory='+root.replace(/\/$/,''),'show','571108e181e2db406aac2886b3ee1eb08ac7f37d:'+file],{cwd:root,encoding:'utf8',windowsHide:true});
  }
- const probe=`(()=>{const m={firstMain:null,lcp:null,cls:0};const publish=()=>{const n=performance.getEntriesByType('navigation')[0];m.ttfb=n?.responseStart;m.responseEnd=n?.responseEnd;document.documentElement.setAttribute('data-local-performance',JSON.stringify(m));};new MutationObserver(()=>{if(m.firstMain===null&&document.querySelector('main h1'))m.firstMain=performance.now();publish();}).observe(document.documentElement,{childList:true,subtree:true});for(const type of ['largest-contentful-paint','layout-shift'])try{new PerformanceObserver(list=>{for(const e of list.getEntries()){if(type==='largest-contentful-paint')m.lcp=e.startTime;else if(!e.hadRecentInput)m.cls+=e.value;}publish();}).observe({type,buffered:true});}catch{}addEventListener('load',publish);})();`;
+ const probe=`(()=>{const m={firstMain:null,firstMainVisibleFrame:null,lcp:null,cls:0};let scheduled=false;const publish=()=>{const n=performance.getEntriesByType('navigation')[0];m.ttfb=n?.responseStart;m.responseEnd=n?.responseEnd;document.documentElement.setAttribute('data-local-performance',JSON.stringify(m));};new MutationObserver(()=>{const h=document.querySelector('main h1');if(m.firstMain===null&&h)m.firstMain=performance.now();if(h&&!scheduled&&m.firstMainVisibleFrame===null){scheduled=true;requestAnimationFrame(()=>requestAnimationFrame(()=>{scheduled=false;const r=h.getBoundingClientRect(),s=getComputedStyle(h);if(r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden')m.firstMainVisibleFrame=performance.now();publish();}));}publish();}).observe(document.documentElement,{childList:true,subtree:true});for(const type of ['largest-contentful-paint','layout-shift'])try{new PerformanceObserver(list=>{for(const e of list.getEntries()){if(type==='largest-contentful-paint')m.lcp=e.startTime;else if(!e.hadRecentInput)m.cls+=e.value;}publish();}).observe({type,buffered:true});}catch{}addEventListener('load',publish);})();`;
  modules['app/layout.tsx']=(await readFile(root+'app/layout.tsx','utf8')).replace('<head>',`<head><script dangerouslySetInnerHTML={{__html:${JSON.stringify(probe)}}}/>`);
 }
 const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'node_modules/.vite-seo-critical-'+port,
   css:{postcss:{plugins:[tailwindcss()]}}, resolve:{alias:{'@':root}},
   plugins:[{name:'loopback-synthetic-seo-loaders',enforce:'pre',load(id){const relative=id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0];return modules[relative]??null}},vinext()],
-  server:{host:'127.0.0.1',port,strictPort:true},
+  server:{host:'127.0.0.1',port,strictPort:true,watch:{ignored:['**/outputs/**']}},
 });
 await server.listen();
 console.log(`SYNTHETIC SEO SSR PREVIEW http://127.0.0.1:${port}/en and /nl — no database${headerFixture ? ', authenticated header fixture only' : ''}`);

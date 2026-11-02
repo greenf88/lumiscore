@@ -34,6 +34,9 @@ jobs:
       - name: Verify synthetic NL/EN profile SSR
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node scripts/operations/verify-profile-ssr.mjs
+      - name: Verify original metadata head with slow optional sources
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/test-metadata-head-http.mjs
       - id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm build:vercel

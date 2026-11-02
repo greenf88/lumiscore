@@ -14,8 +14,8 @@ for(let attempt=0;attempt<5;attempt++){
  const row={attempt,compileWarmup:attempt===0,bot,http:response.status,ttfbMs,h1Ms,totalMs:performance.now()-start,ogImage:metadata.metadata['og:image']};
  rows.push(row);console.log(JSON.stringify(row));
  assert.equal(response.status,200);
- assert.deepEqual(row.ogImage,['https://example.invalid/reviewed-cover.jpg']);
- if(attempt>0&&!bot)assert.ok(h1Ms<1500,'visible main should precede the 2000ms optional cover/description');
+ assert.deepEqual(row.ogImage??[],[]);
+ if(attempt>0)assert.ok(h1Ms<1500,'main and complete metadata should precede the 2000ms optional cover/description for every UA');
  assert.ok(row.totalMs>=1900,'test actually waited for the late verified cover');
 }
 await writeFile(output,JSON.stringify(rows,null,2));
