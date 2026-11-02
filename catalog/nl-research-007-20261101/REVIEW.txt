@@ -1,66 +1,11 @@
-COHORT007 — NEDERLANDSE CATALOGUS — VOORSTEL, GEEN PRODUCTIEVRIJGAVE
+COHORT007 — DEFINITIEF REVIEWPAKKET, GEEN PRODUCTIE-UITVOERING
 
-Actuele basis: main/productie a9d717878b3fb8c9cfe7367f09d1941b0c1ecfe2.
-Read-only productie 1nov2026:10236 Works,10595 edities; gedeelde NL Browse-telling3012.
-Historische referentie2649:364 gewonnen Work-ID's en1 bewuste taalcorrectie verloren,
-netto+363,4637 resterend tot+5000. Work5227 Doing Research niet terugzetten naar NL.
-490 centraal goedgekeurde NL-teksten,119 EN-teksten,550 unieke Works over beide talen.
-3012 is de bestaande operationele selectietelling, geen verklaring dat elk legacyrecord
-al volledig fysiek/bibliografisch is geverifieerd.432 NLWorks hebben de actuele centrale
-identiteitsgebonden printformaten paperback/hardcover.
-
-AFBAKENING
-100 individuele dossiers:74 bestaande Works en26 mogelijke ontbrekende boekidentiteiten.
-87 onderbouwde wijzigingsvoorstellen;7 identiteitsconflicten en6 onvoldoende-bewijsdossiers
-buiten import. Zie dossiers.json, frozen100.json, researched-holds.json en bronbestanden.
-Geen dossier is als 'nooit in Nederlands verschenen' afgesloten.
-
-VOORGESTELDE WIJZIGINGEN (uitsluitend lokaal gegenereerd op dit moment)
-23 nieuwe Works en15 benodigde auteurs;81 nieuwe Nederlandse edities,waarvan58 bij
-bestaande Works en23 bij nieuwe Works.3 bestaande edities NULL->nld (1030,1174,1175).
-86 nieuwe oorspronkelijke Nederlandse samenvattingen;goede Krekel-tekst ongewijzigd.
-86 nieuwe editiebindings en1 gerichte metadata-update Krekel (unknown->hardcover,cover).
-295 productieacties;netto84 extra NLWorks:3012->3096.3 reeds NLbeschikbare Works krijgen
-alleen betere presentatiegegevens en tellen niet als groei. Geen Work-samenvoeging.
-Geen persoonlijke gegevens,taxonomie,ratings,leesstatussen,smaaktestinventaris of scores DML.
-
-BRONNEN EN PRIORITEIT
-CPNB2025-uitleen/jaarverkoop en Bestseller60 W44/2026 hebben ieder hun eigen meetbasis.
-Hebban is zelfselectie/lezersvoorkeur, geen aantal lezers;Boon is jury/publieksprijs.
-Standaard Boekhandel is een retailerselectie,geen landelijke uitleentelling.
-CPNB-jaarverkoop en wekelijkse Bestseller60 delen een databron en gelden niet als twee
-onafhankelijke populariteitsbewijzen. Zie popular-priority-pool.json en vervolgbronnotitie.
-De vier SEO-conceptbestanden zijn alleen als prioriteit gelezen;28 bekende verwijzingen
-vallen reeds onder eerder onderzoek;geen socialtekst/planning/publicatiestatus gewijzigd.
-
-KWALITEIT
-Exacte ISBN-,titel-,auteur-,taal- en printchecks per dossier. Meerdere verkeerde treffers
-(homoniemen,babybewerkingen,theatertekst,omnibus,film-/jongerenvarianten) afgewezen.
-87 originele broncovers bereikbaar en gedecodeerd;visuele ISBN-sheetcontrole uitgevoerd.
-31 door dezelfde bron aangeboden mediumvarianten visueel gecontroleerd en gekozen.
-12 grotere detailbestanden behouden:alleen ongeschikte kleine thumbnails gevonden.
-300kB is een onderzoeksgrens,geen afkeurcriterium. Geen nieuwe coverhost of opslagdienst.
-De juiste kleine cover wordt niet door een gegokte grote URL vervangen.
-
-LOKAAL BEWEZEN
-PGlite met werkelijke productievoorstel-SQL en actuele rijvormen:295acties,9batches,
-eerste COMMIT teruggelezen,replay0,herstel na COMMIT exact naar beginsituatie.
-Latere tekstwijziging en CASCADE-afhankelijkheid weigeren herstel;rating/voortgang behouden.
-Afzonderlijke werkelijke test-schema-proef:134 openbare fixtureacties en280 releaseacties,
-replay0,exact manifest- en receiptgebonden gecommitteerd herstel.
-6 gerichte pakkettests groen. TypeScript en lint groen. Overige CI/hosted bewijs volgt.
-
-TESTUITVOERING EN RELEASEADVIES NOG NIET AFGEROND
-Testproject hlvujbrmfdlrfxdjwsmb;actuele voorcontrole1nov2026 21:29UTC.
-134 eigen openbare baseline-fixturerijen;63 Workfixtures,65 auteurs,6 edities.
-Daarna280 gemapte releaseacties in9batches. Eigen978*IDruimte,geen nummerreeksreset.
-Bestaande Krekel-fixture en bestaande goede tekst hergebruikt;alleen exacte metadata-update.
-Productievoorstellen en testvoorzieningen zijn afzonderlijk en mogen nooit samen op prod.
-execution-manifest.json bevat alle testbestanden en hashes;release-hashes.json de prodbytes.
-Dashboardroute heeft aangemelde normale SQL-editor op het juiste testproject. Geen nieuwe
-defecte connectorbevestiging gestart,geen rechten/beveiliging gewijzigd.
-Hosted COMMIT,replay,gecommitteerd herstel,herstel Preview-toestand en87 browserpresentaties
-zijn nog te bewijzen. Lokale proeven of HTTP200 zijn daarvoor geen vervanging.
-
-Productie blijft uitsluitend read-only. PR51,privédashboard,PR62/social en andere pakketten
-worden niet gewijzigd. Geen merge/import/publicatie zonder afzonderlijk akkoord.
+Lees FINAL-REVIEW.txt en release-state.json. De eerdere voorbereidende status is vervangen.
+100 dossiers inhoudelijk afgerond;87 onderbouwde voorstellen;13 buiten import.
+295 productieacties,netto+84 NLWorks,23 nieuwe Works. Productie nog3012,geen writes.
+Ready-Preview en applicatie5c2e4ced63c53badbf3cc3634b941b357e280663.
+87/87 exacte presentaties hosted geslaagd. COMMIT,replay0,gecommitteerd herstel en
+herstel van de Preview-toestand bewezen. Eigen tijdelijke login/ratings/opruiming bewezen.
+De huidige release-hashes.json is het enige productie-uitvoeringsmanifest. Oudere
+PR68-versies van batch08 niet aanvullend uitvoeren. Testseed/hosted herstel-SQL nooit op prod.
+PR68 blijft Draft. Afzonderlijk releaseakkoord vereist;PR51/dashboard/social buiten scope.

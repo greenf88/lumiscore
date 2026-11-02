@@ -1,0 +1,43 @@
+- button "Run selected":
+      - generic: Run selected
+      - generic: Ctrl ↵
+    - code:
+      - generic: "52"
+      - generic: "53"
+      - generic: "54"
+      - generic: "55"
+      - generic: end if;
+      - generic: end loop;
+      - generic: end;$undo$;select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','phase',
+      - generic: "'committed-recovery','batch','nl007-public-test-seed-20261101','receipt_rows',"
+      - generic: 134) as recovery_result;commit;
+      - textbox "Editor content" [active]: "-- REVIEW ONLY. Receipt from FIRST successful COMMIT required; a dry-run receipt is forbidden. -- Load the exact approved receipt via parameterized set_config('lumiscore.catalog_release_receipt',$1,false). -- Only receipt rows; full-row CAS, parent locks, every incoming FK including CASCADE; later changes abort all. begin;select set_config('lumiscore.catalog_release_receipt','{\"rows\":[{\"key\":{\"id\":978300001},\"seq\":1,\"relation\":\"authors\",\"after_row\":{\"id\":978300001,\"name\":\"Cees Nooteboom\",\"open_library_id\":\"OL49585A\"},\"before_row\":null},{\"key\":{\"id\":978300002},\"seq\":2,\"relation\":\"authors\",\"after_row\":{\"id\":978300002,…134) as recovery_result;commit;"
+      - generic: "29"
+      - generic: 
+      - generic: "32"
+      - generic: 
+      - list:
+        - generic: do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols
+        - generic: for r in select value from jsonb_array_elements(receipt->'rows') order by
+    - separator:
+    - tablist:
+      - tab "Results" [selected]:
+        - generic: Results
+      - tab "Chart":
+        - generic: Chart
+      - button "1 row":
+        - paragraph:
+          - generic: 1 row
+      - button "Export":
+        - generic: Export
+    - grid:
+      - row "recovery_result":
+        - columnheader "recovery_result":
+          - generic: recovery_result
+      - 'row "{\"batch\":\"nl007-public-test-seed-20261101\",\"phase\":\"committed-recovery\",\"project\":\"hlvujbrmfdlrfxdjwsmb\",\"receipt_rows\":134} View full cell content"':
+        - 'gridcell "{\"batch\":\"nl007-public-test-seed-20261101\",\"phase\":\"committed-recovery\",\"project\":\"hlvujbrmfdlrfxdjwsmb\",\"receipt_rows\":134} View full cell content"':
+          - text: "{\"batch\":\"nl007-public-test-seed-20261101\",\"phase\":\"committed-recovery\",\"project\":\"hlvujbrmfdlrfxdjwsmb\",\"receipt_rows\":134}"
+          - button "View full cell content":
+- region "Notifications alt+T"
+- alert
+- alert

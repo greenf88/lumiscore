@@ -1,0 +1,164 @@
+LumiScore — cohort 007 / Draft-PR #68
+Definitief pakket voor releasebeoordeling. Productie is niet gewijzigd.
+
+VERSIES
+Geteste applicatie: 5c2e4ced63c53badbf3cc3634b941b357e280663.
+Ready Preview: https://lumiscore-89u0hqrce-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_9j866WRuJXdpdL53YKHfe2nsjYHk, uitsluitend testproject hlvujbrmfdlrfxdjwsmb.
+De volledige PR-head na de bewijscommit staat in de PR-beschrijving. Een bestand
+kan zijn eigen bevattende commit niet opnemen zonder opnieuw van SHA te veranderen.
+Actuele main/productie: a9d717878b3fb8c9cfe7367f09d1941b0c1ecfe2.
+Productie: 10.236 Works, 10.595 edities en 3.012 operationeel NL-beschikbare Works.
+Centraal goedgekeurde teksten: 490 NL en 119 EN, op 550 unieke Works samen.
+Deze cijfers betekenen niet dat ieder legacyformaat inhoudelijk al is gecontroleerd.
+De betrokken productierijen en globale ISBN-/titel-/aliasmatches zijn opnieuw
+read-only gecontroleerd en ongewijzigd. Zie production-final-compatibility.json.
+
+BESLUITEN EN UITBREIDING
+Alle 100 dossiers zijn inhoudelijk onderzocht: 74 bestaande Works en 26 mogelijke
+nieuwe identiteiten. 87 voorstellen zijn goedgekeurd voor beoordeling. Zeven
+identiteitsconflicten en zes dossiers met onvoldoende bewijs blijven buiten import.
+Een onderzochte uitzondering is geen bewijs dat er nooit een Nederlandse editie is.
+
+Het productievoorstel bevat 295 acties:
+- 23 nieuwe Works en 15 benodigde auteurs.
+- 81 nieuwe Nederlandse edities: 58 bij bestaande Works en 23 bij nieuwe Works.
+- Drie editiecorrecties van ontbrekende taal naar nld.
+- 86 nieuwe oorspronkelijke Nederlandse samenvattingen; de goede Krekel-tekst blijft.
+- 86 nieuwe editie-/coverbindings en één metadata-update bij Krekel.
+
+Drie reeds Nederlandstalig beschikbare Works krijgen alleen presentatieherstel.
+De netto uitbreiding is daarom 84, niet 87: voorgesteld 3.012 → 3.096 Works.
+Geen Work-samenvoegingen, persoonlijke gegevens, kenmerken, smaaktestinventaris,
+scoreberekening, rangschikking, toestemmingslogica of productmetingen in de import.
+
+Cumulatief zijn 686 bestaande Work-identiteiten van de 10.236 onderzocht; 9.550
+blijven te onderzoeken. De 26 nieuwe kandidaatidentiteiten staan daar los van.
+Het cumulatieve register gebruikt een gehasht bestaand register met een unieke
+Work-ID-overlay; de resolver schrijft één materialiseerbare, hervatbare weergave.
+Tegenover de historische NL-nulmeting van 2.649 zijn 364 unieke Works gewonnen en
+is één onterechte NL-presentatie terecht uitgesloten: netto +363 gepubliceerd.
+Er ontbreken nog 4.637 extra Works voor het richtdoel +5.000. Deze batch zou na
+akkoord +447 bereiken, waarna 4.553 overblijven. Dit is geen doorlooptijdbelofte.
+
+TESTIMPORT EN HERSTEL
+Lokale PGlite-proeven gebruiken het werkelijke productievoorstel en actuele
+rijvormen: 295 acties, negen transacties, dry-run zonder blijvende wijziging,
+COMMIT met teruglezen, replay zonder mutaties en herstel na COMMIT. Een latere
+wijziging en een inkomende CASCADE-afhankelijkheid blokkeren herstel. Stand-ins
+voor bestaande ratings en voortgang blijven behouden.
+
+Op de echte testdatabase zijn 134 eigen openbare fixtureacties en 280 gemapte
+releaseacties uitgevoerd: 410 nieuwe testrecords en vier updates. De vijftien
+nieuwe productieauteurs zaten op test al in de fixtureseed. Testaantallen zijn
+daarom geen productiedekking of productie-uitbreiding.
+Alle negen release-replays leverden nul mutaties op. Daarna zijn alle negen
+batches én de seed met COMMIT hersteld. Een nieuwe lezing was exact gelijk aan
+de actuele beginsituatie. De goedgekeurde Preview-toestand is opnieuw opgebouwd.
+Ook hosted zijn een nieuwe afhankelijke eigen testeditie en een later gewijzigd
+uitgeversveld getest. Dezelfde herstel-SQL weigert beide met een volledige rollback
+van de herstelpoging. De tijdelijke editie is verwijderd en de uitgever exact
+teruggezet; alle overige rijen en beschermde digests zijn opnieuw gelijk.
+
+Bij Als de dieren is de bronclassificatie verbeterd: de officiële Flanders
+Literature-catalogus vervangt een als uitgeversbron gelabeld auteursinterview.
+De tekst en editie blijven gelijk; het interview blijft aanvullend bewijs.
+De huidige batch 08 is afzonderlijk opnieuw geïnstalleerd, herhaald met nul
+mutaties, na COMMIT hersteld en opnieuw geïnstalleerd: telkens exact 40 testacties.
+hosted/recovery-verification.json verbindt het geldige oude en nieuwe bewijs.
+Het oorspronkelijke reviewed_at is de inhoudelijke tekstreview van 1 november;
+de latere bronbinding is afzonderlijk gedateerd in source-provenance-revision.json.
+
+ACCEPTATIE
+hosted/presentation-acceptance-v2.json bevat 87 geslaagde exacte presentaties op
+applicatiecommit 5c2e4ced63c53badbf3cc3634b941b357e280663: juiste Work en ISBN,
+Nederlandse titel en editie, werkelijk geladen passende cover, Nederlandse tekst
+met bron, Nederlandse en oorspronkelijke titelzoekvraag, scorepariteit en terugkeer.
+Er zijn geen afwijkende testeditievarianten als bewijs voor de voorstellen gebruikt.
+
+NL en EN Browse: drie opeenvolgende pagina's met elk 16 kaarten en 48 unieke
+Works; stabiele telling per taal, respectievelijk 898 en 631 op test.
+Echte dubbele taalcontrole: Ik ga leven / NLD / ISBN 9789044646870 versus I Will
+Live / ENG / ISBN 9781408716816; terugwisselen en herladen behouden de NL-selectie.
+Een nieuw Work met uitsluitend NL-editie toont in EN expliciete onbeschikbaarheid.
+De bestaande synthetische collectie toont drie NL- en drie EN-presentaties.
+Er is geen tijdelijke testgroepering aangemaakt.
+
+Een niet-leeg persoonlijk profiel is via tien normale detailbeoordelingen op
+bestaande synthetische fixtures opgebouwd. Het toont twintig NL- en twintig
+EN-aanbevelingen met passende kaart/detailtaal en stabiel herladen. Een aparte
+fixture toont op kaart en detail numeriek 7.7 en dezelfde band 3–4 beoordelaars.
+Dit ingelogde bewijs op a9f3e6736834be8f56d6aa04f1f1f8450e25dcec wordt hergebruikt:
+de daaropvolgende applicatiewijziging betreft alleen CSS-woordafbreking. Backend,
+API, selectie en rangschikking zijn identiek. Het is geen claim over de kwaliteit
+van aanbevelingen voor echte lezers.
+Het tijdelijke account, tien ratings, tien leesstatussen en één onvoltooide ronde
+zijn gericht verwijderd. De oorspronkelijke twee accounts, 68 ratings en 68
+leesstatussen zijn exact behouden volgens de controledigests.
+
+OPMAAK EN PRESTATIES
+Paper/Ink, echte viewports van 320 en 390 px en desktop zijn gecontroleerd.
+Eén CSS-regel repareert overloop door aria-hidden placeholdertitels achter geladen
+covers. De zichtbare scorebadge blijft uitsteken; kleuren, fonts, afmetingen en
+kaartindeling blijven gelijk. Regressie: bij 390 px daalt documentbreedte van
+422 naar 375 px; bij 320 px is die 305 px. Geen globale overflow-verberging.
+
+31 geverifieerde kleinere covervarianten: samen 17.708.257 → 4.340.336 bytes.
+Twaalf grotere juiste covers van 318.962 tot 999.631 bytes blijven behouden;
+alle twaalf laden zichtbaar. Er waren alleen ongeschikte kleinere thumbnails.
+87 waargenomen zoekkaarttijden: mediaan 665 ms, p95 971 ms.
+Twaalf grote-covercontroles: mediaan 904,5 ms, maximum 2.342 ms; inhoud-DOM-mediaan
+745,5 ms. Afzonderlijke eerdere bron-bodymetingen: mediaan 156,45 ms.
+Dit zijn warme browser-/toolobservaties en afzonderlijke bronmetingen, geen TTFB,
+FCP, LCP, 4G-, koude-cache- of SLA-benchmark. Er is geen productielasttest uitgevoerd.
+
+BEPERKINGEN
+De automatische smaaktestinventaris op test bevat vier NL-regels maar nul actuele
+snapshots. Er wordt geen voltooide smaaktestronde geclaimd en niets is versoepeld.
+Het niet-lege persoonlijke profiel komt daadwerkelijk uit detailbeoordelingen.
+Nieuwe catalogusopname maakt een boek niet vanzelf geschikt voor de smaaktest.
+Bronbeleid, schaalroute en de 28 SEO-contentverwijzingen staan in
+SOURCE-ACCESS-AND-SCALE.txt en seo-current.json. Dertien genoemde Works missen nog
+een NL-presentatierecord, veertien een centraal goedgekeurde NL-tekst. Dat onderzoek
+blijft apart; conceptteksten, socialplanning en publicatiestatus zijn niet gewijzigd.
+PR #62 en overige voorstellen blijven buiten dit pakket. Er is geen overlap met
+de eigen PR62/63-actievoorstellen. De dertien uitgesloten dossiers staan met redenen
+in researched-holds.json; onder meer auteur-/scopeconflicten, onzekere coverbinding
+en een tegenstrijdige nog toekomstige verschijningsdatum zijn niet gladgestreken.
+
+UITVOERING NA AFZONDERLIJK RELEASEAKKOORD
+1. Pin exacte PR-head, groene CI en actuele main/productieversie. Controleer direct
+   vóór uitvoering productieproject qvplwejffhjvxaypmjut. Geen nieuwe migratie nodig.
+2. Controleer release-hashes.json en alle afzonderlijke plan-/SQL-hashes.
+   SHA256: 44b242e9d9cb223d562a7de474f471931ccf5c88bc567aa62a01127ea484ab24
+   Alleen de huidige negen productiebatches zijn geldig. Oudere batch-08-versies
+   zijn vervangen en mogen niet aanvullend worden uitgevoerd. Testseed en hosted
+   herstel-SQL mogen nooit op productie worden gebruikt.
+3. Maak een nieuwe herstelbare read-only snapshot van de verwachte rijen, globale
+   ISBN-/titel-/alias-/auteuridentiteiten en beschermingsdigests. Controleer op een
+   gedeeltelijke import of nieuwe afhankelijkheden. Stop bij iedere afwijking;
+   geen automatische herbasering of versoepeling van identiteit/taalvoorwaarden.
+4. Voer productie-apply 01 t/m 09 in volgorde transactioneel uit via de bestaande
+   toegestane operatorroute. Bewaar per batch de FIRST volledige niet-lege
+   COMMIT-receipt. Geen nieuwe rollen, grants, instellingen of nummerreeksreset.
+5. Lees alle rijen terug, controleer netto +84 unieke NL-Works en behoud van data.
+   Dezelfde negen imports moeten nul mutaties opleveren. Replayreceipts vervangen
+   nooit de oorspronkelijke herstelreceipts.
+6. Merge en publiceer uitsluitend de goedgekeurde versie als controles groen zijn.
+   Controleer actieve SHA/deployment, alle 87 presentaties live, NL/EN, zoeken,
+   scorepariteit, paginering en mobiele overloop. Geen socialpublicatie.
+
+HERSTEL
+Stop bij afwijkingen. Herstel de applicatieversie en ga alleen via de vastgelegde
+receiptgebonden procedure terug, batch 09 t/m 01. Full-row-CAS en parentlocks
+begrenzen herstel tot eigen wijzigingen. Elke latere wijziging of inkomende FK,
+ook CASCADE, blokkeert de hele hersteltransactie. Verwijder nooit ratings,
+voortgang of andere records om herstel alsnog mogelijk te maken. Geen sequence-reset.
+Lees daarna rijen en digests opnieuw en bewaar het uitvoeringsverslag. Geen
+identieke bevestigingslus of omzeiling. Het hosted bewijs betreft COMMIT-herstel,
+niet uitsluitend een transactionele dry-run met ROLLBACK.
+
+RELEASEADVIES
+Gereed voor beoordeling van deze afgebakende batch; productie blijft ongewijzigd.
+PR #68 blijft Draft totdat afzonderlijk releaseakkoord is gegeven. PR #51,
+productmetingen, het privédashboard, socialplanning en ander onderzoek zijn ongemoeid.
