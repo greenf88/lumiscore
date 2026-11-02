@@ -63,7 +63,7 @@ test('hero preloads only the active theme and matches responsive CSS selection',
   assert.doesNotMatch(css, /(?:dark-reading-scene|light-book-stack)\.png/);
 });
 
-test('theme preload handles saved choice, device density, storage denial and non-home routes', async () => {
+test('first visit defaults to Paper regardless of OS; stored choice, density and storage denial remain safe', async () => {
   const layout = await readFile(new URL('../../app/layout.tsx', import.meta.url), 'utf8');
   const script = /const themeScript = `([\s\S]*?)`;/.exec(layout)?.[1];
   assert.ok(script);
@@ -79,8 +79,9 @@ test('theme preload handles saved choice, device density, storage denial and non
             location: { pathname },
             document: { documentElement: element, createElement: () => ({}), head: { appendChild: (link: Record<string,string>) => links.push(link) } },
           });
-          const theme = saved === 'ink' || saved === 'paper' ? saved : light ? 'paper' : 'ink';
+          const theme = saved === 'ink' || saved === 'paper' ? saved : 'paper';
           assert.equal(element.dataset.theme, theme);
+          assert.equal((element.style as {colorScheme?:string}).colorScheme, theme === 'paper' ? 'light' : 'dark');
           assert.equal(links.length, ['/en', '/nl', '/nl/'].includes(pathname) ? 1 : 0);
           if (links.length) {
             assert.equal(links[0].href, `/assets/${theme === 'paper' ? 'light-book-stack' : 'dark-reading-scene'}-${large ? 1536 : 1024}.avif`);
