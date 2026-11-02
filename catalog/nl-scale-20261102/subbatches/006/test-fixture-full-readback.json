@@ -1,0 +1,125 @@
+{
+  "query": "with w as(select * from public.works where id between 987105001 and 987105999) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','works',(select jsonb_agg(to_jsonb(t) order by id) from w t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from w)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from w))) as readback;",
+  "readback": {
+    "works": [
+      {
+        "id": 987105001,
+        "title": "Eaters of the Dead",
+        "cover_id": null,
+        "author_id": 987304002,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL46873W",
+        "first_publish_year": 1976,
+        "native_identity_key": "nlscale:fixture006:282"
+      },
+      {
+        "id": 987105002,
+        "title": "Honeymoon",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167160W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:fixture006:562"
+      },
+      {
+        "id": 987105003,
+        "title": "The Surgeon",
+        "cover_id": null,
+        "author_id": 987305001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL14871640W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:fixture006:607"
+      },
+      {
+        "id": 987105004,
+        "title": "Judy Moody",
+        "cover_id": null,
+        "author_id": 987305002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL443606W",
+        "first_publish_year": 2000,
+        "native_identity_key": "nlscale:fixture006:5654"
+      }
+    ],
+    "authors": [
+      {
+        "id": 946300342,
+        "name": "James Patterson",
+        "open_library_id": "OL22258A"
+      },
+      {
+        "id": 987304002,
+        "name": "Michael Crichton",
+        "open_library_id": "OL28257A"
+      },
+      {
+        "id": 987305001,
+        "name": "Tess Gerritsen",
+        "open_library_id": "OL24837A"
+      },
+      {
+        "id": 987305002,
+        "name": "Megan McDonald",
+        "open_library_id": "OL18865A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [
+      {
+        "id": 987205001,
+        "title": "Eaters of the Dead/13th Warrior (15M/Troll Associates)",
+        "isbn_10": null,
+        "isbn_13": "9780345917270",
+        "work_id": 987105001,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Ballantine Books",
+        "publish_date": null,
+        "open_library_edition_id": "OL10686520M"
+      },
+      {
+        "id": 987205002,
+        "title": "Honeymoon",
+        "isbn_10": null,
+        "isbn_13": "9780446694216",
+        "work_id": 987105002,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Warner Books",
+        "publish_date": null,
+        "open_library_edition_id": "OL10263160M"
+      },
+      {
+        "id": 987205003,
+        "title": "The Surgeon",
+        "isbn_10": null,
+        "isbn_13": "9780739420416",
+        "work_id": 987105003,
+        "cover_id": null,
+        "language": null,
+        "publisher": "The Ballantine Publishing Group",
+        "publish_date": null,
+        "open_library_edition_id": "OL10658842M"
+      },
+      {
+        "id": 987205004,
+        "title": "Judy Moody Geliyor 1",
+        "isbn_10": "6054482548",
+        "isbn_13": "9786054482542",
+        "work_id": 987105004,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Artemis Yaynlar",
+        "publish_date": null,
+        "open_library_edition_id": "OL35611866M"
+      }
+    ],
+    "checked_at": "2026-11-02T18:15:26.427512+00:00"
+  }
+}

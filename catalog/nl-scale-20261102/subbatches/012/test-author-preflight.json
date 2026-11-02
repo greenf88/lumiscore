@@ -1,0 +1,89 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL21594A','OL33146A','OL9388A','OL32293A','OL153884A']::text[])),w as(select * from public.works where open_library_id=any(array['OL498463W','OL66513W','OL362699W','OL100672W','OL258758W','OL1456910W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9783956763717','9781730712241','9781616511104','9781580491624','9780582427136','9789029554343','9789021469911','9789027491428','9789035108363','9789035108318','9789020425895']::text[]) or open_library_edition_id=any(array['OL50698005M','OL40826271M','OL27668659M','OL12276611M','OL28426674M','OL3487091M','OL24328781M','OL24632641M','OL24354728M','OL24405542M','OL24405545M','OL24651397M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987111001 and 987111999),'editions',(select count(*) from public.editions where id between 987211001 and 987211999),'authors',(select count(*) from public.authors where id between 987311001 and 987311999))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 977300001,
+        "name": "Jane Austen",
+        "open_library_id": "OL21594A"
+      },
+      {
+        "id": 978300007,
+        "name": "Louis Couperus",
+        "open_library_id": "OL153884A"
+      },
+      {
+        "id": 987310001,
+        "name": "Franz Kafka",
+        "open_library_id": "OL33146A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-02T19:50:30.236686+00:00",
+    "author_corpora": [
+      {
+        "id": 977100018,
+        "title": "Pride and Prejudice",
+        "cover_id": null,
+        "author_id": 977300001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL66554W",
+        "first_publish_year": 1813,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100038,
+        "title": "Persuasion",
+        "cover_id": null,
+        "author_id": 977300001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL66544W",
+        "first_publish_year": 1789,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100039,
+        "title": "Sense and Sensibility",
+        "cover_id": null,
+        "author_id": 977300001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL66562W",
+        "first_publish_year": 1811,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100021,
+        "title": "De stille kracht",
+        "cover_id": null,
+        "author_id": 978300007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL1456909W",
+        "first_publish_year": 1971,
+        "native_identity_key": null
+      },
+      {
+        "id": 987110006,
+        "title": "Das Schloß",
+        "cover_id": null,
+        "author_id": 987310001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL498434W",
+        "first_publish_year": 1926,
+        "native_identity_key": "nlscale:fixture011:1824"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "scope": "Exact public snapshot columns, JSONB text sorted with explicit bytewise C collation; no private data or production writes",
+  "baselineAt": "2026-11-02T11:46:58.792698+00:00",
+  "tables": {
+    "works": {
+      "count": 10259,
+      "fields": [
+        "author",
+        "author_id",
+        "cover_id",
+        "first_publish_year",
+        "id",
+        "native_identity_key",
+        "open_library_id",
+        "source_type",
+        "subtitle",
+        "title",
+        "work_type"
+      ],
+      "expectedDigest": "09ebab7abe2b10b906bdc80f71d6dd1d"
+    },
+    "editions": {
+      "count": 10676,
+      "fields": [
+        "created_at",
+        "id",
+        "isbn_10",
+        "isbn_13",
+        "language",
+        "open_library_edition_id",
+        "publisher",
+        "title",
+        "work_id"
+      ],
+      "expectedDigest": "48ffbabafc51051478f12ad16ad534bf"
+    },
+    "authors": {
+      "count": 5722,
+      "fields": [
+        "id",
+        "name",
+        "open_library_id"
+      ],
+      "expectedDigest": "3cab985b0295c451b7c9c33b8416135a"
+    },
+    "metadata": {
+      "count": 576,
+      "fields": [
+        "bound_author_id",
+        "bound_isbn13",
+        "bound_language",
+        "bound_title",
+        "card_cover_url",
+        "cover_url",
+        "edition_id",
+        "evidence",
+        "evidence_url",
+        "format",
+        "review_batch",
+        "review_status",
+        "reviewed_at",
+        "work_id"
+      ],
+      "expectedDigest": "2a8f57de147dad4ae8e59721605d5de4"
+    },
+    "descriptions": {
+      "count": 695,
+      "fields": [
+        "bound_author_id",
+        "evidence",
+        "language",
+        "provenance",
+        "review_batch",
+        "review_status",
+        "reviewed_at",
+        "source_name",
+        "source_type",
+        "source_url",
+        "text",
+        "work_id"
+      ],
+      "expectedDigest": "9a1febd857eb095102d12b0b52b0b8ee"
+    },
+    "aliases": {
+      "count": 8,
+      "fields": [
+        "title",
+        "work_id"
+      ],
+      "expectedDigest": "27f8f2bfaf88021b2ef7c91f8d45f868"
+    }
+  }
+}

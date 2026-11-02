@@ -1,0 +1,197 @@
+{
+  "project": "qvplwejffhjvxaypmjut",
+  "query": "with chosen as(select * from public.works where id in(334,177,324,331,433,1193)) select jsonb_build_object('checked_at',clock_timestamp(),'project','qvplwejffhjvxaypmjut','works',(select jsonb_agg(to_jsonb(t) order by id) from chosen t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from chosen)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from chosen) or isbn_13 in('9789029554343','9789021469911','9789027491428','9789035108363','9789035108318','9789020425895') or open_library_edition_id in('OL24328781M','OL24632641M','OL24354728M','OL24405542M','OL24405545M','OL24651397M')),'descriptions',(select coalesce(jsonb_agg(to_jsonb(t) order by work_id,language),'[]') from public.catalog_work_descriptions t where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(t) order by edition_id),'[]') from public.catalog_edition_metadata t where work_id in(select id from chosen))) as preflight;",
+  "mode": "read-only",
+  "readback": {
+    "works": [
+      {
+        "id": 177,
+        "title": "The Trial",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 129,
+        "work_type": null,
+        "created_at": "2026-09-02T08:25:47.807742+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL498463W",
+        "first_publish_year": 1825,
+        "native_identity_key": null
+      },
+      {
+        "id": 324,
+        "title": "Emma",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 3,
+        "work_type": null,
+        "created_at": "2026-09-02T08:30:33.917458+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL66513W",
+        "first_publish_year": 1815,
+        "native_identity_key": null
+      },
+      {
+        "id": 331,
+        "title": "The Tempest",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 196,
+        "work_type": null,
+        "created_at": "2026-09-02T08:30:51.677901+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL362699W",
+        "first_publish_year": 1611,
+        "native_identity_key": null
+      },
+      {
+        "id": 334,
+        "title": "Candide",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 209,
+        "work_type": null,
+        "created_at": "2026-09-02T08:30:57.857895+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL100672W",
+        "first_publish_year": 1746,
+        "native_identity_key": null
+      },
+      {
+        "id": 433,
+        "title": "The Merchant of Venice",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 196,
+        "work_type": null,
+        "created_at": "2026-09-02T08:34:44.921621+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL258758W",
+        "first_publish_year": 1600,
+        "native_identity_key": null
+      },
+      {
+        "id": 1193,
+        "title": "Eline Vere",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 700,
+        "work_type": null,
+        "created_at": "2026-09-03T19:13:26.351374+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1456910W",
+        "first_publish_year": 1892,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 3,
+        "name": "Jane Austen",
+        "created_at": "2026-09-01T06:01:50.525056+00:00",
+        "open_library_id": "OL21594A"
+      },
+      {
+        "id": 129,
+        "name": "Franz Kafka",
+        "created_at": "2026-09-02T08:25:14.657323+00:00",
+        "open_library_id": "OL33146A"
+      },
+      {
+        "id": 196,
+        "name": "William Shakespeare",
+        "created_at": "2026-09-02T08:30:07.825064+00:00",
+        "open_library_id": "OL9388A"
+      },
+      {
+        "id": 209,
+        "name": "Voltaire",
+        "created_at": "2026-09-02T08:30:57.631054+00:00",
+        "open_library_id": "OL32293A"
+      },
+      {
+        "id": 700,
+        "name": "Louis Couperus",
+        "created_at": "2026-09-03T19:13:26.140038+00:00",
+        "open_library_id": "OL153884A"
+      }
+    ],
+    "project": "qvplwejffhjvxaypmjut",
+    "editions": [
+      {
+        "id": 177,
+        "title": "Trial",
+        "isbn_10": null,
+        "isbn_13": "9783956763717",
+        "work_id": 177,
+        "language": null,
+        "publisher": "Liese. Outside The Box, Andreas",
+        "created_at": "2026-09-02T08:25:48.086713+00:00",
+        "open_library_edition_id": "OL50698005M"
+      },
+      {
+        "id": 324,
+        "title": "Emma, Books 1, 2, And 3",
+        "isbn_10": null,
+        "isbn_13": "9781730712241",
+        "work_id": 324,
+        "language": null,
+        "publisher": "Independently Published",
+        "created_at": "2026-09-02T08:30:34.186533+00:00",
+        "open_library_edition_id": "OL40826271M"
+      },
+      {
+        "id": 331,
+        "title": "The Tempest",
+        "isbn_10": null,
+        "isbn_13": "9781616511104",
+        "work_id": 331,
+        "language": null,
+        "publisher": "Saddleback Educational Publishing",
+        "created_at": "2026-09-02T08:30:51.931003+00:00",
+        "open_library_edition_id": "OL27668659M"
+      },
+      {
+        "id": 334,
+        "title": "Candide - Literary Touchstone Classic",
+        "isbn_10": null,
+        "isbn_13": "9781580491624",
+        "work_id": 334,
+        "language": null,
+        "publisher": "Prestwick House, Inc.",
+        "created_at": "2026-09-02T08:30:58.154406+00:00",
+        "open_library_edition_id": "OL12276611M"
+      },
+      {
+        "id": 433,
+        "title": "Nlss",
+        "isbn_10": null,
+        "isbn_13": "9780582427136",
+        "work_id": 433,
+        "language": null,
+        "publisher": "Pearson Education Australia",
+        "created_at": "2026-09-02T08:34:45.167868+00:00",
+        "open_library_edition_id": "OL28426674M"
+      },
+      {
+        "id": 1193,
+        "title": "Eline Vere",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 1193,
+        "language": null,
+        "publisher": "D. Appleton and co.",
+        "created_at": "2026-09-03T19:13:26.56458+00:00",
+        "open_library_edition_id": "OL3487091M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T19:49:52.005445+00:00",
+    "descriptions": []
+  }
+}

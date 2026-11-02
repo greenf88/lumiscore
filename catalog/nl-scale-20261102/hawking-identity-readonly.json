@@ -1,0 +1,211 @@
+{
+  "project": "qvplwejffhjvxaypmjut",
+  "mode": "read-only",
+  "query": "with target as(select * from public.works where id=2392), corpus as(select * from public.works where author_id in(select author_id from target)) select jsonb_build_object('checked_at',clock_timestamp(),'target',(select to_jsonb(t) from target t),'author_works',(select jsonb_agg(to_jsonb(t) order by id) from corpus t),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from corpus)),'target_ratings_count',(select count(*) from public.ratings where work_id=2392),'target_statuses_count',(select count(*) from public.user_book_status where work_id=2392)) as readback;",
+  "readback": {
+    "target": {
+      "id": 2392,
+      "title": "A Briefer History of Time",
+      "cover_id": null,
+      "subjects": null,
+      "subtitle": null,
+      "author_id": 73,
+      "work_type": null,
+      "created_at": "2026-09-17T14:25:29.271201+00:00",
+      "source_type": "open_library",
+      "open_library_id": "OL1892618W",
+      "first_publish_year": 2005,
+      "native_identity_key": null
+    },
+    "editions": [
+      {
+        "id": 86,
+        "title": "A Brief History of Time",
+        "isbn_10": null,
+        "isbn_13": "9780716726487",
+        "work_id": 86,
+        "language": null,
+        "publisher": "W H Freeman & Co (Sd)",
+        "created_at": "2026-09-01T15:20:43.819411+00:00",
+        "open_library_edition_id": "OL10524161M"
+      },
+      {
+        "id": 816,
+        "title": "Brief answers to the big questions",
+        "isbn_10": null,
+        "isbn_13": "9781984819192",
+        "work_id": 816,
+        "language": null,
+        "publisher": "Bantam Books",
+        "created_at": "2026-09-02T08:47:05.824772+00:00",
+        "open_library_edition_id": "OL26967814M"
+      },
+      {
+        "id": 2616,
+        "title": "Een korte geschiedenis van de tijd",
+        "isbn_10": "9035141709",
+        "isbn_13": "9789035141704",
+        "work_id": 2392,
+        "language": "dut",
+        "publisher": "Bert Bakker",
+        "created_at": "2026-09-17T14:25:29.489738+00:00",
+        "open_library_edition_id": "OL40284495M"
+      },
+      {
+        "id": 2617,
+        "title": "A Briefer History of Time",
+        "isbn_10": "0553804367",
+        "isbn_13": "9780553804362",
+        "work_id": 2392,
+        "language": "eng",
+        "publisher": "Bantam",
+        "created_at": "2026-09-17T14:25:29.714423+00:00",
+        "open_library_edition_id": "OL7850566M"
+      },
+      {
+        "id": 2625,
+        "title": "Het Grote Ontwerp",
+        "isbn_10": null,
+        "isbn_13": "9789035131873",
+        "work_id": 2399,
+        "language": "dut",
+        "publisher": "Bert Bakker",
+        "created_at": "2026-09-17T14:25:41.650727+00:00",
+        "open_library_edition_id": "OL24732287M"
+      },
+      {
+        "id": 2626,
+        "title": "The Grand Design",
+        "isbn_10": "0593058291",
+        "isbn_13": "9780593058299",
+        "work_id": 2399,
+        "language": "eng",
+        "publisher": "Bantam",
+        "created_at": "2026-09-17T14:25:41.931804+00:00",
+        "open_library_edition_id": "OL27041696M"
+      },
+      {
+        "id": 2693,
+        "title": "The Theory of Everything",
+        "isbn_10": "1597775088",
+        "isbn_13": "9781597775083",
+        "work_id": 2458,
+        "language": "eng",
+        "publisher": "Phoenix Books",
+        "created_at": "2026-09-17T14:27:15.483938+00:00",
+        "open_library_edition_id": "OL8895350M"
+      },
+      {
+        "id": 4982,
+        "title": "God Created the Integers",
+        "isbn_10": "0762430044",
+        "isbn_13": "9780762430048",
+        "work_id": 4823,
+        "language": "eng",
+        "publisher": "Running Press Book Publishers",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL9509360M"
+      },
+      {
+        "id": 10804,
+        "title": "Het heelal",
+        "isbn_10": null,
+        "isbn_13": "9789044618099",
+        "work_id": 86,
+        "language": "nld",
+        "publisher": "Prometheus",
+        "created_at": "2026-11-02T07:35:49.595147+00:00",
+        "open_library_edition_id": null
+      }
+    ],
+    "checked_at": "2026-11-02T18:25:00.845312+00:00",
+    "author_works": [
+      {
+        "id": 86,
+        "title": "A Brief History of Time",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-09-01T15:20:43.589838+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1892617W",
+        "first_publish_year": 1988,
+        "native_identity_key": null
+      },
+      {
+        "id": 816,
+        "title": "Brief Answers to the Big Questions",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-09-02T08:47:05.576561+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL19552275W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      },
+      {
+        "id": 2392,
+        "title": "A Briefer History of Time",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-09-17T14:25:29.271201+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1892618W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      },
+      {
+        "id": 2399,
+        "title": "The Grand Design",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-09-17T14:25:41.389201+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL15367338W",
+        "first_publish_year": 1998,
+        "native_identity_key": null
+      },
+      {
+        "id": 2458,
+        "title": "The theory of everything",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-09-17T14:27:15.289676+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1892616W",
+        "first_publish_year": 2002,
+        "native_identity_key": null
+      },
+      {
+        "id": 4823,
+        "title": "God Created the Integers",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 73,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL8037405W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      }
+    ],
+    "target_ratings_count": 0,
+    "target_statuses_count": 0
+  }
+}

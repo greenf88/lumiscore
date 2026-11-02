@@ -11,6 +11,8 @@ fs.mkdirSync(cache,{recursive:true});
 const {cases}=loadCases();
 const drafts=[...loadReviews().values()].filter(r=>r.contentStatus==='reviewed_original_draft');
 const targets=drafts.map(r=>{const d=cases.find(c=>c.candidateId===r.candidateId);if(!d)throw Error('Unknown reviewed candidate');const e=d.editionReviews.find(e=>e.titleConfirmed&&e.languageConfirmed&&e.authorConfirmed)??d.editionReviews[0];return {candidateId:r.candidateId,editionKey:e.editionKey,isbn13:e.isbn13,title:e.title,coverId:e.coverIds[0],semanticStatus:'not_yet_visually_reviewed',notImportApproval:true}});
+const extraFile=new URL('cover-extra-targets.json',ROOT);
+if(fs.existsSync(extraFile))for(const t of readJson(extraFile).targets){if(!t.sourceEvidence||!t.reason||!cases.some(c=>c.candidateId===t.candidateId))throw Error('Explicit extra exact-edition evidence required');if(!targets.some(x=>x.coverId===t.coverId))targets.push({...t,semanticStatus:'not_yet_visually_reviewed',notImportApproval:true});}
 if(targets.length>1500||targets.some(t=>!Number.isSafeInteger(t.coverId)||t.coverId<=0))throw Error('Unbounded or invalid cover manifest');
 fs.writeFileSync(new URL('cover-review-targets.json',ROOT),JSON.stringify({basis:'Bound source editions of content-reviewed candidates; provisional until actual image identity review',targets},null,2)+'\n');
 // Earlier failures remain immutable evidence. Only the previous LOCAL parser stop

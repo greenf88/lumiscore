@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {ROOT,readJson} from './nl-scale-snapshot.mjs';
 import {loadCases} from './nl-scale-case-store.mjs';
 import {loadReviews} from './nl-scale-reviews.mjs';
-import {renderImport,renderRollback} from './catalog-release-sql.mjs';
+import {renderImport,renderRollback} from './nl-scale-release-sql.mjs';
 const dest=new URL('subbatches/002/',ROOT),{cases}=loadCases(),reviews=loadReviews();
 const prod=readJson(new URL('production-preflight.json',dest)).readback;
 const test=readJson(new URL('test-preflight.json',dest)).readback;

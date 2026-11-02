@@ -1,0 +1,396 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL19981A','OL30765A','OL359235A','OL7115219A','OL1392395A','OL34328A','OL21718A','OL102484A','OL7668903A','OL587370A','OL296646A','OL21976A','OL7468980A','OL7414674A']::text[])),w as(select * from public.works where open_library_id=any(array['OL20214285W','OL3511459W','OL19655889W','OL20333471W','OL15100470W','OL24477958W','OL2271589W','OL5725961W','OL134383W','OL81607W','OL81589W','OL17373843W','OL149119W','OL81586W','OL17875641W','OL17453058W','OL1041829W','OL17817705W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9789029511643','9789048813834','9780713904666','9789000360475','9781635575613','9789045043012','9780804172721','9789046705872','9780767919388','9789021026701','9789021828237','9789047500469','9789024513345','9789024519880','9789024557745','9789083267432','9789024528080','9789024539147','9789000364503','9789023491453','9789045800738','9789000345496']::text[]) or open_library_edition_id=any(array['OL27403436M','OL26424302M','OL5087169M','OL26810680M','OL28157461M','OL41870070M','OL31835238M','OL37822777M','OL24050119M','OL41870937M','OL24949539M','OL27098594M','OL47274907M','OL25615750M','OL47234747M','OL50213242M','OL32780065M','OL27281176M','OL27098710M','OL47356265M','OL47313874M','OL27098695M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987102001 and 987102999),'editions',(select count(*) from public.editions where id between 987202001 and 987202999),'authors',(select count(*) from public.authors where id between 987302001 and 987302999))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 924300125,
+        "name": "Sarah J. Maas",
+        "open_library_id": "OL7115219A"
+      },
+      {
+        "id": 928300049,
+        "name": "Stephen King",
+        "open_library_id": "OL19981A"
+      },
+      {
+        "id": 930300014,
+        "name": "Ilja Leonard Pfeijffer",
+        "open_library_id": "OL7668903A"
+      },
+      {
+        "id": 946300171,
+        "name": "Eoin Colfer",
+        "open_library_id": "OL1392395A"
+      },
+      {
+        "id": 969300015,
+        "name": "Rick Riordan",
+        "open_library_id": "OL30765A"
+      },
+      {
+        "id": 987300004,
+        "name": "Michael Ende",
+        "open_library_id": "OL296646A"
+      },
+      {
+        "id": 987300009,
+        "name": "Lee Child",
+        "open_library_id": "OL34328A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-02T17:06:24.498872+00:00",
+    "author_corpora": [
+      {
+        "id": 924100157,
+        "title": "House of Earth and Blood",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL20650912W",
+        "first_publish_year": 2019,
+        "native_identity_key": null
+      },
+      {
+        "id": 924100166,
+        "title": "House of Sky and Breath",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL21101115W",
+        "first_publish_year": 2022,
+        "native_identity_key": null
+      },
+      {
+        "id": 924100253,
+        "title": "A Court of Silver Flames",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL21703979W",
+        "first_publish_year": 2021,
+        "native_identity_key": null
+      },
+      {
+        "id": 928101360,
+        "title": "A Court of Thorns and Roses",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17352669W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 928101842,
+        "title": "The Long Walk",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL9973101W",
+        "first_publish_year": 1979,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100007,
+        "title": "Carrie",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81626W",
+        "first_publish_year": 1974,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100014,
+        "title": "Grand Hotel Europa",
+        "cover_id": null,
+        "author_id": 930300014,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL24320267W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 941101043,
+        "title": "Alkibiades",
+        "cover_id": null,
+        "author_id": 930300014,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL43774423W",
+        "first_publish_year": 2023,
+        "native_identity_key": null
+      },
+      {
+        "id": 946103340,
+        "title": "The Reluctant Assassin",
+        "cover_id": null,
+        "author_id": 946300171,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17471996W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100050,
+        "title": "The Titan's Curse",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL492647W",
+        "first_publish_year": 2007,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100051,
+        "title": "The Last Olympian",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL15270622W",
+        "first_publish_year": 2009,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100070,
+        "title": "The Son of Neptune",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL15980243W",
+        "first_publish_year": 2011,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100035,
+        "title": "A Court of Mist and Fury",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17860744W",
+        "first_publish_year": 2016,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100038,
+        "title": "The Mark of Athena",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL16664287W",
+        "first_publish_year": 2011,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100039,
+        "title": "House of Hades",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL16807730W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100044,
+        "title": "House of Flame and Shadow",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34780775W",
+        "first_publish_year": 2024,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100062,
+        "title": "The Chalice of the Gods",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34025404W",
+        "first_publish_year": 2023,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100063,
+        "title": "Wrath of the Triple Goddess",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL45025627W",
+        "first_publish_year": 2024,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100066,
+        "title": "Empire of Storms",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17625829W",
+        "first_publish_year": 2016,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100067,
+        "title": "Tower of Dawn",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17791167W",
+        "first_publish_year": 2017,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100048,
+        "title": "The Shining",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81633W",
+        "first_publish_year": 1977,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100049,
+        "title": "Misery",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81634W",
+        "first_publish_year": 1978,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100046,
+        "title": "It",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81613W",
+        "first_publish_year": 1986,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100054,
+        "title": "The Gunslinger",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81628W",
+        "first_publish_year": 1976,
+        "native_identity_key": null
+      },
+      {
+        "id": 987100004,
+        "title": "Momo",
+        "cover_id": 12506493,
+        "author_id": 987300004,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL2271626W",
+        "first_publish_year": 1973,
+        "native_identity_key": "nlscale:20261102:ol:OL2271626W"
+      },
+      {
+        "id": 987100005,
+        "title": "The Hammer of Thor",
+        "cover_id": 8738182,
+        "author_id": 969300015,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL17634924W",
+        "first_publish_year": 2016,
+        "native_identity_key": "nlscale:20261102:ol:OL17634924W"
+      },
+      {
+        "id": 987100011,
+        "title": "The Visitor",
+        "cover_id": 9154925,
+        "author_id": 987300009,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL52936W",
+        "first_publish_year": 2000,
+        "native_identity_key": "nlscale:20261102:ol:OL52936W"
+      },
+      {
+        "id": 987101004,
+        "title": "The Dead Zone",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81630W",
+        "first_publish_year": 1979,
+        "native_identity_key": "nlscale:fixture002:227"
+      },
+      {
+        "id": 987101005,
+        "title": "The Running Man",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL149188W",
+        "first_publish_year": 1982,
+        "native_identity_key": "nlscale:fixture002:176"
+      },
+      {
+        "id": 987101010,
+        "title": "Different Seasons",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81621W",
+        "first_publish_year": 1982,
+        "native_identity_key": "nlscale:fixture002:300"
+      },
+      {
+        "id": 987101012,
+        "title": "The Outsider",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17937105W",
+        "first_publish_year": 2018,
+        "native_identity_key": "nlscale:fixture002:2809"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

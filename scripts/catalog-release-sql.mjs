@@ -3,9 +3,11 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 const allowed=['authors','works','editions','catalog_work_descriptions','catalog_edition_metadata'];
+const identityKeys={authors:['id','open_library_id'],works:['id','native_identity_key','open_library_id'],editions:['id','open_library_edition_id','isbn_13','isbn_10'],catalog_work_descriptions:['work_id','language'],catalog_edition_metadata:['edition_id']};
 const quote=x=>"'"+JSON.stringify(x).replaceAll("'","''")+"'::jsonb";
-export function renderImport(plan,{dryRun=false,canary=false}={}){
+export function renderImport(plan,{dryRun=false,canary=false,indexed=false}={}){
  if(plan.actions.some(a=>!allowed.includes(a.relation)))throw Error('Non-catalogue relation');
+ if(indexed)for(const a of plan.actions){const entries=Object.entries(a.key??{});if(!entries.length||entries.length>2||entries.some(([k,v])=>!identityKeys[a.relation].includes(k)||v==null||v===''))throw Error('Bound non-null catalogue identity key required');}
  const payload={batch:plan.summary.batch,project:plan.summary.target,actions:plan.actions,bindings:plan.bindings,authorCorpora:plan.authorCorpora??[]};
  return `-- REVIEW ONLY. Exact target ${payload.project}. ${canary?'Isolated disposable test canary.':'Separate production approval required.'}
 -- No accounts, ratings, progress, collections, taxonomy or taste-inventory DML.
@@ -13,7 +15,7 @@ export function renderImport(plan,{dryRun=false,canary=false}={}){
 begin;set local lock_timeout='3s';set local statement_timeout='30s';
 lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
 create temporary table catalog_release_receipt(seq integer,relation text,key jsonb,before_row jsonb,after_row jsonb) on commit drop;
-do $release$ declare payload jsonb:=${quote(payload)};a jsonb;b jsonb;actual jsonb;oldrow jsonb;nextrow jsonb;k jsonb;kv record;ids jsonb:='{}';cols text;vals text;v_id bigint;i integer:=0;n integer;begin
+do $release$ declare payload jsonb:=${quote(payload)};a jsonb;b jsonb;actual jsonb;oldrow jsonb;nextrow jsonb;k jsonb;kv record;ids jsonb:='{}';cols text;vals text;${indexed?'predicate text;':''}v_id bigint;i integer:=0;n integer;begin
  for b in select value from jsonb_array_elements(payload->'bindings') loop
   select to_jsonb(w) into actual from public.works w where id=(b->'work'->>'id')::bigint;
   if actual is distinct from b->'work' and not exists(select 1 from jsonb_array_elements(payload->'actions') p where p->>'relation'='works' and p->'key'=jsonb_build_object('id',(b->'work'->>'id')::bigint) and actual=p->'after') then raise exception 'Work preflight drift';end if;
@@ -38,14 +40,18 @@ do $release$ declare payload jsonb:=${quote(payload)};a jsonb;b jsonb;actual jso
   for kv in select * from jsonb_each(k) loop
    if jsonb_typeof(kv.value)='string' and left(kv.value#>>'{}',1)='@' then k:=jsonb_set(k,array[kv.key],ids->substring(kv.value#>>'{}',2));end if;
   end loop;
-  execute format('select to_jsonb(t) from public.%I t where to_jsonb(t) @> $1 for update',a->>'relation') into actual using k;
+  ${indexed?`if exists(select 1 from jsonb_each(k) where value='null'::jsonb) then raise exception 'Unresolved/null identity key';end if;
+  -- Typed equality uses the existing primary/natural-key index. Keep full-row
+  -- JSON comparison below; only candidate lookup changes, not CAS protection.
+  select string_agg(format('t.%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,a->>'relation',key),' and ' order by key) into predicate from jsonb_each(k);
+  execute format('select to_jsonb(t) from public.%I t where %s for update',a->>'relation',predicate) into actual using k;`:"execute format('select to_jsonb(t) from public.%I t where to_jsonb(t) @> $1 for update',a->>'relation') into actual using k;"}
   if oldrow<>'null'::jsonb then
    execute format('select to_jsonb(jsonb_populate_record(null::public.%I,$1))',a->>'relation') into oldrow using oldrow;
    execute format('select to_jsonb(jsonb_populate_record(null::public.%I,$1))',a->>'relation') into nextrow using nextrow;
    if actual is not distinct from nextrow then continue;end if;
    if actual is distinct from oldrow then raise exception 'Changed existing row in % at action %',a->>'relation',i;end if;
    select string_agg(format('%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,a->>'relation',key),',') into cols from jsonb_each(nextrow) where value is distinct from oldrow->key;
-   execute format('update public.%I t set %s where to_jsonb(t) @> $2 returning to_jsonb(t)',a->>'relation',cols) into actual using nextrow,k;
+   ${indexed?"execute format('update public.%I t set %s where %s returning to_jsonb(t)',a->>'relation',cols,replace(predicate,'$1','$2')) into actual using nextrow,k;":"execute format('update public.%I t set %s where to_jsonb(t) @> $2 returning to_jsonb(t)',a->>'relation',cols) into actual using nextrow,k;"}
    insert into catalog_release_receipt values(i,a->>'relation',k,oldrow,actual);
   elsif actual is not null then
    if a->>'relation' in ('catalog_work_descriptions','catalog_edition_metadata') then
@@ -67,17 +73,20 @@ select jsonb_build_object('project','${payload.project}','batch','${payload.batc
 ${dryRun?'rollback':'commit'};
 `;
 }
-export function renderRollback(plan){return `-- REVIEW ONLY. Receipt from FIRST successful COMMIT required; a dry-run receipt is forbidden.
+export function renderRollback(plan,{indexed=false}={}){return `-- REVIEW ONLY. Receipt from FIRST successful COMMIT required; a dry-run receipt is forbidden.
 -- Load the exact approved receipt via parameterized set_config('lumiscore.catalog_release_receipt',$1,false).
 -- Only receipt rows; full-row CAS, parent locks, every incoming FK including CASCADE; later changes abort all.
 begin;set local lock_timeout='3s';set local statement_timeout='30s';
 lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
-do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols text;begin
+do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols text;${indexed?'k jsonb;predicate text;allowed_keys text[];':''}begin
  receipt:=nullif(current_setting('lumiscore.catalog_release_receipt',true),'')::jsonb;
  if receipt->>'project' is distinct from '${plan.summary.target}' or receipt->>'batch' is distinct from '${plan.summary.batch}' or jsonb_typeof(receipt->'rows') is distinct from 'array' or jsonb_array_length(receipt->'rows')<>${plan.actions.length} then raise exception 'Exact first committed receipt required';end if;
  for r in select value from jsonb_array_elements(receipt->'rows') order by (value->>'seq')::integer desc loop
   if r->>'relation' not in ('authors','works','editions','catalog_work_descriptions','catalog_edition_metadata') then raise exception 'Unreviewed receipt relation';end if;
-  execute format('select to_jsonb(t) from public.%I t where to_jsonb(t) @> $1 for update',r->>'relation') into actual using r->'key';
+  ${indexed?`k:=r->'key';allowed_keys:=case r->>'relation' when 'authors' then array['id','open_library_id'] when 'works' then array['id','native_identity_key','open_library_id'] when 'editions' then array['id','open_library_edition_id','isbn_13','isbn_10'] when 'catalog_work_descriptions' then array['work_id','language'] else array['edition_id'] end;
+  if jsonb_typeof(k)<>'object' or not exists(select 1 from jsonb_each(k)) or exists(select 1 from jsonb_each(k) where not key=any(allowed_keys) or value='null'::jsonb) then raise exception 'Invalid receipt identity key';end if;
+  select string_agg(format('t.%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),' and ' order by key) into predicate from jsonb_each(k);
+  execute format('select to_jsonb(t) from public.%I t where %s for update',r->>'relation',predicate) into actual using k;`:"execute format('select to_jsonb(t) from public.%I t where to_jsonb(t) @> $1 for update',r->>'relation') into actual using r->'key';"}
   if actual is null and r->'before_row'='null'::jsonb then continue;end if;
   if actual is not distinct from r->'before_row' then continue;end if;
   if actual is distinct from r->'after_row' then raise exception 'Later legitimate change; recovery refused';end if;
@@ -91,10 +100,10 @@ do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols te
     execute format('select count(*) from %I.%I child where %s',dep.nspname,dep.relname,dep.predicate) into n using r->'after_row';
     if n>0 then raise exception 'Later dependency in %.%; recovery refused',dep.nspname,dep.relname;end if;
    end loop;
-   execute format('delete from public.%I t where to_jsonb(t) @> $1',r->>'relation') using r->'key';
+   ${indexed?"execute format('delete from public.%I t where %s',r->>'relation',predicate) using k;":"execute format('delete from public.%I t where to_jsonb(t) @> $1',r->>'relation') using r->'key';"}
   else
    select string_agg(format('%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),',') into cols from jsonb_each(r->'before_row') where value is distinct from r->'after_row'->key;
-   execute format('update public.%I t set %s where to_jsonb(t) @> $2',r->>'relation',cols) using r->'before_row',r->'key';
+   ${indexed?"execute format('update public.%I t set %s where %s',r->>'relation',cols,replace(predicate,'$1','$2')) using r->'before_row',k;":"execute format('update public.%I t set %s where to_jsonb(t) @> $2',r->>'relation',cols) using r->'before_row',r->'key';"}
   end if;
  end loop;
 end;$undo$;commit;

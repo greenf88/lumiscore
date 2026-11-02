@@ -1,0 +1,68 @@
+{
+  "query": "select jsonb_build_object('checked_at',clock_timestamp(),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where id between 987106001 and 987106999),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id between 987106001 and 987106999),'authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.authors t where id in(select author_id from public.works where id between 987106001 and 987106999))) as readback;",
+  "readback": {
+    "works": [
+      {
+        "id": 987106001,
+        "title": "Artemis Fowl",
+        "cover_id": null,
+        "author_id": 946300171,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL5725956W",
+        "first_publish_year": 1999,
+        "native_identity_key": "nlscale:fixture007:264"
+      },
+      {
+        "id": 987106002,
+        "title": "Incidents in the Life of a Slave Girl",
+        "cover_id": null,
+        "author_id": 987306001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL28623W",
+        "first_publish_year": 1861,
+        "native_identity_key": "nlscale:fixture007:399"
+      }
+    ],
+    "authors": [
+      {
+        "id": 946300171,
+        "name": "Eoin Colfer",
+        "open_library_id": "OL1392395A"
+      },
+      {
+        "id": 987306001,
+        "name": "Harriet A. Jacobs",
+        "open_library_id": "OL26467A"
+      }
+    ],
+    "editions": [
+      {
+        "id": 987206001,
+        "title": "Artemis Fowl (Artemis Fowl",
+        "isbn_10": null,
+        "isbn_13": "9780613750356",
+        "work_id": 987106001,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Tandem Library",
+        "publish_date": null,
+        "open_library_edition_id": "OL10954175M"
+      },
+      {
+        "id": 987206002,
+        "title": "Incidents in the Life of a Slave Girl : Written by Herself: (Aberdeen Classics Collection)",
+        "isbn_10": null,
+        "isbn_13": "9798674057338",
+        "work_id": 987106002,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Aberdeen Press",
+        "publish_date": null,
+        "open_library_edition_id": "OL38132499M"
+      }
+    ],
+    "checked_at": "2026-11-02T18:44:20.006635+00:00"
+  }
+}

@@ -1,0 +1,3 @@
+import test from'node:test';import assert from'node:assert/strict';import{reviewedPrintFormat}from'./nl-scale-print-format.mjs';
+test('explicit hardcover/hardback/gebonden and paperback bibliography values map to existing print classes',()=>{for(const s of['Hardcover','Hardback','gebonden'])assert.equal(reviewedPrintFormat(s),'hardcover');for(const s of['Paperback','mass market paperback'])assert.equal(reviewedPrintFormat(s),'paperback');});
+test('no title, author, missing or non-print format is inferred as printed',()=>{for(const s of[null,'','unknown','boek','epub','audio','Dutch novel','not hardcover'])assert.equal(reviewedPrintFormat(s),null);});

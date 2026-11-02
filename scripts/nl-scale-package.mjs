@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {ROOT,readJson} from './nl-scale-snapshot.mjs';
-import {renderImport,renderRollback} from './catalog-release-sql.mjs';
+import {renderImport,renderRollback} from './nl-scale-release-sql.mjs';
 import {loadReviews} from './nl-scale-reviews.mjs';
 import {loadCases} from './nl-scale-case-store.mjs';
 const {cases}=loadCases();

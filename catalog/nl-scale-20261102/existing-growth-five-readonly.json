@@ -1,0 +1,171 @@
+{
+  "project_id": "qvplwejffhjvxaypmjut",
+  "mode": "read-only",
+  "query": "with w as(select * from public.works where id in(282,607,1585,562,3094)) select jsonb_build_object('checked_at',clock_timestamp(),'works',(select jsonb_agg(to_jsonb(t) order by id) from w t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from w)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from w)),'descriptions',(select coalesce(jsonb_agg(to_jsonb(t) order by work_id,language),'[]') from public.catalog_work_descriptions t where work_id in(select id from w)),'metadata',(select coalesce(jsonb_agg(to_jsonb(t) order by edition_id),'[]') from public.catalog_edition_metadata t where work_id in(select id from w))) as preflight;",
+  "readback": {
+    "works": [
+      {
+        "id": 282,
+        "title": "Eaters of the Dead",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 179,
+        "work_type": null,
+        "created_at": "2026-09-02T08:29:14.434319+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL46873W",
+        "first_publish_year": 1976,
+        "native_identity_key": null
+      },
+      {
+        "id": 562,
+        "title": "Honeymoon",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 342,
+        "work_type": null,
+        "created_at": "2026-09-02T08:39:18.509244+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL167160W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 607,
+        "title": "The Surgeon",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 365,
+        "work_type": null,
+        "created_at": "2026-09-02T08:40:37.18833+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL14871640W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 1585,
+        "title": "Het labyrint der geesten",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 849,
+        "work_type": null,
+        "created_at": "2026-09-16T15:13:29.605672+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL33399222W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 3094,
+        "title": "The Whisper Man",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1516,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL20094468W",
+        "first_publish_year": 2019,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 179,
+        "name": "Michael Crichton",
+        "created_at": "2026-09-02T08:29:14.216767+00:00",
+        "open_library_id": "OL28257A"
+      },
+      {
+        "id": 342,
+        "name": "James Patterson",
+        "created_at": "2026-09-02T08:38:35.235714+00:00",
+        "open_library_id": "OL22258A"
+      },
+      {
+        "id": 365,
+        "name": "Tess Gerritsen",
+        "created_at": "2026-09-02T08:40:36.990373+00:00",
+        "open_library_id": "OL24837A"
+      },
+      {
+        "id": 849,
+        "name": "Carlos Ruiz Zafón",
+        "created_at": "2026-09-16T15:13:29.394602+00:00",
+        "open_library_id": "OL2632116A"
+      },
+      {
+        "id": 1516,
+        "name": "Steve Mosby",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_id": "OL2829179A"
+      }
+    ],
+    "editions": [
+      {
+        "id": 282,
+        "title": "Eaters of the Dead/13th Warrior (15M/Troll Associates)",
+        "isbn_10": null,
+        "isbn_13": "9780345917270",
+        "work_id": 282,
+        "language": null,
+        "publisher": "Ballantine Books",
+        "created_at": "2026-09-02T08:29:14.716462+00:00",
+        "open_library_edition_id": "OL10686520M"
+      },
+      {
+        "id": 562,
+        "title": "Honeymoon",
+        "isbn_10": null,
+        "isbn_13": "9780446694216",
+        "work_id": 562,
+        "language": null,
+        "publisher": "Warner Books",
+        "created_at": "2026-09-02T08:39:18.855288+00:00",
+        "open_library_edition_id": "OL10263160M"
+      },
+      {
+        "id": 607,
+        "title": "The Surgeon",
+        "isbn_10": null,
+        "isbn_13": "9780739420416",
+        "work_id": 607,
+        "language": null,
+        "publisher": "The Ballantine Publishing Group",
+        "created_at": "2026-09-02T08:40:37.444461+00:00",
+        "open_library_edition_id": "OL10658842M"
+      },
+      {
+        "id": 1698,
+        "title": "Het labyrint der geesten",
+        "isbn_10": "9056726129",
+        "isbn_13": "9789056726126",
+        "work_id": 1585,
+        "language": null,
+        "publisher": "Signatuur",
+        "created_at": "2026-09-16T15:13:29.835092+00:00",
+        "open_library_edition_id": "OL45307798M"
+      },
+      {
+        "id": 3253,
+        "title": "THE WHISPER MAN*",
+        "isbn_10": "1405936002",
+        "isbn_13": "9781405936002",
+        "work_id": 3094,
+        "language": "eng",
+        "publisher": "Penguin",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL42859963M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T17:32:40.811153+00:00",
+    "descriptions": []
+  }
+}

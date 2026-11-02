@@ -1,0 +1,79 @@
+{
+  "project_id": "qvplwejffhjvxaypmjut",
+  "mode": "read-only",
+  "query": "with chosen as(select * from public.works where id in(264,399,2392)) select jsonb_build_object('checked_at',clock_timestamp(),'project','qvplwejffhjvxaypmjut','works',(select jsonb_agg(to_jsonb(t) order by id) from chosen t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from chosen)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from chosen) or isbn_13 in('9789047500445','9789063280918','9789035141704')),'descriptions',(select coalesce(jsonb_agg(to_jsonb(t) order by work_id,language),'[]') from public.catalog_work_descriptions t where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(t) order by edition_id),'[]') from public.catalog_edition_metadata t where work_id in(select id from chosen))) as preflight;",
+  "readback": {
+    "works": [
+      {
+        "id": 264,
+        "title": "Artemis Fowl",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 171,
+        "work_type": null,
+        "created_at": "2026-09-02T08:28:38.089293+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL5725956W",
+        "first_publish_year": 1999,
+        "native_identity_key": null
+      },
+      {
+        "id": 399,
+        "title": "Incidents in the Life of a Slave Girl",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 247,
+        "work_type": null,
+        "created_at": "2026-09-02T08:33:35.302973+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL28623W",
+        "first_publish_year": 1861,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 171,
+        "name": "Eoin Colfer",
+        "created_at": "2026-09-02T08:28:37.889795+00:00",
+        "open_library_id": "OL1392395A"
+      },
+      {
+        "id": 247,
+        "name": "Harriet A. Jacobs",
+        "created_at": "2026-09-02T08:33:35.097704+00:00",
+        "open_library_id": "OL26467A"
+      }
+    ],
+    "project": "qvplwejffhjvxaypmjut",
+    "editions": [
+      {
+        "id": 264,
+        "title": "Artemis Fowl (Artemis Fowl",
+        "isbn_10": null,
+        "isbn_13": "9780613750356",
+        "work_id": 264,
+        "language": null,
+        "publisher": "Tandem Library",
+        "created_at": "2026-09-02T08:28:38.37451+00:00",
+        "open_library_edition_id": "OL10954175M"
+      },
+      {
+        "id": 399,
+        "title": "Incidents in the Life of a Slave Girl : Written by Herself: (Aberdeen Classics Collection)",
+        "isbn_10": null,
+        "isbn_13": "9798674057338",
+        "work_id": 399,
+        "language": null,
+        "publisher": "Aberdeen Press",
+        "created_at": "2026-09-02T08:33:35.553815+00:00",
+        "open_library_edition_id": "OL38132499M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T18:41:44.081557+00:00",
+    "descriptions": []
+  }
+}

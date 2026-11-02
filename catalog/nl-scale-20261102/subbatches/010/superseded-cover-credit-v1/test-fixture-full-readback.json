@@ -1,0 +1,318 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "query": "with w as(select * from public.works where id between 987109001 and 987109999) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','works',(select jsonb_agg(to_jsonb(t) order by id) from w t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from w)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from w))) as readback;",
+  "readback": {
+    "works": [
+      {
+        "id": 987109001,
+        "title": "Watership Down",
+        "cover_id": null,
+        "author_id": 987309002,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL2096536W",
+        "first_publish_year": 1972,
+        "native_identity_key": "nlscale:fixture010:1464"
+      },
+      {
+        "id": 987109002,
+        "title": "The Greatest Show on Earth",
+        "cover_id": null,
+        "author_id": 987309001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL1966487W",
+        "first_publish_year": 2009,
+        "native_identity_key": "nlscale:fixture010:2409"
+      },
+      {
+        "id": 987109003,
+        "title": "Lotte in Weimar",
+        "cover_id": null,
+        "author_id": 987309005,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL14867077W",
+        "first_publish_year": 1939,
+        "native_identity_key": "nlscale:fixture010:3179"
+      },
+      {
+        "id": 987109004,
+        "title": "The Italian Girl",
+        "cover_id": null,
+        "author_id": 987309004,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL1326316W",
+        "first_publish_year": 1964,
+        "native_identity_key": "nlscale:fixture010:3202"
+      },
+      {
+        "id": 987109005,
+        "title": "Der Vorleser",
+        "cover_id": null,
+        "author_id": 987309006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL14871157W",
+        "first_publish_year": 1995,
+        "native_identity_key": "nlscale:fixture010:3332"
+      },
+      {
+        "id": 987109006,
+        "title": "The beast of buckingham palace",
+        "cover_id": null,
+        "author_id": 987309003,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL20659782W",
+        "first_publish_year": 2019,
+        "native_identity_key": "nlscale:fixture010:3535"
+      },
+      {
+        "id": 987109007,
+        "title": "El hablador",
+        "cover_id": null,
+        "author_id": 987304007,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL857555W",
+        "first_publish_year": 1987,
+        "native_identity_key": "nlscale:fixture010:5055"
+      },
+      {
+        "id": 987109008,
+        "title": "In de mist van het schimmenrijk",
+        "cover_id": null,
+        "author_id": 969300005,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL15253352W",
+        "first_publish_year": 1993,
+        "native_identity_key": "nlscale:fixture010:5073"
+      },
+      {
+        "id": 987109009,
+        "title": "1979",
+        "cover_id": null,
+        "author_id": 987309007,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL3123542W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:fixture010:6012"
+      },
+      {
+        "id": 987109010,
+        "title": "Geisterstunde im Kindergarten",
+        "cover_id": null,
+        "author_id": 987309008,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL14933747W",
+        "first_publish_year": 2002,
+        "native_identity_key": "nlscale:fixture010:6185"
+      }
+    ],
+    "authors": [
+      {
+        "id": 969300005,
+        "name": "Willem Frederik Hermans",
+        "open_library_id": "OL1213378A"
+      },
+      {
+        "id": 987304007,
+        "name": "Mario Vargas Llosa",
+        "open_library_id": "OL74490A"
+      },
+      {
+        "id": 987309001,
+        "name": "Richard Dawkins",
+        "open_library_id": "OL236174A"
+      },
+      {
+        "id": 987309002,
+        "name": "Richard Adams",
+        "open_library_id": "OL800926A"
+      },
+      {
+        "id": 987309003,
+        "name": "David Walliams",
+        "open_library_id": "OL2623989A"
+      },
+      {
+        "id": 987309004,
+        "name": "Iris Murdoch",
+        "open_library_id": "OL135196A"
+      },
+      {
+        "id": 987309005,
+        "name": "Thomas Mann",
+        "open_library_id": "OL22973A"
+      },
+      {
+        "id": 987309006,
+        "name": "Bernhard Schlink",
+        "open_library_id": "OL24809A"
+      },
+      {
+        "id": 987309007,
+        "name": "Christian Kracht",
+        "open_library_id": "OL492907A"
+      },
+      {
+        "id": 987309008,
+        "name": "Ulrich Karger",
+        "open_library_id": "OL561656A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [
+      {
+        "id": 987209001,
+        "title": "Waterschapsheuvel",
+        "isbn_10": "9027408114",
+        "isbn_13": "9789027408112",
+        "work_id": 987109001,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Het Spectrum",
+        "publish_date": null,
+        "open_library_edition_id": "OL24678434M"
+      },
+      {
+        "id": 987209002,
+        "title": "Watership Down",
+        "isbn_10": "1568492502",
+        "isbn_13": "9781568492506",
+        "work_id": 987109001,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Buccaneer Books",
+        "publish_date": null,
+        "open_library_edition_id": "OL12189606M"
+      },
+      {
+        "id": 987209003,
+        "title": "Het grootste spektakel ter wereld",
+        "isbn_10": null,
+        "isbn_13": "9789046806517",
+        "work_id": 987109002,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Nieuw Amsterdam",
+        "publish_date": null,
+        "open_library_edition_id": "OL24328108M"
+      },
+      {
+        "id": 987209004,
+        "title": "The Greatest Show on Earth",
+        "isbn_10": "1416594787",
+        "isbn_13": "9781416594789",
+        "work_id": 987109002,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Free Press",
+        "publish_date": null,
+        "open_library_edition_id": "OL24391629M"
+      },
+      {
+        "id": 987209005,
+        "title": "Lotte in Weimar",
+        "isbn_10": "9029530146",
+        "isbn_13": "9789029530149",
+        "work_id": 987109003,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "De Arbeiderspers",
+        "publish_date": null,
+        "open_library_edition_id": "OL24947100M"
+      },
+      {
+        "id": 987209006,
+        "title": "Het Italiaanse Meisje",
+        "isbn_10": "9021494027",
+        "isbn_13": "9789021494029",
+        "work_id": 987109004,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Em. Querido's Uitgeverij",
+        "publish_date": null,
+        "open_library_edition_id": "OL25098874M"
+      },
+      {
+        "id": 987209007,
+        "title": "De voorlezer",
+        "isbn_10": "9041403701",
+        "isbn_13": "9789041403704",
+        "work_id": 987109005,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Flamingo",
+        "publish_date": null,
+        "open_library_edition_id": "OL9099498M"
+      },
+      {
+        "id": 987209008,
+        "title": "Het beest van Buckingham Palace",
+        "isbn_10": "9044839144",
+        "isbn_13": "9789044839142",
+        "work_id": 987109006,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Clavis",
+        "publish_date": null,
+        "open_library_edition_id": "OL41916184M"
+      },
+      {
+        "id": 987209009,
+        "title": "Het woord van de verteller",
+        "isbn_10": "9029039116",
+        "isbn_13": "9789029039116",
+        "work_id": 987109007,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Meulenhoff",
+        "publish_date": null,
+        "open_library_edition_id": "OL36662942M"
+      },
+      {
+        "id": 987209010,
+        "title": "In de mist van het schimmenrijk",
+        "isbn_10": "9074336027",
+        "isbn_13": "9789074336024",
+        "work_id": 987109008,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Stichting Collectieve Propaganda van het Nederlandse Boek",
+        "publish_date": null,
+        "open_library_edition_id": "OL24328241M"
+      },
+      {
+        "id": 987209011,
+        "title": "1979",
+        "isbn_10": "9029525460",
+        "isbn_13": "9789029525466",
+        "work_id": 987109009,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "De Arbeiderspers",
+        "publish_date": null,
+        "open_library_edition_id": "OL46540080M"
+      },
+      {
+        "id": 987209012,
+        "title": "Spoken in de speelzaal",
+        "isbn_10": "9055796840",
+        "isbn_13": "9789055796847",
+        "work_id": 987109010,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "De Vier Windstreken",
+        "publish_date": null,
+        "open_library_edition_id": "OL24228364M"
+      }
+    ],
+    "checked_at": "2026-11-02T19:36:37.681466+00:00"
+  }
+}

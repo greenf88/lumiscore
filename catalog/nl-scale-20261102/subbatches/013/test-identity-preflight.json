@@ -1,0 +1,127 @@
+{
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL27363A','OL10779545A','OL656011A','OL74469A','OL22242A','OL1970832A','OL14498384A','OL57758A','OL153884A','OL253800A','OL187319A','OL63616A']::text[]) or id=any(array[35,33,654,700,2882,905,912]::bigint[])) select jsonb_build_object('checked_at',clock_timestamp(),'authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'isbn_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')=any(array['9789029000475','9789061691839','9789029517348','9789027491732','9789020232523','9789029519847','9789025401023','9789072810014','9789074336321','9789029583916']::text[])),'source_work_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where open_library_id=any(array['OL274509W','OL3738761W','OL857189W','OL166923W','OL8051539W','OL719939W','OL1456888W','OL14936448W','OL1667589W','OL34858547W']::text[])),'title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','works','row',to_jsonb(t))),'[]') from public.works t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['elcoronelnotienequienleescriba','dekolonelkrijgtnooitpost','84charingcrossroad','charingcrossroad84','effibriest','despeler','thegambler','igrok','erinnerungenandiezukunft','warendegodenkosmonauten','deunster','overlichtendedrempels','depijp','wantditismijnlichaam','hetgeuzenboek']::text[])),'edition_title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','editions','row',to_jsonb(t))),'[]') from public.editions t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['elcoronelnotienequienleescriba','dekolonelkrijgtnooitpost','84charingcrossroad','charingcrossroad84','effibriest','despeler','thegambler','igrok','erinnerungenandiezukunft','warendegodenkosmonauten','deunster','overlichtendedrempels','depijp','wantditismijnlichaam','hetgeuzenboek']::text[])),'reserved_test_ranges',jsonb_build_object('works',(select count(*) from public.works where id between 987112001 and 987112999),'editions',(select count(*) from public.editions where id between 987212001 and 987212999),'authors',(select count(*) from public.authors where id between 987312001 and 987312999))) as preflight;\n",
+  "readback": {
+    "authors": [
+      {
+        "id": 928300035,
+        "name": "Gabriel García Márquez",
+        "open_library_id": "OL27363A"
+      },
+      {
+        "id": 969300006,
+        "name": "Maarten 't Hart",
+        "open_library_id": "OL57758A"
+      },
+      {
+        "id": 977300010,
+        "name": "Fiódor Dostoievski",
+        "open_library_id": "OL22242A"
+      },
+      {
+        "id": 978300007,
+        "name": "Louis Couperus",
+        "open_library_id": "OL153884A"
+      }
+    ],
+    "checked_at": "2026-11-02T20:31:48.185984+00:00",
+    "isbn_matches": [],
+    "title_matches": [],
+    "author_corpora": [
+      {
+        "id": 928104191,
+        "title": "Crónica de una muerte anunciada",
+        "cover_id": null,
+        "author_id": 928300035,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL274574W",
+        "first_publish_year": 1980,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100069,
+        "title": "One Hundred Years of Solitude",
+        "cover_id": null,
+        "author_id": 928300035,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL274505W",
+        "first_publish_year": 1967,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100009,
+        "title": "Een vlucht regenwulpen",
+        "cover_id": null,
+        "author_id": 969300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL719962W",
+        "first_publish_year": 1978,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100027,
+        "title": "Crime and Punishment",
+        "cover_id": null,
+        "author_id": 977300010,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL166894W",
+        "first_publish_year": 1866,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100050,
+        "title": "Love in the Time of Cholera",
+        "cover_id": null,
+        "author_id": 928300035,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL274518W",
+        "first_publish_year": 1985,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100010,
+        "title": "Het woeden der gehele wereld",
+        "cover_id": null,
+        "author_id": 969300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL719963W",
+        "first_publish_year": 1993,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100021,
+        "title": "De stille kracht",
+        "cover_id": null,
+        "author_id": 978300007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL1456909W",
+        "first_publish_year": 1971,
+        "native_identity_key": null
+      },
+      {
+        "id": 987111006,
+        "title": "Eline Vere",
+        "cover_id": null,
+        "author_id": 978300007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL1456910W",
+        "first_publish_year": 1889,
+        "native_identity_key": "nlscale:fixture012:1193"
+      }
+    ],
+    "source_work_matches": [],
+    "reserved_test_ranges": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    },
+    "edition_title_matches": []
+  }
+}
