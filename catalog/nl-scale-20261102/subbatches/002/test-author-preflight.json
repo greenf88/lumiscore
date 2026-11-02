@@ -1,0 +1,126 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with a as(select * from public.authors where lower(name)=any(array['stephen king','william golding','jeff kinney','james patterson','ernesto sabato','colleen hoover','ryan holiday','arnon grunberg','henning mankell','atul gawande']::text[]) or open_library_id=any(array['OL19981A','OL335424A','OL2832500A','OL22258A','OL2748652A','OL7315784A','OL7099653A','OL73644A','OL45364A','OL1485501A']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'authors',(select coalesce(jsonb_agg(to_jsonb(a) order by id),'[]') from a),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') from public.works w where author_id in(select id from a))) as preflight;",
+  "readback": {
+    "authors": [
+      {
+        "id": 8800017,
+        "name": "Arnon Grunberg",
+        "open_library_id": "OL73644A"
+      },
+      {
+        "id": 928300049,
+        "name": "Stephen King",
+        "open_library_id": "OL19981A"
+      },
+      {
+        "id": 946300342,
+        "name": "James Patterson",
+        "open_library_id": "OL22258A"
+      }
+    ],
+    "checked_at": "2026-11-02T16:12:37.125964+00:00",
+    "author_corpora": [
+      {
+        "id": 8800310,
+        "title": "De man zonder ziekte",
+        "cover_id": null,
+        "author_id": 8800017,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19964025W",
+        "first_publish_year": 2012,
+        "native_identity_key": null
+      },
+      {
+        "id": 928101842,
+        "title": "The Long Walk",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL9973101W",
+        "first_publish_year": 1979,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100007,
+        "title": "Carrie",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81626W",
+        "first_publish_year": 1974,
+        "native_identity_key": null
+      },
+      {
+        "id": 939101047,
+        "title": "De asielzoeker",
+        "cover_id": null,
+        "author_id": 8800017,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL850956W",
+        "first_publish_year": 2003,
+        "native_identity_key": null
+      },
+      {
+        "id": 946103532,
+        "title": "Deadly Cross",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL20978085W",
+        "first_publish_year": 2010,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100048,
+        "title": "The Shining",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81633W",
+        "first_publish_year": 1977,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100049,
+        "title": "Misery",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81634W",
+        "first_publish_year": 1978,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100046,
+        "title": "It",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81613W",
+        "first_publish_year": 1986,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100054,
+        "title": "The Gunslinger",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81628W",
+        "first_publish_year": 1976,
+        "native_identity_key": null
+      }
+    ]
+  }
+}

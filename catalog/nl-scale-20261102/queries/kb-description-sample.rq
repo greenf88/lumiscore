@@ -1,0 +1,1 @@
+SELECT ?book ?title ?description WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { ?book a <http://schema.org/Book>; <http://schema.org/name> ?title; <http://schema.org/inLanguage> "nl"; <http://schema.org/description> ?description } } LIMIT 10

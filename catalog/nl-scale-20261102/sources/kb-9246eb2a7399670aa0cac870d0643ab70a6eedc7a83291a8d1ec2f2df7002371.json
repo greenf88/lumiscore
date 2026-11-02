@@ -1,0 +1,32 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT DISTINCT ?format WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { ?book <http://schema.org/bookFormat> ?format } } LIMIT 30\n",
+  "label": "official NBT example schema probe",
+  "checkedAt": "2026-11-02T11:56:32.338Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+DISTINCT+%3Fformat+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+%3Fbook+%3Chttp%3A%2F%2Fschema.org%2FbookFormat%3E+%3Fformat+%7D+%7D+LIMIT+30%0A",
+  "bytes": 123,
+  "sha256": "16b4a0b532e948e8c465b12d5262c9a2a78d5b5ec4900b1347e3c9a6396c7544",
+  "data": {
+    "head": {
+      "vars": [
+        "format"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "format": {
+            "type": "uri",
+            "value": "http://schema.org/EBook"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

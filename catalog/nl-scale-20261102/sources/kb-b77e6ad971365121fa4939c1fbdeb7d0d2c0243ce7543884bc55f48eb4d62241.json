@@ -1,0 +1,733 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "PREFIX schema: <http://schema.org/>\nSELECT ?isbn ?book ?p ?value WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { VALUES ?isbn { \"9493168719\" \"9493254526\" \"9493419045\" \"9493420353\" \"9789046440001\" \"9789059655447\" } ?book schema:isbn ?isbn ; ?p ?value } } LIMIT 9000",
+  "label": "exact NL candidate ISBN10 legacy corroboration 1200..1205",
+  "checkedAt": "2026-11-02T12:35:51.828Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=PREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0ASELECT+%3Fisbn+%3Fbook+%3Fp+%3Fvalue+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+VALUES+%3Fisbn+%7B+%229493168719%22+%229493254526%22+%229493419045%22+%229493420353%22+%229789046440001%22+%229789059655447%22+%7D+%3Fbook+schema%3Aisbn+%3Fisbn+%3B+%3Fp+%3Fvalue+%7D+%7D+LIMIT+9000",
+  "bytes": 10629,
+  "sha256": "ad06e2d27d1826c2f1e21981005b7eb1eb40d981421d6c80aa12f82edf4f0cd9",
+  "data": {
+    "head": {
+      "vars": [
+        "isbn",
+        "book",
+        "p",
+        "value"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Victoria / Knut Hamson ; vert. [uit het Noors] door Cora Polet ; met een voorw. van Cornelis van den Berg"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Wat wij zagen / Hanna Bervoets"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Op omslag en titelpag.: 1#"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Oorspr. Nederlandse uitg.: Amsterdam : Arbeiderspers, cop. 1976"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Een uitgave van de Stichting Collectieve Propaganda van het Nederlandse Boek ter gelegenheid van de Boekenweek 2021"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isPartOf"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p044725523"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/c5bd1dd4b5f42892f3fc261833bbc325"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/41292620ed66c5103c3c6911de92718d"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Victoria"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Wat wij zagen"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p07018738X"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075357305"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p321875109"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p068937083"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p321442997"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "130",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "94",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e dr"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/ba8c50cad42b9bb1c3b02bba0aed76cb"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a72c39afba447d0b61e28ee5442484be"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/778383497"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/1196402496"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0e0120e0beebda3f36eb1bedec6eb252"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2007"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2021"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p433071176"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440936144"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440936152"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789046440001"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p318174375"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789046440001"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789059655447"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p428875572"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789059655447"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

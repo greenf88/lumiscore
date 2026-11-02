@@ -1,0 +1,224 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT DISTINCT ?property WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { ?book ?property ?value } } LIMIT 100\n",
+  "label": "official NBT example schema probe",
+  "checkedAt": "2026-11-02T11:52:03.650Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+DISTINCT+%3Fproperty+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+%3Fbook+%3Fproperty+%3Fvalue+%7D+%7D+LIMIT+100%0A",
+  "bytes": 2356,
+  "sha256": "a45f7f9f499f868dad66a3dfe19345a89fa763808beea20b6bf58a635504e5da",
+  "data": {
+    "head": {
+      "vars": [
+        "property"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://www.w3.org/2002/07/owl#sameAs"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/isPartOf"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/license"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntity"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/about"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/dateCreated"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#ppn"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/isBasedOn"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/endDate"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/associatedMedia"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/issn"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/issueNumber"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/bookFormat"
+          }
+        },
+        {
+          "property": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

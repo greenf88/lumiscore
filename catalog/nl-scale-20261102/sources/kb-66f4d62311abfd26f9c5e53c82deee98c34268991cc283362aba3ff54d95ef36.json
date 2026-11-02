@@ -1,0 +1,2738 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "PREFIX schema: <http://schema.org/>\nSELECT ?isbn ?book ?p ?value ?authorName WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { VALUES ?isbn { \"9789029016353\" \"9789029028424\" \"9789029035729\" \"9789029036092\" \"9789029039055\" \"9789029039116\" \"9789029042208\" \"9789029046398\" \"9789029054102\" \"9789029054225\" \"9789029054584\" \"9789029055505\" \"9789029056472\" \"9789029057455\" \"9789029057462\" \"9789029058759\" \"9789029065719\" \"9789029065795\" \"9789029066501\" \"9789029066945\" \"9789029068284\" \"9789029068291\" \"9789029068307\" \"9789029068352\" \"9789029068574\" \"9789029068871\" \"9789029069359\" \"9789029070850\" \"9789029070867\" \"9789029070881\" \"9789029070898\" \"9789029071482\" \"9789029072298\" \"9789029077033\" \"9789029077859\" \"9789029079778\" \"9789029084482\" \"9789029084635\" \"9789029084659\" \"9789029087902\" } ?book schema:isbn ?isbn ; ?p ?value . OPTIONAL { ?book schema:author ?a . ?a schema:name ?authorName } } } LIMIT 9000",
+  "label": "exact NL candidate ISBN corroboration 760..799",
+  "checkedAt": "2026-11-02T12:22:52.864Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=PREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0ASELECT+%3Fisbn+%3Fbook+%3Fp+%3Fvalue+%3FauthorName+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+VALUES+%3Fisbn+%7B+%229789029016353%22+%229789029028424%22+%229789029035729%22+%229789029036092%22+%229789029039055%22+%229789029039116%22+%229789029042208%22+%229789029046398%22+%229789029054102%22+%229789029054225%22+%229789029054584%22+%229789029055505%22+%229789029056472%22+%229789029057455%22+%229789029057462%22+%229789029058759%22+%229789029065719%22+%229789029065795%22+%229789029066501%22+%229789029066945%22+%229789029068284%22+%229789029068291%22+%229789029068307%22+%229789029068352%22+%229789029068574%22+%229789029068871%22+%229789029069359%22+%229789029070850%22+%229789029070867%22+%229789029070881%22+%229789029070898%22+%229789029071482%22+%229789029072298%22+%229789029077033%22+%229789029077859%22+%229789029079778%22+%229789029084482%22+%229789029084635%22+%229789029084659%22+%229789029087902%22+%7D+%3Fbook+schema%3Aisbn+%3Fisbn+%3B+%3Fp+%3Fvalue+.+OPTIONAL+%7B+%3Fbook+schema%3Aauthor+%3Fa+.+%3Fa+schema%3Aname+%3FauthorName+%7D+%7D+%7D+LIMIT+9000",
+  "bytes": 40628,
+  "sha256": "ff84a8b26bb461194d793af268d38d74dd8bd9eda4c16b6355cd7634630f6577",
+  "data": {
+    "head": {
+      "vars": [
+        "isbn",
+        "book",
+        "p",
+        "value",
+        "authorName"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "De tunnel : roman / Ernesto Sábato ; vert. [uit het Spaans] en van een naw. voorzien door Martine Koenders en Gerard Klooster"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Generatie X : vertellingen voor een versnelde cultuur : roman / Douglas Coupland ; vert. [uit het Engels] door Jan Fastenau ; zijteksten bew. door Jan Kuitenbrouwer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Gesprek in de kathedraal : roman / Mario Vargas Llosa ; vert. [uit het Spaans] door Aline Glastra van Loon"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Pantaleón : roman / Mario Vargas Llosa ; vert. uit het Spaans door Michiel Tjebbes"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2666 : roman / Roberto Bolaño ; uit het Spaans vert. door Aline Glastra van Loon en Arie van der Wal"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Turks fruit / Jan Wolkers"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Magiër / Raymond E. Feist ; [vert. uit het Engels Richard Heufkens]"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Turks fruit / Jan Wolkers"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e dr.: 1988. - (Meulenhoff editie ; E 1024)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e dr. Nederlandse uitg.: 1992. - (Meulenhoff editie ; 1239)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e dr. Nederlandse uitg. geb.: 1987. - (Herengracht editie)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e dr. Nederlandse uitg.: Amsterdam : Meulenhoff, 1977. - (Meulenhoff editie ; E 457)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e druk: 1969. - (Meulenhoff editie ; E 175)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e druk Nederlandse uitg.: Amsterdam : Meulenhoff-M fantasy, 1997"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1e druk: 1969. - (Meulenhoff editie ; E 175)"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isPartOf"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p297796356"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isPartOf"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p166054011"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9181703bd140b331b20fc8c1ba21820c"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cbf4096047f1215092d942f18e608efd"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/aec7ea118f2a4c556a19ead97e501b91"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/14284f828dd20d49ee478544a5a4ec0b"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0e8c06073c3f153190604fe4bba83966"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/64ecd26aea334a35c76bba4d73d9622f"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/1c55984f4e8302df99fecc58579aea5a"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/8d5be2842433d6f9d24cbe90f9fc6f40"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "De tunnel : roman"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Generatie X : vertellingen voor een versnelde cultuur : roman"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Gesprek in de kathedraal : roman"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Pantaleón : roman"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2666 : roman"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Turks fruit"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Magiër"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Turks fruit"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/about"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p077612132"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/about"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p077612132"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p069038783"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p097857890"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p068728506"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p068728506"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p166514500"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p068842368"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p071476075"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p068842368"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p073808679"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p072963611"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p073333654"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p069047979"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p07005830X"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p317723324"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/contributor"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p106514784"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629410"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629402"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "141",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "254",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "622",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "254",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1070",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "189",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "736",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "value": {
+            "type": "literal",
+            "value": "189",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2e dr"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "8e dr"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "3e dr"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "4e dr"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Vierenvijftigste druk"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Zevende druk"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Vijfenzestigste druk"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3616baf0dc3663c2f4a62f0c5cfd1e61"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/59dc9a2a000f9f3f6f9c89e9c037b7ea"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/c739d12c495116da0e380bf5353e3f78"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0445554a0a2488e3d3c8af7500ff31cf"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/1da7ca3c541668c8465fee55f9ab3f77"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/28e54e8e8b4f8cb3afe3325906f62e40"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/4ac33c8b02ab255f480264e46af8374b"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/8e37bb8052e4589af5a852d5952c3168"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/207689949"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/741334144"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/317402246"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/317448239"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/898889311"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/967665475"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/989487073"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/1416930518"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/e610258aaa99304db0dc4cadb2e58307"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d011f58284d4e902d6755323ae9aa84c"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3f61bcb4eb825736300eb07064f9aabd"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6cb25f3c3e4b960937a031eadae9e553"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/931335c8f944652449502249dec2c7b0"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/translationOfWork"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/273f87ddada9c7f83e602e8c083605c6"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2007"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2011"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2009"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2009"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2009"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2016"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2001"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2023"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p342557599"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p342557602"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p41259272X"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p412592622"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p342616390"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p342616404"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p402302656"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/def#hasDerivative"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440808235"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029079778"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p304226130"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029079778"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029087902"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p331014599"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029087902"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084659"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317684957"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029084659"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084635"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p31769961X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029084635"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029084482"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p317723286"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029084482"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p408388722"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029077033"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9029055502"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029055505"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p410592331"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029055505"
+          }
+        },
+        {
+          "isbn": {
+            "type": "literal",
+            "value": "9789029077033"
+          },
+          "book": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/nbt/p440646154"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "value": {
+            "type": "literal",
+            "value": "9789029077033"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

@@ -1,0 +1,3824 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT ?node ?p ?value WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { VALUES ?node { <https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d> <https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f> <https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec> <https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b> <https://data.bibliotheken.nl/.well-known/genid/d015fa2d6969f77cd25944aff86c31f1> <https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0> <https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f> <https://data.bibliotheken.nl/.well-known/genid/d09e8608a2858e2231f70cceec9b5bd8> <https://data.bibliotheken.nl/.well-known/genid/d0c542a5bf1c8042a707dc78b3082cf5> <https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9> <https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10> <https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc> <https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30> <https://data.bibliotheken.nl/.well-known/genid/d13a09cc37a3d40c8dc97d2ff2bc1bca> <https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb> <https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88> <https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914> <https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451> <https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0> <https://data.bibliotheken.nl/.well-known/genid/d24d1fa04645d72663b5fd7161a4e6ca> <https://data.bibliotheken.nl/.well-known/genid/d30228aa57d801059de64bde447e77c2> <https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476> <https://data.bibliotheken.nl/.well-known/genid/d3bcaf41a6dcd20af4b72d9efdd53f8f> <https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f> <https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d> <https://data.bibliotheken.nl/.well-known/genid/d491ac06d0ef02d119d0c5487b7291d3> <https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a> <https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21> <https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731> <https://data.bibliotheken.nl/.well-known/genid/d4cbc1e4acbb5794eac9d1062846e1d8> <https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21> <https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60> <https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368> <https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321> <https://data.bibliotheken.nl/.well-known/genid/d67221efce6e6379016b7a2f45fc3483> <https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff> <https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115> <https://data.bibliotheken.nl/.well-known/genid/d710319d1e392cc0b6dadc4b7431ac23> <https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47> <https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05> <https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32> <https://data.bibliotheken.nl/.well-known/genid/d7b568bc07b6bbbaa813a8b6b87569de> <https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067> <https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956> <https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15> <https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708> <https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789> <https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21> <https://data.bibliotheken.nl/.well-known/genid/d87bf2135104efacb99e6ab7397eda70> <https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05> <https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5> <https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c> <https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40> <https://data.bibliotheken.nl/.well-known/genid/d9fdafe04ac8813da0d1e3d954be32fb> <https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38> <https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035> <https://data.bibliotheken.nl/.well-known/genid/da2ed0ae1a8491519853bff29c0ddc83> <https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422> <https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc> <https://data.bibliotheken.nl/.well-known/genid/daad518e7dcb4e64e7f7406bafda2655> }  ?node ?p ?value } } LIMIT 9000",
+  "label": "linked ISBN publication-original 1080..1139",
+  "checkedAt": "2026-11-02T12:39:51.371Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+%3Fnode+%3Fp+%3Fvalue+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+VALUES+%3Fnode+%7B+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fcf9ac72f03f1688e217e6dab346b203d%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fcfad7c4b9910f243893e9e7be89e819f%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fcfbacec2037ea2c2e0475c81b8f356ec%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fcfead0e05bdbe9954b78735cb380968b%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd015fa2d6969f77cd25944aff86c31f1%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd0370cf9d6f7a35db11c23b37d7d17b0%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd090f18a61e4a84e18e9a216a7f4be5f%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd09e8608a2858e2231f70cceec9b5bd8%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd0c542a5bf1c8042a707dc78b3082cf5%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd0c91eb3e650a3a5c755488a6c98cff9%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd0fb39651d23ac12cd291c121d518a10%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd10524dfb24613f88a690972ab0bc4cc%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd110975260cb866e43e3e00631c4fe30%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd13a09cc37a3d40c8dc97d2ff2bc1bca%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd15c339fd5aa25b2e915c4a186bcf4cb%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd15f01a4a86e08402538e5b0c631cc88%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd19e085a43dc6bc8ee671e4c974f0914%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd1b8645962608e1a94a29894cd734451%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd1cc057a003a0defa060934cbe8f47b0%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd24d1fa04645d72663b5fd7161a4e6ca%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd30228aa57d801059de64bde447e77c2%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd36ad3f25d9b3752c28bb5aee0cc4476%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd3bcaf41a6dcd20af4b72d9efdd53f8f%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd3c8687986a2d91be1328ee7d73eee2f%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd446e1223f14c99fe7911d6b71e7542d%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd491ac06d0ef02d119d0c5487b7291d3%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd49bebbe9b1d9d318a64f8c5cad6849a%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd49e4de9ee8c0a4efb799ed80c443a21%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd4bf962e798c8b5ef742860c7b315731%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd4cbc1e4acbb5794eac9d1062846e1d8%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd4dcd9b9495dc4bc2ab7f553bec87a21%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd54595f6a3a80e2c3ffa8bddb007bb60%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd57d4a63335003be44f84cca766f9368%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd5ce43eab4e23b511e7af3ef4fc9e321%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd67221efce6e6379016b7a2f45fc3483%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd6a2601e7bed084f6d07672a150caaff%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd6cf3f32b9408c305a1cf810acc60115%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd710319d1e392cc0b6dadc4b7431ac23%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd7493bf32cddd26a5243b96c23f06c47%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd7872454f9c2fb2feb5abfa25cc6cd05%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd797eabd0aa85a2e7ad62915cbd98c32%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd7b568bc07b6bbbaa813a8b6b87569de%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd7c178afe3d530300eb24e61e6a65067%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd7ea25c3b991d0e364416e32581b5956%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd8451b987b5449d2d83d84a528a71e15%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd852bf70d15fee8db6a75827c5564708%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd869adc1eaea83ce4a2e1620d3560789%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd86dff34d7a94dc8455df93d38992d21%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd87bf2135104efacb99e6ab7397eda70%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd9050b1b5def9d5bde46822ebc69fe05%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd94c870ba5b76e677cf733baedc0aca5%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd977e1925c6ab2cf776b364583583b9c%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd9b979b83dce26537016ae5a1e073c40%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd9fdafe04ac8813da0d1e3d954be32fb%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fda07644ba69ac7145bb30d2de4ba9d38%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fda14aade983b91a9106e998bc276c035%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fda2ed0ae1a8491519853bff29c0ddc83%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fda3e167f9ff8b1baa0dff782f6ca8422%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fda522c69134603cb4ef19b68311c02cc%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fdaad518e7dcb4e64e7f7406bafda2655%3E+%7D++%3Fnode+%3Fp+%3Fvalue+%7D+%7D+LIMIT+9000",
+  "bytes": 71549,
+  "sha256": "3e5bb832878f8b33b8968f92e959ce5a755c8f549cd4aa3f632bfbc2370c45b6",
+  "data": {
+    "head": {
+      "vars": [
+        "node",
+        "p",
+        "value"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c542a5bf1c8042a707dc78b3082cf5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d491ac06d0ef02d119d0c5487b7291d3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d710319d1e392cc0b6dadc4b7431ac23"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d13a09cc37a3d40c8dc97d2ff2bc1bca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7b568bc07b6bbbaa813a8b6b87569de"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d015fa2d6969f77cd25944aff86c31f1"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d67221efce6e6379016b7a2f45fc3483"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3bcaf41a6dcd20af4b72d9efdd53f8f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d30228aa57d801059de64bde447e77c2"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d87bf2135104efacb99e6ab7397eda70"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9fdafe04ac8813da0d1e3d954be32fb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/daad518e7dcb4e64e7f7406bafda2655"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da2ed0ae1a8491519853bff29c0ddc83"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d24d1fa04645d72663b5fd7161a4e6ca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d09e8608a2858e2231f70cceec9b5bd8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4cbc1e4acbb5794eac9d1062846e1d8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Bezige Bij. 1986"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c542a5bf1c8042a707dc78b3082cf5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Brandbilen som försvann. - Stockholm : Pan, 1969"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d491ac06d0ef02d119d0c5487b7291d3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Mannen på balkongen. - 1967"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d710319d1e392cc0b6dadc4b7431ac23"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "King Richard II. - 1597"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Bakker. 1990"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Veen. 1992"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Hoogeveen etc. : Advena. 1988"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : C.J.Aarts. 1978"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d13a09cc37a3d40c8dc97d2ff2bc1bca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "The blind watchmaker. - Harlow : Longman Scientific & Technical, 1986"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7b568bc07b6bbbaa813a8b6b87569de"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "The labours of Hercules. - London : Collins, 1947"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Baarn : Ambo. 1992"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Baarn : Anthos. 1993"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht : Bruna. 1994"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : De Arbeiderspers. 1995"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht : Bruna. 1998"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Harmonie. 1998"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht : Het Spectrum. 2000"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Meulenhoff-M fantasy. 2000"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Addison-Wesley. 2000"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht etc. : Zwarte Beertjes. 2003"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Veen. 1993"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Veen. 1994"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Veen. 1993"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Arbeiderspers. 1978"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Den Haag : Leopold. 1980"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Arbeiderspers. 1977"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Boekerij. 1999"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Querido. 1985"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d015fa2d6969f77cd25944aff86c31f1"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Krondor : tear of the gods. - London : Voyager, 2000. - (The Riftwar legacy ; b. 3)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d67221efce6e6379016b7a2f45fc3483"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "The dark fields. - London : Little, Brown, 2001"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht etc. : Het Spectrum. 1981"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3bcaf41a6dcd20af4b72d9efdd53f8f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Das Jesusvideo. - München : Schneekluth, cop. 2002"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Boekerij. 2005"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : CPNB. 2001"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Uitgeverij M. 2002"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Luitingh-Sijthoff. 2002"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Bezige Bij. 1985"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Querido. 1991"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Veen. 1991"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d30228aa57d801059de64bde447e77c2"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "La tentation de saint Antoine . - 1874"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Rotterdam : Lemniscaat. 1977"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Loeb en Van der Velden etc.. 1979"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Rotterdam : Lemniscaat. 1978"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht etc. : Spectrum. 1980"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Uitgeverij De Arbeiderspers. 1980"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d87bf2135104efacb99e6ab7397eda70"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Mannen på balkongen. - 1967"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Bakker. 1979"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9fdafe04ac8813da0d1e3d954be32fb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Lolita. - Paris : Olympia Press, 1955. - 1ste dr. Nederlandse uitg.: 's-Gravenhage : Oisterwijk, 1958"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Arbeiderspers. 1977"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : De Arbeiderspers. 1974"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Utrecht etc. : Het Spectrum. 1979"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/daad518e7dcb4e64e7f7406bafda2655"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "The two towers, being the second part of the Lord of the rings"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Assen etc. : Van Gorcum. 1975"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "'s-Gravenhage : Nijgh & Van Ditmar. 1979"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da2ed0ae1a8491519853bff29c0ddc83"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "El coronel no tiene quién le escriba. - 1969"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d24d1fa04645d72663b5fd7161a4e6ca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "La divina commedia"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Bert Bakker. 1984"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam etc. : Triton pers etc.. 1981"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d09e8608a2858e2231f70cceec9b5bd8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "In search of Schrödinger's cat : quantum physics and reality. - Toronto [etc.] : Bantam Books, 1984"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4cbc1e4acbb5794eac9d1062846e1d8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "De amor y de sombra. - Barcelona : Plaza & Janés, 1984. - (Plaza & Janés literaria)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/8b6eb080d1209ee3d1e3362f5bf246a9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6b83d7d39fd65254bef594d67a50d6e6"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d246bbbb019c035b08cb8c14a2999bf7"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/2f9ed5e3b3ff0e357b9602b51c21d81b"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/34944d284a2f3779f9e905fa119d19b8"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/f6a3ccdfe76daf7921ac2aa0f84cf294"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/65dccadcf97a19672d41a1e77b31c260"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a53c4327e9ffe766cbdbf659073f1515"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/63354648eb316c37d81cc2ce1344a28c"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/29182a099cd639e782d655e3569eb54e"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/41dc7f1a6aa8d7a2186ade0ebe48e756"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/1aae1632fe318b630703e70fa70afcd9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/8a1f64e8fe131ea1dea65cd99a2c81df"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9728ddeb3a01aeaab69d2bd25de76c5d"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/ae87b9cb605d05b12cc1eceed5330815"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/1dea5a86dbe193c2ba10d44769e6e84a"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/420d1d29d8aff914e51ebe0e759220fb"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/4f2277a3e5a45b82e2e56fee88ed4968"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9d613d1ea4be4da1c9dc07738adaec50"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3ef711d9992b400ab0d379f7cb25f14"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/523dc480aafca698452f2155617b00c7"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/594cfa3e1fd745a8640a4b4079dce218"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/b4f8f887d4509c6636668e5bd96bb0b9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/7273067b646a736c9c335ad3fb87af4c"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3a7ddcbc51ec7df49e18507df2d40342"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/54c0ec2fc23cf87bdf915947663aaeb5"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/7e88195fcffdbb7ab3eef3fa56c40473"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9f4ed2def189b99b66545925506707e2"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/2d329a69c6d7205a030377a4a6dea401"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9865dea5f910c31f566922fc7ff97253"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/2e1a3cb1c34279f72b7ece8e7b3a22f0"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/24be566fb34678a5ac93c212e374f20e"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/f0bc519c1392b52105515c89459eaa7a"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/20e6305dcaa44575b46d1b4b0129298e"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/48348dfcd579799d5b2039209df2de79"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/212cbb01055168d1f89cec2790ef10a9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/c6445eb70829ab28246a31116485ad7f"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/67195be6d894e7009ef1dc87467bccb0"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/f2ca73d4e91ec6aca8c49b6676cdfc46"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a5821dd964524127129b72ed9d7dc3d7"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/849d2271bf8371e4171b4876f4c1ad4a"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/db7f4192e24a24aa2c72c2af67892493"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/ff7f1a226aac66c28af5ae84926fb66d"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/52db7e9b30f78b764b5322be0f1664ab"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c542a5bf1c8042a707dc78b3082cf5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "sv"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d491ac06d0ef02d119d0c5487b7291d3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "sv"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d710319d1e392cc0b6dadc4b7431ac23"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d13a09cc37a3d40c8dc97d2ff2bc1bca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7b568bc07b6bbbaa813a8b6b87569de"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d015fa2d6969f77cd25944aff86c31f1"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d67221efce6e6379016b7a2f45fc3483"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3bcaf41a6dcd20af4b72d9efdd53f8f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "de"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d30228aa57d801059de64bde447e77c2"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "fr"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d87bf2135104efacb99e6ab7397eda70"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "sv"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9fdafe04ac8813da0d1e3d954be32fb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/daad518e7dcb4e64e7f7406bafda2655"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da2ed0ae1a8491519853bff29c0ddc83"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "es"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d24d1fa04645d72663b5fd7161a4e6ca"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "it"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d09e8608a2858e2231f70cceec9b5bd8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4cbc1e4acbb5794eac9d1062846e1d8"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "es"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1986",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1990",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1992",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1988",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1978",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1992",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1993",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1994",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1995",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1998",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1998",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2000",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2000",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2000",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2003",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1993",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1994",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1993",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1978",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1980",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1977",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1999",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1985",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1981",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2005",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2001",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2002",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "2002",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1985",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1991",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1991",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1977",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1979",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1978",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1980",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1980",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1979",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1977",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1974",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1979",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1975",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1979",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1984",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1981",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15f01a4a86e08402538e5b0c631cc88"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/306c04579e153cce0708cff70297b696"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da07644ba69ac7145bb30d2de4ba9d38"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/038a62afcca6dc456f8ea55ba559e738"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da3e167f9ff8b1baa0dff782f6ca8422"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d952cb27d4f4ae5b6b60aa0b424873d"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1b8645962608e1a94a29894cd734451"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/e04917fba9e2a7e45a24d8b2b61b4d90"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6cf3f32b9408c305a1cf810acc60115"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a824945f5873e930a30e333e48a0b920"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7872454f9c2fb2feb5abfa25cc6cd05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3b60ccdaa23fe4139df3aec7310d8a2c"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7493bf32cddd26a5243b96c23f06c47"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/fc99334eabebefddb36d897c70d362f5"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49bebbe9b1d9d318a64f8c5cad6849a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/f827260fb0ccc6f480254c88301da435"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d15c339fd5aa25b2e915c4a186bcf4cb"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/17a07492b1a5893b3ee4c0e6869bf569"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0370cf9d6f7a35db11c23b37d7d17b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a4e4c8cdc1ff18b0cfdc3d963ee4e008"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfead0e05bdbe9954b78735cb380968b"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/72a420c18fe38e6181431da436771a1b"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d8451b987b5449d2d83d84a528a71e15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/784ff514e87781acc9ec065fee640e09"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d5ce43eab4e23b511e7af3ef4fc9e321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/577c8a8d7e019d381ad0a41ad8be2b15"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0c91eb3e650a3a5c755488a6c98cff9"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/60c834bf923ec4a7fdc586d7a94bec4c"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d852bf70d15fee8db6a75827c5564708"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a607f87caa25a09306fbdd3071ca0c11"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfbacec2037ea2c2e0475c81b8f356ec"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/9a496b89a3dd4f146ae3b89e7025720e"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7ea25c3b991d0e364416e32581b5956"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/07dac7fc32473104644048cd4ddf1079"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9b979b83dce26537016ae5a1e073c40"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/57f2136c299c4c76e2bdd6bf68135f31"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cf9ac72f03f1688e217e6dab346b203d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/866a102fee04482110d7b966c16b0463"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9050b1b5def9d5bde46822ebc69fe05"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/119c1d78ae535a41c077489791dddab3"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/cfad7c4b9910f243893e9e7be89e819f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/dbc9277069222736cd0044fd03a4d7d8"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d36ad3f25d9b3752c28bb5aee0cc4476"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0dafd4bea05c318d22ac307a8df77226"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d797eabd0aa85a2e7ad62915cbd98c32"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/ea2a7b4e98adff0cad0dad98f8b8c626"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d446e1223f14c99fe7911d6b71e7542d"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0a809dc95ec208854f009b3add1bca1f"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d869adc1eaea83ce4a2e1620d3560789"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/c0aa4aaeb65d60307557777f1928e55d"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d3c8687986a2d91be1328ee7d73eee2f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6572a05dc7b34d4070fc190fdd9a15cc"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d7c178afe3d530300eb24e61e6a65067"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/59fa92402a8db715772df08dc81f3c9c"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d49e4de9ee8c0a4efb799ed80c443a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/fe805b5ce08525480c6b2c7975409aee"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d86dff34d7a94dc8455df93d38992d21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d47d8cfc582094413cf7565d8bd31844"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4bf962e798c8b5ef742860c7b315731"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0f911d8c9fa17e09d7cc5c6e05be1723"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d10524dfb24613f88a690972ab0bc4cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d803407efab13964faec1c53dd5ff47e"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d1cc057a003a0defa060934cbe8f47b0"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/c21a5ba45c80f8f6769997a0775905f9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da522c69134603cb4ef19b68311c02cc"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/dc03434aff6d8453354f067aa382864b"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d090f18a61e4a84e18e9a216a7f4be5f"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/62c6331362f635e81d3cc8891897d8eb"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d110975260cb866e43e3e00631c4fe30"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/50db291444642ad0d2749eb95db33ac8"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d0fb39651d23ac12cd291c121d518a10"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/68cef3e57bb370c14963ace74168e2df"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d94c870ba5b76e677cf733baedc0aca5"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/62096cb72d8537cfa1c7686fdb0eb953"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d19e085a43dc6bc8ee671e4c974f0914"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/4dc4ca1da94b389a1d34cb1a359a1795"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/da14aade983b91a9106e998bc276c035"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/2b19abe047bdedd6e292741484e651e9"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d977e1925c6ab2cf776b364583583b9c"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/688e1bf5a108d4fe2ada76f4eeca3714"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d54595f6a3a80e2c3ffa8bddb007bb60"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/79d5f057b1d722ea2deeb50a7df9fffe"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d57d4a63335003be44f84cca766f9368"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/0a63c8e24a8bb5394be4f15aa8238ad5"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d4dcd9b9495dc4bc2ab7f553bec87a21"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/5c01d4ab56c94a479c0c2f70d9feb948"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d6a2601e7bed084f6d07672a150caaff"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3d41b57fc9db56029782b110dc30c46d"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

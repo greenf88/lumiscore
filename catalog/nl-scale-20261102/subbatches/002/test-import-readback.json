@@ -1,0 +1,1529 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "checked_at": "2026-11-02T16:31:10.670328+00:00",
+  "exactRows": 43,
+  "query": "select jsonb_build_object('checked_at',clock_timestamp(),'works',(select jsonb_agg(to_jsonb(w) order by id) from public.works w where id between 987101001 and 987101013),'editions',(select jsonb_agg(to_jsonb(e) order by id) from public.editions e where work_id between 987101001 and 987101013),'descriptions',(select jsonb_agg(to_jsonb(d) order by work_id,language) from public.catalog_work_descriptions d where work_id between 987101001 and 987101013),'metadata',(select jsonb_agg(to_jsonb(m) order by edition_id) from public.catalog_edition_metadata m where work_id between 987101001 and 987101013)) as readback;",
+  "readback": {
+    "works": [
+      {
+        "id": 987101001,
+        "title": "It Ends With Us",
+        "cover_id": null,
+        "author_id": 987301001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL18020194W",
+        "first_publish_year": 2016,
+        "native_identity_key": "nlscale:fixture002:681"
+      },
+      {
+        "id": 987101002,
+        "title": "Lord of the Flies",
+        "cover_id": null,
+        "author_id": 987301002,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL455327W",
+        "first_publish_year": 1954,
+        "native_identity_key": "nlscale:fixture002:395"
+      },
+      {
+        "id": 987101003,
+        "title": "The Long Haul",
+        "cover_id": null,
+        "author_id": 987301003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17076678W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture002:498"
+      },
+      {
+        "id": 987101004,
+        "title": "The Dead Zone",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81630W",
+        "first_publish_year": 1979,
+        "native_identity_key": "nlscale:fixture002:227"
+      },
+      {
+        "id": 987101005,
+        "title": "The Running Man",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL149188W",
+        "first_publish_year": 1982,
+        "native_identity_key": "nlscale:fixture002:176"
+      },
+      {
+        "id": 987101006,
+        "title": "Being Mortal",
+        "cover_id": null,
+        "author_id": 987301004,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17079567W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture002:3672"
+      },
+      {
+        "id": 987101007,
+        "title": "El túnel",
+        "cover_id": null,
+        "author_id": 987301005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL617847W",
+        "first_publish_year": 1948,
+        "native_identity_key": "nlscale:fixture002:608"
+      },
+      {
+        "id": 987101008,
+        "title": "Mördare utan ansikte",
+        "cover_id": null,
+        "author_id": 987301006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL158674W",
+        "first_publish_year": 1991,
+        "native_identity_key": "nlscale:fixture002:3113"
+      },
+      {
+        "id": 987101009,
+        "title": "The Obstacle is the Way",
+        "cover_id": null,
+        "author_id": 987301007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19977665W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture002:811"
+      },
+      {
+        "id": 987101010,
+        "title": "Different Seasons",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL81621W",
+        "first_publish_year": 1982,
+        "native_identity_key": "nlscale:fixture002:300"
+      },
+      {
+        "id": 987101011,
+        "title": "Tirza",
+        "cover_id": null,
+        "author_id": 8800017,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL850975W",
+        "first_publish_year": 2006,
+        "native_identity_key": "nlscale:fixture002:1046"
+      },
+      {
+        "id": 987101012,
+        "title": "The Outsider",
+        "cover_id": null,
+        "author_id": 928300049,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17937105W",
+        "first_publish_year": 2018,
+        "native_identity_key": "nlscale:fixture002:2809"
+      },
+      {
+        "id": 987101013,
+        "title": "The Big Bad Wolf",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167179W",
+        "first_publish_year": 2003,
+        "native_identity_key": "nlscale:fixture002:557"
+      }
+    ],
+    "editions": [
+      {
+        "id": 987201001,
+        "title": "It Ends With Us",
+        "isbn_10": null,
+        "isbn_13": "9781471156267",
+        "work_id": 987101001,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Simon & Schuster UK Ltd.",
+        "publish_date": null,
+        "open_library_edition_id": "OL27213498M"
+      },
+      {
+        "id": 987201002,
+        "title": "Lord of the Flies",
+        "isbn_10": null,
+        "isbn_13": "9780590040013",
+        "work_id": 987101002,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Scholastic",
+        "publish_date": null,
+        "open_library_edition_id": "OL10697919M"
+      },
+      {
+        "id": 987201003,
+        "title": "Diary of a wimpy kid : the long haul",
+        "isbn_10": null,
+        "isbn_13": "9781419711893",
+        "work_id": 987101003,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Penguin",
+        "publish_date": null,
+        "open_library_edition_id": "OL26366428M"
+      },
+      {
+        "id": 987201004,
+        "title": "The Dead Zone",
+        "isbn_10": null,
+        "isbn_13": "9781101137949",
+        "work_id": 987101004,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Penguin USA, Inc.",
+        "publish_date": null,
+        "open_library_edition_id": "OL24277921M"
+      },
+      {
+        "id": 987201005,
+        "title": "The Running Man",
+        "isbn_10": null,
+        "isbn_13": "9781429577083",
+        "work_id": 987101005,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Penguin Group USA, Inc.",
+        "publish_date": null,
+        "open_library_edition_id": "OL24281257M"
+      },
+      {
+        "id": 987201006,
+        "title": "Being Mortal",
+        "isbn_10": "1250076226",
+        "isbn_13": "9781250076229",
+        "work_id": 987101006,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Picador",
+        "publish_date": null,
+        "open_library_edition_id": "OL35253923M"
+      },
+      {
+        "id": 987201007,
+        "title": "The Tunnel",
+        "isbn_10": null,
+        "isbn_13": "9780345373779",
+        "work_id": 987101007,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Ballantine Books",
+        "publish_date": null,
+        "open_library_edition_id": "OL10685619M"
+      },
+      {
+        "id": 987201008,
+        "title": "Faceless Killers",
+        "isbn_10": "0753169770",
+        "isbn_13": "9780753169773",
+        "work_id": 987101008,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "ISIS Large Print",
+        "publish_date": null,
+        "open_library_edition_id": "OL32789185M"
+      },
+      {
+        "id": 987201009,
+        "title": "The obstacle is the way",
+        "isbn_10": null,
+        "isbn_13": "9781591846352",
+        "work_id": 987101009,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Portfolio/Penguin",
+        "publish_date": null,
+        "open_library_edition_id": "OL27157819M"
+      },
+      {
+        "id": 987201010,
+        "title": "Different Seasons",
+        "isbn_10": null,
+        "isbn_13": "9780451124340",
+        "work_id": 987101010,
+        "cover_id": null,
+        "language": null,
+        "publisher": "New American Library",
+        "publish_date": null,
+        "open_library_edition_id": "OL24205193M"
+      },
+      {
+        "id": 987201011,
+        "title": "Tirza",
+        "isbn_10": null,
+        "isbn_13": "9781934824696",
+        "work_id": 987101011,
+        "cover_id": null,
+        "language": null,
+        "publisher": "Open Letter",
+        "publish_date": null,
+        "open_library_edition_id": "OL25433172M"
+      },
+      {
+        "id": 987201012,
+        "title": "The Outsider",
+        "isbn_10": "1473676436",
+        "isbn_13": "9781473676435",
+        "work_id": 987101012,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Hodder",
+        "publish_date": null,
+        "open_library_edition_id": "OL32974710M"
+      },
+      {
+        "id": 987201013,
+        "title": "The Big Bad Wolf",
+        "isbn_10": "1843956292",
+        "isbn_13": "9781843956297",
+        "work_id": 987101013,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Charnwood",
+        "publish_date": null,
+        "open_library_edition_id": "OL33870129M"
+      },
+      {
+        "id": 987201014,
+        "title": "Nooit meer",
+        "isbn_10": null,
+        "isbn_13": "9789401910552",
+        "work_id": 987101001,
+        "cover_id": 12916672,
+        "language": "dut",
+        "publisher": "Uitgeverij Zomer & Keuning / Z&K",
+        "publish_date": null,
+        "open_library_edition_id": "OL35256642M"
+      },
+      {
+        "id": 987201015,
+        "title": "Heer van de vliegen",
+        "isbn_10": null,
+        "isbn_13": "9789059653887",
+        "work_id": 987101002,
+        "cover_id": 10326152,
+        "language": "dut",
+        "publisher": "Stichting Collectieve Propaganda van het Nederlandse boek",
+        "publish_date": null,
+        "open_library_edition_id": "OL28462924M"
+      },
+      {
+        "id": 987201016,
+        "title": "Flutvakantie",
+        "isbn_10": null,
+        "isbn_13": "9789026138409",
+        "work_id": 987101003,
+        "cover_id": 8952830,
+        "language": "dut",
+        "publisher": "De Fontein Jeugd",
+        "publish_date": null,
+        "open_library_edition_id": "OL27495493M"
+      },
+      {
+        "id": 987201017,
+        "title": "Dodelijk dilemma",
+        "isbn_10": null,
+        "isbn_13": "9789024544974",
+        "work_id": 987101004,
+        "cover_id": 14653577,
+        "language": "dut",
+        "publisher": "Poema Pocket",
+        "publish_date": null,
+        "open_library_edition_id": "OL33220021M"
+      },
+      {
+        "id": 987201018,
+        "title": "Vlucht naar de top",
+        "isbn_10": null,
+        "isbn_13": "9789024536979",
+        "work_id": 987101005,
+        "cover_id": 12019512,
+        "language": "dut",
+        "publisher": "Poema Pocket",
+        "publish_date": null,
+        "open_library_edition_id": "OL34009201M"
+      },
+      {
+        "id": 987201019,
+        "title": "Sterfelijk zijn",
+        "isbn_10": null,
+        "isbn_13": "9789057124389",
+        "work_id": 987101006,
+        "cover_id": 8178872,
+        "language": "dut",
+        "publisher": "Nieuwezijds / Nieuwezijds b.v.",
+        "publish_date": null,
+        "open_library_edition_id": "OL26453010M"
+      },
+      {
+        "id": 987201020,
+        "title": "De tunnel",
+        "isbn_10": null,
+        "isbn_13": "9789029079778",
+        "work_id": 987101007,
+        "cover_id": 12390801,
+        "language": "dut",
+        "publisher": "Meulenhoff",
+        "publish_date": null,
+        "open_library_edition_id": "OL35692790M"
+      },
+      {
+        "id": 987201021,
+        "title": "Moordenaar zonder gezicht",
+        "isbn_10": null,
+        "isbn_13": "9789044508758",
+        "work_id": 987101008,
+        "cover_id": 12033198,
+        "language": "dut",
+        "publisher": "De Geus",
+        "publish_date": null,
+        "open_library_edition_id": "OL28312888M"
+      },
+      {
+        "id": 987201022,
+        "title": "Het obstakel is de weg",
+        "isbn_10": null,
+        "isbn_13": "9789400510159",
+        "work_id": 987101009,
+        "cover_id": 13126715,
+        "language": "dut",
+        "publisher": "Lev.",
+        "publish_date": null,
+        "open_library_edition_id": "OL45306653M"
+      },
+      {
+        "id": 987201023,
+        "title": "4 Seizoenen",
+        "isbn_10": null,
+        "isbn_13": "9789024522989",
+        "work_id": 987101010,
+        "cover_id": 13395080,
+        "language": "dut",
+        "publisher": "Poema Pocket",
+        "publish_date": null,
+        "open_library_edition_id": "OL32419396M"
+      },
+      {
+        "id": 987201024,
+        "title": "Tirza",
+        "isbn_10": null,
+        "isbn_13": "9789038890593",
+        "work_id": 987101011,
+        "cover_id": 10522937,
+        "language": "dut",
+        "publisher": "Nijgh & Van Ditmar",
+        "publish_date": null,
+        "open_library_edition_id": "OL31463073M"
+      },
+      {
+        "id": 987201025,
+        "title": "De buitenstaander",
+        "isbn_10": null,
+        "isbn_13": "9789044359930",
+        "work_id": 987101012,
+        "cover_id": 13011890,
+        "language": "dut",
+        "publisher": "The House of Books",
+        "publish_date": null,
+        "open_library_edition_id": "OL42359473M"
+      },
+      {
+        "id": 987201026,
+        "title": "Het uur van de wolf",
+        "isbn_10": null,
+        "isbn_13": "9789046113417",
+        "work_id": 987101013,
+        "cover_id": 13536475,
+        "language": "dut",
+        "publisher": "Zwarte Beertjes",
+        "publish_date": null,
+        "open_library_edition_id": "OL47139273M"
+      }
+    ],
+    "metadata": [
+      {
+        "format": "paperback",
+        "work_id": 987101001,
+        "evidence": [
+          {
+            "note": "Original publisher and exact KB original agree on2016. Existing2012 is not this novel. No merger with It Starts With Us.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p413591824"
+            ],
+            "reference": "work:681",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-015.json",
+            "sources": [
+              "https://www.simonandschuster.co.uk/books/It-Ends-With-Us/Colleen-Hoover/9781471156267",
+              "https://openlibrary.org/works/OL18020194W",
+              "https://data.bibliotheken.nl/id/nbt/p413591824"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ca3291edfac4ece46ed07984ea6154695810d2b5780cbe34cb2816fa0eab1029",
+            "cover_id": 12916672,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/12916672-L.jpg?default=false",
+        "edition_id": 987201014,
+        "bound_title": "Nooit meer",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789401910552",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p413591824",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/12916672-M.jpg?default=false",
+        "bound_author_id": 987301001
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101002,
+        "evidence": [
+          {
+            "note": "Exact Dutch KB ISBN identifies the complete1954 Golding novel, not film or retelling.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p407669000"
+            ],
+            "reference": "work:395",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-016.json",
+            "sources": [
+              "https://openlibrary.org/works/OL455327W",
+              "https://data.bibliotheken.nl/id/nbt/p407669000"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "9c41f297250635cb80664f12406fccd6f77251abb32bfbfba1fdc5730d9bfa08",
+            "cover_id": 10326152,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/10326152-L.jpg?default=false",
+        "edition_id": 987201015,
+        "bound_title": "Heer van de vliegen",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789059653887",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p407669000",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/10326152-M.jpg?default=false",
+        "bound_author_id": 987301002
+      },
+      {
+        "format": "hardcover",
+        "work_id": 987101003,
+        "evidence": [
+          {
+            "note": "Diary of a Wimpy Kid volume9. Exact KB original The long haul and Dutch hardcover match; no movie adaptation imported.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p391594338",
+              "http://data.bibliotheken.nl/id/nbt/p407355804"
+            ],
+            "reference": "work:498",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-016.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17076678W",
+              "https://data.bibliotheken.nl/id/nbt/p391594338",
+              "https://data.bibliotheken.nl/id/nbt/p407355804"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ca460165a9abc344d1f9c2a3ae6c1c1739993f30f3059aa2ac2922d953f4d376",
+            "cover_id": 8952830,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/8952830-L.jpg?default=false",
+        "edition_id": 987201016,
+        "bound_title": "Flutvakantie",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789026138409",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p391594338",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/8952830-M.jpg?default=false",
+        "bound_author_id": 987301003
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101004,
+        "evidence": [
+          {
+            "note": "Exact Dutch KB original The dead zone1979. Dodelijk dilemma is a translated title of this Work.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p239646126"
+            ],
+            "reference": "work:227",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL81630W",
+              "https://data.bibliotheken.nl/id/nbt/p239646126"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ffed5234554ada12d077354e3b5dfbf906cf820bab01591f0acc40a38ae335a2",
+            "cover_id": 14653577,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/14653577-L.jpg?default=false",
+        "edition_id": 987201017,
+        "bound_title": "Dodelijk dilemma",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789024544974",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p239646126",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/14653577-M.jpg?default=false",
+        "bound_author_id": 928300049
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101005,
+        "evidence": [
+          {
+            "note": "Richard Bachman is Stephen King pseudonym. Exact KB original The running man1982; novel, not movie.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p190555246"
+            ],
+            "reference": "work:176",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL149188W",
+              "https://data.bibliotheken.nl/id/nbt/p190555246"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "d2a52a7ced7f9cfa35be21d83bc4d7bff0090fc7b172fd26646cc7b6823ea83c",
+            "cover_id": 12019512,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/12019512-L.jpg?default=false",
+        "edition_id": 987201018,
+        "bound_title": "Vlucht naar de top",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789024536979",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p190555246",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/12019512-M.jpg?default=false",
+        "bound_author_id": 928300049
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101006,
+        "evidence": [
+          {
+            "note": "Exact KB original Being mortal2014 and author agree. Non-fiction remains outside automatic taste-test classification.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p383945747"
+            ],
+            "reference": "work:3672",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17079567W",
+              "https://data.bibliotheken.nl/id/nbt/p383945747"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "2396222bd85987aa3da0646ff665095aa423eecc7a57c663dd6edc3799143f89",
+            "cover_id": 8178872,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/8178872-L.jpg?default=false",
+        "edition_id": 987201019,
+        "bound_title": "Sterfelijk zijn",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789057124389",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p383945747",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/8178872-M.jpg?default=false",
+        "bound_author_id": 987301004
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101007,
+        "evidence": [
+          {
+            "note": "Exact KB original El túnel1948 and Ernesto Sábato identity agree; translator is not a new primary author.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p304226130"
+            ],
+            "reference": "work:608",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL617847W",
+              "https://data.bibliotheken.nl/id/nbt/p304226130"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "6bf4cd0b4b7f4bc1d7a6d4eaa611cf732e4d64e9c5d28cbf2eaa50c7dde9cf32",
+            "cover_id": 12390801,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/12390801-L.jpg?default=false",
+        "edition_id": 987201020,
+        "bound_title": "De tunnel",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789029079778",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p304226130",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/12390801-M.jpg?default=false",
+        "bound_author_id": 987301005
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101008,
+        "evidence": [
+          {
+            "note": "KB original Mördare utan ansikte Stockholm Ordfront1991; current1993 is an edition year, not first original publication.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p294883819"
+            ],
+            "reference": "work:3113",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL158674W",
+              "https://data.bibliotheken.nl/id/nbt/p294883819"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ab8a792ee9479c703e6a17a40bfa0134608457b0a5e0529bf468dac0d369537c",
+            "cover_id": 12033198,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/12033198-L.jpg?default=false",
+        "edition_id": 987201021,
+        "bound_title": "Moordenaar zonder gezicht",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789044508758",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p294883819",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/12033198-M.jpg?default=false",
+        "bound_author_id": 987301006
+      },
+      {
+        "format": "hardcover",
+        "work_id": 987101009,
+        "evidence": [
+          {
+            "note": "Original publisher lists first ebook1May2014 and paperback2015. Proposed NL2018 edition is not the2024 expanded anniversary edition.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p416948715"
+            ],
+            "reference": "work:811",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://profilebooks.com/work/the-obstacle-is-the-way/",
+              "https://openlibrary.org/works/OL19977665W",
+              "https://data.bibliotheken.nl/id/nbt/p416948715"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "98645255b1130d65aa3d7b3f3005b870063dcb550717e0ab126179de28ee47b7",
+            "cover_id": 13126715,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/13126715-L.jpg?default=false",
+        "edition_id": 987201022,
+        "bound_title": "Het obstakel is de weg",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789400510159",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p416948715",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13126715-M.jpg?default=false",
+        "bound_author_id": 987301007
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101010,
+        "evidence": [
+          {
+            "note": "Complete Different seasons collection of four novellas. Keep collection Work; do not count its constituent stories as newly added Works.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p137061226"
+            ],
+            "reference": "work:300",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.stephenking.com/library/story_collection/different_seasons.html",
+              "https://openlibrary.org/works/OL81621W",
+              "https://data.bibliotheken.nl/id/nbt/p137061226"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "476dbf3adb5a88a93c9645be13d5ec301b2d3d4c7260cd14e403837da32a6101",
+            "cover_id": 13395080,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/13395080-L.jpg?default=false",
+        "edition_id": 987201023,
+        "bound_title": "4 Seizoenen",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789024522989",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p137061226",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13395080-M.jpg?default=false",
+        "bound_author_id": 928300049
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101011,
+        "evidence": [
+          {
+            "note": "Exact Dutch original novel Tirza2006. Anniversary publisher synopsis supports content but does not replace proposed2009ISBN/cover.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p307093182"
+            ],
+            "reference": "work:1046",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.singeluitgeverijen.nl/nijgh-van-ditmar/boek/tirza/",
+              "https://www.arnongrunberg.com/words/1-netherlands-belgium/1-novels/112-tirza",
+              "https://openlibrary.org/works/OL850975W",
+              "https://data.bibliotheken.nl/id/nbt/p307093182"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "a592f3dc56fc0efca937da33937061e0a7e85cc50231f5975fd5398c56a3bae7",
+            "cover_id": 10522937,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/10522937-L.jpg?default=false",
+        "edition_id": 987201024,
+        "bound_title": "Tirza",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789038890593",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p307093182",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/10522937-M.jpg?default=false",
+        "bound_author_id": 8800017
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101012,
+        "evidence": [
+          {
+            "note": "Exact KB original The outsider2018 and Stephen King agree; not Albert Camus L’Étranger.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p425280144"
+            ],
+            "reference": "work:2809",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17937105W",
+              "https://data.bibliotheken.nl/id/nbt/p425280144"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "fc1d98a8f6cf6b337f39b72688e00cff731573162b515dfa0a503f4971505df8",
+            "cover_id": 13011890,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/13011890-L.jpg?default=false",
+        "edition_id": 987201025,
+        "bound_title": "De buitenstaander",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789044359930",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p425280144",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13011890-M.jpg?default=false",
+        "bound_author_id": 928300049
+      },
+      {
+        "format": "paperback",
+        "work_id": 987101013,
+        "evidence": [
+          {
+            "note": "Original author/publisher and KB original agree on2003, not current2001. Full Alex Cross novel, not another book called Wolf.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p317909479"
+            ],
+            "reference": "work:557",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.jamespatterson.com/titles/james-patterson/the-big-bad-wolf/9780316743846/",
+              "https://openlibrary.org/works/OL167179W",
+              "https://data.bibliotheken.nl/id/nbt/p317909479"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "7f19cb6f06f8221cdd64caaa7660791123b0a88c18a390690e690a17994cdef3",
+            "cover_id": 13536475,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/13536475-L.jpg?default=false",
+        "edition_id": 987201026,
+        "bound_title": "Het uur van de wolf",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "bound_isbn13": "9789046113417",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p317909479",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13536475-M.jpg?default=false",
+        "bound_author_id": 946300342
+      }
+    ],
+    "checked_at": "2026-11-02T16:31:10.670328+00:00",
+    "descriptions": [
+      {
+        "text": "Lily heeft in Boston een eigen bestaan opgebouwd en is een onderneming begonnen. Haar ontmoeting met neurochirurg Ryle lijkt een nieuwe toekomst te openen, maar zijn houding tegenover relaties roept vragen op. Tegelijk keren herinneringen terug aan Atlas, haar eerste liefde en een belangrijke figuur uit haar jeugd. Wanneer hij opnieuw verschijnt, moet Lily haar verleden en haar huidige keuzes tegenover elkaar plaatsen. De roman volgt hoe liefde ingewikkeld kan worden wanneer oude ervaringen blijven doorwerken.",
+        "work_id": 987101001,
+        "evidence": [
+          {
+            "note": "Original publisher and exact KB original agree on2016. Existing2012 is not this novel. No merger with It Starts With Us.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p413591824"
+            ],
+            "reference": "work:681",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-015.json",
+            "sources": [
+              "https://www.simonandschuster.co.uk/books/It-Ends-With-Us/Colleen-Hoover/9781471156267",
+              "https://openlibrary.org/works/OL18020194W",
+              "https://data.bibliotheken.nl/id/nbt/p413591824"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ca3291edfac4ece46ed07984ea6154695810d2b5780cbe34cb2816fa0eab1029",
+            "cover_id": 12916672,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.simonandschuster.co.uk/books/It-Ends-With-Us/Colleen-Hoover/9781471156267",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301001
+      },
+      {
+        "text": "Een groep Britse jongens raakt zonder volwassenen gestrand op een onbewoond eiland. Ze proberen hun leven te organiseren en samen regels te maken. Wat aanvankelijk een mogelijkheid tot zelfstandigheid lijkt, wordt steeds sterker bepaald door groepsdruk en botsende verlangens. Hun poging zichzelf te besturen brengt vragen over gezag en verantwoordelijkheid naar voren. De roman onderzoekt hoe kwetsbaar afspraken kunnen zijn wanneer een gemeenschap op zichzelf is aangewezen en vertrouwde grenzen verdwijnen.",
+        "work_id": 987101002,
+        "evidence": [
+          {
+            "note": "Exact Dutch KB ISBN identifies the complete1954 Golding novel, not film or retelling.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p407669000"
+            ],
+            "reference": "work:395",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-016.json",
+            "sources": [
+              "https://openlibrary.org/works/OL455327W",
+              "https://data.bibliotheken.nl/id/nbt/p407669000"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "9c41f297250635cb80664f12406fccd6f77251abb32bfbfba1fdc5730d9bfa08",
+            "cover_id": 10326152,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL455327W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301002
+      },
+      {
+        "text": "De familie Heffley gaat op autovakantie, maar de reis verloopt al snel anders dan gehoopt. Kleine ongemakken stapelen zich op tot een reeks onverwachte problemen. Onderweg krijgen ze onder meer te maken met lastige meeuwen, een aanrijding en een ontsnapt varken. Voor hun zoon is het moeilijk daarin de beloofde leuke gezinsreis te herkennen. Zijn verslag laat zien hoe een vakantie vooral herinneringen kan opleveren aan alles wat er misgaat tussen vertrek en aankomst.",
+        "work_id": 987101003,
+        "evidence": [
+          {
+            "note": "Diary of a Wimpy Kid volume9. Exact KB original The long haul and Dutch hardcover match; no movie adaptation imported.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p391594338",
+              "http://data.bibliotheken.nl/id/nbt/p407355804"
+            ],
+            "reference": "work:498",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-016.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17076678W",
+              "https://data.bibliotheken.nl/id/nbt/p391594338",
+              "https://data.bibliotheken.nl/id/nbt/p407355804"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ca460165a9abc344d1f9c2a3ae6c1c1739993f30f3059aa2ac2922d953f4d376",
+            "cover_id": 8952830,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL17076678W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301003
+      },
+      {
+        "text": "Johnny Smith ontwaakt na jaren uit een coma en ontdekt dat aanrakingen hem onverklaarbare beelden opleveren. Wat hij daarin ziet, verandert zijn verhouding tot andere mensen en tot zijn eigen toekomst. Zijn vermogen brengt hem in aanraking met een moordonderzoek en met de opkomst van een politicus. Niet alles wordt duidelijk en sommige informatie blijft ontoegankelijk. Johnny moet bepalen hoeveel verantwoordelijkheid hij draagt voor gebeurtenissen die hij meent te voorzien, maar die anderen niet op dezelfde manier kunnen begrijpen.",
+        "work_id": 987101004,
+        "evidence": [
+          {
+            "note": "Exact Dutch KB original The dead zone1979. Dodelijk dilemma is a translated title of this Work.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p239646126"
+            ],
+            "reference": "work:227",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL81630W",
+              "https://data.bibliotheken.nl/id/nbt/p239646126"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ffed5234554ada12d077354e3b5dfbf906cf820bab01591f0acc40a38ae335a2",
+            "cover_id": 14653577,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL81630W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 928300049
+      },
+      {
+        "text": "In een ontwricht Amerika doet Ben Richards mee aan een televisiespel waarin zijn eigen leven de inzet vormt. Hij mag vluchten, maar wordt achtervolgd door mensen die geld kunnen verdienen door hem te doden. De uitzending maakt van zijn strijd om te overleven publiek vermaak. Terwijl Richards probeert aan zijn jagers te ontsnappen, wordt duidelijk hoe nauw economische wanhoop en macht over informatie samenhangen. De roman beschrijft een samenleving waarin de grens tussen amusement en geweld is verdwenen.",
+        "work_id": 987101005,
+        "evidence": [
+          {
+            "note": "Richard Bachman is Stephen King pseudonym. Exact KB original The running man1982; novel, not movie.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p190555246"
+            ],
+            "reference": "work:176",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL149188W",
+              "https://data.bibliotheken.nl/id/nbt/p190555246"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "d2a52a7ced7f9cfa35be21d83bc4d7bff0090fc7b172fd26646cc7b6823ea83c",
+            "cover_id": 12019512,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL149188W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 928300049
+      },
+      {
+        "text": "Atul Gawande onderzoekt hoe de geneeskunde omgaat met ouder worden, kwetsbaarheid en het einde van het leven. Hij verbindt ervaringen uit de zorg met persoonlijke verhalen en vragen over wat voor mensen zelf belangrijk is. Daarbij stelt hij de nadruk op langer overleven tegenover aandacht voor welzijn en eigen keuzes. Het boek verkent hoe gesprekken over grenzen en wensen ruimte kunnen krijgen, ook wanneer medische behandeling de onzekerheid niet kan wegnemen.",
+        "work_id": 987101006,
+        "evidence": [
+          {
+            "note": "Exact KB original Being mortal2014 and author agree. Non-fiction remains outside automatic taste-test classification.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p383945747"
+            ],
+            "reference": "work:3672",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17079567W",
+              "https://data.bibliotheken.nl/id/nbt/p383945747"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "2396222bd85987aa3da0646ff665095aa423eecc7a57c663dd6edc3799143f89",
+            "cover_id": 8178872,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL17079567W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301004
+      },
+      {
+        "text": "Schilder Juan Pablo Castel ontmoet bij een tentoonstelling María en raakt sterk op haar gefixeerd. Hij denkt in haar iemand te herkennen die hem werkelijk begrijpt. Zijn verlangen naar zekerheid maakt de verhouding echter steeds benauwender. Iedere onduidelijkheid kan voor hem een aanwijzing voor bedrog worden. De lezer krijgt de gebeurtenissen uitsluitend via zijn waarnemingen en gedachten te zien. De roman onderzoekt hoe eenzaamheid en achterdocht een eigen werkelijkheid kunnen vormen waaruit nauwelijks nog ontsnapping mogelijk lijkt.",
+        "work_id": 987101007,
+        "evidence": [
+          {
+            "note": "Exact KB original El túnel1948 and Ernesto Sábato identity agree; translator is not a new primary author.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p304226130"
+            ],
+            "reference": "work:608",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL617847W",
+              "https://data.bibliotheken.nl/id/nbt/p304226130"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "6bf4cd0b4b7f4bc1d7a6d4eaa611cf732e4d64e9c5d28cbf2eaa50c7dde9cf32",
+            "cover_id": 12390801,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL617847W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301005
+      },
+      {
+        "text": "Een ouder echtpaar wordt op het Zweedse platteland aangevallen. Vlak voor haar dood spreekt de vrouw één woord uit dat al snel een eigen leven gaat leiden. Terwijl Kurt Wallander de moord onderzoekt, ontstaat vijandigheid tegenover vluchtelingen en volgt nieuw geweld. Het onderzoek vraagt daardoor niet alleen om het vinden van de oorspronkelijke dader, maar ook om zorgvuldig omgaan met onzekere informatie. Wallander moet voorkomen dat geruchten en vooroordelen het werk van de politie gaan bepalen.",
+        "work_id": 987101008,
+        "evidence": [
+          {
+            "note": "KB original Mördare utan ansikte Stockholm Ordfront1991; current1993 is an edition year, not first original publication.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p294883819"
+            ],
+            "reference": "work:3113",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://openlibrary.org/works/OL158674W",
+              "https://data.bibliotheken.nl/id/nbt/p294883819"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ab8a792ee9479c703e6a17a40bfa0134608457b0a5e0529bf468dac0d369537c",
+            "cover_id": 12033198,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL158674W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301006
+      },
+      {
+        "text": "Ryan Holiday gebruikt ideeën uit de stoïcijnse filosofie om naar tegenslag te kijken. Hij richt zich op het onderscheid tussen wat iemand kan beïnvloeden en wat buiten diens bereik ligt. Aan de hand van historische voorbeelden bespreekt hij manieren om met belemmeringen om te gaan zonder er volledig door te worden bepaald. Het boek presenteert obstakels als aanleiding voor een andere houding en gerichter handelen. Die benadering vormt een praktisch betoog, geen garantie op succes in iedere situatie.",
+        "work_id": 987101009,
+        "evidence": [
+          {
+            "note": "Original publisher lists first ebook1May2014 and paperback2015. Proposed NL2018 edition is not the2024 expanded anniversary edition.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p416948715"
+            ],
+            "reference": "work:811",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-017.json",
+            "sources": [
+              "https://profilebooks.com/work/the-obstacle-is-the-way/",
+              "https://openlibrary.org/works/OL19977665W",
+              "https://data.bibliotheken.nl/id/nbt/p416948715"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "98645255b1130d65aa3d7b3f3005b870063dcb550717e0ab126179de28ee47b7",
+            "cover_id": 13126715,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://profilebooks.com/work/the-obstacle-is-the-way/",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 987301007
+      },
+      {
+        "text": "Vier novellen krijgen elk de sfeer van een seizoen mee. Ze volgen onder meer een gevangene, een scholier die een duister verleden ontdekt en een groep jongens die het bos intrekt. Een vierde vertelling wordt binnen een besloten kring doorgegeven. In uiteenlopende situaties raken de personages geconfronteerd met grenzen die hun gewone bestaan veranderen. De bundel legt de nadruk op menselijke verhoudingen en beslissende ervaringen, terwijl spanning en dreiging op verschillende manieren aanwezig blijven.",
+        "work_id": 987101010,
+        "evidence": [
+          {
+            "note": "Complete Different seasons collection of four novellas. Keep collection Work; do not count its constituent stories as newly added Works.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p137061226"
+            ],
+            "reference": "work:300",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.stephenking.com/library/story_collection/different_seasons.html",
+              "https://openlibrary.org/works/OL81621W",
+              "https://data.bibliotheken.nl/id/nbt/p137061226"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "476dbf3adb5a88a93c9645be13d5ec301b2d3d4c7260cd14e403837da32a6101",
+            "cover_id": 13395080,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.stephenking.com/library/story_collection/different_seasons.html",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 928300049
+      },
+      {
+        "text": "Jörgen Hofmeester heeft veel van zijn zekerheden verloren. Zijn vrouw is weg, zijn werk biedt geen houvast meer en zijn geld is verdwenen. Hij richt zich des te sterker op zijn jongste dochter Tirza. Wanneer zij na haar eindexamen met haar vriend naar Namibië wil reizen, moet hij haar zelfstandigheid onder ogen zien. De roman volgt een vader die controle probeert te behouden terwijl zijn beeld van zichzelf en zijn gezin steeds verder onder druk komt te staan.",
+        "work_id": 987101011,
+        "evidence": [
+          {
+            "note": "Exact Dutch original novel Tirza2006. Anniversary publisher synopsis supports content but does not replace proposed2009ISBN/cover.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p307093182"
+            ],
+            "reference": "work:1046",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.singeluitgeverijen.nl/nijgh-van-ditmar/boek/tirza/",
+              "https://www.arnongrunberg.com/words/1-netherlands-belgium/1-novels/112-tirza",
+              "https://openlibrary.org/works/OL850975W",
+              "https://data.bibliotheken.nl/id/nbt/p307093182"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "a592f3dc56fc0efca937da33937061e0a7e85cc50231f5975fd5398c56a3bae7",
+            "cover_id": 10522937,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.singeluitgeverijen.nl/nijgh-van-ditmar/boek/tirza/",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 8800017
+      },
+      {
+        "text": "Na de moord op een jongen wijzen getuigen en sporen naar Terry Maitland, een bekende en gerespecteerde inwoner van de stad. Rechercheur Ralph Anderson laat hem publiekelijk arresteren. De zaak lijkt overtuigend, maar Maitland beschikt ook over een alibi dat zich niet gemakkelijk laat weerleggen. Het onderzoek komt daardoor voor twee schijnbaar onverenigbare werkelijkheden te staan. Anderson moet opnieuw bekijken wat het bewijs betekent en hoeveel zekerheid zijn eerste conclusie eigenlijk bood.",
+        "work_id": 987101012,
+        "evidence": [
+          {
+            "note": "Exact KB original The outsider2018 and Stephen King agree; not Albert Camus L’Étranger.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p425280144"
+            ],
+            "reference": "work:2809",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://openlibrary.org/works/OL17937105W",
+              "https://data.bibliotheken.nl/id/nbt/p425280144"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "fc1d98a8f6cf6b337f39b72688e00cff731573162b515dfa0a503f4971505df8",
+            "cover_id": 13011890,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL17937105W",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 928300049
+      },
+      {
+        "text": "Alex Cross krijgt kort na zijn overstap naar de FBI te maken met ontvoeringen die over het land verspreid plaatsvinden. De verdwenen vrouwen blijken onderdeel van een netwerk dat mensen verkoopt. Achter de organisatie staat een figuur die alleen als de Wolf bekend is. Cross probeert hem te vinden terwijl de voorzichtige aanpak van zijn nieuwe collega's hem steeds meer frustreert. Ook privé staat hij onder druk. Het onderzoek vraagt hoe hij een tegenstander kan bereiken die zorgvuldig buiten beeld blijft.",
+        "work_id": 987101013,
+        "evidence": [
+          {
+            "note": "Original author/publisher and KB original agree on2003, not current2001. Full Alex Cross novel, not another book called Wolf.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p317909479"
+            ],
+            "reference": "work:557",
+            "checked_at": "2026-11-02T16:27:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://www.jamespatterson.com/titles/james-patterson/the-big-bad-wolf/9780316743846/",
+              "https://openlibrary.org/works/OL167179W",
+              "https://data.bibliotheken.nl/id/nbt/p317909479"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "7f19cb6f06f8221cdd64caaa7660791123b0a88c18a390690e690a17994cdef3",
+            "cover_id": 13536475,
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and bound exact source edition; no visible barcode assertion."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.jamespatterson.com/titles/james-patterson/the-big-bad-wolf/9780316743846/",
+        "reviewed_at": "2026-11-02T16:27:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-002",
+        "review_status": "approved",
+        "bound_author_id": 946300342
+      }
+    ]
+  },
+  "replayMutations": 0
+}

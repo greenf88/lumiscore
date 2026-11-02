@@ -1,0 +1,205 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "projectConfirmedByGetProject": true,
+  "projectStatus": "ACTIVE_HEALTHY",
+  "databaseVersion": "17.11.0.002",
+  "query": "select jsonb_build_object('checked_at',now(),'scope','hlvujbrmfdlrfxdjwsmb read-only catalogue preflight','counts',jsonb_build_object('works',(select count(*) from public.works),'editions',(select count(*) from public.editions),'descriptions',(select count(*) from public.catalog_work_descriptions),'metadata',(select count(*) from public.catalog_edition_metadata)),'constraints',(select coalesce(jsonb_agg(jsonb_build_object('table',c.conrelid::regclass::text,'name',c.conname,'definition',pg_get_constraintdef(c.oid)) order by c.conrelid,c.conname),'[]'::jsonb) from pg_constraint c where c.conrelid in ('public.works'::regclass,'public.editions'::regclass,'public.catalog_work_descriptions'::regclass,'public.catalog_edition_metadata'::regclass)),'triggers',(select coalesce(jsonb_agg(jsonb_build_object('table',t.tgrelid::regclass::text,'name',t.tgname,'trigger',pg_get_triggerdef(t.oid),'function',p.proname,'definition',pg_get_functiondef(p.oid)) order by t.tgrelid,t.tgname),'[]'::jsonb) from pg_trigger t join pg_proc p on p.oid=t.tgfoid where not t.tgisinternal and t.tgrelid in ('public.works'::regclass,'public.editions'::regclass,'public.catalog_work_descriptions'::regclass,'public.catalog_edition_metadata'::regclass))) as preflight;",
+  "readback": {
+    "scope": "hlvujbrmfdlrfxdjwsmb read-only catalogue preflight",
+    "counts": {
+      "works": 1106,
+      "editions": 1554,
+      "metadata": 623,
+      "descriptions": 719
+    },
+    "triggers": [
+      {
+        "name": "catalog_preserve_reviewed_work_author",
+        "table": "works",
+        "trigger": "CREATE TRIGGER catalog_preserve_reviewed_work_author BEFORE UPDATE OF author_id ON public.works FOR EACH ROW EXECUTE FUNCTION catalog_guard_reviewed_identity()",
+        "function": "catalog_guard_reviewed_identity",
+        "definition": "CREATE OR REPLACE FUNCTION public.catalog_guard_reviewed_identity()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin\n if tg_table_name='editions' then\n  if row(new.work_id,new.title,new.language,new.isbn_13,new.isbn_10,new.open_library_edition_id)\n   is distinct from row(old.work_id,old.title,old.language,old.isbn_13,old.isbn_10,old.open_library_edition_id)\n   and exists(select 1 from public.catalog_edition_metadata m where m.edition_id=old.id and m.review_status='approved') then\n   raise exception using errcode='23514',message='Reviewed edition identity is locked; withdraw and review the binding in an explicit correction transaction';\n  end if;\n elsif tg_table_name='works' then\n  if new.author_id is distinct from old.author_id and (\n   exists(select 1 from public.catalog_work_descriptions d where d.work_id=old.id and d.review_status='approved')\n   or exists(select 1 from public.catalog_edition_metadata m where m.work_id=old.id and m.review_status='approved')) then\n   raise exception using errcode='23514',message='Reviewed Work author is locked; explicit identity correction required';\n  end if;\n end if;\n return new;\nend;\n$function$\n"
+      },
+      {
+        "name": "catalog_preserve_reviewed_edition_identity",
+        "table": "editions",
+        "trigger": "CREATE TRIGGER catalog_preserve_reviewed_edition_identity BEFORE UPDATE OF work_id, title, language, isbn_13, isbn_10, open_library_edition_id ON public.editions FOR EACH ROW EXECUTE FUNCTION catalog_guard_reviewed_identity()",
+        "function": "catalog_guard_reviewed_identity",
+        "definition": "CREATE OR REPLACE FUNCTION public.catalog_guard_reviewed_identity()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin\n if tg_table_name='editions' then\n  if row(new.work_id,new.title,new.language,new.isbn_13,new.isbn_10,new.open_library_edition_id)\n   is distinct from row(old.work_id,old.title,old.language,old.isbn_13,old.isbn_10,old.open_library_edition_id)\n   and exists(select 1 from public.catalog_edition_metadata m where m.edition_id=old.id and m.review_status='approved') then\n   raise exception using errcode='23514',message='Reviewed edition identity is locked; withdraw and review the binding in an explicit correction transaction';\n  end if;\n elsif tg_table_name='works' then\n  if new.author_id is distinct from old.author_id and (\n   exists(select 1 from public.catalog_work_descriptions d where d.work_id=old.id and d.review_status='approved')\n   or exists(select 1 from public.catalog_edition_metadata m where m.work_id=old.id and m.review_status='approved')) then\n   raise exception using errcode='23514',message='Reviewed Work author is locked; explicit identity correction required';\n  end if;\n end if;\n return new;\nend;\n$function$\n"
+      }
+    ],
+    "checked_at": "2026-11-02T14:11:45.137985+00:00",
+    "constraints": [
+      {
+        "name": "works_author_id_fkey",
+        "table": "works",
+        "definition": "FOREIGN KEY (author_id) REFERENCES authors(id)"
+      },
+      {
+        "name": "works_open_library_id_key",
+        "table": "works",
+        "definition": "UNIQUE (open_library_id)"
+      },
+      {
+        "name": "works_pkey",
+        "table": "works",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "works_source_type_check",
+        "table": "works",
+        "definition": "CHECK ((source_type = ANY (ARRAY['open_library'::text, 'lumiscore_native'::text]))) NOT VALID"
+      },
+      {
+        "name": "works_work_type_check",
+        "table": "works",
+        "definition": "CHECK (((work_type IS NULL) OR (work_type = ANY (ARRAY['novel'::text, 'novella'::text, 'short_story'::text, 'collection'::text, 'audiobook_original'::text])))) NOT VALID"
+      },
+      {
+        "name": "editions_open_library_edition_id_key",
+        "table": "editions",
+        "definition": "UNIQUE (open_library_edition_id)"
+      },
+      {
+        "name": "editions_pkey",
+        "table": "editions",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "editions_work_id_fkey",
+        "table": "editions",
+        "definition": "FOREIGN KEY (work_id) REFERENCES works(id)"
+      },
+      {
+        "name": "catalog_description_usable_text",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK (((length(btrim(regexp_replace(regexp_replace(text, '<[^>]*>'::text, ''::text, 'g'::text), '&(nbsp|#160);'::text, ' '::text, 'gi'::text))) >= 20) AND (lower(btrim(text)) !~ '^(no (book )?description( available| found)?|description (not available|unavailable|missing)|geen (boek)?beschrijving( beschikbaar| gevonden)?|samenvatting (ontbreekt|niet beschikbaar)|503 service unavailable|429 too many requests)[.! ]*$'::text)))"
+      },
+      {
+        "name": "catalog_work_descriptions_bound_author_id_fkey",
+        "table": "catalog_work_descriptions",
+        "definition": "FOREIGN KEY (bound_author_id) REFERENCES authors(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "catalog_work_descriptions_evidence_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK (((jsonb_typeof(evidence) = 'array'::text) AND ((jsonb_array_length(evidence) >= 1) AND (jsonb_array_length(evidence) <= 12))))"
+      },
+      {
+        "name": "catalog_work_descriptions_language_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK ((language = ANY (ARRAY['nl'::text, 'en'::text])))"
+      },
+      {
+        "name": "catalog_work_descriptions_pkey",
+        "table": "catalog_work_descriptions",
+        "definition": "PRIMARY KEY (work_id, language)"
+      },
+      {
+        "name": "catalog_work_descriptions_provenance_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK ((provenance = 'original_source_reviewed_summary'::text))"
+      },
+      {
+        "name": "catalog_work_descriptions_review_batch_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK (((length(review_batch) >= 1) AND (length(review_batch) <= 100)))"
+      },
+      {
+        "name": "catalog_work_descriptions_review_status_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK ((review_status = ANY (ARRAY['pending'::text, 'approved'::text, 'withdrawn'::text])))"
+      },
+      {
+        "name": "catalog_work_descriptions_source_name_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK (((length(source_name) >= 1) AND (length(source_name) <= 120)))"
+      },
+      {
+        "name": "catalog_work_descriptions_source_type_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK ((source_type = ANY (ARRAY['official_catalog'::text, 'official_publisher'::text])))"
+      },
+      {
+        "name": "catalog_work_descriptions_source_url_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK ((source_url ~ '^https://[^/@ ]+(/|$)'::text))"
+      },
+      {
+        "name": "catalog_work_descriptions_text_check",
+        "table": "catalog_work_descriptions",
+        "definition": "CHECK (((length(text) >= 40) AND (length(text) <= 4000)))"
+      },
+      {
+        "name": "catalog_work_descriptions_work_id_fkey",
+        "table": "catalog_work_descriptions",
+        "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "catalog_edition_metadata_bound_author_id_fkey",
+        "table": "catalog_edition_metadata",
+        "definition": "FOREIGN KEY (bound_author_id) REFERENCES authors(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "catalog_edition_metadata_bound_isbn13_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((bound_isbn13 ~ '^97[89][0-9]{10}$'::text))"
+      },
+      {
+        "name": "catalog_edition_metadata_bound_language_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((bound_language = ANY (ARRAY['nld'::text, 'dut'::text, 'nl'::text, 'eng'::text, 'en'::text])))"
+      },
+      {
+        "name": "catalog_edition_metadata_card_cover_url_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((card_cover_url ~ '^https://[^/@ ]+(/|$)'::text))"
+      },
+      {
+        "name": "catalog_edition_metadata_cover_url_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((cover_url ~ '^https://[^/@ ]+(/|$)'::text))"
+      },
+      {
+        "name": "catalog_edition_metadata_edition_id_fkey",
+        "table": "catalog_edition_metadata",
+        "definition": "FOREIGN KEY (edition_id) REFERENCES editions(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "catalog_edition_metadata_evidence_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK (((jsonb_typeof(evidence) = 'array'::text) AND ((jsonb_array_length(evidence) >= 1) AND (jsonb_array_length(evidence) <= 12))))"
+      },
+      {
+        "name": "catalog_edition_metadata_evidence_url_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((evidence_url ~ '^https://[^/@ ]+(/|$)'::text))"
+      },
+      {
+        "name": "catalog_edition_metadata_format_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((format = ANY (ARRAY['paperback'::text, 'hardcover'::text, 'ebook'::text, 'audio'::text, 'other'::text, 'unknown'::text])))"
+      },
+      {
+        "name": "catalog_edition_metadata_pkey",
+        "table": "catalog_edition_metadata",
+        "definition": "PRIMARY KEY (edition_id)"
+      },
+      {
+        "name": "catalog_edition_metadata_review_batch_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK (((length(review_batch) >= 1) AND (length(review_batch) <= 100)))"
+      },
+      {
+        "name": "catalog_edition_metadata_review_status_check",
+        "table": "catalog_edition_metadata",
+        "definition": "CHECK ((review_status = ANY (ARRAY['pending'::text, 'approved'::text, 'withdrawn'::text])))"
+      },
+      {
+        "name": "catalog_edition_metadata_work_id_fkey",
+        "table": "catalog_edition_metadata",
+        "definition": "FOREIGN KEY (work_id) REFERENCES works(id) ON DELETE RESTRICT"
+      }
+    ]
+  }
+}

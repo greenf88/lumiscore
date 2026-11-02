@@ -1,0 +1,254 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "PREFIX schema: <http://schema.org/> SELECT ?s ?p ?o WHERE { VALUES ?s { <http://data.bibliotheken.nl/id/nta/p255790554> <https://data.bibliotheken.nl/.well-known/genid/a8444424c2275b70f16f5cb96b2d02ea> <https://data.bibliotheken.nl/.well-known/genid/96c1e1a712663d497a1a6b09d8ad2430> <https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a> <https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3> } GRAPH ?g { ?s ?p ?o } } LIMIT 150",
+  "label": "Judy Moody first Dutch edition linked identity and publication nodes",
+  "checkedAt": "2026-11-02T16:30:19.564Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=PREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E+SELECT+%3Fs+%3Fp+%3Fo+WHERE+%7B+VALUES+%3Fs+%7B+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fnta%2Fp255790554%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fa8444424c2275b70f16f5cb96b2d02ea%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F96c1e1a712663d497a1a6b09d8ad2430%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F36e747b0a8c8a665c219e60fa17b1e7a%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F6d86f93a7b4b6f73a32a250ddef4cfd3%3E+%7D+GRAPH+%3Fg+%7B+%3Fs+%3Fp+%3Fo+%7D+%7D+LIMIT+150",
+  "bytes": 4153,
+  "sha256": "0b5a7fce8702f4fe78ea0adb3a95ae519162ee7f7092fc9ab27a15a749c5ccf8",
+  "data": {
+    "head": {
+      "vars": [
+        "s",
+        "p",
+        "o"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a8444424c2275b70f16f5cb96b2d02ea"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/96c1e1a712663d497a1a6b09d8ad2430"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Houten : Van Holkema & Warendorf. 2003"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a8444424c2275b70f16f5cb96b2d02ea"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Judy Moody. - London : Walker Books, cop. 2000"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Houten : Van Holkema & Warendorf. 2004"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/96c1e1a712663d497a1a6b09d8ad2430"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Judy Moody. - London : Walker Books, cop. 2000"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/ec9eec88156b65d4d125afbef43232c2"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/aff550fef050bc2ee6f7af3fbe38add4"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a8444424c2275b70f16f5cb96b2d02ea"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "o": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/96c1e1a712663d497a1a6b09d8ad2430"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "o": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "o": {
+            "type": "literal",
+            "value": "2003",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "o": {
+            "type": "literal",
+            "value": "2004",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/36e747b0a8c8a665c219e60fa17b1e7a"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/7bdf41202729246a66cd6af6ce6874fe"
+          }
+        },
+        {
+          "s": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/6d86f93a7b4b6f73a32a250ddef4cfd3"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d9a0a10ac31b62453ba9863fff3565c0"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}
