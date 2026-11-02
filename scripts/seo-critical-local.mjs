@@ -34,7 +34,7 @@ if(process.argv.includes('--slow-cover')){
 modules['lib/supabase/books.ts']+=`;export async function loadCatalogBooksBySourceIds(ids){return books.filter(b=>ids.includes(b.openLibraryWorkId))}`;
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];
- modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
+ modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));if(book.workId==='4')return {state:'temporary_failure',description:null};const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
  if(process.argv.includes('--baseline'))for(const file of ['app/book/[workId]/page.tsx','app/components/LumiScoreBookDetail.tsx','app/components/LumiScoreBookDescription.tsx']){
   modules[file]=execFileSync('git',['-c','safe.directory='+root.replace(/\/$/,''),'show','571108e181e2db406aac2886b3ee1eb08ac7f37d:'+file],{cwd:root,encoding:'utf8',windowsHide:true});
  }

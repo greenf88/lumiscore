@@ -1,0 +1,173 @@
+LumiScore metadata-head repair — reviewpakket, 2 november 2026
+
+Afgebakend resultaat
+Draft-PR https://github.com/greenf88/lumiscore/pull/69
+Geteste applicatie-SHA: fc33bc0e5fb1feb95608d4cd4dcacea6194e6a3c.
+Runtimebestanden daarna ongewijzigd; de uiteindelijke PR-head bevat aanvullend
+test- en bewijsbestanden. De volledige head wordt ook in de PR en oplevering vermeld.
+Ready Preview: https://lumiscore-oku6nm48b-rgkgroeneveld-9102.vercel.app/en
+Deployment: dpl_HJx25iRWBNkjwY21evgqxkKxDXiC, target null (= Preview).
+Basis main/productie: 13f3a9a3ee7d9610f7f260019476846c997bf8c5,
+Ready dpl_HDLKYULbKptw99VjphF8FHnKtwc9, alias lumisco.re, opnieuw read-only bevestigd.
+Geen merge, productiepublicatie, databaseactie, GSC-validatie of indexeringsverzoek.
+
+Oorzaak en kleinste reparatie
+De echte server is Vinext 1.0.0-beta.3 / React 19.2.6 / Vite 8.0.13 / Nitro
+3.0.260903-beta; Next 16.2.6 levert de compatibele API/types. De Vercel-projecthint
+is nextjs, maar vercel.json zet framework op null en bouwt met pnpm build:vercel.
+Op Vercel gebruikt vite.config.ts Vinext plus Nitro, Node 24.x, regio dub1.
+Het bestaande next.config.ts was leeg. Vinext's ingebouwde html-limited-botregex
+herkent Google-InspectionTool en Bingbot, maar niet de gewone Googlebot-string.
+Daardoor streamen desktop, mobiel en Googlebot-UA metadata naar de body; de
+inspectie-UA wacht op metadata in de head. Dit is in huidige productie herhaald.
+De oorspronkelijke bytes en de uiteindelijke DOM hebben beide de verkeerde
+plaatsing; een browser verplaatste deze tags hier niet alsnog naar de head.
+Dit zijn UA-simulaties, geen geauthenticeerde bezoeken van Google of Bing.
+
+next.config.ts gebruikt de ondersteunde htmlLimitedBots: /.*/ voor alle UAs.
+Dit blokkeert alleen Metadata API-output tot de head compleet is; bestaande
+Suspense voor optionele boekinhoud blijft streamen. Er is geen botinhoudsvariant.
+app/book/[workId]/page.tsx wacht in generateMetadata niet meer op de optionele
+externe coverpromise (tot 3500 ms). Alleen een direct beschikbare, opgeslagen
+editiecover wordt als deelafbeelding gebruikt. Bij ontbreken daarvan blijft het
+expliciete no-image-beleid gelden: geen willekeurige/homepage-afbeelding.
+Dezelfde late coverpromise en beschrijving blijven in de zichtbare boekpagina
+gebruikt. Afweging: een uitsluitend extern/later gevonden cover verschijnt niet
+meer als OG/Twitter-image in die response; een opgeslagen cover blijft behouden.
+app/layout.tsx laat de paginaroute de title beheren. Dit verwijdert de bestaande
+dubbele title op onbekende 404-pagina's zonder de foutpagina of vormgeving te wijzigen.
+Geen stylesheet, componentindeling, ranking, catalogus of meetlogica gewijzigd.
+
+Bestaande/geparkeerde reparatie onderzocht
+De Oct7/8-review, commitdiff, lokale SEO-fixture en gedeelde Metadata API-helpers
+zijn hergebruikt; de oude Oct9-HTMLcontrole toetste aanwezigheid, geen head-plaatsing.
+Ook de herstelbron en technical-recovery-review van 21 oktober zijn gelezen.
+De dagcontrole van 31 oktober noemt de geparkeerde fout. Er is geen afzonderlijke,
+nog niet gepubliceerde head-patch aangetroffen. Geen tweede metadata-eigenaar gebouwd.
+
+Responsebewijs en controles
+response-production-before.json: 140 normale volledige GETs, 28 NL/EN-routes
+met vijf UAs; 72 responses met relevante tags buiten de head. Alles heeft originele
+UTF-8-byteposities, headgrenzen, relevante headers, redirectketen, hash en timing.
+De 10 homepage-requests waren no-store/MISS; het grotere matrixverzoek eveneens
+MISS. Dit bewijst geen UA-vervuiling door een gedeelde HTML-cache.
+response-router-after.json: 150 echte Vinext-routerresponses, 30 NL/EN-routes x
+vijf UAs. Geen metadata buiten de head of dubbele metadata. Correcte clean
+canonicals op lumisco.re, bestaande wederkerige hreflang (ook IMDb-routevertaling),
+indexbeleid, account-naar-loginredirect en echte 404-responses blijven behouden.
+Boekfixtures omvatten een opgeslagen cover, 2 seconden vertraagde cover/tekst,
+ontbrekende tekst en tijdelijke bronfout. Titel/hoofdinhoud blijven bruikbaar.
+Zes parsertests weerstaan script-/commentaarstrings, templates, een tweede head,
+UTF-8-offsets, dubbele tags en een canonical in de body. Alleen 'ergens aanwezig'
+is geen acceptatiecriterium. Bronbestanden staan lokaal onder outputs/metadata-head-20261102;
+het reviewpakket bewaart posities/hashes zonder complete boekbeschrijvingen te kopiëren.
+
+response-hosted-dom.json bevat de afzonderlijk gemarkeerde hosted DOM-controles:
+homepage, echte en bestaande synthetische testboeken, Discover, Middle-earth,
+dystopielijst, IMDb-pagina, zoeken, parameters, login/account en onbekende routes.
+NL/EN, Paper/Ink, 320/390 px en desktop: één title/canonical en geen relevante
+bodymetadata; taalwisselen en herladen gecontroleerd. De vaste testcatalogus is
+kleiner dan productie; dit is geen nieuwe catalogus- of editieacceptatie.
+De centrale WebSite-JSON-LD en bestaande deelmetadatahelpers zijn behouden.
+
+Nog ontbrekend hosted bewijs
+De aangemelde browser en Vercel-connector werken. De lokale CLI geeft bij project
+inspect echter forbidden / 'The request is missing an authentication token',
+invocationId 3113d74c-c046-43c8-8595-ca87e6db2404. Zonder accepted auth bereikt een
+HTTP-client de Vercel-authredirect, niet de applicatie. Een eerdere response met
+'Login – Vercel' is uitdrukkelijk uitgesloten van applicatiebewijs. De browser
+staat het view-source-protocol niet toe; die route is gestopt, zonder omweg.
+Geen tijdelijke sharelink of protection-bypass gemaakt; beveiliging niet gewijzigd.
+Daarom bewijst het hosted DOM nog niet de oorspronkelijke hosted bytes of HTTP-status.
+De 302-authresponse had X-Robots-Tag: noindex; dit is platform/authgedrag, geen
+onverwachte noindex in applicatiemetadata. De authenticated application-header
+moet nog afzonderlijk worden teruggelezen. Vereiste stap: normale Vercel CLI-login
+vernieuwen, zonder token in chat, en uitsluitend bestaande geautoriseerde toegang
+gebruiken voor de vijf-UA-GETmatrix. Geen rechten uitbreiden of bescherming uitzetten.
+
+Tests en CI
+Lokaal: TypeScript, lint, 23 bestaande SEO-tests, 3 gerichte technical-recovery-tests,
+6 parsertests, 150 HTTP-regressieresponses en client-secretscan geslaagd.
+Standaard build geslaagd. Lokale Vercel-mode packaging op Windows strandde op
+EPERM readlink C:\Users\rickg; de echte Linux Vercel Preview-build is Ready.
+De eerste CI draaide 983 tests: 966 geslaagd, 16 bestaande skips, 1 oude assertion
+die juist wachten op de externe cover in metadata verplichtte. Die specifieke
+verwachting is bijgewerkt; overige performancechecks behouden. Dezelfde CI had
+TypeScript/lint, 16 authenticated/guest synthetic SSR checks, de HTTP-regressietest,
+build, secretscan en diffcheck groen. Definitieve CI-status staat in de PR.
+De bestaande 16 skips zijn geen nieuw hosted/authbewijs; de afzonderlijke 16
+SSR-controles voeren hun private/guest-routes wel uit. Geen echte accounts gebruikt.
+
+Snelheid: beperkte gecontroleerde vergelijking, geen productiewinstclaim
+performance.json bevat alle monsters en definities. Twee loopback devservers op
+dezelfde machine, dezelfde loaders, 2 seconden optionele bronnen. Warmup apart;
+geen bewijs van een echte koude cache. Browserbezoeken n=3 interleaved per route.
+Homepage mediaan TTFB 337 -> 409 ms; zichtbare H1-frame 585 -> 687 ms; LCP 800 ->
+880 ms. Boek mediaan TTFB 164 -> 223 ms; zichtbaar H1-frame 368 -> 433 ms; LCP
+456 -> 524 ms. CLS boek 0 -> 0; home 0.000429 -> 0.000429. Kleine aantallen en
+dev-ruis geven geen statistische productieconclusie; er is bescheiden lokale overhead.
+HTTP boek/desktop: alle metadata ontvangen mediaan 2092 -> 111 ms; daarvoor zat
+metadata in de body, dus geen geldige 'complete metadata-head'-tijd. Inspectie-UA:
+head/H1 mediaan 2208 -> 174 ms; de optionele bron vertraagt de hoofdinhoud niet meer.
+De volledige boekresponse wacht nog circa 2.1 seconden op optionele inhoud.
+firstH1SourceMs is bronontvangst, niet paint. Het zichtbare-frame-probe gebruikt
+twee animation frames en zichtbare afmetingen; LCP wordt apart geobserveerd.
+Het pakket claimt geen nul-overhead. Hosted voor/na-performantie en productietest
+blijven releasecontroles. De eerdere preload/cover-visibilityfixes zijn behouden.
+
+Tijdlijn en organische terugval
+context-timeline.json: zes Ready-productiedeployments op 22/23 oktober; de laatste
+is PR55 op 23 oktober 19:27:23 UTC, 2651c364eb879dc6ec7416034744b3e947458449.
+In het opgevraagde venster tot 27 oktober geen deployment op 24/25 oktober.
+PR55 verandert herstel/login/proxy, geen robots/sitemap/frameworkconfig. Een oude
+PR51-authordatum in oktober is geen bewijs dat die wijziging toen al was uitgerold.
+De aangeleverde opgeslagen Google-homepage van 24 oktober bevat de fout al;
+het beschikbare fragment is geen complete Google-response-export.
+Een begrensde error-logquery vond 24 oktober 09:14:26.135 UTC een timeout op
+/en/browse. Dat is een afzonderlijke bereikbaarheidshypothese, zonder crawler-ID
+of betrouwbare totale requestnoemer. Geen oorzakelijke toewijzing aan Google.
+Nu robots.txt 200, sitemap.xml 200 met 20.686 URLs, canonical host lumisco.re,
+geen parameter-URLs; bestaande legacy redirects werken. Geen herindiening.
+De GSC-weekvergelijking en afwezigheid van gemelde handmatige/security/removalacties
+komen uit de aangeleverde analyse, niet uit een nieuwe GSC-controle door deze taak.
+Performance-daggrenzen daar zijn PT. Aanvullend open: volledige crawl-/requestlogs,
+Google's volgende opgeslagen response, query/paginamix en crawl-/bereikbaarheidsfouten,
+eventuele historische domein/firewall/cachewijzigingen. Geen bewijs voor een enkele
+volledige verklaring van 2486 -> 115 vertoningen en 27 -> 0 klikken.
+
+Officiële bronnen, geraadpleegd naast de geïnstalleerde versie
+https://nextjs.org/docs/app/api-reference/config/next-config-js/htmlLimitedBots
+https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
+https://github.com/cloudflare/vinext
+https://vercel.com/docs/cli/curl
+
+Uitrol en herstel — uitsluitend na apart akkoord
+1. Definitieve PR-head/CI/hashmanifest, actuele main en actieve domeindeployment
+   opnieuw controleren. Geen database-, analytics- of omgevingswijziging nodig.
+2. Eerst ontbrekend raw Preview-bewijs en platform-noindex controleren. Bij
+   functionele of materiële performanceafwijkingen niet uitrollen.
+3. Na akkoord alleen deze PR mergen/publiceren; productie-SHA/deployment/alias
+   teruglezen. De huidige branch heeft uitsluitend test-Previewconfiguratie.
+4. Dezelfde volledige vijf-UA-GETmatrix op productie opslaan en parsen; geen
+   bodymetadata, dubbele tags, Previewcanonicals of onbedoelde robotswaarden.
+   Check statuscodes, redirects, sitemap/robots en werkelijke body/coverweergave.
+5. Vergelijk TTFB, volledige metadata-head, zichtbaar hoofddeel en CLS met de
+   vastgelegde baseline, met warm/koud-labels. Stop bij een afwijking.
+6. Herstel bij defect: vorige productie-deployment dpl_HDLKYULbKptw99VjphF8FHnKtwc9
+   terugplaatsen en een reviewbare revert van deze codewijzigingen voorbereiden.
+   Geen database-rollback nodig; accounts/ratings/catalogus zijn niet aangeraakt.
+
+Overdracht aan SEO Lumi na goedgekeurde publicatie
+Bevestig eerst productie-SHA en https://lumisco.re. Herhaal originele HTML-matrix,
+robots/canonical/hreflang/sitemap/statuscodes. Inspecteer daarna beperkt /nl, /en
+en de gewijzigde prioriteitspagina's in GSC. Onderscheid live test van opgeslagen
+Google-crawl en de zichtbare sitenaam. Alleen na afzonderlijk akkoord passende
+URLs gericht aanbieden; geen herhaalde/massale verzoeken. Bewaar voor-/nametingen
+met release-aantekening en vergelijk volledige perioden. Geen rankingherstelbelofte.
+
+Releaseadvies
+Gerichte reparatie is reviewbaar en lokaal bewezen, met een werkende Ready Preview.
+PR blijft Draft. Volledige raw hosted responsecontrole en definitieve groene CI
+zijn vereist vóór een releaseadvies zonder voorbehoud. Geen productieherstelclaim
+voordat de originele productie-head na een goedgekeurde release is gecontroleerd.

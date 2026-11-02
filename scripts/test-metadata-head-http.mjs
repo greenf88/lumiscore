@@ -12,7 +12,7 @@ try{
  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Fixture start timed out\n'+log.slice(-3000))),45000);child.once('exit',c=>{clearTimeout(timer);reject(Error('Fixture exited '+c+'\n'+log.slice(-3000)));});for(const stream of[child.stdout,child.stderr])stream.on('data',b=>{log=(log+b).slice(-10000);if(log.includes('SYNTHETIC SEO SSR PREVIEW')){clearTimeout(timer);resolve();}});});
  // Compile the real home route before the bounded parallel audit; compilation is not metadata latency.
  const warm=await fetch('http://127.0.0.1:'+port+'/en',{signal:AbortSignal.timeout(90000)});assert.equal(warm.status,200);await warm.text();
- const paths=['','/browse','/book/1','/book/2','/book/3','/collection/synthetic-series','/toplijsten/dystopie-vanaf-1990','/search?q=test','/browse?page=2&sort=highest','/login','/account','/metadata-missing-page','/book/999999999'].flatMap(p=>['/nl'+p,'/en'+p]);paths.push('/nl/imdb-voor-boeken','/en/imdb-for-books');
+ const paths=['','/browse','/book/1','/book/2','/book/3','/book/4','/collection/synthetic-series','/toplijsten/dystopie-vanaf-1990','/search?q=test','/browse?page=2&sort=highest','/login','/account','/metadata-missing-page','/book/999999999'].flatMap(p=>['/nl'+p,'/en'+p]);paths.push('/nl/imdb-voor-boeken','/en/imdb-for-books');
  const output='outputs/metadata-head-http-regression';await mkdir(new URL('../'+output+'/',import.meta.url),{recursive:true});
  await run(py,['scripts/test-metadata-head-parser.py']);
  await run(py,['scripts/audit-metadata-head.py','--origin','http://127.0.0.1:'+port,'--output',output,'--paths',...paths]);
