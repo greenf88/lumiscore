@@ -51,9 +51,10 @@ export async function generateMetadata({
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
-  // Metadata may finish after the visible shell. Reuse the very same verified
-  // cover promise as the card; never drop a late cover or perform a second lookup.
-  const cover = book.coverUrls?.[0] ?? (await book.editionCoverUrls)?.[0];
+  // A stored, edition-bound cover can be shared immediately. Optional external
+  // cover evidence still streams into the page, without blocking its head.
+  // Without a stored cover, preserve the existing explicit no-image policy.
+  const cover = book.coverUrls?.[0];
 
   return createLocalizedPageMetadata({
     title,
