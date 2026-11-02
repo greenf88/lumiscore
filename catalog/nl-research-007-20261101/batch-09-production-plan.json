@@ -1,0 +1,987 @@
+{
+  "summary": {
+    "batch": "nl007-reviewed-batch-09-20261101",
+    "target": "qvplwejffhjvxaypmjut",
+    "productionApproval": false
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 604,
+        "title": "Big Little Lies",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 364,
+        "work_type": null,
+        "created_at": "2026-09-02T08:40:32.047747+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL17116911W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      },
+      "author": {
+        "id": 364,
+        "name": "Liane Moriarty",
+        "created_at": "2026-09-02T08:40:31.825594+00:00",
+        "open_library_id": "OL1436339A"
+      }
+    }
+  ],
+  "authorCorpora": [
+    {
+      "author_id": 364,
+      "rows": [
+        {
+          "id": 604,
+          "title": "Big Little Lies",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 364,
+          "work_type": null,
+          "created_at": "2026-09-02T08:40:32.047747+00:00",
+          "source_type": "open_library",
+          "open_library_id": "OL17116911W",
+          "first_publish_year": 2014,
+          "native_identity_key": null
+        },
+        {
+          "id": 8154,
+          "title": "Truly Madly Guilty",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 364,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL17722496W",
+          "first_publish_year": 2016,
+          "native_identity_key": null
+        },
+        {
+          "id": 9241,
+          "title": "Nine perfect strangers",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 364,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL19761911W",
+          "first_publish_year": 2018,
+          "native_identity_key": null
+        },
+        {
+          "id": 9913,
+          "title": "The Husband's Secret",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 364,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL17116908W",
+          "first_publish_year": 2013,
+          "native_identity_key": null
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "relation": "authors",
+      "ref": "author:new-sluipmoord",
+      "key": {
+        "name": "Robert Bryndza"
+      },
+      "before": null,
+      "after": {
+        "name": "Robert Bryndza",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-sluipmoord",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789049206079"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789049206079",
+        "title": "Sluipmoord",
+        "author_id": "@author:new-sluipmoord",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789049206079",
+      "key": {
+        "isbn_13": "9789049206079"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-sluipmoord",
+        "title": "Sluipmoord",
+        "language": "nld",
+        "isbn_13": "9789049206079",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Boekerij"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789049206079",
+      "key": {
+        "edition_id": "@edition:9789049206079"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789049206079",
+        "work_id": "@work:new-sluipmoord",
+        "bound_author_id": "@author:new-sluipmoord",
+        "bound_title": "Sluipmoord",
+        "bound_language": "nld",
+        "bound_isbn13": "9789049206079",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000796150_Sluipmoord_2_710_130_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2076715/sluipmoord.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2076715/sluipmoord.html",
+            "sha256": "ea67165d71b9d7740c0579e9364b6f6a2b666ec1930f4f666d793a77464ec0f3",
+            "checkedAt": "2026-11-01T20:43:36.125Z",
+            "fact": "Paperback ISBN 9789049206079 verschijningsdatum 29/09/2026 NUR 330 Spannende boeken algemeen imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Engels",
+            "sourceAuthors": "Robert Bryndza"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000796150_Sluipmoord_2_710_130_0_0.jpg",
+            "sha256": "4608718de43192b9c3f0251f80fe1806820510dae351ec1ce1aa2222adf34b45",
+            "bytes": 180749,
+            "checkedAt": "2026-11-01T21:24:10.890Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          },
+          {
+            "url": "https://libris.nl/dekker-vd-vegt/a/robert-bryndza/sluipmoord/501663224",
+            "fact": "Exact9789049206079 Dutch paperback29Sep2026,Willeke Lempens.",
+            "checkedAt": "2026-11-01"
+          },
+          {
+            "url": "https://sdbh-cd.prod.sdbh.dlwnet.com/p/sluipmoord-9789049206079",
+            "fact": "Exact Dutch paperback and Jamie Day1987 standalone, not Erika Foster/Kate Marshall volume.",
+            "checkedAt": "2026-11-01"
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-sluipmoord",
+      "key": {
+        "work_id": "@work:new-sluipmoord",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-sluipmoord",
+        "language": "nl",
+        "bound_author_id": "@author:new-sluipmoord",
+        "text": "Jamie Day arriveert in 1987 in Londen om als politieagent in burger te gaan werken. Hij is vastbesloten zich te bewijzen, maar vindt al op zijn eerste dag het lichaam van een vermoorde jonge man. Terwijl de winter vordert, worden meer slachtoffers ontdekt. Zijn nieuwe bestaan in de hoofdstad verandert zo in een confrontatie met geweld dat hij niet kende en met een onderzoek dat steeds dreigender wordt.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2076715/sluipmoord.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2076715/sluipmoord.html",
+            "sha256": "ea67165d71b9d7740c0579e9364b6f6a2b666ec1930f4f666d793a77464ec0f3",
+            "checkedAt": "2026-11-01T20:43:36.125Z",
+            "fact": "Paperback ISBN 9789049206079 verschijningsdatum 29/09/2026 NUR 330 Spannende boeken algemeen imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Engels",
+            "sourceAuthors": "Robert Bryndza"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2076715/sluipmoord.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "authors",
+      "ref": "author:new-bankgeheim",
+      "key": {
+        "name": "Jonas Boets"
+      },
+      "before": null,
+      "after": {
+        "name": "Jonas Boets",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-bankgeheim",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789022343135"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789022343135",
+        "title": "Bankgeheim",
+        "author_id": "@author:new-bankgeheim",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789022343135",
+      "key": {
+        "isbn_13": "9789022343135"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-bankgeheim",
+        "title": "Bankgeheim",
+        "language": "nld",
+        "isbn_13": "9789022343135",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Manteau"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789022343135",
+      "key": {
+        "edition_id": "@edition:9789022343135"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789022343135",
+        "work_id": "@work:new-bankgeheim",
+        "bound_author_id": "@author:new-bankgeheim",
+        "bound_title": "Bankgeheim",
+        "bound_language": "nld",
+        "bound_isbn13": "9789022343135",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000794170_Bankgeheim_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2117392/bankgeheim.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2117392/bankgeheim.html",
+            "sha256": "2f1dc8ab672df0d543bb78ecc5553843f7d949ac5a3908bade61b0d6fd8e3a54",
+            "checkedAt": "2026-11-01T20:43:38.254Z",
+            "fact": "Paperback ISBN 9789022343135 verschijningsdatum 22/09/2026 NUR 330 Spannende boeken algemeen imprint Manteau uitgever Standaard Uitgeverij - Algemeen taal Nederlands",
+            "sourceAuthors": "Jonas Boets"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000794170_Bankgeheim_0_0.jpg",
+            "sha256": "3d9358c9ba7f0de6ac1484b2d749de2855447c51f89607919b1ea09e315f94ba",
+            "bytes": 58083,
+            "checkedAt": "2026-11-01T21:24:12.305Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-bankgeheim",
+      "key": {
+        "work_id": "@work:new-bankgeheim",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-bankgeheim",
+        "language": "nl",
+        "bound_author_id": "@author:new-bankgeheim",
+        "text": "Op een ochtend blijken de rekeningen van klanten van het Gemeentekrediet te zijn leeggehaald. Zelfs de hoofdcommissaris is zijn geld kwijt. De bankdirecteur is verdwenen en lijkt een centrale rol in de fraude te spelen. Van In en Versavel moeten uitzoeken hoe de operatie kon plaatsvinden zonder duidelijke sporen achter te laten. Hun onderzoek voert door een wereld waarin financiële kennis en verzwegen belangen nauw samenhangen.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2117392/bankgeheim.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2117392/bankgeheim.html",
+            "sha256": "2f1dc8ab672df0d543bb78ecc5553843f7d949ac5a3908bade61b0d6fd8e3a54",
+            "checkedAt": "2026-11-01T20:43:38.254Z",
+            "fact": "Paperback ISBN 9789022343135 verschijningsdatum 22/09/2026 NUR 330 Spannende boeken algemeen imprint Manteau uitgever Standaard Uitgeverij - Algemeen taal Nederlands",
+            "sourceAuthors": "Jonas Boets"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2117392/bankgeheim.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-grotekleinewaarheid",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789400520486"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789400520486",
+        "title": "Big Little Truths",
+        "author_id": 364,
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789400520486",
+      "key": {
+        "isbn_13": "9789400520486"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-grotekleinewaarheid",
+        "title": "Grote kleine waarheid",
+        "language": "nld",
+        "isbn_13": "9789400520486",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "A.W. Bruna Uitgevers"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789400520486",
+      "key": {
+        "edition_id": "@edition:9789400520486"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789400520486",
+        "work_id": "@work:new-grotekleinewaarheid",
+        "bound_author_id": 364,
+        "bound_title": "Grote kleine waarheid",
+        "bound_language": "nld",
+        "bound_isbn13": "9789400520486",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000774639_Grote_kleine_waarheid_2_710_130_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2117691/grote-kleine-waarheid.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2117691/grote-kleine-waarheid.html",
+            "sha256": "0e4071ab52a1f05aeb8814070f79dde19f960b647ff2f66e9e204b5ab18805ee",
+            "checkedAt": "2026-11-01T20:43:40.692Z",
+            "fact": "Paperback ISBN 9789400520486 verschijningsdatum 13/10/2026 NUR 302 Vertaalde literaire roman, novelle imprint A.W. Bruna Uitgevers uitgever Bruna Uitgevers B.V., A.W. taal Engels",
+            "sourceAuthors": "Liane Moriarty"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000774639_Grote_kleine_waarheid_2_710_130_0_0.jpg",
+            "sha256": "56c22320836c7458621a5d1cc8695aeee09b90a7e74903d32424bb37016aa9a3",
+            "bytes": 140129,
+            "checkedAt": "2026-11-01T21:24:13.605Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          },
+          {
+            "url": "https://www.awbruna.nl/boek/romans/liane-moriarty/grote-kleine-waarheid/",
+            "fact": "Publisher exact9789400520486 translated Anna Livestro. Sequel to Big Little Lies, not existing Work604.",
+            "checkedAt": "2026-11-01"
+          },
+          {
+            "url": "https://www.bruna.nl/boeken/grote-kleine-waarheid-9789400520486",
+            "fact": "Explicit exact-ISBN Dutch paperback; overrides English Bureau field.",
+            "checkedAt": "2026-11-01"
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-grotekleinewaarheid",
+      "key": {
+        "work_id": "@work:new-grotekleinewaarheid",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-grotekleinewaarheid",
+        "language": "nl",
+        "bound_author_id": 364,
+        "text": "Een afgehakte vinger in de post van een schoolrector verstoort de rust in een kustplaats bij Sydney. Vijf bevriende vrouwen hebben intussen ieder hun eigen zorgen over relaties, familie en veranderingen in hun leven. Wanneer ook een onbekende man bij de school verschijnt, krijgen hun persoonlijke vragen een onheilspellende achtergrond. De roman keert terug naar Madeline, Celeste, Jane, Renata en Bonnie en de wereld die zij met elkaar delen.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2117691/grote-kleine-waarheid.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2117691/grote-kleine-waarheid.html",
+            "sha256": "0e4071ab52a1f05aeb8814070f79dde19f960b647ff2f66e9e204b5ab18805ee",
+            "checkedAt": "2026-11-01T20:43:40.692Z",
+            "fact": "Paperback ISBN 9789400520486 verschijningsdatum 13/10/2026 NUR 302 Vertaalde literaire roman, novelle imprint A.W. Bruna Uitgevers uitgever Bruna Uitgevers B.V., A.W. taal Engels",
+            "sourceAuthors": "Liane Moriarty"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2117691/grote-kleine-waarheid.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "authors",
+      "ref": "author:new-devrouwvanmijnechtgenoot",
+      "key": {
+        "name": "Carla Kovach"
+      },
+      "before": null,
+      "after": {
+        "name": "Carla Kovach",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-devrouwvanmijnechtgenoot",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789049211363"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789049211363",
+        "title": "De vrouw van mijn echtgenoot",
+        "author_id": "@author:new-devrouwvanmijnechtgenoot",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789049211363",
+      "key": {
+        "isbn_13": "9789049211363"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-devrouwvanmijnechtgenoot",
+        "title": "De vrouw van mijn echtgenoot",
+        "language": "nld",
+        "isbn_13": "9789049211363",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Boekerij"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789049211363",
+      "key": {
+        "edition_id": "@edition:9789049211363"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789049211363",
+        "work_id": "@work:new-devrouwvanmijnechtgenoot",
+        "bound_author_id": "@author:new-devrouwvanmijnechtgenoot",
+        "bound_title": "De vrouw van mijn echtgenoot",
+        "bound_language": "nld",
+        "bound_isbn13": "9789049211363",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000783163_De_vrouw_van_mijn_echtgenoot_2_710_130_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2076738/de-vrouw-van-mijn-echtgenoot.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2076738/de-vrouw-van-mijn-echtgenoot.html",
+            "sha256": "782a9f9147978e1e241ba945f8c836b5c8a232e3329c55d561616d3c4b56c7e7",
+            "checkedAt": "2026-11-01T20:43:43.177Z",
+            "fact": "Paperback ISBN 9789049211363 verschijningsdatum 18/08/2026 NUR 330 Spannende boeken algemeen imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Engels",
+            "sourceAuthors": "Carla Kovach"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000783163_De_vrouw_van_mijn_echtgenoot_2_710_130_0_0.jpg",
+            "sha256": "ea2d49c9788aee3560309a2305b60cc7dbe062445e887911e3236cf7a2ab9381",
+            "bytes": 215068,
+            "checkedAt": "2026-11-01T21:24:14.991Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/thrillers-spanning/de-vrouw-van-mijn-echtgenoot-9789049211363",
+            "fact": "Publisher exactISBN Dutch paperback,Jonas de Vries translation18Aug2026; overrides English Bureau field.",
+            "checkedAt": "2026-11-01"
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-devrouwvanmijnechtgenoot",
+      "key": {
+        "work_id": "@work:new-devrouwvanmijnechtgenoot",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-devrouwvanmijnechtgenoot",
+        "language": "nl",
+        "bound_author_id": "@author:new-devrouwvanmijnechtgenoot",
+        "text": "Na de zelfmoord van haar echtgenoot Hugo probeert Eva met haar zoon een nieuw bestaan op te bouwen. Ze hertrouwt, verhuist naar de kust en gaat als weddingplanner werken. Dan ontmoet ze een bruidegom die volgens haar Hugo is, maar die haar niet lijkt te herkennen. Terwijl anderen twijfelen aan haar waarneming, wil Eva weten wie deze man is en wat er van haar eerdere leven werkelijk klopt.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2076738/de-vrouw-van-mijn-echtgenoot.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2076738/de-vrouw-van-mijn-echtgenoot.html",
+            "sha256": "782a9f9147978e1e241ba945f8c836b5c8a232e3329c55d561616d3c4b56c7e7",
+            "checkedAt": "2026-11-01T20:43:43.177Z",
+            "fact": "Paperback ISBN 9789049211363 verschijningsdatum 18/08/2026 NUR 330 Spannende boeken algemeen imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Engels",
+            "sourceAuthors": "Carla Kovach"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2076738/de-vrouw-van-mijn-echtgenoot.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "authors",
+      "ref": "author:new-eentoekomstinmontmartre",
+      "key": {
+        "name": "Marie Lacrosse"
+      },
+      "before": null,
+      "after": {
+        "name": "Marie Lacrosse",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-eentoekomstinmontmartre",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789049211356"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789049211356",
+        "title": "Montmartre – Traum und Schicksal",
+        "author_id": "@author:new-eentoekomstinmontmartre",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789049211356",
+      "key": {
+        "isbn_13": "9789049211356"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-eentoekomstinmontmartre",
+        "title": "Een toekomst in Montmartre",
+        "language": "nld",
+        "isbn_13": "9789049211356",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Boekerij"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789049211356",
+      "key": {
+        "edition_id": "@edition:9789049211356"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789049211356",
+        "work_id": "@work:new-eentoekomstinmontmartre",
+        "bound_author_id": "@author:new-eentoekomstinmontmartre",
+        "bound_title": "Een toekomst in Montmartre",
+        "bound_language": "nld",
+        "bound_isbn13": "9789049211356",
+        "format": "paperback",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000802841_Een_toekomst_in_Montmartre_2_710_130_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2122813/een-toekomst-in-montmartre.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2122813/een-toekomst-in-montmartre.html",
+            "sha256": "a7a2429f363eaf02b40501a896098e34c0a2e965089d8e74d047bb77df0834e4",
+            "checkedAt": "2026-11-01T20:43:45.384Z",
+            "fact": "Paperback ISBN 9789049211356 verschijningsdatum 13/10/2026 NUR 302 Vertaalde literaire roman, novelle imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Duits",
+            "sourceAuthors": "Marie Lacrosse"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000802841_Een_toekomst_in_Montmartre_2_710_130_0_0.jpg",
+            "sha256": "d2d41c1850753c40d1414c59f3c338d7f1b80d8144aa59f1cf1724207e8a7c8b",
+            "bytes": 193426,
+            "checkedAt": "2026-11-01T21:24:16.407Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/literatuur-romans/een-toekomst-montmartre-9789049211356",
+            "fact": "Publisher exactISBN Dutch paperback,Hans van Riemsdijk translation13Oct2026; overrides German Bureau field.",
+            "checkedAt": "2026-11-01"
+          },
+          {
+            "url": "https://www.maritaspang.de/",
+            "fact": "Marie Lacrosse=Marita Spang=Tessa Duncan; Montmartre second volume Traum und Schicksal, not first volume.",
+            "checkedAt": "2026-11-01"
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-eentoekomstinmontmartre",
+      "key": {
+        "work_id": "@work:new-eentoekomstinmontmartre",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-eentoekomstinmontmartre",
+        "language": "nl",
+        "bound_author_id": "@author:new-eentoekomstinmontmartre",
+        "text": "In het Parijs van 1889 krijgt danseres Elise Lambert een plaats in de pas geopende Moulin Rouge. Haar succes wekt rivaliteit en maakt haar positie minder zeker dan zij had gehoopt. Ondertussen probeert Valérie Dumas ruimte te vinden voor haar eigen ambities in de schilderkunst. Het slotdeel van het tweeluik volgt twee vrouwen die in dezelfde stad hun toekomst zoeken, maar daarbij elk andere beperkingen ontmoeten.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2122813/een-toekomst-in-montmartre.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2122813/een-toekomst-in-montmartre.html",
+            "sha256": "a7a2429f363eaf02b40501a896098e34c0a2e965089d8e74d047bb77df0834e4",
+            "checkedAt": "2026-11-01T20:43:45.384Z",
+            "fact": "Paperback ISBN 9789049211356 verschijningsdatum 13/10/2026 NUR 302 Vertaalde literaire roman, novelle imprint Boekerij uitgever Meulenhoff Boekerij B.V. taal Duits",
+            "sourceAuthors": "Marie Lacrosse"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2122813/een-toekomst-in-montmartre.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "authors",
+      "ref": "author:new-hetcruisecomplot",
+      "key": {
+        "name": "Timon Verbeeck"
+      },
+      "before": null,
+      "after": {
+        "name": "Timon Verbeeck",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-hetcruisecomplot",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789464106121"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789464106121",
+        "title": "Het C.R.U.I.S.E. complot",
+        "author_id": "@author:new-hetcruisecomplot",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789464106121",
+      "key": {
+        "isbn_13": "9789464106121"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-hetcruisecomplot",
+        "title": "Het C.R.U.I.S.E. complot",
+        "language": "nld",
+        "isbn_13": "9789464106121",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Horizon"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789464106121",
+      "key": {
+        "edition_id": "@edition:9789464106121"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789464106121",
+        "work_id": "@work:new-hetcruisecomplot",
+        "bound_author_id": "@author:new-hetcruisecomplot",
+        "bound_title": "Het C.R.U.I.S.E. complot",
+        "bound_language": "nld",
+        "bound_isbn13": "9789464106121",
+        "format": "hardcover",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000802323_Het_C.R.U.I.S.E._complot_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2128607/het-c-r-u-i-s-e-complot.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2128607/het-c-r-u-i-s-e-complot.html",
+            "sha256": "843ab5870c80dddf51840cf09425acf03875186b1e5035fe54d2aea1600ba118",
+            "checkedAt": "2026-11-01T20:43:47.584Z",
+            "fact": "Hardback ISBN 9789464106121 verschijningsdatum 24/09/2026 NUR 283 Fictie 10-12 jaar 282 Fictie 7-9 jaar imprint Horizon uitgever Overamstel Uitgevers taal Nederlands",
+            "sourceAuthors": "Timon Verbeeck"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000802323_Het_C.R.U.I.S.E._complot_0_0.jpg",
+            "sha256": "1efcb883f3217e9ab713bb24c19f51c2caf8cd306aceca544609b99e6a373492",
+            "bytes": 508454,
+            "checkedAt": "2026-11-01T21:24:17.822Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-hetcruisecomplot",
+      "key": {
+        "work_id": "@work:new-hetcruisecomplot",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-hetcruisecomplot",
+        "language": "nl",
+        "bound_author_id": "@author:new-hetcruisecomplot",
+        "text": "Tijdens een vakantie vindt Timon een boodschap in een fles. Zijn nieuwsgierigheid naar de afzender brengt hem op een ongewoon cruiseschip. Wat als een zoektocht begint, wordt een avontuur waarin de reis niet meer volgens de verwachtingen van een gewone vakantieganger verloopt. Het verhaal gebruikt een fictieve Timon Verbeeck als hoofdpersoon, die tussen nieuwe ontmoetingen en eigenaardige gebeurtenissen probeert te ontdekken waar hij in terechtgekomen is.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2128607/het-c-r-u-i-s-e-complot.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2128607/het-c-r-u-i-s-e-complot.html",
+            "sha256": "843ab5870c80dddf51840cf09425acf03875186b1e5035fe54d2aea1600ba118",
+            "checkedAt": "2026-11-01T20:43:47.584Z",
+            "fact": "Hardback ISBN 9789464106121 verschijningsdatum 24/09/2026 NUR 283 Fictie 10-12 jaar 282 Fictie 7-9 jaar imprint Horizon uitgever Overamstel Uitgevers taal Nederlands",
+            "sourceAuthors": "Timon Verbeeck"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2128607/het-c-r-u-i-s-e-complot.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "authors",
+      "ref": "author:new-indepuree",
+      "key": {
+        "name": "Bieke Biesbrouck"
+      },
+      "before": null,
+      "after": {
+        "name": "Bieke Biesbrouck",
+        "open_library_id": null
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "work:new-indepuree",
+      "key": {
+        "native_identity_key": "nl-reviewed-isbn:9789083624440"
+      },
+      "before": null,
+      "after": {
+        "native_identity_key": "nl-reviewed-isbn:9789083624440",
+        "title": "In de puree",
+        "author_id": "@author:new-indepuree",
+        "open_library_id": null,
+        "source_type": "lumiscore_native",
+        "work_type": null,
+        "first_publish_year": null,
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "edition:9789083624440",
+      "key": {
+        "isbn_13": "9789083624440"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-indepuree",
+        "title": "In de puree",
+        "language": "nld",
+        "isbn_13": "9789083624440",
+        "isbn_10": null,
+        "open_library_edition_id": null,
+        "publisher": "Höngry"
+      }
+    },
+    {
+      "relation": "catalog_edition_metadata",
+      "ref": "metadata:9789083624440",
+      "key": {
+        "edition_id": "@edition:9789083624440"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@edition:9789083624440",
+        "work_id": "@work:new-indepuree",
+        "bound_author_id": "@author:new-indepuree",
+        "bound_title": "In de puree",
+        "bound_language": "nld",
+        "bound_isbn13": "9789083624440",
+        "format": "hardcover",
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000797256_In_de_puree_2_710_130_0_0.jpg",
+        "card_cover_url": null,
+        "evidence_url": "https://metadata.isbn.nl/2127134/in-de-puree.html",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2127134/in-de-puree.html",
+            "sha256": "3b6fb7038484ac28a224069dd6c71fdfbdd42b2125f2ec3a0edd84b76c328d27",
+            "checkedAt": "2026-11-01T20:43:49.728Z",
+            "fact": "Hardback ISBN 9789083624440 verschijningsdatum 29/09/2026 NUR 273 Prentenboeken ( imprint Höngry uitgever Hongry taal Nederlands",
+            "sourceAuthors": "Bieke Biesbrouck"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000797256_In_de_puree_2_710_130_0_0.jpg",
+            "sha256": "5e4f2eceacf5166e21a854af7fdd427e693c878a3b4d0fa2071e73b4e05c8b42",
+            "bytes": 98093,
+            "checkedAt": "2026-11-01T21:24:19.187Z",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant."
+          }
+        ]
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description:new-indepuree",
+      "key": {
+        "work_id": "@work:new-indepuree",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@work:new-indepuree",
+        "language": "nl",
+        "bound_author_id": "@author:new-indepuree",
+        "text": "Teddy Tomaat gaat met zijn vrienden op ontdekking langs een blotevoetenpad. Onderweg wordt er gelopen, gesprongen en geklauterd. Zijn vrienden vragen hem telkens om hulp, en Teddy wil hen graag bijstaan. Maar voortdurend voor anderen klaarstaan maakt het lastig om ook zijn eigen grenzen te voelen. Het prentenboek volgt hoe een gezamenlijk avontuur de vraag oproept wanneer helpen prettig is en wanneer je ook nee mag zeggen.",
+        "source_type": "official_catalog",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_url": "https://metadata.isbn.nl/2127134/in-de-puree.html",
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-01T21:37:32Z",
+        "review_batch": "nl007-reviewed-batch-09-20261101",
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/2127134/in-de-puree.html",
+            "sha256": "3b6fb7038484ac28a224069dd6c71fdfbdd42b2125f2ec3a0edd84b76c328d27",
+            "checkedAt": "2026-11-01T20:43:49.728Z",
+            "fact": "Hardback ISBN 9789083624440 verschijningsdatum 29/09/2026 NUR 273 Prentenboeken ( imprint Höngry uitgever Hongry taal Nederlands",
+            "sourceAuthors": "Bieke Biesbrouck"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2127134/in-de-puree.html",
+            "checkedAt": "2026-11-01T21:37:32Z",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content."
+          }
+        ]
+      }
+    }
+  ]
+}

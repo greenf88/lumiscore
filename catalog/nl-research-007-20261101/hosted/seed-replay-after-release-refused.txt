@@ -1,0 +1,56 @@
+ - generic: Untitled query
+      - button "Close tab":
+      - separator
+      - button:
+    - status
+    - generic: Unsaved edits
+    - button "More actions":
+    - 'button "Query source: Database"':
+      - generic: Database
+    - button "Save":
+      - generic: Save
+      - generic: Ctrl S
+    - button "Run selected":
+      - generic: Run selected
+      - generic: Ctrl ↵
+    - code:
+      - generic: "54"
+      - generic: "55"
+      - generic: "56"
+      - generic: "57"
+      - generic: "58"
+      - generic: "59"
+      - generic: select count(*) into n from catalog_release_receipt;
+      - generic: if n not in (0,134) then raise exception 'Partial install/replay; expected
+      - generic: zero or all actions, got %',n;end if;
+      - generic: end;$release$;
+      - generic: select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','batch',
+      - generic: "'nl007-public-test-seed-20261101','rows',coalesce(jsonb_agg(to_jsonb(r) order"
+      - generic: by seq),'[]')) as receipt from catalog_release_receipt r;
+      - generic: commit;
+      - textbox "Editor content" [active]: "-- REVIEW ONLY. Exact target hlvujbrmfdlrfxdjwsmb. Isolated disposable test canary. -- No accounts, ratings, progress, collections, taxonomy or taste-inventory DML. -- COMMIT: securely retain FIRST non-empty full receipt, never substitute a replay receipt. begin;set local lock_timeout='3s';set local statement_timeout='30s'; lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode; create temporary table catalog_release_receipt(seq integer,relation text,key …by seq),'[]')) as receipt from catalog_release_receipt r; commit;"
+      - generic: "7"
+      - generic: 
+      - list:
+        - generic: "do $release$ declare payload jsonb:='{\"batch\":\"nl007-public-test-seed-20261101\","
+    - separator:
+    - tablist:
+      - tab "Results" [selected]:
+        - generic: Results
+      - tab "Chart":
+        - generic: Chart
+      - button "0 rows":
+        - paragraph:
+          - generic: 0 rows
+      - button "Export" [disabled]:
+        - generic: Export
+    - generic: "Failed to run sql query: ERROR: P0001: Existing natural identity differs"
+    - generic: "CONTEXT: PL/pgSQL function inline_code_block line 39 at RAISE"
+    - button:
+      - button:
+    - button "Debug with Assistant":
+      - generic: Debug with Assistant
+    - button "More actions":
+- region "Notifications alt+T"
+- alert
+- alert
