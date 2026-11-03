@@ -1,0 +1,75 @@
+{
+  "checkedOn": "2026-11-03",
+  "project": "qvplwejffhjvxaypmjut",
+  "route": "Read-only pg_constraint inspection; no DDL or DML",
+  "actualConstraint": "CHECK (work_type IS NULL OR work_type IN ('novel','novella','short_story','collection','audiobook_original')) NOT VALID",
+  "meaning": "NOT VALID still checks new/updated rows. Source taxonomy is not automatically the database taxonomy.",
+  "frozenBatch001Changed": false,
+  "changes": [
+    {
+      "caseNumber": 213,
+      "contentKind": "essay",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 214,
+      "contentKind": "pamphlet",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 216,
+      "contentKind": "essay_collection",
+      "proposedDatabaseWorkType": "collection"
+    },
+    {
+      "caseNumber": 217,
+      "contentKind": "essay",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 218,
+      "contentKind": "essay_collection",
+      "proposedDatabaseWorkType": "collection"
+    },
+    {
+      "caseNumber": 233,
+      "contentKind": "story_collection",
+      "proposedDatabaseWorkType": "collection"
+    },
+    {
+      "caseNumber": 254,
+      "contentKind": "poetry_collection",
+      "proposedDatabaseWorkType": "collection"
+    },
+    {
+      "caseNumber": 255,
+      "contentKind": "nonfiction",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 270,
+      "contentKind": "nonfiction",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 272,
+      "contentKind": "column_collection",
+      "proposedDatabaseWorkType": "collection"
+    },
+    {
+      "caseNumber": 290,
+      "contentKind": "nonfiction",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 304,
+      "contentKind": "non_fiction",
+      "proposedDatabaseWorkType": null
+    },
+    {
+      "caseNumber": 315,
+      "contentKind": "narrative_nonfiction",
+      "proposedDatabaseWorkType": null
+    }
+  ]
+}

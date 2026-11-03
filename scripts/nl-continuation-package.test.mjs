@@ -18,6 +18,10 @@ async function fixture(env){
  create table synthetic_cascade_dependency(work_id bigint references works on delete cascade);
  insert into synthetic_accounts values(1,'owned safety stand-in');`);
  for(const [table,rows]of[['authors',baseline.authors],['works',baseline.author_corpora],['editions',baseline.editions]])await db.query(`insert into ${table} select * from jsonb_populate_recordset(null::${table},$1)`,[JSON.stringify(rows)]);
+ // Exact current production CHECK constraints were independently read back. NOT VALID
+ // tolerates historical rows but still rejects invalid newly inserted/updated data.
+ await db.exec(`alter table works add constraint works_work_type_check check(work_type is null or work_type in('novel','novella','short_story','collection','audiobook_original')) not valid;
+ alter table works add constraint works_source_type_check check(source_type in('open_library','lumiscore_native')) not valid;`);
  for(const file of['20261030063949_nl_pilot_reviewed_presentation.sql','20261030120602_catalog_integrity_presentation_guards.sql'])await db.exec(fs.readFileSync(new URL('../supabase/migrations/'+file,import.meta.url),'utf8'));
  for(const [table,rows]of[['catalog_work_descriptions',baseline.descriptions],['catalog_edition_metadata',baseline.metadata]])await db.query(`insert into ${table} select * from jsonb_populate_recordset(null::${table},$1)`,[JSON.stringify(rows)]);
  await db.query('insert into synthetic_ratings values(1,$1,9)',[baseline.author_corpora[0].id]);await db.query("insert into synthetic_progress values($1,'read')",[baseline.author_corpora[0].id]);

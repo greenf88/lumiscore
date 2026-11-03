@@ -10,6 +10,7 @@ const isbnOk=s=>/^\d{13}$/.test(s)&&[...s].reduce((n,c,i)=>n+Number(c)*(i%2?3:1)
 const result=[];
 for(const r of rows){
  const c=cases.find(c=>c.caseNumber===r.caseNumber);if(!c||c.candidateId!==r.candidateId)throw Error('Source identity missing');
+ if(r.proposedWork?.type&&!['novel','novella','short_story','collection','audiobook_original'].includes(r.proposedWork.type))throw Error('Proposed database Work type not supported by current CHECK '+r.caseNumber);
  if(r.summary?.text){const n=r.summary.text.trim().split(/\s+/).length;if(n<50||n>105||r.summary.language!=='nl')throw Error('Summary bounds/language '+r.caseNumber);}
  if(r.status.startsWith('approved_')){
   // Legacy/source-reviewed dossiers deliberately retain importApproved:false until
