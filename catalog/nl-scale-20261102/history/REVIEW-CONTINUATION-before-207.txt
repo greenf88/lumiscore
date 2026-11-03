@@ -1,0 +1,428 @@
+ACTUEEL — 2 november 2026, na acceptatie en gerichte testopruiming
+WERK IN UITVOERING — nog geen eindoplevering of releaseaanbod
+
+PR #71 blijft Draft. De laatst gepushte head is 96c3efc5ebea86e286c72786db87aecc9138f5f3.
+Deze aanvullende bestanden worden in de volgende bewijscommit gepusht.
+De applicatie blijft bytegelijk aan 9c74ecaa48f7a35830f713eed3528d46ba0466ad.
+Er zijn geen wijzigingen aan app, lib, CSS, PR51, het dashboard of socialplanning.
+Ready Preview: https://lumiscore-9ue18tr1w-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_9ruvyD65bjhJtzNvP4UuWbrxyXvg.
+
+Actuele productie is read-only bevestigd op dezelfde applicatie-SHA, main,
+deployment dpl_34ATBqyjeBes7NKatC5vHkNAkpyU. De openbare tabelprojecties zijn
+ongewijzigd: 10.259 Works, 10.676 edities, 3.096 operationeel NL beschikbare Works
+en 576 goedgekeurde Nederlandse teksten. De vaste historische nulmeting blijft
+2.649: gepubliceerd +447, nog 4.553 tot het doel +5.000. Deze fase heeft niets
+op productie gewijzigd. Operationele geschiktheid certificeert niet alle oude formaten.
+
+Het register telt 2.300 kandidaten en 1.001 eerste inhoudslezingen, inclusief één
+extra bron voor hetzelfde Geuzenboek en een vervangend dossier. 337 geselecteerde
+kandidaten waren mogelijk nieuwe identiteiten; bron-ID-afwezigheid bewijst geen afwezig boek.
+Er zijn 549 oorspronkelijke Nederlandse concepten, 25 gelezen behouden teksten en
+426 eerste bron- of identiteitsholds. Definitief beoordeeld: 157 dossiers, waarvan
+154 importgoedkeuringen, twee scopeconflicten en één onvoldoende bewezen formaat
+(De Pijp, dossier 178: paperback tegenover hardback voor hetzelfde ISBN).
+844 kandidaatdossiers hebben nog geen eindbesluit. Dit zijn geen 1.000 afgeronde dossiers.
+De 709 eerder onderzochte huidige Work-identiteiten overlappen de nieuwe besluiten niet.
+
+Het gecombineerde concept bevat 470 acties: 472 ruwe voorstellen minus twee gedeelde
+auteursinserts. De aansluiting is exact:
+- 11 nieuwe auteurs; 50 nieuwe Works; 17 correcties van oorspronkelijke boekjaren.
+- 75 nieuwe Nederlandse edities: 50 bij nieuwe en 25 bij bestaande Works.
+- Negen editiecorrecties, waaronder drie herstelde NULL-talen, zes ISBN-vullingen
+  en een Turkse editie die foutief als Nederlands stond; één correctie overlapt.
+- 154 nieuwe Nederlandse samenvattingen en 154 coverbindings.
+Netto extra NL beschikbaar: 77 = 50 + 25 + 3 - 1. De Judy-vervanging telt niet dubbel.
+De lokale volledige snapshot bewijst 3.096 → 3.173, 470 mutaties, herhaling zonder
+mutaties en gecommitteerd herstel met alle oorspronkelijke rijen gelijk.
+Importduur lokaal: 1,653 s; dit is geen hosted of productieprestatiemeting.
+Zie combined-draft en review-hashes-draft.json. Deelbatch-SQL nooit blind samenvoegen.
+
+Alle 154 exacte voorgestelde Nederlandse presentaties zijn hosted op test bewezen:
+titel, ISBN, geladen kaart- en detailcover, zichtbare samenvatting met bron, zoeken op
+Nederlandse én oorspronkelijke titel, echte kaartklik en terugkeer. Zie
+hosted-acceptance-matrix.json. De eigen test-Works zijn onbeoordeeld; dit bewijst
+lege scorepariteit, geen gevulde publieke score of kwaliteit van rangschikking.
+Een niet-leeg synthetisch profiel met drie UI-beoordelingen bewees Nederlandse en
+Engelse editievoorkeur, taalwisselen, herladen en terugkeer naar aanbevelingen.
+Paper/Ink, 320 px en desktop zijn gecontroleerd. De langste titel loopt niet over.
+Drie opeenvolgende Discover-pagina’s tonen 48 unieke Works, dezelfde telling en een
+stabiele derde pagina na herladen. De applicatievormgeving is ongewijzigd.
+
+Alle dertien testdeelbatches zijn gecommitteerd geïmporteerd, exact teruggelezen,
+herhaald zonder mutaties, na COMMIT hersteld en voor de Preview teruggezet.
+Deelbatch 013: negen nieuwe boeken, 41 testacties tegenover 39 productievoorstellen.
+Herstel op 20:39:46.266207 UTC behield alle overige catalogus- en beschermde gegevens.
+Daarna zijn de 41 rijen weer exact teruggelezen.
+
+Deelbatch 012 is vervangen voor één bronveld: Eline Vere was opgeslagen, maar de
+bron-URL had een optionele q-highlight. De bestaande loader weigert terecht vrije
+queryparameters. Hetzelfde DBNL-artikel is zonder query gecontroleerd en gekoppeld.
+De appveiligheid is niet versoepeld. Oude bestanden staan uitsluitend als geschiedenis
+in superseded-source-url-v1. Herstel van de actuele versie, inclusief alle 14 fixtures,
+slaagde op 20:29:22.292723 UTC. De SHA256 van de atomaire herstelactie is
+adc0eeb7d292a7952a5f749b6cd675de79a6f22b51853c5573e1c1f9970e519c.
+De actuele testimport-SHA256 is
+fa06d3069d18101a3332abd54a8c5f9b6df30eec2338ab1676b8780c9c431a52.
+Ook de oude maker-creditnotitie van 010 is expliciet vervangen; gebruik geen oud voorstel.
+
+Het eigen tijdelijke account is via de normale route afgemeld en verwijderd.
+Alleen drie eigen ratings en drie eigen leesstatussen zijn teruggedraaid met volledige
+rijvergelijking en controle van alle publieke account-FK’s. Oorspronkelijk behouden:
+68 ratings (f82368f0ee3048b6b1662d395b25aaeb), 68 leesstatussen
+(77999c7c66ee5965578677058668efea), één voorkeur
+(7a45bd5d65b7364b84eaac00e93eeb3b) en twee bestaande testaccounts.
+Geen credentials gelezen; het privéopruimmanifest is daarna verwijderd. Het geanonimiseerde
+bewijs staat in hosted-own-profile-cleanup-proof.json. Er zijn geen nummerreeksen gereset.
+
+De actuele productieprojectie is met expliciete C-collation volledig gelijk aan de
+bestaande openbare snapshot. Een aanvankelijk anders gesorteerde aggregaat-hash van
+teksten bleek meetmethodiek: alle 695 individuele rijen waren gelijk en met dezelfde
+collation ook het aggregaat. De precieze vergelijking-SQL is nu opgeslagen.
+
+De Unicode-zoekmigratie staat alleen op test, via de officiële CLI en juiste historie:
+20261102185143_nl_scale_search_unicode.sql, SHA256
+496d043fbf442ef297382ba824dd337dc00bcfe66b6f9ec1b1762182fe30ebde.
+ACL/RLS/selectie en sortering zijn behouden. Dertig testmetingen toonden circa 6 ms
+extra uitvoering in de database, niet de browser of productie. Vier titelzoekfouten zijn
+hosted opgelost. De gedeelde oude CAS-renderer blijft bytegelijk; alleen nl-scale kiest
+de geïndexeerde variant met volledige rij-CAS en alle inkomende FK’s.
+
+Gerichte import-, herstel-, ISBN-, taal-, bron- en compatibiliteitstests zijn groen,
+evenals scriptslint en TypeScript. Eerder build- en clientsecretscanbewijs blijft geldig
+voor de ongewijzigde applicatie; de nieuwe head heeft na push eigen CI nodig.
+De nieuwe pakketscan vond geen private keys, providersecrets of JWT’s.
+
+Volgende zelfstandige werkzaamheden: de overige 53 gedekte bron-/editiedossiers
+inhoudelijk oplossen, daarna overige kandidaten. Bridget heeft nu een echte Nederlandse
+editie en cover; de primaire persoonsbron OL38952A tegenover de summiere dubbele
+OL10352829A moet expliciet worden gebonden. Controleer volledigheid bij klassiekers en
+bewaar bekende conflicten. Een kleine geslaagde batch is geen voltooiing van deze opdracht.
+Geen productie-import, merge, publicatie of wijzigingen aan andere werkzaamheden.
+
+HISTORISCHE TUSSENSTAND HIERONDER — aantallen/012bronversiehieronderNIETactueel
+
+WERK IN UITVOERING — GEEN EINDOPLEVERING / GEEN PRODUCTIERELEASEAKKOORD GEVRAAGD
+
+ACTUELE STATUS 2 NOVEMBER 2026 — vervangt alle oudere tussenstanden hieronder
+DraftPR71 https://github.com/greenf88/lumiscore/pull/71 blijft Draft.
+Laatst gepusht96c3efc5ebea86e286c72786db87aecc9138f5f3; veel aanvullende lokale
+scripts/data/bewijzen nog niet gepusht. Applicatiecode ONGEWIJZIGD op
+9c74ecaa48f7a35830f713eed3528d46ba0466ad. Andere werkbomen/PR51 ongemoeid.
+ReadyPreview dpl_9ruvyD65bjhJtzNvP4UuWbrxyXvg:
+https://lumiscore-9ue18tr1w-rgkgroeneveld-9102.vercel.app
+Alleen branchgebonden bestaande publieke testconfiguratie, één rebuild gebruikt.
+CI96c3: run41483858894success. Nieuwe head heeft na push nieuwe CI nodig.
+
+TELCORRECTHEID — progress-current.json/research-register.jsonl prevaleren
+2300poolkandidaten;1001eerste inhoudslezingen incl één dubbele Geuzenboekbron,
+met vervangend dossier1001Schaamte.337mogelijke nieuwe identiteiten bekeken.
+549originele NL-concepten,25behouden teksten,426bron-/identiteitsholds.
+Dit is GEEN1000inhoudelijk afgehandelde dossiers:147finale onderzoeksbesluiten,
+waarvan145importgoedkeuringen en2expliciete identiteits-/scopeconflicten.
+Gecontroleerde overlap:0geselecteerde/finale dossiers overlappen de709eerder
+onderzochte huidigeWork-ID's. Behouden teksten tellen niet als nieuwe teksten.
+Productie read-only nulmeting2nov11:46:58UTC:10259Works/10676edities,
+3096operationeel NL,576goedgekeurdeNL/119ENteksten. Historisch2649dus+447
+gepubliceerd;4553resterend naar+5000. OperationalNLcertificeert niet alle legacyformaten.
+
+GECOMBINEERD LOKAAL VOORSTEL — NOG GEEN RELEASEAANBOD
+431acties na ontdubbeling van2gedeelde nieuwe auteurs (433ruwe subvoorstelacties).
+41nieuweWorks,66NL-edities(41nieuwWork+25bestaandWork),145nieuwe NL-teksten en
+145coverbindings.3NULL-taalherstellingen,1dut→turcorrectie,6ontbrekendeISBNs.
+NettoNL+68 =41+25+3-1; geen dubbeltelling van JudyMoody-vervanging.
+Lokale volledige actuele openbare snapshot:3096→3164;431mutaties,replay0,
+COMMITherstel alle oorspronkelijke rijen gelijk; import1,097s lokaal, geen hosted/prodclaim.
+Zie combined-draft/. SubbatchSQL NIET blind aaneenplakken; combineerscript bindt refs.
+Production00484acties en00934acties vervangen oudere83/33voorstellen:
+primaire-auteurresolver mag gezamenlijkeWorkautoriteit niet als coauthoridentiteit gebruiken.
+Exacte testplannen004/009 bleven byte-identiek; bewijs blijft geldig.
+
+TESTWERKELIJK UITGEVOERD — hlvujbrmfdlrfxdjwsmb
+Alle12deelbatches geïmporteerd, volledig teruggelezen, replay0, na echteCOMMIT
+hersteld met full-rowCAS/ALLE inkomendeFK inclusiefCASCADE, daarna exact hersteld
+voorPreview. Geen sequence-reset. Alle catalogus-/beschermde hashes gelijk bij herstel.
+010:20release+30fixtureacties; actuele correct-credit herstel19:44:00.058265UTC.
+Oude interne frontnotitie voor Spoken in de speelzaal noemde foutief andere makers;
+Work/editie/summary/afbeelding waren correct. Notitie gecorrigeerd naar UlrichKarger/UliWaas,
+oude bestanden expliciet superseded-cover-credit-v1/. Actuele exacte editorSHA
+c782a023d62d1a8fe7d179a658bdb23b0f698eea53d3c93c7dc9eb0df649d7e5.
+011:18release+23fixtures;6ISBN-vullingen,1NULL→dut; echt herstel19:47:55.353558UTC,
+editorSHA3f1a751a9f15fdde55bb3aacbdb9b46e3426c18c19f210de0219b68cb6559e54.
+012:21release+14fixtures;6Nederlandse printedities,3afzonderlijk onderbouwde
+boekjaarcorrecties(Candide1759,Hetproces1925,ElineVere1889boek/1888serial),
+herstel19:51:48.028776UTC, editorSHAcf1eb5be0fa522798c5d46714b6261264873db69859e768a782ceaf186fea958.
+Normale reeds toegestane dashboardroute werkte. Eén MCPherstel001verliep; geen retrylus.
+Nieuwe indexgesteunde CASrenderer gehost bewezen in010/011/012; geen verzwakte CAS.
+Voor001blijven expliciete latere-wijziging/FK-weigeringsproeven geldig.
+
+ZOEKFOUT OP TEST OPGELOST — PRODUCTIE ONGEWIJZIGD
+Storedtitels en query hadden niet symmetrisch NFKC: ½,ligaturen/NFDaccenten.
+Migratie20261102185143_nl_scale_search_unicode.sql SHA256
+496d043fbf442ef297382ba824dd337dc00bcfe66b6f9ec1b1762182fe30ebde.
+OfficiëleCLI2.116bestaandeauth, TESTdryrunuitsluitend1migratie, history30regels,
+owner/ACL/securityinvoker/stable/search_pathbehouden; bodyMD5
+187df6e5e6ea8976d1a85a2d4c1a9e01. Alle4gevonden titelzoekfouten hosted gerepareerd.
+Geen rol-/RLS-/rangschikkings-/pagineringwijziging. TestDB30servermetingen:
++circa6–6,3ms mediane uitvoering, geen browser/netwerk/prodclaim.
+Een Blaubär-teruglink leek te falen door de testharness die ½ letterlijk vergeleek
+met de bedoeldeNFKC1⁄2. Werkelijke klik/terugkeer juist; bewijs expliciet gecorrigeerd.
+
+BROWSERBEWIJS — huidig matrixbestand volgen, niet aantallen geopendeURL's
+145exacte TESTtargets. hosted-acceptance-matrix.json bevat laatst93volledige
+acceptaties; overige nog aanvullen. Details115met geladen covers, overige volgen
+via kaart→detail→terug. Beide titelzoekopdrachten137/145gevonden. Kaartpipeline
+loopt met blijvende CUAobjecten; niet opnieuw beginnen. Sommige vroegepending-
+beelden moeten eenmaal opnieuw bevestigd worden; HTTP200isgeenloaded-coverbewijs.
+TestWorks zijn onbeoordeeld: lege-scorepariteit, geen gevuldpubliekscoreclaim.
+Niet-leeg synthetisch profiel:3eigen UIratings9/7/8 en3eigen leesstatussen;
+persoonlijkeNL→EN→reload→NL→backroute geslaagd. Bewijst editievoorkeur, geen
+rangschikkingskwaliteit. Authaccount nl-scale-acceptance-20261102@example.test.
+Geen password/token gelezen. Opruiming eigen3ratings/3statussen/account naacceptatie
+nog vereist. Oorspronkelijke68ratings/68statussen/2accounts beschermen.
+Nu71/71/3door eigen testprofiel; oude voorkeur1ongewijzigd. Geen echteaccounts gewijzigd.
+320Paper/Ink en1280Paper screenshots/DOMvastgelegd; Paperbeelden ook echt gelezen.
+EN/device/paginering/long-title aanvullendecontroles nog afmaken, viewportuiteindelijk resetten.
+
+COVERS / BRONNEN
+Oorspronkelijke549bulkreceipts afgerond; niet opnieuw starten of APIcrawlen.
+42nieuwe grote-coverTARleden uit officiële l_covers_0006 ontdekt, exactRange/index/
+header/memberhash, alle42gedecodeerd en3contactsheets visueel gelezen. Lokale
+V1parserfout hersteld inV2metcache, geen toegangweigeringomzeild. Metadata/docs/UA
+beperkingen staan in SOURCE-USAGE.txt.217is niet blind als aantal gerepareerd te claimen:
+transport,beeldidentiteit en exacte ISBN-/taal-/formaatbinding blijven afzonderlijk.
+Bridget: nieuwe exactNL1998paperback9053337261/9789053337264,OL37788615M,
+KBp175816077, inhoud en broncover12692038/47545B/319x500 daadwerkelĳk gelezen.
+Eerste13digitKBquery gaf voor deze printing0rijen; eerdere voorlopige cover-
+requesttekst daarover was onjuist. Expliciete correctie in cover-semantic-review011;
+legacyresponsceb41d...enlinkedcdef70...zijn het echte bewijs. Auteurcorpus/dupcheck
+nog afronden vóór nieuwWork; geen blindnieuwWork opbasisvananderecover/titel.
+Contentamendment008Sappho/Nabokov: oorspronkelijke brongebonden concepten,
+exacte vertaalscope/Work-identiteit nog niet goedgekeurd. Geen automatische import.
+
+CHECKS / VOLGENDE UITVOERBARE TAKEN
+33gerichte tests waaronder alle12datapakketten, volledige snapshot431acties,
+UnicodeRPC/RLS/3pagina's, sleutel-CAS, auteursidentiteit, ISBN en printformaten groen.
+Lint alle nl-scale-mjs plus catalog-release-sql groen. Appcode onveranderd: bestaand
+TypeScript/build/clientsecretscanbewijs geldig; nieuwe headCI en gerichte pakketscan
+nog vastleggen vóór releaseaanbod. RuweHTML/coverpixels/sourceflapteksten niet committen.
+Zet verder:145browseracceptaties afmaken, nieuwe bron-/identiteitsdossiers inhoudelijk
+verwerken, aanvullende goedgekeurde batches begrensdtesten.147eindbesluiten is een
+checkpoint, niet het gevraagde1000dossierseindresultaat. Niet stoppen zolang zelfstandig
+onderzoek uitvoerbaar is. Geen productie-import,merge,publicatie,dashboard,social ofPR51.
+
+OUDERE TUSSENSTANDEN — uitsluitend historie; bovenstaande status prevaleert
+
+ACTUELE AANVULLING 2 NOVEMBER 2026 16:34 UTC — voorgaan op oudere notities hieronder
+1001eerste contentlezingen,534oorspronkelijke NL-concepten,25behouden teksten,
+441bron-/identiteitsvragen en1dubbele bronkandidaat. Schaamte/HugoClaus als
+vervangend dossier1001toegevoegd. Deze aantallen zijn GEEN1000eindbesluiten.
+26finale importvoorstellen:13nieuwe Work-identiteiten(deelbatch001),13NL-edities
+aan bestaande Works(deelbatch002). Gezamenlijk99productievoorstelacties en+26NL.
+Dit is een tussenstand, geen aanbod om slechts26als eindresultaat te releasen.
+
+TESTBEWIJS WEL UITGEVOERD
+001:63testacties/56productievoorstelacties.63/63teruggelezen,replay0.
+Gecommitteerd herstel via aangemelde normale Supabase SQL Editor geslaagd;
+alle vijf catalogushashes en beschermde tellingen/hashes exact behouden.
+Later gewijzigde tekst en nieuwe FK-afhankelijkheid HOSTED geweigerd; beide
+probes binnen ROLLBACK uitgevoerd. Daarna63testacties hersteld voor Preview.
+002:33afzonderlijke eigen testfixtureacties,43releaseacties.43/43teruggelezen,
+replay0. Releaseacties EN testfixtures gecommitteerd hersteld via SQL Editor.
+Nacontrole16:33:17.777496UTC: alle catalogus-/gebruikershashes exact terug op
+beginsituatie. Daarna33+43hersteld; protected hashes identiek. Testfixtures
+tellen NIET als nieuwe productieWorks. Exact receipts/hashbestanden in002.
+Geen testaccounts, ratings, voortgang of productiedata gewijzigd.
+
+MCPherstel001verliep eenmaal: This confirmation expired after 2 minutes.
+Geen identieke retry. Normale reeds toegestane dashboardroute werkte.
+Een MCP-replay002werd door gewijzigde TOOLcatalogus geweigerd, niet door
+databasevoorwaarden. Tool opnieuw ontdekt, eerst read-only gecontroleerd,
+daarna replay0bewezen. Geen beveiligingsweigering of rechtenwijziging.
+
+COVERS
+Bulkarchiefjob95206is voltooid:527targets/527receipts. Niet opnieuw starten.
+Decoder/contact sheets --v3nog uitvoeren met gebundelde Python-runtime.
+Oude65visuele reviews bewaren; nieuwe bereikbare beelden moeten nog inhoudelijk
+worden gelezen. HTTP500groepen zijn no-retry; geen cover-APIbulkrequests.
+
+PREVIEW
+Branch bestaat nog niet remote; Vercel branchgebonden env-aanvraag gaf daarom
+400Branch not found. Geen env aangemaakt. Eerst afgebakende WIPcommit pushen,
+dan bestaande publieke testURL/publishable key alleen voor deze branch instellen.
+Geen productieconfiguratie/protection/PR51wijzigen. Nog0hostedboekacceptaties.
+Applicatiecode ongewijzigd op9c74ecaa48f7a35830f713eed3528d46ba0466ad.
+
+BRONVOORTGANG
+content-amendment001:Untamed,3Asterixalbums,Margo,Narziss.002:Gebrokenlicht,
+IkheetKarmozijn,Hetlevenisvurrukkulluk,Gamechanger,Vrijgevochten.
+JudyMoody5654: huidige5813ISBN9786054482542isTurks, geenNLprint. EchteFleurHumeur
+ISBN9789026997501/9026997507 inKBp255790708/p265792169, origineelJudyMoody2000.
+Exact uitgever2003VanHolkemaWarendorf; onafhankelijke primary/printbronnen bewaard.
+OL32768333Mverbindt meerdereISBNs: niet blind importeren. Cover/formaat en eigen
+NLtekst nog afmaken. Taalcorrectie+echteNL-editie levertoperationeelnetto0, niet+1.
+
+Volgende: nieuwebulkcoversdecoderen/visueelcontroleren, resterendebronvragen en
+finaledossiersafwerken, DraftPR+ReadytestPreview enalleexactevoorstellenhosted.
+Gerichte tests inmiddels17geslaagd; tscgroen; ESLintnieuwescriptsgroen.
+Volledige build/secretscan voorpushnoguitvoeren. Geen eindoplevering bij kleincheckpoint.
+
+OUDERE WERKNOTITIES — bewaar bronverwijzingen, bovenstaande actuele status prevaleert
+
+Gebruikersopdracht:
+C:/Users/rickg/.codex/attachments/7a08b991-4116-4248-89cd-5f22ba1b3ffd/Geplakte tekst.txt
+Minimaal1000 unieke inhoudelijk afgehandelde dossiers, >=2000 ontdubbelde
+kandidaten, >=300 mogelijke nieuwe Works onderzoeken. Richtdoel500 netto extra
+NL-beschikbare Works indien bewijs dat draagt. Geen aantallen forceren.
+
+Branch catalog/nl-expansion-scale-20261102, geïsoleerde werkmap
+lumiscore-nl-expansion-scale-20261102, gestart op9c74ecaa48f7a35830f713eed3528d46ba0466ad.
+PR68 is gepubliceerd en87/87 live geaccepteerd in het oorspronkelijke releasebewijs.
+Actuele read-only productienulmeting2nov11:46:58UTC:10259Works,10676edities,
+3096operationeel NL-beschikbaar,576goedgekeurde centrale NL-teksten en119EN.
+Dit operationaliseert opgeslagen NL-taal; het certificeert niet alle legacyformaten.
+519Works hebben tevens centraal goedgekeurde NL-printmetadata.
+Historisch2649:netto+447gepubliceerd;4553resterend naar+5000.
+Paginagewijze openbare catalogussnapshot met identieke voor-/nadigests bewaard.
+Geen accounts/ratings/voortgang geëxporteerd. Productie blijft read-only.
+
+VOORTGANG — GEBRUIK progress-current.json / research-register.jsonl
+2300kandidaatdossiers,860mogelijke ontbrekende identiteiten, geen afwezigheidsbewijs.
+1000eerder niet inhoudelijk afgeronde bronkandidaten geselecteerd, waaronder337
+mogelijke nieuwe Works. Exacte selectie staat in research-selection.json.
+1000individuele eerste inhoudscontroles in content-review-001..035.json:
+522oorspronkelijke NL-tekstconcepten;25behouden goedgekeurde teksten;1dubbele
+bronkandidaat (Het geuzenboek) en452bron-/identiteitsvragen. Dit zijn geen1000
+volledig afgeronde dossiers. De337mogelijke nieuwe kandidaten zijn vergeleken
+met de volledige lokale titel-/editie-/aliascorpora van mogelijke bestaande
+auteurs. Geen match is op zichzelf geen bewijs van afwezigheid.
+Open editie-/cover-/identiteitsvragen, definitieve besluiten, import en hosted
+acceptatie worden verder verwerkt. Nog geen finale importgoedkeuring.
+De dubbele Geuzenboek-bronkandidaat telt NIET als tweede unieke inhoudelijke
+identiteit; minimaal één vervangend dossier toevoegen vóór1000unieke eindbesluiten.
+Geen testwrites, imports, commits naar productie, nieuwe PR of Preview voor deze fase.
+Eerder709huidige Work-identiteiten onderzocht:686oud+23daadwerkelijk toegevoegde
+PR68Works; hun onderzoek niet opnieuw tellen.
+
+BRONKETEN EN HERVATTEN
+- .research-cache/nl-scale-20261102/editions-extract.json bevat1277Workkandidaten
+  met expliciete printformaten, geldige ISBNs, NL-brontaal, coverID en één ouder.
+  Ze zijn GEEN automatische goedkeuring: er zijn concrete bronfouten gevonden.
+- works-extract.json bevat1277brongekoppelde Workteksten; authors-extract.json
+  bevat nu6012gevonden auteurs van6014benodigde bronkeys inclusief huidige auteurs.
+- research-cases.jsonl staat UITSLUITEND in de genegeerde cache omdat originele
+  bronflapteksten niet opnieuw in een publieke PR worden verspreid.
+- Individuele leesdossiers staan in outputs/nl-scale-20261102/review-packets/.
+  Tot en met geval1000 gelezen en vastgelegd. Later opgeloste vragen als
+  expliciete revisie bewaren; oorspronkelijke source-binding hashes behouden.
+- De officiële reeds lokale9/30edition- enWorkdumps uit de integritywerkmap zijn
+  read-only hergebruikt en volledig op de gepinde SHA1gecontroleerd.
+- Eén officiële auteursdump782352949bytes is opgehaald en SHA1gecontroleerd.
+  Alle bronbestanden blijven genegeerd; alleen feiten, bronhashes en eigen teksten
+  zijn bedoeld voor het reviewpakket.
+- Aanvullende lokale reserve-extractie:4644Workkandidaten/4903printrecords,
+  waarvan3725nog geen directe OL-key-match. Titelmatch tegen CPNB levert27extra
+  voorlopige bronkandidaten. Titel alleen is geen match: Oktober van Marnix Gijsen
+  is NIET automatisch de gelijknamige CPNB-titel; 't Hooge Nest bestaat al als1173.
+- works-reserve-extract.json is voltooid:4640bronnen,4ontbrekende bronWorks.
+  Bronrijke extra populaire dossiers/CPNB27 nader beoordelen; bestaande fase-
+  selectie en afgeronde reviews behouden. Niet blind3725nieuwe Works noemen.
+
+KB
+Officiële NBT en NTA, CC0, openbare SPARQLroute:
+https://data.bibliotheken.nl/sparql
+De /KB/Production/sparql URL is de editor, geen JSON-API. Dit was een technische
+endpointkeuze, geen beveiligingsweigering.
+Exacte ISBN13 én oude ISBN10 in begrensde gecachete VALUESqueries onderzocht.
+KB-normalized-facts.json bevat2198bibliografische records; namen/ISBNvarianten en
+drukken zijn geen afzonderlijke Works. Ontbrekend bookFormat blijft onbekend.
+Verreweg de meeste descriptions zijn catalogusnotities, geen inhoudssamenvatting.
+Nieuwe calls alleen voor ontbrekende gegevens; nl-scale-kb-links.mjs hergebruikt
+eerder gekoppelde identifiers. Cached failures worden niet automatisch herhaald.
+
+POPULARITEIT
+CPNB14officiële jaar-PDFs2019–2025:1400posities1..100, verkoop en uitleen gescheiden.
+PDFs lokaal genegeerd; feiten in sources/cpnb-ranking-facts.json.22rijen hebben
+glyph-/regelomloopvragen en blijven buiten exacte automatische matching.
+Verkoop kan formats/drukken samenvoegen; uitleen zijn gebeurtenissen, geen personen.
+Open Library ratingsdump1060973rijen/709550Works is een wereldwijd
+beoordelingssignaal, geen Nederlandse verkoop- of lezersranglijst.
+SEO-contentmap alleen gelezen en als prioriteit gebruikt; niets gepubliceerd.
+
+BELANGRIJKE INHOUDELIJKE CONTROLES
+- Eerste Bridget Jones Diary-kandidaat OL547745W heeft een onjuiste Duitse
+  Goldmann-editie met dut-tag: niet overnemen. Bestaande3512(OL547743W) is
+  The Edge of Reason(1999), dus NIET hetzelfde boek. Geen samenvoeging.
+- Gone/Verlaten OL12514150W is mogelijk reeds9380(Gone. Michael Grant,
+  OL20098483W, Egmont ISBN9781405242356). Exacte inhoudsidentiteit nog bevestigen,
+  dan Nederlandse editie aan bestaand9380toevoegen; GEEN nieuw Work/merge.
+- Lethal Vows/Dodelijke geloften bevat twee verschillende ISBN13s, waaronder
+  een buitenlandse ISBN naast9789464405989. Nooit het eerste ISBN kiezen.
+  Triage markeert nu meerdere ISBNs voor expliciete editiecontrole.
+- Bronarrays bevatten illustratoren/vertalers/voorlezers en foutieve namen.
+  Geen automatische auteurimport. Reguliere DB heeft één primaire author_id.
+  Bewaar onderbouwde nevencredits in bewijs; geen verzonnen gecombineerde
+  auteuridentiteiten of nieuwe schemafuncties zonder noodzaak.
+- Books of Blood Volume One vs NL-ISBN met KB-oorsprong I–VI: inhoudsconflict.
+  Sappho-selecties, Aphrodite-stripbewerkingen, Nabokov's revisie en collecties
+  vragen expliciete scopecontrole. Geen bronnen of halve delen samenvoegen.
+- Margo's bron is vervuild met persoonlijke meningen/instructies; deze genegeerd.
+  Officiële auteurbron inmiddels gevonden:rufithorpe.com/margo-s-got-money-troubles.
+- De Profundis-brontekst verworpen; onafhankelijke Wilde Society/PRHbron gelezen
+  en eigen concept opgeslagen. Nederlandse versie/compleetheid nog controleren.
+- Ontembaar/Untamed: officiële Macmillansynopsis en dubbele schrijverscredit
+  inmiddels gelezen; concept/bronbinding nog toevoegen als gerichte revisie.
+- Astérix officiële site niet toegankelijk. Onafhankelijke oorspronkelijke
+  uitgever Hachette UK heeft auteurs-/illustratorcredits en albumsynopsissen.
+  Enkele URLs zijn reeds in webonderzoek gevonden; gericht verder, geen gokplot.
+
+COVERS
+Officiële Open Library documentatie verbiedt bulkdownload via cover-API.
+Geen cover-APIcrawl uitgevoerd. Alleen officiële bulkarchieven gebruikt.
+65exacte archived covers gedecodeerd;65visuele frontreviews in
+cover-semantic-review-001.json en002.json.63frontconsistent,2nogonzeker
+(Artemis Fowl/Noordhoff:taal;In slavernij/Linda Brent:auteursalias).
+Onderliggende SHA256s in cover-decode-results-v2.json en oorspronkelijke001.
+Geen geclaimde hosted lading of zichtbare barcodecontrole. Design Patterns148×210
+en Triffids158×265 beperkt.
+Eon714233B en Reni725783B zijn ARCHIEFORIGINELEN, geen gemeten publiekeL-payload.
+Archief15en7nietbeschikbaar. ZIP64ondersteuning nu getest op veilige64bitgrenzen,
+truncatie en multidiskweigering:4gerichte tests geslaagd. v2run190targets,
+65succesvolle archiefleden, allen gedecodeerd; oorspronkelijke receipts behouden.
+Nieuwe HTTPfouten in v2NIET blind opnieuw aanbieden; resumelogica moet ook die
+groepen blokkeren alvorens vervolgrequests. Geen cover-APIbulkdownload.
+Officieel archief biedt checksummed .indexbestanden met TARleden-offsets.
+Die afzonderlijke ondersteunde route is onderzocht; enkele TARs geven502.
+Fouten/no-retry in cover-tar-readback.json. Geen403beveiligingsweigering gezien.
+Niet blind dezelfde aanvragen herhalen. Brononderzoek gaat onafhankelijk door.
+Voor appacceptatie blijft normale coverweergave via bestaande loaders behouden;
+geen nieuwe coverhost/opslag en geen volledige bronimages in de repository.
+
+OPEN PR-OVERLAP
+PR62is nogDraft33801703..., pakket in andere werkmap
+../lumiscore-dystopia-dune-20261031/catalog/edition-recovery-20261031/
+11edities/12coverbindings/23teksten: niet opnieuw importeren vanuit deze fase.
+Ook openPR58/60/57en andere lopende wijzigingen onaangeroerd laten.
+De actuele open-PRinformatie is eerder read-only uit GitHub opgehaald.
+De huidige brede registerbron sluit eerder afgehandelde Workdossiers al uit;
+vóór goedkeuring alsnog exacte ISBN-/Work-/tekstkey-overlap vastleggen.
+
+VOLGENDE WERKZAAMHEDEN
+1. Open bronnen inhoudelijk verifiëren en gerichte contentrevisies vastleggen.
+2. Identiteitsvergelijkingen voor337mogelijke nieuwe dossiers vastleggen en
+   concrete matches hergebruiken: geval52naarbestaand1903(Gebroken licht),
+   geval318naar4838(Narziss und Goldmund). Geen nieuwe Works hiervoor.
+   identity-neighbours.json is een kandidatenhulp, geen mergebesluit.
+3. Finale dossierbesluiten pas na relevante inhouds-/editiecontrole vastleggen;
+   nog ongecontroleerd blijft nogteonderzoek. Register/progress script hergebruiken.
+4. Exacte importvoorstellen met verwachte oude waarden en eigen testmanifest maken.
+   Bestaande echte PR68/nl006helpers en SQL hergebruiken; enkele nl007scripts op
+   main zijn1byte leeg en geen werkende importer.
+5. Lokale SQLproeven, testimport, teruglezen, replay en gecommitteerd herstel.
+   Behoud gebruikersdata; stop bij afhankelijkheden/later gewijzigde waarden.
+6. DraftPR+branchgebonden testPreview; iedere gewijzigde presentatie renderen,
+   decoded cover, titelzoekbaarheid, bron en publieke scorepariteit controleren.
+   Representatief NL/EN,Paper/Ink,320px/desktop,gast/auth,paging/preference.
+7. Eén gezamenlijk reviewadvies na deze hele fase; geen eindstop bij100.
+
+GEEN productie-import/merge/publicatie. Geen dashboard/PR51/socialwijzigingen.

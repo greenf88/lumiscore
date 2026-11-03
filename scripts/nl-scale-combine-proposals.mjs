@@ -5,7 +5,7 @@ import{ROOT,readJson}from'./nl-scale-snapshot.mjs';
 import{renderImport,renderRollback}from'./nl-scale-release-sql.mjs';
 const dir=new URL('subbatches/',ROOT),numbers=fs.readdirSync(dir).filter(n=>/^\d{3}$/.test(n)).sort(),actions=[],authorRefs=new Map(),bindings=new Map(),corpora=new Map();
 const stable=x=>JSON.stringify(x,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
-const totals={newWorks:0,newDutchEditions:0,newDutchSummaries:0,newCoverBindings:0,netDutchAvailability:0};
+const totals={newWorks:0,newDutchEditions:0,newDutchSummaries:0,newCoverBindings:0,missingVerifiedCovers:0,netDutchAvailability:0};
 let rawActions=0;
 for(const n of numbers){const p=readJson(new URL(n+'/production-plan.json',dir)),refs=new Map(p.actions.map(a=>[a.ref,'b'+n+'_'+a.ref]));if(p.summary.target!=='qvplwejffhjvxaypmjut')throw Error('Unexpected target');rawActions+=p.actions.length;
  for(const a of p.actions.filter(a=>a.relation==='authors'&&a.before===null)){

@@ -1,6 +1,15 @@
-import test from'node:test';import assert from'node:assert/strict';import{fillVerifiedMissingIsbn,mirrorReviewedEditionPatch}from'./nl-scale-edition-patch.mjs';
+import test from'node:test';import assert from'node:assert/strict';import{fillVerifiedMissingIsbn,mirrorReviewedEditionPatch,verifyAdditionalPrintedAlternative}from'./nl-scale-edition-patch.mjs';
 const row={id:1201,work_id:1201,open_library_edition_id:'OL24298393M',isbn_13:null,language:null,title:'Pijpelijntjes'},options={isbn13:'9789065210937',editionKey:'/books/OL24298393M',workId:1201,editionRows:[row]};
+test('additional reviewed printed alternative preserves exact legacy rows and earns no automatic availability credit',()=>{
+ const old={...row,language:'dut'},review={reason:'Exact historical edition is a separately reviewed French-based adaptation; add verified full play without modifying it.',sources:['https://example.invalid/library','https://example.invalid/exact-edition'],expectedEditions:[old]};
+ assert(verifyAdditionalPrintedAlternative([old],review));assert.deepEqual(old,{...row,language:'dut'});
+ assert.throws(()=>verifyAdditionalPrintedAlternative([old],undefined));
+ assert.throws(()=>verifyAdditionalPrintedAlternative([{...old,title:'A later legitimate correction'}],review));
+ assert.throws(()=>verifyAdditionalPrintedAlternative([old,{...old,id:2}],review));
+});
 test('verified missing ISBN fills one existing exact edition without changing title, Work or ID',()=>assert.deepEqual(fillVerifiedMissingIsbn(row,options),{...row,isbn_13:options.isbn13}));
 test('wrong Work, edition, checksum, populated ISBN or duplicate ISBN is refused',()=>{for(const x of[{...row,work_id:2},{...row,open_library_edition_id:'OL1M'},{...row,isbn_13:'9789065210937'}])assert.throws(()=>fillVerifiedMissingIsbn(x,options));assert.throws(()=>fillVerifiedMissingIsbn(row,{...options,isbn13:'9789065210938'}));assert.throws(()=>fillVerifiedMissingIsbn(row,{...options,editionRows:[row,{...row,id:2,isbn_13:options.isbn13}]}));});
 test('test mirror applies exactly reviewed ISBN/language deltas while preserving its own IDs and other metadata',()=>{const target={...row,id:987110001,work_id:987110001};assert.deepEqual(mirrorReviewedEditionPatch(target,row,{...row,language:'dut',isbn_13:options.isbn13}),{...target,language:'dut',isbn_13:options.isbn13});});
 test('test mirror refuses baseline drift and unrelated edition changes',()=>{assert.throws(()=>mirrorReviewedEditionPatch({...row,isbn_13:'9789065210937'},row,{...row,isbn_13:options.isbn13}));assert.throws(()=>mirrorReviewedEditionPatch(row,row,{...row,work_id:7}));});
+
+test('explicit reviewed publisher allowance mirrors only that field and preserves its baseline',()=>{const before={id:1,title:'Book',publisher:'Cosse'},target={id:2,title:'Book',publisher:'Cosse'},after={...before,publisher:'Cossee'};assert.deepEqual(mirrorReviewedEditionPatch(target,before,after,['publisher']),{...target,publisher:'Cossee'});assert.throws(()=>mirrorReviewedEditionPatch(target,before,after));assert.throws(()=>mirrorReviewedEditionPatch({...target,publisher:'Later'},before,after,['publisher']));assert.throws(()=>mirrorReviewedEditionPatch(target,before,{...after,work_id:9},['work_id']));});

@@ -1,0 +1,72 @@
+begin;
+select set_config('lumiscore.catalog_release_receipt','{"rows":[{"key":{"open_library_edition_id":"OL42371583M"},"seq":1,"relation":"editions","after_row":{"id":987221002,"title":"De Fluisterman","isbn_10":null,"isbn_13":"9789049807368","work_id":987121001,"cover_id":null,"language":"dut","publisher":"Dwarsligger","publish_date":null,"open_library_edition_id":"OL42371583M"},"before_row":null},{"key":{"work_id":987121001,"language":"nl"},"seq":2,"relation":"catalog_work_descriptions","after_row":{"text":"Na de dood van zijn vrouw verhuist Tom Kennedy met zijn jonge zoon Jake naar Featherbank. Hij hoopt er opnieuw te kunnen beginnen, maar het stadje draagt de herinnering aan een reeks kindermoorden met zich mee. Een nieuwe verdwijning vertoont verontrustende overeenkomsten met die oude zaken. Terwijl rechercheurs naar het vermiste kind zoeken, merkt Tom dat ook Jake zich anders gedraagt. De jongen zegt gefluister bij zijn raam te horen, waardoor de veilige nieuwe omgeving steeds minder geruststellend wordt.","work_id":987121001,"evidence":[{"note":"Author official website explicitly states he published ten crime novels as SteveMosby before writing TheWhisperMan as AlexNorth. Same verified person, no name-only equivalence or author merge. Exact9789049807368 Dutch Dwarsligger print bound by KBp421924489; display public author model is retained and pseudonym credit documented.","type":"reviewed_identity_and_bibliography","sources":["http://data.bibliotheken.nl/id/nbt/p421924489"],"reference":"work:3094","checked_at":"2026-11-02T21:52:43.735Z","supplemental":null,"existingAlternativeReview":null},{"type":"original_substantive_source_review","review":"content-review-019.json","sources":["https://www.alexnorth.co.uk/","https://openlibrary.org/works/OL20094468W","https://data.bibliotheken.nl/id/nbt/p421924489"]},{"type":"cover_front_review","sha256":"92a5cac5ca2232ea764dc769008775a5b902fbeaaa335bf663b00f5916e9dfac","cover_id":13784395,"reference":"cover-semantic-review-003.json","limitation":"Front title/author and source-edition binding; no barcode assertion."}],"language":"nl","provenance":"original_source_reviewed_summary","source_url":"https://www.alexnorth.co.uk/","reviewed_at":"2026-11-02T21:52:43.735+00:00","source_name":"Gecontroleerde boek- en catalogusbronnen","source_type":"official_catalog","review_batch":"nl-scale-20261102-022","review_status":"approved","bound_author_id":946301516},"before_row":null},{"key":{"edition_id":987221002},"seq":3,"relation":"catalog_edition_metadata","after_row":{"format":"paperback","work_id":987121001,"evidence":[{"note":"Author official website explicitly states he published ten crime novels as SteveMosby before writing TheWhisperMan as AlexNorth. Same verified person, no name-only equivalence or author merge. Exact9789049807368 Dutch Dwarsligger print bound by KBp421924489; display public author model is retained and pseudonym credit documented.","type":"reviewed_identity_and_bibliography","sources":["http://data.bibliotheken.nl/id/nbt/p421924489"],"reference":"work:3094","checked_at":"2026-11-02T21:52:43.735Z","supplemental":null,"existingAlternativeReview":null},{"type":"original_substantive_source_review","review":"content-review-019.json","sources":["https://www.alexnorth.co.uk/","https://openlibrary.org/works/OL20094468W","https://data.bibliotheken.nl/id/nbt/p421924489"]},{"type":"cover_front_review","sha256":"92a5cac5ca2232ea764dc769008775a5b902fbeaaa335bf663b00f5916e9dfac","cover_id":13784395,"reference":"cover-semantic-review-003.json","limitation":"Front title/author and source-edition binding; no barcode assertion."}],"cover_url":"https://covers.openlibrary.org/b/id/13784395-L.jpg?default=false","edition_id":987221002,"bound_title":"De Fluisterman","reviewed_at":"2026-11-02T21:52:43.735+00:00","bound_isbn13":"9789049807368","evidence_url":"https://data.bibliotheken.nl/id/nbt/p421924489","review_batch":"nl-scale-20261102-022","review_status":"approved","bound_language":"dut","card_cover_url":"https://covers.openlibrary.org/b/id/13784395-M.jpg?default=false","bound_author_id":946301516},"before_row":null}],"batch":"nl-scale-20261102-022","project":"hlvujbrmfdlrfxdjwsmb"}',false);
+-- REVIEW ONLY. Receipt from FIRST successful COMMIT required; a dry-run receipt is forbidden.
+-- Load the exact approved receipt via parameterized set_config('lumiscore.catalog_release_receipt',$1,false).
+-- Only receipt rows; full-row CAS, parent locks, every incoming FK including CASCADE; later changes abort all.
+set local lock_timeout='3s';set local statement_timeout='30s';
+lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
+do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols text;k jsonb;predicate text;allowed_keys text[];begin
+ receipt:=nullif(current_setting('lumiscore.catalog_release_receipt',true),'')::jsonb;
+ if receipt->>'project' is distinct from 'hlvujbrmfdlrfxdjwsmb' or receipt->>'batch' is distinct from 'nl-scale-20261102-022' or jsonb_typeof(receipt->'rows') is distinct from 'array' or jsonb_array_length(receipt->'rows')<>3 then raise exception 'Exact first committed receipt required';end if;
+ for r in select value from jsonb_array_elements(receipt->'rows') order by (value->>'seq')::integer desc loop
+  if r->>'relation' not in ('authors','works','editions','catalog_work_descriptions','catalog_edition_metadata') then raise exception 'Unreviewed receipt relation';end if;
+  k:=r->'key';allowed_keys:=case r->>'relation' when 'authors' then array['id','open_library_id'] when 'works' then array['id','native_identity_key','open_library_id'] when 'editions' then array['id','open_library_edition_id','isbn_13','isbn_10'] when 'catalog_work_descriptions' then array['work_id','language'] else array['edition_id'] end;
+  if jsonb_typeof(k)<>'object' or not exists(select 1 from jsonb_each(k)) or exists(select 1 from jsonb_each(k) where not key=any(allowed_keys) or value='null'::jsonb) then raise exception 'Invalid receipt identity key';end if;
+  select string_agg(format('t.%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),' and ' order by key) into predicate from jsonb_each(k);
+  execute format('select to_jsonb(t) from public.%I t where %s for update',r->>'relation',predicate) into actual using k;
+  if actual is null and r->'before_row'='null'::jsonb then continue;end if;
+  if actual is not distinct from r->'before_row' then continue;end if;
+  if actual is distinct from r->'after_row' then raise exception 'Later legitimate change; recovery refused';end if;
+  if r->'before_row'='null'::jsonb then
+   for dep in select ns.nspname,c.relname,string_agg(format('(to_jsonb(child)->%L)=($1->%L)',ca.attname,pa.attname),' and ' order by k.ord) predicate
+    from pg_constraint f join pg_class c on c.oid=f.conrelid join pg_namespace ns on ns.oid=c.relnamespace
+    cross join lateral unnest(f.conkey,f.confkey) with ordinality k(childkey,parentkey,ord)
+    join pg_attribute ca on ca.attrelid=f.conrelid and ca.attnum=k.childkey join pg_attribute pa on pa.attrelid=f.confrelid and pa.attnum=k.parentkey
+    where f.contype='f' and f.confrelid=to_regclass('public.'||(r->>'relation')) group by f.oid,ns.nspname,c.relname
+   loop
+    execute format('select count(*) from %I.%I child where %s',dep.nspname,dep.relname,dep.predicate) into n using r->'after_row';
+    if n>0 then raise exception 'Later dependency in %.%; recovery refused',dep.nspname,dep.relname;end if;
+   end loop;
+   execute format('delete from public.%I t where %s',r->>'relation',predicate) using k;
+  else
+   select string_agg(format('%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),',') into cols from jsonb_each(r->'before_row') where value is distinct from r->'after_row'->key;
+   execute format('update public.%I t set %s where %s',r->>'relation',cols,replace(predicate,'$1','$2')) using r->'before_row',k;
+  end if;
+ end loop;
+end;$undo$;
+select set_config('lumiscore.catalog_release_receipt','{"rows":[{"key":{"native_identity_key":"nlscale:fixture022:3094"},"seq":1,"relation":"works","after_row":{"id":987121001,"title":"The Whisper Man","cover_id":null,"author_id":946301516,"work_type":null,"source_type":null,"open_library_id":"OL20094468W","first_publish_year":2019,"native_identity_key":"nlscale:fixture022:3094"},"before_row":null},{"key":{"open_library_edition_id":"OL42859963M"},"seq":2,"relation":"editions","after_row":{"id":987221001,"title":"THE WHISPER MAN*","isbn_10":"1405936002","isbn_13":"9781405936002","work_id":987121001,"cover_id":null,"language":"eng","publisher":"Penguin","publish_date":null,"open_library_edition_id":"OL42859963M"},"before_row":null}],"batch":"nl-scale-20261102-022-fixture","project":"hlvujbrmfdlrfxdjwsmb"}',false);
+-- REVIEW ONLY. Receipt from FIRST successful COMMIT required; a dry-run receipt is forbidden.
+-- Load the exact approved receipt via parameterized set_config('lumiscore.catalog_release_receipt',$1,false).
+-- Only receipt rows; full-row CAS, parent locks, every incoming FK including CASCADE; later changes abort all.
+set local lock_timeout='3s';set local statement_timeout='30s';
+lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
+do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols text;k jsonb;predicate text;allowed_keys text[];begin
+ receipt:=nullif(current_setting('lumiscore.catalog_release_receipt',true),'')::jsonb;
+ if receipt->>'project' is distinct from 'hlvujbrmfdlrfxdjwsmb' or receipt->>'batch' is distinct from 'nl-scale-20261102-022-fixture' or jsonb_typeof(receipt->'rows') is distinct from 'array' or jsonb_array_length(receipt->'rows')<>2 then raise exception 'Exact first committed receipt required';end if;
+ for r in select value from jsonb_array_elements(receipt->'rows') order by (value->>'seq')::integer desc loop
+  if r->>'relation' not in ('authors','works','editions','catalog_work_descriptions','catalog_edition_metadata') then raise exception 'Unreviewed receipt relation';end if;
+  k:=r->'key';allowed_keys:=case r->>'relation' when 'authors' then array['id','open_library_id'] when 'works' then array['id','native_identity_key','open_library_id'] when 'editions' then array['id','open_library_edition_id','isbn_13','isbn_10'] when 'catalog_work_descriptions' then array['work_id','language'] else array['edition_id'] end;
+  if jsonb_typeof(k)<>'object' or not exists(select 1 from jsonb_each(k)) or exists(select 1 from jsonb_each(k) where not key=any(allowed_keys) or value='null'::jsonb) then raise exception 'Invalid receipt identity key';end if;
+  select string_agg(format('t.%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),' and ' order by key) into predicate from jsonb_each(k);
+  execute format('select to_jsonb(t) from public.%I t where %s for update',r->>'relation',predicate) into actual using k;
+  if actual is null and r->'before_row'='null'::jsonb then continue;end if;
+  if actual is not distinct from r->'before_row' then continue;end if;
+  if actual is distinct from r->'after_row' then raise exception 'Later legitimate change; recovery refused';end if;
+  if r->'before_row'='null'::jsonb then
+   for dep in select ns.nspname,c.relname,string_agg(format('(to_jsonb(child)->%L)=($1->%L)',ca.attname,pa.attname),' and ' order by k.ord) predicate
+    from pg_constraint f join pg_class c on c.oid=f.conrelid join pg_namespace ns on ns.oid=c.relnamespace
+    cross join lateral unnest(f.conkey,f.confkey) with ordinality k(childkey,parentkey,ord)
+    join pg_attribute ca on ca.attrelid=f.conrelid and ca.attnum=k.childkey join pg_attribute pa on pa.attrelid=f.confrelid and pa.attnum=k.parentkey
+    where f.contype='f' and f.confrelid=to_regclass('public.'||(r->>'relation')) group by f.oid,ns.nspname,c.relname
+   loop
+    execute format('select count(*) from %I.%I child where %s',dep.nspname,dep.relname,dep.predicate) into n using r->'after_row';
+    if n>0 then raise exception 'Later dependency in %.%; recovery refused',dep.nspname,dep.relname;end if;
+   end loop;
+   execute format('delete from public.%I t where %s',r->>'relation',predicate) using k;
+  else
+   select string_agg(format('%I=(jsonb_populate_record(null::public.%I,$1)).%I',key,r->>'relation',key),',') into cols from jsonb_each(r->'before_row') where value is distinct from r->'after_row'->key;
+   execute format('update public.%I t set %s where %s',r->>'relation',cols,replace(predicate,'$1','$2')) using r->'before_row',k;
+  end if;
+ end loop;
+end;$undo$;
+commit;

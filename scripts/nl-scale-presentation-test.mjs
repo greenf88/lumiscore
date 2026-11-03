@@ -34,7 +34,7 @@ if(mode==='fixture'){
   const wid=a.relation==='works'?a.key.id:a.after.work_id,w=wm.get(wid),key={...a.key};let before=a.before,after={...a.after};
   if(a.relation==='works'){key.id=w.id;before=w;after={...w,first_publish_year:a.after.first_publish_year};}
   else if(a.relation==='editions'&&a.before===null){after={...a.after,id:base.editions+full.editions.length+(++addedEditionCount),work_id:w.id,publish_date:null,cover_id:null};}
-  else if(a.relation==='editions'){const e=em.get(a.key.id);key.id=e.id;before=e;after=mirrorReviewedEditionPatch(e,a.before,a.after);}
+  else if(a.relation==='editions'){const e=em.get(a.key.id);key.id=e.id;before=e;after=mirrorReviewedEditionPatch(e,a.before,a.after,a.reviewedEditionFieldKeys);}
   else{after.work_id=w.id;after.bound_author_id=w.author_id;if(key.work_id)key.work_id=w.id;if(a.relation==='catalog_edition_metadata'&&!String(a.key.edition_id).startsWith('@')){const e=em.get(a.key.edition_id);key.edition_id=e.id;after.edition_id=e.id;}}
   return{...a,key,before,after};
  });
