@@ -1,0 +1,97 @@
+{
+  "scope": "Test only. Two own ratings, two own automatic statuses, one own empty round transactionally removed with full-row CAS. Normal Auth dashboard deletion of own temporary confirmed account after logout and zero dependency preflight.",
+  "before": {
+    "status": {
+      "count": 68,
+      "digest": "1c7928e13bfc99ef5864ddb0d8ae5588"
+    },
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ratings": {
+      "count": 68,
+      "digest": "cb81f8f832556fd90c341e236f8591cf"
+    },
+    "accounts": {
+      "count": 3,
+      "identity_updated_digest": "4ee0154cc7915f0e30cb98b67eed826d"
+    },
+    "reserved": {
+      "works": 35,
+      "authors": 13,
+      "editions": 49
+    },
+    "catalogue": {
+      "works": {
+        "count": 1641,
+        "digest": "96a0a5189ae77e9437d203465d31bd0d"
+      },
+      "authors": {
+        "count": 666,
+        "digest": "17edf776871db535561e46f2f9a67080"
+      },
+      "editions": {
+        "count": 2193,
+        "digest": "c5733be043fd03870b9f537348abe68f"
+      },
+      "metadata": {
+        "count": 1159,
+        "digest": "db362fffb7640ef4b279a373c206fb31"
+      },
+      "descriptions": {
+        "count": 1255,
+        "digest": "1611be20df2278a0cf66b9650a918931"
+      }
+    },
+    "checked_at": "2026-11-03T18:29:50.45551+00:00"
+  },
+  "after": {
+    "status": {
+      "count": 68,
+      "digest": "1c7928e13bfc99ef5864ddb0d8ae5588"
+    },
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ratings": {
+      "count": 68,
+      "digest": "cb81f8f832556fd90c341e236f8591cf"
+    },
+    "accounts": {
+      "count": 2,
+      "identity_updated_digest": "4423e4320839858d8946af7a01f8588a"
+    },
+    "reserved": {
+      "works": 35,
+      "authors": 13,
+      "editions": 49
+    },
+    "catalogue": {
+      "works": {
+        "count": 1641,
+        "digest": "96a0a5189ae77e9437d203465d31bd0d"
+      },
+      "authors": {
+        "count": 666,
+        "digest": "17edf776871db535561e46f2f9a67080"
+      },
+      "editions": {
+        "count": 2193,
+        "digest": "c5733be043fd03870b9f537348abe68f"
+      },
+      "metadata": {
+        "count": 1159,
+        "digest": "db362fffb7640ef4b279a373c206fb31"
+      },
+      "descriptions": {
+        "count": 1255,
+        "digest": "1611be20df2278a0cf66b9650a918931"
+      }
+    },
+    "checked_at": "2026-11-03T18:38:41.761581+00:00"
+  },
+  "checks": {
+    "catalogueIdentical": true,
+    "ratingsPreserved": true,
+    "statusesPreserved": true,
+    "originalAccountsRestored": true,
+    "previewCatalogueRestored": true
+  },
+  "meaning": "Original68 ratings/68statuses/2accounts match initial digests, five catalogue tables match before personal test. Own35/49/13 Preview fixtures remain. No sequence reset, production write or metadata/ranking change."
+}

@@ -5,7 +5,7 @@
   "workId": 3390,
   "newWork": false,
   "netNewDutchAvailability": 0,
-  "status": "substantive_review_complete_cover_pending",
+  "status": "approved_existing_presentation_proposal",
   "importApproved": false,
   "identityDecision": "Preserve first childrens Discworld novel3390 and exact Dutch hardcover3549. Same KB authority expanded Terence David John with Terry alias, already corroborated in506. No film-adaptation facts or storybook ISBN substituted.",
   "sources": [
@@ -27,8 +27,10 @@
   ],
   "cover": {
     "id": 12592580,
-    "status": "archived_transport_not_yet_visually_verified",
-    "receipt": "cover-12592580.json"
+    "receipt": "cover-normal-12592580.json",
+    "sha256": "4605dd1057019198e5d33c53915b23197913923ee4bd393e25c60f2bbd87fa10",
+    "bytes": 56211,
+    "visualReview": "Black/orange TerryPratchett front, Maurits cat with mice; Dutch full title and translator VenugopalanIttekot. Exact selected hardcover9789022537411, not film."
   },
   "presentationSource": "https://terrypratchett.com/books/the-amazing-maurice-and-his-educated-rodents/",
   "testApplied": false,
@@ -49,8 +51,13 @@
     "text": "Maurits verdient samen met een jongen en een groep slimme ratten geld aan een slimme variant van het rattenvangersverhaal. De ratten veroorzaken overlast en verdwijnen zodra de jongen op zijn fluit speelt. Buiten de stad verdelen ze de opbrengst. In een volgende plaats blijkt hun vertrouwde truc echter gevaarlijker dan verwacht. Er is weinig voedsel en onder de straten wacht een dreiging die niet met gladde praat valt op te lossen. De partners moeten beslissen wat zij buiten hun bedrog voor elkaar betekenen."
   },
   "remaining": [
-    "Current full-row/duplicate preflight",
-    "Local import/recovery validation",
-    "Test import and exact hosted acceptance"
-  ]
+    "Current full-row/identity collision review and PR71 overlap proof",
+    "Separate batch002 manifest/local and exact hosted import/recovery/acceptance; not part of frozen batch001"
+  ],
+  "coverResolution": {
+    "checkedOn": "2026-11-03",
+    "method": "Decoded original pixels viewed on labelled internal sheet; exact source-edition/ISBN binding independently checked",
+    "transport": "cover-largezip-readback-001.json",
+    "priorFailuresPreserved": true
+  }
 }

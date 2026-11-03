@@ -5,9 +5,9 @@
   "workId": 3357,
   "newWork": false,
   "netNewDutchAvailability": 0,
-  "status": "substantive_review_complete_cover_pending",
+  "status": "approved_existing_presentation_proposal",
   "importApproved": false,
-  "identityDecision": "Work3357 and edition3516 retained. Exact KB original2013 and Dutch film-edition ISBN resolves Dave/David authority variant; do not adopt retailer misspelling The Cirkle or narrator as coauthor. Later2021 publisher ISBN used for content only, never assigned to2017 edition.",
+  "identityDecision": "Work3357 and edition3516 retained. Exact KB original2013 and Dutch film-edition ISBN resolves Dave/David authority variant; do not adopt retailer misspelling The Cirkle or narrator as coauthor. Later2021 publisher ISBN used for content only, never assigned to2017 edition. Current read-only snapshot also finds Work5870/TheCircle by LauraDay, not DaveEggers; distinct author and story, never merge by title.",
   "sources": [
     {
       "url": "https://www.debezigebij.nl/boek/de-cirkel/",
@@ -37,8 +37,10 @@
   },
   "cover": {
     "id": 11575786,
-    "status": "archive_HTTP500_no_identical_retry",
-    "receipt": "cover-11575786.json"
+    "receipt": "cover-normal-11575786.json",
+    "sha256": "052861721a20d836b2c9a6dba2692e4f2f9cac09cd3d58d30ed48762da4390b9",
+    "bytes": 49989,
+    "visualReview": "Cream/red fingerprint DaveEggers/DeCirkel/Lebowski front, film-tie-in line and price sticker. Reprint styling bound by source to same9789048836680, not different titleTheCircle byLauraDay."
   },
   "presentationSource": "https://www.debezigebij.nl/boek/de-cirkel/",
   "testApplied": false,
@@ -53,8 +55,13 @@
     "publisher": "Lebowski Publishers"
   },
   "remaining": [
-    "Current full-row/duplicate preflight",
-    "Local import/recovery validation",
-    "Test import and exact hosted acceptance"
-  ]
+    "Current full-row/identity collision review and PR71 overlap proof",
+    "Separate batch002 manifest/local and exact hosted import/recovery/acceptance; not part of frozen batch001"
+  ],
+  "coverResolution": {
+    "checkedOn": "2026-11-03",
+    "method": "Decoded original pixels viewed on labelled internal sheet; exact source-edition/ISBN binding independently checked",
+    "transport": "cover-largezip-readback-001.json",
+    "priorFailuresPreserved": true
+  }
 }
