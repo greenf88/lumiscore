@@ -18,8 +18,9 @@ printkeuring van alle3096. Testspiegels en ongepubliceerde voorstellen worden ni
 
 Centraal vervolgregister: research-register.jsonl. Oorspronkelijk412 bronrijen,411 logische
 dossiers. Case303 is dezelfde roman Het geuzenboek als eerder afgeronde case260;
-bronverwijzingen blijven behouden, geen extra dossier/Work. Eerste75 logische dossiers
-behandeld;336 nog niet inhoudelijk behandeld in deze voortzetting. Onbezocht is geen
+bronverwijzingen blijven behouden, geen extra dossier/Work. Eerste148 logische dossiers
+behandeld;263 nog niet inhoudelijk behandeld in deze voortzetting. Behandeld betekent
+niet dat alle cover-, identiteit- of editievragen zijn opgelost. Onbezocht is geen
 onderzochte uitzondering. Historische709 dossiers en de589 eerdere schaalbesluiten
 worden niet opnieuw uitgevoerd. Nieuwe onderzoeksresultaten blijven buiten PR71.
 
@@ -56,7 +57,9 @@ geen permanente RLS aangepast. Geen defecte connectorbevestigingslus gebruikt.
 Draft-PR72: https://github.com/greenf88/lumiscore/pull/72 . Ready-Preview:
 https://lumiscore-mbjubus1a-rgkgroeneveld-9102.vercel.app . Deployment
 dpl_AA4HezGdFY8sqfKBLELxcysL7VcC op b2b5ee23dbbaaba04fd3810c4f63a3980d20477d;
-applicatiebytes ongewijzigd9c74ecaa48f7a35830f713eed3528d46ba0466ad. CI groen, run148.
+applicatiebytes ongewijzigd9c74ecaa48f7a35830f713eed3528d46ba0466ad. CI groen op bewijshead
+7b118c730b8b576940263b9e38318661c1400cb3, quality/run149. Nieuwere onderzoekcommits
+hebben hun eigen CI; deze SHA is geen vervangende applicatierelease.
 Alle35 exacte Nederlandse testpresentaties daadwerkelijk via zoeken/kaartklik/detail/
 herladen/teruglink/originele titel gecontroleerd, inclusief geladen cover en tekstbron.
 Aanvankelijk pending beelden en twee tijdelijke detailfallbacks blijven in het ruwe bewijs;
@@ -80,12 +83,17 @@ dezelfde applicatie9c74 is hash-gecontroleerd hergebruikt, inclusief langste oud
 (langer dan de nieuwe titels) en dezelfde aanbevelingsfixture. Dit is geen nieuwe mobiele
 meting van alle35 spiegels. Alles staat in batch-001/hosted-* en reused-responsive-proof.
 
-Vervolgonderzoek buiten batch001:18 aanvullende bron-goedgekeurde voorstellen (samen53),
-met nog lokale/testvalidatie te doen. Eerste batch verwacht+12; vervolgpotentieel+14 is nog
-geen importbewijs.53 bronvoorstellen zijn niet53 gehoste presentaties of26 gepubliceerde
-Works. Overige dossiers:14 coverpending,1 identiteit/coverpending,1 retitelvergelijking,
-1 geblokkeerde exacte cover,2 inhoudsidentiteitsconflicten,2 auteurscreditconflicten en
-1 geverifieerd pseudoniem met nog onopgeloste publieke presentatie.336 onbezocht.
+Vervolgonderzoek buiten batch001:48 aanvullende bron-goedgekeurde voorstellen (samen83),
+met nog lokale/testvalidatie te doen. Eerste batch verwacht+12; totaal bronpotentieel+44,
+dus extra+32 buiten batch001, is nog geen importbewijs.83 bronvoorstellen zijn niet83
+gehoste presentaties of44 gepubliceerde Works. Brongoedkeuring betreft17 nieuwe Works,
+25 editieaanvullingsdossiers,39 bestaande presentaties en2 editiehersteldossiers. Dit
+zijn dossiercategorieën, niet de actieaantallen van een nieuw importbestand.
+Overige dossiers:43 coverpending,6 identiteit/coverpending,1 bronidentiteit+inhoudpending,
+1 retitelvergelijking,1 geblokkeerde exacte cover,4 inhoudsidentiteitsconflicten,
+2 auteurscreditconflicten,3 bundel-/selectieconflicten,1 bestaande verkeerde-editiekoppeling,
+1 meertalige editiebeleidsvraag,1 editiecreditconflict en1 geverifieerd pseudoniem met
+nog onopgeloste publieke presentatie.263 onbezocht. Actuele telling in progress.json.
 SarahLark/ChristianeGohl is dezelfde persoon; geen extra auteur of globale naamswijziging.
 PowerPlay3650 van KateWilliam is niet DanielleSteel; TheCircle5870/LauraDay niet Eggers.
 
@@ -95,7 +103,26 @@ transfer. Square3D-mockup Dodelijke geloften en enkele oude bibliotheekstickers 
 Voorlopige dossiernotities bewaren de onderzoeksgeschiedenis; de definitieve cover.visualReview
 beschrijft de later bekeken exacte fronten. Geen barcode-identiteit geclaimd zonder bewijs.
 
-Volgende werkzaamheden: reviewpakket35 afronden en overige open dossiers voortzetten.
+Volgende werkzaamheden: reviewpakket35 blijft afgebakend; overige open dossiers voortzetten.
+Nieuwe controles vanaf reviewed-013 t/m023 zijn duurzaam vastgelegd. Lees actuele reviewed-
+bestanden; voer oudere materialisatiescripts niet blind opnieuw uit: latere identiteits-
+en coverbesluiten kunnen die eerdere selectie hebben vervangen. Geen extra hosted writes
+voor deze vervolgvoorstellen uitgevoerd. Read-only snapshots004–007 staan afzonderlijk.
+reviewed-validation.json vergelijkt alle149 bronrijen met het actieve PR71-plan: geen exacte
+actieoverlap; alleen de reeds opgeloste Geuzenboek-brondubbeling als titelsignaal.
+HoeDan9789000378739 hoort bij bestaandHowTo7005, nietWhatIf3646; ZoekTLekkerUit hoort
+bij bestaandDorkDiaries2Work4368. Geen nieuwe dubbele Works daarvoor voorbereiden.
+HermansWork1015 heeft fout gekoppeldOhlsson-ebook9789044335781: primair colofonbewijs,
+geen automatische verplaatsing/verwijdering. CorrecteHermansprint afzonderlijk onderbouwd,
+volledige dossierimport blijft uit tot identiteit/afhankelijkheden zijn uitgewerkt.
+DeAleph1986 is Sillevis-selectie uitElAleph+Ficciones; Baudelaire1986 is20gedichten,
+tweetalig. ArieloudeBrassinga-editie is geen herstelde facsimile. Geen volledige-bundel-
+samenvattingen of enkelvoudige taalwaarden daarvoor verzinnen. SonnetsTabula1984 heeft
+NL+EN en een mogelijk titelbladbeeld; nog geen cover-/beleidsgoedkeuring.
+Vijf nieuwe covermanifests leveren tientallen exact gehashte, gedecodeerde en visueel
+bekeken fronten via toegestane bulkleden. HTTP500 bijHerenVanDeThee-archief is vastgelegd,
+geen retry of CoverAPI-crawl. Grotegroeparchieven7/15 blijven een bronbeperking; geen
+claim dat deze boeken daarom geen cover hebben. Nieuwe voorstellen blijven buiten batch001.
 Case228 Buitenstaanders: oude cover is providerplaceholder. Concrete alternatieve2013
 Podium paperback9789057596230 bevestigd door ISBN-register/NBD; nog exact beeld nodig.
 Case392 Communistisch manifest: onzekere CreateSpace-vertaling niet goedkeuren; Boom2021
