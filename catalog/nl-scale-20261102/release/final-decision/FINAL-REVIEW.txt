@@ -1,0 +1,147 @@
+PR71 — ÉÉN DEFINITIEVE RELEASEBESLISSING — 3 NOVEMBER 2026
+STATUS: REVIEWBAAR DRAFT; GEEN PRODUCTIE-UITVOERING IN DEZE OPDRACHT.
+
+ACTUELE VERSIES EN AFBAKENING
+Actieve productie/main: 1bd42f0bb96699eeef33ebe6b409e36ed6dad061.
+Productie Ready: dpl_CcgdJL2hy3N6gNhmoXDhcvYowCZY. PR72 is gemerged en gepubliceerd.
+Geteste runtime/applicatie: 9c74ecaa48f7a35830f713eed3528d46ba0466ad.
+Deze PR bevat geen runtimeverschil met huidige main: metadataherstel, Paper,
+NL-editievoorkeur, taalfilters vóór paginering, gedeelde covers/teksten/scores,
+zoekaliassen, mobiele titelregels, PR51 en toestemming blijven behouden.
+De definitieve PR-head is de commit die dit pakket bevat; volledige SHA, groene
+exact-head-CI en Ready-deployment worden in PR71 en het eindantwoord vastgelegd.
+Reeds geteste actuele Preview op ab211bc66628fb35892b390084e870269e612b7e:
+https://lumiscore-eoloy4wz2-rgkgroeneveld-9102.vercel.app
+dpl_A9EJVMfnmx4WHM4Sd4AmtVKdoGcT. Runtimebytegelijkheid maakt het eerdere bewijs
+bruikbaar; oud bewijs wordt niet als nieuw uitgevoerde volledige browserronde gelabeld.
+
+EXACTE ACTIES EN GEEN DUBBELTELLING
+1.492 acties: 33 auteurs; 209 Works (176 nieuw,33 correcties); 254 edities
+(234 nieuw,20 correcties); 498 NL-samenvattingen; 498 editie-metadatarecords.
+220 metadatarecords bevatten een expliciete nieuwe coverbinding. De andere278
+zijn NIET278 ontbrekende covers:194 daarvan zijn via de gedeelde resolver bekeken.
+498 unieke presentaties:176 nieuwe Works,58 editieaanvullingsdossiers,261 verbeterde
+bestaande presentaties en3 herstelde uitsluitingen. De58 leveren56 extra NL Works;
+twee waren al beschikbaar. Netto176+56+3=235. Een tekst/cover telt niet als nieuw boek.
+Nieuwe onafhankelijke read-only berekening:263 van498 reeds Nederlands beschikbaar,
+235 niet;176 voorgestelde nieuwe Works nog afwezig. Operationeel3108 ->3343.
+Historische nulmeting2649: gepubliceerd+459; dit voorstel+235 nog NIET gerealiseerd.
+Na eventuele release+694 richting+5000; nog4306 te gaan. Operationele reeks meet
+distinct Work-ID's met editie.language nl/nld/dut; geen nieuwe inhoudelijke keuring
+van alle3108 bestaande boeken. De voorgestelde printedities zijn apart onderzocht.
+
+OVERLAP EN WAT IS AANGEPAST
+Alle1492 actie-inhouden en Work/auteurbindings zijn diep gelijk aan het oude plan.
+Nul doorPR72 overbodige acties; nul overlappende PR72-acties; nul kandidaat-overlap
+met de171 goedgekeurde maar ongepubliceerde vervolgdossiers. Geen nieuwe dossiers.
+Enige uitvoeringsaanpassing: auteurscorpusguard670/JanTerlouw erkent de volledig
+tegen de echte PR72-receipt vergeleken Works10290 en10291. Geen nieuwe importactie.
+Vier gedeelde auteurs al vóór de historische1492 eenmaal ontdubbeld.
+Drie covergevallen blijven uitgesloten:5028/5187 en1628/1761 hebben onvoldoende
+gelijk kaart/detailbewijs;6044/6203 toont NIEUWE maan terwijl Work WITTE maan heet.
+Geen retitling/merge om dat conflict te verbergen. Hun6 acties staan buiten1492.
+
+ACTIEVE MANIFESTEN — GEEN DUBBELE UITVOERING
+release/final-decision/release-manifest.json bindt exacte executables, bewijs en
+auditbronnen met SHA256. Het eindantwoord noemt de SHA256 van dat manifest.
+Actieve SQL uitsluitend release/after-pr72/production-{preflight,import,dry-run,
+rollback}.sql en production-plan.json. Bijbehorend after-pr72/hashes.json:
+9d9682b74a9c7db2164b44b1932a2bc8934c9a829fe60d966367f1f86deceffb.
+Oorspronkelijke release/production-*.sql en FINAL-REVIEW.txt blijven historisch
+hashbewijs, zijn voor productie-uitvoering VERVANGEN. Nooit beide versies uitvoeren.
+Alle22 oude manifestbestanden en1079 subbatch-bewijsbestanden opnieuw hashgelijk.
+
+ACTUELE VOORCONTROLE EN TESTBEWIJS
+Productie read-only 2026-11-03 22:00:05 UTC:2285 controles,0 afwijkingen.
+Volledige verwachte oude rijen,101 auteurscorpora,natuurlijke sleutels,globale ISBN/
+bron-Work/auteuridentiteiten en lege presentatieplaatsen gecontroleerd. Dit bewijs
+verloopt bij latere catalogusmutaties: onmiddellijk vóór uitvoering opnieuw doen.
+Test read-only21:57-21:59UTC:1992/1992 rijen gelijk aan de laatst gecommitteerd
+herstelde receipts:498 Works,498 edities,498 teksten inclusief provenance,498metadata.
+Iedere expliciete receiptwaarde vergeleken; niet daarin opgenomen DB-defaults
+worden niet als volledig vergeleken voorgesteld. Bestaande gedeelde fixtures komen
+uit hun gehashte bindings/readback, niet ten onrechte uit een nieuwe importreceipt.
+68ratings,68leesstatussen en2accounts behouden. Ratings/statushashes exact gelijk
+aan de laatstePR72-cleanupbaseline met dezelfde hashdefinitie. Geen nieuwe testwrites.
+
+498/498 bestaande hosted acceptaties blijven geldig voor ongewijzigde app,data en
+selectie:exacte editie/ISBN,titel,bronvermelde NL-tekst,NL/oorspronkelijke zoekopdracht,
+kaart/detail en terugklik.414 oorspronkelijk gedecodeerde inhoudelijk bekeken covers,
+84 expliciet toegestane neutrale placeholders. Lege-scorepariteit bij onbeoordeelde
+spiegelWorks bewijst geen echte positieve score; gedeelde bron en positieve tests
+zijn afzonderlijk bewijs. Geen ongefundeerde claim over rangschikkingskwaliteit.
+Niet-leeg synthetisch profiel,N L/EN,Paper/Ink,320px/desktop,toetsenbord,herladen,
+drie pagina's16kaarten/48unieke Works: bestaand gehashte bewijs hergebruikt.
+Tijdelijk account en3eigen ratings/statussen zijn al gericht opgeruimd; geen nieuw account.
+Nieuwe Ready-Previewcontrole:NLtitel/ISBN/samenvatting/bron en geladen cover,
+320pxPaper/Ink,herladen enEN-weigering bij ontbrekende geschikte Engelse editie.
+Geen 498nieuwe bezoeken geclaimd. Geen nieuwe externe bronroute of browserrequests.
+
+HERSTELBEWIJS EN GRENS DAARVAN
+Alle498 dossiers vallen onder54 afgebakende hosted import/teruglees/replay0/
+werkelijk gecommitteerd herstel/Previewherstelproeven; zie gehashte bewijsindex.
+Een transactionele dry-run metROLLBACK wordt niet als gecommitteerd herstel geteld.
+Gecombineerde1492actie-import,replay0 en herstel naCOMMIT zijn bovendien lokaal
+bewezen op productiesnapshot met beschermde synthetische stand-ins. Geen afzonderlijke
+gecombineerde hosted productie-import/herstel geclaimd. Testmirrors en fixtureacties
+zitten niet in het productieplan. Renderer behoudt full-row-CAS en alle inkomende
+FK's inclusiefCASCADE:latere wijzigingen of nieuwe afhankelijkheden stoppen volledig.
+De nieuwe auteurscorpusguard is alleen read-only gevalideerd; acties ongewijzigd.
+Eerdere28 gerichte package/renderer/import/replay/CAS/CASCADEtests geslaagd;
+volledige exacte PR-head-CI moet vóór akkoord/uitvoering groen zijn.
+
+COVERBEPERKINGEN PER CATEGORIE
+cover-case-decisions.json bevat ieder van84 fallbackgevallen met ISBN,Work/edition,
+bronpoging,status en dossierverwijzing plus de3 uitsluitingen.
+84:geen voor import behouden geverifieerde asset na vastgelegde bulkbron-/parser-
+problemen. Dit is GEEN bewijs dat nergens een cover bestaat,noch dat uitval permanent
+of tijdelijk is. Geen definitief kapotte afbeelding of verkeerde taal uit die fouten
+afgeleid. Laat bestaande neutrale fallback staan; geen willekeurige vervanging.
+Eén actuele waarneming:*Het tijdperk van de huid*,ISBN9789038807416,cover14860444:
+dezelfde bestaande resolver laadt nu passende kaart/detailcover op320px en nareload.
+Titel,auteur enuitgever visueel gecontroleerd; geen extra binding/importactie.
+Andere83 niet opnieuw als gevonden cover geteld. Historisch84-fallbackacceptatie
+blijft de conservatieve beperking,geen belofte van84 permanent ontbrekende covers.
+2uitgesloten:paired kaart/detaillevering niet bewezen;1uitgesloten:boekidentiteit
+onjuist/onopgelost. Verkeerde identiteit blokkeert DIE wijzigingen, niet498goede.
+27 bewaarde bronassets boven300kB,van161 gemeten archiefassets; grootste6.63MB.
+Dat zijn bronarchiefbytes,GEEN gemeten browser L/M-transfers of27 onbruikbare covers.
+Grote juiste afbeeldingen/stickers/externe laadtijd blijven apart gedocumenteerd.
+Geen nieuwe prestatieclaim; oude server/zichtbaar/covermeetdefinities ongewijzigd.
+
+UITVOERINGSVOLGORDE NA AFZONDERLIJK RELEASEAKKOORD
+1.Verifieer exacte head/CI/hashes,actuele main/productie,deployment enproject.
+  Productie qvplwejffhjvxaypmjut;stop bij iedere afwijking. Lees afhankelijkheden,
+  maak herleidbare herstelsnapshot,herhaal2285preflight enactuele NL-berekening.
+2.Installeer UITSLUITEND migratie20261102185143_nl_scale_search_unicode.sql via de
+  officiële bestaande correct registrerende CLI-route. Controleer lokale énremote
+  historie en volledige geplande set;geen overige migraties,geen handmatige historie.
+  SHA256496d043fbf442ef297382ba824dd337dc00bcfe66b6f9ec1b1762182fe30ebde.
+  Productie nu0registraties,body22d828c503e8b36cdd86a16602e594e4. Test1registratie,
+  body187df6e5e6ea8976d1a85a2d4c1a9e01. Alleen NFKCmatching;zelfde editievoorwaarden,
+  sortering,resultaatvorm engrants;SECURITYINVOKER,postgres,lege search_path.
+3.Voer uitsluitend actuele after-pr72-import transactioneel uit. IDs via bestaande
+  automatische toekenning;geen sequence-reset. Bewaar EERSTE echte COMMITreceipt.
+  Lees1492exacte rijen terug,replay0zonder mutaties,controleer netto235 enbeschermde
+  data. Bewaar snapshot/receipt veilig;geen accounts ofcredentials inreviewartefacten.
+4.Merge/publiceer uitsluitend goedgekeurde versie als alles groen. Controleer live
+  alle498 exacte presentaties met84toegestane fallbacks,metadata enrepresentatieve
+  gebruikersroutes. Meld werkelijk actieve SHA/deployment engemeten netto-uitbreiding.
+5.Bij probleem:stop. Gebruik after-pr72/production-rollback.sql met EERSTE COMMITreceipt
+  via parameter lumiscore.catalog_release_receipt;geen dry-run/replayreceipt.
+  Full-row-CAS,locks enalle FK's weigeren latere wijzigingen/afhankelijkheden.
+  Lees herstel enbeschermde gegevens terug. Geen force-delete of reset van IDreeksen.
+  Zoekfunctie afzonderlijk herstellen met search-normalization/rollback.sql,hash
+  bf28d5e77e940c125e74eac44f663c004366b913ed6fd0abf7ded166d5a16df3;guard weigert
+  latere functiewijzigingen. Behoud correcte migratieadministratie via officiële
+  procedure;geen fictieve historie-inserts/verwijderingen. Approllback indien nodig
+  naar vastgelegde voorafgaande productie;runtime momenteel al bytegelijk.
+
+RELEASEADVIES
+GEREED VOOR AFZONDERLIJK RELEASEAKKOORD als definitieve exact-head-CI groen is.
+Geen resterende technische afwijking gevonden. Werkelijke voorwaarden:akkoord voor
+het exacte huidige pakket,inclusief zoekmigratie;verse guards/hashes groen;correcte
+migratie-uitvoering/registratie.84 fallbackgevallen,grote assets enbegrensde testscore/
+profielbewijzen zijn expliciete beperkingen. Geen volledige catalogusreparatie geclaimd.
+Geen171vervolgvoorstellen,nieuwecohorten,PR51wijziging,dashboard,GSC,social ofproductie-
+actie binnen deze opdracht. PR blijft Draft tot afzonderlijk akkoord.
