@@ -2,7 +2,7 @@
 import fs from'node:fs';import{ROOT}from'./nl-continuation-bootstrap.mjs';
 const selected=fs.readdirSync(ROOT).filter(f=>/^reviewed-\d+\.json$/.test(f)).map(f=>JSON.parse(fs.readFileSync(new URL(f,ROOT),'utf8'))).filter(r=>r.status.startsWith('approved_'));
 const norm=s=>String(s??'').normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().replace(/[^a-z0-9]/g,'');
-const lit=s=>"'"+String(s).replaceAll("'","''")+"'",arr=xs=>'array['+[...new Set(xs.filter(x=>x!==null&&x!==undefined))].map(lit).join(',')+']::text[]';
+const lit=s=>"'"+String(s).replaceAll("'","''")+"'",arr=xs=>'array['+[...new Set(xs.filter(x=>x!==null&&x!==undefined&&x!==''))].map(lit).join(',')+']::text[]';
 const ids=selected.map(r=>r.workId).filter(Number.isInteger),aids=[...new Set([...selected.map(r=>r.proposedWork?.primaryAuthor?.existingId).filter(Number.isInteger),3285])];
 const sourceWorks=selected.map(r=>r.proposedWork?.sourceWorkKey).filter(Boolean),sourceAuthors=selected.map(r=>r.proposedWork?.primaryAuthor?.sourceAuthorKey).filter(Boolean);
 const titles=selected.flatMap(r=>[r.edition.title,r.proposedWork?.originalTitle,...(r.caseNumber===52?["The Memory Keeper's Daughter"]:[])]).filter(Boolean);

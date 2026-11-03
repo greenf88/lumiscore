@@ -26,4 +26,4 @@ for start in range(0,len(items),8):
         with Image.open(cache/f"{t['coverId']}-L.jpg") as im:
             im=im.convert('RGB');im.thumbnail((284,440));sheet.paste(im,(x+(300-im.width)//2,y+70))
     out=cache/f"{Path(manifest).stem}-sheet-{start//8+1:03}.jpg";sheet.save(out,quality=90);print(str(out))
-(root/'cover-decode-current.json').write_text(json.dumps(items,ensure_ascii=False,indent=2),encoding='utf8')
+(root/'cover-decode-current.json').write_text(json.dumps(items,ensure_ascii=False,indent=2)+'\n',encoding='utf8',newline='\n')
