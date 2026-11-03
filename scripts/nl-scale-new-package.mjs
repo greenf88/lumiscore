@@ -18,7 +18,7 @@ const input=readJson(new URL('new-work-dossier-readings-'+number+'.json',ROOT)),
 const cases=loadCases().cases,reviews=loadReviews(),neighbours=readJson(new URL('identity-neighbours.json',ROOT)).cases,covers=fs.readdirSync(ROOT).filter(f=>/^cover-semantic-review-/.test(f)).flatMap(f=>readJson(new URL(f,ROOT)).reviews.map(x=>({...x,reference:f})));
 const selected=input.entries.map(s=>({s,c:cases.find(c=>c.caseNumber===s.caseNumber)}));if(selected.some(x=>!x.c||x.c.workId)||new Set(selected.map(x=>x.c.candidateId)).size!==selected.length)throw Error('Only distinct possible-new selected identities');
 for(const {s}of selected)reviewedWorkType(s.type);
-const norm=s=>s.normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const norm=s=>String(s??'').normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().replace(/[^a-z0-9]/g,'');
 const lit=s=>"'"+String(s).replaceAll("'","''")+"'",arr=xs=>'array['+[...new Set(xs)].map(lit).join(',')+']::text[]';
 if(mode==='preflight'){
  const ns=selected.flatMap(({c})=>neighbours.find(n=>n.candidateId===c.candidateId)?.authorityMatches??[]),ids=[...new Set(ns.map(x=>x.authorId))];

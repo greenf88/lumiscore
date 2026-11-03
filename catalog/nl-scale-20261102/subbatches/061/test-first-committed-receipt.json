@@ -1,0 +1,836 @@
+{
+  "rows": [
+    {
+      "key": {
+        "open_library_id": "OL42200A"
+      },
+      "seq": 1,
+      "relation": "authors",
+      "after_row": {
+        "id": 987360001,
+        "name": "Atte Jongstra",
+        "open_library_id": "OL42200A"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_id": "OL1450411A"
+      },
+      "seq": 2,
+      "relation": "authors",
+      "after_row": {
+        "id": 987360002,
+        "name": "Éric Vuillard",
+        "open_library_id": "OL1450411A"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL20244922W"
+      },
+      "seq": 3,
+      "relation": "works",
+      "after_row": {
+        "id": 987160001,
+        "title": "Aan open zee",
+        "cover_id": 8900406,
+        "author_id": 987360001,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL20244922W",
+        "first_publish_year": 2016,
+        "native_identity_key": "nlscale:20261102:ol:OL20244922W"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_edition_id": "OL27440391M"
+      },
+      "seq": 4,
+      "relation": "editions",
+      "after_row": {
+        "id": 987260001,
+        "title": "Aan open zee",
+        "isbn_10": null,
+        "isbn_13": "9789029505130",
+        "work_id": 987160001,
+        "cover_id": 8900406,
+        "language": "dut",
+        "publisher": "De Arbeiderspers",
+        "publish_date": null,
+        "open_library_edition_id": "OL27440391M"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 987160001,
+        "language": "nl"
+      },
+      "seq": 5,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "Schrijver Axel Borg trekt voor de winter naar Christiansø, een klein Deens eiland in de Oostzee. Hij hoopt er eindelijk een groot boek te schrijven, maar de rust levert weinig inspiratie op. Dan spoelen er lichaamsdelen aan en krijgt het eiland onverwacht met geweld te maken. De bewoners en wintergasten proberen te begrijpen wat er gebeurt. Onder hen bevinden zich een politieman met verlof en een ondergedoken misdadiger. Terwijl Axel observeert, raken zijn schrijfplannen en de gebeurtenissen om hem heen steeds sterker verstrengeld.",
+        "work_id": 987160001,
+        "evidence": [
+          {
+            "note": "DistinctAtteJongstra2016novel with exactDutchPaperback9789029505130. Primarypublishercontent andindependentNBDspecificreviewchecked, librarysameISBN. Ebookpublisherpage usedonlyforcontent, notprintformat.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p401626474",
+              "https://data.bibliotheken.nl/id/nbt/p398407509"
+            ],
+            "reference": "new-work-dossier-readings-061.json#206",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://www.uitgeverijvolt.nl/de-arbeiderspers/boek/aan-open-zee/",
+              "https://www.nbdbiblion.nl/sites/nbdbiblion.nl/files/vo_1604.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p401626474",
+              "https://data.bibliotheken.nl/id/nbt/p398407509"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "e6116fafcc9a24d34e25cb719002df8c6bfacbbbf3cffe335533b22d6f0c0abe",
+            "cover_id": 8900406,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.uitgeverijvolt.nl/de-arbeiderspers/boek/aan-open-zee/",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_author_id": 987360001
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 987260001
+      },
+      "seq": 6,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 987160001,
+        "evidence": [
+          {
+            "note": "DistinctAtteJongstra2016novel with exactDutchPaperback9789029505130. Primarypublishercontent andindependentNBDspecificreviewchecked, librarysameISBN. Ebookpublisherpage usedonlyforcontent, notprintformat.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p401626474",
+              "https://data.bibliotheken.nl/id/nbt/p398407509"
+            ],
+            "reference": "new-work-dossier-readings-061.json#206",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://www.uitgeverijvolt.nl/de-arbeiderspers/boek/aan-open-zee/",
+              "https://www.nbdbiblion.nl/sites/nbdbiblion.nl/files/vo_1604.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p401626474",
+              "https://data.bibliotheken.nl/id/nbt/p398407509"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "e6116fafcc9a24d34e25cb719002df8c6bfacbbbf3cffe335533b22d6f0c0abe",
+            "cover_id": 8900406,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/8900406-L.jpg?default=false",
+        "edition_id": 987260001,
+        "bound_title": "Aan open zee",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "bound_isbn13": "9789029505130",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p401626474",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/8900406-M.jpg?default=false",
+        "bound_author_id": 987360001
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL20934335W"
+      },
+      "seq": 7,
+      "relation": "works",
+      "after_row": {
+        "id": 987160002,
+        "title": "14 juillet",
+        "cover_id": 13214322,
+        "author_id": 987360002,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL20934335W",
+        "first_publish_year": 2016,
+        "native_identity_key": "nlscale:20261102:ol:OL20934335W"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_edition_id": "OL46533679M"
+      },
+      "seq": 8,
+      "relation": "editions",
+      "after_row": {
+        "id": 987260002,
+        "title": "14 juli",
+        "isbn_10": null,
+        "isbn_13": "9789029092722",
+        "work_id": 987160002,
+        "cover_id": 13214322,
+        "language": "dut",
+        "publisher": "Meulenhoff",
+        "publish_date": null,
+        "open_library_edition_id": "OL46533679M"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 987160002,
+        "language": "nl"
+      },
+      "seq": 9,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "In het Parijs van 1789 nemen honger en onvrede toe, terwijl fabrikanten op de lonen willen bezuinigen. Éric Vuillard volgt de mensen die zich op straat verzamelen en uiteindelijk bij de Bastille terechtkomen. Zijn aandacht gaat naar ambachtslieden, arbeiders en andere deelnemers die in grote geschiedverhalen nauwelijks een naam krijgen. Vanuit hun levens reconstrueert hij de aanloop naar 14 juli en de onrust van die dag. Het boek verbindt historische gegevens met een literaire verbeelding van de menigte.",
+        "work_id": 987160002,
+        "evidence": [
+          {
+            "note": "DistinctVuillard2016Frenchoriginal14juillet and exactDutchHardcover9789029092722 translatedLiesbethvanNes2019. FreshpublicAPI parentOL20934335W andauthorOL1450411A agree; staleindexedHTMLdifferentparent isnotfollowed. Libraryoriginaltitle andprimaryMeulenhoffcontent confirm samebook; noGoncourtclaimforthisbook.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p422375888"
+            ],
+            "reference": "new-work-dossier-readings-061.json#210",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://www.lannoo.com/nl-nl/literatuur-romans/14-juli-9789402311242",
+              "https://www.bibliotheek.nl/catalogus/titel.422375888.html/14-juli/",
+              "https://www.tzum.info/2019/09/recensie-eric-vuillard-14-juli/",
+              "https://openlibrary.org/works/OL20934335W",
+              "https://data.bibliotheken.nl/id/nbt/p422375888"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "68970eb4c8a57baae08318230745fd0417f450dd36408768124d01c44ec61f19",
+            "cover_id": 13214322,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.lannoo.com/nl-nl/literatuur-romans/14-juli-9789402311242",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_author_id": 987360002
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 987260002
+      },
+      "seq": 10,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "hardcover",
+        "work_id": 987160002,
+        "evidence": [
+          {
+            "note": "DistinctVuillard2016Frenchoriginal14juillet and exactDutchHardcover9789029092722 translatedLiesbethvanNes2019. FreshpublicAPI parentOL20934335W andauthorOL1450411A agree; staleindexedHTMLdifferentparent isnotfollowed. Libraryoriginaltitle andprimaryMeulenhoffcontent confirm samebook; noGoncourtclaimforthisbook.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p422375888"
+            ],
+            "reference": "new-work-dossier-readings-061.json#210",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://www.lannoo.com/nl-nl/literatuur-romans/14-juli-9789402311242",
+              "https://www.bibliotheek.nl/catalogus/titel.422375888.html/14-juli/",
+              "https://www.tzum.info/2019/09/recensie-eric-vuillard-14-juli/",
+              "https://openlibrary.org/works/OL20934335W",
+              "https://data.bibliotheken.nl/id/nbt/p422375888"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "68970eb4c8a57baae08318230745fd0417f450dd36408768124d01c44ec61f19",
+            "cover_id": 13214322,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/13214322-L.jpg?default=false",
+        "edition_id": 987260002,
+        "bound_title": "14 juli",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "bound_isbn13": "9789029092722",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p422375888",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13214322-M.jpg?default=false",
+        "bound_author_id": 987360002
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL22945506W"
+      },
+      "seq": 11,
+      "relation": "works",
+      "after_row": {
+        "id": 987160003,
+        "title": "En alweer bleven we ongedeerd",
+        "cover_id": null,
+        "author_id": 969300004,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL22945506W",
+        "first_publish_year": 2015,
+        "native_identity_key": "nlscale:20261102:ol:OL22945506W"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_edition_id": "OL30853029M"
+      },
+      "seq": 12,
+      "relation": "editions",
+      "after_row": {
+        "id": 987260003,
+        "title": "En alweer bleven we ongedeerd",
+        "isbn_10": null,
+        "isbn_13": "9789025445874",
+        "work_id": 987160003,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Uitgeverij Atlas Contact",
+        "publish_date": null,
+        "open_library_edition_id": "OL30853029M"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 987160003,
+        "language": "nl"
+      },
+      "seq": 13,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "Hanna Bervoets onderzoekt waarom gewone situaties soms ongemakkelijk of raadselachtig worden. Een vakantie, een herinnering aan vroeger of schaamte na een avond uit vormt het begin van een vraag over hoe mensen willen leven. Steeds keert het verlangen naar echtheid terug: waarom vinden we het zo belangrijk dat ervaringen authentiek zijn? De korte stukken verbinden persoonlijke observaties met de ongeschreven regels van contact met anderen. Deze derde bundeling van haar columns uit Volkskrant Magazine verzamelt afzonderlijke overpeinzingen over het dagelijks leven.",
+        "work_id": 987160003,
+        "evidence": [
+          {
+            "note": "Distinct2015thirdVolkskrantMagazinecolumncollection, exactDutchPaperback9789025445874. Publisherdistributeddescription andauthorCV bindHannaBervoets; KBprimarypersonHannaMarleenBervoets1984 is nottranslator. Fullnamecreditresolution based on sameISBN/title/publication andauthorCV, no author merge.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p394067029",
+              "https://data.bibliotheken.nl/id/nbt/p391131303"
+            ],
+            "reference": "new-work-dossier-readings-061.json#221",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-027.json",
+            "sources": [
+              "https://www.donner.nl/producten/en-alweer-bleven-we-ongedeerd-9789025445874/",
+              "https://thisishowweread.be/en-alweer-bleven-we-ongedeerd/",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p394067029",
+              "https://data.bibliotheken.nl/id/nbt/p391131303"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "ExactsourcecoverId present but providerbulkarchive notavailable. No no-cover-existence claim; sharedbrowserresolver mightshowrealfront, notyetproven. No imageimport until actualvisualreview.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789025445874",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15169288,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "646004b728c37255b6fe9c1e9aa475e0ee6aa3a2adda6dd52d29a8f33c4dd3c2"
+              }
+            ],
+            "checkedAt": "2026-11-03T12:14:47.005Z",
+            "editionKey": "/books/OL30853029M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.donner.nl/producten/en-alweer-bleven-we-ongedeerd-9789025445874/",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 987260003
+      },
+      "seq": 14,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 987160003,
+        "evidence": [
+          {
+            "note": "Distinct2015thirdVolkskrantMagazinecolumncollection, exactDutchPaperback9789025445874. Publisherdistributeddescription andauthorCV bindHannaBervoets; KBprimarypersonHannaMarleenBervoets1984 is nottranslator. Fullnamecreditresolution based on sameISBN/title/publication andauthorCV, no author merge.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p394067029",
+              "https://data.bibliotheken.nl/id/nbt/p391131303"
+            ],
+            "reference": "new-work-dossier-readings-061.json#221",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-027.json",
+            "sources": [
+              "https://www.donner.nl/producten/en-alweer-bleven-we-ongedeerd-9789025445874/",
+              "https://thisishowweread.be/en-alweer-bleven-we-ongedeerd/",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p394067029",
+              "https://data.bibliotheken.nl/id/nbt/p391131303"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "ExactsourcecoverId present but providerbulkarchive notavailable. No no-cover-existence claim; sharedbrowserresolver mightshowrealfront, notyetproven. No imageimport until actualvisualreview.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789025445874",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15169288,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "646004b728c37255b6fe9c1e9aa475e0ee6aa3a2adda6dd52d29a8f33c4dd3c2"
+              }
+            ],
+            "checkedAt": "2026-11-03T12:14:47.005Z",
+            "editionKey": "/books/OL30853029M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "cover_url": null,
+        "edition_id": 987260003,
+        "bound_title": "En alweer bleven we ongedeerd",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "bound_isbn13": "9789025445874",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p394067029",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": null,
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL23161111W"
+      },
+      "seq": 15,
+      "relation": "works",
+      "after_row": {
+        "id": 987160004,
+        "title": "Opstaan, aankleden, niet doodgaan",
+        "cover_id": null,
+        "author_id": 969300004,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL23161111W",
+        "first_publish_year": 2013,
+        "native_identity_key": "nlscale:20261102:ol:OL23161111W"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_edition_id": "OL30998636M"
+      },
+      "seq": 16,
+      "relation": "editions",
+      "after_row": {
+        "id": 987260004,
+        "title": "Opstaan, aankleden, niet doodgaan",
+        "isbn_10": null,
+        "isbn_13": "9789025441869",
+        "work_id": 987160004,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Uitgeverij Atlas Contact",
+        "publish_date": null,
+        "open_library_edition_id": "OL30998636M"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 987160004,
+        "language": "nl"
+      },
+      "seq": 17,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "Een verdwenen chocoladereep of een televisieprogramma kan bij Hanna Bervoets een onverwachte gedachtegang losmaken. In deze columns kijkt zij naar vriendschap, ouder worden en de vraag hoeveel betekenis een individu voor anderen heeft. Soms roept iets alledaags een herinnering op, soms ontstaat er een verontrustend denkbeeld, zoals het besef dat het leven van vrienden ook zonder haar zou doorgaan. De bundel verzamelt korte stukken waarin persoonlijke ervaringen en herkenbare gewoonten opnieuw worden bekeken.",
+        "work_id": 987160004,
+        "evidence": [
+          {
+            "note": "Distinct2013secondcolumncollection, exactDutchPaperback9789025441869. SameISBNselectedprimarycreditHannaBervoets, authorCV andKBHannaMarleenBervoets1984 agree. Notselfhelp or ebook. Pagecounts vary233/234/226 andarenotimported.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p357796691"
+            ],
+            "reference": "new-work-dossier-readings-061.json#222",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-027.json",
+            "sources": [
+              "https://www.deslegte.com/opstaan-aankleden-niet-doodgaan-139068/",
+              "https://www.donner.nl/producten/opstaan-aankleden-niet-doodgaan-9789025441876/",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p357796691"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "ExactsourcecoverId present but providerbulkarchive notavailable. No no-cover-existence claim; sharedbrowserresolver mightshowrealfront, notyetproven. No imageimport until actualvisualreview.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789025441869",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15169284,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "646004b728c37255b6fe9c1e9aa475e0ee6aa3a2adda6dd52d29a8f33c4dd3c2"
+              }
+            ],
+            "checkedAt": "2026-11-03T12:14:47.005Z",
+            "editionKey": "/books/OL30998636M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.deslegte.com/opstaan-aankleden-niet-doodgaan-139068/",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 987260004
+      },
+      "seq": 18,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 987160004,
+        "evidence": [
+          {
+            "note": "Distinct2013secondcolumncollection, exactDutchPaperback9789025441869. SameISBNselectedprimarycreditHannaBervoets, authorCV andKBHannaMarleenBervoets1984 agree. Notselfhelp or ebook. Pagecounts vary233/234/226 andarenotimported.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p357796691"
+            ],
+            "reference": "new-work-dossier-readings-061.json#222",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-027.json",
+            "sources": [
+              "https://www.deslegte.com/opstaan-aankleden-niet-doodgaan-139068/",
+              "https://www.donner.nl/producten/opstaan-aankleden-niet-doodgaan-9789025441876/",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://data.bibliotheken.nl/id/nbt/p357796691"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "ExactsourcecoverId present but providerbulkarchive notavailable. No no-cover-existence claim; sharedbrowserresolver mightshowrealfront, notyetproven. No imageimport until actualvisualreview.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789025441869",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15169284,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "646004b728c37255b6fe9c1e9aa475e0ee6aa3a2adda6dd52d29a8f33c4dd3c2"
+              }
+            ],
+            "checkedAt": "2026-11-03T12:14:47.005Z",
+            "editionKey": "/books/OL30998636M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "cover_url": null,
+        "edition_id": 987260004,
+        "bound_title": "Opstaan, aankleden, niet doodgaan",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "bound_isbn13": "9789025441869",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p357796691",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": null,
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL23233100W"
+      },
+      "seq": 19,
+      "relation": "works",
+      "after_row": {
+        "id": 987160005,
+        "title": "Leuk zeg doei",
+        "cover_id": 12345993,
+        "author_id": 969300004,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL23233100W",
+        "first_publish_year": 2011,
+        "native_identity_key": "nlscale:20261102:ol:OL23233100W"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "open_library_edition_id": "OL31069272M"
+      },
+      "seq": 20,
+      "relation": "editions",
+      "after_row": {
+        "id": 987260005,
+        "title": "Leuk zeg doei",
+        "isbn_10": null,
+        "isbn_13": "9789020412345",
+        "work_id": 987160005,
+        "cover_id": 12345993,
+        "language": "dut",
+        "publisher": "Uitgeverij L. J. Veen",
+        "publish_date": null,
+        "open_library_edition_id": "OL31069272M"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 987160005,
+        "language": "nl"
+      },
+      "seq": 21,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "In deze verzameling columns kijkt Hanna Bervoets naar de manier waarop mensen zichzelf en elkaar begrijpen. Zij schrijft over familie, relaties en volwassen worden, maar ook over de beelden die media van het dagelijks leven maken. Persoonlijke situaties geven aanleiding tot vragen over identiteit en over gedrag dat vanzelfsprekend lijkt. De stukken staan los van elkaar en behouden de directe blik van de krantencolumn. Samen vormen ze een reeks observaties over het leven van een jonge volwassene en de wereld om haar heen.",
+        "work_id": 987160005,
+        "evidence": [
+          {
+            "note": "Distinct2011firstcolumncollection, selectedDutchPaperbackthirdprinting2012 ISBN9789020412345. PublisherBureauISBN confirmsfirst2011printededitionand2012ebookseparately, exactprintretained. SameISBNprimarycreditHannaBervoets andKBHannaMarleenBervoets1984 plusauthorCV establishprimaryrole, no author merge.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p334622476"
+            ],
+            "reference": "new-work-dossier-readings-061.json#223",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://metadata.isbn.nl/127424/leuk-zeg-doei.html",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://www.hpdetijd.nl/nieuws/leven/21445/hanna-bervoets",
+              "https://data.bibliotheken.nl/id/nbt/p334622476"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ad7728ad84d6565b5adcb50bed40aa3ef1369b073b7fc288ee79f30a33f5d5dc",
+            "cover_id": 12345993,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://metadata.isbn.nl/127424/leuk-zeg-doei.html",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 987260005
+      },
+      "seq": 22,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 987160005,
+        "evidence": [
+          {
+            "note": "Distinct2011firstcolumncollection, selectedDutchPaperbackthirdprinting2012 ISBN9789020412345. PublisherBureauISBN confirmsfirst2011printededitionand2012ebookseparately, exactprintretained. SameISBNprimarycreditHannaBervoets andKBHannaMarleenBervoets1984 plusauthorCV establishprimaryrole, no author merge.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p334622476"
+            ],
+            "reference": "new-work-dossier-readings-061.json#223",
+            "checked_at": "2026-11-03T12:14:47.005Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-026.json",
+            "sources": [
+              "https://metadata.isbn.nl/127424/leuk-zeg-doei.html",
+              "https://www.hannabervoets.com/gallery/HannaBervoetsEnglish2022.pdf",
+              "https://www.hpdetijd.nl/nieuws/leven/21445/hanna-bervoets",
+              "https://data.bibliotheken.nl/id/nbt/p334622476"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ad7728ad84d6565b5adcb50bed40aa3ef1369b073b7fc288ee79f30a33f5d5dc",
+            "cover_id": 12345993,
+            "asset_url": null,
+            "reference": "cover-semantic-review-061.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/12345993-L.jpg?default=false",
+        "edition_id": 987260005,
+        "bound_title": "Leuk zeg doei",
+        "reviewed_at": "2026-11-03T12:14:47.005+00:00",
+        "bound_isbn13": "9789020412345",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p334622476",
+        "review_batch": "nl-scale-20261102-061",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/12345993-M.jpg?default=false",
+        "bound_author_id": 969300004
+      },
+      "before_row": null
+    }
+  ],
+  "batch": "nl-scale-20261102-061",
+  "project": "hlvujbrmfdlrfxdjwsmb"
+}
