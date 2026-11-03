@@ -1,0 +1,592 @@
+{
+  "query": "with target as(select * from public.works where id=any(array[1530,1535,1491,1522,6480,1903,1884,1655,1423,3259,2645,2984,3348,3414,2668,3371,3364]::bigint[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','qvplwejffhjvxaypmjut','works',coalesce((select jsonb_agg(to_jsonb(w) order by id) from target w),'[]'),'authors',coalesce((select jsonb_agg(to_jsonb(a) order by id) from public.authors a where id in(select author_id from target)),'[]'),'editions',coalesce((select jsonb_agg(to_jsonb(e) order by id) from public.editions e where work_id in(select id from target)),'[]'),'metadata',coalesce((select jsonb_agg(to_jsonb(m) order by edition_id) from public.catalog_edition_metadata m where work_id in(select id from target)),'[]'),'descriptions',coalesce((select jsonb_agg(to_jsonb(d) order by work_id,language) from public.catalog_work_descriptions d where work_id in(select id from target)),'[]'),'aliases',coalesce((select jsonb_agg(to_jsonb(a) order by work_id,title) from public.catalog_work_title_aliases a where work_id in(select id from target)),'[]')) as snapshot",
+  "data": {
+    "works": [
+      {
+        "id": 1423,
+        "title": "The Lost Symbol",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 42,
+        "work_type": null,
+        "created_at": "2026-09-16T15:08:01.636933+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL14873315W",
+        "first_publish_year": 2009,
+        "native_identity_key": null
+      },
+      {
+        "id": 1491,
+        "title": "Hoe overleef ik alles wat anders gaat dan gedacht?",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 738,
+        "work_type": null,
+        "created_at": "2026-09-16T15:10:25.024622+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL44321574W",
+        "first_publish_year": 2025,
+        "native_identity_key": null
+      },
+      {
+        "id": 1522,
+        "title": "Liever moe dan lui",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 814,
+        "work_type": null,
+        "created_at": "2026-09-16T15:11:36.469216+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL45173871W",
+        "first_publish_year": 2025,
+        "native_identity_key": null
+      },
+      {
+        "id": 1530,
+        "title": "Last Love Song",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 758,
+        "work_type": null,
+        "created_at": "2026-09-16T15:11:50.973084+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL44542122W",
+        "first_publish_year": 2025,
+        "native_identity_key": null
+      },
+      {
+        "id": 1535,
+        "title": "The Gift",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 821,
+        "work_type": null,
+        "created_at": "2026-09-16T15:11:58.754247+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL21180963W",
+        "first_publish_year": 2020,
+        "native_identity_key": null
+      },
+      {
+        "id": 1655,
+        "title": "Angels & Demons",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 42,
+        "work_type": null,
+        "created_at": "2026-09-16T15:15:47.16078+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL76833W",
+        "first_publish_year": 2000,
+        "native_identity_key": null
+      },
+      {
+        "id": 1884,
+        "title": "Diary of a Wimpy Kid",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 288,
+        "work_type": null,
+        "created_at": "2026-09-16T17:00:19.694159+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL8483260W",
+        "first_publish_year": 2007,
+        "native_identity_key": null
+      },
+      {
+        "id": 1903,
+        "title": "Gebroken licht / druk Heruitgave",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 966,
+        "work_type": null,
+        "created_at": "2026-09-16T17:01:01.483288+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL35377404W",
+        "first_publish_year": 2010,
+        "native_identity_key": null
+      },
+      {
+        "id": 2645,
+        "title": "The Clan of the Cave Bear",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1270,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL2746369W",
+        "first_publish_year": 1900,
+        "native_identity_key": null
+      },
+      {
+        "id": 2668,
+        "title": "Il pendolo di Foucault",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 52,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL8996438W",
+        "first_publish_year": 1988,
+        "native_identity_key": null
+      },
+      {
+        "id": 2984,
+        "title": "Anansi Boys",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 23,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL679266W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      },
+      {
+        "id": 3259,
+        "title": "海辺のカフカ",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 143,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL2625431W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 3348,
+        "title": "Magician",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1549,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL554687W",
+        "first_publish_year": 1982,
+        "native_identity_key": null
+      },
+      {
+        "id": 3364,
+        "title": "Quidditch Through the Ages",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 80,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL8119615W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 3371,
+        "title": "The Children of Húrin",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 6,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL27471W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 3414,
+        "title": "Men at Arms",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 22,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL453739W",
+        "first_publish_year": 1993,
+        "native_identity_key": null
+      },
+      {
+        "id": 6480,
+        "title": "Een kleine verrassing",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 693,
+        "work_type": null,
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "source_type": null,
+        "open_library_id": "OL24461512W",
+        "first_publish_year": 2019,
+        "native_identity_key": null
+      }
+    ],
+    "aliases": [],
+    "authors": [
+      {
+        "id": 6,
+        "name": "J.R.R. Tolkien",
+        "created_at": "2026-09-01T06:01:57.22722+00:00",
+        "open_library_id": "OL26320A"
+      },
+      {
+        "id": 22,
+        "name": "Terry Pratchett",
+        "created_at": "2026-09-01T15:17:50.35658+00:00",
+        "open_library_id": "OL25712A"
+      },
+      {
+        "id": 23,
+        "name": "Neil Gaiman",
+        "created_at": "2026-09-01T15:17:52.989071+00:00",
+        "open_library_id": "OL53305A"
+      },
+      {
+        "id": 42,
+        "name": "Dan Brown",
+        "created_at": "2026-09-01T15:19:09.731575+00:00",
+        "open_library_id": "OL39307A"
+      },
+      {
+        "id": 52,
+        "name": "Umberto Eco",
+        "created_at": "2026-09-01T15:19:40.791294+00:00",
+        "open_library_id": "OL20735A"
+      },
+      {
+        "id": 80,
+        "name": "J. K. Rowling",
+        "created_at": "2026-09-01T15:21:01.522441+00:00",
+        "open_library_id": "OL23919A"
+      },
+      {
+        "id": 143,
+        "name": "村上春樹",
+        "created_at": "2026-09-02T08:26:13.180359+00:00",
+        "open_library_id": "OL382524A"
+      },
+      {
+        "id": 288,
+        "name": "Jeff Kinney",
+        "created_at": "2026-09-02T08:35:40.700959+00:00",
+        "open_library_id": "OL2832500A"
+      },
+      {
+        "id": 693,
+        "name": "Hendrik Groen",
+        "created_at": "2026-09-03T19:12:59.001805+00:00",
+        "open_library_id": "OL7522010A"
+      },
+      {
+        "id": 738,
+        "name": "Francine Oomen",
+        "created_at": "2026-09-16T15:06:42.67202+00:00",
+        "open_library_id": "OL8270388A"
+      },
+      {
+        "id": 758,
+        "name": "Lucinda Riley",
+        "created_at": "2026-09-16T15:08:29.626589+00:00",
+        "open_library_id": "OL7758106A"
+      },
+      {
+        "id": 814,
+        "name": "Erik Scherder",
+        "created_at": "2026-09-16T15:11:36.244709+00:00",
+        "open_library_id": "OL9564527A"
+      },
+      {
+        "id": 821,
+        "name": "Edith Eger",
+        "created_at": "2026-09-16T15:11:58.534423+00:00",
+        "open_library_id": "OL1318893A"
+      },
+      {
+        "id": 966,
+        "name": "Kim Edwards",
+        "created_at": "2026-09-16T17:01:01.192923+00:00",
+        "open_library_id": "OL9918428A"
+      },
+      {
+        "id": 1270,
+        "name": "Jean M. Auel",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_id": "OL402869A"
+      },
+      {
+        "id": 1549,
+        "name": "Raymond E. Feist",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_id": "OL40784A"
+      }
+    ],
+    "project": "qvplwejffhjvxaypmjut",
+    "editions": [
+      {
+        "id": 1483,
+        "title": "Het Verloren Symbool",
+        "isbn_10": "9024553288",
+        "isbn_13": "9789024553280",
+        "work_id": 1423,
+        "language": "dut",
+        "publisher": "Luitingh",
+        "created_at": "2026-09-16T15:08:01.883917+00:00",
+        "open_library_edition_id": "OL32365290M"
+      },
+      {
+        "id": 1484,
+        "title": "The Lost Symbol",
+        "isbn_10": "0385504225",
+        "isbn_13": "9780385504225",
+        "work_id": 1423,
+        "language": "eng",
+        "publisher": "Doubleday",
+        "created_at": "2026-09-16T15:08:02.140231+00:00",
+        "open_library_edition_id": "OL23704372M"
+      },
+      {
+        "id": 1579,
+        "title": "Hoe overleef ik alles wat anders gaat dan gedacht?",
+        "isbn_10": "9062225640",
+        "isbn_13": "9789062225644",
+        "work_id": 1491,
+        "language": "dut",
+        "publisher": "Volt Kinderboeken",
+        "created_at": "2026-09-16T15:10:25.278116+00:00",
+        "open_library_edition_id": "OL60567995M"
+      },
+      {
+        "id": 1627,
+        "title": "Liever moe dan lui",
+        "isbn_10": null,
+        "isbn_13": "9789025319151",
+        "work_id": 1522,
+        "language": "dut",
+        "publisher": "Athenaeum - Polak & Van Gennep",
+        "created_at": "2026-09-16T15:11:36.726454+00:00",
+        "open_library_edition_id": "OL61597162M"
+      },
+      {
+        "id": 1637,
+        "title": "Het laatste lied",
+        "isbn_10": null,
+        "isbn_13": "9789401625319",
+        "work_id": 1530,
+        "language": "dut",
+        "publisher": "Xander Uitgevers B.V.",
+        "created_at": "2026-09-16T15:11:51.203764+00:00",
+        "open_library_edition_id": "OL61048809M"
+      },
+      {
+        "id": 1638,
+        "title": "Last Love Song",
+        "isbn_10": null,
+        "isbn_13": "9781035072088",
+        "work_id": 1530,
+        "language": "eng",
+        "publisher": "Pan Macmillan",
+        "created_at": "2026-09-16T15:11:51.472592+00:00",
+        "open_library_edition_id": "OL60823958M"
+      },
+      {
+        "id": 1643,
+        "title": "Het geschenk",
+        "isbn_10": "9400512252",
+        "isbn_13": "9789400512252",
+        "work_id": 1535,
+        "language": "dut",
+        "publisher": "Lev.",
+        "created_at": "2026-09-16T15:11:58.969444+00:00",
+        "open_library_edition_id": "OL46926577M"
+      },
+      {
+        "id": 1644,
+        "title": "The Gift",
+        "isbn_10": "1982143096",
+        "isbn_13": "9781982143091",
+        "work_id": 1535,
+        "language": "eng",
+        "publisher": "Scribner",
+        "created_at": "2026-09-16T15:11:59.183839+00:00",
+        "open_library_edition_id": "OL28684791M"
+      },
+      {
+        "id": 1792,
+        "title": "Het Bernini Mysterie",
+        "isbn_10": "9024547903",
+        "isbn_13": "9789024547906",
+        "work_id": 1655,
+        "language": "dut",
+        "publisher": "Uitgeverij Luitingh Sijthoff",
+        "created_at": "2026-09-16T15:15:47.43312+00:00",
+        "open_library_edition_id": "OL47273765M"
+      },
+      {
+        "id": 1793,
+        "title": "Angels & Demons",
+        "isbn_10": "0671027352",
+        "isbn_13": "9780671027353",
+        "work_id": 1655,
+        "language": "eng",
+        "publisher": "Pocket Books",
+        "created_at": "2026-09-16T15:15:47.671945+00:00",
+        "open_library_edition_id": "OL59419M"
+      },
+      {
+        "id": 2056,
+        "title": "Logboek van Bram Botermans",
+        "isbn_10": "9026125690",
+        "isbn_13": "9789026125690",
+        "work_id": 1884,
+        "language": "dut",
+        "publisher": "De Fontein",
+        "created_at": "2026-09-16T17:00:19.957073+00:00",
+        "open_library_edition_id": "OL40282296M"
+      },
+      {
+        "id": 2057,
+        "title": "Diary of a Wimpy Kid",
+        "isbn_10": "0810993139",
+        "isbn_13": "9780810993136",
+        "work_id": 1884,
+        "language": "eng",
+        "publisher": "Abrams Books for Young Readers",
+        "created_at": "2026-09-16T17:00:20.234872+00:00",
+        "open_library_edition_id": "OL7999598M"
+      },
+      {
+        "id": 2078,
+        "title": "Gebroken licht / druk Heruitgave",
+        "isbn_10": "9029574895",
+        "isbn_13": "9789029574891",
+        "work_id": 1903,
+        "language": null,
+        "publisher": "Arbeiderspers",
+        "created_at": "2026-09-16T17:01:01.767471+00:00",
+        "open_library_edition_id": "OL47796603M"
+      },
+      {
+        "id": 2804,
+        "title": "de Stam van de Holebeer",
+        "isbn_10": "902742196X",
+        "isbn_13": "9789027421968",
+        "work_id": 2645,
+        "language": "dut",
+        "publisher": "Het Spectrum",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL32852315M"
+      },
+      {
+        "id": 2827,
+        "title": "De slinger van Foucault",
+        "isbn_10": "9035113861",
+        "isbn_13": "9789035113862",
+        "work_id": 2668,
+        "language": "dut",
+        "publisher": "Ooievaar Pockethouse",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL35327886M"
+      },
+      {
+        "id": 3143,
+        "title": "De bende van Anansi",
+        "isbn_10": "9024553857",
+        "isbn_13": "9789024553853",
+        "work_id": 2984,
+        "language": "dut",
+        "publisher": "Luitingh",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL28294204M"
+      },
+      {
+        "id": 3418,
+        "title": "Kafka op het strand",
+        "isbn_10": null,
+        "isbn_13": "9789045000947",
+        "work_id": 3259,
+        "language": "dut",
+        "publisher": "Atlas",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL45392766M"
+      },
+      {
+        "id": 3507,
+        "title": "Magiër",
+        "isbn_10": "9029054220",
+        "isbn_13": "9789029054225",
+        "work_id": 3348,
+        "language": "dut",
+        "publisher": "Meulenhoff",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL27290962M"
+      },
+      {
+        "id": 3523,
+        "title": "Zwerkbal Door de Eeuwen Heen",
+        "isbn_10": "9061699088",
+        "isbn_13": "9789061699088",
+        "work_id": 3364,
+        "language": "dut",
+        "publisher": "De Harmonie",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL60703107M"
+      },
+      {
+        "id": 3530,
+        "title": "De kinderen van Hurin",
+        "isbn_10": "9089681841",
+        "isbn_13": "9789089681843",
+        "work_id": 3371,
+        "language": "dut",
+        "publisher": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL28345253M"
+      },
+      {
+        "id": 3573,
+        "title": "Te wapen",
+        "isbn_10": "902255127X",
+        "isbn_13": "9789022551271",
+        "work_id": 3414,
+        "language": "dut",
+        "publisher": "MYNX",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL32355813M"
+      },
+      {
+        "id": 6639,
+        "title": "Een kleine verrassing",
+        "isbn_10": "9029093102",
+        "isbn_13": "9789029093101",
+        "work_id": 6480,
+        "language": "dut",
+        "publisher": "J.M. Meulenhoff",
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "open_library_edition_id": "OL32402536M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-03T17:09:18.195434+00:00",
+    "descriptions": []
+  }
+}

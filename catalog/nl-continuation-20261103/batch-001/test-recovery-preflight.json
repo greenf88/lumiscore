@@ -1,0 +1,20 @@
+{
+  "query": "select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','checked_at',clock_timestamp(),'unexpected_dependencies',(select jsonb_object_agg(name,n) from (select 'ratings' name,count(*) n from public.ratings where work_id between 998100001 and 998100999 union all select 'user_book_status',count(*) from public.user_book_status where work_id between 998100001 and 998100999 union all select 'collection_books',count(*) from public.collection_books where work_id between 998100001 and 998100999 union all select 'catalog_selection_members',count(*) from public.catalog_selection_members where work_id between 998100001 and 998100999 union all select 'catalog_work_title_aliases',count(*) from public.catalog_work_title_aliases where work_id between 998100001 and 998100999 union all select 'taste_rating_offers',count(*) from public.taste_rating_offers where work_id between 998100001 and 998100999 union all select 'work_catalog_categories',count(*) from public.work_catalog_categories where work_id between 998100001 and 998100999 union all select 'work_cover_resolutions',count(*) from public.work_cover_resolutions where work_id between 998100001 and 998100999 union all select 'work_trait_evidence',count(*) from public.work_trait_evidence where work_id between 998100001 and 998100999 union all select 'catalog_private.editorial_records',count(*) from catalog_private.editorial_records where work_id between 998100001 and 998100999 union all select 'taste_private.eligible_inventory_v1',count(*) from taste_private.eligible_inventory_v1 where work_id between 998100001 and 998100999) d)) as recovery_preflight;",
+  "data": {
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "checked_at": "2026-11-03T17:43:23.560846+00:00",
+    "unexpected_dependencies": {
+      "ratings": 0,
+      "collection_books": 0,
+      "user_book_status": 0,
+      "taste_rating_offers": 0,
+      "work_trait_evidence": 0,
+      "work_cover_resolutions": 0,
+      "work_catalog_categories": 0,
+      "catalog_selection_members": 0,
+      "catalog_work_title_aliases": 0,
+      "catalog_private.editorial_records": 0,
+      "taste_private.eligible_inventory_v1": 0
+    }
+  }
+}

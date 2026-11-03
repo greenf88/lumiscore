@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+import {ROOT} from './nl-continuation-bootstrap.mjs';
+import {record} from './nl-continuation-record.mjs';
+const r=record(505,{status:'approved_existing_presentation_proposal',identityDecision:'Work3348 is complete1982 prose Magician, ISBN9789029054225 explicitly contains Leerling and Meester. Reject comic OL37818268W/Brett Booth adaptation and partial volume. Do not add the alternative hardcover editions or merge comic and novel. Existing Work/edition3507 retained.',sources:[{url:'https://crydee.com/',role:'Primary author site, Pug/Tomas/Crydee and rift invasion synopsis',checkedOn:'2026-11-03'},{url:'https://www.deslegte.com/magier-leerling-meester-997894/',role:'Exact paperback ISBN9789029054225, Meulenhoff-M,736pages, both books in one complete novel',checkedOn:'2026-11-03'},{url:'https://data.bibliotheken.nl/id/nbt/p159532574',role:'Pinned Dutch language, full-author identity and original1982 prose Magician linkage',checkedOn:'2026-11-03'}],reusePriorSummary:true,coverId:8770815,visualReview:'Decoded ochre Meulenhoff-M front, Raymond E Feist / Magiër / Eerste boek Leerling Tweede boek Meester, candle and open book. Confirms complete novel rather than comic or first half.',presentationSource:'https://crydee.com/'});
+// Avoid transplanting the English castle name into a Dutch translation.
+r.summary.text=r.summary.text.replace('bij het kasteel Crydee','bij een kasteel');
+fs.writeFileSync(new URL('reviewed-505.json',ROOT),JSON.stringify(r,null,2)+'\n');

@@ -1,0 +1,93 @@
+{
+  "caseNumber": 52,
+  "candidateId": "ol:OL1921530W",
+  "status": "approved_edition_addition_proposal",
+  "workId": 1903,
+  "newWork": false,
+  "netNewDutchAvailability": 1,
+  "edition": {
+    "sourceKey": "OL32698485M",
+    "title": "Gebroken licht",
+    "isbn13": "9789063053994",
+    "language": "nl",
+    "format": "paperback",
+    "publisher": "Archipel"
+  },
+  "identityDecision": "Reuse Work1903 and author966, following the already checked PR71 identity routing. Do not create a new Work for TheMemoryKeeper'sDaughter/OL1921530W. Existing2078/ISBN9789029574891 is a2010 Dutch paperback of the same book; exact open record and BureauISBN agree. Its merchant CapturingLight original-title field is rejected. New2009/2010 reprint ISBN9789063053994 has its own reviewed front and is not asserted to be the2010 ISBN cover. Date disagreement is not silently resolved.",
+  "existingEditionCorrections": [
+    {
+      "id": 2078,
+      "expectedIsbn13": "9789029574891",
+      "beforeLanguage": null,
+      "afterLanguage": "dut",
+      "beforeTitle": "Gebroken licht / druk Heruitgave",
+      "afterTitle": "Gebroken licht",
+      "formatEvidence": "https://metadata.isbn.nl/24271/gebroken-licht.html",
+      "noCrossEditionCover": true
+    }
+  ],
+  "workCorrections": {
+    "beforeTitle": "Gebroken licht / druk Heruitgave",
+    "afterTitle": "The Memory Keeper's Daughter",
+    "beforeFirstPublishYear": 2010,
+    "afterFirstPublishYear": 2005,
+    "yearSource": "Exact KB records p318266377 and p27635592X identify The memory keeper's daughter, Viking2005. Preserve Work identity and all links.",
+    "titleReason": "Use verified original Work title for canonical identity/search; selected Dutch editions remain Gebroken licht. Avoid introducing alias-table DML into the existing five-relation importer. This is a reviewed title normalization, not a new Work or edition-language inference."
+  },
+  "aliases": [],
+  "sources": [
+    {
+      "url": "https://metadata.isbn.nl/24271/gebroken-licht.html",
+      "role": "Primary ISBN registry; exact existing2010 paperback, Dutch language and substantial narrative evidence",
+      "checkedOn": "2026-11-03"
+    },
+    {
+      "url": "https://data.bibliotheken.nl/id/nbt/p318266377",
+      "role": "Pinned exact ISBN9789063053994, Dutch title/author and original English2005 Work; reused immutable prior source",
+      "checkedOn": "2026-11-03"
+    },
+    {
+      "url": "https://www.bol.com/nl/nl/p/gebroken-licht/1001004006434702/",
+      "role": "Exact paperback9789063053994, Dutch language and matching dark baby-dress front; incorrect CapturingLight field rejected",
+      "checkedOn": "2026-11-03"
+    },
+    {
+      "url": "https://openlibrary.org/books/OL47796603M.json",
+      "role": "New bounded exact existing-edition read; ISBN/parent/publisher; no language or cover field present",
+      "receipt": "edition-OL47796603M.json",
+      "checkedOn": "2026-11-03"
+    }
+  ],
+  "facts": [
+    "A physician delivers his wife's twins during a snowstorm",
+    "He conceals the daughter with Down syndrome from her mother",
+    "A nurse raises the girl instead of leaving her in an institution",
+    "Separated family lives are followed; ending omitted"
+  ],
+  "summary": {
+    "language": "nl",
+    "provenance": "original_source_reviewed_summary",
+    "reusedReviewedDraft": "PR71 content-amendment-002.json#ol:OL1921530W",
+    "text": "Een arts helpt zijn vrouw tijdens een sneeuwstorm bij de geboorte van hun tweeling. Wanneer blijkt dat hun dochter het syndroom van Down heeft, neemt hij een beslissing die hij voor zijn vrouw verborgen houdt. Een verpleegster krijgt het meisje mee, maar brengt haar niet naar de inrichting die hij heeft uitgekozen. Ze voedt het kind zelf op. De roman volgt de gescheiden levens die hieruit ontstaan en laat zien hoe een verzwegen gebeurtenis binnen een gezin blijft doorwerken."
+  },
+  "cover": {
+    "id": 11440793,
+    "receipt": "cover-11440793.json",
+    "sha256": "82202262283e17d2df0aa74c8377be626b4a0a63062108353a03a3b43c33400d",
+    "bytes": 35136,
+    "width": 300,
+    "height": 500,
+    "visualReview": "Decoded Dutch front: KIM EDWARDS / GEBROKEN LICHT, transparent baby dress on dark background, ROMAN and Archipel mark. Exact9789063053994 source association; not bound to existing ISBN9789029574891."
+  },
+  "presentationSource": "https://metadata.isbn.nl/24271/gebroken-licht.html",
+  "remaining": [
+    "Current full-row/ISBN preflight and dependences",
+    "Local and hosted import/recovery",
+    "Exact hosted search/selection acceptance"
+  ],
+  "testApplied": true,
+  "published": false,
+  "reviewedOn": "2026-11-03",
+  "testEvidence": "batch-001/test-committed-readback.json",
+  "hostedBrowserAccepted": false
+}
