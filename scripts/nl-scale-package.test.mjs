@@ -1,12 +1,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
 import {renderImport,renderRollback} from './nl-scale-release-sql.mjs';
 import {loadSnapshot} from './nl-scale-snapshot.mjs';
 import {selectStrictEdition} from '../lib/books/strict-edition.ts';
 const root=new URL('../catalog/nl-scale-20261102/',import.meta.url);
 const read=n=>JSON.parse(fs.readFileSync(new URL(n,root),'utf8'));
+test('frozen release hashes bind only the 498 accepted presentations and exact unchanged migration',()=>{
+ const manifest=read('release/release-hashes.json'),plan=read('release/production-plan.json');
+ assert.equal(manifest.status,'REVIEW_READY_NOT_AUTHORISED');assert.equal(manifest.productionWrites,0);
+ assert.equal(plan.actions.length,1492);assert.equal(manifest.summary.netDutchAvailability,235);
+ for(const [name,hash]of Object.entries(manifest.files))assert.equal(createHash('sha256').update(fs.readFileSync(new URL('release/'+name,root))).digest('hex'),hash,name);
+ const accepted=read('release/hosted-acceptance.json');assert.equal(accepted.rows.length,498);assert(accepted.rows.every(r=>r.accepted));
+ assert.equal(accepted.rows.filter(r=>r.documentedPlaceholder).length,84);
+ const exclusions=read('release/exclusions.json');assert.equal(exclusions.excludedActions.length,6);
+ const deferred=read('release/deferred-research.json');assert.equal(deferred.completedDossiers,589);assert.equal(deferred.openLogicalDossiers,411);
+});
 async function fixture(env,baseline){
  const db=new PGlite();
  await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
@@ -250,8 +261,8 @@ for(const env of ['test','production'])test(`phase013 ${env}: nine new identitie
  try{const before=await snapshot(),receipt=(await db.exec(renderImport(plan))).find(x=>x.rows?.[0]?.receipt)?.rows[0].receipt;assert.equal(plan.summary.newWorks,9);assert.equal(receipt.rows.length,plan.actions.length);assert.equal((await db.query("select count(*)::int n from editions where language='dut'")).rows[0].n,9);assert.equal((await db.query("select count(*)::int n from editions where isbn_13='9789072810014'")).rows[0].n,0);assert.equal((await db.query("select count(*)::int n from catalog_work_descriptions where text like 'In de familie Olson%'")).rows[0].n,1);assert.equal((await db.exec(renderImport(plan))).find(x=>x.rows?.[0]?.receipt)?.rows[0].receipt.rows.length,0);await db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);await db.exec(renderRollback(plan));assert.deepEqual(await snapshot(),before);}finally{await db.close();}
 });
 
-test('combined draft over full public production snapshot: shared authors once, unique NL growth, replay and committed recovery',async()=>{
- const s=loadSnapshot(),plan=read('combined-draft/production-plan.json');
+for(const [folder,expectedActions,expectedTexts,expectedMissing]of[['combined-draft',1498,501,281],['release',1492,498,278]])test(folder+' over full public production snapshot: shared authors once, unique NL growth, replay and committed recovery',async()=>{
+ const s=loadSnapshot(),plan=read(folder+'/production-plan.json');
  // Public inventory omits subjects/created_at; enrich only missing CAS fields from fresh full-row preflights, rejecting any core-field drift.
  const wm=new Map(s.works.map(w=>[w.id,w])),am=new Map(s.authors.map(a=>[a.id,a])),em=new Map(s.editions.map(e=>[e.id,e]));
  const enrich=(m,row)=>{const old=m.get(row.id);if(!old)throw Error('Preflight identity absent from full snapshot');for(const k of Object.keys(row))if(Object.hasOwn(old,k))assert.deepEqual(old[k],row[k],`Snapshot/preflight core drift ${row.id}:${k}`);m.set(row.id,{...old,...row});};
@@ -262,9 +273,41 @@ test('combined draft over full public production snapshot: shared authors once, 
  const available=async()=>{const ws=(await db.query('select * from works')).rows,es=(await db.query('select * from editions')).rows,m=new Map();for(const e of es){const a=m.get(e.work_id)??[];a.push(e);m.set(e.work_id,a);}return new Set(ws.filter(w=>selectStrictEdition(m.get(w.id)??[],'nl',w.title)).map(w=>w.id));};
  try{await db.query('insert into editions select * from jsonb_populate_recordset(null::editions,$1)',[JSON.stringify(s.editions)]);
   for(const[t,rows]of[['catalog_work_descriptions',s.descriptions],['catalog_edition_metadata',s.metadata]])await db.query(`insert into ${t} select * from jsonb_populate_recordset(null::${t},$1)`,[JSON.stringify(rows)]);
+  if(folder==='release'){
+   const preflight=(await db.exec(fs.readFileSync(new URL('release/production-preflight.sql',root),'utf8'))).find(x=>x.rows?.[0]?.failures!==undefined)?.rows[0];
+   assert(preflight);assert.equal(preflight.failures,0);assert.equal(preflight.checks,read('release/preflight-contract.json').checks);
+   const preflightSql=fs.readFileSync(new URL('release/production-preflight.sql',root),'utf8');
+   const bound=plan.bindings[0].work;
+   await db.query("update works set title=title||' synthetic later edit' where id=$1",[bound.id]);
+   assert((await db.exec(preflightSql)).find(x=>x.rows?.[0]?.failures!==undefined).rows[0].failures>0);
+   await db.query('update works set title=$1 where id=$2',[bound.title,bound.id]);
+   const newEdition=plan.actions.find(a=>a.relation==='editions'&&a.before===null).after;
+   await db.query('insert into editions(id,work_id,title,isbn_13) values(999999,$1,$2,$3)',[bound.id,'Synthetic duplicate identity probe',newEdition.isbn_13]);
+   assert((await db.exec(preflightSql)).find(x=>x.rows?.[0]?.failures!==undefined).rows[0].failures>0);
+   await db.query('delete from editions where id=999999');
+   assert.equal((await db.exec(preflightSql)).find(x=>x.rows?.[0]?.failures!==undefined).rows[0].failures,0);
+  }
   const before=await snapshot(),nlBefore=await available(),started=performance.now(),receipt=(await db.exec(renderImport(plan))).find(x=>x.rows?.[0]?.receipt)?.rows[0].receipt,importMs=performance.now()-started;
-  assert.equal(plan.summary.actions,1498);assert.equal(receipt.rows.length,1498);assert.equal(plan.summary.deduplicatedSharedAuthors,4);
+  assert.equal(plan.summary.actions,expectedActions);assert.equal(receipt.rows.length,expectedActions);assert.equal(plan.summary.deduplicatedSharedAuthors,4);
+  assert.equal(plan.actions.filter(a=>a.relation==='catalog_work_descriptions').length,expectedTexts);
+  if(folder==='release'){
+   assert(!plan.actions.some(a=>a.relation==='catalog_work_descriptions'&&[5028,1628,6044].includes(a.key.work_id)));
+   assert(!plan.actions.some(a=>a.relation==='catalog_edition_metadata'&&[5187,1761,6203].includes(a.key.edition_id)));
+   const hosted=read('release/hosted-acceptance.json');assert.equal(hosted.accepted,498);assert.equal(hosted.rows.length,498);assert(hosted.rows.every(r=>r.accepted&&Object.values(r.checks).every(Boolean)));
+  }
   const nlAfter=await available();assert.equal(nlBefore.size,3096);assert.equal(nlAfter.size-nlBefore.size,235);assert.equal([...nlBefore].filter(id=>!nlAfter.has(id)).length,0);
+  if(folder==='release'){
+   const dossiers=read('release/dossiers.json').decisions;
+   const metadata=receipt.rows.filter(r=>r.relation==='catalog_edition_metadata').map(r=>r.after_row);
+   const rows=dossiers.map(d=>{
+    const matches=metadata.filter(m=>m.bound_isbn13===d.edition.isbn13);assert.equal(matches.length,1);
+    const workId=matches[0].work_id;
+    return {candidateId:d.candidateId,stream:d.stream,productionWorkId:d.productionWorkId??(d.candidateId.startsWith('work:')?Number(d.candidateId.slice(5)):null),sourceWorkId:d.work?.sourceWorkId??null,isbn:d.edition.isbn13,newlyAvailableInDutch:!nlBefore.has(workId)&&nlAfter.has(workId)};
+   });
+   assert.equal(rows.filter(r=>r.newlyAvailableInDutch).length,235);
+   const streams=Object.fromEntries([...new Set(rows.map(r=>r.stream))].map(stream=>[stream,{dossiers:rows.filter(r=>r.stream===stream).length,extraDutchWorks:rows.filter(r=>r.stream===stream&&r.newlyAvailableInDutch).length}]));
+   fs.writeFileSync(new URL('release/net-availability.json',root),JSON.stringify({scope:'Computed using unchanged strict edition selector on full current public production snapshot, exact release import and unique Work IDs; projected, not production executed.',before:3096,after:3331,net:235,streams,rows},null,2)+'\n');
+  }
   const game=(await db.query("select m.cover_url from catalog_edition_metadata m join editions e on e.id=m.edition_id where e.isbn_13='9789464291513'")).rows;
   assert.equal(game.length,1);assert.equal(game[0].cover_url,'https://metadata.isbn.nl/ie_fcache/0000579782_Gamechanger_0_0.jpg');
   const touch=(await db.query("select m.cover_url,m.card_cover_url from catalog_edition_metadata m join editions e on e.id=m.edition_id where e.isbn_13='9789020550634'")).rows;
@@ -277,6 +320,6 @@ test('combined draft over full public production snapshot: shared authors once, 
   const authors=(await db.query("select name,count(*)::int n from authors where open_library_id in('OL709121A','OL863535A') group by name")).rows;assert.equal(authors.length,2);assert(authors.every(a=>a.n===1));
   assert.equal((await db.exec(renderImport(plan))).find(x=>x.rows?.[0]?.receipt)?.rows[0].receipt.rows.length,0);
   await db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);await db.exec(renderRollback(plan));assert.deepEqual(await snapshot(),before);
-  fs.writeFileSync(new URL('combined-draft/local-proof.json',root),JSON.stringify({scope:'Local full public production snapshot plus clearly synthetic private stand-ins; not hosted combined import',baselineWorks:s.works.length,baselineEditions:s.editions.length,actions:receipt.rows.length,newWorks:176,newDutchEditions:234,newDutchSummaries:501,coverBindings:220,editionsWithoutImportedCoverBinding:281,additionalReviewedOriginalYearCorrections:8,nlBefore:nlBefore.size,nlAfter:nlAfter.size,net:nlAfter.size-nlBefore.size,duplicateNewAuthorsPrevented:4,importMs,commitReplayAndCommittedRecovery:true,allOriginalRowsPreserved:true,productionWrites:0},null,2)+'\n');
+  fs.writeFileSync(new URL(folder+'/local-proof.json',root),JSON.stringify({scope:'Local full public production snapshot plus clearly synthetic private stand-ins; not hosted combined import',baselineWorks:s.works.length,baselineEditions:s.editions.length,actions:receipt.rows.length,newWorks:176,newDutchEditions:234,newDutchSummaries:expectedTexts,coverBindings:220,editionsWithoutImportedCoverBinding:expectedMissing,additionalReviewedOriginalYearCorrections:8,nlBefore:nlBefore.size,nlAfter:nlAfter.size,net:nlAfter.size-nlBefore.size,duplicateNewAuthorsPrevented:4,importMs,commitReplayAndCommittedRecovery:true,allOriginalRowsPreserved:true,productionWrites:0},null,2)+'\n');
  }finally{await db.close();}
 });
