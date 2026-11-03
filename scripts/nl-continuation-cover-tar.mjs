@@ -5,10 +5,8 @@ import{parseLargeCoverIndex}from'../../lumiscore-nl-expansion-scale-20261102/scr
 const cache=new URL('archive-covers/',CACHE),prior=readJson(new URL('cover-archive-v2-readback.json',ROOT));
 const phase=process.argv[2];if(phase&&!/^\d{3}$/.test(phase))throw Error('Explicit bounded cover phase required');
 const targets=phase?readJson(new URL('cover-large-bulk-request-'+phase+'.json',ROOT)).targets:prior.filter(r=>r.status==='bulk_archive_unavailable'&&Math.floor(r.coverId/1000000)===6);
-if(targets.some(t=>Math.floor(t.coverId/1000000)!==6||!t.candidateId||!t.editionKey))throw Error('Only exact group-six editions supported');
+if(targets.some(t=>![5,6].includes(Math.floor(t.coverId/1000000))||!t.candidateId||!t.editionKey))throw Error('Only exact reviewed official group-five/six editions supported');
 if(!targets.length||targets.length>100||new Set(targets.map(t=>t.coverId)).size!==targets.length)throw Error('Explicit unique bounded target set required');
-const item='l_covers_0006',m=readJson(new URL(item+'-new-metadata.json',cache));
-if(m.title!==item||!m.collection.includes('ol_exports')||m.is_dark||m.nodownload)throw Error('Not an available official OpenLibrary bulk item');
 // V1 stopped on a LOCAL parser assumption (missing -L suffix). Keep its evidence,
 // reuse checksummed cached indexes; no failed network request is retried.
 const file=new URL(phase?'cover-large-bulk-readback-'+phase+'.json':'cover-large-bulk-v2-readback.json',ROOT),old=new URL('cover-large-bulk-readback.json',ROOT),done=fs.existsSync(file)?readJson(file):!phase&&fs.existsSync(old)?readJson(old).filter(r=>r.error!=='Unknown index format'):[];let last=0;
@@ -19,8 +17,8 @@ async function request(url,{range,total,cap=1000000}={}){const delay=Math.max(0,
  if(!r.ok||range&&(r.status!==206||r.headers.get('content-range')!==`bytes ${range[0]}-${range[1]}/${total}`)){await r.body?.cancel();throw Error('HTTP/range mismatch '+r.status+'; no retry or full-download fallback');}
  const chunks=[];let n=0;for await(const b of r.body){n+=b.length;if(n>cap)throw Error('Bounded response exceeded');chunks.push(b);}if(range&&n!==range[1]-range[0]+1)throw Error('Short range');return Buffer.concat(chunks);
 }
-const groups=new Map();for(const t of targets.filter(t=>!done.some(x=>x.coverId===t.coverId))){const stem=item+'_'+String(Math.floor(t.coverId/10000)%100).padStart(2,'0');const g=groups.get(stem)??[];g.push(t);groups.set(stem,g);}
-for(const[stem,ts]of groups){const index=m.files.find(f=>f.name===stem+'.index'),tar=m.files.find(f=>f.name===stem+'.tar');
+const groups=new Map();for(const t of targets.filter(t=>!done.some(x=>x.coverId===t.coverId))){const item='l_covers_'+String(Math.floor(t.coverId/1000000)).padStart(4,'0'),stem=item+'_'+String(Math.floor(t.coverId/10000)%100).padStart(2,'0');const g=groups.get(stem)??[];g.push(t);groups.set(stem,g);}
+for(const[stem,ts]of groups){const item=stem.slice(0,-3),m=readJson(new URL(item+'-new-metadata.json',cache));if(m.title!==item||!m.collection.includes('ol_exports')||m.is_dark||m.nodownload)throw Error('Not an available official OpenLibrary bulk item');const index=m.files.find(f=>f.name===stem+'.index'),tar=m.files.find(f=>f.name===stem+'.tar');
  try{if(!index||!tar||index.private||tar.private||Number(index.size)>1000000||!index.sha1)throw Error('Public checksummed index/TAR absent');
   const ip=new URL(index.name,cache),ib=fs.existsSync(ip)?fs.readFileSync(ip):await request('https://archive.org/download/'+item+'/'+index.name);
   if(ib.length!==Number(index.size)||createHash('sha1').update(ib).digest('hex')!==index.sha1)throw Error('Index checksum mismatch');fs.writeFileSync(ip,ib);
