@@ -1,0 +1,185 @@
+{
+  "query": "with target as(select * from public.works where id=any(array[1903,1530,1535,1491,1522,6480,1950,313,315,2608,1884,1655,1423,3259,2645,2984,3348,3414,2668,3371,3364,1430,2648,3276,1890,2402,3329,3520]::bigint[]) or open_library_id=any(array['OL20648695W','OL23763952W','OL24248715W','OL24348719W','OL26181955W','OL27060702W','OL34311125W']::text[]) or regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['gebrokenlicht','thememorykeepersdaughter','dodelijkegeloften','lethalvows','labyrint','labyrinten','decockendebroedersvandezachtedood','decockendemoordopannabentveld','demoordopannabentveld','devuurtoren','venijn','heteilandvandeverdwenenbomen','theislandofmissingtrees','hetlaatstelied','hetgeschenk','hoeoverleefikalleswatandersgaatdangedacht','lievermoedanlui','eenkleineverrassing','romeoenjulia','hamlet','derodeletter','degodvankleinedingen','hetlevenvaneenloserlogboekvanbrambotermans','hetberninimysterie','hetverlorensymbool','kafkaophetstrand','destamvandeholebeer','debendevananansi','magier','tewapen','deslingervanfoucault','dekinderenvanhurin','zwerkbaldoordeeeuwenheen','driekoningenofziezelfmaar','zwaardvanglas','deverlorenwereld','detovervinger','deontrafelingvandekosmos','huiver','risingsun','ikbenderegen','kleinestinkerd']::text[])), a as(select * from public.authors where id in(select author_id from target) or id=any(array[857,3405,670,2189,3285]::bigint[]) or open_library_id=any(array['OL3767459A','OL45364A','OL9125502A','OL636019A','OL97320A']::text[]) or regexp_replace(lower(normalize(name,NFD)),'[^a-z0-9]','','g')=any(array['tlsmith','henningmankell','baantjer','janterlouw','elifsafak','henkvanstraten']::text[])), e as(select * from public.editions where work_id in(select id from target) or open_library_edition_id=any(array['OL32698485M','OL60561039M','OL34367822M','OL32077933M','OL32241443M','OL35331713M','OL36693487M','OL46531222M','OL61048809M','OL46926577M','OL60567995M','OL61597162M','OL32402536M','OL24405553M','OL24405549M','OL24356706M','OL35687461M','OL40282296M','OL47273765M','OL32365290M','OL45392766M','OL32852315M','OL28294204M','OL27290962M','OL27738260M','OL9097908M','OL28345253M','OL60703107M','OL24405512M','OL27097743M','OL33897477M','OL39218981M','OL24946953M','OL47217005M','OL32352161M']::text[]) or regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')=any(array['9789063053994','9789464405989','9789044518597','9789026101595','9789026101373','9789046807187','9789046802083','9789046829134','9789401625319','9789400512252','9789062225644','9789025319151','9789029093101','9789035104549','9789035107335','9789027491121','9789046140536','9789026125690','9789024547906','9789024553280','9789045000947','9789027421968','9789024553853','9789029054225','9789027447845','9789035107007','9789089681843','9789061699088','9789035108356','9789023498070','9789024519569','9789026161223','9789027469830','9789048802531','9789024555659']::text[])) select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','checked_at',clock_timestamp(),'works',coalesce((select jsonb_agg(to_jsonb(t) order by id) from target t),'[]'),'authors',coalesce((select jsonb_agg(to_jsonb(t) order by id) from a t),'[]'),'author_corpora',coalesce((select jsonb_agg(to_jsonb(t) order by id) from public.works t where author_id in(select id from a)),'[]'),'editions',coalesce((select jsonb_agg(to_jsonb(t) order by id) from e t),'[]'),'metadata',coalesce((select jsonb_agg(to_jsonb(t) order by edition_id) from public.catalog_edition_metadata t where edition_id in(select id from e)),'[]'),'descriptions',coalesce((select jsonb_agg(to_jsonb(t) order by work_id,language) from public.catalog_work_descriptions t where work_id in(select id from target)),'[]'),'aliases',coalesce((select jsonb_agg(to_jsonb(t) order by work_id,title) from public.catalog_work_title_aliases t where work_id in(select id from target)),'[]'),'reserved_works',(select count(*) from public.works where id between 998100001 and 998100999),'reserved_editions',(select count(*) from public.editions where id between 998200001 and 998201999),'reserved_authors',(select count(*) from public.authors where id between 998300001 and 998300999)) as snapshot;",
+  "data": {
+    "works": [
+      {
+        "id": 978100108,
+        "title": "Het geschenk",
+        "cover_id": null,
+        "author_id": 978300051,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": null,
+        "native_identity_key": "nl-reviewed-isbn:9789025318604"
+      }
+    ],
+    "aliases": [],
+    "authors": [
+      {
+        "id": 930300025,
+        "name": "Jan Terlouw",
+        "open_library_id": "OL636019A"
+      },
+      {
+        "id": 978300051,
+        "name": "Gaea Schoeters",
+        "open_library_id": null
+      },
+      {
+        "id": 987301006,
+        "name": "Henning Mankell",
+        "open_library_id": "OL45364A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [
+      {
+        "id": 978200166,
+        "title": "Het geschenk",
+        "isbn_10": null,
+        "isbn_13": "9789025318604",
+        "work_id": 978100108,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Querido",
+        "publish_date": null,
+        "open_library_edition_id": null
+      }
+    ],
+    "metadata": [
+      {
+        "format": "paperback",
+        "work_id": 978100108,
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Paperback ISBN 9789025318604 verschijningsdatum 04/06/2025 NUR 301 Literaire roman, novelle imprint Querido uitgever Singel Uitgeverijen taal Nederlands",
+            "sha256": "3d50965652b5e5f46e5598e88d0cec27ae6c7be12e362fcae6eae88ff9f5ef54",
+            "checkedAt": "2026-11-01T20:43:11.995Z",
+            "sourceAuthors": "Gaea Schoeters"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000709382_Het_geschenk_2_710_130_0_0.jpg",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant.",
+            "bytes": 96245,
+            "sha256": "2f38265a2fc71e900f2ae33a00578ceaaeda2a7e1416121bd2ad5a7e2f65989b",
+            "checkedAt": "2026-11-01T21:23:57.203Z"
+          }
+        ],
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000709382_Het_geschenk_2_710_130_0_0.jpg",
+        "edition_id": 978200166,
+        "bound_title": "Het geschenk",
+        "reviewed_at": "2026-11-01T21:37:32+00:00",
+        "bound_isbn13": "9789025318604",
+        "evidence_url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+        "review_batch": "nl007-reviewed-batch-08-20261101",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": null,
+        "bound_author_id": 978300051
+      }
+    ],
+    "checked_at": "2026-11-03T17:33:29.732322+00:00",
+    "descriptions": [
+      {
+        "text": "In Berlijn duiken plotseling overal olifanten op. Ze blijken een geschenk van de president van Botswana, bedoeld als reactie op strengere Duitse regels voor de invoer van jachttrofeeën. Met twintigduizend dieren krijgt de stad een probleem dat zich moeilijk laat wegpraten. De roman volgt de botsing tussen politieke overtuigingen en een ontregelende werkelijkheid, waarin de gevolgen van een besluit onverwacht dichtbij komen te staan.",
+        "work_id": 978100108,
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Paperback ISBN 9789025318604 verschijningsdatum 04/06/2025 NUR 301 Literaire roman, novelle imprint Querido uitgever Singel Uitgeverijen taal Nederlands",
+            "sha256": "3d50965652b5e5f46e5598e88d0cec27ae6c7be12e362fcae6eae88ff9f5ef54",
+            "checkedAt": "2026-11-01T20:43:11.995Z",
+            "sourceAuthors": "Gaea Schoeters"
+          },
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content.",
+            "checkedAt": "2026-11-01T21:37:32Z"
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+        "reviewed_at": "2026-11-01T21:37:32+00:00",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_type": "official_catalog",
+        "review_batch": "nl007-reviewed-batch-08-20261101",
+        "review_status": "approved",
+        "bound_author_id": 978300051
+      }
+    ],
+    "author_corpora": [
+      {
+        "id": 930100025,
+        "title": "Oorlogswinter",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL3681911W",
+        "first_publish_year": 1972,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100028,
+        "title": "Koning van Katoren",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL3681910W",
+        "first_publish_year": 1971,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100108,
+        "title": "Het geschenk",
+        "cover_id": null,
+        "author_id": 978300051,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": null,
+        "native_identity_key": "nl-reviewed-isbn:9789025318604"
+      },
+      {
+        "id": 987101008,
+        "title": "Mördare utan ansikte",
+        "cover_id": null,
+        "author_id": 987301006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL158674W",
+        "first_publish_year": 1991,
+        "native_identity_key": "nlscale:fixture002:3113"
+      },
+      {
+        "id": 987144011,
+        "title": "De 90ste verjaardag van Louis van Roosgaarde",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL44869785W",
+        "first_publish_year": 2019,
+        "native_identity_key": "nlscale:20261102:ol:OL44869785W"
+      },
+      {
+        "id": 987152012,
+        "title": "Den vita lejoninnan",
+        "cover_id": null,
+        "author_id": 987301006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL158630W",
+        "first_publish_year": 1996,
+        "native_identity_key": "nlscale:fixture053:5832"
+      }
+    ],
+    "reserved_works": 0,
+    "reserved_authors": 0,
+    "reserved_editions": 0
+  }
+}

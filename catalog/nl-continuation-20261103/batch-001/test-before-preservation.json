@@ -1,0 +1,46 @@
+{
+  "query": "select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','catalogue',(select jsonb_object_agg(rel,stats) from (select 'authors' rel,jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by id),''))) stats from public.authors t union all select 'works',jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by id),''))) from public.works t union all select 'editions',jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by id),''))) from public.editions t union all select 'descriptions',jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by work_id,language),''))) from public.catalog_work_descriptions t union all select 'metadata',jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by edition_id),''))) from public.catalog_edition_metadata t) s),'ratings',(select jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by to_jsonb(t)::text),''))) from public.ratings t),'status',(select jsonb_build_object('count',count(*),'digest',md5(coalesce(string_agg(to_jsonb(t)::text,'|' order by to_jsonb(t)::text),''))) from public.user_book_status t),'accounts',(select jsonb_build_object('count',count(*),'identity_updated_digest',md5(coalesce(string_agg(id::text||coalesce(updated_at::text,''),'|' order by id),''))) from auth.users),'reserved',(select jsonb_build_object('works',(select count(*) from public.works where id between 998100001 and 998100999),'editions',(select count(*) from public.editions where id between 998200001 and 998201999),'authors',(select count(*) from public.authors where id between 998300001 and 998300999)))) as preservation;",
+  "data": {
+    "status": {
+      "count": 68,
+      "digest": "1c7928e13bfc99ef5864ddb0d8ae5588"
+    },
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "ratings": {
+      "count": 68,
+      "digest": "cb81f8f832556fd90c341e236f8591cf"
+    },
+    "accounts": {
+      "count": 2,
+      "identity_updated_digest": "4423e4320839858d8946af7a01f8588a"
+    },
+    "reserved": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    },
+    "catalogue": {
+      "works": {
+        "count": 1606,
+        "digest": "b6cbf33ca538fa6e866c778c960dfb12"
+      },
+      "authors": {
+        "count": 653,
+        "digest": "7927da58036554fefd5f17228e90c303"
+      },
+      "editions": {
+        "count": 2144,
+        "digest": "be3650bfc3f91080c4960bb2bf2c217f"
+      },
+      "metadata": {
+        "count": 1124,
+        "digest": "4b753db695c098cf247c847cc39e16ec"
+      },
+      "descriptions": {
+        "count": 1220,
+        "digest": "9a0d55a7cc700e20c6d05963713bb547"
+      }
+    },
+    "checked_at": "2026-11-03T17:40:45.00043+00:00"
+  }
+}

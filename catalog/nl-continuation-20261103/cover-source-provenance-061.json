@@ -1,0 +1,13 @@
+{
+  "checkedOn": "2026-11-03",
+  "policy": "Official Open Library ol_exports bulk provenance required; no Covers API crawl or repeated denied requests",
+  "documentation": ["https://openlibrary.org/developers/dumps", "https://openlibrary.org/dev/docs/api/covers"],
+  "items": [
+    {"url":"https://archive.org/metadata/l_covers_0003","title":"l_covers_0003","collections":["opensource_media","community"],"decision":"No image fetch: official provenance not established"},
+    {"url":"https://archive.org/metadata/l_covers_0004","title":"l_covers_0004","collections":["opensource_media","community"],"decision":"No image fetch: official provenance not established"},
+    {"url":"https://archive.org/metadata/l_covers_0005","title":"l_covers_0005","collections":["ol_exports","data"],"decision":"Exact bounded members permitted by existing public bulk workflow; index SHA1 and TAR headers checked"}
+  ],
+  "selectionNote": "ZIP phase023 originally had29 targets; a local pending selection refresh ran while its29-member request was active. The original manifest was reconstructed from all29 completed immutable transport receipts. No HTTP request was retried. The selection helper now refuses any existing phase. TAR017 has9 targets.",
+  "transport": {"tar017": {"targets":9,"successful":9},"zip023":{"targets":29,"successful":22,"otherResponses":7}},
+  "meaning": "Transport and decode evidence only; visual edition decisions are separate. No production or test database writes. No complete archive checksum claim."
+}

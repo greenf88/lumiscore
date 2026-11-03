@@ -1,0 +1,1404 @@
+{
+  "query": "with target as(select * from public.works where id=any(array[1903,1530,1535,1491,1522,6480,1950,313,315,2608,1884,1655,1423,3259,2645,2984,3348,3414,2668,3371,3364,1430,2648,3276,1890,2402,3329,3520]::bigint[]) or open_library_id=any(array['OL20648695W','OL23763952W','OL24248715W','OL24348719W','OL26181955W','OL27060702W','OL34311125W','OL9170454W','OL455305W','OL14873315W','OL362694W','OL44321574W','OL45173871W','OL44542122W','OL21180963W','OL76833W','OL8483260W','OL45876W','OL35377404W','OL362427W','OL1909291W','OL1052133W','OL2746369W','OL17356842W','OL8996438W','OL679266W','OL2625431W','OL46876W','OL11967025W','OL554687W','OL8119615W','OL27471W','OL453739W','OL46887W','OL24461512W']::text[]) or regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['gebrokenlicht','thememorykeepersdaughter','dodelijkegeloften','lethalvows','labyrint','labyrinten','decockendebroedersvandezachtedood','decockendemoordopannabentveld','demoordopannabentveld','devuurtoren','venijn','heteilandvandeverdwenenbomen','theislandofmissingtrees','hetlaatstelied','hetgeschenk','hoeoverleefikalleswatandersgaatdangedacht','lievermoedanlui','eenkleineverrassing','romeoenjulia','hamlet','derodeletter','degodvankleinedingen','hetlevenvaneenloserlogboekvanbrambotermans','hetberninimysterie','hetverlorensymbool','kafkaophetstrand','destamvandeholebeer','debendevananansi','magier','tewapen','deslingervanfoucault','dekinderenvanhurin','zwerkbaldoordeeeuwenheen','driekoningenofziezelfmaar','zwaardvanglas','deverlorenwereld','detovervinger','deontrafelingvandekosmos','huiver','risingsun','ikbenderegen','kleinestinkerd','thescarletletter','thelostsymbol','twelfthnightorwhatyouwill','lastlovesong','thegift','angelsdemons','diaryofawimpykid','themagicfinger','gebrokenlichtdrukheruitgave','romeoandjuliet','thefabricofthecosmos','thegodofsmallthings','theclanofthecavebear','glasssword','ilpendolodifoucault','anansiboys','','thelostworld','shiver','magician','quidditchthroughtheages','thechildrenofhurin','menatarms']::text[])), a as(select * from public.authors where id in(select author_id from target) or id=any(array[857,3405,670,2189,3285]::bigint[]) or open_library_id=any(array['OL3767459A','OL45364A','OL9125502A','OL636019A','OL97320A','OL26320A','OL25712A','OL53305A','OL39307A','OL20735A','OL23919A','OL34184A','OL7276129A','OL382524A','OL28257A','OL9388A','OL26681A','OL2832500A','OL7522010A','OL8270388A','OL7758106A','OL9564527A','OL1318893A','OL9918428A','OL2644885A','OL402869A','OL40784A','OL5152012A','OL7988370A','OL7204857A','OL2818851A']::text[]) or regexp_replace(lower(normalize(name,NFD)),'[^a-z0-9]','','g')=any(array['tlsmith','henningmankell','baantjer','janterlouw','elifsafak','henkvanstraten','jrrtolkien','terrypratchett','neilgaiman','danbrown','umbertoeco','jkrowling','roalddahl','victoriaaveyard','','michaelcrichton','williamshakespeare','nathanielhawthorne','jeffkinney','hendrikgroen','francineoomen','lucindariley','erikscherder','editheger','kimedwards','briangreene','arundhatiroy','jeanmauel','raymondefeist','maggiestiefvater','heinlvandolen','acbaantjer','franck','gaeaschoeters']::text[])), e as(select * from public.editions where work_id in(select id from target) or open_library_edition_id=any(array['OL32698485M','OL60561039M','OL34367822M','OL32077933M','OL32241443M','OL35331713M','OL36693487M','OL46531222M','OL61048809M','OL46926577M','OL60567995M','OL61597162M','OL32402536M','OL24405553M','OL24405549M','OL24356706M','OL35687461M','OL40282296M','OL47273765M','OL32365290M','OL45392766M','OL32852315M','OL28294204M','OL27290962M','OL27738260M','OL9097908M','OL28345253M','OL60703107M','OL24405512M','OL27097743M','OL33897477M','OL39218981M','OL24946953M','OL47217005M','OL32352161M']::text[]) or regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')=any(array['9789063053994','9789464405989','9789044518597','9789026101595','9789026101373','9789046807187','9789046802083','9789046829134','9789401625319','9789400512252','9789062225644','9789025319151','9789029093101','9789035104549','9789035107335','9789027491121','9789046140536','9789026125690','9789024547906','9789024553280','9789045000947','9789027421968','9789024553853','9789029054225','9789027447845','9789035107007','9789089681843','9789061699088','9789035108356','9789023498070','9789024519569','9789026161223','9789027469830','9789048802531','9789024555659']::text[])) select jsonb_build_object('project','hlvujbrmfdlrfxdjwsmb','checked_at',clock_timestamp(),'works',coalesce((select jsonb_agg(to_jsonb(t) order by id) from target t),'[]'),'authors',coalesce((select jsonb_agg(to_jsonb(t) order by id) from a t),'[]'),'author_corpora',coalesce((select jsonb_agg(to_jsonb(t) order by id) from public.works t where author_id in(select id from a)),'[]'),'editions',coalesce((select jsonb_agg(to_jsonb(t) order by id) from e t),'[]'),'metadata',coalesce((select jsonb_agg(to_jsonb(t) order by edition_id) from public.catalog_edition_metadata t where edition_id in(select id from e)),'[]'),'descriptions',coalesce((select jsonb_agg(to_jsonb(t) order by work_id,language) from public.catalog_work_descriptions t where work_id in(select id from target)),'[]'),'aliases',coalesce((select jsonb_agg(to_jsonb(t) order by work_id,title) from public.catalog_work_title_aliases t where work_id in(select id from target)),'[]'),'reserved_works',(select count(*) from public.works where id between 998100001 and 998100999),'reserved_editions',(select count(*) from public.editions where id between 998200001 and 998201999),'reserved_authors',(select count(*) from public.authors where id between 998300001 and 998300999)) as snapshot;",
+  "data": {
+    "works": [
+      {
+        "id": 8800312,
+        "title": "ההיסטוריה של המחר",
+        "cover_id": null,
+        "author_id": 8800019,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17641518W",
+        "first_publish_year": 2015,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100108,
+        "title": "Het geschenk",
+        "cover_id": null,
+        "author_id": 978300051,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": null,
+        "native_identity_key": "nl-reviewed-isbn:9789025318604"
+      },
+      {
+        "id": 987110003,
+        "title": "πολιτεία",
+        "cover_id": null,
+        "author_id": 987310004,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL51831W",
+        "first_publish_year": 1554,
+        "native_identity_key": "nlscale:fixture011:1400"
+      },
+      {
+        "id": 987112004,
+        "title": "Игрокъ",
+        "cover_id": 6583038,
+        "author_id": 977300010,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL166923W",
+        "first_publish_year": 1866,
+        "native_identity_key": "nlscale:20261102:ol:OL166923W"
+      },
+      {
+        "id": 987135014,
+        "title": "猫を処方いたします。",
+        "cover_id": null,
+        "author_id": 987335007,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL37920099W",
+        "first_publish_year": 2023,
+        "native_identity_key": "nlscale:20261102:ol:OL37920099W"
+      }
+    ],
+    "aliases": [],
+    "authors": [
+      {
+        "id": 8800019,
+        "name": "Yuval Noah Harari",
+        "open_library_id": "OL3778242A"
+      },
+      {
+        "id": 921300006,
+        "name": "J.R.R. Tolkien",
+        "open_library_id": null
+      },
+      {
+        "id": 921300022,
+        "name": "Terry Pratchett",
+        "open_library_id": null
+      },
+      {
+        "id": 921300101,
+        "name": "刘慈欣",
+        "open_library_id": null
+      },
+      {
+        "id": 930300025,
+        "name": "Jan Terlouw",
+        "open_library_id": "OL636019A"
+      },
+      {
+        "id": 945300758,
+        "name": "Lucinda Riley",
+        "open_library_id": "OL7758106A"
+      },
+      {
+        "id": 962300003,
+        "name": "J. K. Rowling",
+        "open_library_id": "OL23919A"
+      },
+      {
+        "id": 969300003,
+        "name": "Hendrik Groen",
+        "open_library_id": "OL7522010A"
+      },
+      {
+        "id": 977300004,
+        "name": "Neil Gaiman",
+        "open_library_id": "OL53305A"
+      },
+      {
+        "id": 977300010,
+        "name": "Fiódor Dostoievski",
+        "open_library_id": "OL22242A"
+      },
+      {
+        "id": 977300016,
+        "name": "Umberto Eco",
+        "open_library_id": "OL20735A"
+      },
+      {
+        "id": 977300024,
+        "name": "Dan Brown",
+        "open_library_id": "OL39307A"
+      },
+      {
+        "id": 977300031,
+        "name": "Лев Толстой",
+        "open_library_id": "OL26783A"
+      },
+      {
+        "id": 978300032,
+        "name": "Roald Dahl",
+        "open_library_id": "OL34184A"
+      },
+      {
+        "id": 978300035,
+        "name": "川口俊和",
+        "open_library_id": "OL7524457A"
+      },
+      {
+        "id": 978300051,
+        "name": "Gaea Schoeters",
+        "open_library_id": null
+      },
+      {
+        "id": 987300006,
+        "name": "Jean M. Auel",
+        "open_library_id": "OL402869A"
+      },
+      {
+        "id": 987301003,
+        "name": "Jeff Kinney",
+        "open_library_id": "OL2832500A"
+      },
+      {
+        "id": 987301006,
+        "name": "Henning Mankell",
+        "open_library_id": "OL45364A"
+      },
+      {
+        "id": 987304002,
+        "name": "Michael Crichton",
+        "open_library_id": "OL28257A"
+      },
+      {
+        "id": 987304014,
+        "name": "Raymond E. Feist",
+        "open_library_id": "OL40784A"
+      },
+      {
+        "id": 987310004,
+        "name": "Plato",
+        "open_library_id": "OL12823A"
+      },
+      {
+        "id": 987311001,
+        "name": "William Shakespeare",
+        "open_library_id": "OL9388A"
+      },
+      {
+        "id": 987313001,
+        "name": "Terry Pratchett",
+        "open_library_id": "OL25712A"
+      },
+      {
+        "id": 987313003,
+        "name": "Francine Oomen",
+        "open_library_id": "OL8270388A"
+      },
+      {
+        "id": 987335007,
+        "name": "Ishida Syou",
+        "open_library_id": "OL13522735A"
+      },
+      {
+        "id": 987347012,
+        "name": "柳美里",
+        "open_library_id": "OL4865543A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [
+      {
+        "id": 618,
+        "title": "Homo Deus",
+        "isbn_10": null,
+        "isbn_13": "9781910701874",
+        "work_id": 8800312,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Harvill Secker",
+        "publish_date": null,
+        "open_library_edition_id": "OL26326058M"
+      },
+      {
+        "id": 978200166,
+        "title": "Het geschenk",
+        "isbn_10": null,
+        "isbn_13": "9789025318604",
+        "work_id": 978100108,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Querido",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      {
+        "id": 987210004,
+        "title": "Politeia",
+        "isbn_10": "9025315313",
+        "isbn_13": "9789025315313",
+        "work_id": 987110003,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Athenaeum-Polak & Van Gennep",
+        "publish_date": null,
+        "open_library_edition_id": "OL24329738M"
+      },
+      {
+        "id": 987210005,
+        "title": "The Republic (Everyman's Library (Cloth))",
+        "isbn_10": "0679413308",
+        "isbn_13": "9780679413301",
+        "work_id": 987110003,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Everyman's Library",
+        "publish_date": null,
+        "open_library_edition_id": "OL7698626M"
+      },
+      {
+        "id": 987212004,
+        "title": "De speler",
+        "isbn_10": null,
+        "isbn_13": "9789027491732",
+        "work_id": 987112004,
+        "cover_id": 6583038,
+        "language": "dut",
+        "publisher": "Het Spectrum",
+        "publish_date": null,
+        "open_library_edition_id": "OL24357047M"
+      },
+      {
+        "id": 987235014,
+        "title": "Een kat op recept",
+        "isbn_10": null,
+        "isbn_13": "9789029099912",
+        "work_id": 987135014,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Meulenhoff",
+        "publish_date": null,
+        "open_library_edition_id": "OL61471418M"
+      }
+    ],
+    "metadata": [
+      {
+        "format": "paperback",
+        "work_id": 978100108,
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Paperback ISBN 9789025318604 verschijningsdatum 04/06/2025 NUR 301 Literaire roman, novelle imprint Querido uitgever Singel Uitgeverijen taal Nederlands",
+            "sha256": "3d50965652b5e5f46e5598e88d0cec27ae6c7be12e362fcae6eae88ff9f5ef54",
+            "checkedAt": "2026-11-01T20:43:11.995Z",
+            "sourceAuthors": "Gaea Schoeters"
+          },
+          {
+            "url": "https://metadata.isbn.nl/ie_fcache/0000709382_Het_geschenk_2_710_130_0_0.jpg",
+            "fact": "Exact edition block and human visual review; same observed provider image stem for medium variant.",
+            "bytes": 96245,
+            "sha256": "2f38265a2fc71e900f2ae33a00578ceaaeda2a7e1416121bd2ad5a7e2f65989b",
+            "checkedAt": "2026-11-01T21:23:57.203Z"
+          }
+        ],
+        "cover_url": "https://metadata.isbn.nl/ie_fcache/0000709382_Het_geschenk_2_710_130_0_0.jpg",
+        "edition_id": 978200166,
+        "bound_title": "Het geschenk",
+        "reviewed_at": "2026-11-01T21:37:32+00:00",
+        "bound_isbn13": "9789025318604",
+        "evidence_url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+        "review_batch": "nl007-reviewed-batch-08-20261101",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": null,
+        "bound_author_id": 978300051
+      },
+      {
+        "format": "hardcover",
+        "work_id": 987110003,
+        "evidence": [
+          {
+            "note": "Plato’s Politeia dialogue, exact Dutch hardcover9789025315313. Philosophy stays outside automatic taste-test approval. Exact current source-edition key is already present; fill its absent ISBN from bound independent KB records, never insert a duplicate edition. Only Pijpelijntjes additionally needs NULL-language→dut based on exact KB language evidence.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p821854011",
+              "http://data.bibliotheken.nl/id/nbt/p822873486"
+            ],
+            "reference": "work:1400",
+            "checked_at": "2026-11-02T19:45:00.000Z",
+            "canonical_name_resolution": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-020.json",
+            "sources": [
+              "https://openlibrary.org/works/OL51831W",
+              "https://data.bibliotheken.nl/id/nbt/p821854011",
+              "https://data.bibliotheken.nl/id/nbt/p822873486"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ab05a51391b16ab0decf913cd3391e55ae9990d86eb8b6ab237faca643eaa1ca",
+            "cover_id": 6455896,
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Actually read cover-large/sheet-001.jpg. Plato; Politeia; Athenaeum. Front identity and source-edition attachment are corroboration, not proof of a visible barcode, printing year, language or complete contents. Bibliographic checks remain separate."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/6455896-L.jpg?default=false",
+        "edition_id": 987210004,
+        "bound_title": "Politeia",
+        "reviewed_at": "2026-11-02T19:45:00+00:00",
+        "bound_isbn13": "9789025315313",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p821854011",
+        "review_batch": "nl-scale-20261102-011",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/6455896-M.jpg?default=false",
+        "bound_author_id": 987310004
+      },
+      {
+        "format": "hardcover",
+        "work_id": 987112004,
+        "evidence": [
+          {
+            "note": "Standalone Игрокъ/Igrok1866 novel, same Dutch De speler9789027491732hardcover. Exact KB original binding excludes the broader GamblerAndOtherStories collection; publisher’s chronology corroborates1866. Alternative original/English title queries included before any addition.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p842653597"
+            ],
+            "reference": "new-work-dossier-readings-013.json#65",
+            "checked_at": "2026-11-02T20:32:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-003.json",
+            "sources": [
+              "https://www.penguinrandomhouse.co.za/sites/penguinbooks.co.za/files/Penguin%20Post%20Magazine%20%20Issue%205.pdf",
+              "https://www.penguinrandomhouse.com/books/42263/the-gambler-by-fyodor-dostoevsky/9780307432247/",
+              "https://openlibrary.org/works/OL166923W",
+              "https://data.bibliotheken.nl/id/nbt/p842653597"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "a12c01895269494cace8a38347481ab34a242ff9f0e6770a8762e3905c9c13b9",
+            "cover_id": 6583038,
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "cover_url": "https://covers.openlibrary.org/b/id/6583038-L.jpg?default=false",
+        "edition_id": 987212004,
+        "bound_title": "De speler",
+        "reviewed_at": "2026-11-02T20:32:00+00:00",
+        "bound_isbn13": "9789027491732",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p842653597",
+        "review_batch": "nl-scale-20261102-013",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/6583038-M.jpg?default=false",
+        "bound_author_id": 977300010
+      },
+      {
+        "format": "hardcover",
+        "work_id": 987135014,
+        "evidence": [
+          {
+            "note": "Een kat op recept9789029099912 bindt aanJapaneseNekoWoShohoItashimasu2023, PHPprimarypublisher8March2023. Niet2026mangaadaptatie/latere vervolgen. SyouIshidaJapaneseauthor, geen Engelseeditie door Engelsebrontekst.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p443106975"
+            ],
+            "reference": "new-work-dossier-readings-036.json#100",
+            "checked_at": "2026-11-03T07:32:53.960Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-008.json",
+            "sources": [
+              "https://www.php.co.jp/books/detail.php?isbn=978-4-569-90288-3",
+              "https://data.bibliotheken.nl/id/nbt/p443106975",
+              "https://openlibrary.org/works/OL37920099W"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "Bounded official bulk-source attempt for this exact edition did not yield an identity-approved asset. Preserve existing resolver and document its actual image or neutral placeholder in hosted acceptance; not proof of provider-wide absence.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789029099912",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15203527,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "0e5eaf5635f1c02234e225a0e3a9e680fc357d0b4dee55ac8eb2522a8c89ba78"
+              }
+            ],
+            "checkedAt": "2026-11-03T07:32:53.966Z",
+            "editionKey": "/books/OL61471418M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "cover_url": null,
+        "edition_id": 987235014,
+        "bound_title": "Een kat op recept",
+        "reviewed_at": "2026-11-03T07:32:53.96+00:00",
+        "bound_isbn13": "9789029099912",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p443106975",
+        "review_batch": "nl-scale-20261102-036",
+        "review_status": "approved",
+        "bound_language": "dut",
+        "card_cover_url": null,
+        "bound_author_id": 987335007
+      }
+    ],
+    "checked_at": "2026-11-03T17:37:08.247034+00:00",
+    "descriptions": [
+      {
+        "text": "Yuval Noah Harari turns from humanity's past to the ambitions that may shape its future. He examines the pursuit of longer lives, greater happiness and powers once attributed to gods. Drawing on history and developments in technology, he asks how those projects could change human societies and people's place within them. The book presents possible directions and their dangers, inviting readers to question who might benefit from the capabilities humanity is creating.",
+        "work_id": 8800312,
+        "evidence": [
+          {
+            "url": "https://www.wilibraries.org.uk/Record/102419",
+            "role": "Original Work synopsis facts; not edition/format/cover proof",
+            "facts": [
+              "Yuval Noah Harari examines future projects after historical struggle with famine, plague and war",
+              "Happiness, immortality, technological powers and risks to human future are questions, not established predictions"
+            ],
+            "snapshot": null,
+            "checkedAt": "2026-10-31"
+          },
+          {
+            "url": "https://openlibrary.org/books/OL26326058M",
+            "isbn": "9781910701874",
+            "role": "Exact selected test edition sole parent/ISBN/title plus existing Work-author authority binding; cover remains separate",
+            "snapshot": "2026-09-30",
+            "workParent": "OL17641518W"
+          }
+        ],
+        "language": "en",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.wilibraries.org.uk/Record/102419",
+        "reviewed_at": "2026-10-31T00:00:00+00:00",
+        "source_name": "www.wilibraries.org.uk",
+        "source_type": "official_catalog",
+        "review_batch": "integrity-source-remainder-20261031",
+        "review_status": "approved",
+        "bound_author_id": 8800019
+      },
+      {
+        "text": "In Berlijn duiken plotseling overal olifanten op. Ze blijken een geschenk van de president van Botswana, bedoeld als reactie op strengere Duitse regels voor de invoer van jachttrofeeën. Met twintigduizend dieren krijgt de stad een probleem dat zich moeilijk laat wegpraten. De roman volgt de botsing tussen politieke overtuigingen en een ontregelende werkelijkheid, waarin de gevolgen van een besluit onverwacht dichtbij komen te staan.",
+        "work_id": 978100108,
+        "evidence": [
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Paperback ISBN 9789025318604 verschijningsdatum 04/06/2025 NUR 301 Literaire roman, novelle imprint Querido uitgever Singel Uitgeverijen taal Nederlands",
+            "sha256": "3d50965652b5e5f46e5598e88d0cec27ae6c7be12e362fcae6eae88ff9f5ef54",
+            "checkedAt": "2026-11-01T20:43:11.995Z",
+            "sourceAuthors": "Gaea Schoeters"
+          },
+          {
+            "url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+            "fact": "Work-bound content reviewed; original factual Dutch summary, not source quotation or title-derived content.",
+            "checkedAt": "2026-11-01T21:37:32Z"
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://metadata.isbn.nl/1963074/het-geschenk.html",
+        "reviewed_at": "2026-11-01T21:37:32+00:00",
+        "source_name": "Bibliografische bron; oorspronkelijke gecontroleerde samenvatting",
+        "source_type": "official_catalog",
+        "review_batch": "nl007-reviewed-batch-08-20261101",
+        "review_status": "approved",
+        "bound_author_id": 978300051
+      },
+      {
+        "text": "In gesprekken rond Socrates onderzoekt Plato wat rechtvaardigheid inhoudt en of een rechtvaardig mens gelukkiger leeft dan een onrechtvaardig mens. Om die vragen te verkennen bouwen de gesprekspartners in gedachten een samenleving op. Daarbij komen opvoeding, bestuur, filosofische kennis en de ordening van de menselijke ziel aan bod. De denkbeeldige stad biedt telkens een ander perspectief op het individuele leven. Het werk ontvouwt zijn argumenten als een dialoog waarin definities en overtuigingen worden beproefd.",
+        "work_id": 987110003,
+        "evidence": [
+          {
+            "note": "Plato’s Politeia dialogue, exact Dutch hardcover9789025315313. Philosophy stays outside automatic taste-test approval. Exact current source-edition key is already present; fill its absent ISBN from bound independent KB records, never insert a duplicate edition. Only Pijpelijntjes additionally needs NULL-language→dut based on exact KB language evidence.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p821854011",
+              "http://data.bibliotheken.nl/id/nbt/p822873486"
+            ],
+            "reference": "work:1400",
+            "checked_at": "2026-11-02T19:45:00.000Z",
+            "canonical_name_resolution": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-020.json",
+            "sources": [
+              "https://openlibrary.org/works/OL51831W",
+              "https://data.bibliotheken.nl/id/nbt/p821854011",
+              "https://data.bibliotheken.nl/id/nbt/p822873486"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "ab05a51391b16ab0decf913cd3391e55ae9990d86eb8b6ab237faca643eaa1ca",
+            "cover_id": 6455896,
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Actually read cover-large/sheet-001.jpg. Plato; Politeia; Athenaeum. Front identity and source-edition attachment are corroboration, not proof of a visible barcode, printing year, language or complete contents. Bibliographic checks remain separate."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://openlibrary.org/works/OL51831W",
+        "reviewed_at": "2026-11-02T19:45:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-011",
+        "review_status": "approved",
+        "bound_author_id": 987310004
+      },
+      {
+        "text": "Alexej werkt als huisleraar in het gezin van een Russische generaal. Zijn onzekere plaats in dat huishouden en zijn gevoelens voor Polina maken hem afhankelijk van mensen bij wie hij juist erkenning zoekt. Aan de speeltafel probeert hij een andere positie te veroveren. Het vooruitzicht van winst raakt steeds sterker verweven met zijn hoop op liefde en zelfstandigheid. Verlies betekent daardoor meer dan een geldprobleem: de behoefte nog één keer te spelen gaat zijn keuzes beheersen.",
+        "work_id": 987112004,
+        "evidence": [
+          {
+            "note": "Standalone Игрокъ/Igrok1866 novel, same Dutch De speler9789027491732hardcover. Exact KB original binding excludes the broader GamblerAndOtherStories collection; publisher’s chronology corroborates1866. Alternative original/English title queries included before any addition.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p842653597"
+            ],
+            "reference": "new-work-dossier-readings-013.json#65",
+            "checked_at": "2026-11-02T20:32:00.000Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-003.json",
+            "sources": [
+              "https://www.penguinrandomhouse.co.za/sites/penguinbooks.co.za/files/Penguin%20Post%20Magazine%20%20Issue%205.pdf",
+              "https://www.penguinrandomhouse.com/books/42263/the-gambler-by-fyodor-dostoevsky/9780307432247/",
+              "https://openlibrary.org/works/OL166923W",
+              "https://data.bibliotheken.nl/id/nbt/p842653597"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "sha256": "a12c01895269494cace8a38347481ab34a242ff9f0e6770a8762e3905c9c13b9",
+            "cover_id": 6583038,
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.penguinrandomhouse.co.za/sites/penguinbooks.co.za/files/Penguin%20Post%20Magazine%20%20Issue%205.pdf",
+        "reviewed_at": "2026-11-02T20:32:00+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-013",
+        "review_status": "approved",
+        "bound_author_id": 977300010
+      },
+      {
+        "text": "In een verborgen straatje in Kyoto vinden mensen met uiteenlopende zorgen een merkwaardige kliniek. De arts geeft hun geen gewone medicijnen mee, maar een kat die ze gedurende een bepaalde tijd moeten verzorgen. De dieren zijn eigenzinnig en vragen aandacht, waardoor de patiënten anders naar hun dagelijkse leven gaan kijken. Achter de ongebruikelijke werkwijze schuilt bovendien een reden die niet meteen duidelijk is. Het boek vertelt over ontmoetingen tussen mensen en katten binnen deze fictieve praktijk.",
+        "work_id": 987135014,
+        "evidence": [
+          {
+            "note": "Een kat op recept9789029099912 bindt aanJapaneseNekoWoShohoItashimasu2023, PHPprimarypublisher8March2023. Niet2026mangaadaptatie/latere vervolgen. SyouIshidaJapaneseauthor, geen Engelseeditie door Engelsebrontekst.",
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p443106975"
+            ],
+            "reference": "new-work-dossier-readings-036.json#100",
+            "checked_at": "2026-11-03T07:32:53.960Z"
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-008.json",
+            "sources": [
+              "https://www.php.co.jp/books/detail.php?isbn=978-4-569-90288-3",
+              "https://data.bibliotheken.nl/id/nbt/p443106975",
+              "https://openlibrary.org/works/OL37920099W"
+            ]
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "note": "Bounded official bulk-source attempt for this exact edition did not yield an identity-approved asset. Preserve existing resolver and document its actual image or neutral placeholder in hosted acceptance; not proof of provider-wide absence.",
+            "type": "no_verified_cover_asset_retained",
+            "isbn13": "9789029099912",
+            "status": "no_verified_asset_retained",
+            "attempts": [
+              {
+                "status": "bulk_archive_unavailable",
+                "coverId": 15203527,
+                "receipt": "cover-archive-v2-readback.json",
+                "receiptSha256": "0e5eaf5635f1c02234e225a0e3a9e680fc357d0b4dee55ac8eb2522a8c89ba78"
+              }
+            ],
+            "checkedAt": "2026-11-03T07:32:53.966Z",
+            "editionKey": "/books/OL61471418M",
+            "limitation": "No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere."
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://data.bibliotheken.nl/id/nbt/p443106975",
+        "reviewed_at": "2026-11-03T07:32:53.96+00:00",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_type": "official_catalog",
+        "review_batch": "nl-scale-20261102-036",
+        "review_status": "approved",
+        "bound_author_id": 987335007
+      }
+    ],
+    "author_corpora": [
+      {
+        "id": 8800312,
+        "title": "ההיסטוריה של המחר",
+        "cover_id": null,
+        "author_id": 8800019,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17641518W",
+        "first_publish_year": 2015,
+        "native_identity_key": null
+      },
+      {
+        "id": 921100006,
+        "title": "The Hobbit",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27482W",
+        "first_publish_year": 1937,
+        "native_identity_key": null
+      },
+      {
+        "id": 921100027,
+        "title": "Good Omens",
+        "cover_id": null,
+        "author_id": 921300022,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL453936W",
+        "first_publish_year": 1990,
+        "native_identity_key": null
+      },
+      {
+        "id": 921100117,
+        "title": "The Three-Body Problem",
+        "cover_id": null,
+        "author_id": 921300101,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17267881W",
+        "first_publish_year": 2008,
+        "native_identity_key": null
+      },
+      {
+        "id": 921100171,
+        "title": "The Fellowship of the Ring",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27513W",
+        "first_publish_year": 1954,
+        "native_identity_key": null
+      },
+      {
+        "id": 921100218,
+        "title": "Guards! Guards!",
+        "cover_id": null,
+        "author_id": 921300022,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL453735W",
+        "first_publish_year": 1989,
+        "native_identity_key": null
+      },
+      {
+        "id": 923100007,
+        "title": "The Lord of the Rings",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27448W",
+        "first_publish_year": 1954,
+        "native_identity_key": null
+      },
+      {
+        "id": 923100192,
+        "title": "The Silmarillion",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27495W",
+        "first_publish_year": 1977,
+        "native_identity_key": null
+      },
+      {
+        "id": 924100138,
+        "title": "The Two Towers",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27479W",
+        "first_publish_year": 1954,
+        "native_identity_key": null
+      },
+      {
+        "id": 924100193,
+        "title": "The Return of the King",
+        "cover_id": null,
+        "author_id": 921300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27455W",
+        "first_publish_year": 1950,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100025,
+        "title": "Oorlogswinter",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL3681911W",
+        "first_publish_year": 1972,
+        "native_identity_key": null
+      },
+      {
+        "id": 930100028,
+        "title": "Koning van Katoren",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL3681910W",
+        "first_publish_year": 1971,
+        "native_identity_key": null
+      },
+      {
+        "id": 945101865,
+        "title": "De liefdesbrief",
+        "cover_id": null,
+        "author_id": 945300758,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL30378943W",
+        "first_publish_year": 2021,
+        "native_identity_key": null
+      },
+      {
+        "id": 962100003,
+        "title": "Harry Potter and the Philosopher's Stone",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82563W",
+        "first_publish_year": 1997,
+        "native_identity_key": null
+      },
+      {
+        "id": 962100006,
+        "title": "De zeven zussen",
+        "cover_id": null,
+        "author_id": 945300758,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34536006W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100003,
+        "title": "Leven en laten leven",
+        "cover_id": null,
+        "author_id": 969300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34310983W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100029,
+        "title": "Zolang er leven is",
+        "cover_id": null,
+        "author_id": 969300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19740472W",
+        "first_publish_year": 2016,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100030,
+        "title": "Opgewekt naar de eindstreep",
+        "cover_id": null,
+        "author_id": 969300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL24341496W",
+        "first_publish_year": 2020,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100045,
+        "title": "Harry Potter and the Half-Blood Prince",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82565W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100046,
+        "title": "Harry Potter and the Deathly Hallows",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82586W",
+        "first_publish_year": 2007,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100021,
+        "title": "American Gods",
+        "cover_id": null,
+        "author_id": 977300004,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL679360W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100027,
+        "title": "Crime and Punishment",
+        "cover_id": null,
+        "author_id": 977300010,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL166894W",
+        "first_publish_year": 1866,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100034,
+        "title": "The Name of the Rose",
+        "cover_id": null,
+        "author_id": 977300016,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL8996439W",
+        "first_publish_year": 1980,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100046,
+        "title": "The Da Vinci Code",
+        "cover_id": null,
+        "author_id": 977300024,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL76837W",
+        "first_publish_year": 2003,
+        "native_identity_key": null
+      },
+      {
+        "id": 977100057,
+        "title": "Anna Karenina",
+        "cover_id": null,
+        "author_id": 977300031,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL267096W",
+        "first_publish_year": 1878,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100048,
+        "title": "Matilda",
+        "cover_id": null,
+        "author_id": 978300032,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL45846W",
+        "first_publish_year": 1988,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100049,
+        "title": "Charlie and the Chocolate Factory",
+        "cover_id": null,
+        "author_id": 978300032,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL45790W",
+        "first_publish_year": 1964,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100055,
+        "title": "Before the Coffee Gets Cold",
+        "cover_id": null,
+        "author_id": 978300035,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL20019347W",
+        "first_publish_year": 2015,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100108,
+        "title": "Het geschenk",
+        "cover_id": null,
+        "author_id": 978300051,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": null,
+        "native_identity_key": "nl-reviewed-isbn:9789025318604"
+      },
+      {
+        "id": 987100007,
+        "title": "The Mammoth Hunters",
+        "cover_id": 14417367,
+        "author_id": 987300006,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL2746372W",
+        "first_publish_year": 1985,
+        "native_identity_key": "nlscale:20261102:ol:OL2746372W"
+      },
+      {
+        "id": 987100008,
+        "title": "The Valley of Horses",
+        "cover_id": 12528958,
+        "author_id": 987300006,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL2746368W",
+        "first_publish_year": 1982,
+        "native_identity_key": "nlscale:20261102:ol:OL2746368W"
+      },
+      {
+        "id": 987101003,
+        "title": "The Long Haul",
+        "cover_id": null,
+        "author_id": 987301003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL17076678W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture002:498"
+      },
+      {
+        "id": 987101008,
+        "title": "Mördare utan ansikte",
+        "cover_id": null,
+        "author_id": 987301006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL158674W",
+        "first_publish_year": 1991,
+        "native_identity_key": "nlscale:fixture002:3113"
+      },
+      {
+        "id": 987103003,
+        "title": "The Casual Vacancy",
+        "cover_id": 10310623,
+        "author_id": 962300003,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL16796166W",
+        "first_publish_year": 2012,
+        "native_identity_key": "nlscale:20261102:ol:OL16796166W"
+      },
+      {
+        "id": 987104014,
+        "title": "Sphere",
+        "cover_id": null,
+        "author_id": 987304002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL46917W",
+        "first_publish_year": 1987,
+        "native_identity_key": "nlscale:fixture005:3335"
+      },
+      {
+        "id": 987104030,
+        "title": "Flight of the Nighthawks",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL554701W",
+        "first_publish_year": 2005,
+        "native_identity_key": "nlscale:fixture005:5042"
+      },
+      {
+        "id": 987104035,
+        "title": "A Kingdom Besieged",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL15902261W",
+        "first_publish_year": 2011,
+        "native_identity_key": "nlscale:fixture005:5873"
+      },
+      {
+        "id": 987105001,
+        "title": "Eaters of the Dead",
+        "cover_id": null,
+        "author_id": 987304002,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL46873W",
+        "first_publish_year": 1976,
+        "native_identity_key": "nlscale:fixture006:282"
+      },
+      {
+        "id": 987110003,
+        "title": "πολιτεία",
+        "cover_id": null,
+        "author_id": 987310004,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL51831W",
+        "first_publish_year": 1554,
+        "native_identity_key": "nlscale:fixture011:1400"
+      },
+      {
+        "id": 987111003,
+        "title": "The Tempest",
+        "cover_id": null,
+        "author_id": 987311001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL362699W",
+        "first_publish_year": 1611,
+        "native_identity_key": "nlscale:fixture012:331"
+      },
+      {
+        "id": 987111005,
+        "title": "The Merchant of Venice",
+        "cover_id": null,
+        "author_id": 987311001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL258758W",
+        "first_publish_year": 1600,
+        "native_identity_key": "nlscale:fixture012:433"
+      },
+      {
+        "id": 987112004,
+        "title": "Игрокъ",
+        "cover_id": 6583038,
+        "author_id": 977300010,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL166923W",
+        "first_publish_year": 1866,
+        "native_identity_key": "nlscale:20261102:ol:OL166923W"
+      },
+      {
+        "id": 987113002,
+        "title": "Hoe overleef ik alles wat ik niemand vertel?",
+        "cover_id": null,
+        "author_id": 987313003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL36883768W",
+        "first_publish_year": 2023,
+        "native_identity_key": "nlscale:fixture014:1551"
+      },
+      {
+        "id": 987113006,
+        "title": "A Hat Full of Sky",
+        "cover_id": null,
+        "author_id": 987313001,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL453737W",
+        "first_publish_year": 2004,
+        "native_identity_key": "nlscale:fixture014:3376"
+      },
+      {
+        "id": 987116003,
+        "title": "King Lear",
+        "cover_id": null,
+        "author_id": 987311001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL259026W",
+        "first_publish_year": 1608,
+        "native_identity_key": "nlscale:fixture017:1408"
+      },
+      {
+        "id": 987122005,
+        "title": "Over to You - Ten Stories of Flyers and Flying",
+        "cover_id": null,
+        "author_id": 978300032,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL45867W",
+        "first_publish_year": 1946,
+        "native_identity_key": "nlscale:fixture023:4958"
+      },
+      {
+        "id": 987130003,
+        "title": "Mistress of the Empire",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL554751W",
+        "first_publish_year": 1993,
+        "native_identity_key": "nlscale:20261102:ol:OL554751W"
+      },
+      {
+        "id": 987134001,
+        "title": "Servant of the Empire",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL554736W",
+        "first_publish_year": 1990,
+        "native_identity_key": "nlscale:20261102:ol:OL554736W"
+      },
+      {
+        "id": 987134007,
+        "title": "Murder in LaMut",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL257938W",
+        "first_publish_year": 2002,
+        "native_identity_key": "nlscale:20261102:ol:OL257938W"
+      },
+      {
+        "id": 987134010,
+        "title": "Honoured Enemy",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL257936W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:20261102:ol:OL257936W"
+      },
+      {
+        "id": 987135004,
+        "title": "Jimmy the Hand",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL554703W",
+        "first_publish_year": 2003,
+        "native_identity_key": "nlscale:20261102:ol:OL554703W"
+      },
+      {
+        "id": 987135014,
+        "title": "猫を処方いたします。",
+        "cover_id": null,
+        "author_id": 987335007,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL37920099W",
+        "first_publish_year": 2023,
+        "native_identity_key": "nlscale:20261102:ol:OL37920099W"
+      },
+      {
+        "id": 987139004,
+        "title": "Macbeth",
+        "cover_id": null,
+        "author_id": 987311001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL258902W",
+        "first_publish_year": 1623,
+        "native_identity_key": "nlscale:fixture040:323"
+      },
+      {
+        "id": 987139010,
+        "title": "Inferno",
+        "cover_id": null,
+        "author_id": 977300024,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL16804289W",
+        "first_publish_year": 2013,
+        "native_identity_key": "nlscale:fixture040:559"
+      },
+      {
+        "id": 987142001,
+        "title": "The Wonderful Story of Henry Sugar and Six More",
+        "cover_id": null,
+        "author_id": 978300032,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL45864W",
+        "first_publish_year": 1977,
+        "native_identity_key": "nlscale:20261102:ol:OL45864W"
+      },
+      {
+        "id": 987144011,
+        "title": "De 90ste verjaardag van Louis van Roosgaarde",
+        "cover_id": null,
+        "author_id": 930300025,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL44869785W",
+        "first_publish_year": 2019,
+        "native_identity_key": "nlscale:20261102:ol:OL44869785W"
+      },
+      {
+        "id": 987145010,
+        "title": "The Secret of Secrets",
+        "cover_id": null,
+        "author_id": 977300024,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL42542598W",
+        "first_publish_year": 2025,
+        "native_identity_key": "nlscale:fixture046:1907"
+      },
+      {
+        "id": 987145018,
+        "title": "Deception Point",
+        "cover_id": null,
+        "author_id": 977300024,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL76835W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:fixture046:3274"
+      },
+      {
+        "id": 987145022,
+        "title": "A Darkness at Sethanon",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL554680W",
+        "first_publish_year": 1986,
+        "native_identity_key": "nlscale:fixture046:3494"
+      },
+      {
+        "id": 987146049,
+        "title": "King of Foxes",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL554727W",
+        "first_publish_year": 2003,
+        "native_identity_key": "nlscale:fixture047:5043"
+      },
+      {
+        "id": 987146053,
+        "title": "Into a Dark Realm",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL554726W",
+        "first_publish_year": 2006,
+        "native_identity_key": "nlscale:fixture047:5753"
+      },
+      {
+        "id": 987146058,
+        "title": "Jimmy and the Crawler",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL20887200W",
+        "first_publish_year": 2013,
+        "native_identity_key": "nlscale:fixture047:5903"
+      },
+      {
+        "id": 987146059,
+        "title": "At the Gates of Darkness",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL15171940W",
+        "first_publish_year": 2009,
+        "native_identity_key": "nlscale:fixture047:5904"
+      },
+      {
+        "id": 987147014,
+        "title": "JR上野駅公園口",
+        "cover_id": null,
+        "author_id": 987347012,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL21177270W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture048:3496"
+      },
+      {
+        "id": 987152006,
+        "title": "Exile's Return",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL554723W",
+        "first_publish_year": 2004,
+        "native_identity_key": "nlscale:fixture053:3224"
+      },
+      {
+        "id": 987152011,
+        "title": "Wrath of a Mad God",
+        "cover_id": null,
+        "author_id": 987304014,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL14963876W",
+        "first_publish_year": 2008,
+        "native_identity_key": "nlscale:fixture053:5737"
+      },
+      {
+        "id": 987152012,
+        "title": "Den vita lejoninnan",
+        "cover_id": null,
+        "author_id": 987301006,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL158630W",
+        "first_publish_year": 1996,
+        "native_identity_key": "nlscale:fixture053:5832"
+      }
+    ],
+    "reserved_works": 0,
+    "reserved_authors": 0,
+    "reserved_editions": 0
+  }
+}

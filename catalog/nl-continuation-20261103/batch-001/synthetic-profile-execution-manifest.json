@@ -1,0 +1,51 @@
+{
+  "scope": "Disposable synthetic test workflow, test project only; no production account",
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "accountId": "c0bf5eb8-8f4f-41d8-b518-7f41645ea8f9",
+  "syntheticEmail": "pr72-catalogue-20261103@example.test",
+  "before": {
+    "account": {
+      "id": "c0bf5eb8-8f4f-41d8-b518-7f41645ea8f9",
+      "confirmed": true,
+      "rating_count": 0,
+      "status_count": 0,
+      "taste_responses": 0
+    },
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "checked_at": "2026-11-03T18:28:41.081918+00:00",
+    "trait_works": 309,
+    "anchor_works": [
+      {
+        "en": 0,
+        "id": 6,
+        "nl": 0,
+        "title": "Synthetic migration placeholder 6"
+      },
+      {
+        "en": 0,
+        "id": 7,
+        "nl": 0,
+        "title": "Synthetic migration placeholder 7"
+      }
+    ]
+  },
+  "plannedWrites": {
+    "ratings": [
+      {
+        "workId": 8800306,
+        "rating": 9
+      },
+      {
+        "workId": 8800307,
+        "rating": 4
+      }
+    ],
+    "purpose": "Nonempty test profile using existing trait-reviewed test fixtures; no new traits or changes to existing ratings",
+    "maxOwnRatings": 2,
+    "ownRoundStartedViaUi": {
+      "target": 10,
+      "completed": false
+    }
+  },
+  "cleanupPolicy": "Only own exact new rows after readback; CAS abort on drift. Preserve all other accounts, ratings, statuses and catalogue. Do not claim completed10-book round."
+}

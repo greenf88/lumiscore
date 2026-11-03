@@ -1,0 +1,64 @@
+{
+  "state": "HOSTED_TEST_IMPORT_REPLAY_COMMITTED_RECOVERY_AND_35_EXACT_DUTCH_PRESENTATIONS_PROVEN",
+  "baseApplicationSha": "9c74ecaa48f7a35830f713eed3528d46ba0466ad",
+  "parkedPr71OverlapActions": 0,
+  "packages": {
+    "production": {
+      "summary": {
+        "batch": "nl-continuation-20261103-001",
+        "target": "qvplwejffhjvxaypmjut",
+        "scope": "REVIEW PROPOSAL ONLY. NO PRODUCTION EXECUTION.",
+        "presentations": 35,
+        "actions": 96,
+        "newWorks": 7,
+        "ownedTestMirrors": 0,
+        "newDutchEditions": 14,
+        "newDutchSummaries": 35,
+        "newCoverBindings": 35,
+        "netDutchAvailability": 12,
+        "relations": {
+          "works": 8,
+          "editions": 17,
+          "catalog_work_descriptions": 35,
+          "catalog_edition_metadata": 35,
+          "authors": 1
+        }
+      },
+      "files": {
+        "production-plan.json": "06c2605a4b9d37def072383ff2906e9fd761c8d1b5e1eee69528e134728bcf06",
+        "production-import.sql": "23694247bb3ecb9b6b394221e5510309d91b83215706abfd850921b13229afdc",
+        "production-dry-run.sql": "a14246d1d0600bb3978182f90b17bf5dda900e6b4bb427578ed3bcbcaf384639",
+        "production-rollback.sql": "fedeca81d0224b7f8b6ab0fdea37875f22f904851de23c7a8fffbb5d92fe9ebf"
+      }
+    },
+    "test": {
+      "summary": {
+        "batch": "nl-continuation-20261103-001-test",
+        "target": "hlvujbrmfdlrfxdjwsmb",
+        "scope": "OWNED EXACT PRESENTATION MIRRORS. Pre-existing shared authors read-only; mirrors are NOT production additions.",
+        "presentations": 35,
+        "actions": 167,
+        "newWorks": 0,
+        "ownedTestMirrors": 35,
+        "newDutchEditions": 0,
+        "newDutchSummaries": 35,
+        "newCoverBindings": 35,
+        "netDutchAvailability": 0,
+        "relations": {
+          "authors": 13,
+          "works": 35,
+          "editions": 49,
+          "catalog_work_descriptions": 35,
+          "catalog_edition_metadata": 35
+        }
+      },
+      "files": {
+        "test-plan.json": "9738789fcc4455e259ea3e3b47c0536c0b94402bd4ac937d6b6c59237bb8631f",
+        "test-import.sql": "6811ea55b60532bd4387c8528bae5f347e433978a2817eec8ed96f54f92db8dc",
+        "test-dry-run.sql": "c5df4ab4a87c2971c0fa805f5884e989e2dc97e755cb65bfc36150b6f48ab6c2",
+        "test-rollback.sql": "7e74f7240d6ad3554e5428c959276e0f11130b80842332d2ecc2fd6f79944cf3"
+      }
+    }
+  },
+  "remaining": "Separate production release approval/fresh preflight; current320px capability ignored, valid unchanged-UI responsive proof reused. Follow-up research not in this frozen import."
+}
