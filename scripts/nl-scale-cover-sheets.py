@@ -8,13 +8,17 @@ cache=base/'.research-cache/nl-scale-20261102/covers'
 requested=[x for x in sys.argv[1:] if re.fullmatch(r'--v(?:[2-9]|[1-9][0-9])',x)]
 if len(requested)>1:raise ValueError('One output revision only')
 version=requested[0][1:] if requested else ''
-large='--large' in sys.argv
+phase_args=[x.split('=',1)[1] for x in sys.argv[1:] if x.startswith('--large-phase=')]
+if len(phase_args)>1 or any(not re.fullmatch(r'\d{3}',x) for x in phase_args):raise ValueError('One bounded large phase required')
+large_phase=phase_args[0] if phase_args else None
+large='--large' in sys.argv or bool(large_phase)
 large_zip='--large-zip' in sys.argv
 if large_zip and (large or version):raise ValueError('ZIP source has its own output namespace')
 if large_zip:large=True
 if large and version:raise ValueError('Large source has its own output namespace')
 if large:version='-large'
 if large_zip:version='-large-zip'
+if large_phase:version='-large-'+large_phase
 out=base/('outputs/nl-scale-20261102/covers'+version)
 out.mkdir(parents=True,exist_ok=True)
 rows=json.loads((root/'cover-archive-readback.json').read_text(encoding='utf8'))
@@ -24,6 +28,7 @@ if version and (root/'cover-archive-v2-readback.json').exists():
     rows+=json.loads((root/'cover-archive-v2-readback.json').read_text(encoding='utf8'))
 rows=list({r['coverId']:r for r in rows if r.get('sha256')}.values())
 if large:rows=json.loads((root/'cover-large-bulk-v2-readback.json').read_text(encoding='utf8'))
+if large_phase:rows=json.loads((root/('cover-large-bulk-readback-'+large_phase+'.json')).read_text(encoding='utf8'))
 if large_zip:rows=[r for r in json.loads((root/'cover-large-zip-readback.json').read_text(encoding='utf8')) if r.get('sha256')]
 suffix='-large' if large else ''
 targets=json.loads((root/'cover-review-targets.json').read_text(encoding='utf8'))['targets']

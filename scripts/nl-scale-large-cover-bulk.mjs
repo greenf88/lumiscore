@@ -3,13 +3,15 @@
 import fs from'node:fs';import{createHash}from'node:crypto';import{ROOT,readJson}from'./nl-scale-snapshot.mjs';
 import{parseLargeCoverIndex}from'./nl-scale-large-cover-index.mjs';
 const cache=new URL('../.research-cache/nl-scale-20261102/covers/',import.meta.url),prior=readJson(new URL('cover-archive-v2-readback.json',ROOT));
-const targets=prior.filter(r=>r.status==='bulk_archive_unavailable'&&Math.floor(r.coverId/1000000)===6);
+const phase=process.argv[2];if(phase&&!/^\d{3}$/.test(phase))throw Error('Explicit bounded cover phase required');
+const targets=phase?readJson(new URL('cover-large-bulk-request-'+phase+'.json',ROOT)).targets:prior.filter(r=>r.status==='bulk_archive_unavailable'&&Math.floor(r.coverId/1000000)===6);
+if(targets.some(t=>Math.floor(t.coverId/1000000)!==6||!t.candidateId||!t.editionKey))throw Error('Only exact group-six editions supported');
 if(!targets.length||targets.length>100||new Set(targets.map(t=>t.coverId)).size!==targets.length)throw Error('Explicit unique bounded target set required');
 const item='l_covers_0006',m=readJson(new URL(item+'-new-metadata.json',cache));
 if(m.title!==item||!m.collection.includes('ol_exports')||m.is_dark||m.nodownload)throw Error('Not an available official OpenLibrary bulk item');
 // V1 stopped on a LOCAL parser assumption (missing -L suffix). Keep its evidence,
 // reuse checksummed cached indexes; no failed network request is retried.
-const file=new URL('cover-large-bulk-v2-readback.json',ROOT),old=new URL('cover-large-bulk-readback.json',ROOT),done=fs.existsSync(file)?readJson(file):fs.existsSync(old)?readJson(old).filter(r=>r.error!=='Unknown index format'):[];let last=0;
+const file=new URL(phase?'cover-large-bulk-readback-'+phase+'.json':'cover-large-bulk-v2-readback.json',ROOT),old=new URL('cover-large-bulk-readback.json',ROOT),done=fs.existsSync(file)?readJson(file):!phase&&fs.existsSync(old)?readJson(old).filter(r=>r.error!=='Unknown index format'):[];let last=0;
 if(done.some(r=>r.status==='access_stop'))throw Error('Recorded source access stop; no request');
 async function request(url,{range,total,cap=1000000}={}){const delay=Math.max(0,1200-(Date.now()-last));if(delay)await new Promise(r=>setTimeout(r,delay));last=Date.now();
  const r=await fetch(url,{headers:{'User-Agent':'LumiScore-CatalogReview/20261102 (OpenAI Codex GPT-6; +https://lumisco.re)',...(range?{Range:'bytes='+range[0]+'-'+range[1]}:{})},signal:AbortSignal.timeout(25000)});

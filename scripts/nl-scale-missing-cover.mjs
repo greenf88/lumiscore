@@ -9,7 +9,7 @@ export function reviewedMissingCover(edition,review,{readReceipt,hasVerifiedCove
   const file=readReceipt(a.receipt),rows=Array.isArray(file)?file:file.results??file.readback??file.receipts;
   if(!Array.isArray(rows))throw Error('Unknown receipt structure');
   const row=rows.find(r=>r.candidateId===review.candidateId&&r.editionKey===edition.editionKey&&r.coverId===a.coverId);
-  if(!row||row.status!==a.status||!/(?:unavailable|failed|not_published|missing)/.test(row.status))throw Error('Missing-cover attempt not independently recorded');
+  if(!row||row.status!==a.status||!/(?:unavailable|failed|source_failure_no_retry|not_published|missing)/.test(row.status))throw Error('Missing-cover attempt not independently recorded');
   return{receipt:a.receipt,coverId:a.coverId,status:a.status,receiptSha256:createHash('sha256').update(JSON.stringify(file)).digest('hex')};
  });
  return{type:'no_verified_cover_asset_retained',status:review.status,editionKey:edition.editionKey,isbn13:review.isbn13,checkedAt:review.checkedAt,note:review.note,attempts,limitation:'No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere.'};
