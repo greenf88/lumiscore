@@ -18,8 +18,8 @@ printkeuring van alle3096. Testspiegels en ongepubliceerde voorstellen worden ni
 
 Centraal vervolgregister: research-register.jsonl. Oorspronkelijk412 bronrijen,411 logische
 dossiers. Case303 is dezelfde roman Het geuzenboek als eerder afgeronde case260;
-bronverwijzingen blijven behouden, geen extra dossier/Work. Eerste148 logische dossiers
-behandeld;263 nog niet inhoudelijk behandeld in deze voortzetting. Behandeld betekent
+bronverwijzingen blijven behouden, geen extra dossier/Work. Eerste217 logische dossiers
+behandeld;194 nog niet inhoudelijk behandeld in deze voortzetting. Behandeld betekent
 niet dat alle cover-, identiteit- of editievragen zijn opgelost. Onbezocht is geen
 onderzochte uitzondering. Historische709 dossiers en de589 eerdere schaalbesluiten
 worden niet opnieuw uitgevoerd. Nieuwe onderzoeksresultaten blijven buiten PR71.
@@ -57,8 +57,8 @@ geen permanente RLS aangepast. Geen defecte connectorbevestigingslus gebruikt.
 Draft-PR72: https://github.com/greenf88/lumiscore/pull/72 . Ready-Preview:
 https://lumiscore-mbjubus1a-rgkgroeneveld-9102.vercel.app . Deployment
 dpl_AA4HezGdFY8sqfKBLELxcysL7VcC op b2b5ee23dbbaaba04fd3810c4f63a3980d20477d;
-applicatiebytes ongewijzigd9c74ecaa48f7a35830f713eed3528d46ba0466ad. CI groen op bewijshead
-7b118c730b8b576940263b9e38318661c1400cb3, quality/run149. Nieuwere onderzoekcommits
+applicatiebytes ongewijzigd9c74ecaa48f7a35830f713eed3528d46ba0466ad. CI groen op onderzoekhead
+cd54a496ad570c799484a88c718258e71bfd3a54, quality/run150. Nieuwere onderzoekcommits
 hebben hun eigen CI; deze SHA is geen vervangende applicatierelease.
 Alle35 exacte Nederlandse testpresentaties daadwerkelijk via zoeken/kaartklik/detail/
 herladen/teruglink/originele titel gecontroleerd, inclusief geladen cover en tekstbron.
@@ -83,17 +83,15 @@ dezelfde applicatie9c74 is hash-gecontroleerd hergebruikt, inclusief langste oud
 (langer dan de nieuwe titels) en dezelfde aanbevelingsfixture. Dit is geen nieuwe mobiele
 meting van alle35 spiegels. Alles staat in batch-001/hosted-* en reused-responsive-proof.
 
-Vervolgonderzoek buiten batch001:48 aanvullende bron-goedgekeurde voorstellen (samen83),
-met nog lokale/testvalidatie te doen. Eerste batch verwacht+12; totaal bronpotentieel+44,
-dus extra+32 buiten batch001, is nog geen importbewijs.83 bronvoorstellen zijn niet83
-gehoste presentaties of44 gepubliceerde Works. Brongoedkeuring betreft17 nieuwe Works,
-25 editieaanvullingsdossiers,39 bestaande presentaties en2 editiehersteldossiers. Dit
-zijn dossiercategorieën, niet de actieaantallen van een nieuw importbestand.
-Overige dossiers:43 coverpending,6 identiteit/coverpending,1 bronidentiteit+inhoudpending,
-1 retitelvergelijking,1 geblokkeerde exacte cover,4 inhoudsidentiteitsconflicten,
-2 auteurscreditconflicten,3 bundel-/selectieconflicten,1 bestaande verkeerde-editiekoppeling,
-1 meertalige editiebeleidsvraag,1 editiecreditconflict en1 geverifieerd pseudoniem met
-nog onopgeloste publieke presentatie.263 onbezocht. Actuele telling in progress.json.
+Vervolgonderzoek buiten batch001:85 aanvullende bron-goedgekeurde voorstellen (samen120),
+met nog lokale/testvalidatie te doen. Eerste batch verwacht+12; totaal bronpotentieel+61,
+dus extra+49 buiten batch001, is nog geen importbewijs.120 bronvoorstellen zijn niet120
+gehoste presentaties of61 gepubliceerde Works. Brongoedkeuring betreft23 nieuwe Works,
+35 editieaanvullingsdossiers,58 bestaande presentaties en4 editiehersteldossiers. Dit
+zijn dossiercategorieën, niet actieaantallen van een nieuw importbestand.
+217 dossiers inhoudelijk behandeld;194 onbezocht. Overige uitkomsten en bronnen staan
+per dossier in research-register.jsonl/progress.json; pending is geen afgeronde oplossing.
+Alle nieuwe read-only preflights008–015 zijn aparte snapshots. Geen extra testwrites.
 SarahLark/ChristianeGohl is dezelfde persoon; geen extra auteur of globale naamswijziging.
 PowerPlay3650 van KateWilliam is niet DanielleSteel; TheCircle5870/LauraDay niet Eggers.
 
@@ -104,11 +102,11 @@ Voorlopige dossiernotities bewaren de onderzoeksgeschiedenis; de definitieve cov
 beschrijft de later bekeken exacte fronten. Geen barcode-identiteit geclaimd zonder bewijs.
 
 Volgende werkzaamheden: reviewpakket35 blijft afgebakend; overige open dossiers voortzetten.
-Nieuwe controles vanaf reviewed-013 t/m023 zijn duurzaam vastgelegd. Lees actuele reviewed-
+Nieuwe controles vanaf reviewed-013 t/m033 zijn duurzaam vastgelegd. Lees actuele reviewed-
 bestanden; voer oudere materialisatiescripts niet blind opnieuw uit: latere identiteits-
 en coverbesluiten kunnen die eerdere selectie hebben vervangen. Geen extra hosted writes
-voor deze vervolgvoorstellen uitgevoerd. Read-only snapshots004–007 staan afzonderlijk.
-reviewed-validation.json vergelijkt alle149 bronrijen met het actieve PR71-plan: geen exacte
+voor deze vervolgvoorstellen uitgevoerd. Read-only snapshots004–015 staan afzonderlijk.
+reviewed-validation.json vergelijkt alle218 bronrijen met het actieve PR71-plan: geen exacte
 actieoverlap; alleen de reeds opgeloste Geuzenboek-brondubbeling als titelsignaal.
 HoeDan9789000378739 hoort bij bestaandHowTo7005, nietWhatIf3646; ZoekTLekkerUit hoort
 bij bestaandDorkDiaries2Work4368. Geen nieuwe dubbele Works daarvoor voorbereiden.
@@ -131,6 +129,25 @@ geen retry/nooit concluderen dat een editie daardoor niet bestaat.
 Case249 Ik ben de regen: oorspronkelijke titel = heruitgavetitel Kleine stinkerd; current
 query vindt geen Work/auteur, cover nog controleren. Bundels en auteurscreditconflicten
 blijven uitgesloten; geen automatische merges.
+
+Nieuwe gecontroleerde uitzonderingen: ISBN9789027445827 is Het mediterrane dieet van
+Fedon Lindberg, niet Flaubert. Ovidius9789025350215 bevat alleen boekI; de complete
+Scheltema/Dros-uitgave9789025319182 is apart voorbereid, exact beeld nog nodig.
+ArsPoetica9789025315634 is Latijn+NL; Pepys9789022838860 is selectie; Arendt
+9789024408825 bevat deel3 plus één hoofdstuk, niet de hele OriginsOfTotalitarianism.
+Caesar9789026942501 is alleen GallischeOorlog, niet Gallische+Burgeroorlog samen.
+Deze dossiers zijn NIET automatisch in de import opgenomen. MondVolVogels2023 heeft
+vier extra verhalen versus2011; binding2011Hardback/bronPB conflicteert. Titaantjes
+9789023656289 is de vroege versie. FantasiaXVI9789464290462 komt overeen met de
+internationale#14; Nederlandse titel/nummering blijven behouden.
+VlammendHart13334728 is daadwerkelijk bekeken providerplaceholder, uitgesloten.
+Verlossing9789024544448 is DeanKoontz; bestaandauteur370 hergebruiken. Komrij2914
+is GerritJanKomrij; geen nieuwe auteurs vanwege naamuitbreiding. Vijf Komrij-werken
+bron-goedgekeurd na volledige actuele auteurscorpuscontrole; geen smaaktestkenmerken
+voor essays/kunstkritiek. HetKroostVanAagtMorsebel heeft correcte bibliografie en cover,
+maar nog te weinig gedetailleerd inhoudsbewijs voor een oorspronkelijke samenvatting.
+Geen bronloze tekst geschreven. DeDwergenHC9789024559923 en PB9789024559893 delen
+een bronrecord; de exacte hardcoverfrontbinding blijft apart te vergelijken.
 
 Uitvoering na eventueel later akkoord: actuele volledige productievoorcontrole/snapshot,
 alle hashes opnieuw, uitsluitend batch-001/production-import.sql, eerste echte receipt
