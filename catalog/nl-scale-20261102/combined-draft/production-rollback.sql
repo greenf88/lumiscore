@@ -5,7 +5,7 @@ begin;set local lock_timeout='3s';set local statement_timeout='30s';
 lock table public.authors,public.works,public.editions,public.catalog_work_descriptions,public.catalog_edition_metadata in share row exclusive mode;
 do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols text;k jsonb;predicate text;allowed_keys text[];begin
  receipt:=nullif(current_setting('lumiscore.catalog_release_receipt',true),'')::jsonb;
- if receipt->>'project' is distinct from 'qvplwejffhjvxaypmjut' or receipt->>'batch' is distinct from 'nl-scale-20261102-combined-draft' or jsonb_typeof(receipt->'rows') is distinct from 'array' or jsonb_array_length(receipt->'rows')<>910 then raise exception 'Exact first committed receipt required';end if;
+ if receipt->>'project' is distinct from 'qvplwejffhjvxaypmjut' or receipt->>'batch' is distinct from 'nl-scale-20261102-combined-draft' or jsonb_typeof(receipt->'rows') is distinct from 'array' or jsonb_array_length(receipt->'rows')<>1357 then raise exception 'Exact first committed receipt required';end if;
  for r in select value from jsonb_array_elements(receipt->'rows') order by (value->>'seq')::integer desc loop
   if r->>'relation' not in ('authors','works','editions','catalog_work_descriptions','catalog_edition_metadata') then raise exception 'Unreviewed receipt relation';end if;
   k:=r->'key';allowed_keys:=case r->>'relation' when 'authors' then array['id','open_library_id'] when 'works' then array['id','native_identity_key','open_library_id'] when 'editions' then array['id','open_library_edition_id','isbn_13','isbn_10'] when 'catalog_work_descriptions' then array['work_id','language'] else array['edition_id'] end;

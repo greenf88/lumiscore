@@ -1,0 +1,85 @@
+- link "Skip to content":
+  - /url: "#main"
+  - generic: Skip to content
+- navigation:
+  - button "L lumiscore-pr8-discovery-test main":
+    - generic: L
+    - generic: lumiscore-pr8-discovery-test
+    - generic: main
+  - button "Connect":
+  - button:
+    - figure:
+  - button "Open menu":
+- navigation "Floating toolbar":
+  - button:
+  - button "Help":
+    - generic: Help
+  - button "Advisor Center":
+    - generic: Advisor Center
+  - button "SQL Editor":
+    - generic: SQL Editor
+  - button "AI Assistant":
+    - generic: AI Assistant
+- main:
+  - main:
+    - tablist:
+      - tab "Untitled query" [selected]:
+        - generic: Untitled query
+      - button "Close tab":
+      - separator
+      - button:
+    - status
+    - generic: Unsaved edits
+    - button "More actions":
+    - 'button "Query source: Database"':
+      - generic: Database
+    - button "Save":
+      - generic: Save
+      - generic: Ctrl S
+    - button "Run":
+      - generic: Run
+      - generic: Ctrl ↵
+    - code:
+      - generic: "32"
+      - generic: "33"
+      - generic: "34"
+      - generic: "35"
+      - generic: "36"
+      - generic: execute format('update public.%I t set %s where %s',r->>'relation',cols,
+      - generic: replace(predicate,'$1','$2')) using r->'before_row',k;
+      - generic: end if;
+      - generic: end loop;
+      - generic: end;$undo$;commit;
+      - textbox "Editor content" [active]: execute format('update public.%I t set %s where %s',r->>'relation',cols,replace(predicate,'$1','$2')) using r->'before_row',k; end if; end loop; end;$undo$;commit;
+      - generic: "7"
+      - generic: 
+      - generic: "10"
+      - generic: 
+      - generic: "30"
+      - generic: 
+      - list:
+        - generic: do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols
+        - generic: for r in select value from jsonb_array_elements(receipt->'rows') order by
+        - generic: else
+    - separator:
+    - tablist:
+      - tab "Results" [selected]:
+        - generic: Results
+      - tab "Chart":
+        - generic: Chart
+      - button "1 row":
+        - paragraph:
+          - generic: 1 row
+      - button "Export":
+        - generic: Export
+    - grid:
+      - row "set_config":
+        - columnheader "set_config":
+          - generic: set_config
+      - row:
+        - gridcell:
+          - text: "{\"rows\":[{\"key\":{\"open_library_edition_id\":\"OL12800799M\"},\"seq\":1,\"relation\":\"editions\",\"after_row\":{\"id\":987248003,\"title\":\"De gedaanteverwisseling\",\"isbn_10\":null,\"isbn_13\":\"9789025327422\",\"work_id\":987148002,\"cover_id\":null,\"language\":\"dut\",\"publisher\":\"Athenaeum- Polak & Van Gennep\",\"publish_date\":null,\"open_library_edition_id\":\"OL12800799M\"},\"before_row\":null},{\"key\":{\"work_id\":987148002,\"language\":\"nl\"},\"seq\":2,\"relation\":\"catalog_work_descriptions\",\"after_row\":{\"text\":\"Handelsreiziger Gregor Samsa wordt op een ochtend wakker in een lichaam dat niet langer menselijk is. Zijn gewone verplichtingen blijven bestaan, maar hij kan er niet meer aan voldoen. Terwijl hij probeert zich aan zijn nieuwe toestand aan te passen, verandert ook de verhouding tot zijn familie. Het huishouden moet omgaan met zijn aanwezigheid en het wegvallen van zijn vertrouwde rol. De novelle volgt hoe afhankelijkheid en vervreemding groeien binnen een omgeving die hem eerder vanzelfsprekend leek.\",\"work_id\":987148002,\"evidence\":[{\"note\":\"Reuse existing162Metamorphosis/FranzKafka; KBexactoriginalDieVerwandlung1915 confirms same standalonebook, notnewWork orcollectedstories. Correct titletypo only in proposedDutch2001Hardcover9789025327422. Existingunknown-languageunverifiededition remainsuntouched.\",\"type\":\"reviewed_identity_and_bibliography\",\"sources\":[\"http://data.bibliotheken.nl/id/nbt/p21670135X\"],\"reference\":\"ol:OL498460W\",\"checked_at\":\"2026-11-03T09:51:03.949Z\",\"supplemental\":{\"review\":\"Rawsourceeditiontypo gedaateverwisseling correctedto exact independentlyboundKBtitle. SameISBN9789025327422, sourcekey, language, Hardcoverformatandcoverid retained. Physical2001editionverified, not collection.\",\"formatSource\":\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\",\"reviewSources\":[\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\"],\"originalEditionSha256\":\"b759eb773fa67d5b7a0c325aed6078f233d1f26d12e013ca96c78b688efe5b99\"},\"existingAlternativeReview\":null},{\"type\":\"original_substantive_source_review\",\"review\":\"content-review-013.json\",\"sources\":[\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"https://openlibrary.org/works/OL498556W\",\"https://www.singeluitgeverijen.nl/athenaeum/boek/de-gedaanteverwisseling-en-andere-verhalen/\",\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\",\"https://www.booksinbelgium.be/nl/b/f-kafka-de-gedaanteverwisseling-9789025327422\"]},{\"note\":\"Bound exacteditionbulkarchive unavailable. No manualcoverURL imported; inspectsharedresolver or documentedneutralplaceholder hosted. No claimcoverdoesnotexist.\",\"type\":\"no_verified_cover_asset_retained\",\"isbn13\":\"9789025327422\",\"status\":\"no_verified_asset_retained\",\"attempts\":[{\"status\":\"bulk_archive_unavailable\",\"coverId\":6451131,\"receipt\":\"cover-archive-v2-readback.json\",\"receiptSha256\":\"e708a18cf8cc616bac8188db448d09c721bd2d5d82f72c5bce761890bae30c14\"}],\"checkedAt\":\"2026-11-03T09:51:03.948Z\",\"editionKey\":\"/books/OL12800799M\",\"limitation\":\"No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere.\"}],\"language\":\"nl\",\"provenance\":\"original_source_reviewed_summary\",\"source_url\":\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"reviewed_at\":\"2026-11-03T09:51:03.949+00:00\",\"source_name\":\"Gecontroleerde boek- en catalogusbronnen\",\"source_type\":\"official_catalog\",\"review_batch\":\"nl-scale-20261102-049\",\"review_status\":\"approved\",\"bound_author_id\":987310001},\"before_row\":null},{\"key\":{\"edition_id\":987248003},\"seq\":3,\"relation\":\"catalog_edition_metadata\",\"after_row\":{\"format\":\"hardcover\",\"work_id\":987148002,\"evidence\":[{\"note\":\"Reuse existing162Metamorphosis/FranzKafka; KBexactoriginalDieVerwandlung1915 confirms same standalonebook, notnewWork orcollectedstories. Correct titletypo only in proposedDutch2001Hardcover9789025327422. Existingunknown-languageunverifiededition remainsuntouched.\",\"type\":\"reviewed_identity_and_bibliography\",\"sources\":[\"http://data.bibliotheken.nl/id/nbt/p21670135X\"],\"reference\":\"ol:OL498460W\",\"checked_at\":\"2026-11-03T09:51:03.949Z\",\"supplemental\":{\"review\":\"Rawsourceeditiontypo gedaateverwisseling correctedto exact independentlyboundKBtitle. SameISBN9789025327422, sourcekey, language, Hardcoverformatandcoverid retained. Physical2001editionverified, not collection.\",\"formatSource\":\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\",\"reviewSources\":[\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\"],\"originalEditionSha256\":\"b759eb773fa67d5b7a0c325aed6078f233d1f26d12e013ca96c78b688efe5b99\"},\"existingAlternativeReview\":null},{\"type\":\"original_substantive_source_review\",\"review\":\"content-review-013.json\",\"sources\":[\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"https://openlibrary.org/works/OL498556W\",\"https://www.singeluitgeverijen.nl/athenaeum/boek/de-gedaanteverwisseling-en-andere-verhalen/\",\"https://www.deslegte.com/de-gedaanteverwisseling-724494/\",\"https://www.booksinbelgium.be/nl/b/f-kafka-de-gedaanteverwisseling-9789025327422\"]},{\"note\":\"Bound exacteditionbulkarchive unavailable. No manualcoverURL imported; inspectsharedresolver or documentedneutralplaceholder hosted. No claimcoverdoesnotexist.\",\"type\":\"no_verified_cover_asset_retained\",\"isbn13\":\"9789025327422\",\"status\":\"no_verified_asset_retained\",\"attempts\":[{\"status\":\"bulk_archive_unavailable\",\"coverId\":6451131,\"receipt\":\"cover-archive-v2-readback.json\",\"receiptSha256\":\"e708a18cf8cc616bac8188db448d09c721bd2d5d82f72c5bce761890bae30c14\"}],\"checkedAt\":\"2026-11-03T09:51:03.948Z\",\"editionKey\":\"/books/OL12800799M\",\"limitation\":\"No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere.\"}],\"cover_url\":null,\"edition_id\":987248003,\"bound_title\":\"De gedaanteverwisseling\",\"reviewed_at\":\"2026-11-03T09:51:03.949+00:00\",\"bound_isbn13\":\"9789025327422\",\"evidence_url\":\"https://data.bibliotheken.nl/id/nbt/p21670135X\",\"review_batch\":\"nl-scale-20261102-049\",\"review_status\":\"approved\",\"bound_language\":\"dut\",\"card_cover_url\":null,\"bound_author_id\":987310001},\"before_row\":null},{\"key\":{\"id\":987148001},\"seq\":4,\"relation\":\"works\",\"after_row\":{\"id\":987148001,\"title\":\"Tender Is the Flesh\",\"cover_id\":null,\"author_id\":987348001,\"work_type\":null,\"source_type\":\"open_library\",\"open_library_id\":\"OL17864836W\",\"first_publish_year\":2017,\"native_identity_key\":\"nlscale:fixture049:149\"},\"before_row\":{\"id\":987148001,\"title\":\"Tender Is the Flesh\",\"cover_id\":null,\"author_id\":987348001,\"work_type\":null,\"source_type\":\"open_library\",\"open_library_id\":\"OL17864836W\",\"first_publish_year\":2015,\"native_identity_key\":\"nlscale:fixture049:149\"}},{\"key\":{\"open_library_edition_id\":\"OL60598620M\"},\"seq\":5,\"relation\":\"editions\",\"after_row\":{\"id\":987248004,\"title\":\"Schitterend lichaam\",\"isbn_10\":null,\"isbn_13\":\"9789025470104\",\"work_id\":987148001,\"cover_id\":null,\"language\":\"dut\",\"publisher\":\"Atlas Contact\",\"publish_date\":null,\"open_library_edition_id\":\"OL60598620M\"},\"before_row\":null},{\"key\":{\"work_id\":987148001,\"language\":\"nl\"},\"seq\":6,\"relation\":\"catalog_work_descriptions\",\"after_row\":{\"text\":\"In een toekomstige samenleving is dierlijk vlees onveilig verklaard en heeft de overheid de verwerking van mensen als voedsel toegestaan. Marcos werkt in die industrie en probeert zijn taken als gewone administratie te beschouwen. Wanneer hij zelf een levende vrouw toegewezen krijgt, wordt die afstand moeilijker vol te houden. Persoonlijk contact is verboden, maar hij begint haar anders te zien dan het systeem voorschrijft. De roman onderzoekt hoe taal en gewoonten ontmenselijking tot iets alledaags kunnen maken.\",\"work_id\":987148001,\"evidence\":[{\"note\":\"Reuse149TenderIsTheFlesh/AgustinaBazterrica. Add exactDutchSchitterendLichaam9789025470104Paperback independentlyconfirmedAtlasContact. Correct originalyear2015to2017: primarySuhrkampcopyrightsampleidentifies originalArgentina2017ClarínAlfaguara; copyrightPRH2018is laterforeignedition, notfirstpublication.\",\"type\":\"reviewed_identity_and_bibliography\",\"sources\":[\"http://data.bibliotheken.nl/id/nbt/p427844819\"],\"reference\":\"work:149\",\"checked_at\":\"2026-11-03T09:51:03.949Z\",\"supplemental\":null,\"existingAlternativeReview\":null},{\"type\":\"original_substantive_source_review\",\"review\":\"content-review-017.json\",\"sources\":[\"https://www.atlascontact.nl/boek/schitterend-lichaam/\",\"https://res.cloudinary.com/suhrkamp/image/upload/v1742116942/59761.pdf\",\"https://www.boekhandelkoops.nl/BookApi/GetSample?guid=6c18511f-99d9-4490-9416-1ac5ad78eefc\",\"https://openlibrary.org/works/OL17864836W\",\"https://data.bibliotheken.nl/id/nbt/p427844819\"]},{\"note\":\"Bound exacteditionbulkarchive unavailable. No manualcoverURL imported; inspectsharedresolver or documentedneutralplaceholder hosted. No claimcoverdoesnotexist.\",\"type\":\"no_verified_cover_asset_retained\",\"isbn13\":\"9789025470104\",\"status\":\"no_verified_asset_retained\",\"attempts\":[{\"status\":\"bulk_archive_unavailable\",\"coverId\":15139399,\"receipt\":\"cover-archive-v2-readback.json\",\"receiptSha256\":\"e708a18cf8cc616bac8188db448d09c721bd2d5d82f72c5bce761890bae30c14\"}],\"checkedAt\":\"2026-11-03T09:51:03.949Z\",\"editionKey\":\"/books/OL60598620M\",\"limitation\":\"No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere.\"}],\"language\":\"nl\",\"provenance\":\"original_source_reviewed_summary\",\"source_url\":\"https://www.atlascontact.nl/boek/schitterend-lichaam/\",\"reviewed_at\":\"2026-11-03T09:51:03.949+00:00\",\"source_name\":\"Gecontroleerde boek- en catalogusbronnen\",\"source_type\":\"official_catalog\",\"review_batch\":\"nl-scale-20261102-049\",\"review_status\":\"approved\",\"bound_author_id\":987348001},\"before_row\":null},{\"key\":{\"edition_id\":987248004},\"seq\":7,\"relation\":\"catalog_edition_metadata\",\"after_row\":{\"format\":\"paperback\",\"work_id\":987148001,\"evidence\":[{\"note\":\"Reuse149TenderIsTheFlesh/AgustinaBazterrica. Add exactDutchSchitterendLichaam9789025470104Paperback independentlyconfirmedAtlasContact. Correct originalyear2015to2017: primarySuhrkampcopyrightsampleidentifies originalArgentina2017ClarínAlfaguara; copyrightPRH2018is laterforeignedition, notfirstpublication.\",\"type\":\"reviewed_identity_and_bibliography\",\"sources\":[\"http://data.bibliotheken.nl/id/nbt/p427844819\"],\"reference\":\"work:149\",\"checked_at\":\"2026-11-03T09:51:03.949Z\",\"supplemental\":null,\"existingAlternativeReview\":null},{\"type\":\"original_substantive_source_review\",\"review\":\"content-review-017.json\",\"sources\":[\"https://www.atlascontact.nl/boek/schitterend-lichaam/\",\"https://res.cloudinary.com/suhrkamp/image/upload/v1742116942/59761.pdf\",\"https://www.boekhandelkoops.nl/BookApi/GetSample?guid=6c18511f-99d9-4490-9416-1ac5ad78eefc\",\"https://openlibrary.org/works/OL17864836W\",\"https://data.bibliotheken.nl/id/nbt/p427844819\"]},{\"note\":\"Bound exacteditionbulkarchive unavailable. No manualcoverURL imported; inspectsharedresolver or documentedneutralplaceholder hosted. No claimcoverdoesnotexist.\",\"type\":\"no_verified_cover_asset_retained\",\"isbn13\":\"9789025470104\",\"status\":\"no_verified_asset_retained\",\"attempts\":[{\"status\":\"bulk_archive_unavailable\",\"coverId\":15139399,\"receipt\":\"cover-archive-v2-readback.json\",\"receiptSha256\":\"e708a18cf8cc616bac8188db448d09c721bd2d5d82f72c5bce761890bae30c14\"}],\"checkedAt\":\"2026-11-03T09:51:03.949Z\",\"editionKey\":\"/books/OL60598620M\",\"limitation\":\"No verified image is imported. Existing neutral placeholder; not proof that no cover exists at the provider or elsewhere.\"}],\"cover_url\":null,\"edition_id\":987248004,\"bound_title\":\"Schitterend lichaam\",\"reviewed_at\":\"2026-11-03T09:51:03.949+00:00\",\"bound_isbn13\":\"9789025470104\",\"evidence_url\":\"https://data.bibliotheken.nl/id/nbt/p427844819\",\"review_batch\":\"nl-scale-20261102-049\",\"review_status\":\"approved\",\"bound_language\":\"dut\",\"card_cover_url\":null,\"bound_author_id\":987348001},\"before_row\":null}],\"batch\":\"nl-scale-20261102-049\",\"project\":\"hlvujbrmfdlrfxdjwsmb\"}"
+          - button "View full cell content":
+- region "Notifications alt+T"
+- alert
+- alert

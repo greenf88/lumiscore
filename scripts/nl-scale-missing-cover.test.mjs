@@ -6,3 +6,14 @@ test('placeholder proposal binds exact edition and actual failed source receipt'
 test('missing cover cannot discard a verified cover, invent a failure or target a different edition',()=>{for(const [ed,r,options]of[[e,review,{hasVerifiedCover:true}],[{...e,isbn13:['9789025915117']},review,{}],[e,{...review,attempts:[{...review.attempts[0],status:'http_image_ok'}]},{}],[e,{...review,editionKey:'/books/OL999M'},{}]])assert.throws(()=>reviewedMissingCover(ed,r,{readReceipt:()=>receipt,...options}));});
 
 test('documented unpublished archive is accepted only with its independently matched failure receipt',()=>{const state='new_large_zip_source_failure_no_retry',rr={...review,attempts:[{receipt:'cover-large-zip-readback.json',coverId:15138593,status:state}]};assert.equal(reviewedMissingCover(e,rr,{readReceipt:()=>[{...receipt[0],status:state}]}).attempts[0].status,state);assert.throws(()=>reviewedMissingCover(e,rr,{readReceipt:()=>[{...receipt[0],status:'large_zip_bytes_verified_decode_and_identity_pending'}]}));});
+
+test('a cached archive failure needs the original same-archive receipt; it proves no image absence',()=>{
+ const error='Range refused/different: HTTP 500, Content-Range null; no full-download fallback';
+ const prior={...receipt[0],status:'prior_source_failure_no_new_request',sourceFailureReference:'cover-archive-readback.json',error};
+ const original={status:'bulk_source_failure_no_retry',url:'https://archive.org/download/covers_0015/covers_0015_13.zip',error};
+ const rr={...review,attempts:[{receipt:'cover-archive-v2-readback.json',coverId:15138593,status:prior.status}]};
+ const check=old=>reviewedMissingCover(e,rr,{readReceipt:name=>name==='cover-archive-v2-readback.json'?[prior]:old});
+ const result=check([original]);assert.equal(result.attempts[0].historicalFailure.noNewRequest,true);assert(result.limitation.includes('not proof'));
+ assert.throws(()=>check([]));assert.throws(()=>check([{...original,url:original.url.replace('_13.zip','_14.zip')} ]));
+ assert.throws(()=>check([{...original,error:'ACCESS_STOP 403 archive.org'}]));
+});

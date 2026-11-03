@@ -1,0 +1,543 @@
+{
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL7290222A','OL1352452A','OL8384995A','OL7386651A','OL30522A','OL57758A','OL7400495A','OL2470564A','OL15928641A','OL9211446A','OL7756678A','OL10349033A','OL16065334A','OL225243A','OL331605A','OL1389873A','OL7543762A','OL402789A','OL3173527A','OL2621921A','OL1389462A','OL9109447A','OL4865543A','OL12429055A','OL7369987A','OL3746100A','OL338750A','OL27048A','OL2489737A','OL185745A','OL3072525A','OL7645091A','OL2834795A','OL298574A','OL8374201A','OL48025A','OL856331A','OL8370516A','OL13520769A','OL31295A','OL16239433A','OL1615731A','OL9145145A','OL5666784A','OL30964A']::text[])),w as(select * from public.works where open_library_id=any(array['OL44023813W','OL45344754W','OL25073337W','OL488432W','OL17092729W','OL44714690W','OL42814938W','OL44287002W','OL24484502W','OL44286980W','OL44651244W','OL1881615W','OL42412330W','OL21177270W','OL17333580W','OL42424992W','OL2445392W','OL20291907W','OL22440938W','OL462940W','OL5712521W','OL8090770W','OL20755234W','OL42406530W','OL44077231W','OL20048406W','OL2412103W','OL462957W','OL462934W','OL42428354W','OL258123W','OL2412106W','OL462947W','OL17431440W','OL42395220W','OL462939W','OL462935W','OL20863082W','OL14937156W','OL42413211W','OL16593146W','OL24405610W','OL20022574W','OL17606104W','OL20438910W','OL2745947W','OL21909165W','OL19738179W','OL44216500W','OL44983631W','OL42396986W','OL37585310W','OL56572W','OL24273445W','OL45051977W','OL6235712W','OL9068501W','OL45104248W','OL20802186W','OL14955254W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9789024597147','9789032521714','9789023498438','9789044301229','9780345484277','9789029538541','9789021058078','9789020609738','9789026346118','9789000351091','9789026367861','9789000376650','9789026323157','9789026370953','9789044545418','9789400511224','9789025477356','9789022994139','9789059245914','9789044650365','9789022543320','9789025739973','9789024528547','9789026351204','9789402716856','9789402717136','9789026143533','9789088653230','9789022551790','9789022526149','9789029739702','9789022543337','9789088653223','9789022525586','9789402704204','9789402717914','9789022541036','9789022531242','9789026340369','9789022555125','9789402717822','9789402708608','9789026158872','9789056726034','9789400515765','9789026151200','9789029504591','9789400512382','9789038802657','9789493420359','9789020560718','9789020558760','9789000388356','9789044303124','9789044312126','9789020558869','9789023422013','9789024527816','9789021488806','9789057599880','9789023440512']::text[]) or open_library_edition_id=any(array['OL60076060M','OL62083370M','OL33339138M','OL32713003M','OL9495137M','OL25662920M','OL61062794M','OL58305826M','OL60528373M','OL32438747M','OL60528349M','OL60989285M','OL61200496M','OL61339428M','OL61369518M','OL42377826M','OL60693549M','OL45818645M','OL42805493M','OL38581180M','OL46979728M','OL47212945M','OL35330285M','OL42066399M','OL60693552M','OL60291854M','OL54834963M','OL59668946M','OL42907073M','OL42944993M','OL62501770M','OL32985585M','OL59668783M','OL42944938M','OL59547168M','OL60291857M','OL47017106M','OL59556299M','OL58372491M','OL42944987M','OL61454192M','OL59612890M','OL61374889M','OL58519378M','OL61548512M','OL61374888M','OL27624275M','OL60468819M','OL58474290M','OL60447563M','OL61374887M','OL61326978M','OL60681604M','OL35616063M','OL33334159M','OL61454227M','OL61097620M','OL33029000M','OL61514658M','OL58495152M','OL32377987M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987147001 and 987147999),'editions',(select count(*) from public.editions where id between 987247001 and 987247999),'authors',(select count(*) from public.authors where id between 987347001 and 987347999))) as preflight;\n\r\n",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 924300339,
+        "name": "Freida McFadden",
+        "open_library_id": "OL8384995A"
+      },
+      {
+        "id": 928300586,
+        "name": "Kristin Hannah",
+        "open_library_id": "OL30522A"
+      },
+      {
+        "id": 946300867,
+        "name": "Jeroen Olyslaegers",
+        "open_library_id": "OL2470564A"
+      },
+      {
+        "id": 947303168,
+        "name": "Dubravka Ugrešić",
+        "open_library_id": "OL185745A"
+      },
+      {
+        "id": 969300006,
+        "name": "Maarten 't Hart",
+        "open_library_id": "OL57758A"
+      },
+      {
+        "id": 978300030,
+        "name": "Taylor Jenkins Reid",
+        "open_library_id": "OL7290222A"
+      },
+      {
+        "id": 987303009,
+        "name": "Eva García Sáenz de Urturi",
+        "open_library_id": "OL7369987A"
+      },
+      {
+        "id": 987304010,
+        "name": "Erin Hunter",
+        "open_library_id": "OL1389873A"
+      },
+      {
+        "id": 987304015,
+        "name": "Markus Heitz",
+        "open_library_id": "OL3173527A"
+      },
+      {
+        "id": 987304016,
+        "name": "Douglas Kennedy",
+        "open_library_id": "OL2621921A"
+      },
+      {
+        "id": 987304023,
+        "name": "Faye Kellerman",
+        "open_library_id": "OL27048A"
+      },
+      {
+        "id": 987304024,
+        "name": "John Connolly",
+        "open_library_id": "OL2489737A"
+      },
+      {
+        "id": 987334002,
+        "name": "Laurie Gilmore",
+        "open_library_id": "OL12429055A"
+      },
+      {
+        "id": 987337006,
+        "name": "Michael Wallner",
+        "open_library_id": "OL1615731A"
+      },
+      {
+        "id": 987339007,
+        "name": "B.A. Paris",
+        "open_library_id": "OL7386651A"
+      },
+      {
+        "id": 987346002,
+        "name": "Dalene Matthee",
+        "open_library_id": "OL331605A"
+      },
+      {
+        "id": 987346010,
+        "name": "Travis Baldree",
+        "open_library_id": "OL9109447A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-03T10:27:05.780941+00:00",
+    "author_corpora": [
+      {
+        "id": 924100553,
+        "title": "The Housemaid's Secret",
+        "cover_id": null,
+        "author_id": 924300339,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34113490W",
+        "first_publish_year": 2023,
+        "native_identity_key": null
+      },
+      {
+        "id": 928108538,
+        "title": "The Great Alone",
+        "cover_id": null,
+        "author_id": 928300586,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL18147688W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 946105133,
+        "title": "De wonderen",
+        "cover_id": null,
+        "author_id": 946300867,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL44702832W",
+        "first_publish_year": 2025,
+        "native_identity_key": null
+      },
+      {
+        "id": 947106486,
+        "title": "Štefica Cvek u raljama života",
+        "cover_id": null,
+        "author_id": 947303168,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL10556778W",
+        "first_publish_year": 1981,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100009,
+        "title": "Een vlucht regenwulpen",
+        "cover_id": null,
+        "author_id": 969300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL719962W",
+        "first_publish_year": 1978,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100037,
+        "title": "The Housemaid",
+        "cover_id": null,
+        "author_id": 924300339,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL27729743W",
+        "first_publish_year": 2022,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100038,
+        "title": "The Housemaid Is Watching",
+        "cover_id": null,
+        "author_id": 924300339,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL37576476W",
+        "first_publish_year": 2024,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100010,
+        "title": "Het woeden der gehele wereld",
+        "cover_id": null,
+        "author_id": 969300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL719963W",
+        "first_publish_year": 1993,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100045,
+        "title": "The Seven Husbands of Evelyn Hugo",
+        "cover_id": null,
+        "author_id": 978300030,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL18203673W",
+        "first_publish_year": 2017,
+        "native_identity_key": null
+      },
+      {
+        "id": 987103013,
+        "title": "Los ritos del agua",
+        "cover_id": 13012233,
+        "author_id": 987303009,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL17640142W",
+        "first_publish_year": 2017,
+        "native_identity_key": "nlscale:20261102:ol:OL17640142W"
+      },
+      {
+        "id": 987104013,
+        "title": "The Big Picture",
+        "cover_id": null,
+        "author_id": 987304016,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL258117W",
+        "first_publish_year": 1997,
+        "native_identity_key": "nlscale:fixture005:3197"
+      },
+      {
+        "id": 987104015,
+        "title": "Firestar's Quest",
+        "cover_id": null,
+        "author_id": 987304010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL5714316W",
+        "first_publish_year": 2007,
+        "native_identity_key": "nlscale:fixture005:3383"
+      },
+      {
+        "id": 987104019,
+        "title": "Yellowfang's Secret",
+        "cover_id": null,
+        "author_id": 987304010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL27036364W",
+        "first_publish_year": 2012,
+        "native_identity_key": "nlscale:fixture005:3418"
+      },
+      {
+        "id": 987104032,
+        "title": "Smoke Mountain",
+        "cover_id": null,
+        "author_id": 987304010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL5714281W",
+        "first_publish_year": 2009,
+        "native_identity_key": "nlscale:fixture005:5785"
+      },
+      {
+        "id": 987104036,
+        "title": "The white road",
+        "cover_id": null,
+        "author_id": 987304024,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL1998805W",
+        "first_publish_year": 2002,
+        "native_identity_key": "nlscale:fixture005:5888"
+      },
+      {
+        "id": 987104042,
+        "title": "Der Triumph der Zwerge",
+        "cover_id": null,
+        "author_id": 987304015,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL19518795W",
+        "first_publish_year": 2015,
+        "native_identity_key": "nlscale:fixture005:6118"
+      },
+      {
+        "id": 987104043,
+        "title": "Sanctuary",
+        "cover_id": null,
+        "author_id": 987304023,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL462976W",
+        "first_publish_year": 1994,
+        "native_identity_key": "nlscale:fixture005:6138"
+      },
+      {
+        "id": 987104044,
+        "title": "Leaving the world",
+        "cover_id": null,
+        "author_id": 987304016,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL1844991W",
+        "first_publish_year": 2009,
+        "native_identity_key": "nlscale:fixture005:6168"
+      },
+      {
+        "id": 987112006,
+        "title": "De unster",
+        "cover_id": 6452301,
+        "author_id": 969300006,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL719939W",
+        "first_publish_year": 1989,
+        "native_identity_key": "nlscale:20261102:ol:OL719939W"
+      },
+      {
+        "id": 987132002,
+        "title": "Doba kože",
+        "cover_id": null,
+        "author_id": 947303168,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL21254611W",
+        "first_publish_year": 2019,
+        "native_identity_key": "nlscale:20261102:ol:OL21254611W"
+      },
+      {
+        "id": 987134003,
+        "title": "The Pumpkin Spice Café",
+        "cover_id": null,
+        "author_id": 987334002,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL34337924W",
+        "first_publish_year": 2023,
+        "native_identity_key": "nlscale:20261102:ol:OL34337924W"
+      },
+      {
+        "id": 987137008,
+        "title": "Ik had een wapenbroeder",
+        "cover_id": 6452298,
+        "author_id": 969300006,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL719954W",
+        "first_publish_year": 1973,
+        "native_identity_key": "nlscale:20261102:ol:OL719954W"
+      },
+      {
+        "id": 987137011,
+        "title": "Die Zeit des Skorpions",
+        "cover_id": null,
+        "author_id": 987337006,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL20448029W",
+        "first_publish_year": 2008,
+        "native_identity_key": "nlscale:20261102:ol:OL20448029W"
+      },
+      {
+        "id": 987139009,
+        "title": "Behind Closed Doors",
+        "cover_id": null,
+        "author_id": 987339007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19715138W",
+        "first_publish_year": 2016,
+        "native_identity_key": "nlscale:fixture040:554"
+      },
+      {
+        "id": 987139013,
+        "title": "The Wife Upstairs",
+        "cover_id": null,
+        "author_id": 924300339,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL26121595W",
+        "first_publish_year": 2020,
+        "native_identity_key": "nlscale:fixture040:589"
+      },
+      {
+        "id": 987140001,
+        "title": "Mammoet op zondag",
+        "cover_id": null,
+        "author_id": 969300006,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL719956W",
+        "first_publish_year": 1977,
+        "native_identity_key": "nlscale:20261102:ol:OL719956W"
+      },
+      {
+        "id": 987144001,
+        "title": "Baba Jaga je snijela jaje",
+        "cover_id": null,
+        "author_id": 947303168,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL13752009W",
+        "first_publish_year": null,
+        "native_identity_key": "nlscale:20261102:ol:OL13752009W"
+      },
+      {
+        "id": 987144006,
+        "title": "Double homicide",
+        "cover_id": null,
+        "author_id": 987304023,
+        "work_type": "collection",
+        "source_type": "open_library",
+        "open_library_id": "OL18157814W",
+        "first_publish_year": 2004,
+        "native_identity_key": "nlscale:20261102:ol:OL18157814W"
+      },
+      {
+        "id": 987145016,
+        "title": "Daisy Jones & The Six",
+        "cover_id": null,
+        "author_id": 978300030,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL19922194W",
+        "first_publish_year": 2019,
+        "native_identity_key": "nlscale:fixture046:3266"
+      },
+      {
+        "id": 987146005,
+        "title": "Fiela se kind",
+        "cover_id": null,
+        "author_id": 987346002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL2412102W",
+        "first_publish_year": 1985,
+        "native_identity_key": "nlscale:fixture047:2658"
+      },
+      {
+        "id": 987146007,
+        "title": "Outcast",
+        "cover_id": null,
+        "author_id": 987304010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL5714309W",
+        "first_publish_year": 2008,
+        "native_identity_key": "nlscale:fixture047:3010"
+      },
+      {
+        "id": 987146009,
+        "title": "The Therapist",
+        "cover_id": null,
+        "author_id": 987339007,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL23658202W",
+        "first_publish_year": 2002,
+        "native_identity_key": "nlscale:fixture047:3238"
+      },
+      {
+        "id": 987146018,
+        "title": "Legends & Lattes",
+        "cover_id": null,
+        "author_id": 987346010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL27591348W",
+        "first_publish_year": 2022,
+        "native_identity_key": "nlscale:fixture047:3326"
+      },
+      {
+        "id": 987146021,
+        "title": "One By One",
+        "cover_id": null,
+        "author_id": 924300339,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL34612213W",
+        "first_publish_year": 2020,
+        "native_identity_key": "nlscale:fixture047:3358"
+      },
+      {
+        "id": 987146024,
+        "title": "Sign of the Moon",
+        "cover_id": null,
+        "author_id": 987304010,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17455355W",
+        "first_publish_year": 2011,
+        "native_identity_key": "nlscale:fixture047:3394"
+      },
+      {
+        "id": 987146025,
+        "title": "Kringe in 'n bos",
+        "cover_id": null,
+        "author_id": 987346002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL2412107W",
+        "first_publish_year": 1984,
+        "native_identity_key": "nlscale:fixture047:3397"
+      },
+      {
+        "id": 987146030,
+        "title": "The Women",
+        "cover_id": null,
+        "author_id": 928300586,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL37247638W",
+        "first_publish_year": 2024,
+        "native_identity_key": "nlscale:fixture047:3439"
+      },
+      {
+        "id": 987146036,
+        "title": "The Cinnamon Bun Book Store",
+        "cover_id": null,
+        "author_id": 987334002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL37585489W",
+        "first_publish_year": 2024,
+        "native_identity_key": "nlscale:fixture047:3498"
+      },
+      {
+        "id": 987146056,
+        "title": "The Lovers",
+        "cover_id": null,
+        "author_id": 987304024,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL1998799W",
+        "first_publish_year": 2009,
+        "native_identity_key": "nlscale:fixture047:5862"
+      },
+      {
+        "id": 987146060,
+        "title": "Grievous Sin",
+        "cover_id": null,
+        "author_id": 987304023,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL462950W",
+        "first_publish_year": 1993,
+        "native_identity_key": "nlscale:fixture047:5929"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

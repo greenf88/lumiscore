@@ -1,0 +1,45 @@
+{
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL8106910A','OL33146A']::text[])),w as(select * from public.works where open_library_id=any(array['OL17864836W','OL498556W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9781982150921','9781098540685','9789025327422','9789025470104']::text[]) or open_library_edition_id=any(array['OL29762592M','OL41072530M','OL12800799M','OL60598620M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987148001 and 987148999),'editions',(select count(*) from public.editions where id between 987248001 and 987248999),'authors',(select count(*) from public.authors where id between 987348001 and 987348999))) as preflight;\n\r\n",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 987310001,
+        "name": "Franz Kafka",
+        "open_library_id": "OL33146A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-03T10:27:20.027721+00:00",
+    "author_corpora": [
+      {
+        "id": 987110006,
+        "title": "Das Schloß",
+        "cover_id": null,
+        "author_id": 987310001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL498434W",
+        "first_publish_year": 1926,
+        "native_identity_key": "nlscale:fixture011:1824"
+      },
+      {
+        "id": 987111001,
+        "title": "The Trial",
+        "cover_id": null,
+        "author_id": 987310001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL498463W",
+        "first_publish_year": 1925,
+        "native_identity_key": "nlscale:fixture012:177"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

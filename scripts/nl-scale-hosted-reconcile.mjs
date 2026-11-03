@@ -1,5 +1,6 @@
 // Reconcile actual browser observations; a planned URL or HTTP200 is not acceptance.
 import fs from'node:fs';import{ROOT,readJson}from'./nl-scale-snapshot.mjs';
+import{sameReviewedCover}from'./nl-scale-observed-cover.mjs';
 const targets=readJson(new URL('hosted-acceptance-targets.json',ROOT));
 const details=readJson(new URL('hosted-detail-readback-v2.json',ROOT));
 const cards=readJson(new URL('hosted-card-observations.json',ROOT));
@@ -8,7 +9,13 @@ for(const p of[details,cards,searches])if(p.deployment!==targets.deployment||p.a
 const decisions=readJson(new URL('final-research-decisions.json',ROOT)).decisions;
 const norm=s=>String(s??'').normalize('NFKC').trim();
 const rows=targets.targets.map(t=>{
- const coverOkay=o=>t.coverAcceptance==='documented_neutral_placeholder'?o.placeholderVerified===true&&o.coverLoaded===false:o.coverLoaded===true;
+ const coverOkay=o=>{
+  if(t.coverAcceptance==='documented_neutral_placeholder')return o.placeholderVerified===true&&o.coverLoaded===false;
+  const late=o.lateCardCoverObservation;
+  let lateImages=[];
+  if(typeof late?.url==='string'){try{const u=new URL(late.url);if(u.origin===targets.host&&u.pathname==='/nl/search'&&[t.title,t.originalTitle].some(q=>norm(q)===norm(u.searchParams.get('q')))&&late.card?.href?.split('?')[0]==='/nl/book/'+t.testWorkId&&late.card.title===t.title&&late.card.score===o.card?.score)lateImages=late.card.images??[];}catch{/* Incomplete historical observation is not image evidence. */}}
+  return o.coverLoaded===true&&[...(o.cover?[o.cover]:[]),...(o.card?.images??[]),...lateImages].some(i=>i.complete&&(i.w??i.width)>0&&(i.h??i.height)>0&&sameReviewedCover(i.src??i.url,t.coverUrl));
+ };
  const d=details.details.findLast(d=>d.work===t.testWorkId&&d.edition===t.expectedEditionId&&d.titleCorrect&&d.isbnVisible&&d.summaryVisible&&d.sourceCorrect&&coverOkay(d));
  const c=cards.observations.findLast(c=>c.work===t.testWorkId&&c.edition===t.expectedEditionId&&c.titleCorrect&&c.scoreParity&&coverOkay(c)&&c.actualClickThrough&&c.detailTitleMatches&&c.backNavigationMatches);
  const find=q=>searches.observations.findLast(s=>s.work===t.testWorkId&&s.edition===t.expectedEditionId&&norm(s.query)===norm(q)&&s.found&&s.titleCorrect&&s.scoreParity);
