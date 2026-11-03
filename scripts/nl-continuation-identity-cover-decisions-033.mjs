@@ -1,0 +1,23 @@
+import fs from 'node:fs';import {ROOT,CACHE} from './nl-continuation-bootstrap.mjs';
+const read=n=>JSON.parse(fs.readFileSync(new URL(n,ROOT))),d=read('followup-preflight-readback-015.json').data,rows=fs.readFileSync(new URL('open-cases.jsonl',CACHE),'utf8').trim().split('\n').map(JSON.parse);
+if(d.project!=='qvplwejffhjvxaypmjut'||d.works.length||d.editions.length||!d.authors.find(a=>a.id===2914&&a.name==='Gerrit Komrij'))throw Error('Komrij identity snapshot differs');
+for(const[n,id,year,type,note]of[
+ [213,6454522,1983,'essay','Cream/redtype DeMuzeInHetKolenhok/OverEenGedichtVanHolderlin/GerritKomrij/GuusBauerAmsterdam front; exactPB9789070532093.'],
+ [214,6454517,1978,'pamphlet','Orange/black DoodAanDeGrutters/DoorGerritKomrij/AartsAmsterdamseSchotschriften1 front; exactPB9789061877011.'],
+ [216,6275857,1996,'essay_collection','Dark painting-of-man portraitfront GerritKomrij/KijkenIsBekekenWorden/UitDeKeldersVanHetStedelijk/AP; exact1996PB9789029526739. Smallfront, no highresdetailclaim.'],
+ [217,6454510,1990,'essay','Creamgreenborder GerritKomrij/OverDeNoodzaakVanTuinieren/HuizingaLezing1990/BertBakkerfront; exactDutchPB9789035110557. Lectureyearnotasserteditionprintdate.'],
+ [218,6454505,1986,'essay_collection','PhotographofKomrijinfrontofbookshelves, blacktitlepanel VerzonkenBoeken/Synopsis; exactDutchPB9789029527194.']
+]){
+ const name='reviewed-'+n+'.json',r=read(name),c=read('cover-'+id+'.json'),a=d.authors.find(a=>a.id===2914);
+ if(!c.sha256||c.isbn13!==r.edition.isbn13)throw Error('Exactcoverreceipt differs');
+ r.proposedWork={originalTitle:r.edition.title.replace(/\s+/g,' ').trim(),originalYear:year,sourceWorkKey:rows.find(c=>c.caseNumber===n).identityChecks[0].sourceWorkKey.replace('/works/',''),primaryAuthor:{id:a.id,name:a.name,sourceKey:a.open_library_id},type};
+ r.cover={id,receipt:'cover-'+id+'.json',sha256:c.sha256,bytes:c.bytes,visualReview:'Actually viewed: '+note};r.status='approved_new_work_proposal';r.importApproved=false;r.currentReadback='followup-preflight-readback-015.json';r.identityDecision+=' Freshwholeauthorcorpus onlyVerwoestArcadie5496; no matchingtitle/ISBN/OLWork. Reuseexistingauthor2914; no newauthor.';r.remaining=['Source-approved only; separate executable manifest/local/hosted acceptance outside frozen batch001'];fs.writeFileSync(new URL(name,ROOT),JSON.stringify(r,null,2)+'\n');
+}
+for(const n of[215,219]){const name='reviewed-'+n+'.json',r=read(name);r.currentReadback='followup-preflight-readback-015.json';r.identityDecision+=' Currentproduction015findsnoWork/ISBNandonlyVerwoestArcadieinKomrijcorpus; reuseexisting2914, notnewauthor.';if(n===215)r.cover={id:6425550,receipt:'cover-6425550.json',sha256:read('cover-6425550.json').sha256,bytes:read('cover-6425550.json').bytes,visualReview:'Actually viewed beige Komrij/FritziHarmsenVanDerBeek/HetKroostVanAagtMorsebelfront androdentdrawing; exact1981HC9789060052228. Contentstillinsufficient; coverdoesnotapprovesummary/import.'};fs.writeFileSync(new URL(name,ROOT),JSON.stringify(r,null,2)+'\n');}
+const snap=read('followup-preflight-readback-014.json').data;
+for(const[n,id,note]of[[702,6666763,'WhiteBertBakker/Shakespeare/GerritKomrij/Pericles front, womanwithhatandflowersinwaves. Exact1988HC9789035104556.'],[754,13125746,'WhiteEricVuillard/DeOrdeVanDeDag/Meulenhofffront, monochromemanstandingatruins. ExactDutchHC9789029092708.']]){
+ const name='reviewed-'+n+'.json',r=read(name),c=read((id<8000000?'cover-':'cover-normal-')+id+'.json'),e=snap.editions.find(e=>e.id===r.edition.id);
+ if(!e||e.work_id!==r.workId||e.open_library_edition_id!==r.edition.sourceKey||(e.isbn_13&&e.isbn_13!==r.edition.isbn13)||!['dut','nl','nld'].includes(e.language))throw Error('Currentexactedition differs');
+ r.cover={id,receipt:(id<8000000?'cover-':'cover-normal-')+id+'.json',sha256:c.sha256,bytes:c.bytes,visualReview:'Actually viewed: '+note};r.status=e.isbn_13?'approved_existing_presentation_proposal':'approved_existing_edition_repair_proposal';r.importApproved=false;r.netNewDutchAvailability=0;r.currentReadback='followup-preflight-readback-014.json';r.remaining=['Source-approved only; separate manifest/local/hosted tests outside frozen batch001',...(!e.isbn_13?['Expected existingISBNNULL; verified ISBNfill requiresfull-rowCAS, not anexecutedchange']:[])];fs.writeFileSync(new URL(name,ROOT),JSON.stringify(r,null,2)+'\n');
+}
+const multi=read('reviewed-699.json'),c=read('cover-6456215.json');multi.cover={id:6456215,receipt:'cover-6456215.json',sha256:c.sha256,bytes:c.bytes,visualReview:'Actually viewed cream/redHoratiusArsPoetica/Athenaeumfront. Bookidentityfits, bilingualeligibilitystillpending; notsourceapprovedimport.'};fs.writeFileSync(new URL('reviewed-699.json',ROOT),JSON.stringify(multi,null,2)+'\n');

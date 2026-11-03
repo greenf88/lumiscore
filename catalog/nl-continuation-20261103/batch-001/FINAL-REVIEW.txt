@@ -1,0 +1,89 @@
+REVIEWPAKKET — GEEN PRODUCTIEAKKOORD, GEEN IMPORT UITVOEREN
+
+Afzonderlijke Draft-PR72, branch research/nl-continuation-20261103. PR71 blijft ongewijzigd
+Draft op c7f6e10dc11aab87a9d0f9cbb9545a73342bf1f6. Zijn+235 is niet gepubliceerd.
+Deze batch is bevroren op selection.json:35 exacte presentaties,96 productievoorstelacties.
+Vervolgonderzoek en nieuwere reviewed-bestanden breiden deze selectie NIET uit.
+
+Applicatie:9c74ecaa48f7a35830f713eed3528d46ba0466ad, geen app/lib/component/CSS-verschil.
+Geteste Preview-commit:b2b5ee23dbbaaba04fd3810c4f63a3980d20477d,
+deployment:dpl_AA4HezGdFY8sqfKBLELxcysL7VcC,
+https://lumiscore-mbjubus1a-rgkgroeneveld-9102.vercel.app . CI groen: quality/run148.
+Latere document-/onderzoekscommits veranderen de geteste applicatiebytes niet.
+
+96 acties:1 auteur,7 nieuwe Works,14 editieaanvullingen,3 bestaande editiecorrecties,
+1 Work-titel/jaarcorrectie,35 Nederlandse samenvattingen en35 exacte coverbindings.
+De Work-correctie is een actie binnen works; totaal8 Work-acties, niet8 nieuwe Works.
+Verwacht12 extra uniek Nederlands beschikbare Works:7 nieuwe+5 bestaande zonder NL.
+Nieuwe teksten35:30 hier oorspronkelijk geschreven,5 goede eerder geschreven teksten
+hergebruikt en bron/identiteit opnieuw gecontroleerd;35 nieuwe opslagregels,0 overschreven
+goede NL-teksten. Geen smaakkenmerken of veranderingen aan rangschikking/PR51.
+Actieoverlap met gepind actief PR71-releaseplan:0; oude combined-draft is vervangen.
+
+Exacte SHA256 (opnieuw uit bytes controleren bij een later releaseakkoord):
+production-plan.json 06c2605a4b9d37def072383ff2906e9fd761c8d1b5e1eee69528e134728bcf06
+production-import.sql 23694247bb3ecb9b6b394221e5510309d91b83215706abfd850921b13229afdc
+production-dry-run.sql a14246d1d0600bb3978182f90b17bf5dda900e6b4bb427578ed3bcbcaf384639
+production-rollback.sql fedeca81d0224b7f8b6ab0fdea37875f22f904851de23c7a8fffbb5d92fe9ebf
+test-plan.json 9738789fcc4455e259ea3e3b47c0536c0b94402bd4ac937d6b6c59237bb8631f
+test-import.sql 6811ea55b60532bd4387c8528bae5f347e433978a2817eec8ed96f54f92db8dc
+test-rollback.sql 7e74f7240d6ad3554e5428c959276e0f11130b80842332d2ecc2fd6f79944cf3
+Alle bestanden en referenties in package-hashes.json. Geen nieuwe DDL of scheduler.
+
+HOSTED BEWEZEN, uitsluitend test hlvujbrmfdlrfxdjwsmb:
+-167 spiegelacties werkelijk COMMIT, onafhankelijk volledig teruggelezen/vergelijking.
+-Exacte herhaalimport0 mutaties.
+-11 externe afhankelijkheidssoorten vooraf0; echt gecommitteerd herstel met eerste receipt.
+-Vijf catalogustabeldigests exact terug naar beginsituatie;68 ratings/68statussen/2accounts
+ behouden. Daarna exact testpakket opnieuw gecommitteerd voor Preview.
+-35/35 exacte Nederlandse presentaties, cover geladen, eigen samenvatting/bron/ISBN,
+ Nederlandse en oorspronkelijke titelzoekopdracht, terugnavigatie en kaart/detailscore.
+ Spiegelratings zijn leeg: dit bewijst nulscorepariteit, niet niet-lege publieke aggregatie.
+-16 kaarten op elk van drie pagina's,48 unieke Works, stabiele telling en herladen.
+-Niet-leeg synthetisch profiel met twee echte eigen testratings; Nederlandse voorkeur en
+ EN-wissel/detail/terug/herladen bewezen. Geen rangschikkingskwaliteit geclaimd.
+-Testaccount/profielgegevens gericht opgeruimd en teruggelezen. Preview-catalogus behouden.
+-Nieuw desktop Paper/Ink; geldig gedeeld320pxNL/ENPaper/Ink-bewijs van dezelfde applicatie
+ hergebruikt. Huidige viewportbediening paste gewenste320px niet toe; dat is vastgelegd.
+
+LOKAAL:3 PostgreSQL/PGlite-regressietests groen, import/replay/gecommitteerd herstel,
+weigering bij latere wijziging en CASCADE-afhankelijkheid, alle35 gedeelde selectiechecks.
+TypeScript/lint/build/client-secretscan groen. Geen tweede implementatie of analysesysteem.
+De bronarchieflezers zijn operationele hulpmiddelen, geen nieuwe runtime-netwerkaanvragen.
+
+BEPERKINGEN:
+-Covers zijn een externe afhankelijkheid: eerste requests kunnen vertragen/fallback tonen;
+ alle35 later correct geladen. Geen gegarandeerde providerbeschikbaarheid.
+-DodelijkeGeloften heeft geverifieerde vierkante3D-mockup; enkele oude scans hebben stickers.
+ Enkele bronnen leveren minder dan500px hoogte; leesbaarheid/identiteit geverifieerd,
+ geen kwaliteitswinst of hogere resolutie geclaimd zonder passende variant.
+-Drie originele archiefbeelden>300kB; dit is geen gemeten L/M-browsertransfer. Browser-
+observatie-intervallen bevatten automatisering/wachten en zijn GEEN TTFB/FCP-metingen.
+-Nieuwe Nederlandse beschikbaarheid verleent niet automatisch smaaktestgeschiktheid:
+ geen ongecontroleerde kenmerken aan de nieuwe boeken toegevoegd.
+-Bestaande Engelse externe beschrijvingsfout bij LastLoveSong apart waargenomen;
+ titel/bediening/Engelse editie blijven zichtbaar. Geen nieuwe EN-tekst of codefix inbegrepen.
+-Bestaand model toont één primaire auteur; geverifieerde coauthors blijven in bronbewijs.
+
+VOLGORDE NA EVENTUEEL AFZONDERLIJK AKKOORD:
+1. Actuele main/PR-head/CI/deployment, databaseproject en alle bytes/hashes opnieuw controleren.
+2. Verse read-only productievoorcontrole: exacte oude waarden, ISBN/Work/alias/author-corpus,
+ overlap met dan gepubliceerde pakketten, rechten/guards en inkomende afhankelijkheden.
+ Bij drift STOP; geen aanpassing ter plekke.
+3. Herstelbare snapshot van alle geraakte oude rijen en afhankelijkheden bewaren. Vereiste
+ bestaande presentatie- en integriteitsmigraties moeten al correct aanwezig zijn.
+4. Uitsluitend production-import.sql transactioneel uitvoeren via ondersteunde route.
+ Eerste echte receipt veilig bewaren; deze receipt, niet een lege replay, bindt herstel.
+5. Alle96 acties onafhankelijk teruglezen, expected full rows en netto uniek NL meten.
+ Exact herhalen moet0 mutaties opleveren. Accounts/ratings/statussen behouden controleren.
+6. Alleen dan eventueel goedgekeurde merge/publicatie en35 exacte live-presentaties nalopen.
+ Geen reeds toegevoegde testspiegels naar productie kopiëren; productieplan gebruikt eigen
+ bestaande Works en bronidentiteiten. Geen productietestaccounts of kunstmatige ratings.
+7. Bij probleem eerste receipt in herstelprocedure gebruiken met production-rollback.sql.
+ Full-row-CAS en alle inkomende FK's weigeren onverwachte latere wijzigingen/afhankelijkheden.
+ Niet forceren; geen sequence-reset. Na herstel opnieuw exacte waarden/gebruikersgegevens
+ controleren. Hosted COMMIT-undo is op test bewezen; productieherstel nog niet uitgevoerd.
+
+ADVIES: het afgebakende datapakket35/96 kan inhoudelijk worden beoordeeld. Het is niet
+automatisch vrijgegeven. Nieuwe vervolgvoorstellen en het resterende onderzoek wachten
+niet op dit pakket en maken geen deel uit van deze productie-import.

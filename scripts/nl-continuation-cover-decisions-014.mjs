@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import {ROOT} from './nl-continuation-bootstrap.mjs';
+const read=n=>JSON.parse(fs.readFileSync(new URL(n,ROOT)));
+const snapshot=read('followup-preflight-readback-012.json').data;
+if(snapshot.project!=='qvplwejffhjvxaypmjut'||snapshot.works.length||snapshot.editions.length)throw Error('Expected absence snapshot differs');
+const r=read('reviewed-263.json'),c=read('cover-normal-13729312.json');
+if(r.edition.isbn13!=='9789024544448'||r.proposedWork.primaryAuthor.id!==370||!c.sha256)throw Error('Exact edition/author/receipt differs');
+r.cover={id:13729312,receipt:'cover-normal-13729312.json',sha256:c.sha256,bytes:c.bytes,visualReview:'Actually viewed blue highway/lights front, Dean Koontz VERLOSSING; exact Luitingh paperback9789024544448. Not Adler-Olsen book of same Dutch title.'};
+r.status='approved_new_work_proposal';r.importApproved=false;r.remaining=['Source approval only; separate executable manifest/local and hosted tests, outside frozen batch001'];
+fs.writeFileSync(new URL('reviewed-263.json',ROOT),JSON.stringify(r,null,2)+'\n');
+const p=read('reviewed-251.json');
+p.rejectedCoverEvidence={id:13334728,receipt:'cover-normal-13334728.json',visualReview:'Actually viewed blue provider COVER COMING SOON placeholder. Decodes but is NOT a book front. Excluded from verified cover count and import.'};
+p.remaining=['Correct front for exact paperback9789044308389; candidate13334728 is provider placeholder','Separate executable manifest/local and hosted tests, outside frozen batch001'];
+fs.writeFileSync(new URL('reviewed-251.json',ROOT),JSON.stringify(p,null,2)+'\n');
+const martin=read('reviewed-664.json');martin.identityDecision=martin.identityDecision.replaceAll('GeorgeRRMarin','GeorgeRRMartin');
+fs.writeFileSync(new URL('reviewed-664.json',ROOT),JSON.stringify(martin,null,2)+'\n');
