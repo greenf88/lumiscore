@@ -26,9 +26,10 @@ const starts = [
   { title: 'Madonna', heading: 'Een kort verhaal tussendoor', text: 'Ingrid krijgt een zakelijke kans bij een Italiaans modeconcern. Madonna is een kort verhaal uit De bestemming, geen volledige roman.', source: SUZANNE_SOURCES.S06 },
 ];
 export function SuzanneGuideEntries({ books }: { books: Book[] }) {
-  const entries = starts.flatMap(entry => { const book = findSuzanneGuideBook(books, entry.title); const href = book && getBookHref(book, { kind:'collection',slug:'suzanne-vermeer' }); return href ? [{ ...entry, href }] : []; });
+  const entries = starts.map(entry => { const book = findSuzanneGuideBook(books, entry.title); const href = book && getBookHref(book, { kind:'collection',slug:'suzanne-vermeer' }); return { ...entry, href }; });
   return <section className="landing-guide collection-guide-intro"><h2>Waar kun je beginnen?</h2>
-    <ul>{entries.map(e => <li key={e.title}><LocaleLink href={e.href}>{e.title}</LocaleLink> — {e.heading}. <span>{e.text}</span><GuideSources sources={[e.source]}/></li>)}</ul>
+    <ul>{entries.map(e => <li key={e.title}>{e.href ? <LocaleLink href={e.href}>{e.title}</LocaleLink> : <strong>{e.title}</strong>} — {e.heading}. <span>{e.text}</span>
+      {!e.href && <p>Voor dit boek is nu geen passende editie in deze collectie beschikbaar.</p>}<GuideSources sources={[e.source]}/></li>)}</ul>
     <a href="#leesvolgorde">Bekijk de bevestigde verhaalverbanden en leesvragen</a>
   </section>;
 }
