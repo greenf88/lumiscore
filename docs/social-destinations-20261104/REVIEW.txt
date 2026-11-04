@@ -7,7 +7,9 @@ Ready TEST Preview: https://lumiscore-oi0pnlmaz-rgkgroeneveld-9102.vercel.app
 Deployment: dpl_6nCKBuNh3YWYBWm6jboBJhuTrQ8q.
 Documentation-only final head is available from the PR API; application files must match the manifest.
 Runtime manifest SHA256: 85b82eaac13d8e7d534f87b2ff83db322344c2448fe62a9135d813ce0616ceca (22 changed code/test/generator/asset Git blobs).
-Reference hashes: reference-hashes.json. No database migration or import.
+Reference hashes: reference-hashes.json. No PRODUCTION database migration or import.
+4 November follow-up: explicitly authorized TEST-only 17-row fixture; see test-fixture/README.txt,
+manifest.json, execution.json and hashes.json. Runtime/application files are unchanged.
 
 RESULT AND SCOPE
 Three existing NL destinations are improved; no new competing author/list pages:
@@ -61,16 +63,27 @@ PASSED EVIDENCE, APPLICATION SHA ABOVE
   verified all seven collection link bindings and locale guards for Madonna/Noorderlicht copy.
   This is local synthetic rendering, not hosted edition/catalogue proof.
 
-EXPLICIT LIMITATIONS
-The existing TEST Suzanne collection has52 linked migration placeholders and zero suitable
-NL/EN presentation cards. Example TEST Work1229 is named Synthetic migration placeholder1229;
-the new Noorderlicht copy correctly does not attach to it. No shared test fixture was overwritten.
-The seven real production book destinations were independently present in original production HTML:
-1220,1229,1305,1299,1300,1243,1287. This is read-only production evidence, not hosted execution
-of new choice links or new book copy. Exact hosted Suzanne seven-link/book-copy acceptance remains
-unproven without a separately reviewed test-fixture action; this task explicitly forbids catalogue/
-database writes. Investigate/reuse existing real test identities before preparing any bounded
-temporary fixture manifest. Preserve shared placeholders, ratings, accounts and progress.
+HOSTED SUZANNE GAP RESOLVED — 4 NOVEMBER
+Explicitly authorized TEST-only fixture on hlvujbrmfdlrfxdjwsmb: six real existing Suzanne Works,
+editions and approved NL summaries were reused. One Madonna Work/edition999740001 was added,
+with the unchanged existing reviewed summary. Seven edition-bound cover/format records and seven
+collection links were inserted:17 rows total, no existing rows updated. The52 shared placeholders
+and their memberships remain intact. TEST collection now has7 suitable NL cards among59 links;
+EN correctly has0 verified editions. TEST counts are not production catalogue totals.
+7/7 real editorial links were clicked to the correct book and back;7/7 card and detail covers
+actually loaded, selected ISBNs/identity and source summaries matched. Madonna/Noorderlicht NL
+contextual copy and metadata are visible; EN correctly omits that NL copy and reports unavailable
+English editions. Mobile360px Paper/Ink, language transitions and reload passed, no overflow.
+18/18 additional complete original GET responses passed:collection and both contextual books,
+NL/EN xdesktop/Googlebot/InspectionTool simulations; correct in-head metadata and breadcrumbs.
+Full-row CAS committed recovery removed only the17 own rows.71 preserved records passed exact
+before-value checks;52 original links, six real books/editions/summaries remained. Ratings/status
+fingerprints and account count2 were unchanged. Reapplied17 rows for Preview; both final and first
+repeat imports inserted0. Final-receipt guarded cleanup is provided for later fixture removal.
+No account, rating, status, user progress, rights, schema or number sequence was changed.
+The real production IDs1220,1229,1305,1299,1300,1243,1287 were checked read-only; no production writes.
+The fixtures have TEST IDs and some retained unknown publication years; they are not a proposed
+production import. Exact cover sources and binding evidence are in test-fixture/.
 
 REAL GOOGLE TEST
 Collection Preview URL test:
@@ -99,12 +112,10 @@ status/screenshot; targeted/header/profile/metadata/build/secretscan results; ru
 All browser/HTML evidence is bound to the tested application SHA. Preview is not a live fix.
 
 RELEASE ADVICE AND ORDER
-Keep Draft for now: content/code/metadata are reviewable, but exact hosted Suzanne choice-link
-and supplementary-book-copy coverage is missing because permitted test data is absent. Do not
-present zero-card Preview as proof of all production book journeys.
-1. Resolve that bounded TEST-fixture evidence gap with an explicit reviewed manifest and authority;
-   no silent shared-data edits. Reuse the passed independent evidence.
-2. Recheck final head, runtime hashes, CI and main compatibility; get separate release approval.
+Ready for separate release review; keep Draft until explicitly approved. Hosted Suzanne evidence
+gap is closed. No merge or public release was performed. External-source limitations below remain.
+1. Review exact final head, unchanged application SHA/runtime hashes and TEST-only fixture evidence.
+2. Recheck CI/main compatibility immediately before a separately approved release.
 3. Merge/deploy only the approved package; no database installation or import is required.
 4. Confirm live domain/deployment SHA; repeat changed NL/EN pages, guest paths, metadata, seven real
    Suzanne destinations and representative mobile/Paper/Ink navigation.
