@@ -9,6 +9,7 @@ for r in a['targets']:
  missing='geverifieerde Nederlandse editie beschikbaar' in text or 'verified English edition is not available' in text
  row={k:r[k] for k in ['url','cohorts','status','finalUrl','canonical','robots','headValid','mainWords','inSitemap','sameLanguageInlinks','observedHomePath','sha256','ttfbMs','totalMs']}
  row.update(title=d.get('h1'),editionState='verified-language-edition-missing' if missing else 'no-missing-edition-notice',descriptionState=state,descriptionSources=d.get('sourceLinks',[]),browserCanonical=d['canonical'],classification='gericht te verbeteren' if missing or state in ['missing','temporary-source-failure'] else 'waardevol indexeerbaar',browserImages=d['images'])
+ row['sameLanguageInlinkCount']=len(row['sameLanguageInlinks']);row['sameLanguageInlinks']=row['sameLanguageInlinks'][:3]
  rows.append(row)
 report={'checkedAt':a['checkedAt'],'productionSha':a['productionSha'],'deployment':'dpl_F6j6cQ9TTBm3RUnXxfEJDeDPXDwN','boundaries':a['boundaries'],'historicalSourceHashes':a['sourceHashes'],'evidenceFiles':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in [p/'audit.json',p/'browser.json']},'rows':rows}
 (out/'cohorts.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

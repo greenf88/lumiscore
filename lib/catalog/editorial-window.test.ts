@@ -10,7 +10,8 @@ test('Browse defaults to all/highest/16; Search retains az/32; explicit old choi
   for(const size of [16,32,64,128]) for(const sort of ['az','highest','newest']) {
     const state=browseQuery({pageSize:String(size),sort});
     assert.equal(state.pageSize,size); assert.equal(state.sort,sort);
-    assert.equal(new URL(editorialHref('/browse',state),'https://example.invalid').searchParams.get('sort'),sort);
+    const linked=browseQuery(Object.fromEntries(new URL(editorialHref('/browse',state),'https://example.invalid').searchParams));
+    assert.equal(linked.sort,sort); assert.equal(linked.pageSize,size);
   }
   assert.equal(browseQuery({q:'author',category:'fiction_fantasy'}).pageSize,16);
   assert.equal(browseQuery({sort:''}).sort,'highest');

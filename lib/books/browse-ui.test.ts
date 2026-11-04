@@ -38,7 +38,10 @@ test('public browse route loads catalog books without requiring a search query o
   assert.match(page, /loadEditorialCatalog\(state, locale, true, true\)/);
   assert.match(page, /<LumiScoreBrowsePage data=\{data\} authState=\{authState\}/);
   assert.match(page, /editorialHref\('\/browse', current\)/);
-  assert.doesNotMatch(page, /redirect\(|notFound\(/);
+  // No login gate; the only new redirect corrects an excessive public page to
+  // the real final page returned by the unchanged bounded catalog RPC.
+  assert.doesNotMatch(page, /redirect\([^\n]*(?:login|auth)|notFound\(/);
+  assert.match(page, /data\.available && publicBrowsePage\(params\) !== null && data\.page !== state\.page/);
   assert.doesNotMatch(page, /\bq\b.*required|isCatalogSearchQuery/);
 });
 
