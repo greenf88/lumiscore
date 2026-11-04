@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
 import { renderMetadataToHtml } from 'vinext/shims/metadata';
-import { browseHasQuery, createPageMetadata } from './page-metadata.ts';
+import { createPageMetadata } from './page-metadata.ts';
 import { inspectServerHtml } from './server-html.ts';
 
 test('Vinext renders one robots, canonical and social value from the shared helper', () => {
@@ -17,18 +17,6 @@ test('Vinext renders one robots, canonical and social value from the shared help
     assert.deepEqual(tags.metadata['og:type'], ['article']);
     assert.deepEqual(tags.metadata['og:url'], tags.canonical);
     assert.deepEqual(tags.metadata['twitter:image'], ['https://example.org/cover.jpg']);
-  }
-});
-
-test('only genuinely parameter-free Browse is indexable', () => {
-  assert.equal(browseHasQuery({}), false);
-  for (const query of ['page=1', 'page=2', 'pageSize=32', 'pageSize=invalid', 'sort=az', 'genre=fantasy', 'language=nl', 'filter=classic', 'page=1&page=2', 'utm_source=test', 'unknown=', 'sort=']) {
-    const values: Record<string, string[]> = {};
-    for (const [key, value] of new URLSearchParams(query)) (values[key] ??= []).push(value);
-    assert.equal(browseHasQuery(values), true, query);
-    const tags = inspectServerHtml(renderMetadataToHtml(createPageMetadata({ title: 'Browse', canonicalPath: '/browse', noIndex: browseHasQuery(values) })));
-    assert.deepEqual(tags.robots, ['noindex, follow']);
-    assert.deepEqual(tags.canonical, ['https://lumisco.re/browse']);
   }
 });
 

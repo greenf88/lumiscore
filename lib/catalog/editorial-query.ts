@@ -1,6 +1,7 @@
 import model from './categories.json' with { type: 'json' };
 import { normalizeCatalogBrowsePage, normalizeCatalogBrowsePageSize, normalizeCatalogBrowseSort, type CatalogBrowsePageSize, type CatalogBrowseSort } from '../books/catalog-browse.ts';
 import { normalizeCatalogSearchQuery, collectCatalogSearchAliases } from '../books/catalog-search.ts';
+import { publicBrowseHref } from '../seo/browse-pagination.ts';
 export const editorialCategories = model.categories;
 export const selectionSlug = 'lumiscore-selectie-1000';
 export type CatalogParams = Record<string, string | string[] | undefined>;
@@ -51,5 +52,6 @@ export function editorialHref(route: '/browse' | '/search', state: EditorialQuer
   for (const id of state.categories) params.append('category', id);
   for (const id of state.languages) params.append('language', id);
   if (state.selection) params.set('selection', state.selection);
-  return route + '?' + params.toString();
+  const path = route + '?' + params.toString();
+  return route === '/browse' ? publicBrowseHref(state, path) : path;
 }
