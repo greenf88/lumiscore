@@ -34,7 +34,7 @@ export function LumiScoreInformationPage({
   }, []);
 
   return (
-    <main className="site-shell information-page-shell">
+    <main className={`site-shell information-page-shell${content.locale === 'nl' && (content.key === 'howItWorks' || content.key === 'imdbComparison') ? ' information-product-help' : ''}`}>
       <Header
         onThemeToggle={toggleTheme}
         query={query}
