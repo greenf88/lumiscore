@@ -250,7 +250,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
   };
 
   return (
-    <main className={`site-shell collection-page-shell${bulkActive ? ' has-bulk-mode' : ''}`}>
+    <main className={`site-shell collection-page-shell${guide ? ' editorial-destination' : ''}${bulkActive ? ' has-bulk-mode' : ''}`}>
       <Header
         onThemeToggle={toggleTheme}
         query={query}

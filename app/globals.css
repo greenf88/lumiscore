@@ -1597,9 +1597,9 @@ button, input, select, textarea { font-family: var(--sans); }
   .site-header, .browse-page-shell .site-header { padding-inline: 6px; }
   /* These NL explanations reuse the existing compact-menu search entry. Keep
      the full sign-in label inside the header, including desktop scrollbars. */
-  .information-product-help .site-header .mobile-search-button { display: none; }
-  .information-product-help .mobile-navigation-panel .mobile-navigation-search-link { display: flex; }
-  .information-product-help .site-header .header-sign-in { flex-shrink: 0; }
+  :is(.information-product-help, .editorial-destination) .site-header .mobile-search-button { display: none; }
+  :is(.information-product-help, .editorial-destination) .mobile-navigation-panel .mobile-navigation-search-link { display: flex; }
+  :is(.information-product-help, .editorial-destination) .site-header .header-sign-in { flex-shrink: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ui-control, .mobile-navigation-panel a, .taste-direct-test button { transition: none; }
