@@ -1,0 +1,14 @@
+{
+  "url": "https://openlibrary.org/dev/docs/api/covers",
+  "status": 200,
+  "checkedAt": "2026-11-02T12:40:20.292Z",
+  "responseTextSha256": "126d45c7070836e18c694c77eb908a0fa33383bf4683f37ca3ab3c5c9e45ff41",
+  "findings": {
+    "purpose": "Public website cover display; bulk download should use the separate official archive items.",
+    "rateScope": "100 requests/IP/5 minutes for identifiers other than CoverID and OLID. A lack of this cap for CoverID does not grant bulk API crawling.",
+    "bulkRoute": "Official archive.org cover collections; use bounded archived members, preserve source and checksum.",
+    "localArchiveReuse": true,
+    "noCoverApiCrawl": true,
+    "noBlanketCopyrightLicenceClaim": true
+  }
+}

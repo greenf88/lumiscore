@@ -1,0 +1,124 @@
+{
+  "project": "qvplwejffhjvxaypmjut",
+  "query": "with a as(select * from public.authors where id=32 or open_library_id='OL39331A') select jsonb_build_object('checked_at',clock_timestamp(),'authors',(select coalesce(jsonb_agg(to_jsonb(a)),'[]') from a),'works',(select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') from public.works w where author_id in(select id from a) or open_library_id in('OL77058W','OL14877416W')),'isbn_matches',(select coalesce(jsonb_agg(to_jsonb(e) order by id),'[]') from public.editions e where isbn_13 in('9789086060153','9789086060177','9789077932018'))) as identity;",
+  "readback": {
+    "identity": {
+      "works": [
+        {
+          "id": 39,
+          "title": "The Picture of Dorian Gray",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 32,
+          "work_type": null,
+          "created_at": "2026-09-01T15:18:34.143236+00:00",
+          "source_type": "open_library",
+          "open_library_id": "OL8193416W",
+          "first_publish_year": 1890,
+          "native_identity_key": null
+        },
+        {
+          "id": 378,
+          "title": "The Importance of Being Earnest",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 32,
+          "work_type": null,
+          "created_at": "2026-09-02T08:32:45.786933+00:00",
+          "source_type": "open_library",
+          "open_library_id": "OL27776452W",
+          "first_publish_year": 1893,
+          "native_identity_key": null
+        },
+        {
+          "id": 6034,
+          "title": "The Spider's Web",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 3252,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL77053W",
+          "first_publish_year": 1997,
+          "native_identity_key": null
+        },
+        {
+          "id": 6094,
+          "title": "The Monk Who Vanished",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 3252,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL77057W",
+          "first_publish_year": 1999,
+          "native_identity_key": null
+        },
+        {
+          "id": 6159,
+          "title": "The Leper's Bell",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 3252,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL77052W",
+          "first_publish_year": 2004,
+          "native_identity_key": null
+        },
+        {
+          "id": 6222,
+          "title": "Smoke in the Wind",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 3252,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL77043W",
+          "first_publish_year": 2001,
+          "native_identity_key": null
+        },
+        {
+          "id": 9099,
+          "title": "The selfish giant",
+          "cover_id": null,
+          "subjects": null,
+          "subtitle": null,
+          "author_id": 32,
+          "work_type": null,
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "source_type": null,
+          "open_library_id": "OL14877873W",
+          "first_publish_year": 1932,
+          "native_identity_key": null
+        }
+      ],
+      "authors": [
+        {
+          "id": 32,
+          "name": "Oscar Wilde",
+          "created_at": "2026-09-01T15:18:33.870213+00:00",
+          "open_library_id": "OL20646A"
+        },
+        {
+          "id": 3252,
+          "name": "Peter Berresford Ellis",
+          "created_at": "2026-10-03T17:13:22.654831+00:00",
+          "open_library_id": "OL39331A"
+        }
+      ],
+      "checked_at": "2026-11-03T08:43:21.209494+00:00",
+      "isbn_matches": []
+    }
+  }
+}

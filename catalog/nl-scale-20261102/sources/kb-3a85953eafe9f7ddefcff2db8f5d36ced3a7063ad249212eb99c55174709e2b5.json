@@ -1,0 +1,323 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT ?node ?p ?value WHERE {VALUES ?node {<http://data.bibliotheken.nl/id/thes/p121023370> <https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26> <https://data.bibliotheken.nl/.well-known/genid/364e1c8ab1c438262f7a2830aca85d15>} GRAPH ?g {?node ?p ?value}} LIMIT 1500",
+  "label": "Bridget1998 linked exact author/original/publication nodes",
+  "checkedAt": "2026-11-02T19:57:34.863Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+%3Fnode+%3Fp+%3Fvalue+WHERE+%7BVALUES+%3Fnode+%7B%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp121023370%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fd151205427b2ed3ff5c8f00e4952cf26%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F364e1c8ab1c438262f7a2830aca85d15%3E%7D+GRAPH+%3Fg+%7B%3Fnode+%3Fp+%3Fvalue%7D%7D+LIMIT+1500",
+  "bytes": 4832,
+  "sha256": "cdef70dc6c46b4d6f98f01934dc8a9ce9551fe9b5ac4bc35ceb5f9a9e3c42cb7",
+  "data": {
+    "head": {
+      "vars": [
+        "node",
+        "p",
+        "value"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/Person"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/364e1c8ab1c438262f7a2830aca85d15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://schema.org/PublicationEvent"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Fielding, Helen (1958-)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/364e1c8ab1c438262f7a2830aca85d15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Bridget Jones's diary. - London [etc.] : Picador, 1996"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Amsterdam : Prometheus. 1998"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/location"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/2ec18d3d8abe231dfdb2fa1b6c8c2a89"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Bron geb.-jaar: Libr. of Congress"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/description"
+          },
+          "value": {
+            "type": "literal",
+            "value": "bron: https://nl.wikipedia.org/wiki/Helen_Fielding"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/95fbc6ee0a03978d00b5b0c206024fc6"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Helen Fielding"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/364e1c8ab1c438262f7a2830aca85d15"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "value": {
+            "type": "literal",
+            "value": "en"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/birthDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1958"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/familyName"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Fielding"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/givenName"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Helen"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000121187829"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://viaf.org/viaf/5075561"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "http://www.wikidata.org/entity/Q232359"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/startDate"
+          },
+          "value": {
+            "type": "literal",
+            "value": "1998",
+            "datatype": "http://www.w3.org/2001/XMLSchema#gYear"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p121023370"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/nationality"
+          },
+          "value": {
+            "type": "literal",
+            "value": "gb"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/d151205427b2ed3ff5c8f00e4952cf26"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publishedBy"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/3ecc4e3e3324ab40ef3781e495e29c9c"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

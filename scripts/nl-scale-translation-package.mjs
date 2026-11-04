@@ -1,0 +1,48 @@
+// Reuse the existing five-table CAS renderer for explicit existing-Work additions.
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {ROOT,readJson} from './nl-scale-snapshot.mjs';
+import {loadCases} from './nl-scale-case-store.mjs';
+import {loadReviews} from './nl-scale-reviews.mjs';
+import {renderImport,renderRollback} from './nl-scale-release-sql.mjs';
+import{reviewedPrintFormat}from'./nl-scale-print-format.mjs';
+import{verifyAdditionalPrintedAlternative}from'./nl-scale-edition-patch.mjs';
+import{reviewedExistingCase}from'./nl-scale-reviewed-routing.mjs';
+import{verifyReviewedOriginalEdition}from'./nl-scale-source-binding.mjs';
+import{reviewedMissingCover}from'./nl-scale-missing-cover.mjs';
+import{safePublicSource}from'../lib/books/stored-presentation.ts';
+const number=process.argv[2];if(!/^\d{3}$/.test(number??''))throw Error('Explicit reviewed batch');
+const dir=new URL('subbatches/'+number+'/',ROOT),input=readJson(new URL('reviewed-input.json',dir)),base=readJson(new URL('production-preflight.json',dir)).readback;
+const cases=loadCases().cases,reviews=loadReviews(),covers=fs.readdirSync(ROOT).filter(n=>/^cover-semantic-review-\d+\.json$/.test(n)).flatMap(file=>readJson(new URL(file,ROOT)).reviews.map(x=>({...x,reference:file})));
+const batch='nl-scale-20261102-'+number,actions=[],bindings=[],decisions=[];let net=0,yearCorrections=0,languageCorrections=0;
+const identityReviews=readJson(new URL('identity-reviewed-decisions.json',ROOT)).decisions;
+for(const [i,item] of input.entries.entries()){
+ const w=base.works.find(w=>w.id===item.workId),a=base.authors.find(a=>a.id===w?.author_id),c=reviewedExistingCase(cases,item,identityReviews,w,a),r=reviews.get(c?.candidateId);
+ const e=item.supplementalEdition??c?.editionReviews.find(e=>e.editionKey===item.editionKey),cover=covers.find(k=>k.candidateId===c?.candidateId&&k.editionKey===item.editionKey&&(!item.coverId||k.coverId===item.coverId)&&k.status==='front_title_author_consistent_with_bound_source');
+ const missingCover=e?reviewedMissingCover(e,item.missingCoverReview,{readReceipt:file=>readJson(new URL(file,ROOT)),hasVerifiedCover:Boolean(cover)}):null;
+ if(!c||!w||!a||!r?.text||!e?.languageConfirmed||!e.titleConfirmed||!e.authorConfirmed||e.problems.length||e.isbn13.length!==1||!e.kbRecords.length||(!cover&&!missingCover)||!reviewedPrintFormat(e.format))throw Error('Unresolved explicit translation '+item.caseNumber);
+ if(item.supplementalEdition&&(!e.sourceEvidence?.review||!e.sourceEvidence?.formatSource))throw Error('Supplemental bibliography needs independently recorded evidence');
+ if(item.supplementalEdition?.sourceEvidence?.originalEditionSha256)verifyReviewedOriginalEdition(c,{primaryAuthorKey:c.sourceAuthors[0].key.split('/').at(-1)},e,readJson(new URL('sources/kb-normalized-facts.json',ROOT)));
+ if(base.editions.some(x=>x.isbn_13===e.isbn13[0]||(!item.unreliableCombinedOLRecord&&x.open_library_edition_id===e.editionKey.split('/').at(-1)))||base.descriptions.some(x=>x.work_id===w.id&&x.language==='nl')||base.metadata.some(x=>x.work_id===w.id))throw Error('Current presentation or edition requires explicit reuse/review');
+ const old=base.editions.filter(x=>x.work_id===w.id),nlBefore=old.some(x=>['nl','dut','nld'].includes(x.language));
+ if(nlBefore&&!item.languageCorrection)verifyAdditionalPrintedAlternative(old.filter(x=>['nl','dut','nld'].includes(x.language)),item.reviewedExistingAlternative);
+ bindings.push({work:w,author:a});
+ if(item.year!=null&&item.year!==w.first_publish_year){if(!item.extraSources?.length)throw Error('Year source required');actions.push({ref:'y'+i,relation:'works',key:{id:w.id},before:w,after:{...w,first_publish_year:item.year}});yearCorrections++;}
+ if(item.languageCorrection){const fix=item.languageCorrection,row=old.find(x=>x.id===fix.editionId);if(!row||row.language!==fix.before||row.isbn_13!==fix.expectedIsbn13||fix.after!=='tur'||fix.sources.length<2)throw Error('Exact independently corroborated language conflict required');actions.push({ref:'l'+i,relation:'editions',key:{id:row.id},before:row,after:{...row,language:fix.after}});languageCorrections++;}
+ const title=e.title,isbn=e.isbn13[0],format=reviewedPrintFormat(e.format),ref='e'+i;
+ if(item.presentationSourceUrl&&(!(item.extraSources??[]).includes(item.presentationSourceUrl)||new URL(item.presentationSourceUrl).protocol!=='https:'||new URL(item.presentationSourceUrl).search||new URL(item.presentationSourceUrl).hash))throw Error('Explicit reviewed canonical source must be bound and have no query or fragment');
+ const sources=[...new Set([...(item.presentationSourceUrl?[item.presentationSourceUrl]:[]),...(r.additionalSources??[]),...(item.extraSources??[]),...c.contentSources.filter(x=>x.text).map(x=>x.sourceUrl),...e.kbRecords.map(k=>k.uri.replace('http://','https://'))])];
+ const presentationSource=sources.find(safePublicSource);if(!presentationSource)throw Error('No reviewed public presentation source');
+ const evidence=[{type:'reviewed_identity_and_bibliography',sources:e.kbRecords.map(k=>k.uri),reference:c.candidateId,checked_at:input.reviewedAt,note:item.reason,supplemental:item.supplementalEdition?.sourceEvidence??null,existingAlternativeReview:item.reviewedExistingAlternative??null},{type:'original_substantive_source_review',review:r.reference,sources},missingCover??{type:'cover_front_review',cover_id:cover.coverId,sha256:cover.sha256,reference:cover.reference,limitation:cover.note??'Front title/author and source-edition binding; no barcode assertion.'}];
+ const edition={work_id:w.id,title,language:'dut',open_library_edition_id:item.unreliableCombinedOLRecord?null:e.editionKey.split('/').at(-1),isbn_13:isbn,isbn_10:null,publisher:e.publisher.join(' / ')};
+ actions.push({ref,relation:'editions',key:item.unreliableCombinedOLRecord?{isbn_13:isbn}:{open_library_edition_id:edition.open_library_edition_id},before:null,after:edition});
+ actions.push({ref:'d'+i,relation:'catalog_work_descriptions',key:{work_id:w.id,language:'nl'},before:null,after:{work_id:w.id,language:'nl',bound_author_id:a.id,text:r.text,source_type:'official_catalog',source_name:'Gecontroleerde boek- en catalogusbronnen',source_url:presentationSource,evidence,provenance:'original_source_reviewed_summary',review_status:'approved',reviewed_at:input.reviewedAt,review_batch:batch}});
+ actions.push({ref:'m'+i,relation:'catalog_edition_metadata',key:{edition_id:'@'+ref},before:null,after:{edition_id:'@'+ref,work_id:w.id,bound_author_id:a.id,bound_title:title,bound_language:'dut',bound_isbn13:isbn,format,cover_url:cover?`https://covers.openlibrary.org/b/id/${cover.coverId}-L.jpg?default=false`:null,card_cover_url:cover?`https://covers.openlibrary.org/b/id/${cover.coverId}-M.jpg?default=false`:null,evidence_url:e.kbRecords[0].uri.replace('http://','https://'),evidence,review_status:'approved',reviewed_at:input.reviewedAt,review_batch:batch}});
+ if(!nlBefore)net++;
+ decisions.push({candidateId:c.candidateId,caseNumber:c.caseNumber,status:item.languageCorrection?'approved_wrong_language_replacement':'approved_edition_addition',importApproved:true,stream:'B_add_translation',reviewedAt:input.reviewedAt,reason:item.reason,productionWorkId:w.id,edition:{key:e.editionKey,title,isbn13:isbn,language:'dut',format,coverId:cover?.coverId??null,combinedSourceNotUsedAsUniqueEdition:Boolean(item.unreliableCombinedOLRecord)},summary:{text:r.text,language:'nl',sourceUrl:presentationSource,sources,reference:r.reference},evidence:{editionReferences:e.kbRecords.map(k=>k.uri),coverReference:cover?.reference??null,coverSha256:cover?.sha256??null,...(missingCover?{missingCover}:{}),additionalSources:item.extraSources??[],languageCorrection:item.languageCorrection??null},remaining:['exact test import/readback/replay/committed recovery','hosted exact presentation and search acceptance'],testApplied:false,hostedAccepted:false,releaseOffered:false});
+}
+const importedCovers=decisions.filter(d=>d.edition.coverId!==null).length;
+const plan={summary:{batch,target:'qvplwejffhjvxaypmjut',scope:'REVIEW PROPOSAL ONLY; no production execution authorised',actions:actions.length,newWorks:0,newDutchEditions:input.entries.length,newDutchSummaries:input.entries.length,newCoverBindings:importedCovers,...(importedCovers<input.entries.length?{missingVerifiedCovers:input.entries.length-importedCovers}:{}),correctedOriginalYears:yearCorrections,correctedWrongLanguages:languageCorrections,netDutchAvailability:net},bindings,authorCorpora:[],actions};
+const files={'production-plan.json':JSON.stringify(plan,null,2)+'\n','production-import.sql':renderImport(plan),'production-dry-run.sql':renderImport(plan,{dryRun:true}),'production-rollback.sql':renderRollback(plan)};
+for(const[n,b]of Object.entries(files))fs.writeFileSync(new URL(n,dir),b);fs.writeFileSync(new URL('production-hashes.json',dir),JSON.stringify(Object.fromEntries(Object.entries(files).map(([n,b])=>[n,createHash('sha256').update(b).digest('hex')])),null,2)+'\n');
+const finalFile=new URL('final-research-decisions.json',ROOT),final=readJson(finalFile);for(const d of decisions){const old=final.decisions.find(x=>x.candidateId===d.candidateId);if(old&&JSON.stringify(old)!==JSON.stringify(d))throw Error('Explicit decision amendment required');if(!old)final.decisions.push(d);}fs.writeFileSync(finalFile,JSON.stringify(final,null,2)+'\n');console.log(JSON.stringify(plan.summary));

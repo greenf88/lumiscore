@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {reviewedCoverAsset} from './nl-scale-reviewed-cover-asset.mjs';
+const e={editionKey:'/books/OL47620250M',isbn13:['9789464291513']};
+const c={status:'front_title_author_consistent_with_bound_source',editionKey:e.editionKey,isbn13:e.isbn13[0],assetUrl:'https://metadata.isbn.nl/ie_fcache/0000579782_Gamechanger_0_0.jpg',evidenceUrl:'https://metadata.isbn.nl/1557496/gamechanger.html',sha256:'f0074e19ba1cc196f0bb2d8cf9b5464ae91417b38ad8e2a4b07f4db660a9e74a',bytes:155974,width:756,height:1200,decoded:true,note:'Dutch hardcover front checked; source links image beside exact ISBN.'};
+test('verified publisher image stays bound to exact Dutch edition',()=>{assert.equal(reviewedCoverAsset(e,c).url,c.assetUrl);assert.equal(reviewedCoverAsset(e,{...c,assetUrl:null}),null);});
+test('foreign edition, missing decode and credential-bearing image are refused',()=>{for(const bad of[{...c,isbn13:'9789464018509'},{...c,editionKey:'/books/OL999M'},{...c,decoded:false},{...c,assetUrl:c.assetUrl+'?token=secret'},{...c,sha256:'missing'}])assert.throws(()=>reviewedCoverAsset(e,bad));});

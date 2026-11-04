@@ -1,0 +1,198 @@
+{
+  "summary": {
+    "batch": "nl-scale-20261102-025",
+    "target": "qvplwejffhjvxaypmjut",
+    "scope": "REVIEW PROPOSAL ONLY; production not authorised",
+    "newWorks": 1,
+    "newDutchEditions": 1,
+    "newDutchSummaries": 1,
+    "newCoverBindings": 1,
+    "newAuthors": 1,
+    "netDutchAvailability": 1,
+    "actions": 5
+  },
+  "bindings": [],
+  "authorCorpora": [],
+  "actions": [
+    {
+      "ref": "a1",
+      "relation": "authors",
+      "key": {
+        "open_library_id": "OL228968A"
+      },
+      "before": null,
+      "after": {
+        "name": "John Wyndham",
+        "open_library_id": "OL228968A"
+      }
+    },
+    {
+      "ref": "w0",
+      "relation": "works",
+      "key": {
+        "native_identity_key": "nlscale:20261102:ol:OL1911336W"
+      },
+      "before": null,
+      "after": {
+        "title": "The Day of the Triffids",
+        "author_id": "@a1",
+        "first_publish_year": 1951,
+        "open_library_id": "OL1911336W",
+        "cover_id": 13119475,
+        "source_type": "open_library",
+        "work_type": "novel",
+        "native_identity_key": "nlscale:20261102:ol:OL1911336W"
+      }
+    },
+    {
+      "ref": "e0",
+      "relation": "editions",
+      "key": {
+        "open_library_edition_id": "OL45002848M"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@w0",
+        "open_library_edition_id": "OL45002848M",
+        "isbn_13": "9789027432858",
+        "isbn_10": null,
+        "title": "De Triffids Komen",
+        "language": "dut",
+        "publisher": "Het Spectrum"
+      }
+    },
+    {
+      "ref": "d0",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": "@w0",
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": "@w0",
+        "language": "nl",
+        "bound_author_id": "@a1",
+        "text": "Tijdens een ziekenhuisopname mist Bill Masen een hemelverschijnsel waar bijna iedereen naar kijkt. Wanneer zijn verband afgaat, blijkt een groot deel van de bevolking blind te zijn geworden. De samenleving valt uiteen, terwijl de triffids, planten die zich kunnen verplaatsen en een giftige aanval kunnen uitvoeren, een steeds groter gevaar vormen. Bill probeert zich in deze veranderde wereld staande te houden. Het verhaal onderzoekt hoe mensen zich organiseren wanneer vertrouwde bescherming en regels wegvallen.",
+        "source_type": "official_catalog",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_url": "https://www.bol.com/nl/nl/f/de-triffids-komen/33724439/",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p107631296"
+            ],
+            "reference": "new-work-dossier-readings-025.json#12",
+            "checked_at": "2026-11-02T22:25:40.674Z",
+            "note": "ExactDutchSpectrumprint9789027432858/294p full1951novel. JohnWyndham sole originalnovelist; MarcelBattin translator/othereditioncredit and AndyBridge designer not coauthors. No adaptation/film or anthology substitution."
+          },
+          {
+            "type": "original_substantive_source_review",
+            "sources": [
+              "https://www.bol.com/nl/nl/f/de-triffids-komen/33724439/",
+              "https://www.booksinbelgium.be/nl/b/wyndham-triffids-komen-9789027432858",
+              "https://openlibrary.org/works/OL1911336W",
+              "https://data.bibliotheken.nl/id/nbt/p107631296"
+            ],
+            "review": "content-review-001.json"
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [
+              {
+                "name": "Marcel Battin",
+                "role": "translator/other-edition credit; not original novelist",
+                "source": "https://openlibrary.org/authors/OL8007250A"
+              },
+              {
+                "name": "Andy Bridge",
+                "role": "cover designer on source; not novelist",
+                "source": "https://openlibrary.org/authors/OL8007853A"
+              }
+            ],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13119475,
+            "sha256": "9f876d5b51b9e641b94ea74a0fae19b9074100a4d238aea21e2079d426e3d11c",
+            "reference": "cover-semantic-review-011.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T22:25:40.674Z",
+        "review_batch": "nl-scale-20261102-025"
+      }
+    },
+    {
+      "ref": "m0",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": "@e0"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@e0",
+        "work_id": "@w0",
+        "bound_author_id": "@a1",
+        "bound_title": "De Triffids Komen",
+        "bound_language": "dut",
+        "bound_isbn13": "9789027432858",
+        "format": "paperback",
+        "cover_url": "https://covers.openlibrary.org/b/id/13119475-L.jpg?default=false",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13119475-M.jpg?default=false",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p107631296",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p107631296"
+            ],
+            "reference": "new-work-dossier-readings-025.json#12",
+            "checked_at": "2026-11-02T22:25:40.674Z",
+            "note": "ExactDutchSpectrumprint9789027432858/294p full1951novel. JohnWyndham sole originalnovelist; MarcelBattin translator/othereditioncredit and AndyBridge designer not coauthors. No adaptation/film or anthology substitution."
+          },
+          {
+            "type": "original_substantive_source_review",
+            "sources": [
+              "https://www.bol.com/nl/nl/f/de-triffids-komen/33724439/",
+              "https://www.booksinbelgium.be/nl/b/wyndham-triffids-komen-9789027432858",
+              "https://openlibrary.org/works/OL1911336W",
+              "https://data.bibliotheken.nl/id/nbt/p107631296"
+            ],
+            "review": "content-review-001.json"
+          },
+          {
+            "type": "explicit_contributor_roles",
+            "credits": [
+              {
+                "name": "Marcel Battin",
+                "role": "translator/other-edition credit; not original novelist",
+                "source": "https://openlibrary.org/authors/OL8007250A"
+              },
+              {
+                "name": "Andy Bridge",
+                "role": "cover designer on source; not novelist",
+                "source": "https://openlibrary.org/authors/OL8007853A"
+              }
+            ],
+            "limitation": "Existing schema has one primary Work author; no synthetic combined-author identity or author merge."
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13119475,
+            "sha256": "9f876d5b51b9e641b94ea74a0fae19b9074100a4d238aea21e2079d426e3d11c",
+            "reference": "cover-semantic-review-011.json",
+            "limitation": "Front title/author and source-edition binding; no barcode or exact printing-year claim."
+          }
+        ],
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T22:25:40.674Z",
+        "review_batch": "nl-scale-20261102-025"
+      }
+    }
+  ]
+}

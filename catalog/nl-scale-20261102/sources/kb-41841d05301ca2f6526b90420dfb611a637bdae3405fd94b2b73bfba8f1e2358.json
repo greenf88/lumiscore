@@ -1,0 +1,178 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT ?p ?o WHERE { GRAPH <http://data.bibliotheken.nl/nbt> { <http://data.bibliotheken.nl/id/nbt/p455901074> ?p ?o } } LIMIT 100",
+  "label": "official NBT example schema probe",
+  "checkedAt": "2026-11-02T11:50:28.109Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+%3Fp+%3Fo+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnbt%3E+%7B+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fnbt%2Fp455901074%3E+%3Fp+%3Fo+%7D+%7D+LIMIT+100",
+  "bytes": 2043,
+  "sha256": "d6c86782eb478709617ae66665f6037b601d661baaafe463daf6a2775264fe82",
+  "data": {
+    "head": {
+      "vars": [
+        "p",
+        "o"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/CreativeWork"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/Book"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://schema.org/ProductModel"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Passage Maastricht : roman / Maria Philippens"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/mainEntityOfPage"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/e00bd0bd901c6bab0c08d99c995cf6ee"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Passage Maastricht : roman"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/author"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p36437103X"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/genre"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p075629402"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/inLanguage"
+          },
+          "o": {
+            "type": "literal",
+            "value": "nl"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/numberOfPages"
+          },
+          "o": {
+            "type": "literal",
+            "value": "271",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/bookEdition"
+          },
+          "o": {
+            "type": "literal",
+            "value": "Eerste druk"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/publication"
+          },
+          "o": {
+            "type": "uri",
+            "value": "https://data.bibliotheken.nl/.well-known/genid/a493356d56e364fda4c2f20b0ceb1673"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "o": {
+            "type": "uri",
+            "value": "http://www.worldcat.org/oclc/1573044304"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://purl.org/dc/terms#issued"
+          },
+          "o": {
+            "type": "literal",
+            "value": "2026"
+          }
+        },
+        {
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/isbn"
+          },
+          "o": {
+            "type": "literal",
+            "value": "9789083504216"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

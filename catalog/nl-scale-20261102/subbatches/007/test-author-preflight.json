@@ -1,0 +1,46 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL1392395A','OL26467A']::text[])),w as(select * from public.works where open_library_id=any(array['OL5725956W','OL28623W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9780613750356','9798674057338','9789047500445','9789063280918']::text[]) or open_library_edition_id=any(array['OL10954175M','OL38132499M','OL27098593M','OL47095894M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987106001 and 987106999),'editions',(select count(*) from public.editions where id between 987206001 and 987206999),'authors',(select count(*) from public.authors where id between 987306001 and 987306999))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 946300171,
+        "name": "Eoin Colfer",
+        "open_library_id": "OL1392395A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-02T18:42:34.142505+00:00",
+    "author_corpora": [
+      {
+        "id": 946103340,
+        "title": "The Reluctant Assassin",
+        "cover_id": null,
+        "author_id": 946300171,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL17471996W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 987102008,
+        "title": "Artemis Fowl and the Eternity Code",
+        "cover_id": null,
+        "author_id": 946300171,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL5725961W",
+        "first_publish_year": 2003,
+        "native_identity_key": "nlscale:fixture003:2665"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

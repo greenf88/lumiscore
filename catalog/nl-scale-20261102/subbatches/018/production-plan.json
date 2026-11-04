@@ -1,0 +1,359 @@
+{
+  "summary": {
+    "batch": "nl-scale-20261102-018",
+    "target": "qvplwejffhjvxaypmjut",
+    "scope": "REVIEW PROPOSAL ONLY; no production execution authorised",
+    "actions": 7,
+    "newWorks": 0,
+    "newDutchEditions": 2,
+    "newDutchSummaries": 2,
+    "newCoverBindings": 2,
+    "correctedOriginalYears": 1,
+    "correctedWrongLanguages": 0,
+    "netDutchAvailability": 2
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 793,
+        "title": "Mein Kampf",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 461,
+        "work_type": null,
+        "created_at": "2026-09-02T08:46:07.754656+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1067314W",
+        "first_publish_year": 1922,
+        "native_identity_key": null
+      },
+      "author": {
+        "id": 461,
+        "name": "Adolf Hitler",
+        "created_at": "2026-09-02T08:46:07.533894+00:00",
+        "open_library_id": "OL108070A"
+      }
+    },
+    {
+      "work": {
+        "id": 4838,
+        "title": "Narziss und Goldmund",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 223,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL873100W",
+        "first_publish_year": 1930,
+        "native_identity_key": null
+      },
+      "author": {
+        "id": 223,
+        "name": "Hermann Hesse",
+        "created_at": "2026-09-02T08:31:59.944573+00:00",
+        "open_library_id": "OL76437A"
+      }
+    }
+  ],
+  "authorCorpora": [],
+  "actions": [
+    {
+      "ref": "y0",
+      "relation": "works",
+      "key": {
+        "id": 793
+      },
+      "before": {
+        "id": 793,
+        "title": "Mein Kampf",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 461,
+        "work_type": null,
+        "created_at": "2026-09-02T08:46:07.754656+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1067314W",
+        "first_publish_year": 1922,
+        "native_identity_key": null
+      },
+      "after": {
+        "id": 793,
+        "title": "Mein Kampf",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 461,
+        "work_type": null,
+        "created_at": "2026-09-02T08:46:07.754656+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL1067314W",
+        "first_publish_year": 1925,
+        "native_identity_key": null
+      }
+    },
+    {
+      "ref": "e0",
+      "relation": "editions",
+      "key": {
+        "open_library_edition_id": "OL45300996M"
+      },
+      "before": null,
+      "after": {
+        "work_id": 793,
+        "title": "Mijn strijd",
+        "language": "dut",
+        "open_library_edition_id": "OL45300996M",
+        "isbn_13": "9789044635867",
+        "isbn_10": null,
+        "publisher": "Prometheus"
+      }
+    },
+    {
+      "ref": "d0",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 793,
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": 793,
+        "language": "nl",
+        "bound_author_id": 461,
+        "text": "Dit boek bevat Hitlers uiteenzetting van zijn politieke denkbeelden, verweven met zijn voorstelling van zijn eigen levensloop. Antisemitisme, raciale hiërarchie en nationaalsocialistische opvattingen over staat en samenleving staan daarin centraal. De Nederlandse geannoteerde editie plaatst deze tekst in een historische context met inleidingen en toelichtingen. Zo kan de lezer de oorspronkelijke propaganda onderscheiden van het redactionele commentaar. Het gaat om een historische bron voor onderzoek naar de ideologie die later in het naziregime werd uitgevoerd.",
+        "source_type": "official_catalog",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_url": "https://uitgeverijprometheus.nl/boeken/mijn-strijd-gebonden/",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p417047274",
+              "http://data.bibliotheken.nl/id/nbt/p420515372"
+            ],
+            "reference": "ol:OL33393100W",
+            "checked_at": "2026-11-02T21:30:06.460Z",
+            "note": "Exact2018Prometheus annotated Dutch MeinKampf, translatorMarioMolegraaf/editorWillemMelching are separate from primary authorHitler. Reuse currentWork793, not a second Work for Dutch annotations. Correct invalid original1922 to first volumeJuly1925 per InstitutfürZeitgeschichtescholarly publication; secondvolumeDecember1926 not collapsed into fake1924. Historical propaganda is contextualized, no taste traits.",
+            "supplemental": null,
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-013.json",
+            "sources": [
+              "https://uitgeverijprometheus.nl/boeken/mijn-strijd-gebonden/",
+              "https://www.bibliotheek.nl/catalogus/titel.417047274.html/mijn-strijd/",
+              "https://id.rijksmuseum.nl/300287283",
+              "https://www.ifz-muenchen.de/heftarchiv/1992_2.pdf",
+              "https://openlibrary.org/works/OL33393100W",
+              "https://data.bibliotheken.nl/id/nbt/p417047274",
+              "https://data.bibliotheken.nl/id/nbt/p420515372"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13126197,
+            "sha256": "99801c6b042811c386b73065660a86526a9fe405ea2064d642e0cd5d8840b39f",
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and source-edition binding; no barcode assertion."
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T21:30:06.460Z",
+        "review_batch": "nl-scale-20261102-018"
+      }
+    },
+    {
+      "ref": "m0",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": "@e0"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@e0",
+        "work_id": 793,
+        "bound_author_id": 461,
+        "bound_title": "Mijn strijd",
+        "bound_language": "dut",
+        "bound_isbn13": "9789044635867",
+        "format": "hardcover",
+        "cover_url": "https://covers.openlibrary.org/b/id/13126197-L.jpg?default=false",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13126197-M.jpg?default=false",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p417047274",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p417047274",
+              "http://data.bibliotheken.nl/id/nbt/p420515372"
+            ],
+            "reference": "ol:OL33393100W",
+            "checked_at": "2026-11-02T21:30:06.460Z",
+            "note": "Exact2018Prometheus annotated Dutch MeinKampf, translatorMarioMolegraaf/editorWillemMelching are separate from primary authorHitler. Reuse currentWork793, not a second Work for Dutch annotations. Correct invalid original1922 to first volumeJuly1925 per InstitutfürZeitgeschichtescholarly publication; secondvolumeDecember1926 not collapsed into fake1924. Historical propaganda is contextualized, no taste traits.",
+            "supplemental": null,
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-013.json",
+            "sources": [
+              "https://uitgeverijprometheus.nl/boeken/mijn-strijd-gebonden/",
+              "https://www.bibliotheek.nl/catalogus/titel.417047274.html/mijn-strijd/",
+              "https://id.rijksmuseum.nl/300287283",
+              "https://www.ifz-muenchen.de/heftarchiv/1992_2.pdf",
+              "https://openlibrary.org/works/OL33393100W",
+              "https://data.bibliotheken.nl/id/nbt/p417047274",
+              "https://data.bibliotheken.nl/id/nbt/p420515372"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13126197,
+            "sha256": "99801c6b042811c386b73065660a86526a9fe405ea2064d642e0cd5d8840b39f",
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and source-edition binding; no barcode assertion."
+          }
+        ],
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T21:30:06.460Z",
+        "review_batch": "nl-scale-20261102-018"
+      }
+    },
+    {
+      "ref": "e1",
+      "relation": "editions",
+      "key": {
+        "open_library_edition_id": "OL12804329M"
+      },
+      "before": null,
+      "after": {
+        "work_id": 4838,
+        "title": "Narziss & Goldmund",
+        "language": "dut",
+        "open_library_edition_id": "OL12804329M",
+        "isbn_13": "9789041330215",
+        "isbn_10": null,
+        "publisher": "Singel Pockets"
+      }
+    },
+    {
+      "ref": "d1",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 4838,
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": 4838,
+        "language": "nl",
+        "bound_author_id": 223,
+        "text": "Narziss en Goldmund raken met elkaar verbonden, maar zoeken op verschillende manieren naar betekenis. Narziss richt zich op het denken en het beschouwende kloosterleven. Goldmund voelt zich aangetrokken tot ervaringen buiten die besloten omgeving en tot het kunstenaarschap. Hun uiteenlopende levenswegen maken zichtbaar wat ieder waardeert en wat daarbij buiten bereik blijft. Hermann Hesse onderzoekt via hun verhouding de spanning tussen orde en verlangen, geestelijke toewijding en het leven dat zich door ontmoetingen en waarnemingen laat vormen.",
+        "source_type": "official_catalog",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_url": "https://openlibrary.org/works/OL873100W",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p148265561",
+              "http://data.bibliotheken.nl/id/nbt/p168330156"
+            ],
+            "reference": "ol:OL873015W",
+            "checked_at": "2026-11-02T21:30:06.460Z",
+            "note": "DutchNarziss&Goldmund is the same1930German novel as currentWork4838, confirmed by exactISBN9789041330215 and authority. Alternate sourceparentOL873015W does not justify anotherWork. RetaincurrentWorkOL873100W, primaryHermannHesse, all existing EN edition and user links. Title & versus en is a source-punctuation variant.",
+            "supplemental": {
+              "formatSource": "https://data.bibliotheken.nl/id/nbt/p168330156",
+              "review": "ExactDutchISBN9789041330215 and cover Narziss &Goldmund; KB spells same title with en. PrimarysourceOL76437A and KBauthority share Q25973/VIAF41841418/ISNI0000000121296240. OriginalNarzissundGoldmund1930; sourceparentOL873015W resolves to existingWork4838OL873100W per separate reviewed identity. No Work or author merge."
+            },
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-001.json",
+            "sources": [
+              "https://openlibrary.org/works/OL873100W",
+              "https://data.bibliotheken.nl/id/nbt/p148265561",
+              "https://data.bibliotheken.nl/id/nbt/p168330156",
+              "https://www.dhm.de/lemo/biografie/hermann-hesse"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 6870449,
+            "sha256": "daacc38f9b08d382f2f11f58a2bceb553a692701d2501de1298d9bccb2cd0eda",
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Actually read cover-large/sheet-003.jpg. Hermann Hesse; Narziss & Goldmund. Front identity and source-edition attachment are corroboration, not proof of a visible barcode, printing year, language or complete contents. Bibliographic checks remain separate."
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T21:30:06.460Z",
+        "review_batch": "nl-scale-20261102-018"
+      }
+    },
+    {
+      "ref": "m1",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": "@e1"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@e1",
+        "work_id": 4838,
+        "bound_author_id": 223,
+        "bound_title": "Narziss & Goldmund",
+        "bound_language": "dut",
+        "bound_isbn13": "9789041330215",
+        "format": "paperback",
+        "cover_url": "https://covers.openlibrary.org/b/id/6870449-L.jpg?default=false",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/6870449-M.jpg?default=false",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p148265561",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p148265561",
+              "http://data.bibliotheken.nl/id/nbt/p168330156"
+            ],
+            "reference": "ol:OL873015W",
+            "checked_at": "2026-11-02T21:30:06.460Z",
+            "note": "DutchNarziss&Goldmund is the same1930German novel as currentWork4838, confirmed by exactISBN9789041330215 and authority. Alternate sourceparentOL873015W does not justify anotherWork. RetaincurrentWorkOL873100W, primaryHermannHesse, all existing EN edition and user links. Title & versus en is a source-punctuation variant.",
+            "supplemental": {
+              "formatSource": "https://data.bibliotheken.nl/id/nbt/p168330156",
+              "review": "ExactDutchISBN9789041330215 and cover Narziss &Goldmund; KB spells same title with en. PrimarysourceOL76437A and KBauthority share Q25973/VIAF41841418/ISNI0000000121296240. OriginalNarzissundGoldmund1930; sourceparentOL873015W resolves to existingWork4838OL873100W per separate reviewed identity. No Work or author merge."
+            },
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-001.json",
+            "sources": [
+              "https://openlibrary.org/works/OL873100W",
+              "https://data.bibliotheken.nl/id/nbt/p148265561",
+              "https://data.bibliotheken.nl/id/nbt/p168330156",
+              "https://www.dhm.de/lemo/biografie/hermann-hesse"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 6870449,
+            "sha256": "daacc38f9b08d382f2f11f58a2bceb553a692701d2501de1298d9bccb2cd0eda",
+            "reference": "cover-semantic-review-010.json",
+            "limitation": "Actually read cover-large/sheet-003.jpg. Hermann Hesse; Narziss & Goldmund. Front identity and source-edition attachment are corroboration, not proof of a visible barcode, printing year, language or complete contents. Bibliographic checks remain separate."
+          }
+        ],
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T21:30:06.460Z",
+        "review_batch": "nl-scale-20261102-018"
+      }
+    }
+  ]
+}

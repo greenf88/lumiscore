@@ -1,0 +1,161 @@
+AFGEBAKEND RELEASEVOORSTEL — PR71 — 3 november 2026
+Geen productie-import, merge of publicatie uitgevoerd of door deze tekst toegestaan.
+
+Besluit over de scope
+De gebruiker heeft op 3 november gevraagd het huidige gecontroleerde pakket af te
+ronden en verdere uitbreiding te stoppen. Dit vervangt voor deze oplevering het
+eerdere minimum van 1.000 einddossiers. Het volledige onderzoek is NIET afgerond.
+589 nieuwe eindbesluiten: 501 inhoudelijk goedgekeurde voorstellen, 21 correct
+aanwezig, 18 conflicten en 49 onvoldoende-bewijsdossiers na brononderzoek.
+411 logische dossiers blijven open. Hun bronpogingen en concepten blijven in het
+cumulatieve register; niet onderzocht wordt niet omgedoopt tot geen NL-editie.
+
+Exact uitvoeringspakket
+Uitsluitend release/production-plan.json: 1.492 acties, 498 unieke presentaties.
+33 nieuwe auteurs, 176 nieuwe Works en 33 bestaande Work-correcties; 234 nieuwe
+Nederlandse edities en 20 bestaande editiecorrecties; 498 NL-samenvattingen en
+498 editie-metadatarecords, waarvan 220 handmatige coverbindings.
+De vier gedeelde nieuwe auteurs worden eenmaal ingevoegd.
+
+Stromen en groei, zonder dubbeltelling
+C: 176 nieuwe Works, netto +176 NL beschikbaar.
+B: 58 editieaanvullingen aan bestaande Works, netto +56; twee waren al NL beschikbaar.
+A: 261 bestaande presentaties verbeteren, netto 0; drie foutieve uitsluitingen
+herstellen, netto +3. Totaal 498 dossiers, 234 nieuwe edities, netto +235.
+net-availability.json bevat het berekende besluit per uniek Work/dossier.
+Operationele beschikbaarheid op huidige snapshot: 3.096 -> 3.331. Dit is een
+projectie, geen productie-import. Historische nulmeting 2.649: nu gepubliceerd +447;
+na een geslaagde release zou dit +682 zijn, met 4.318 te gaan tot +5.000.
+Een tekst, cover of extra editie is niet automatisch een extra beschikbaar Work.
+
+Uitgesloten
+Ooit waren er wolven/5028 en Wil/1628: daadwerkelijk gelezen detailcover,
+maar nog geen gelijke geladen kaartcover bij de vastgelegde klik/terugroute.
+Nacht Van de Witte Maan/6044: beide bekeken bronfronten tonen NIEUWE maan.
+Geen onjuiste retitling of coverbinding geïmporteerd. Zes voorstelacties verwijderd;
+deze drie waren al NL beschikbaar en veranderen de netto +235 niet.
+Alle open, onzekere en niet-importdossiers staan buiten dit releasevoorstel.
+Alle Works, gebruikers en edities blijven hun identiteit behouden; geen merges.
+
+Code, omgeving en compatibiliteit
+Applicatie: 9c74ecaa48f7a35830f713eed3528d46ba0466ad, gelijk aan actuele main en productie.
+Geen app-, component-, lib-, public-, package- of configuratiewijziging voor dit pakket.
+Metadatareparatie en Paper-standaard blijven behouden. Geen SEO-onderzoek herhaald,
+geen nieuwe SEO-content, PR51-, dashboard-, ranking- of toestemmingswijziging.
+De definitieve volledige PR-head staat in GitHub en in het eindantwoord; applicatie-
+SHA en bestandshashes binden het uitvoerbare pakket zonder zelfreferentiële git-hash.
+Ready-bewijs-Preview: https://lumiscore-9ue18tr1w-rgkgroeneveld-9102.vercel.app
+Deployment dpl_9ruvyD65bjhJtzNvP4UuWbrxyXvg, gebouwd uit
+96c3efc5ebea86e286c72786db87aecc9138f5f3 met bytegelijke applicatie.
+Latere automatische Previews krijgen oud browserbewijs niet toegeschreven.
+
+Actuele voorcontrole
+Productieproject qvplwejffhjvxaypmjut uitsluitend read-only geraadpleegd.
+13:13 UTC: volledige openbare projectie ongewijzigd: 10.259 Works, 10.676 edities,
+5.722 auteurs, 576 editie-metadatarecords, 695 teksten (576 NL/119 EN).
+13:16 UTC: production-preflight.sql: 2.285 controles, nul afwijkingen.
+Volledige oude rijen, 101 auteurscorpora, verwachte lege presentatieplaatsen en
+globale Work-, auteurs- en editie-identiteiten gecontroleerd. Niet slechts titels.
+Productie Ready dpl_34ATBqyjeBes7NKatC5vHkNAkpyU op genoemde main-SHA.
+Dit bewijst geen blijvende geldigheid: exact opnieuw controleren vlak voor uitvoering.
+
+Afzonderlijke zoeknormalisatiemigratie
+supabase/migrations/20261102185143_nl_scale_search_unicode.sql is bytegelijk aan
+search-normalization/install.sql. SHA256:
+496d043fbf442ef297382ba824dd337dc00bcfe66b6f9ec1b1762182fe30ebde.
+Alleen NFKC-query- en titelmatching in bestaande catalog_search_selection_v2;
+geen verandering van editievoorwaarden, sortering, resultaatvorm of grants.
+Test heeft echte migratieregistratie 20261102185143/nl_scale_search_unicode.
+Productie heeft die registratie niet en nog de verwachte oude functiebody.
+Body-MD5 oud 22d828c503e8b36cdd86a16602e594e4;
+nieuw 187df6e5e6ea8976d1a85a2d4c1a9e01.
+Owner postgres, SECURITY INVOKER, lege search_path; execute uitsluitend bestaande
+postgres/anon/authenticated-grants. Geen nieuwe rechten of beveiligingswijziging.
+Gebruik bij release de bestaande officiële, correct registrerende migratieroute;
+controleer lokale/remote geschiedenis en volledige geplande set: uitsluitend deze
+migratie. Geen handmatige historie-inserts of andere open migraties uitvoeren.
+
+Acceptatie en herstelbewijs
+498/498 exacte testpresentaties geaccepteerd, inclusief editie/ISBN, Nederlandse
+tekst en bron, Nederlandse/originele titelzoekopdracht, kaart/detail en terugklik.
+414 gedecodeerde inhoudelijk bekeken covers; 84 expliciete neutrale placeholders.
+Een placeholder is geen herstelde cover. 220 bindings zijn daadwerkelijk voorgesteld;
+194 andere covers zijn via de bestaande resolver daadwerkelijk bekeken.
+SpiegelWorks zijn onbeoordeeld: per Work bewijst dit lege-scorepariteit. Gedeelde
+scorebron en positieve-scoretests zijn afzonderlijk bewijs, geen gemeten echte score.
+Eerder geldig NL/EN, Paper/Ink, 320px/desktop, toetsenbord, herladen en drie pagina's
+met 48 unieke kaarten hergebruikt bij ongewijzigde applicatie. Niet-leeg synthetisch
+profiel bewijst NL-editievoorkeur, geen kwaliteit van persoonlijke rangschikking.
+Tijdelijk account plus drie eigen ratings en statussen verwijderd; volledige oude
+ratings/status/voorkeurdigests en de twee bestaande testaccounts behouden.
+13:14 UTC opnieuw beschermd testbaseline exact: zie current-readonly-validation.json.
+
+Alle 498 dossiers vallen onder 54 afgebakende hosted import-/teruglees-/replay0-/
+werkelijk gecommitteerd herstel-/Previewherstelproeven. Geen enkel ROLLBACK-only
+bewijs wordt als herstel na COMMIT gepresenteerd. Bewijsindex en eerste receipts
+zijn gehasht en opnieuw op bestandsintegriteit gecontroleerd.
+De exacte gecombineerde release is bovendien lokaal op de volledige openbare
+productiesnapshot geïmporteerd, herhaald zonder mutatie en na COMMIT hersteld:
+alle oude catalogusrijen en duidelijk synthetische beschermde stand-ins exact gelijk.
+Geen afzonderlijke gecombineerde hosted import geclaimd: test gebruikt afgebakende
+spiegel-ID's en expliciet aparte fixtures; productiescript gebruikt natuurlijke keys.
+Dezelfde gedeelde renderer is bewezen met full-row-CAS en ALLE inkomende FK's,
+inclusief CASCADE; latere wijzigingen of afhankelijkheden weigeren herstel volledig.
+Geen automatische nummering of sequence reset uitgevoerd of voorzien.
+
+Prestaties en beperkingen
+Geen nieuwe browserrequests, runtimecode of externe metadata-lookup toegevoegd.
+Normalisatie kost in vijf herhalingen per zoekvraag op test circa 6 ms extra DB-tijd:
+De chirurg mediaan 4,304 -> 10,348 ms; Momo 4,059 -> 10,368 ms;
+Niemand zeggen 5,956 -> 12,139 ms. Dit is geen productiemeting of browser-paintmeting.
+Eerdere hosted HTTPmetingen: nieuwe detailpagina 2 bezoeken TTFB 288-424 ms;
+zoekpagina 3 bezoeken 180-334 ms. Niet bewezen koud en geen causale voor/na-vergelijking.
+Bronarchief bevat 27 gekozen assets boven 300 kB van de 161 exact op hash gematchte
+assets. Dit zijn bronbestanden, niet gemeten actuele browsertransfergroottes van
+alle L/M-endpoints. Grootste bronasset 6,63 MB; coveroptimalisatie blijft apart.
+Onder meer zachte kleine covers en 84 placeholders blijven expliciete beperkingen.
+performance-and-cover-limitations.json bewaart bestanden en meetdefinities.
+
+Uitvoering NA afzonderlijk releaseakkoord
+1. Bevestig goedgekeurde PR-head, groene CI, actuele main/Ready-productie en ALLE
+   hashes uit release-hashes.json. Stop bij afwijkingen. Alleen deze release-map
+   gebruiken: geen losse subbatches of combined-draft daarnaast uitvoeren.
+2. Controleer project-ID, schema/functie- en migratiehistorie. Voer read-only
+   production-preflight.sql opnieuw uit: failures=0. Controleer nieuwe duplicaten.
+3. Bewaar een herstelbare, beveiligde snapshot van de betrokken volledige openbare
+   rijen en actuele functie plus operationele beschermingsdigests. Geen credentials
+   of individuele leesprofielen in publiceerbare bewijzen. Snapshot nodig vóór writes.
+4. Installeer uitsluitend de genoemde zoekmigratie via de ondersteunde route met
+   echte migratieregistratie. Lees body, owner, config en ACL terug.
+5. Voer uitsluitend release/production-import.sql uit, één begrensde transactie.
+   Verwacht 1.492 receipt-rijen; bewaar de EERSTE volledige niet-lege COMMIT-receipt
+   veilig vóór iedere replay. Volledige rijvergelijkingen/identiteiten bewaken drift.
+6. Lees de receipt-rijen exact terug. Herhaal import: verwacht receipt.rows=[] en
+   geen mutaties. Bevestig netto unieke NL-beschikbaarheid +235 en behoud gegevens.
+7. Merge alleen de afzonderlijk goedgekeurde PR-versie bij groene checks. Publiceer
+   die versie; geen andere PR, dataimport of socialpublicatie. Applicatiebytes blijven
+   gelijk, maar actieve productie-SHA en deployment wel daadwerkelijk controleren.
+8. Controleer 498 productiepresentaties en zoekopdrachten, bron, cover/placeholder,
+   scorepariteit, NL/EN, Paper/Ink, mobiel/desktop, taalwissel en stabiele paginering.
+   Controleer oorspronkelijke metadata-head op enkele controleroutes; geen GSC-
+   aanvraag of claim dat deze catalogusrelease de SEO-terugval verklaart of herstelt.
+
+Herstel bij problemen
+Stop verdere uitvoering. Gebruik release/production-rollback.sql uitsluitend met de
+EERSTE echte productie-COMMIT-receipt van batch nl-scale-20261102-release-498 via
+parameterized set_config('lumiscore.catalog_release_receipt',$1,false). Geen testreceipt,
+dry-runreceipt of lege replayreceipt. Nooit de historisch losse rollbackbestanden
+blind combineren. De transactie draait alleen eigen nog ongewijzigde rijen terug.
+Bij latere wijziging of afhankelijkheid: alles wordt geweigerd; niets geforceerd wissen.
+Daarna eerdere applicatiedeployment terugzetten indien nodig. De zoekfunctie alleen
+gericht terugzetten met search-normalization/rollback.sql wanneer nieuwe body/ACL
+nog exact overeenkomen; historie uitsluitend via ondersteunde migratiereparatie en
+eerlijke registratie, geen fictieve historie of handmatige deletes. Geen sequence reset.
+Lees na herstel volledige oude rijen en beschermingsdigests terug.
+
+Advies
+GEREED VOOR AFGEBAKENDE RELEASEBEOORDELING na groene definitieve PR-CI.
+Beoordeel 1.492 acties voor 498 presentaties, netto +235, plus exact één genoemde
+zoekmigratie; aanvaard zichtbaar de 84 placeholders en overige coverbeperkingen.
+Het resterende catalogusonderzoek en de drie uitgesloten covergevallen zijn aparte
+vervolgwerkvoorraad. Geen volledige catalogusafronding, +5.000 of SEO-herstel geclaimd.

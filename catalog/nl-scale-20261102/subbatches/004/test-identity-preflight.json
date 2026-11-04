@@ -1,0 +1,102 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL25161A','OL1393502A','OL23919A','OL3416152A','OL29079A','OL2865776A','OL709121A','OL1460559A','OL863535A','OL934457A','OL386812A','OL242164A','OL9320229A','OL775673A','OL7369987A','OL234454A','OL657039A','OL2829179A','OL63790A','OL34328A','OL2301303A','OL25882A','OL784428A','OL198269A']::text[]) or id=any(array[124,236,80,1088,379,3341,1633,1667,1307,1516,3148,380,5269,3014,3047]::bigint[])) select jsonb_build_object('checked_at',clock_timestamp(),'authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'isbn_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')=any(array['9789022568200','9789023450191','9789022564301','9789051085853','9789044912890','9789032004736','9789044914399','9789028416536','9789032004620','9789024561988','9789044915129','9789029068871','9789400514133','9789000339259','9789400502086','9789022582824','9789024591947','9789041409621','9789463105071','9789029589888']::text[])),'source_work_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where open_library_id=any(array['OL49488W','OL5731542W','OL16796166W','OL84889W','OL3899224W','OL267635W','OL3899219W','OL2652815W','OL267633W','OL19491609W','OL3899215W','OL16028342W','OL17640142W','OL15547922W','OL17485749W','OL19718480W','OL20787872W','OL23557W','OL30590560W','OL20293310W']::text[])),'title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','works','row',to_jsonb(t))),'[]') from public.works t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['endersgame','halfofayellowsun','eenhalvegelezon','thecasualvacancy','eengoederaad','valhallarising','infernoopzee','roseanna','devrouwinhetgotakanaal','leslauriersdecesar','asterixendelauwerkransvancaesar','denskrattandepolisen','delachendepolitieman','traumaandrecovery','traumaenherstel','asterixetlesgoths','asterixendegothen','thethirdkingdom','hetderdekoninkrijk','brandbilensomforsvann','debrandweerautodieverdween','thewitchesofkarres','deheksenvankarres','losritosdelagua','deritenvanhetwater','teslasattic','demysterieuzezolder','thenightmareplace','duisteroord','partingshot','onhoudbaar','thesentinel','dewachtpost','dramacity','dramastad','belgischerepublikeinen','destiltevanhetlicht']::text[])),'edition_title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','editions','row',to_jsonb(t))),'[]') from public.editions t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['endersgame','halfofayellowsun','eenhalvegelezon','thecasualvacancy','eengoederaad','valhallarising','infernoopzee','roseanna','devrouwinhetgotakanaal','leslauriersdecesar','asterixendelauwerkransvancaesar','denskrattandepolisen','delachendepolitieman','traumaandrecovery','traumaenherstel','asterixetlesgoths','asterixendegothen','thethirdkingdom','hetderdekoninkrijk','brandbilensomforsvann','debrandweerautodieverdween','thewitchesofkarres','deheksenvankarres','losritosdelagua','deritenvanhetwater','teslasattic','demysterieuzezolder','thenightmareplace','duisteroord','partingshot','onhoudbaar','thesentinel','dewachtpost','dramacity','dramastad','belgischerepublikeinen','destiltevanhetlicht']::text[])),'reserved_test_ranges',jsonb_build_object('works',(select count(*) from public.works where id between 987103001 and 987103999),'editions',(select count(*) from public.editions where id between 987203001 and 987203999),'authors',(select count(*) from public.authors where id between 987303001 and 987303999))) as preflight;",
+  "readback": {
+    "authors": [
+      {
+        "id": 946301516,
+        "name": "Steve Mosby",
+        "open_library_id": "OL2829179A"
+      },
+      {
+        "id": 962300003,
+        "name": "J. K. Rowling",
+        "open_library_id": "OL23919A"
+      },
+      {
+        "id": 987300009,
+        "name": "Lee Child",
+        "open_library_id": "OL34328A"
+      }
+    ],
+    "checked_at": "2026-11-02T17:18:51.072502+00:00",
+    "isbn_matches": [],
+    "title_matches": [],
+    "author_corpora": [
+      {
+        "id": 946106334,
+        "title": "Cry for help",
+        "cover_id": null,
+        "author_id": 946301516,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL8475512W",
+        "first_publish_year": 2008,
+        "native_identity_key": null
+      },
+      {
+        "id": 962100003,
+        "title": "Harry Potter and the Philosopher's Stone",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82563W",
+        "first_publish_year": 1997,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100045,
+        "title": "Harry Potter and the Half-Blood Prince",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82565W",
+        "first_publish_year": 2005,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100046,
+        "title": "Harry Potter and the Deathly Hallows",
+        "cover_id": null,
+        "author_id": 962300003,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL82586W",
+        "first_publish_year": 2007,
+        "native_identity_key": null
+      },
+      {
+        "id": 987100011,
+        "title": "The Visitor",
+        "cover_id": 9154925,
+        "author_id": 987300009,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL52936W",
+        "first_publish_year": 2000,
+        "native_identity_key": "nlscale:20261102:ol:OL52936W"
+      },
+      {
+        "id": 987102006,
+        "title": "Killing Floor",
+        "cover_id": null,
+        "author_id": 987300009,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL24477958W",
+        "first_publish_year": 1997,
+        "native_identity_key": "nlscale:fixture003:2644"
+      }
+    ],
+    "source_work_matches": [],
+    "reserved_test_ranges": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    },
+    "edition_title_matches": []
+  }
+}

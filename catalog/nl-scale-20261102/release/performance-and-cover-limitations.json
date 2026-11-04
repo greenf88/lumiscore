@@ -1,0 +1,1484 @@
+{
+  "search": [
+    {
+      "query": "De chirurg",
+      "phases": {
+        "before": {
+          "n": 5,
+          "medianMs": 4.304,
+          "minMs": 4.23,
+          "maxMs": 4.346
+        },
+        "after": {
+          "n": 5,
+          "medianMs": 10.348,
+          "minMs": 10.225,
+          "maxMs": 10.464
+        }
+      }
+    },
+    {
+      "query": "Momo en de tijdspaarders",
+      "phases": {
+        "before": {
+          "n": 5,
+          "medianMs": 4.059,
+          "minMs": 4.027,
+          "maxMs": 6.992
+        },
+        "after": {
+          "n": 5,
+          "medianMs": 10.368,
+          "minMs": 10.216,
+          "maxMs": 12.423
+        }
+      }
+    },
+    {
+      "query": "Niemand zeggen",
+      "phases": {
+        "before": {
+          "n": 5,
+          "medianMs": 5.956,
+          "minMs": 5.924,
+          "maxMs": 24.967
+        },
+        "after": {
+          "n": 5,
+          "medianMs": 12.139,
+          "minMs": 12.066,
+          "maxMs": 13.436
+        }
+      }
+    }
+  ],
+  "searchMethod": "EXPLAIN ANALYZE TIMING OFF, actual existing test DB, 5 repeat queries x3 controls per phase; old/new within one rolled-back transaction; no browser/network timings",
+  "httpDefinition": "curl time_starttransfer: network/DNS/TLS/server to first byte; fullHtmlSeconds: response transfer completion. Neither is browser paint, visible-content or cover-load timing. Samples are first-observed/repeated requests, not proven cold functions. Existing control is a different Work, not a before/after causal comparison.",
+  "http": [
+    {
+      "route": "new-detail",
+      "path": "/nl/book/987100001",
+      "sample": 1,
+      "measuredAt": "2026-11-02T18:20:28.1903007Z",
+      "status": 200,
+      "ttfbSeconds": 0.423959,
+      "fullHtmlSeconds": 0.425211,
+      "bytes": 29253,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "c2e478b2ab320137a2d171db7a9989554c242f7b7a506efe817dd627b2a1c860"
+    },
+    {
+      "route": "new-detail",
+      "path": "/nl/book/987100001",
+      "sample": 2,
+      "measuredAt": "2026-11-02T18:20:30.6197403Z",
+      "status": 200,
+      "ttfbSeconds": 0.288057,
+      "fullHtmlSeconds": 0.29111,
+      "bytes": 29207,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "fb857fe6f3eabad9a719cadbd243c6522a9fef9e1adff14c2c5d6fba4484232b"
+    },
+    {
+      "route": "existing-control",
+      "path": "/nl/book/8800309",
+      "sample": 1,
+      "measuredAt": "2026-11-02T18:20:32.9360894Z",
+      "status": 200,
+      "ttfbSeconds": 0.31812,
+      "fullHtmlSeconds": 0.324824,
+      "bytes": 29580,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "581f3c3583fe5edc1c0a70bba95c15e645570d29353d72f58794a5ede5927c77"
+    },
+    {
+      "route": "existing-control",
+      "path": "/nl/book/8800309",
+      "sample": 2,
+      "measuredAt": "2026-11-02T18:20:35.2855297Z",
+      "status": 200,
+      "ttfbSeconds": 0.312112,
+      "fullHtmlSeconds": 0.313186,
+      "bytes": 29534,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "950a0e2aae4c12e7c1dc2782a2bc4be0f8fd0051a220c14fa8c8a95af08eb773"
+    },
+    {
+      "route": "existing-control",
+      "path": "/nl/book/8800309",
+      "sample": 3,
+      "measuredAt": "2026-11-02T18:20:37.8177836Z",
+      "status": 200,
+      "ttfbSeconds": 0.493752,
+      "fullHtmlSeconds": 0.496197,
+      "bytes": 29534,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "950a0e2aae4c12e7c1dc2782a2bc4be0f8fd0051a220c14fa8c8a95af08eb773"
+    },
+    {
+      "route": "search",
+      "path": "/nl/search?q=Niemand%20zeggen&pageSize=16&sort=relevance",
+      "sample": 1,
+      "measuredAt": "2026-11-02T18:20:40.2297806Z",
+      "status": 200,
+      "ttfbSeconds": 0.333867,
+      "fullHtmlSeconds": 0.337944,
+      "bytes": 26558,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "1d79d7fdb370908e7d65786ee0b68e17665d90e748d61b5b2a14ba4896135e5b"
+    },
+    {
+      "route": "search",
+      "path": "/nl/search?q=Niemand%20zeggen&pageSize=16&sort=relevance",
+      "sample": 2,
+      "measuredAt": "2026-11-02T18:20:42.7606966Z",
+      "status": 200,
+      "ttfbSeconds": 0.179815,
+      "fullHtmlSeconds": 0.182241,
+      "bytes": 26558,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "1d79d7fdb370908e7d65786ee0b68e17665d90e748d61b5b2a14ba4896135e5b"
+    },
+    {
+      "route": "search",
+      "path": "/nl/search?q=Niemand%20zeggen&pageSize=16&sort=relevance",
+      "sample": 3,
+      "measuredAt": "2026-11-02T18:20:45.0266931Z",
+      "status": 200,
+      "ttfbSeconds": 0.281316,
+      "fullHtmlSeconds": 0.283724,
+      "bytes": 26558,
+      "vercelCache": "MISS",
+      "httpVersion": "1.1",
+      "htmlSha256": "1d79d7fdb370908e7d65786ee0b68e17665d90e748d61b5b2a14ba4896135e5b"
+    }
+  ],
+  "knownArchivedAssets": [
+    {
+      "candidateId": "work:2809",
+      "title": "De buitenstaander",
+      "bytes": 6630613,
+      "sha256": "fc1d98a8f6cf6b337f39b72688e00cff731573162b515dfa0a503f4971505df8",
+      "source": "https://archive.org/download/covers_0013/covers_0013_01.zip"
+    },
+    {
+      "candidateId": "ol:OL486654W",
+      "title": "De bewoonde wereld",
+      "bytes": 4260531,
+      "sha256": "abe5b52854e7df8360c5b7ef72f83adc07824670df768a5203751c08251686a4",
+      "source": "https://archive.org/download/covers_0013/covers_0013_02.zip"
+    },
+    {
+      "candidateId": "work:1346",
+      "title": "Stoner",
+      "bytes": 2612418,
+      "sha256": "b1173b466ee9d6078b8a2bfab2bab45a7711be54ffa85f9b7a1d2ecf2af1fe18",
+      "source": "https://archive.org/download/covers_0008/covers_0008_13.zip"
+    },
+    {
+      "candidateId": "work:4976",
+      "title": "De crash",
+      "bytes": 1281697,
+      "sha256": "e9fd7fec4c53e2d7c94d3f0370ca9399b9c893a9e0e08b128ecbce7891da0337",
+      "source": "https://archive.org/download/covers_0012/covers_0012_31.zip"
+    },
+    {
+      "candidateId": "ol:OL134888W",
+      "title": "Schaduwen in de tuin",
+      "bytes": 980753,
+      "sha256": "246903a68ba498900534781d93d734efb85554ed229af62e5c01e05ef6bca045",
+      "source": "https://archive.org/download/covers_0012/covers_0012_68.zip"
+    },
+    {
+      "candidateId": "ol:OL17485749W",
+      "title": "Duister oord",
+      "bytes": 869037,
+      "sha256": "bfe138d68fc9413b8b902bf695930fc76d6b75c537560c1e50b8d64ae3d45611",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "ol:OL19729677W",
+      "title": "Waarom ik niet meer met witte mensen over racisme praat",
+      "bytes": 725783,
+      "sha256": "281cd9a649e0f65e15a9d945a8a8e8fed5db35cffb87324b1158de8e13bfc9b2",
+      "source": "https://archive.org/download/covers_0010/covers_0010_47.zip"
+    },
+    {
+      "candidateId": "ol:OL16518W",
+      "title": "Eon",
+      "bytes": 714233,
+      "sha256": "938a669bc6aeef4b79c2ec4fb47644903559aa6d129ed53fa9b99d9eb5360437",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "work:2175",
+      "title": "Hof van ijs en sterren",
+      "bytes": 659410,
+      "sha256": "f2d45278e7045e45208bae8b3c097717f2155d080438419ac235c9105c07b357",
+      "source": "https://archive.org/download/covers_0014/covers_0014_34.zip"
+    },
+    {
+      "candidateId": "work:1461",
+      "title": "Het Zoutpad",
+      "bytes": 624114,
+      "sha256": "c8c3fba14a538bb15323193667e5051e4e9c43496ad5bdfd7cb7b0551ffc6463",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "work:2391",
+      "title": "Een huis vol",
+      "bytes": 598522,
+      "sha256": "561b9ada9a40858492017f3b19c019bc46df2918e8afca5a01d4c439d130c18e",
+      "source": "https://archive.org/download/covers_0013/covers_0013_10.zip"
+    },
+    {
+      "candidateId": "ol:OL2652815W",
+      "title": "Trauma en Herstel",
+      "bytes": 569680,
+      "sha256": "3b86a122003aca991e6d37ce32dbe94ddacfd3b6c8f9fca215b79e1c960e3a0e",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:5888",
+      "title": "Het witte pad",
+      "bytes": 562309,
+      "sha256": "0da5efddb81d1173311b88c6f98da7e08fe50dd8c0423a708a5f849c9940df4a",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "work:6168",
+      "title": "Aan het einde van de wereld",
+      "bytes": 559672,
+      "sha256": "f3f9bd0f681c65c76a1401cba4c273b48aa54b5ef939f98f39f5ecd81819790b",
+      "source": "https://archive.org/download/covers_0010/covers_0010_97.zip"
+    },
+    {
+      "candidateId": "work:2980",
+      "title": "Het uur van de zonde",
+      "bytes": 555983,
+      "sha256": "071e907b9b8d037c90b5d09eb1cd145d4db93e18ac1263dff43a615de237ba0c",
+      "source": "https://archive.org/download/covers_0012/covers_0012_14.zip"
+    },
+    {
+      "candidateId": "work:1485",
+      "title": "Het Kwade Uur",
+      "bytes": 532596,
+      "sha256": "73da1bd5f68107d8df92f9e3d5181e494c74c2f8709233db951e432ace879817",
+      "source": "https://archive.org/download/covers_0013/covers_0013_05.zip"
+    },
+    {
+      "candidateId": "work:1551",
+      "title": "Hoe overleef ik alles wat ik niemand vertel?",
+      "bytes": 517658,
+      "sha256": "9d54afb205acc1c19c1c2181a8e83c4d95273cfc439d23d1d2489ef27e0331f4",
+      "source": "https://archive.org/download/covers_0014/covers_0014_53.zip"
+    },
+    {
+      "candidateId": "work:3268",
+      "title": "De noodzaak",
+      "bytes": 510939,
+      "sha256": "92457148f556b00958aff73fa1ef791d24f9e71f036e0f41a53d8f3c25a59abe",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "ol:OL23233100W",
+      "title": "Leuk zeg doei",
+      "bytes": 496025,
+      "sha256": "ad7728ad84d6565b5adcb50bed40aa3ef1369b073b7fc288ee79f30a33f5d5dc",
+      "source": "https://archive.org/download/covers_0012/covers_0012_34.zip"
+    },
+    {
+      "candidateId": "work:227",
+      "title": "Dodelijk dilemma",
+      "bytes": 487996,
+      "sha256": "ffed5234554ada12d077354e3b5dfbf906cf820bab01591f0acc40a38ae335a2",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:3299",
+      "title": "Duma",
+      "bytes": 483551,
+      "sha256": "ffa931fe2d0b7ce08c2f0a8eba7a9afe1c1f48ef617b9cfcb09f0fd6d8adce64",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:5010",
+      "title": "Vermist",
+      "bytes": 455016,
+      "sha256": "e36fa4364b61c8cd42bdaaacfff1678c9f6328df7dd68708afea0fa2d8ee3268",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:3456",
+      "title": "Houvast",
+      "bytes": 411812,
+      "sha256": "4191821885a7eaf25481ac88dae785d654e9196233b074b165bb5e86e9ea01fb",
+      "source": "https://archive.org/download/covers_0010/covers_0010_57.zip"
+    },
+    {
+      "candidateId": "ol:OL267613W",
+      "title": "Asterix en de Noormannen",
+      "bytes": 361726,
+      "sha256": "6b93a638bb03dd64c1d75a21f9668e2cba3d6056a67e612f73ebfbeb768d97f3",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "ol:OL267633W",
+      "title": "Asterix en de Gothen",
+      "bytes": 346498,
+      "sha256": "ab0d12f10fcbceac3f512a2a433dd8ae9872ff19f9be5aef1aa6b47d606cfb28",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "work:3325",
+      "title": "Het geheim van de Buick",
+      "bytes": 327573,
+      "sha256": "986ee7c998d2586774e09cda02e0d820d2c79a6ef8add9b582be72101e49ecfb",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:300",
+      "title": "4 Seizoenen",
+      "bytes": 313815,
+      "sha256": "476dbf3adb5a88a93c9645be13d5ec301b2d3d4c7260cd14e403837da32a6101",
+      "source": "https://archive.org/download/covers_0013/covers_0013_39.zip"
+    },
+    {
+      "candidateId": "ol:OL267636W",
+      "title": "Asterix en het 1ste Legioen",
+      "bytes": 295013,
+      "sha256": "c2cdfc47c73892a2a8226b4814c1108ba59c6865be50868bce3a3cea6ddbac72",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "ol:OL5731542W",
+      "title": "Een halve gele zon",
+      "bytes": 289625,
+      "sha256": "d0241560daa2b2045665647ada3ddd0b593c712445c360cfcf4fdc15a7a6fc47",
+      "source": "https://archive.org/download/covers_0008/covers_0008_08.zip"
+    },
+    {
+      "candidateId": "work:4176",
+      "title": "Vogels zonder vleugels",
+      "bytes": 288823,
+      "sha256": "1f7161cbbde833eeaecfb3513794fc1ed6d009396baecdc307653845310962fd",
+      "source": "https://archive.org/download/covers_0012/covers_0012_06.zip"
+    },
+    {
+      "candidateId": "ol:OL267635W",
+      "title": "Asterix en de Lauwerkrans van Caesar",
+      "bytes": 273485,
+      "sha256": "162b82af22b26caa7c71975db32e49f66aedc6ebd7986457f9f36f731a5137df",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "work:5042",
+      "title": "De vlucht van de nachtraven",
+      "bytes": 264456,
+      "sha256": "3aec906044adc6142583a32998b65b3b5da9fe71303feaac2f071e7c7805b4bd",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:6138",
+      "title": "Toevluchtsoord",
+      "bytes": 261380,
+      "sha256": "0623e8aa3ec5945276c94d8d4639af12fe5f2136a43dc83021ac6c4a1f4b36e4",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:2651",
+      "title": "Het oneindige verhaal",
+      "bytes": 260696,
+      "sha256": "003b86dbbaab7b84466abf7ce01eb3e5bd54265f88ef0181cde1f5270f38c7ba",
+      "source": "https://archive.org/download/covers_0009/covers_0009_27.zip"
+    },
+    {
+      "candidateId": "work:1046",
+      "title": "Tirza",
+      "bytes": 245462,
+      "sha256": "a592f3dc56fc0efca937da33937061e0a7e85cc50231f5975fd5398c56a3bae7",
+      "source": "https://archive.org/download/covers_0010/covers_0010_52.zip"
+    },
+    {
+      "candidateId": "ol:OL16796166W",
+      "title": "Een goede raad",
+      "bytes": 234570,
+      "sha256": "1c8bf7fd8c65e6d95c754a2191fed5407694ea88038f87e6d7fbbd2ee1d0f91b",
+      "source": "https://archive.org/download/covers_0010/covers_0010_31.zip"
+    },
+    {
+      "candidateId": "work:681",
+      "title": "Nooit meer",
+      "bytes": 232919,
+      "sha256": "ca3291edfac4ece46ed07984ea6154695810d2b5780cbe34cb2816fa0eab1029",
+      "source": "https://archive.org/download/covers_0012/covers_0012_91.zip"
+    },
+    {
+      "candidateId": "ol:OL21680947W",
+      "title": "Het ministerie voor de toekomst",
+      "bytes": 232022,
+      "sha256": "d76e75de866f42f176eb851936208fcc52d0377ca39bb43121e371ee2e428b5b",
+      "source": "https://archive.org/download/covers_0014/covers_0014_58.zip"
+    },
+    {
+      "candidateId": "work:608",
+      "title": "De tunnel",
+      "bytes": 205658,
+      "sha256": "6bf4cd0b4b7f4bc1d7a6d4eaa611cf732e4d64e9c5d28cbf2eaa50c7dde9cf32",
+      "source": "https://archive.org/download/covers_0012/covers_0012_39.zip"
+    },
+    {
+      "candidateId": "ol:OL1932332W",
+      "title": "De statusplaneet",
+      "bytes": 201965,
+      "sha256": "ee08ef1cfcaeb102aef0a701e261e13a47c8c86007b7f4e9dfaa686f1f961dec",
+      "source": "https://archive.org/download/covers_0012/covers_0012_14.zip"
+    },
+    {
+      "candidateId": "ol:OL3899229W",
+      "title": "De man die even wilde afrekenen",
+      "bytes": 197508,
+      "sha256": "2790feb2284079317218fe012f921a87e7ffb16e9fe9b370870aeb9350016562",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "work:5056",
+      "title": "Rumo & de wonderen in het donker",
+      "bytes": 194240,
+      "sha256": "1035d48e970afd2f3a011ed6d55cf5fd5d0bebea363af34b4e5b5ac22b60f4d0",
+      "source": "https://archive.org/download/covers_0012/covers_0012_94.zip"
+    },
+    {
+      "candidateId": "work:2973",
+      "title": "Ruby",
+      "bytes": 191659,
+      "sha256": "bcbd64c96ecd39a3a8080c654b105c9caaa89837aa0c4d36a12ee044b7e4589a",
+      "source": "https://archive.org/download/covers_0012/covers_0012_37.zip"
+    },
+    {
+      "candidateId": "work:176",
+      "title": "Vlucht naar de top",
+      "bytes": 191563,
+      "sha256": "d2a52a7ced7f9cfa35be21d83bc4d7bff0090fc7b172fd26646cc7b6823ea83c",
+      "source": "https://archive.org/download/covers_0012/covers_0012_01.zip"
+    },
+    {
+      "candidateId": "ol:OL3899216W",
+      "title": "De man die in rook opging",
+      "bytes": 182821,
+      "sha256": "c8c2b01617721bd7cc9bb185bb85222b4ee80e01d91e01ad294bb0cbc18e853d",
+      "source": "https://archive.org/download/covers_0014/covers_0014_39.zip"
+    },
+    {
+      "candidateId": "ol:OL3899219W",
+      "title": "De lachende politieman",
+      "bytes": 182692,
+      "sha256": "76fa5d9aa67604ec4d375e3982a99fd5b2601e3eee3d6c3e0f48a08ae78631df",
+      "source": "https://archive.org/download/covers_0014/covers_0014_40.zip"
+    },
+    {
+      "candidateId": "ol:OL19749410W",
+      "title": "De spion en de verrader",
+      "bytes": 160248,
+      "sha256": "4f967f37adedf204c6a8bccc58fea133cf986a28def82fb21fb5c28d83fd2e39",
+      "source": "https://archive.org/download/covers_0010/covers_0010_52.zip"
+    },
+    {
+      "candidateId": "work:3285",
+      "title": "Kinderen van de tijd",
+      "bytes": 155499,
+      "sha256": "421a376d97f65ee9e09312bc2f1b79e9fa5b63806220ad12dfd1df9fbad3d427",
+      "source": "https://archive.org/download/covers_0014/covers_0014_55.zip"
+    },
+    {
+      "candidateId": "work:2654",
+      "title": "Als er Doornen zijn",
+      "bytes": 146992,
+      "sha256": "da3033d146ea94a61bfbad180ede6c3ffbb42a55340ff801ec96fbc03300a469",
+      "source": "https://archive.org/download/covers_0009/covers_0009_35.zip"
+    },
+    {
+      "candidateId": "work:3113",
+      "title": "Moordenaar zonder gezicht",
+      "bytes": 139897,
+      "sha256": "ab8a792ee9479c703e6a17a40bfa0134608457b0a5e0529bf468dac0d369537c",
+      "source": "https://archive.org/download/covers_0012/covers_0012_03.zip"
+    },
+    {
+      "candidateId": "ol:OL49488W",
+      "title": "Ender's Game",
+      "bytes": 133257,
+      "sha256": "427e1911bfa7f06bdfd577d443719975836f187db6fe63c99e241f7b33f5d07b",
+      "source": "https://archive.org/download/covers_0008/covers_0008_18.zip"
+    },
+    {
+      "candidateId": "ol:OL3899217W",
+      "title": "De man op het balkon",
+      "bytes": 132617,
+      "sha256": "b2d2a12d4fcb78c97f02a45097d50c62c62b3d3cb1472fa025a380fb9bc6ba7a",
+      "source": "https://archive.org/download/covers_0014/covers_0014_39.zip"
+    },
+    {
+      "candidateId": "ol:OL16028342W",
+      "title": "De Heksen van Karres",
+      "bytes": 130939,
+      "sha256": "bf1a249237117846f55cd1914589bfd9518cb36d41e168de3a11efb0577fcffb",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "work:5183",
+      "title": "Frida Kahlo",
+      "bytes": 119542,
+      "sha256": "7967e446551d9d2768a228f9e4c9b2b6bb80db5bf8e982c2da8fbfa75e8fa5db",
+      "source": "https://archive.org/download/covers_0009/covers_0009_24.zip"
+    },
+    {
+      "candidateId": "work:3449",
+      "title": "De 13 ½ levens van kap’tein Blauwbeer",
+      "bytes": 107189,
+      "sha256": "955778e2a70d278468779dc41eda33c9b2b4a2dbe93606d5428785e1a21c1667",
+      "source": "https://archive.org/download/covers_0012/covers_0012_94.zip"
+    },
+    {
+      "candidateId": "ol:OL857601W",
+      "title": "De oorlog van het einde van de wereld",
+      "bytes": 98363,
+      "sha256": "00fd4721e483d1837baba4a63730849df7165aea53cc8eb4af4e2aa6d26848c6",
+      "source": "https://archive.org/download/covers_0012/covers_0012_51.zip"
+    },
+    {
+      "candidateId": "work:1414",
+      "title": "Tante Julia en meneer de schrijver",
+      "bytes": 92404,
+      "sha256": "a661c5015541daa7083c6e584ae982ac9737b5b7f803e11a9b3766f02f837a24",
+      "source": "https://archive.org/download/covers_0012/covers_0012_53.zip"
+    },
+    {
+      "candidateId": "work:5860",
+      "title": "De duistere kant van de liefde",
+      "bytes": 89342,
+      "sha256": "3a94f1ef2a069a89bae57f3587a083e0158fb356c3e0d2f5c9a619d75e3a59e2",
+      "source": "https://archive.org/download/covers_0013/covers_0013_02.zip"
+    },
+    {
+      "candidateId": "work:395",
+      "title": "Heer van de vliegen",
+      "bytes": 87742,
+      "sha256": "9c41f297250635cb80664f12406fccd6f77251abb32bfbfba1fdc5730d9bfa08",
+      "source": "https://archive.org/download/covers_0010/covers_0010_32.zip"
+    },
+    {
+      "candidateId": "ol:OL22755879W",
+      "title": "Met de kennis van toen",
+      "bytes": 80655,
+      "sha256": "4744b38ef03ea365e0bfdeb5eaa1b7b11028261837b17ec9e0767ca02bd75f5b",
+      "source": "https://archive.org/download/covers_0012/covers_0012_61.zip"
+    },
+    {
+      "candidateId": "ol:OL2746372W",
+      "title": "De mammoetjagers",
+      "bytes": 75810,
+      "sha256": "b6f7e8330af1fb0d06a14357a6a6ae6bf626565c1c4e8f849535fd312ceefacf",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "work:282",
+      "title": "De mistmonsters",
+      "bytes": 74653,
+      "sha256": "33920e87c8dc824784d96a2e18a13d7827a777d4fc043bc44f03c99b984deef9",
+      "source": "https://archive.org/download/covers_0013/covers_0013_01.zip"
+    },
+    {
+      "candidateId": "ol:OL19718480W",
+      "title": "Onhoudbaar",
+      "bytes": 65728,
+      "sha256": "1329ace3849f961a684bab87a17835128815304865173c9c249b7b8f33af7284",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "ol:OL2271626W",
+      "title": "Momo en de tijdspaarders",
+      "bytes": 64407,
+      "sha256": "b953606182c994e16e2c2d032082e05babf030284a74ce53865f9f75b6a54f14",
+      "source": "https://archive.org/download/covers_0012/covers_0012_50.zip"
+    },
+    {
+      "candidateId": "ol:OL2746368W",
+      "title": "De vallei van de paarden",
+      "bytes": 63104,
+      "sha256": "851936ff1734c18e7ebdc0c91230ba7e40df37a94324ea9c5835b65bd180f93e",
+      "source": "https://archive.org/download/covers_0012/covers_0012_52.zip"
+    },
+    {
+      "candidateId": "ol:OL17634924W",
+      "title": "De hamer van Thor",
+      "bytes": 62096,
+      "sha256": "78b8a0f737a84a4409477f1b1e7e712118c3f2418f95c59b6296105b96f3ba8a",
+      "source": "https://archive.org/download/covers_0008/covers_0008_73.zip"
+    },
+    {
+      "candidateId": "work:5033",
+      "title": "Het Laatste Zwijgen",
+      "bytes": 60075,
+      "sha256": "44f3ebd8204bfba3280de2a045ecdbeb7cf13d7b5ac73f7d7722e53bfa38672a",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "work:2386",
+      "title": "Het lichaam",
+      "bytes": 59708,
+      "sha256": "004ee3bac5fb6f3a2a43645fc8fd7b12be7fdeb11315088ad7dcc020bc71f3b3",
+      "source": "https://archive.org/download/covers_0014/covers_0014_55.zip"
+    },
+    {
+      "candidateId": "work:5857",
+      "title": "1 Fifth Avenue",
+      "bytes": 58214,
+      "sha256": "720d553940eac3aaba9abda7b97080b87eb4671009bd23cc403f0b9b812f0bd2",
+      "source": "https://archive.org/download/covers_0014/covers_0014_43.zip"
+    },
+    {
+      "candidateId": "work:6346",
+      "title": "Het Schip der Doden",
+      "bytes": 56096,
+      "sha256": "02a4b179fd4bf8bb546f1be080a8287f3fba0faa9477c9cdad6d0261950ec5ac",
+      "source": "https://archive.org/download/covers_0008/covers_0008_73.zip"
+    },
+    {
+      "candidateId": "work:3376",
+      "title": "Een Hoed Van Lucht",
+      "bytes": 55323,
+      "sha256": "e53a05941868259607f0c966f295182aa9281ec8719112485346f9ae3f2e9121",
+      "source": "https://archive.org/download/covers_0014/covers_0014_64.zip"
+    },
+    {
+      "candidateId": "work:1874",
+      "title": "Wij waren, ik ben : weg uit Ruinerwold",
+      "bytes": 55038,
+      "sha256": "b5950f13812a9720eab15df3585365a1d8245e27b784628ab2e274acc570b429",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "ol:OL20244922W",
+      "title": "Aan open zee",
+      "bytes": 54393,
+      "sha256": "e6116fafcc9a24d34e25cb719002df8c6bfacbbbf3cffe335533b22d6f0c0abe",
+      "source": "https://archive.org/download/covers_0008/covers_0008_90.zip"
+    },
+    {
+      "candidateId": "work:498",
+      "title": "Flutvakantie",
+      "bytes": 53442,
+      "sha256": "ca460165a9abc344d1f9c2a3ae6c1c1739993f30f3059aa2ac2922d953f4d376",
+      "source": "https://archive.org/download/covers_0008/covers_0008_95.zip"
+    },
+    {
+      "candidateId": "work:3413",
+      "title": "Gegrepen",
+      "bytes": 53320,
+      "sha256": "aff7dca97455c2d98bf929c382d7cc7f12bde6ced5f9df6b2ef230ca12cdf3d1",
+      "source": "https://archive.org/download/covers_0012/covers_0012_88.zip"
+    },
+    {
+      "candidateId": "ol:OL20934335W",
+      "title": "14 juli",
+      "bytes": 52934,
+      "sha256": "68970eb4c8a57baae08318230745fd0417f450dd36408768124d01c44ec61f19",
+      "source": "https://archive.org/download/covers_0013/covers_0013_21.zip"
+    },
+    {
+      "candidateId": "ol:OL27203W",
+      "title": "De vier inzichten",
+      "bytes": 52140,
+      "sha256": "b5545acbfcea0b595ab15544c749560116d234641ef04ddf80c26780cc2a8259",
+      "source": "https://archive.org/download/covers_0013/covers_0013_76.zip"
+    },
+    {
+      "candidateId": "work:3310",
+      "title": "In ongenade",
+      "bytes": 51691,
+      "sha256": "e98d9632ef4a6bb1a621f5b1f8738aac561f6483b5c26ce4b834efabc516cf8d",
+      "source": "https://archive.org/download/covers_0012/covers_0012_86.zip"
+    },
+    {
+      "candidateId": "work:3562",
+      "title": "Levenslijn",
+      "bytes": 51322,
+      "sha256": "ed3b75aeccfa839bb1793dc3bbb23baf9d9b316572365d5dd371e31008cf2fdf",
+      "source": "https://archive.org/download/covers_0013/covers_0013_61.zip"
+    },
+    {
+      "candidateId": "ol:OL1345101W",
+      "title": "Shosha",
+      "bytes": 51300,
+      "sha256": "1d400f9cad82796d9411143705decbbf8a355facf8b04f8ed6cffc0e14eb2067",
+      "source": "https://archive.org/download/covers_0012/covers_0012_44.zip"
+    },
+    {
+      "candidateId": "ol:OL33390812W",
+      "title": "In het zwart van de spiegel",
+      "bytes": 50800,
+      "sha256": "e943aa852eb65512fd1cf325e622b95e5d58086a5600621c5da2fef26e4cca69",
+      "source": "https://archive.org/download/covers_0013/covers_0013_12.zip"
+    },
+    {
+      "candidateId": "work:4958",
+      "title": "Over en Sluiten",
+      "bytes": 49797,
+      "sha256": "43da27dd8bb40ef41dc407501e623503105fd65b7d27ee548a21cd0311afe460",
+      "source": "https://archive.org/download/covers_0012/covers_0012_00.zip"
+    },
+    {
+      "candidateId": "work:3415",
+      "title": "Aru Shah en het einde van de tijd",
+      "bytes": 49690,
+      "sha256": "802b10dbf6aeb4580c1ccdb1b9776fc3b0eb3334cb933969eba8aa4505e58141",
+      "source": "https://archive.org/download/covers_0008/covers_0008_73.zip"
+    },
+    {
+      "candidateId": "work:5964",
+      "title": "Het Messias-mysterie",
+      "bytes": 48999,
+      "sha256": "3df37f3403b8bac7afd1bbf15155baf79034f99f4096cd124f96d73a740f1fc5",
+      "source": "https://archive.org/download/covers_0012/covers_0012_91.zip"
+    },
+    {
+      "candidateId": "work:5180",
+      "title": "De jongeman",
+      "bytes": 48687,
+      "sha256": "408c91ff91be5bda6cbec6f06ea1bef985e0c94cd3c228c4f6cb79b26a5d7d26",
+      "source": "https://archive.org/download/covers_0013/covers_0013_44.zip"
+    },
+    {
+      "candidateId": "work:3433",
+      "title": "Autoriteit",
+      "bytes": 48269,
+      "sha256": "94be631023a2a7e48d899151dec069ebc4ccfeff39fb5c1d0ec407a5f25277b6",
+      "source": "https://archive.org/download/covers_0013/covers_0013_94.zip"
+    },
+    {
+      "candidateId": "work:2650",
+      "title": "De tombe van de tiran",
+      "bytes": 48191,
+      "sha256": "38a8ecbb951c4bda37d25f933c25ca323a18b39c8cd8ee934843d2f26cb68bda",
+      "source": "https://archive.org/download/covers_0013/covers_0013_20.zip"
+    },
+    {
+      "candidateId": "work:6118",
+      "title": "De triomf van de dwergen",
+      "bytes": 46639,
+      "sha256": "5313d78f1f4b151de1404e35bdadb352c4184047f78487cca3bbf359e1c4401b",
+      "source": "https://archive.org/download/covers_0008/covers_0008_75.zip"
+    },
+    {
+      "candidateId": "work:6052",
+      "title": "Nachtwerk",
+      "bytes": 46019,
+      "sha256": "bc41cf70afaeb0432828ec1202f1878b4fafec6f9646ef8d4d197d68645bfa86",
+      "source": "https://archive.org/download/covers_0012/covers_0012_54.zip"
+    },
+    {
+      "candidateId": "work:1629",
+      "title": "Kolja",
+      "bytes": 45580,
+      "sha256": "7fe36527e61e6e09d54f18dfea665fec34df1c6e74bd338cb5c19302079f850a",
+      "source": "https://archive.org/download/covers_0008/covers_0008_84.zip"
+    },
+    {
+      "candidateId": "ol:OL52936W",
+      "title": "De bezoeker",
+      "bytes": 44582,
+      "sha256": "228097d8c8d4dccc25a9dbde754060921e47c3d9be43685ef6583e8d39045a91",
+      "source": "https://archive.org/download/covers_0009/covers_0009_15.zip"
+    },
+    {
+      "candidateId": "ol:OL20787872W",
+      "title": "De wachtpost",
+      "bytes": 43918,
+      "sha256": "1028997c29a2e14451e220097e5b99e1850b535b4af1391d6b7a60888e7c9b17",
+      "source": "https://archive.org/download/covers_0014/covers_0014_42.zip"
+    },
+    {
+      "candidateId": "work:399",
+      "title": "In slavernij",
+      "bytes": 43669,
+      "sha256": "ff657f46927162eea1b371aa33589e558e357d3d244975f87742c3ea19f6c067",
+      "source": "https://archive.org/download/covers_0013/covers_0013_46.zip"
+    },
+    {
+      "candidateId": "ol:OL25346692W",
+      "title": "Jeugdzonde",
+      "bytes": 43511,
+      "sha256": "c131ae03057a15a72a4c46f862151355b2863db513294c6a02ee054aa31c3ff0",
+      "source": "https://archive.org/download/covers_0013/covers_0013_44.zip"
+    },
+    {
+      "candidateId": "work:1356",
+      "title": "De goede zoon",
+      "bytes": 43229,
+      "sha256": "36659e0e87a3f2f1a196484c5948ab6aec10d94aa0138cb6166228b4213511af",
+      "source": "https://archive.org/download/covers_0010/covers_0010_44.zip"
+    },
+    {
+      "candidateId": "ol:OL34311050W",
+      "title": "Niemand zeggen",
+      "bytes": 43131,
+      "sha256": "891cbe9961d5699a46a3f2ccbe53e1c469541d7fbe6a153b5d0a981c7d61fc42",
+      "source": "https://archive.org/download/covers_0013/covers_0013_18.zip"
+    },
+    {
+      "candidateId": "work:1398",
+      "title": "Zwarte schuur",
+      "bytes": 42549,
+      "sha256": "fdfeb788cfc00a31d2ce7afac9d4fe87c965f2b5d7f5b3d0f7fe33c6f0f82f43",
+      "source": "https://archive.org/download/covers_0013/covers_0013_74.zip"
+    },
+    {
+      "candidateId": "work:562",
+      "title": "Belofte maakt schuld",
+      "bytes": 42536,
+      "sha256": "0e3ab4232eb534c59a3f965e46cdb7a6d6bf2f6d9bec4d8602d1c8d33054bdaa",
+      "source": "https://archive.org/download/covers_0013/covers_0013_53.zip"
+    },
+    {
+      "candidateId": "work:5000",
+      "title": "De boom der kennis",
+      "bytes": 41932,
+      "sha256": "a7ff58550628470924fdc5821f4d6a0385727fd9e281b547936d9844c3e30514",
+      "source": "https://archive.org/download/covers_0014/covers_0014_58.zip"
+    },
+    {
+      "candidateId": "work:5190",
+      "title": "Een tijd voor empathie",
+      "bytes": 40815,
+      "sha256": "5ea5df7bed464755e76e89b5b6658280aca7202debe0a803a18b06aad516f849",
+      "source": "https://archive.org/download/covers_0008/covers_0008_06.zip"
+    },
+    {
+      "candidateId": "work:1585",
+      "title": "Het labyrint der geesten",
+      "bytes": 40779,
+      "sha256": "37547168660731405d216664e06044fd2c28c0d2aa4852f667d1327a0507b346",
+      "source": "https://archive.org/download/covers_0013/covers_0013_12.zip"
+    },
+    {
+      "candidateId": "work:2042",
+      "title": "Butcher's Crossing",
+      "bytes": 40627,
+      "sha256": "daec4094a42aca7b825b5ea04661f99474a0c0d93835879f9ef348fdcf31a08a",
+      "source": "https://archive.org/download/covers_0013/covers_0013_61.zip"
+    },
+    {
+      "candidateId": "work:816",
+      "title": "De antwoorden op de grote vragen",
+      "bytes": 40440,
+      "sha256": "7fa0c5166659b6afa751df326a0d3577ddea98c56d86ea8a6e324b3eae7f5515",
+      "source": "https://archive.org/download/covers_0013/covers_0013_18.zip"
+    },
+    {
+      "candidateId": "work:3535",
+      "title": "Het beest van Buckingham Palace",
+      "bytes": 40203,
+      "sha256": "e05da75b509789000eab0f9059144851a8f604dd8b73eb1d62efbe57b6a3c62a",
+      "source": "https://archive.org/download/covers_0013/covers_0013_64.zip"
+    },
+    {
+      "candidateId": "work:264",
+      "title": "Artemis Fowl",
+      "bytes": 39858,
+      "sha256": "6f540347be8fc6762c33b8483dc7ac1c788e997467157cc5563ea3c5fc46024e",
+      "source": "https://archive.org/download/covers_0008/covers_0008_73.zip"
+    },
+    {
+      "candidateId": "ol:OL20840329W",
+      "title": "Boyfriend material",
+      "bytes": 39156,
+      "sha256": "30b852c4462a427aebc020e821680dfeaa116d89ea3988386f6ea893e17371f3",
+      "source": "https://archive.org/download/covers_0013/covers_0013_75.zip"
+    },
+    {
+      "candidateId": "work:6191",
+      "title": "De ijsmakers",
+      "bytes": 38631,
+      "sha256": "8899cbd4be7bdbdf40a877759a252de203264395a1643138418847df40fb906f",
+      "source": "https://archive.org/download/covers_0008/covers_0008_96.zip"
+    },
+    {
+      "candidateId": "work:3094",
+      "title": "De Fluisterman",
+      "bytes": 38168,
+      "sha256": "92a5cac5ca2232ea764dc769008775a5b902fbeaaa335bf663b00f5916e9dfac",
+      "source": "https://archive.org/download/covers_0013/covers_0013_78.zip"
+    },
+    {
+      "candidateId": "work:3335",
+      "title": "Sfeer",
+      "bytes": 37536,
+      "sha256": "eaa7b9ec3f4fd637f62f24b9b63530bba323d3697262dd34faef20847a4b5ff6",
+      "source": "https://archive.org/download/covers_0012/covers_0012_88.zip"
+    },
+    {
+      "candidateId": "ol:OL17640142W",
+      "title": "De riten van het water",
+      "bytes": 37057,
+      "sha256": "7e04b140da2abab9a2346a127de1ce9cfd5cbf67d6354648997fb79e40747cd0",
+      "source": "https://archive.org/download/covers_0013/covers_0013_01.zip"
+    },
+    {
+      "candidateId": "ol:OL15547922W",
+      "title": "De mysterieuze zolder",
+      "bytes": 36587,
+      "sha256": "0e951d67e1e7ebd9b179d1ccd7070fb4a1c3d7f015b4c74103449cfc12c331b9",
+      "source": "https://archive.org/download/covers_0008/covers_0008_45.zip"
+    },
+    {
+      "candidateId": "work:3281",
+      "title": "Lisey's verhaal",
+      "bytes": 36585,
+      "sha256": "8d69f74ddc673db8acef8e58eeb1f747ef17f9a50d557948ec5eea4684284591",
+      "source": "https://archive.org/download/covers_0013/covers_0013_67.zip"
+    },
+    {
+      "candidateId": "ol:OL18020257W",
+      "title": "Verloren zoon",
+      "bytes": 35682,
+      "sha256": "5238f823dc8b8ddb52d1d950b7d853fec48ec6b89900abf92bb57cc313960925",
+      "source": "https://archive.org/download/covers_0009/covers_0009_86.zip"
+    },
+    {
+      "candidateId": "work:2665",
+      "title": "De Eeuwige Code",
+      "bytes": 35465,
+      "sha256": "68fc8a333d06103df9ee2fb1e73b71f2a49c11f48686e48c5f97e16be4a4c4f1",
+      "source": "https://archive.org/download/covers_0008/covers_0008_73.zip"
+    },
+    {
+      "candidateId": "ol:OL716850W",
+      "title": "Gödel, Escher, Bach",
+      "bytes": 35183,
+      "sha256": "17cf89f3de76ec5f229d5b6d78c7e721238af2862862abd4ef73bdcce47204f7",
+      "source": "https://archive.org/download/covers_0013/covers_0013_12.zip"
+    },
+    {
+      "candidateId": "work:1619",
+      "title": "Eindstation Auschwitz",
+      "bytes": 34305,
+      "sha256": "b70a4a064c52f230854fc63af4c5ab95988b0cd2041d435df06c37d360023fd4",
+      "source": "https://archive.org/download/covers_0013/covers_0013_18.zip"
+    },
+    {
+      "candidateId": "work:3418",
+      "title": "Geeltands geheim",
+      "bytes": 34055,
+      "sha256": "1f0e8361bdd1cbe1895bba64ec3e29dcf89d49514ade0bc0ce709b98e45f6bf0",
+      "source": "https://archive.org/download/covers_0013/covers_0013_86.zip"
+    },
+    {
+      "candidateId": "work:3417",
+      "title": "De jaren",
+      "bytes": 33917,
+      "sha256": "cd76ee98dbdefe7040094fc95346f3d16e09841f011b3a799a21adc69fbe6653",
+      "source": "https://archive.org/download/covers_0013/covers_0013_76.zip"
+    },
+    {
+      "candidateId": "work:3554",
+      "title": "Wild",
+      "bytes": 33508,
+      "sha256": "1c2ca1dcdce0d5c4508b86f6b5fa98fad5f19d95b0548d16a9229ef81baf9a78",
+      "source": "https://archive.org/download/covers_0013/covers_0013_18.zip"
+    },
+    {
+      "candidateId": "work:6022",
+      "title": "Tonje en de geheime brief",
+      "bytes": 33463,
+      "sha256": "2166665a36c697c17223a8506f9ce2f08cb5b333178134c57908327a6c278090",
+      "source": "https://archive.org/download/covers_0013/covers_0013_64.zip"
+    },
+    {
+      "candidateId": "work:5785",
+      "title": "Achter de rokende bergen",
+      "bytes": 33318,
+      "sha256": "72882e0aff5d7177a9cb4f6173b194634463479fca5f1e73e928b7cd9e84f6f6",
+      "source": "https://archive.org/download/covers_0013/covers_0013_61.zip"
+    },
+    {
+      "candidateId": "ol:OL19491609W",
+      "title": "Het derde koninkrijk",
+      "bytes": 32201,
+      "sha256": "e376319a4be3600719cfd2927b10c90b7e4ae96f7bf0e511d2d039d2c8397495",
+      "source": "https://archive.org/download/covers_0010/covers_0010_14.zip"
+    },
+    {
+      "candidateId": "work:3383",
+      "title": "Vuursters missie",
+      "bytes": 31914,
+      "sha256": "d5c7950c7323e29dcc9c37a06b5a0767d9bdd63ac645c8d4a10c7aa43d9346f8",
+      "source": "https://archive.org/download/covers_0013/covers_0013_77.zip"
+    },
+    {
+      "candidateId": "work:629",
+      "title": "In naam van de vader",
+      "bytes": 31777,
+      "sha256": "8ca226f927c483bcaf0157e52f72a26de4fdc0a627c8c7b5771394d026a322fc",
+      "source": "https://archive.org/download/covers_0013/covers_0013_53.zip"
+    },
+    {
+      "candidateId": "work:5005",
+      "title": "Verbrande schaduwen",
+      "bytes": 31731,
+      "sha256": "66a55e58e60de5d8cd20fe52d8d0eefd2fdb2f98babc840de0aa2121f0b04158",
+      "source": "https://archive.org/download/covers_0013/covers_0013_78.zip"
+    },
+    {
+      "candidateId": "work:4928",
+      "title": "Tegenwerking",
+      "bytes": 31494,
+      "sha256": "f31161f0a1a2f5e1b2cdad1d1f77a460d2948693bbe9620825aad091a52d388c",
+      "source": "https://archive.org/download/covers_0013/covers_0013_44.zip"
+    },
+    {
+      "candidateId": "ol:OL15399488W",
+      "title": "Wassende maan",
+      "bytes": 31337,
+      "sha256": "4d2f04e398057747bf4e71bf58cf73a15b1fb9139aa57ecb728fccb0699213af",
+      "source": "https://archive.org/download/covers_0013/covers_0013_64.zip"
+    },
+    {
+      "candidateId": "work:1671",
+      "title": "Alle tijd",
+      "bytes": 31308,
+      "sha256": "aadab6371bb12de31d9594db84132249858c61ae71420048dfebda8a938e894e",
+      "source": "https://archive.org/download/covers_0010/covers_0010_95.zip"
+    },
+    {
+      "candidateId": "work:3197",
+      "title": "Het oog van de lens",
+      "bytes": 30760,
+      "sha256": "4e04a1e8066444ee73e5531059568f47f8c8fecb070ab7402bc4ed7e0a7929e6",
+      "source": "https://archive.org/download/covers_0013/covers_0013_71.zip"
+    },
+    {
+      "candidateId": "work:2644",
+      "title": "Jachtveld",
+      "bytes": 30033,
+      "sha256": "306366dd68a272d757ecd82dbb48a1fa6b1865c15e4a611906723c224cf52213",
+      "source": "https://archive.org/download/covers_0013/covers_0013_88.zip"
+    },
+    {
+      "candidateId": "work:811",
+      "title": "Het obstakel is de weg",
+      "bytes": 29768,
+      "sha256": "98645255b1130d65aa3d7b3f3005b870063dcb550717e0ab126179de28ee47b7",
+      "source": "https://archive.org/download/covers_0013/covers_0013_12.zip"
+    },
+    {
+      "candidateId": "work:6082",
+      "title": "Het keerpunt",
+      "bytes": 29739,
+      "sha256": "37cea4b305286096f2849fdd352d0b2651e387660a4d53599cb5b5d364eab337",
+      "source": "https://archive.org/download/covers_0014/covers_0014_62.zip"
+    },
+    {
+      "candidateId": "work:2981",
+      "title": "Tituba, de zwarte heks van Salem",
+      "bytes": 29466,
+      "sha256": "f4cc752adbf839ffb9d2b7f3d7a168ed0fe7cf79b1e2d25ed2066bbe41c7f718",
+      "source": "https://archive.org/download/covers_0013/covers_0013_66.zip"
+    },
+    {
+      "candidateId": "ol:OL30590560W",
+      "title": "Belgische republikeinen",
+      "bytes": 29038,
+      "sha256": "2593072a924506543af36f1216cbb13f8c7373c2bb66aea2af1504b903b8cd29",
+      "source": "https://archive.org/download/covers_0014/covers_0014_23.zip"
+    },
+    {
+      "candidateId": "ol:OL15895132W",
+      "title": "Raw food als levenskunst",
+      "bytes": 28824,
+      "sha256": "f009eca9a3f6cf586109aa4b01a5cbb0a62939c5b8ebbf12bb3a8dfff912d526",
+      "source": "https://archive.org/download/covers_0013/covers_0013_46.zip"
+    },
+    {
+      "candidateId": "work:2323",
+      "title": "Drift",
+      "bytes": 28150,
+      "sha256": "bddba3c33c0b83bf514a6925bdc13b0668cb0f4d31c0548c4af28d756a78e0fc",
+      "source": "https://archive.org/download/covers_0010/covers_0010_86.zip"
+    },
+    {
+      "candidateId": "work:557",
+      "title": "Het uur van de wolf",
+      "bytes": 27706,
+      "sha256": "7f19cb6f06f8221cdd64caaa7660791123b0a88c18a390690e690a17994cdef3",
+      "source": "https://archive.org/download/covers_0013/covers_0013_53.zip"
+    },
+    {
+      "candidateId": "ol:OL24326597W",
+      "title": "Welkom in het Rijk der zieken",
+      "bytes": 27494,
+      "sha256": "7f83735e03c220eb42e20b2cd00ee32f00fb17f7f6f44b6e11e612e89103df73",
+      "source": "https://archive.org/download/covers_0010/covers_0010_84.zip"
+    },
+    {
+      "candidateId": "work:3175",
+      "title": "Limonov",
+      "bytes": 25477,
+      "sha256": "2f214efa6f110fd594d223a2088f331f615b84204bcf73dd47ead3d684a39938",
+      "source": "https://archive.org/download/covers_0013/covers_0013_46.zip"
+    },
+    {
+      "candidateId": "work:2392",
+      "title": "Een korte geschiedenis van de tijd",
+      "bytes": 24940,
+      "sha256": "6b67ab28cca6b61f508370fb3aed90d20eac79da3f38ca31b3e6f7ca3c21631d",
+      "source": "https://archive.org/download/covers_0013/covers_0013_80.zip"
+    },
+    {
+      "candidateId": "ol:OL3899224W",
+      "title": "De vrouw in het Götakanaal",
+      "bytes": 24906,
+      "sha256": "bcde57e35216ea589ce428dea4f6cbe6ce284ef4e5a748cb90ffdde54f368c10",
+      "source": "https://archive.org/download/covers_0014/covers_0014_10.zip"
+    },
+    {
+      "candidateId": "work:2334",
+      "title": "Stern",
+      "bytes": 22116,
+      "sha256": "49f03828364ece0388547c138c9ccfe5d817278ca853df6bdb070df01df9536f",
+      "source": "https://archive.org/download/covers_0013/covers_0013_61.zip"
+    },
+    {
+      "candidateId": "ol:OL14873505W",
+      "title": "Elke dag is er een",
+      "bytes": 21963,
+      "sha256": "78f986df57c602a6cb4de03ffea082bfcf799690665938e7440f0c6cd668e0bb",
+      "source": "https://archive.org/download/covers_0013/covers_0013_57.zip"
+    },
+    {
+      "candidateId": "work:3465",
+      "title": "Ganzenmeisje",
+      "bytes": 21666,
+      "sha256": "c58bdc2646348d4f6d4bde63088c4fb0904bcef24885390072e22540f76221e3",
+      "source": "https://archive.org/download/covers_0014/covers_0014_53.zip"
+    },
+    {
+      "candidateId": "ol:OL84889W",
+      "title": "Inferno op zee",
+      "bytes": 21649,
+      "sha256": "2ab3370745135a8f2666b1c2fc7ecb5c25cdcaa7d51a71d44e2066d1c4fd58ac",
+      "source": "https://archive.org/download/covers_0008/covers_0008_76.zip"
+    },
+    {
+      "candidateId": "work:3672",
+      "title": "Sterfelijk zijn",
+      "bytes": 21328,
+      "sha256": "2396222bd85987aa3da0646ff665095aa423eecc7a57c663dd6edc3799143f89",
+      "source": "https://archive.org/download/covers_0008/covers_0008_17.zip"
+    },
+    {
+      "candidateId": "ol:OL20293310W",
+      "title": "De stilte van het licht",
+      "bytes": 21016,
+      "sha256": "9a05f4ba1d19cad789185d2713c5741980a02059bc930739224a7149734aebd4",
+      "source": "https://archive.org/download/covers_0008/covers_0008_95.zip"
+    },
+    {
+      "candidateId": "work:3436",
+      "title": "De stad en de honden",
+      "bytes": 20364,
+      "sha256": "350de512c0a0c40d9c2ed569e68e03f9214819ab2f53dbd82d70002878aa9c9a",
+      "source": "https://archive.org/download/covers_0012/covers_0012_52.zip"
+    },
+    {
+      "candidateId": "work:3171",
+      "title": "Geliefd",
+      "bytes": 20175,
+      "sha256": "8bd38529a6a7d4f5d58ae9d2573a97c022e7078515e2471baffaf631360d48b2",
+      "source": "https://archive.org/download/covers_0013/covers_0013_77.zip"
+    },
+    {
+      "candidateId": "ol:OL23557W",
+      "title": "Drama Stad",
+      "bytes": 19663,
+      "sha256": "dbbcc0612e93a9570cb77bd8924b34f0b67023b3eac82d3e0326b1dfe42aceb9",
+      "source": "https://archive.org/download/covers_0009/covers_0009_18.zip"
+    },
+    {
+      "candidateId": "ol:OL3899215W",
+      "title": "De brandweerauto die verdween",
+      "bytes": 19361,
+      "sha256": "c376f23bf67bbd5d8e0c62c7d0f4796e317a3a8d393bdb165d1208769f0be843",
+      "source": "https://archive.org/download/covers_0013/covers_0013_52.zip"
+    },
+    {
+      "candidateId": "work:2972",
+      "title": "Fataal Weekend",
+      "bytes": 17224,
+      "sha256": "a559448d6c9894e4fd1c8b5554b8c0d97257c879b18a443b31b9dfa0d1180f4f",
+      "source": "https://archive.org/download/covers_0013/covers_0013_73.zip"
+    },
+    {
+      "candidateId": "work:3420",
+      "title": "De roofbruid",
+      "bytes": 15812,
+      "sha256": "9eb4d4855ea2fe3b9d08f79a6aa78866c31d013f6cfa2046843ae5aeba8fa8a1",
+      "source": "https://archive.org/download/covers_0013/covers_0013_77.zip"
+    },
+    {
+      "candidateId": "work:5954",
+      "title": "De vlucht",
+      "bytes": 15414,
+      "sha256": "f16f31cb0ace82aebc6da8ac44f51e964180e3bc577a55419c236ef19ec32ca5",
+      "source": "https://archive.org/download/covers_0013/covers_0013_61.zip"
+    },
+    {
+      "candidateId": "ol:OL34858547W",
+      "title": "Het geuzenboek",
+      "bytes": 14374,
+      "sha256": "ad7b799921720e1fb264ab54eff2d5e6321fa6fc1e6c293b2b93421148cce116",
+      "source": "https://archive.org/download/covers_0013/covers_0013_64.zip"
+    },
+    {
+      "candidateId": "work:1044",
+      "title": "Peachez, een romance",
+      "bytes": 14354,
+      "sha256": "6ef7d999eaccf47c6e27472a6aab3ff56b6f342ee66782a96c79a090aa8670c0",
+      "source": "https://archive.org/download/covers_0008/covers_0008_86.zip"
+    },
+    {
+      "candidateId": "work:5055",
+      "title": "Het woord van de verteller",
+      "bytes": 13832,
+      "sha256": "900708ea4b57ddc3468d07921d9b22da2020627afcae0e6d5bc88e3eb0412bb3",
+      "source": "https://archive.org/download/covers_0012/covers_0012_55.zip"
+    },
+    {
+      "candidateId": "work:6012",
+      "title": "1979",
+      "bytes": 9852,
+      "sha256": "2741e5c8c02e90d02e6f4649d8d52014416badd54cfff1fd046c76dd8726d89e",
+      "source": "https://archive.org/download/covers_0013/covers_0013_26.zip"
+    },
+    {
+      "candidateId": "ol:OL20915078W",
+      "title": "Reiziger in de Chaos",
+      "bytes": 9049,
+      "sha256": "732d8a1845994c0f1231b57ad6d554d4c8f700be9d06ae6dacdce7ec791c2b84",
+      "source": "https://archive.org/download/covers_0010/covers_0010_28.zip"
+    },
+    {
+      "candidateId": "ol:OL33393100W",
+      "title": "Mijn strijd",
+      "bytes": 7852,
+      "sha256": "99801c6b042811c386b73065660a86526a9fe405ea2064d642e0cd5d8840b39f",
+      "source": "https://archive.org/download/covers_0013/covers_0013_12.zip"
+    },
+    {
+      "candidateId": "work:3332",
+      "title": "De voorlezer",
+      "bytes": 5674,
+      "sha256": "795ce20cea3127ba4d6ddd199a683c6c4ad70fc245342fd7cc376fb53e8970af",
+      "source": "https://archive.org/download/covers_0013/covers_0013_19.zip"
+    }
+  ],
+  "archivedAssetsOver300k": [
+    {
+      "candidateId": "work:2809",
+      "title": "De buitenstaander",
+      "bytes": 6630613,
+      "sha256": "fc1d98a8f6cf6b337f39b72688e00cff731573162b515dfa0a503f4971505df8",
+      "source": "https://archive.org/download/covers_0013/covers_0013_01.zip"
+    },
+    {
+      "candidateId": "ol:OL486654W",
+      "title": "De bewoonde wereld",
+      "bytes": 4260531,
+      "sha256": "abe5b52854e7df8360c5b7ef72f83adc07824670df768a5203751c08251686a4",
+      "source": "https://archive.org/download/covers_0013/covers_0013_02.zip"
+    },
+    {
+      "candidateId": "work:1346",
+      "title": "Stoner",
+      "bytes": 2612418,
+      "sha256": "b1173b466ee9d6078b8a2bfab2bab45a7711be54ffa85f9b7a1d2ecf2af1fe18",
+      "source": "https://archive.org/download/covers_0008/covers_0008_13.zip"
+    },
+    {
+      "candidateId": "work:4976",
+      "title": "De crash",
+      "bytes": 1281697,
+      "sha256": "e9fd7fec4c53e2d7c94d3f0370ca9399b9c893a9e0e08b128ecbce7891da0337",
+      "source": "https://archive.org/download/covers_0012/covers_0012_31.zip"
+    },
+    {
+      "candidateId": "ol:OL134888W",
+      "title": "Schaduwen in de tuin",
+      "bytes": 980753,
+      "sha256": "246903a68ba498900534781d93d734efb85554ed229af62e5c01e05ef6bca045",
+      "source": "https://archive.org/download/covers_0012/covers_0012_68.zip"
+    },
+    {
+      "candidateId": "ol:OL17485749W",
+      "title": "Duister oord",
+      "bytes": 869037,
+      "sha256": "bfe138d68fc9413b8b902bf695930fc76d6b75c537560c1e50b8d64ae3d45611",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "ol:OL19729677W",
+      "title": "Waarom ik niet meer met witte mensen over racisme praat",
+      "bytes": 725783,
+      "sha256": "281cd9a649e0f65e15a9d945a8a8e8fed5db35cffb87324b1158de8e13bfc9b2",
+      "source": "https://archive.org/download/covers_0010/covers_0010_47.zip"
+    },
+    {
+      "candidateId": "ol:OL16518W",
+      "title": "Eon",
+      "bytes": 714233,
+      "sha256": "938a669bc6aeef4b79c2ec4fb47644903559aa6d129ed53fa9b99d9eb5360437",
+      "source": "https://archive.org/download/covers_0014/covers_0014_41.zip"
+    },
+    {
+      "candidateId": "work:2175",
+      "title": "Hof van ijs en sterren",
+      "bytes": 659410,
+      "sha256": "f2d45278e7045e45208bae8b3c097717f2155d080438419ac235c9105c07b357",
+      "source": "https://archive.org/download/covers_0014/covers_0014_34.zip"
+    },
+    {
+      "candidateId": "work:1461",
+      "title": "Het Zoutpad",
+      "bytes": 624114,
+      "sha256": "c8c3fba14a538bb15323193667e5051e4e9c43496ad5bdfd7cb7b0551ffc6463",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "work:2391",
+      "title": "Een huis vol",
+      "bytes": 598522,
+      "sha256": "561b9ada9a40858492017f3b19c019bc46df2918e8afca5a01d4c439d130c18e",
+      "source": "https://archive.org/download/covers_0013/covers_0013_10.zip"
+    },
+    {
+      "candidateId": "ol:OL2652815W",
+      "title": "Trauma en Herstel",
+      "bytes": 569680,
+      "sha256": "3b86a122003aca991e6d37ce32dbe94ddacfd3b6c8f9fca215b79e1c960e3a0e",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:5888",
+      "title": "Het witte pad",
+      "bytes": 562309,
+      "sha256": "0da5efddb81d1173311b88c6f98da7e08fe50dd8c0423a708a5f849c9940df4a",
+      "source": "https://archive.org/download/covers_0012/covers_0012_66.zip"
+    },
+    {
+      "candidateId": "work:6168",
+      "title": "Aan het einde van de wereld",
+      "bytes": 559672,
+      "sha256": "f3f9bd0f681c65c76a1401cba4c273b48aa54b5ef939f98f39f5ecd81819790b",
+      "source": "https://archive.org/download/covers_0010/covers_0010_97.zip"
+    },
+    {
+      "candidateId": "work:2980",
+      "title": "Het uur van de zonde",
+      "bytes": 555983,
+      "sha256": "071e907b9b8d037c90b5d09eb1cd145d4db93e18ac1263dff43a615de237ba0c",
+      "source": "https://archive.org/download/covers_0012/covers_0012_14.zip"
+    },
+    {
+      "candidateId": "work:1485",
+      "title": "Het Kwade Uur",
+      "bytes": 532596,
+      "sha256": "73da1bd5f68107d8df92f9e3d5181e494c74c2f8709233db951e432ace879817",
+      "source": "https://archive.org/download/covers_0013/covers_0013_05.zip"
+    },
+    {
+      "candidateId": "work:1551",
+      "title": "Hoe overleef ik alles wat ik niemand vertel?",
+      "bytes": 517658,
+      "sha256": "9d54afb205acc1c19c1c2181a8e83c4d95273cfc439d23d1d2489ef27e0331f4",
+      "source": "https://archive.org/download/covers_0014/covers_0014_53.zip"
+    },
+    {
+      "candidateId": "work:3268",
+      "title": "De noodzaak",
+      "bytes": 510939,
+      "sha256": "92457148f556b00958aff73fa1ef791d24f9e71f036e0f41a53d8f3c25a59abe",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "ol:OL23233100W",
+      "title": "Leuk zeg doei",
+      "bytes": 496025,
+      "sha256": "ad7728ad84d6565b5adcb50bed40aa3ef1369b073b7fc288ee79f30a33f5d5dc",
+      "source": "https://archive.org/download/covers_0012/covers_0012_34.zip"
+    },
+    {
+      "candidateId": "work:227",
+      "title": "Dodelijk dilemma",
+      "bytes": 487996,
+      "sha256": "ffed5234554ada12d077354e3b5dfbf906cf820bab01591f0acc40a38ae335a2",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:3299",
+      "title": "Duma",
+      "bytes": 483551,
+      "sha256": "ffa931fe2d0b7ce08c2f0a8eba7a9afe1c1f48ef617b9cfcb09f0fd6d8adce64",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:5010",
+      "title": "Vermist",
+      "bytes": 455016,
+      "sha256": "e36fa4364b61c8cd42bdaaacfff1678c9f6328df7dd68708afea0fa2d8ee3268",
+      "source": "https://archive.org/download/covers_0012/covers_0012_15.zip"
+    },
+    {
+      "candidateId": "work:3456",
+      "title": "Houvast",
+      "bytes": 411812,
+      "sha256": "4191821885a7eaf25481ac88dae785d654e9196233b074b165bb5e86e9ea01fb",
+      "source": "https://archive.org/download/covers_0010/covers_0010_57.zip"
+    },
+    {
+      "candidateId": "ol:OL267613W",
+      "title": "Asterix en de Noormannen",
+      "bytes": 361726,
+      "sha256": "6b93a638bb03dd64c1d75a21f9668e2cba3d6056a67e612f73ebfbeb768d97f3",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "ol:OL267633W",
+      "title": "Asterix en de Gothen",
+      "bytes": 346498,
+      "sha256": "ab0d12f10fcbceac3f512a2a433dd8ae9872ff19f9be5aef1aa6b47d606cfb28",
+      "source": "https://archive.org/download/covers_0013/covers_0013_13.zip"
+    },
+    {
+      "candidateId": "work:3325",
+      "title": "Het geheim van de Buick",
+      "bytes": 327573,
+      "sha256": "986ee7c998d2586774e09cda02e0d820d2c79a6ef8add9b582be72101e49ecfb",
+      "source": "https://archive.org/download/covers_0014/covers_0014_65.zip"
+    },
+    {
+      "candidateId": "work:300",
+      "title": "4 Seizoenen",
+      "bytes": 313815,
+      "sha256": "476dbf3adb5a88a93c9645be13d5ec301b2d3d4c7260cd14e403837da32a6101",
+      "source": "https://archive.org/download/covers_0013/covers_0013_39.zip"
+    }
+  ],
+  "limitation": "Archived source asset sizes are not measured browser transfer sizes of current L/M endpoints. 300 kB is an investigation threshold, not automatic rejection. This release retains existing cover resolver and has no browser-paint or production speed claim."
+}

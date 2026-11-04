@@ -1,0 +1,42 @@
+{
+  "query": "select clock_timestamp() as checked_at,jsonb_object_agg(name,jsonb_build_object('count',n,'digest',digest)) as projection from(select 'works' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('author',a.name,'author_id',t.\"author_id\",'cover_id',t.\"cover_id\",'first_publish_year',t.\"first_publish_year\",'id',t.\"id\",'native_identity_key',t.\"native_identity_key\",'open_library_id',t.\"open_library_id\",'source_type',t.\"source_type\",'subtitle',t.\"subtitle\",'title',t.\"title\",'work_type',t.\"work_type\") as row from public.works t join public.authors a on a.id=t.author_id)p union all select 'editions' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('created_at',t.\"created_at\",'id',t.\"id\",'isbn_10',t.\"isbn_10\",'isbn_13',t.\"isbn_13\",'language',t.\"language\",'open_library_edition_id',t.\"open_library_edition_id\",'publisher',t.\"publisher\",'title',t.\"title\",'work_id',t.\"work_id\") as row from public.editions t)p union all select 'authors' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('id',t.\"id\",'name',t.\"name\",'open_library_id',t.\"open_library_id\") as row from public.authors t)p union all select 'metadata' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('bound_author_id',t.\"bound_author_id\",'bound_isbn13',t.\"bound_isbn13\",'bound_language',t.\"bound_language\",'bound_title',t.\"bound_title\",'card_cover_url',t.\"card_cover_url\",'cover_url',t.\"cover_url\",'edition_id',t.\"edition_id\",'evidence',t.\"evidence\",'evidence_url',t.\"evidence_url\",'format',t.\"format\",'review_batch',t.\"review_batch\",'review_status',t.\"review_status\",'reviewed_at',t.\"reviewed_at\",'work_id',t.\"work_id\") as row from public.catalog_edition_metadata t)p union all select 'descriptions' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('bound_author_id',t.\"bound_author_id\",'evidence',t.\"evidence\",'language',t.\"language\",'provenance',t.\"provenance\",'review_batch',t.\"review_batch\",'review_status',t.\"review_status\",'reviewed_at',t.\"reviewed_at\",'source_name',t.\"source_name\",'source_type',t.\"source_type\",'source_url',t.\"source_url\",'text',t.\"text\",'work_id',t.\"work_id\") as row from public.catalog_work_descriptions t)p union all select 'aliases' as name,count(*) as n,md5(string_agg(row::text,'' order by row::text collate \"C\")) as digest from(select jsonb_build_object('title',t.\"title\",'work_id',t.\"work_id\") as row from public.catalog_work_title_aliases t)p)q;\n",
+  "readback": {
+    "checked_at": "2026-11-03 11:11:23.415994+00",
+    "projection": {
+      "works": {
+        "count": 10259,
+        "digest": "09ebab7abe2b10b906bdc80f71d6dd1d"
+      },
+      "aliases": {
+        "count": 8,
+        "digest": "27f8f2bfaf88021b2ef7c91f8d45f868"
+      },
+      "authors": {
+        "count": 5722,
+        "digest": "3cab985b0295c451b7c9c33b8416135a"
+      },
+      "editions": {
+        "count": 10676,
+        "digest": "48ffbabafc51051478f12ad16ad534bf"
+      },
+      "metadata": {
+        "count": 576,
+        "digest": "2a8f57de147dad4ae8e59721605d5de4"
+      },
+      "descriptions": {
+        "count": 695,
+        "digest": "9a1febd857eb095102d12b0b52b0b8ee"
+      }
+    }
+  },
+  "matches": {
+    "works": true,
+    "aliases": true,
+    "authors": true,
+    "editions": true,
+    "metadata": true,
+    "descriptions": true
+  },
+  "productionWrites": 0,
+  "serialization": "Explicit C collation avoids differing locale sort of prose. Earlier default-collation aggregate mismatch was disproved by all695matching per-row hashes; no changed production descriptions."
+}

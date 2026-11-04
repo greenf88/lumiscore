@@ -1,0 +1,6 @@
+import test from'node:test';import assert from'node:assert/strict';import{createHash}from'node:crypto';import{reviewedUnrelatedTitleMatches}from'./nl-scale-title-collisions.mjs';
+const row={id:3711,author_id:1788,title:'Untamed',open_library_id:'OL20652361W'};
+const p={title_matches:[{relation:'works',row}],edition_title_matches:[],authors:[{id:12}],author_corpora:[]};
+const r={environment:'production',relation:'works',id:3711,workId:3711,workAuthorId:1788,rowSha256:createHash('sha256').update(JSON.stringify(row)).digest('hex'),reason:'Distinct Glennon Doyle memoir2020, not Cast2008novel.',sourceUrl:'https://openlibrary.org/works/OL20652361W'};
+test('equal titles require an explicit current full-row independent-author review',()=>assert(reviewedUnrelatedTitleMatches(p,[r],'production')));
+test('unreviewed, changed, same-author or different-environment title matches stop packaging',()=>{for(const [base,rs,env]of[[p,[],'production'],[{...p,title_matches:[{relation:'works',row:{...row,title:'changed'}}]},[r],'production'],[{...p,authors:[{id:1788}]},[r],'production'],[{...p,author_corpora:[{id:3711}]},[r],'production'],[p,[r],'test']])assert.throws(()=>reviewedUnrelatedTitleMatches(base,rs,env));});

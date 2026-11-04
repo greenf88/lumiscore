@@ -1,0 +1,26 @@
+VALIDATIE — 3 november 2026
+
+Exacte release-selectie en volledige snapshotproef: 2 tests PASS, 0 FAIL,
+0 SKIP. Laatste volledige proef 46,343s inclusief voorcontrole en afwijkingsprobes;
+import/replay0/herstel na COMMIT, alle oorspronkelijke rijen behouden.
+Voorcontrole herkent latere Work-mutatie en dubbele nieuwe ISBN-identiteit;
+na opruimen van de lokale synthetische probes weer nul afwijkingen.
+Bronbindingregressies: 5 PASS, 0 FAIL, 0 SKIP.
+Gerichte helperslint PASS. Clientsecretscan94bestanden PASS. diffcheck PASS.
+Alle hashverwijzingen van54 hosted uitvoeringsdossiers opnieuw gecontroleerd:
+geen gewijzigde bewijsbestanden. Beschermde testgegevens13:14UTC exact behouden.
+Read-only productievoorcontrole13:16UTC:2285checks/0failures.
+
+Het eerste nieuwe lokale UNION-voorcontrolemacro faalde in de PGlite/WASM-
+parser. Het is vóór hosted gebruik vervangen door begrensde set-based joins.
+De huidige versie is lokaal met afwijkingsprobes en read-only op productie
+bewezen. Geen mislukte of herhaalde productiewrite.
+
+Volledige eerdere CI41641171719 op ed07c2431bf4335682191a2603862cb7a141a5a2
+is groen, inclusief unit,TypeScript,lint,profielSSR,metadatahead,build,secretscan.
+De definitieve head krijgt eigen CI; lees die voor release af uit GitHub. Geen
+groene vorige CI als bewijs voor een andere nieuwe head presenteren.
+
+Applicatiebytes gelijk aan9c74ecaa48f7a35830f713eed3528d46ba0466ad; eerdere
+hosted UI- en metadatabewijzen zijn daarom hergebruikt. Geen nieuwe
+productiemetingen of browser-paintprestaties geclaimd.

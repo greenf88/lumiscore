@@ -1,0 +1,89 @@
+{
+  "currentProduction": "1bd42f0bb96699eeef33ebe6b409e36ed6dad061",
+  "pr72": "merged_and_deployed; prerequisite already satisfied",
+  "actionsKept": 1492,
+  "actionsMadeRedundantByPr72": 0,
+  "actionContentsChanged": 0,
+  "authorCorpusGuardUpdated": {
+    "authorId": 670,
+    "addedExactlyPr72Works": [
+      10290,
+      10291
+    ],
+    "isImportAction": false
+  },
+  "excludedHistoricalActions": [
+    {
+      "ref": "b048_d2",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 5028,
+        "language": "nl"
+      }
+    },
+    {
+      "ref": "b048_m2",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": 5187
+      }
+    },
+    {
+      "ref": "b048_d13",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 1628,
+        "language": "nl"
+      }
+    },
+    {
+      "ref": "b048_m13",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": 1761
+      }
+    },
+    {
+      "ref": "b053_d13",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 6044,
+        "language": "nl"
+      }
+    },
+    {
+      "ref": "b053_m13",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": 6203
+      }
+    }
+  ],
+  "newActionsFrom171Followups": 0,
+  "followupCandidatesChecked": 171,
+  "followupCandidateOverlap": 0,
+  "pr72ActionOverlap": 0,
+  "actionCounts": {
+    "authors": 33,
+    "works": 209,
+    "editions": 254,
+    "catalog_work_descriptions": 498,
+    "catalog_edition_metadata": 498
+  },
+  "operationalDefinition": "Distinct Work IDs with an edition.language in nl/nld/dut, same historical series; not a new semantic approval of the entire catalogue. Proposed dossier editions separately reviewed as printed Dutch editions.",
+  "currentDutch": 3108,
+  "alreadyDutchAmong498": 263,
+  "proposedNewDutch": 235,
+  "projectedDutch": 3343,
+  "publishedAgainstHistorical2649": 459,
+  "projectedAgainstHistorical2649": 694,
+  "remainingToPlus5000IfReleased": 4306,
+  "testProtectedDataMatchesLatestCleanup": {
+    "ratings": true,
+    "statuses": true,
+    "oldAccountCount": true,
+    "baseline": "catalog/nl-continuation-20261103/batch-001/synthetic-profile-cleanup-proof.json",
+    "differentOldDigestAlgorithmsNotInterchangeable": true
+  },
+  "runtime": "No app/lib/components/public/package/build/middleware changes against current main; preserve metadata, Paper, edition selection, shared score source, PR51 and consent."
+}

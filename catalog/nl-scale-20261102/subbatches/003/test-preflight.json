@@ -1,0 +1,48 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "query": "with chosen as(select * from public.works where open_library_id=any(array['OL20214285W','OL3511459W','OL19655889W','OL20333471W','OL15100470W','OL24477958W','OL2271589W','OL5725961W','OL134383W','OL81607W','OL81589W','OL17373843W','OL149119W','OL81586W','OL17875641W','OL17453058W','OL1041829W','OL17817705W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'works',(select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') from chosen w),'authors',(select coalesce(jsonb_agg(to_jsonb(a) order by id),'[]') from public.authors a where open_library_id=any(array['OL19981A','OL30765A','OL359235A','OL7115219A','OL1392395A','OL34328A','OL21718A','OL102484A','OL7668903A','OL587370A','OL296646A','OL21976A','OL7468980A','OL7414674A']::text[])),'editions',(select coalesce(jsonb_agg(to_jsonb(e) order by id),'[]') from public.editions e where work_id in(select id from chosen) or isbn_13=any(array['9789029511643','9789048813834','9780713904666','9789000360475','9781635575613','9789045043012','9780804172721','9789046705872','9780767919388','9789021026701','9789021828237','9789047500469','9789024513345','9789024519880','9789024557745','9789083267432','9789024528080','9789024539147','9789000364503','9789023491453','9789045800738','9789000345496']::text[])),'descriptions',(select coalesce(jsonb_agg(to_jsonb(d) order by work_id,language),'[]') from public.catalog_work_descriptions d where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(m) order by edition_id),'[]') from public.catalog_edition_metadata m where work_id in(select id from chosen))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 924300125,
+        "name": "Sarah J. Maas",
+        "open_library_id": "OL7115219A"
+      },
+      {
+        "id": 928300049,
+        "name": "Stephen King",
+        "open_library_id": "OL19981A"
+      },
+      {
+        "id": 930300014,
+        "name": "Ilja Leonard Pfeijffer",
+        "open_library_id": "OL7668903A"
+      },
+      {
+        "id": 946300171,
+        "name": "Eoin Colfer",
+        "open_library_id": "OL1392395A"
+      },
+      {
+        "id": 969300015,
+        "name": "Rick Riordan",
+        "open_library_id": "OL30765A"
+      },
+      {
+        "id": 987300004,
+        "name": "Michael Ende",
+        "open_library_id": "OL296646A"
+      },
+      {
+        "id": 987300009,
+        "name": "Lee Child",
+        "open_library_id": "OL34328A"
+      }
+    ],
+    "editions": [],
+    "metadata": [],
+    "checked_at": "2026-11-02T16:57:29.449361+00:00",
+    "descriptions": []
+  }
+}

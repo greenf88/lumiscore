@@ -1,0 +1,62 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL28257A','OL22258A','OL24837A','OL18865A']::text[])),w as(select * from public.works where open_library_id=any(array['OL46873W','OL167160W','OL14871640W','OL443606W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9780345917270','9780446694216','9780739420416','9786054482542','9789010018052','9789044358490','9789046113677','9789026997501']::text[]) or open_library_edition_id=any(array['OL10686520M','OL10263160M','OL10658842M','OL35611866M','OL42854732M','OL61374864M','OL47139245M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987105001 and 987105999),'editions',(select count(*) from public.editions where id between 987205001 and 987205999),'authors',(select count(*) from public.authors where id between 987305001 and 987305999))) as preflight;\n\r\n",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 946300342,
+        "name": "James Patterson",
+        "open_library_id": "OL22258A"
+      },
+      {
+        "id": 987304002,
+        "name": "Michael Crichton",
+        "open_library_id": "OL28257A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-02T18:11:47.538178+00:00",
+    "author_corpora": [
+      {
+        "id": 946103532,
+        "title": "Deadly Cross",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL20978085W",
+        "first_publish_year": 2010,
+        "native_identity_key": null
+      },
+      {
+        "id": 987101013,
+        "title": "The Big Bad Wolf",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167179W",
+        "first_publish_year": 2003,
+        "native_identity_key": "nlscale:fixture002:557"
+      },
+      {
+        "id": 987104014,
+        "title": "Sphere",
+        "cover_id": null,
+        "author_id": 987304002,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL46917W",
+        "first_publish_year": 1987,
+        "native_identity_key": "nlscale:fixture005:3335"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

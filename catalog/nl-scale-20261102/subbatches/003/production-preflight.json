@@ -1,0 +1,594 @@
+{
+  "project_id": "qvplwejffhjvxaypmjut",
+  "mode": "read-only",
+  "query": "with chosen as (\n select * from public.works where id=any(array[5005,3285,1044,3299,3268,3325,1346,3433,2644,2391,2175,2665,3415,2972,3281,2651,2386,6346]::bigint[])\n)\nselect jsonb_build_object(\n 'checked_at',clock_timestamp(),\n 'works',(select jsonb_agg(to_jsonb(w) order by id) from chosen w),\n 'authors',(select jsonb_agg(to_jsonb(a) order by id) from public.authors a where id in(select author_id from chosen)),\n 'editions',(select jsonb_agg(to_jsonb(e) order by id) from public.editions e where work_id in(select id from chosen)),\n 'descriptions',(select coalesce(jsonb_agg(to_jsonb(d) order by work_id,language),'[]') from public.catalog_work_descriptions d where work_id in(select id from chosen)),\n 'metadata',(select coalesce(jsonb_agg(to_jsonb(m) order by edition_id),'[]') from public.catalog_edition_metadata m where work_id in(select id from chosen))\n) as preflight;\n",
+  "readback": {
+    "works": [
+      {
+        "id": 1044,
+        "title": "Peachez, een romance",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 644,
+        "work_type": null,
+        "created_at": "2026-09-03T19:07:30.272662+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL20214285W",
+        "first_publish_year": 2017,
+        "native_identity_key": null
+      },
+      {
+        "id": 1346,
+        "title": "Stoner",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 722,
+        "work_type": null,
+        "created_at": "2026-09-16T15:05:04.178904+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL3511459W",
+        "first_publish_year": 1965,
+        "native_identity_key": null
+      },
+      {
+        "id": 2175,
+        "title": "A Court of Frost and Starlight",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 125,
+        "work_type": null,
+        "created_at": "2026-09-17T14:19:51.074154+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL19655889W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 2386,
+        "title": "The Body",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 466,
+        "work_type": null,
+        "created_at": "2026-09-17T14:25:18.4265+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL20333471W",
+        "first_publish_year": 2019,
+        "native_identity_key": null
+      },
+      {
+        "id": 2391,
+        "title": "At Home",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 466,
+        "work_type": null,
+        "created_at": "2026-09-17T14:25:27.341458+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL15100470W",
+        "first_publish_year": 2010,
+        "native_identity_key": null
+      },
+      {
+        "id": 2644,
+        "title": "Killing Floor",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 380,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL24477958W",
+        "first_publish_year": 1997,
+        "native_identity_key": null
+      },
+      {
+        "id": 2651,
+        "title": "Die unendliche Geschichte",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1273,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL2271589W",
+        "first_publish_year": 1979,
+        "native_identity_key": null
+      },
+      {
+        "id": 2665,
+        "title": "Artemis Fowl and the Eternity Code",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 171,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL5725961W",
+        "first_publish_year": 2003,
+        "native_identity_key": null
+      },
+      {
+        "id": 2972,
+        "title": "Postmortem",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1468,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL134383W",
+        "first_publish_year": 1990,
+        "native_identity_key": null
+      },
+      {
+        "id": 3268,
+        "title": "Needful Things",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL81607W",
+        "first_publish_year": 1991,
+        "native_identity_key": null
+      },
+      {
+        "id": 3281,
+        "title": "Lisey's Story",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL81589W",
+        "first_publish_year": 2006,
+        "native_identity_key": null
+      },
+      {
+        "id": 3285,
+        "title": "Children of Time",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1579,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL17373843W",
+        "first_publish_year": 2015,
+        "native_identity_key": null
+      },
+      {
+        "id": 3299,
+        "title": "Duma Key",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL149119W",
+        "first_publish_year": 2008,
+        "native_identity_key": null
+      },
+      {
+        "id": 3325,
+        "title": "From a Buick 8",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL81586W",
+        "first_publish_year": 2002,
+        "native_identity_key": null
+      },
+      {
+        "id": 3415,
+        "title": "Aru Shah And The End Of Time",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1631,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL17875641W",
+        "first_publish_year": 2017,
+        "native_identity_key": null
+      },
+      {
+        "id": 3433,
+        "title": "Authority",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 114,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL17453058W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      },
+      {
+        "id": 5005,
+        "title": "Burnt shadows",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 624,
+        "work_type": null,
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "source_type": null,
+        "open_library_id": "OL1041829W",
+        "first_publish_year": 2009,
+        "native_identity_key": null
+      },
+      {
+        "id": 6346,
+        "title": "The Ship of the Dead",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 111,
+        "work_type": null,
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "source_type": null,
+        "open_library_id": "OL17817705W",
+        "first_publish_year": 2017,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 49,
+        "name": "Stephen King",
+        "created_at": "2026-09-01T15:19:31.691813+00:00",
+        "open_library_id": "OL19981A"
+      },
+      {
+        "id": 111,
+        "name": "Rick Riordan",
+        "created_at": "2026-09-02T08:24:21.295408+00:00",
+        "open_library_id": "OL30765A"
+      },
+      {
+        "id": 114,
+        "name": "Jeff VanderMeer",
+        "created_at": "2026-09-02T08:24:32.058974+00:00",
+        "open_library_id": "OL359235A"
+      },
+      {
+        "id": 125,
+        "name": "Sarah J. Maas",
+        "created_at": "2026-09-02T08:25:06.499577+00:00",
+        "open_library_id": "OL7115219A"
+      },
+      {
+        "id": 171,
+        "name": "Eoin Colfer",
+        "created_at": "2026-09-02T08:28:37.889795+00:00",
+        "open_library_id": "OL1392395A"
+      },
+      {
+        "id": 380,
+        "name": "Lee Child",
+        "created_at": "2026-09-02T08:41:14.099585+00:00",
+        "open_library_id": "OL34328A"
+      },
+      {
+        "id": 466,
+        "name": "Bill Bryson",
+        "created_at": "2026-09-02T08:46:25.331255+00:00",
+        "open_library_id": "OL21718A"
+      },
+      {
+        "id": 624,
+        "name": "Kamila Shamsie",
+        "created_at": "2026-09-02T08:52:36.033097+00:00",
+        "open_library_id": "OL102484A"
+      },
+      {
+        "id": 644,
+        "name": "Ilja Leonard Pfeijffer",
+        "created_at": "2026-09-03T19:07:23.893273+00:00",
+        "open_library_id": "OL7668903A"
+      },
+      {
+        "id": 722,
+        "name": "John Williams",
+        "created_at": "2026-09-16T15:05:03.913504+00:00",
+        "open_library_id": "OL587370A"
+      },
+      {
+        "id": 1273,
+        "name": "Michael Ende",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_id": "OL296646A"
+      },
+      {
+        "id": 1468,
+        "name": "Patricia Cornwell",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_id": "OL21976A"
+      },
+      {
+        "id": 1579,
+        "name": "Adrian Tchaikovsky",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_id": "OL7468980A"
+      },
+      {
+        "id": 1631,
+        "name": "Roshani Chokshi",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_id": "OL7414674A"
+      }
+    ],
+    "editions": [
+      {
+        "id": 1044,
+        "title": "Peachez, een romance",
+        "isbn_10": null,
+        "isbn_13": "9789029511643",
+        "work_id": 1044,
+        "language": null,
+        "publisher": "De Arbeiderspers",
+        "created_at": "2026-09-03T19:07:30.708691+00:00",
+        "open_library_edition_id": "OL27403436M"
+      },
+      {
+        "id": 1372,
+        "title": "Stoner",
+        "isbn_10": "9048813832",
+        "isbn_13": "9789048813834",
+        "work_id": 1346,
+        "language": "dut",
+        "publisher": "Lebowski",
+        "created_at": "2026-09-16T15:05:04.466419+00:00",
+        "open_library_edition_id": "OL26424302M"
+      },
+      {
+        "id": 1373,
+        "title": "Stoner",
+        "isbn_10": "0713904666",
+        "isbn_13": "9780713904666",
+        "work_id": 1346,
+        "language": "eng",
+        "publisher": "Allen Lane",
+        "created_at": "2026-09-16T15:05:04.713425+00:00",
+        "open_library_edition_id": "OL5087169M"
+      },
+      {
+        "id": 2383,
+        "title": "Hof van ijs en sterren",
+        "isbn_10": "9000360471",
+        "isbn_13": "9789000360475",
+        "work_id": 2175,
+        "language": "dut",
+        "publisher": "Van Goor",
+        "created_at": "2026-09-17T14:19:51.361586+00:00",
+        "open_library_edition_id": "OL26810680M"
+      },
+      {
+        "id": 2384,
+        "title": "A Court of Frost and Starlight",
+        "isbn_10": "1635575613",
+        "isbn_13": "9781635575613",
+        "work_id": 2175,
+        "language": "eng",
+        "publisher": "Bloomsbury Publishing",
+        "created_at": "2026-09-17T14:19:51.597299+00:00",
+        "open_library_edition_id": "OL28157461M"
+      },
+      {
+        "id": 2607,
+        "title": "Het lichaam",
+        "isbn_10": "9045043017",
+        "isbn_13": "9789045043012",
+        "work_id": 2386,
+        "language": "dut",
+        "publisher": "Atlas Contact",
+        "created_at": "2026-09-17T14:25:18.647337+00:00",
+        "open_library_edition_id": "OL41870070M"
+      },
+      {
+        "id": 2608,
+        "title": "The Body",
+        "isbn_10": "0804172722",
+        "isbn_13": "9780804172721",
+        "work_id": 2386,
+        "language": "eng",
+        "publisher": "Anchor Books",
+        "created_at": "2026-09-17T14:25:18.857403+00:00",
+        "open_library_edition_id": "OL31835238M"
+      },
+      {
+        "id": 2614,
+        "title": "Een huis vol",
+        "isbn_10": "9046705870",
+        "isbn_13": "9789046705872",
+        "work_id": 2391,
+        "language": "dut",
+        "publisher": "Olympus",
+        "created_at": "2026-09-17T14:25:27.562353+00:00",
+        "open_library_edition_id": "OL37822777M"
+      },
+      {
+        "id": 2615,
+        "title": "At home",
+        "isbn_10": "0767919386",
+        "isbn_13": "9780767919388",
+        "work_id": 2391,
+        "language": "eng",
+        "publisher": "Doubleday",
+        "created_at": "2026-09-17T14:25:27.781021+00:00",
+        "open_library_edition_id": "OL24050119M"
+      },
+      {
+        "id": 2803,
+        "title": "Jachtveld",
+        "isbn_10": "9021026708",
+        "isbn_13": "9789021026701",
+        "work_id": 2644,
+        "language": "dut",
+        "publisher": "Luitingh Sijthoff",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL41870937M"
+      },
+      {
+        "id": 2810,
+        "title": "Het oneindige verhaal",
+        "isbn_10": "9021828235",
+        "isbn_13": "9789021828237",
+        "work_id": 2651,
+        "language": "dut",
+        "publisher": "Sijthoff",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL24949539M"
+      },
+      {
+        "id": 2824,
+        "title": "De Eeuwige Code",
+        "isbn_10": "9047500466",
+        "isbn_13": "9789047500469",
+        "work_id": 2665,
+        "language": "dut",
+        "publisher": "Uitgeverij van Goor",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL27098594M"
+      },
+      {
+        "id": 3131,
+        "title": "Fataal Weekend",
+        "isbn_10": "9024513340",
+        "isbn_13": "9789024513345",
+        "work_id": 2972,
+        "language": "dut",
+        "publisher": "Puema Pocket",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL47274907M"
+      },
+      {
+        "id": 3427,
+        "title": "De noodzaak",
+        "isbn_10": "9024519888",
+        "isbn_13": "9789024519880",
+        "work_id": 3268,
+        "language": "dut",
+        "publisher": "Luitingh-Sijthoff",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL25615750M"
+      },
+      {
+        "id": 3440,
+        "title": "Lisey's verhaal",
+        "isbn_10": "9024557747",
+        "isbn_13": "9789024557745",
+        "work_id": 3281,
+        "language": "dut",
+        "publisher": "Luitingh",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL47234747M"
+      },
+      {
+        "id": 3444,
+        "title": "Kinderen van de tijd",
+        "isbn_10": null,
+        "isbn_13": "9789083267432",
+        "work_id": 3285,
+        "language": "dut",
+        "publisher": "iceberg books",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL50213242M"
+      },
+      {
+        "id": 3458,
+        "title": "Duma",
+        "isbn_10": "9024528089",
+        "isbn_13": "9789024528080",
+        "work_id": 3299,
+        "language": "dut",
+        "publisher": "Luitingh",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL32780065M"
+      },
+      {
+        "id": 3484,
+        "title": "Het geheim van de Buick",
+        "isbn_10": "9024539145",
+        "isbn_13": "9789024539147",
+        "work_id": 3325,
+        "language": "dut",
+        "publisher": "Luitingh-Sijthoff",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL27281176M"
+      },
+      {
+        "id": 3574,
+        "title": "Aru Shah en het einde van de tijd",
+        "isbn_10": "9000364507",
+        "isbn_13": "9789000364503",
+        "work_id": 3415,
+        "language": "dut",
+        "publisher": "Van Goor",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL27098710M"
+      },
+      {
+        "id": 3592,
+        "title": "Autoriteit",
+        "isbn_10": "9023491459",
+        "isbn_13": "9789023491453",
+        "work_id": 3433,
+        "language": "dut",
+        "publisher": "De Bezige Bij",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL47356265M"
+      },
+      {
+        "id": 5164,
+        "title": "Verbrande schaduwen",
+        "isbn_10": "904580073X",
+        "isbn_13": "9789045800738",
+        "work_id": 5005,
+        "language": "dut",
+        "publisher": "Mouria",
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "open_library_edition_id": "OL47313874M"
+      },
+      {
+        "id": 6505,
+        "title": "Het Schip der Doden",
+        "isbn_10": "9000345499",
+        "isbn_13": "9789000345496",
+        "work_id": 6346,
+        "language": "dut",
+        "publisher": "Van Goor",
+        "created_at": "2026-10-03T17:13:22.654831+00:00",
+        "open_library_edition_id": "OL27098695M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T16:56:43.358214+00:00",
+    "descriptions": []
+  }
+}

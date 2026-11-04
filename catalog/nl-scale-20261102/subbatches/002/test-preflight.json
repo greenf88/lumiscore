@@ -1,0 +1,13 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with chosen as(select * from public.works where open_library_id=any(array['OL18020194W','OL455327W','OL17076678W','OL81630W','OL149188W','OL17079567W','OL617847W','OL158674W','OL19977665W','OL81621W','OL850975W','OL17937105W','OL167179W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'works',(select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') from chosen w),'authors',(select coalesce(jsonb_agg(to_jsonb(a) order by id),'[]') from public.authors a where id in(select author_id from chosen)),'editions',(select coalesce(jsonb_agg(to_jsonb(e) order by id),'[]') from public.editions e where work_id in(select id from chosen) or isbn_13=any(array['9789401910552','9789059653887','9789026138409','9789024544974','9789024536979','9789057124389','9789029079778','9789044508758','9789400510159','9789024522989','9789038890593','9789044359930','9789046113417']::text[])),'descriptions',(select coalesce(jsonb_agg(to_jsonb(d) order by work_id,language),'[]') from public.catalog_work_descriptions d where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(m) order by edition_id),'[]') from public.catalog_edition_metadata m where work_id in(select id from chosen))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [],
+    "editions": [],
+    "metadata": [],
+    "checked_at": "2026-11-02T16:11:47.39292+00:00",
+    "descriptions": []
+  }
+}

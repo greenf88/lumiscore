@@ -1,0 +1,98 @@
+{
+  "at": "2026-11-02",
+  "project": "qvplwejffhjvxaypmjut",
+  "scope": "Two bounded read-only SELECT EXPLAIN ANALYZE samples on same public Work. Not full import timing; cache/order effects possible.",
+  "jsonPredicate": {
+    "q": "explain(analyze,buffers,format json,timing off) select to_jsonb(t) from public.works t where to_jsonb(t) @> '{\"id\":6}'::jsonb;",
+    "plan": {
+      "Plan": {
+        "Node Type": "Seq Scan",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Relation Name": "works",
+        "Alias": "t",
+        "Startup Cost": 0,
+        "Total Cost": 290.53,
+        "Plan Rows": 103,
+        "Plan Width": 32,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Filter": "(to_jsonb(t.*) @> '{\"id\": 6}'::jsonb)",
+        "Rows Removed by Filter": 10258,
+        "Shared Hit Blocks": 145,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning": {
+        "Shared Hit Blocks": 169,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.539,
+      "Triggers": [],
+      "Execution Time": 208.49
+    }
+  },
+  "typedIndexedPredicate": {
+    "q": "explain(analyze,buffers,format json,timing off) select to_jsonb(t) from public.works t where t.id=(jsonb_populate_record(null::public.works,'{\"id\":6}'::jsonb)).id;",
+    "plan": {
+      "Plan": {
+        "Node Type": "Index Scan",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Scan Direction": "Forward",
+        "Index Name": "works_pkey",
+        "Relation Name": "works",
+        "Alias": "t",
+        "Startup Cost": 0.29,
+        "Total Cost": 2.51,
+        "Plan Rows": 1,
+        "Plan Width": 32,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Index Cond": "(id = (jsonb_populate_record(NULL::works, '{\"id\": 6}'::jsonb)).id)",
+        "Rows Removed by Index Recheck": 0,
+        "Shared Hit Blocks": 3,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning": {
+        "Shared Hit Blocks": 189,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.71,
+      "Triggers": [],
+      "Execution Time": 1.531
+    }
+  },
+  "productionWrites": 0
+}

@@ -1,0 +1,85 @@
+{
+  "source": "Open Library public exact-edition API",
+  "purpose": "Resolve explicitly identified edition/ISBN conflicts; no source description export",
+  "url": "https://openlibrary.org/api/get_many?keys=%5B%22%2Fbooks%2FOL8689696M%22%2C%22%2Fbooks%2FOL13872256M%22%5D",
+  "checkedAt": "2026-11-03T12:07:41.509Z",
+  "status": 200,
+  "sourceBodySha256": "925b249b1181ffe4bae379ae6efb4e34b3132f341d131208b4d4d8785e551647",
+  "bytes": 1831,
+  "records": [
+    {
+      "key": "/books/OL8689696M",
+      "record": {
+        "key": "/books/OL8689696M",
+        "title": "Vincent Van Gogh",
+        "works": [
+          {
+            "key": "/works/OL518262W"
+          }
+        ],
+        "authors": [
+          {
+            "key": "/authors/OL3064166A"
+          },
+          {
+            "key": "/authors/OL36119A"
+          }
+        ],
+        "languages": [
+          {
+            "key": "/languages/eng"
+          }
+        ],
+        "isbn_13": [
+          "9781568521114"
+        ],
+        "isbn_10": [
+          "1568521111"
+        ],
+        "publishers": [
+          "Konecky, William S"
+        ],
+        "publish_date": "October 1996",
+        "physical_format": "Hardcover",
+        "number_of_pages": 384,
+        "identifiers": {
+          "librarything": [
+            "3553459"
+          ],
+          "goodreads": [
+            "448931"
+          ]
+        }
+      }
+    },
+    {
+      "key": "/books/OL13872256M",
+      "record": {
+        "key": "/books/OL13872256M",
+        "title": "Vincent Van Gogh.",
+        "works": [
+          {
+            "key": "/works/OL518262W"
+          }
+        ],
+        "authors": [
+          {
+            "key": "/authors/OL36119A"
+          }
+        ],
+        "languages": [
+          {
+            "key": "/languages/dut"
+          }
+        ],
+        "publishers": [
+          "Stedelijk Museum"
+        ],
+        "publish_date": "1955",
+        "number_of_pages": 70,
+        "pagination": "ca.70 :"
+      }
+    }
+  ],
+  "error": null
+}

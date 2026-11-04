@@ -1,0 +1,107 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL236174A','OL1213378A','OL74490A','OL800926A','OL2623989A','OL135196A','OL22973A','OL24809A','OL492907A','OL561656A']::text[])),w as(select * from public.works where open_library_id=any(array['OL2096536W','OL1966487W','OL14867077W','OL1326316W','OL14871157W','OL20659782W','OL857555W','OL15253352W','OL3123542W','OL14933747W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'project','hlvujbrmfdlrfxdjwsmb','authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from w t),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id in(select id from w) or isbn_13=any(array['9789027408112','9781568492506','9789046806517','9781416594789','9789029530149','9789021494029','9789041403704','9789044839142','9789029039116','9789074336024','9789029525466','9789055796847']::text[]) or open_library_edition_id=any(array['OL24678434M','OL12189606M','OL24328108M','OL24391629M','OL24947100M','OL25098874M','OL9099498M','OL41916184M','OL36662942M','OL24328241M','OL46540080M','OL24228364M']::text[])),'reserved_range',jsonb_build_object('works',(select count(*) from public.works where id between 987109001 and 987109999),'editions',(select count(*) from public.editions where id between 987209001 and 987209999),'authors',(select count(*) from public.authors where id between 987309001 and 987309999))) as preflight;",
+  "readback": {
+    "works": [],
+    "authors": [
+      {
+        "id": 969300005,
+        "name": "Willem Frederik Hermans",
+        "open_library_id": "OL1213378A"
+      },
+      {
+        "id": 987304007,
+        "name": "Mario Vargas Llosa",
+        "open_library_id": "OL74490A"
+      }
+    ],
+    "project": "hlvujbrmfdlrfxdjwsmb",
+    "editions": [],
+    "checked_at": "2026-11-02T19:36:02.347023+00:00",
+    "author_corpora": [
+      {
+        "id": 969100005,
+        "title": "De donkere kamer van Damokles",
+        "cover_id": null,
+        "author_id": 969300005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL109957W",
+        "first_publish_year": 1959,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100006,
+        "title": "Onder professoren",
+        "cover_id": null,
+        "author_id": 969300005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL15250238W",
+        "first_publish_year": 1975,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100007,
+        "title": "Au pair",
+        "cover_id": null,
+        "author_id": 969300005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL109948W",
+        "first_publish_year": 1989,
+        "native_identity_key": null
+      },
+      {
+        "id": 978100003,
+        "title": "Nooit meer slapen",
+        "cover_id": null,
+        "author_id": 969300005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL109959W",
+        "first_publish_year": 1967,
+        "native_identity_key": null
+      },
+      {
+        "id": 987104002,
+        "title": "La tía Julia y el escribidor",
+        "cover_id": null,
+        "author_id": 987304007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL857606W",
+        "first_publish_year": 1977,
+        "native_identity_key": "nlscale:fixture005:1414"
+      },
+      {
+        "id": 987104016,
+        "title": "La Fiesta del Chivo",
+        "cover_id": null,
+        "author_id": 987304007,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL857600W",
+        "first_publish_year": 2000,
+        "native_identity_key": "nlscale:fixture005:3387"
+      },
+      {
+        "id": 987108006,
+        "title": "La guerra del fin del mundo",
+        "cover_id": 12516057,
+        "author_id": 987304007,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL857601W",
+        "first_publish_year": 1981,
+        "native_identity_key": "nlscale:20261102:ol:OL857601W"
+      }
+    ],
+    "reserved_range": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    }
+  }
+}

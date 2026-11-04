@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {sameReviewedCover} from './nl-scale-observed-cover.mjs';
+test('card and detail may use different sizes of the same reviewed OL image',()=>{assert(sameReviewedCover('https://covers.openlibrary.org/b/id/12448997-M.jpg?default=false','https://covers.openlibrary.org/b/id/12448997-L.jpg?default=false'));});
+test('a publisher asset requires the exact observed URL',()=>{const expected='https://metadata.isbn.nl/ie_fcache/0000579782_Gamechanger_0_0.jpg';assert(sameReviewedCover(expected,expected));for(const wrong of['https://covers.openlibrary.org/b/id/14244239-L.jpg?default=false',expected.replace('metadata.isbn.nl','wrong.example'),expected+'?token=bad'])assert(!sameReviewedCover(wrong,expected));});

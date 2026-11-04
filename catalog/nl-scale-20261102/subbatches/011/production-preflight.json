@@ -1,0 +1,258 @@
+{
+  "project": "qvplwejffhjvxaypmjut",
+  "query": "with chosen as(select * from public.works where id in(1201,1400,1824,1376,1483,1468)) select jsonb_build_object('checked_at',clock_timestamp(),'project','qvplwejffhjvxaypmjut','works',(select jsonb_agg(to_jsonb(t) order by id) from chosen t),'authors',(select jsonb_agg(to_jsonb(t) order by id) from public.authors t where id in(select author_id from chosen)),'editions',(select jsonb_agg(to_jsonb(t) order by id) from public.editions t where work_id in(select id from chosen) or isbn_13 in('9789065210937','9789025315313','9789021469928','9789025305505','9789027491190','9789025305543')),'descriptions',(select coalesce(jsonb_agg(to_jsonb(t) order by work_id,language),'[]') from public.catalog_work_descriptions t where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(t) order by edition_id),'[]') from public.catalog_edition_metadata t where work_id in(select id from chosen))) as preflight;",
+  "mode": "read-only",
+  "readback": {
+    "works": [
+      {
+        "id": 1201,
+        "title": "Pijpelijntjes",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 703,
+        "work_type": null,
+        "created_at": "2026-09-03T19:13:41.533587+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL3698641W",
+        "first_publish_year": 1974,
+        "native_identity_key": null
+      },
+      {
+        "id": 1376,
+        "title": "À rebours",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 734,
+        "work_type": null,
+        "created_at": "2026-09-16T15:06:11.43106+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL2239396W",
+        "first_publish_year": 1884,
+        "native_identity_key": null
+      },
+      {
+        "id": 1400,
+        "title": "πολιτεία",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 250,
+        "work_type": null,
+        "created_at": "2026-09-16T15:07:06.808027+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL51831W",
+        "first_publish_year": 1554,
+        "native_identity_key": null
+      },
+      {
+        "id": 1468,
+        "title": "Salammbô",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 219,
+        "work_type": null,
+        "created_at": "2026-09-16T15:09:34.672297+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL893958W",
+        "first_publish_year": 1863,
+        "native_identity_key": null
+      },
+      {
+        "id": 1483,
+        "title": "The Mayor of Casterbridge",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 240,
+        "work_type": null,
+        "created_at": "2026-09-16T15:10:08.295981+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL8193406W",
+        "first_publish_year": 1800,
+        "native_identity_key": null
+      },
+      {
+        "id": 1824,
+        "title": "Das Schloß",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 129,
+        "work_type": null,
+        "created_at": "2026-09-16T15:20:38.829815+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL498434W",
+        "first_publish_year": 1926,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 129,
+        "name": "Franz Kafka",
+        "created_at": "2026-09-02T08:25:14.657323+00:00",
+        "open_library_id": "OL33146A"
+      },
+      {
+        "id": 219,
+        "name": "Gustave Flaubert",
+        "created_at": "2026-09-02T08:31:42.701189+00:00",
+        "open_library_id": "OL79039A"
+      },
+      {
+        "id": 240,
+        "name": "Thomas Hardy",
+        "created_at": "2026-09-02T08:33:08.650543+00:00",
+        "open_library_id": "OL18277A"
+      },
+      {
+        "id": 250,
+        "name": "Plato",
+        "created_at": "2026-09-02T08:33:43.827193+00:00",
+        "open_library_id": "OL12823A"
+      },
+      {
+        "id": 703,
+        "name": "Jacob Israël de Haan",
+        "created_at": "2026-09-03T19:13:41.350853+00:00",
+        "open_library_id": "OL641289A"
+      },
+      {
+        "id": 734,
+        "name": "Joris-Karl Huysmans",
+        "created_at": "2026-09-16T15:06:11.021034+00:00",
+        "open_library_id": "OL2658897A"
+      }
+    ],
+    "project": "qvplwejffhjvxaypmjut",
+    "editions": [
+      {
+        "id": 1201,
+        "title": "Pijpelijntjes",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 1201,
+        "language": null,
+        "publisher": "Peter van der Velden",
+        "created_at": "2026-09-03T19:13:41.756247+00:00",
+        "open_library_edition_id": "OL24298393M"
+      },
+      {
+        "id": 1413,
+        "title": "Tegen de keer",
+        "isbn_10": "9025305504",
+        "isbn_13": null,
+        "work_id": 1376,
+        "language": "dut",
+        "publisher": "Athenaeum-Polak & Van Gennep",
+        "created_at": "2026-09-16T15:06:11.679467+00:00",
+        "open_library_edition_id": "OL24655111M"
+      },
+      {
+        "id": 1414,
+        "title": "Against The Grain",
+        "isbn_10": "1414230680",
+        "isbn_13": "9781414230689",
+        "work_id": 1376,
+        "language": "eng",
+        "publisher": "IndyPublish",
+        "created_at": "2026-09-16T15:06:12.016048+00:00",
+        "open_library_edition_id": "OL8454856M"
+      },
+      {
+        "id": 1447,
+        "title": "Politeia",
+        "isbn_10": "9025315313",
+        "isbn_13": null,
+        "work_id": 1400,
+        "language": "dut",
+        "publisher": "Athenaeum-Polak & Van Gennep",
+        "created_at": "2026-09-16T15:07:07.019394+00:00",
+        "open_library_edition_id": "OL24329738M"
+      },
+      {
+        "id": 1448,
+        "title": "The Republic (Everyman's Library (Cloth))",
+        "isbn_10": "0679413308",
+        "isbn_13": "9780679413301",
+        "work_id": 1400,
+        "language": "eng",
+        "publisher": "Everyman's Library",
+        "created_at": "2026-09-16T15:07:07.297176+00:00",
+        "open_library_edition_id": "OL7698626M"
+      },
+      {
+        "id": 1539,
+        "title": "Salammbô",
+        "isbn_10": "9025305547",
+        "isbn_13": null,
+        "work_id": 1468,
+        "language": "dut",
+        "publisher": "Athenaeum-Polak & Van Gennep",
+        "created_at": "2026-09-16T15:09:34.847595+00:00",
+        "open_library_edition_id": "OL24633991M"
+      },
+      {
+        "id": 1540,
+        "title": "Salammbo",
+        "isbn_10": "1582871043",
+        "isbn_13": "9781582871042",
+        "work_id": 1468,
+        "language": "eng",
+        "publisher": "North Books",
+        "created_at": "2026-09-16T15:09:35.083058+00:00",
+        "open_library_edition_id": "OL8788552M"
+      },
+      {
+        "id": 1564,
+        "title": "Leven en dood van de burgemeester van Casterbridge",
+        "isbn_10": "9027491194",
+        "isbn_13": null,
+        "work_id": 1483,
+        "language": "dut",
+        "publisher": "Het Spectrum",
+        "created_at": "2026-09-16T15:10:08.492041+00:00",
+        "open_library_edition_id": "OL24356708M"
+      },
+      {
+        "id": 1565,
+        "title": "The Mayor of Casterbridge",
+        "isbn_10": "1428059164",
+        "isbn_13": "9781428059160",
+        "work_id": 1483,
+        "language": "eng",
+        "publisher": "IndyPublish",
+        "created_at": "2026-09-16T15:10:08.762815+00:00",
+        "open_library_edition_id": "OL11885814M"
+      },
+      {
+        "id": 1975,
+        "title": "Het slot",
+        "isbn_10": "9021469928",
+        "isbn_13": null,
+        "work_id": 1824,
+        "language": "dut",
+        "publisher": "Querido",
+        "created_at": "2026-09-16T15:20:38.993407+00:00",
+        "open_library_edition_id": "OL24654065M"
+      },
+      {
+        "id": 1976,
+        "title": "The Castle",
+        "isbn_10": "0679417354",
+        "isbn_13": "9780679417354",
+        "work_id": 1824,
+        "language": "eng",
+        "publisher": "Everyman's Library",
+        "created_at": "2026-09-16T15:20:39.218272+00:00",
+        "open_library_edition_id": "OL7698685M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T19:45:11.026849+00:00",
+    "descriptions": []
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "with a as(select * from public.authors where open_library_id=any(array['OL863535A','OL934457A','OL709121A','OL1460559A','OL29079A','OL2660314A','OL74490A','OL7381348A','OL55662A']::text[]) or id=any(array[3341,379,746,678,3587]::bigint[])) select jsonb_build_object('checked_at',clock_timestamp(),'authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from a t),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where author_id in(select id from a)),'isbn_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where regexp_replace(coalesce(isbn_13,''),'[-[:space:]]','','g')=any(array['9789032004071','9789044914405','9789044332551','9789044915112','9789044912883','9789029071482','9789029016353','9789023472124','9789025452834']::text[])),'source_work_matches',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where open_library_id=any(array['OL267613W','OL3899216W','OL15399488W','OL3899229W','OL3899217W','OL857601W','OL22755879W','OL33390812W']::text[])),'title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','works','row',to_jsonb(t))),'[]') from public.works t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['asterixetlesnormands','asterixendenoormannen','mannensomgickuppirok','demandieinrookopging','crescentdawn','wassendemaan','polispolispotatismos','demandieevenwildeafrekenen','mannenpabalkongen','demanophetbalkon','laguerradelfindelmundo','deoorlogvanheteindevandewereld','metdekennisvantoen','inhetzwartvandespiegel']::text[])),'edition_title_matches',(select coalesce(jsonb_agg(jsonb_build_object('relation','editions','row',to_jsonb(t))),'[]') from public.editions t where regexp_replace(lower(normalize(title,NFD)),'[^a-z0-9]','','g')=any(array['asterixetlesnormands','asterixendenoormannen','mannensomgickuppirok','demandieinrookopging','crescentdawn','wassendemaan','polispolispotatismos','demandieevenwildeafrekenen','mannenpabalkongen','demanophetbalkon','laguerradelfindelmundo','deoorlogvanheteindevandewereld','metdekennisvantoen','inhetzwartvandespiegel']::text[])),'reserved_test_ranges',jsonb_build_object('works',(select count(*) from public.works where id between 987108001 and 987108999),'editions',(select count(*) from public.editions where id between 987208001 and 987208999),'authors',(select count(*) from public.authors where id between 987308001 and 987308999))) as preflight;",
+  "readback": {
+    "authors": [
+      {
+        "id": 930300011,
+        "name": "Rutger Bregman",
+        "open_library_id": "OL7381348A"
+      },
+      {
+        "id": 987303003,
+        "name": "Clive Cussler",
+        "open_library_id": "OL29079A"
+      },
+      {
+        "id": 987303004,
+        "name": "Maj Sjöwall",
+        "open_library_id": "OL709121A"
+      },
+      {
+        "id": 987303005,
+        "name": "René Goscinny",
+        "open_library_id": "OL863535A"
+      },
+      {
+        "id": 987304007,
+        "name": "Mario Vargas Llosa",
+        "open_library_id": "OL74490A"
+      }
+    ],
+    "checked_at": "2026-11-02T18:58:17.685519+00:00",
+    "isbn_matches": [],
+    "title_matches": [],
+    "author_corpora": [
+      {
+        "id": 930100011,
+        "title": "De meeste mensen deugen",
+        "cover_id": null,
+        "author_id": 930300011,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL20726133W",
+        "first_publish_year": 2019,
+        "native_identity_key": null
+      },
+      {
+        "id": 936101151,
+        "title": "De geschiedenis van de vooruitgang",
+        "cover_id": null,
+        "author_id": 930300011,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL20783434W",
+        "first_publish_year": null,
+        "native_identity_key": null
+      },
+      {
+        "id": 938101152,
+        "title": "Gratis geld voor iedereen",
+        "cover_id": null,
+        "author_id": 930300011,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL31712603W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      },
+      {
+        "id": 987103004,
+        "title": "Valhalla Rising",
+        "cover_id": 8765780,
+        "author_id": 987303003,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL84889W",
+        "first_publish_year": 2001,
+        "native_identity_key": "nlscale:20261102:ol:OL84889W"
+      },
+      {
+        "id": 987103005,
+        "title": "Roseanna",
+        "cover_id": 14103315,
+        "author_id": 987303004,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL3899224W",
+        "first_publish_year": 1965,
+        "native_identity_key": "nlscale:20261102:ol:OL3899224W"
+      },
+      {
+        "id": 987103006,
+        "title": "Les Lauriers de César",
+        "cover_id": 13137506,
+        "author_id": 987303005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL267635W",
+        "first_publish_year": 1972,
+        "native_identity_key": "nlscale:20261102:ol:OL267635W"
+      },
+      {
+        "id": 987103007,
+        "title": "Den skrattande polisen",
+        "cover_id": 14403489,
+        "author_id": 987303004,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL3899219W",
+        "first_publish_year": 1968,
+        "native_identity_key": "nlscale:20261102:ol:OL3899219W"
+      },
+      {
+        "id": 987103009,
+        "title": "Astérix et les Goths",
+        "cover_id": 13137509,
+        "author_id": 987303005,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL267633W",
+        "first_publish_year": 1963,
+        "native_identity_key": "nlscale:20261102:ol:OL267633W"
+      },
+      {
+        "id": 987103011,
+        "title": "Brandbilen som försvann",
+        "cover_id": 13521524,
+        "author_id": 987303004,
+        "work_type": "novel",
+        "source_type": "open_library",
+        "open_library_id": "OL3899215W",
+        "first_publish_year": 1969,
+        "native_identity_key": "nlscale:20261102:ol:OL3899215W"
+      },
+      {
+        "id": 987104002,
+        "title": "La tía Julia y el escribidor",
+        "cover_id": null,
+        "author_id": 987304007,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL857606W",
+        "first_publish_year": 1977,
+        "native_identity_key": "nlscale:fixture005:1414"
+      },
+      {
+        "id": 987104016,
+        "title": "La Fiesta del Chivo",
+        "cover_id": null,
+        "author_id": 987304007,
+        "work_type": null,
+        "source_type": null,
+        "open_library_id": "OL857600W",
+        "first_publish_year": 2000,
+        "native_identity_key": "nlscale:fixture005:3387"
+      }
+    ],
+    "source_work_matches": [],
+    "reserved_test_ranges": {
+      "works": 0,
+      "authors": 0,
+      "editions": 0
+    },
+    "edition_title_matches": []
+  }
+}

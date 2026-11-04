@@ -15,11 +15,12 @@ export async function reviewedFixtureInputs() {
     files.push({ name, sql: bytes.toString('utf8') });
   }
   const categories = JSON.parse(await readFile(new URL('../lib/catalog/categories.json', import.meta.url), 'utf8')).categories;
-  const inputs={files,categories,bootstrap:await readFile(new URL('bootstrap.sql', support),'utf8'),seed:await readFile(new URL('seed.sql', support),'utf8')};
+  const inputs={files,categories,bootstrap:await readFile(new URL('bootstrap.sql', support),'utf8'),seed:await readFile(new URL('seed.sql', support),'utf8'),searchPrerequisite:await readFile(new URL('08-search-function-prerequisite.sql',support),'utf8')};
   const prerequisites=fixturePrerequisites(inputs);
   assertReviewedArtifacts({
     '00-bootstrap.sql':inputs.bootstrap,'02-placeholder-works.sql':prerequisites.placeholders,
     '04-collection-prerequisites.sql':prerequisites.collections,'06-categories-and-seed.sql':prerequisites.categories+'\n'+inputs.seed,
+    '08-search-function-prerequisite.sql':inputs.searchPrerequisite,
   },JSON.parse(await readFile(new URL('artifact-hashes.json',support),'utf8')));
   return inputs;
 }
@@ -50,6 +51,12 @@ export async function setupDiscoveryFixture(db) {
   if (Number((await db.query('select count(*) as n from auth.users')).rows[0].n)) throw new Error('Fresh empty test Auth required.');
   await db.exec(inputs.bootstrap);
   for (const file of inputs.files) {
+    if (file.name === '20261102185143_nl_scale_search_unicode.sql') {
+      // The existing v2 function was released as an operations package, outside
+      // this historical fixture's migration chain. Install its exact reviewed
+      // definition/ACL before testing the guarded replacement; do not weaken it.
+      await db.exec(inputs.searchPrerequisite);
+    }
     if (file.name === '20260916071439_collections_v1.sql') {
       // Synthetic placeholders satisfy historical FK IDs, not real book identities.
       // No Editions/evidence: they cannot enter NL/EN taste rounds or recommendations.

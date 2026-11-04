@@ -1,0 +1,190 @@
+{
+  "summary": {
+    "batch": "nl-scale-20261102-064",
+    "target": "hlvujbrmfdlrfxdjwsmb",
+    "scope": "Exact mirrored editions; fixture has separate receipt",
+    "actions": 4,
+    "newWorks": 0,
+    "newDutchEditions": 1,
+    "newDutchSummaries": 1,
+    "newCoverBindings": 1,
+    "correctedOriginalYears": 1,
+    "correctedWrongLanguages": 0,
+    "netDutchAvailability": 1
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 987163001,
+        "title": "Brief Answers to the Big Questions",
+        "cover_id": null,
+        "author_id": 978300018,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19552275W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture064:816"
+      },
+      "author": {
+        "id": 978300018,
+        "name": "Stephen Hawking",
+        "open_library_id": "OL2675573A"
+      }
+    }
+  ],
+  "authorCorpora": [],
+  "actions": [
+    {
+      "ref": "y0",
+      "relation": "works",
+      "key": {
+        "id": 987163001
+      },
+      "before": {
+        "id": 987163001,
+        "title": "Brief Answers to the Big Questions",
+        "cover_id": null,
+        "author_id": 978300018,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19552275W",
+        "first_publish_year": 2014,
+        "native_identity_key": "nlscale:fixture064:816"
+      },
+      "after": {
+        "id": 987163001,
+        "title": "Brief Answers to the Big Questions",
+        "cover_id": null,
+        "author_id": 978300018,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL19552275W",
+        "first_publish_year": 2018,
+        "native_identity_key": "nlscale:fixture064:816"
+      }
+    },
+    {
+      "ref": "e0",
+      "relation": "editions",
+      "key": {
+        "open_library_edition_id": "OL46531174M"
+      },
+      "before": null,
+      "after": {
+        "work_id": 987163001,
+        "title": "De antwoorden op de grote vragen",
+        "language": "dut",
+        "open_library_edition_id": "OL46531174M",
+        "isbn_13": "9789000365043",
+        "isbn_10": null,
+        "publisher": "Spectrum",
+        "id": 987263002,
+        "publish_date": null,
+        "cover_id": null
+      }
+    },
+    {
+      "ref": "d0",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 987163001,
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": 987163001,
+        "language": "nl",
+        "bound_author_id": 978300018,
+        "text": "Stephen Hawking onderzoekt grote vragen over het heelal en de toekomst van de mens. Kan de mensheid op aarde blijven voortbestaan, wat betekent kunstmatige intelligentie en heeft het zin om andere planeten te bewonen? Hij verbindt zulke vragen met zijn natuurkundige werk en zijn overtuiging dat wetenschap ook bij maatschappelijke problemen een rol kan spelen. De teksten gaan over mogelijkheden en risico’s, zonder overal een definitief antwoord te bieden. Deze postuum verschenen bundel brengt zijn laatste beschouwingen voor een breed publiek samen.",
+        "source_type": "official_catalog",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_url": "https://www.penguinrandomhouse.com/books/600621/brief-answers-to-the-big-questions-by-stephen-hawking/",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p418241082"
+            ],
+            "reference": "work:816",
+            "checked_at": "2026-11-03T12:40:25.561Z",
+            "note": "ExactDutchHardcoverISBN9789000365043 andKBoriginalBriefAnswers2018 plusprimaryBantampublisher matchexistingWork816; current2014predatesactualbook. RetainWork/author, newDutchedition notnewWork. SourceHawkingcanonicalfullnameindependentlybound byexactISBN.",
+            "supplemental": null,
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-029.json",
+            "sources": [
+              "https://www.penguinrandomhouse.com/books/600621/brief-answers-to-the-big-questions-by-stephen-hawking/",
+              "https://openlibrary.org/works/OL19552275W",
+              "https://data.bibliotheken.nl/id/nbt/p418241082"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13189253,
+            "sha256": "7fa0c5166659b6afa751df326a0d3577ddea98c56d86ea8a6e324b3eae7f5515",
+            "reference": "cover-semantic-review-063.json",
+            "limitation": "Actually viewed black starfield front, StephenHawking andDutch Deantwoordenopdegrotevragen, wireframeface andgoldtitle. ExactselectedDutch2018hardcoverISBNsource."
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-03T12:40:25.561Z",
+        "review_batch": "nl-scale-20261102-064"
+      }
+    },
+    {
+      "ref": "m0",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": "@e0"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@e0",
+        "work_id": 987163001,
+        "bound_author_id": 978300018,
+        "bound_title": "De antwoorden op de grote vragen",
+        "bound_language": "dut",
+        "bound_isbn13": "9789000365043",
+        "format": "hardcover",
+        "cover_url": "https://covers.openlibrary.org/b/id/13189253-L.jpg?default=false",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13189253-M.jpg?default=false",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p418241082",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p418241082"
+            ],
+            "reference": "work:816",
+            "checked_at": "2026-11-03T12:40:25.561Z",
+            "note": "ExactDutchHardcoverISBN9789000365043 andKBoriginalBriefAnswers2018 plusprimaryBantampublisher matchexistingWork816; current2014predatesactualbook. RetainWork/author, newDutchedition notnewWork. SourceHawkingcanonicalfullnameindependentlybound byexactISBN.",
+            "supplemental": null,
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-amendment-029.json",
+            "sources": [
+              "https://www.penguinrandomhouse.com/books/600621/brief-answers-to-the-big-questions-by-stephen-hawking/",
+              "https://openlibrary.org/works/OL19552275W",
+              "https://data.bibliotheken.nl/id/nbt/p418241082"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13189253,
+            "sha256": "7fa0c5166659b6afa751df326a0d3577ddea98c56d86ea8a6e324b3eae7f5515",
+            "reference": "cover-semantic-review-063.json",
+            "limitation": "Actually viewed black starfield front, StephenHawking andDutch Deantwoordenopdegrotevragen, wireframeface andgoldtitle. ExactselectedDutch2018hardcoverISBNsource."
+          }
+        ],
+        "review_status": "approved",
+        "reviewed_at": "2026-11-03T12:40:25.561Z",
+        "review_batch": "nl-scale-20261102-064"
+      }
+    }
+  ]
+}

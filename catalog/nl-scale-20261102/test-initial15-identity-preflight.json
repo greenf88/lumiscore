@@ -1,0 +1,96 @@
+{
+  "project_id": "hlvujbrmfdlrfxdjwsmb",
+  "mode": "read-only",
+  "query": "select jsonb_build_object('checked_at',now(),'isbn_matches',(select coalesce(jsonb_agg(to_jsonb(e)),'[]'::jsonb) from public.editions e where e.isbn_13=any(ARRAY['9789022591208','9789020212587','9789046706862','9789027432858','9789060694206','9789043002172','9789000345472','9789492734235','9789022986202','9789027421951','9789463104715','9789029042208','9789024568963','9789022586761','9789020541458']::text[])),'source_work_matches',(select coalesce(jsonb_agg(to_jsonb(w)),'[]'::jsonb) from public.works w where w.open_library_id=any(ARRAY['OL34311050W','OL27203W','OL716850W','OL1911336W','OL2271626W','OL6030812W','OL17634924W','OL21680947W','OL2746372W','OL2746368W','OL19729677W','OL16518W','OL52936W','OL19749410W','OL20840329W']::text[])),'authors',(select coalesce(jsonb_agg(to_jsonb(a)),'[]'::jsonb) from public.authors a where a.open_library_id=any(ARRAY['OL10830350A','OL26273A','OL57437A','OL228968A','OL296646A','OL1515521A','OL30765A','OL19986A','OL402869A','OL7530199A','OL23206A','OL34328A','OL381435A','OL7508207A']::text[])),'author_corpora',(select coalesce(jsonb_agg(to_jsonb(w) order by w.id),'[]'::jsonb) from public.works w join public.authors a on a.id=w.author_id where a.open_library_id=any(ARRAY['OL10830350A','OL26273A','OL57437A','OL228968A','OL296646A','OL1515521A','OL30765A','OL19986A','OL402869A','OL7530199A','OL23206A','OL34328A','OL381435A','OL7508207A']::text[]))) as checks;",
+  "readback": {
+    "authors": [
+      {
+        "id": 969300015,
+        "name": "Rick Riordan",
+        "open_library_id": "OL30765A"
+      }
+    ],
+    "checked_at": "2026-11-02T14:14:37.434452+00:00",
+    "isbn_matches": [],
+    "author_corpora": [
+      {
+        "id": 969100050,
+        "title": "The Titan's Curse",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL492647W",
+        "first_publish_year": 2007,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100051,
+        "title": "The Last Olympian",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL15270622W",
+        "first_publish_year": 2009,
+        "native_identity_key": null
+      },
+      {
+        "id": 969100070,
+        "title": "The Son of Neptune",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL15980243W",
+        "first_publish_year": 2011,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100038,
+        "title": "The Mark of Athena",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL16664287W",
+        "first_publish_year": 2011,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100039,
+        "title": "House of Hades",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL16807730W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100062,
+        "title": "The Chalice of the Gods",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL34025404W",
+        "first_publish_year": 2023,
+        "native_identity_key": null
+      },
+      {
+        "id": 975100063,
+        "title": "Wrath of the Triple Goddess",
+        "cover_id": null,
+        "author_id": 969300015,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL45025627W",
+        "first_publish_year": 2024,
+        "native_identity_key": null
+      }
+    ],
+    "source_work_matches": []
+  }
+}

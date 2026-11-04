@@ -1,0 +1,840 @@
+{
+  "source": "KB Nederlandse Bibliografie Totaal",
+  "license": "CC0",
+  "licenseUrl": "https://data.bibliotheken.nl/",
+  "endpoint": "https://data.bibliotheken.nl/sparql",
+  "query": "SELECT ?node ?p ?value WHERE { GRAPH <http://data.bibliotheken.nl/nta> { VALUES ?node { <http://data.bibliotheken.nl/id/thes/p439367530> <http://data.bibliotheken.nl/id/thes/p440178894> <http://data.bibliotheken.nl/id/thes/p440295637> <http://data.bibliotheken.nl/id/thes/p44227517X> <http://data.bibliotheken.nl/id/thes/p442550936> <http://data.bibliotheken.nl/id/thes/p442818122> <http://data.bibliotheken.nl/id/thes/p442926820> <http://data.bibliotheken.nl/id/thes/p443068801> <http://data.bibliotheken.nl/id/thes/p444263365> <http://data.bibliotheken.nl/id/thes/p444263683> <http://data.bibliotheken.nl/id/thes/p444359397> <http://data.bibliotheken.nl/id/thes/p444360239> <http://data.bibliotheken.nl/id/thes/p444404287> <http://data.bibliotheken.nl/id/thes/p444440321> <http://data.bibliotheken.nl/id/thes/p44449040X> <http://data.bibliotheken.nl/id/thes/p444620192> <http://data.bibliotheken.nl/id/thes/p447691848> <http://data.bibliotheken.nl/id/thes/p45157558X> <http://data.bibliotheken.nl/id/thes/p453719376> <http://data.bibliotheken.nl/id/thes/p45439215X> <http://data.bibliotheken.nl/id/thes/p455221332> <http://data.bibliotheken.nl/id/thes/p455428786> <http://data.bibliotheken.nl/id/thes/p456749225> <http://data.bibliotheken.nl/id/thes/p457916508> <https://data.bibliotheken.nl/.well-known/genid/0e410c28036c1c3fb8e9ce29d066dd38> <https://data.bibliotheken.nl/.well-known/genid/19723159ba35c6155feaa1ccd698c452> <https://data.bibliotheken.nl/.well-known/genid/204ddcdf68145d28e5f82f4371aa0c3b> <https://data.bibliotheken.nl/.well-known/genid/2096a357ab990603f1586e594e15d301> <https://data.bibliotheken.nl/.well-known/genid/2187a39f4d151815a3c923201069b2c0> <https://data.bibliotheken.nl/.well-known/genid/2b75a7606d2be09d050dc44c48055fe6> <https://data.bibliotheken.nl/.well-known/genid/2d5bb3c904d944f654fab0d579770fd0> <https://data.bibliotheken.nl/.well-known/genid/2ed5bed4af61b886284a5b6e92b41e34> <https://data.bibliotheken.nl/.well-known/genid/309b3c62cb8e7203a236c6bb80f0209e> <https://data.bibliotheken.nl/.well-known/genid/4aba62ec27b739c7f49e24823758255f> <https://data.bibliotheken.nl/.well-known/genid/633184d103b1d81aa7f68ccd286cf532> <https://data.bibliotheken.nl/.well-known/genid/66e46d976eb05f64d4b72cb7de66bdaa> <https://data.bibliotheken.nl/.well-known/genid/6d112972719b07547c059596bb2a67da> <https://data.bibliotheken.nl/.well-known/genid/709819c4d4e63893f7fb1eade2e8dea1> <https://data.bibliotheken.nl/.well-known/genid/83e2ea0e80fcf048fb82458e0590ad41> <https://data.bibliotheken.nl/.well-known/genid/9f99a3794455487ad346840745ddfedc> <https://data.bibliotheken.nl/.well-known/genid/ae1bd5f54d5df325352c55c18bd28614> <https://data.bibliotheken.nl/.well-known/genid/b9d649183c398bde885f79a0306ae050> <https://data.bibliotheken.nl/.well-known/genid/f0316e9dec5693671bf5a19be7e9c5aa> } VALUES ?p { <http://schema.org/name> <http://schema.org/alternateName> <http://www.w3.org/2000/01/rdf-schema#label> <http://schema.org/sameAs> } ?node ?p ?value } } LIMIT 9000",
+  "label": "linked ISBN author 420..462",
+  "checkedAt": "2026-11-02T12:25:02.025Z",
+  "status": 200,
+  "contentType": "application/sparql-results+json; charset=UTF-8",
+  "finalUrl": "https://data.bibliotheken.nl/sparql?query=SELECT+%3Fnode+%3Fp+%3Fvalue+WHERE+%7B+GRAPH+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fnta%3E+%7B+VALUES+%3Fnode+%7B+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp439367530%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp440178894%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp440295637%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp44227517X%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp442550936%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp442818122%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp442926820%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp443068801%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444263365%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444263683%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444359397%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444360239%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444404287%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444440321%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp44449040X%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp444620192%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp447691848%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp45157558X%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp453719376%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp45439215X%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp455221332%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp455428786%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp456749225%3E+%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fid%2Fthes%2Fp457916508%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F0e410c28036c1c3fb8e9ce29d066dd38%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F19723159ba35c6155feaa1ccd698c452%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F204ddcdf68145d28e5f82f4371aa0c3b%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F2096a357ab990603f1586e594e15d301%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F2187a39f4d151815a3c923201069b2c0%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F2b75a7606d2be09d050dc44c48055fe6%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F2d5bb3c904d944f654fab0d579770fd0%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F2ed5bed4af61b886284a5b6e92b41e34%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F309b3c62cb8e7203a236c6bb80f0209e%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F4aba62ec27b739c7f49e24823758255f%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F633184d103b1d81aa7f68ccd286cf532%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F66e46d976eb05f64d4b72cb7de66bdaa%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F6d112972719b07547c059596bb2a67da%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F709819c4d4e63893f7fb1eade2e8dea1%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F83e2ea0e80fcf048fb82458e0590ad41%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2F9f99a3794455487ad346840745ddfedc%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fae1bd5f54d5df325352c55c18bd28614%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Fb9d649183c398bde885f79a0306ae050%3E+%3Chttps%3A%2F%2Fdata.bibliotheken.nl%2F.well-known%2Fgenid%2Ff0316e9dec5693671bf5a19be7e9c5aa%3E+%7D+VALUES+%3Fp+%7B+%3Chttp%3A%2F%2Fschema.org%2Fname%3E+%3Chttp%3A%2F%2Fschema.org%2FalternateName%3E+%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label%3E+%3Chttp%3A%2F%2Fschema.org%2FsameAs%3E+%7D+%3Fnode+%3Fp+%3Fvalue+%7D+%7D+LIMIT+9000",
+  "bytes": 11583,
+  "sha256": "af80ac9c39f0108ab7f7ef42089270c2dd46a9fb1103c8e37e0ae2a17b48c50c",
+  "data": {
+    "head": {
+      "vars": [
+        "node",
+        "p",
+        "value"
+      ]
+    },
+    "results": {
+      "bindings": [
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p455221332"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Durst, Sarah Beth"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p455428786"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Lynn, Jaysea"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p456749225"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Bostwick, Marie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p457916508"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Thompson, Shailee"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p439367530"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Scanlan, Kathryn (1980-)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p440178894"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Silver, Elsie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p440295637"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Gilmore, Laurie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44227517X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Tuli, Nisha J."
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442550936"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Keijzer, Leslie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442818122"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Parish, Theo"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442926820"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Weaver, Brynne"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p443068801"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Kiefer, Lena"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444263365"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Hermans-Kroot, Eva (1998-2024)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444263683"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Tongerloo, Michelle van"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444359397"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Ishida, Syou (1975-)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444360239"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Espach, Alison (1984-)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444404287"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Kova, Elise"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444440321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Hart, Callie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44449040X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Kliewer, Marcus"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444620192"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Smith, Kaylie"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p447691848"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Knapp, Florence"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p45157558X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Mae, Selina"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p453719376"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Franke, Shari"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p45439215X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "value": {
+            "type": "literal",
+            "value": "SenLinYu (1990-)"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p455221332"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Sarah Beth Durst"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p455428786"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Jaysea Lynn"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p456749225"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Marie Bostwick"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p457916508"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Shailee Thompson"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p439367530"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Kathryn Scanlan"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p440178894"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Elsie Silver"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p440295637"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Laurie Gilmore"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44227517X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Nisha J. Tuli"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442550936"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Leslie Keijzer"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442818122"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Theo Parish"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p442926820"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Brynne Weaver"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p443068801"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Lena Kiefer"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444263365"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Eva Hermans-Kroot"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444263683"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Michelle van Tongerloo"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444359397"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Syou Ishida"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444360239"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Alison Espach"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444404287"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Elise Kova"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444440321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Callie Hart"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44449040X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Marcus Kliewer"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444620192"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Kaylie Smith"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p447691848"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Florence Knapp"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p45157558X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Selina Mae"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p453719376"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "Shari Franke"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p45439215X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/name"
+          },
+          "value": {
+            "type": "literal",
+            "value": "SenLinYu"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p455221332"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000035630273"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p439367530"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000501749520"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p440178894"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000517636053"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44227517X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000514486248"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444359397"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000528718812"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444360239"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000090826404"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444440321"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000506004931"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p44449040X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000528885936"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p444620192"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000513701065"
+          }
+        },
+        {
+          "node": {
+            "type": "uri",
+            "value": "http://data.bibliotheken.nl/id/thes/p45439215X"
+          },
+          "p": {
+            "type": "uri",
+            "value": "http://schema.org/sameAs"
+          },
+          "value": {
+            "type": "uri",
+            "value": "https://isni.org/isni/0000000529474098"
+          }
+        }
+      ]
+    }
+  },
+  "error": null
+}

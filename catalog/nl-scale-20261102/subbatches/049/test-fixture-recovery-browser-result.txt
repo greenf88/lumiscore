@@ -1,0 +1,85 @@
+- link "Skip to content":
+  - /url: "#main"
+  - generic: Skip to content
+- navigation:
+  - button "L lumiscore-pr8-discovery-test main":
+    - generic: L
+    - generic: lumiscore-pr8-discovery-test
+    - generic: main
+  - button "Connect":
+  - button:
+    - figure:
+  - button "Open menu":
+- navigation "Floating toolbar":
+  - button:
+  - button "Help":
+    - generic: Help
+  - button "Advisor Center":
+    - generic: Advisor Center
+  - button "SQL Editor":
+    - generic: SQL Editor
+  - button "AI Assistant":
+    - generic: AI Assistant
+- main:
+  - main:
+    - tablist:
+      - tab "Untitled query" [selected]:
+        - generic: Untitled query
+      - button "Close tab":
+      - separator
+      - button:
+    - status
+    - generic: Unsaved edits
+    - button "More actions":
+    - 'button "Query source: Database"':
+      - generic: Database
+    - button "Save":
+      - generic: Save
+      - generic: Ctrl S
+    - button "Run":
+      - generic: Run
+      - generic: Ctrl ↵
+    - code:
+      - generic: "32"
+      - generic: "33"
+      - generic: "34"
+      - generic: "35"
+      - generic: "36"
+      - generic: execute format('update public.%I t set %s where %s',r->>'relation',cols,
+      - generic: replace(predicate,'$1','$2')) using r->'before_row',k;
+      - generic: end if;
+      - generic: end loop;
+      - generic: end;$undo$;commit;
+      - textbox "Editor content" [active]: execute format('update public.%I t set %s where %s',r->>'relation',cols,replace(predicate,'$1','$2')) using r->'before_row',k; end if; end loop; end;$undo$;commit;
+      - generic: "7"
+      - generic: 
+      - generic: "10"
+      - generic: 
+      - generic: "30"
+      - generic: 
+      - list:
+        - generic: do $undo$ declare receipt jsonb;r jsonb;actual jsonb;dep record;n bigint;cols
+        - generic: for r in select value from jsonb_array_elements(receipt->'rows') order by
+        - generic: else
+    - separator:
+    - tablist:
+      - tab "Results" [selected]:
+        - generic: Results
+      - tab "Chart":
+        - generic: Chart
+      - button "1 row":
+        - paragraph:
+          - generic: 1 row
+      - button "Export":
+        - generic: Export
+    - grid:
+      - row "set_config":
+        - columnheader "set_config":
+          - generic: set_config
+      - row:
+        - gridcell:
+          - text: "{\"rows\":[{\"key\":{\"open_library_id\":\"OL8106910A\"},\"seq\":1,\"relation\":\"authors\",\"after_row\":{\"id\":987348001,\"name\":\"Agustina Bazterrica\",\"open_library_id\":\"OL8106910A\"},\"before_row\":null},{\"key\":{\"native_identity_key\":\"nlscale:fixture049:149\"},\"seq\":2,\"relation\":\"works\",\"after_row\":{\"id\":987148001,\"title\":\"Tender Is the Flesh\",\"cover_id\":null,\"author_id\":987348001,\"work_type\":null,\"source_type\":\"open_library\",\"open_library_id\":\"OL17864836W\",\"first_publish_year\":2015,\"native_identity_key\":\"nlscale:fixture049:149\"},\"before_row\":null},{\"key\":{\"native_identity_key\":\"nlscale:fixture049:162\"},\"seq\":3,\"relation\":\"works\",\"after_row\":{\"id\":987148002,\"title\":\"Metamorphosis\",\"cover_id\":null,\"author_id\":987310001,\"work_type\":null,\"source_type\":\"open_library\",\"open_library_id\":\"OL498556W\",\"first_publish_year\":1915,\"native_identity_key\":\"nlscale:fixture049:162\"},\"before_row\":null},{\"key\":{\"open_library_edition_id\":\"OL29762592M\"},\"seq\":4,\"relation\":\"editions\",\"after_row\":{\"id\":987248001,\"title\":\"Tender Is the Flesh\",\"isbn_10\":null,\"isbn_13\":\"9781982150921\",\"work_id\":987148001,\"cover_id\":null,\"language\":null,\"publisher\":\"Scribner\",\"publish_date\":null,\"open_library_edition_id\":\"OL29762592M\"},\"before_row\":null},{\"key\":{\"open_library_edition_id\":\"OL41072530M\"},\"seq\":5,\"relation\":\"editions\",\"after_row\":{\"id\":987248002,\"title\":\"Metamorphosis\",\"isbn_10\":null,\"isbn_13\":\"9781098540685\",\"work_id\":987148002,\"cover_id\":null,\"language\":null,\"publisher\":\"Independently Published\",\"publish_date\":null,\"open_library_edition_id\":\"OL41072530M\"},\"before_row\":null}],\"batch\":\"nl-scale-20261102-049-fixture\",\"project\":\"hlvujbrmfdlrfxdjwsmb\"}"
+          - button "View full cell content":
+- region "Notifications alt+T"
+- alert
+- alert

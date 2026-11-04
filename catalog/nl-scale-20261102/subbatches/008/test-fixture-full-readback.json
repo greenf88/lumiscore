@@ -1,0 +1,52 @@
+{
+  "query": "select jsonb_build_object('checked_at',clock_timestamp(),'works',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.works t where id between 987107001 and 987107999),'editions',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.editions t where work_id between 987107001 and 987107999),'authors',(select coalesce(jsonb_agg(to_jsonb(t) order by id),'[]') from public.authors t where id in(select author_id from public.works where id between 987107001 and 987107999))) as readback;",
+  "readback": {
+    "works": [
+      {
+        "id": 987107001,
+        "title": "A Briefer History of Time",
+        "cover_id": null,
+        "author_id": 978300018,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL1892618W",
+        "first_publish_year": 2005,
+        "native_identity_key": "nlscale:fixture008:2392"
+      }
+    ],
+    "authors": [
+      {
+        "id": 978300018,
+        "name": "Stephen Hawking",
+        "open_library_id": "OL2675573A"
+      }
+    ],
+    "editions": [
+      {
+        "id": 987207001,
+        "title": "Een korte geschiedenis van de tijd",
+        "isbn_10": "9035141709",
+        "isbn_13": "9789035141704",
+        "work_id": 987107001,
+        "cover_id": null,
+        "language": "dut",
+        "publisher": "Bert Bakker",
+        "publish_date": null,
+        "open_library_edition_id": "OL40284495M"
+      },
+      {
+        "id": 987207002,
+        "title": "A Briefer History of Time",
+        "isbn_10": "0553804367",
+        "isbn_13": "9780553804362",
+        "work_id": 987107001,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "Bantam",
+        "publish_date": null,
+        "open_library_edition_id": "OL7850566M"
+      }
+    ],
+    "checked_at": "2026-11-02T18:46:56.425768+00:00"
+  }
+}

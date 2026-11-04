@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {reviewHash,applyAmendments} from './nl-scale-reviews.mjs';
+const old={candidateId:'one',reference:'content-review-001.json',text:null};
+const make=()=>({candidateId:'one',reference:'content-amendment-001.json',supersedes:{reference:old.reference,entrySha256:reviewHash(old)},reason:'Checked an independent primary source',review:{facts:['Book-specific fact'],additionalSources:['https://publisher.example/book'],contentStatus:'reviewed_original_draft',text:Array(60).fill('woord').join(' ')}});
+test('new source revision preserves the immutable earlier review',()=>{const source=new Map([['one',old]]),a=make(),out=applyAmendments(source,[a]);assert.equal(source.get('one').text,null);assert.equal(out.get('one').previousReference,old.reference);assert.equal(out.get('one').reference,a.reference);});
+test('stale, evidence-free and repeated amendments are refused',()=>{const source=new Map([['one',old]]);let a=make();a.supersedes.entrySha256='wrong';assert.throws(()=>applyAmendments(source,[a]),/Stale/);a=make();a.review.additionalSources=[];assert.throws(()=>applyAmendments(source,[a]),/evidence/);a=make();assert.throws(()=>applyAmendments(source,[a,a]),/Stale/);});

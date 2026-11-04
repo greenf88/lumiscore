@@ -1,0 +1,349 @@
+{
+  "tables": [
+    {
+      "rls": true,
+      "name": "authors"
+    },
+    {
+      "rls": true,
+      "name": "catalog_edition_metadata"
+    },
+    {
+      "rls": true,
+      "name": "catalog_work_descriptions"
+    },
+    {
+      "rls": true,
+      "name": "editions"
+    },
+    {
+      "rls": true,
+      "name": "works"
+    }
+  ],
+  "columns": [
+    {
+      "type": "bigint",
+      "table": "authors",
+      "column": "id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "authors",
+      "column": "name",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "authors",
+      "column": "open_library_id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "catalog_edition_metadata",
+      "column": "edition_id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "catalog_edition_metadata",
+      "column": "work_id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "catalog_edition_metadata",
+      "column": "bound_author_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "bound_title",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "bound_language",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "bound_isbn13",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "format",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "cover_url",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "card_cover_url",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "evidence_url",
+      "default": null
+    },
+    {
+      "type": "jsonb",
+      "table": "catalog_edition_metadata",
+      "column": "evidence",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "review_status",
+      "default": null
+    },
+    {
+      "type": "timestamp with time zone",
+      "table": "catalog_edition_metadata",
+      "column": "reviewed_at",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_edition_metadata",
+      "column": "review_batch",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "catalog_work_descriptions",
+      "column": "work_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "language",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "catalog_work_descriptions",
+      "column": "bound_author_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "text",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "source_type",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "source_name",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "source_url",
+      "default": null
+    },
+    {
+      "type": "jsonb",
+      "table": "catalog_work_descriptions",
+      "column": "evidence",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "provenance",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "review_status",
+      "default": null
+    },
+    {
+      "type": "timestamp with time zone",
+      "table": "catalog_work_descriptions",
+      "column": "reviewed_at",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "catalog_work_descriptions",
+      "column": "review_batch",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "editions",
+      "column": "id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "editions",
+      "column": "work_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "title",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "language",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "open_library_edition_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "isbn_10",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "isbn_13",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "publisher",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "editions",
+      "column": "publish_date",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "editions",
+      "column": "cover_id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "works",
+      "column": "id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "works",
+      "column": "title",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "works",
+      "column": "author_id",
+      "default": null
+    },
+    {
+      "type": "integer",
+      "table": "works",
+      "column": "first_publish_year",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "works",
+      "column": "open_library_id",
+      "default": null
+    },
+    {
+      "type": "bigint",
+      "table": "works",
+      "column": "cover_id",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "works",
+      "column": "source_type",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "works",
+      "column": "work_type",
+      "default": null
+    },
+    {
+      "type": "text",
+      "table": "works",
+      "column": "native_identity_key",
+      "default": null
+    }
+  ],
+  "database": "postgres",
+  "policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "(review_status = 'approved'::text)",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "catalog_edition_metadata",
+      "permissive": "PERMISSIVE",
+      "policyname": "catalog_editions_public_approved",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(review_status = 'approved'::text)",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "catalog_work_descriptions",
+      "permissive": "PERMISSIVE",
+      "policyname": "catalog_descriptions_public_approved",
+      "schemaname": "public",
+      "with_check": null
+    }
+  ],
+  "checked_at": "2026-11-02T15:20:06.78448+00:00",
+  "free_range_conflicts": {
+    "works": 0,
+    "authors": 0,
+    "editions": 0
+  }
+}

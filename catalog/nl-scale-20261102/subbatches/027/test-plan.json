@@ -1,0 +1,210 @@
+{
+  "summary": {
+    "batch": "nl-scale-20261102-027",
+    "target": "hlvujbrmfdlrfxdjwsmb",
+    "scope": "Exact mirrored editions; fixture has separate receipt",
+    "actions": 4,
+    "newWorks": 0,
+    "newDutchEditions": 1,
+    "newDutchSummaries": 1,
+    "newCoverBindings": 1,
+    "correctedOriginalYears": 1,
+    "correctedWrongLanguages": 0,
+    "netDutchAvailability": 1
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 987126001,
+        "title": "Mary, Mary",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167173W",
+        "first_publish_year": 1857,
+        "native_identity_key": "nlscale:fixture027:629"
+      },
+      "author": {
+        "id": 946300342,
+        "name": "James Patterson",
+        "open_library_id": "OL22258A"
+      }
+    }
+  ],
+  "authorCorpora": [],
+  "actions": [
+    {
+      "ref": "y0",
+      "relation": "works",
+      "key": {
+        "id": 987126001
+      },
+      "before": {
+        "id": 987126001,
+        "title": "Mary, Mary",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167173W",
+        "first_publish_year": 1857,
+        "native_identity_key": "nlscale:fixture027:629"
+      },
+      "after": {
+        "id": 987126001,
+        "title": "Mary, Mary",
+        "cover_id": null,
+        "author_id": 946300342,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL167173W",
+        "first_publish_year": 2005,
+        "native_identity_key": "nlscale:fixture027:629"
+      }
+    },
+    {
+      "ref": "e0",
+      "relation": "editions",
+      "key": {
+        "open_library_edition_id": "OL47139255M"
+      },
+      "before": null,
+      "after": {
+        "work_id": 987126001,
+        "title": "In naam van de vader",
+        "language": "dut",
+        "open_library_edition_id": "OL47139255M",
+        "isbn_13": "9789046113639",
+        "isbn_10": null,
+        "publisher": "Bruna Uitgevers, a.W.",
+        "id": 987226002,
+        "publish_date": null,
+        "cover_id": null
+      }
+    },
+    {
+      "ref": "d0",
+      "relation": "catalog_work_descriptions",
+      "key": {
+        "work_id": 987126001,
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": 987126001,
+        "language": "nl",
+        "bound_author_id": 946300342,
+        "text": "Tijdens een vakantie met zijn gezin wordt Alex Cross opgeroepen voor het onderzoek naar de moord op een actrice. Een krant ontvangt kort daarna een bericht waarin de dader de gebeurtenis beschrijft. Het blijkt niet om een op zichzelf staande zaak te gaan. Nieuwe bedreigingen brengen bekende personen in Hollywood in paniek. Cross en de plaatselijke politie moeten een patroon zien te vinden voordat opnieuw iemand wordt gedood, terwijl de berichten het onderzoek steeds nadrukkelijker proberen te sturen.",
+        "source_type": "official_catalog",
+        "source_name": "Gecontroleerde boek- en catalogusbronnen",
+        "source_url": "https://data.bibliotheken.nl/id/nbt/p320421678",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p320421678"
+            ],
+            "reference": "work:629",
+            "checked_at": "2026-11-02T22:45:19.457Z",
+            "note": "ExactDutch9789046113639/KBp320421678 canonical title is Innaamvandevader. Remove source retail /druk1 suffix and extra de, preserve ISBN/OLkey/language/format/cover. AlexCross#11/MaryMary2005, authorJamesPatterson canonicalJamesBrendan; no newWork. Current1857 is incompatible with the primary author/publisher original2005; correct only this original Workyear with fullrowCAS. Existing unknown-language edition remains unchanged.",
+            "supplemental": {
+              "originalEditionSha256": "74ba91a12c2ce44330d67dc051f3d7beceea1eb7923d52a251cfe734b5a414ad",
+              "review": "ExactDutch9789046113639/KBp320421678 canonical title is Innaamvandevader. Remove source retail /druk1 suffix and extra de, preserve ISBN/OLkey/language/format/cover. AlexCross#11/MaryMary2005, authorJamesPatterson canonicalJamesBrendan; no newWork.",
+              "reviewSources": [
+                "https://data.bibliotheken.nl/id/nbt/p320421678",
+                "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639"
+              ],
+              "formatSource": "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639"
+            },
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p320421678",
+              "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639",
+              "https://www.hachettebookgroup.com/titles/james-patterson/mary-mary/9780316159760/",
+              "https://www.jamespatterson.com/titles/james-patterson/mary-mary/9780759514812/",
+              "https://openlibrary.org/works/OL167173W"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13536449,
+            "sha256": "8ca226f927c483bcaf0157e52f72a26de4fdc0a627c8c7b5771394d026a322fc",
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and source-edition binding; no barcode assertion."
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T22:45:19.457Z",
+        "review_batch": "nl-scale-20261102-027"
+      }
+    },
+    {
+      "ref": "m0",
+      "relation": "catalog_edition_metadata",
+      "key": {
+        "edition_id": "@e0"
+      },
+      "before": null,
+      "after": {
+        "edition_id": "@e0",
+        "work_id": 987126001,
+        "bound_author_id": 946300342,
+        "bound_title": "In naam van de vader",
+        "bound_language": "dut",
+        "bound_isbn13": "9789046113639",
+        "format": "paperback",
+        "cover_url": "https://covers.openlibrary.org/b/id/13536449-L.jpg?default=false",
+        "card_cover_url": "https://covers.openlibrary.org/b/id/13536449-M.jpg?default=false",
+        "evidence_url": "https://data.bibliotheken.nl/id/nbt/p320421678",
+        "evidence": [
+          {
+            "type": "reviewed_identity_and_bibliography",
+            "sources": [
+              "http://data.bibliotheken.nl/id/nbt/p320421678"
+            ],
+            "reference": "work:629",
+            "checked_at": "2026-11-02T22:45:19.457Z",
+            "note": "ExactDutch9789046113639/KBp320421678 canonical title is Innaamvandevader. Remove source retail /druk1 suffix and extra de, preserve ISBN/OLkey/language/format/cover. AlexCross#11/MaryMary2005, authorJamesPatterson canonicalJamesBrendan; no newWork. Current1857 is incompatible with the primary author/publisher original2005; correct only this original Workyear with fullrowCAS. Existing unknown-language edition remains unchanged.",
+            "supplemental": {
+              "originalEditionSha256": "74ba91a12c2ce44330d67dc051f3d7beceea1eb7923d52a251cfe734b5a414ad",
+              "review": "ExactDutch9789046113639/KBp320421678 canonical title is Innaamvandevader. Remove source retail /druk1 suffix and extra de, preserve ISBN/OLkey/language/format/cover. AlexCross#11/MaryMary2005, authorJamesPatterson canonicalJamesBrendan; no newWork.",
+              "reviewSources": [
+                "https://data.bibliotheken.nl/id/nbt/p320421678",
+                "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639"
+              ],
+              "formatSource": "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639"
+            },
+            "existingAlternativeReview": null
+          },
+          {
+            "type": "original_substantive_source_review",
+            "review": "content-review-018.json",
+            "sources": [
+              "https://data.bibliotheken.nl/id/nbt/p320421678",
+              "https://boekenbalie.nl/in-de-naam-van-de-vader-zwarte-beertjes/9789046113639",
+              "https://www.hachettebookgroup.com/titles/james-patterson/mary-mary/9780316159760/",
+              "https://www.jamespatterson.com/titles/james-patterson/mary-mary/9780759514812/",
+              "https://openlibrary.org/works/OL167173W"
+            ]
+          },
+          {
+            "type": "cover_front_review",
+            "cover_id": 13536449,
+            "sha256": "8ca226f927c483bcaf0157e52f72a26de4fdc0a627c8c7b5771394d026a322fc",
+            "reference": "cover-semantic-review-002.json",
+            "limitation": "Front title/author and source-edition binding; no barcode assertion."
+          }
+        ],
+        "review_status": "approved",
+        "reviewed_at": "2026-11-02T22:45:19.457Z",
+        "review_batch": "nl-scale-20261102-027"
+      }
+    }
+  ]
+}

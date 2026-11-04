@@ -1,0 +1,110 @@
+{
+  "project": "hlvujbrmfdlrfxdjwsmb",
+  "installation": {
+    "at": "2026-11-02T18:54:06.460454+00:00",
+    "history": [
+      {
+        "name": "nl_scale_search_unicode",
+        "version": "20261102185143",
+        "statements": 6
+      }
+    ],
+    "function": {
+      "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres}",
+      "md5": "187df6e5e6ea8976d1a85a2d4c1a9e01",
+      "owner": "postgres",
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": false
+    }
+  },
+  "query": "select v.label,v.query,v.expected_id,jsonb_array_length(public.catalog_search_selection_v2(v.query,'nl')->'candidates') as candidates,exists(select 1 from jsonb_array_elements(public.catalog_search_selection_v2(v.query,'nl')->'candidates') c where c->>'workId'=v.expected_id::text) as expected_found from(values ('tituba','Moi, Tituba, Sorcière...Noire de Salem',987104010::bigint),('blauwbeer_nl','De 13 1⁄2 levens van kap’tein Blauwbeer',987104021::bigint),('blauwbeer_original','Die 13 1⁄2 Leben des Käpt’n Blaubär',987104021::bigint),('baroja','El árbol de la ciencia',987104027::bigint),('control','Niemand zeggen',987100001::bigint)) v(label,query,expected_id);",
+  "rows": [
+    {
+      "label": "tituba",
+      "query": "Moi, Tituba, Sorcière...Noire de Salem",
+      "expected_id": 987104010,
+      "candidates": 1,
+      "expected_found": true
+    },
+    {
+      "label": "blauwbeer_nl",
+      "query": "De 13 1⁄2 levens van kap’tein Blauwbeer",
+      "expected_id": 987104021,
+      "candidates": 1,
+      "expected_found": true
+    },
+    {
+      "label": "blauwbeer_original",
+      "query": "Die 13 1⁄2 Leben des Käpt’n Blaubär",
+      "expected_id": 987104021,
+      "candidates": 1,
+      "expected_found": true
+    },
+    {
+      "label": "baroja",
+      "query": "El árbol de la ciencia",
+      "expected_id": 987104027,
+      "candidates": 1,
+      "expected_found": true
+    },
+    {
+      "label": "control",
+      "query": "Niemand zeggen",
+      "expected_id": 987100001,
+      "candidates": 1,
+      "expected_found": true
+    }
+  ],
+  "safety": {
+    "catalogue": {
+      "works": {
+        "count": 1221,
+        "digest": "97e83b40b5b8022acb00855e5c47f17e"
+      },
+      "authors": {
+        "count": 471,
+        "digest": "88738dc43c31955f6b407f63453cda8f"
+      },
+      "editions": {
+        "count": 1694,
+        "digest": "db8ce43a933b1dd10245772236f6805a"
+      },
+      "metadata": {
+        "count": 738,
+        "digest": "ce57de0d603aa5d8e64f156d35063d2a"
+      },
+      "descriptions": {
+        "count": 834,
+        "digest": "14e51805577a9d7db4502265b844ffeb"
+      }
+    },
+    "protected": {
+      "ratings": {
+        "count": 71,
+        "digest": "ee170538912a5903686f35838187b073"
+      },
+      "accounts": {
+        "count": 3
+      },
+      "reading_status": {
+        "count": 71,
+        "digest": "246b5aaa40b970555a4f94ec04cbac14"
+      },
+      "reading_preferences": {
+        "count": 1,
+        "digest": "7a45bd5d65b7364b84eaac00e93eeb3b"
+      }
+    },
+    "checked_at": "2026-11-02T18:54:09.181932+00:00",
+    "reserved_range": {
+      "works": 1,
+      "authors": 0,
+      "editions": 2
+    }
+  },
+  "catalogueDigestsUnchanged": true,
+  "protectedDigestsUnchanged": true,
+  "productionWrites": 0
+}

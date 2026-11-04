@@ -1,0 +1,401 @@
+{
+  "project_id": "qvplwejffhjvxaypmjut",
+  "mode": "read-only",
+  "query": "with chosen as(select * from public.works where open_library_id=any(array['OL18020194W','OL455327W','OL17076678W','OL81630W','OL149188W','OL17079567W','OL617847W','OL158674W','OL19977665W','OL81621W','OL850975W','OL17937105W','OL167179W']::text[])) select jsonb_build_object('checked_at',clock_timestamp(),'works',(select coalesce(jsonb_agg(to_jsonb(w) order by id),'[]') from chosen w),'authors',(select coalesce(jsonb_agg(to_jsonb(a) order by id),'[]') from public.authors a where id in(select author_id from chosen)),'editions',(select coalesce(jsonb_agg(to_jsonb(e) order by id),'[]') from public.editions e where work_id in(select id from chosen) or isbn_13=any(array['9789401910552','9789059653887','9789026138409','9789024544974','9789024536979','9789057124389','9789029079778','9789044508758','9789400510159','9789024522989','9789038890593','9789044359930','9789046113417']::text[])),'descriptions',(select coalesce(jsonb_agg(to_jsonb(d) order by work_id,language),'[]') from public.catalog_work_descriptions d where work_id in(select id from chosen)),'metadata',(select coalesce(jsonb_agg(to_jsonb(m) order by edition_id),'[]') from public.catalog_edition_metadata m where work_id in(select id from chosen))) as preflight;",
+  "readback": {
+    "works": [
+      {
+        "id": 176,
+        "title": "The Running Man",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-09-02T08:25:45.574009+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL149188W",
+        "first_publish_year": 1982,
+        "native_identity_key": null
+      },
+      {
+        "id": 227,
+        "title": "The Dead Zone",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-09-02T08:27:26.86139+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL81630W",
+        "first_publish_year": 1979,
+        "native_identity_key": null
+      },
+      {
+        "id": 300,
+        "title": "Different Seasons",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-09-02T08:29:45.497652+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL81621W",
+        "first_publish_year": 1982,
+        "native_identity_key": null
+      },
+      {
+        "id": 395,
+        "title": "Lord of the Flies",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 245,
+        "work_type": null,
+        "created_at": "2026-09-02T08:33:23.235196+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL455327W",
+        "first_publish_year": 1954,
+        "native_identity_key": null
+      },
+      {
+        "id": 498,
+        "title": "The Long Haul",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 288,
+        "work_type": null,
+        "created_at": "2026-09-02T08:36:50.697533+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL17076678W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      },
+      {
+        "id": 557,
+        "title": "The Big Bad Wolf",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 342,
+        "work_type": null,
+        "created_at": "2026-09-02T08:38:38.820433+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL167179W",
+        "first_publish_year": 2001,
+        "native_identity_key": null
+      },
+      {
+        "id": 608,
+        "title": "El túnel",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 366,
+        "work_type": null,
+        "created_at": "2026-09-02T08:40:38.990932+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL617847W",
+        "first_publish_year": 1948,
+        "native_identity_key": null
+      },
+      {
+        "id": 681,
+        "title": "It Ends With Us",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 404,
+        "work_type": null,
+        "created_at": "2026-09-02T08:42:49.058405+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL18020194W",
+        "first_publish_year": 2012,
+        "native_identity_key": null
+      },
+      {
+        "id": 811,
+        "title": "The Obstacle is the Way",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 476,
+        "work_type": null,
+        "created_at": "2026-09-02T08:46:55.982842+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL19977665W",
+        "first_publish_year": 2013,
+        "native_identity_key": null
+      },
+      {
+        "id": 1046,
+        "title": "Tirza",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 645,
+        "work_type": null,
+        "created_at": "2026-09-03T19:07:34.667881+00:00",
+        "source_type": "open_library",
+        "open_library_id": "OL850975W",
+        "first_publish_year": 2006,
+        "native_identity_key": null
+      },
+      {
+        "id": 2809,
+        "title": "The Outsider",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 49,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL17937105W",
+        "first_publish_year": 2018,
+        "native_identity_key": null
+      },
+      {
+        "id": 3113,
+        "title": "Mördare utan ansikte",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 857,
+        "work_type": null,
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "source_type": null,
+        "open_library_id": "OL158674W",
+        "first_publish_year": 1993,
+        "native_identity_key": null
+      },
+      {
+        "id": 3672,
+        "title": "Being Mortal",
+        "cover_id": null,
+        "subjects": null,
+        "subtitle": null,
+        "author_id": 1199,
+        "work_type": null,
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "source_type": null,
+        "open_library_id": "OL17079567W",
+        "first_publish_year": 2014,
+        "native_identity_key": null
+      }
+    ],
+    "authors": [
+      {
+        "id": 49,
+        "name": "Stephen King",
+        "created_at": "2026-09-01T15:19:31.691813+00:00",
+        "open_library_id": "OL19981A"
+      },
+      {
+        "id": 245,
+        "name": "William Golding",
+        "created_at": "2026-09-02T08:33:23.061783+00:00",
+        "open_library_id": "OL335424A"
+      },
+      {
+        "id": 288,
+        "name": "Jeff Kinney",
+        "created_at": "2026-09-02T08:35:40.700959+00:00",
+        "open_library_id": "OL2832500A"
+      },
+      {
+        "id": 342,
+        "name": "James Patterson",
+        "created_at": "2026-09-02T08:38:35.235714+00:00",
+        "open_library_id": "OL22258A"
+      },
+      {
+        "id": 366,
+        "name": "Ernesto Sabato",
+        "created_at": "2026-09-02T08:40:38.793707+00:00",
+        "open_library_id": "OL2748652A"
+      },
+      {
+        "id": 404,
+        "name": "Colleen Hoover",
+        "created_at": "2026-09-02T08:42:48.829599+00:00",
+        "open_library_id": "OL7315784A"
+      },
+      {
+        "id": 476,
+        "name": "Ryan Holiday",
+        "created_at": "2026-09-02T08:46:55.782368+00:00",
+        "open_library_id": "OL7099653A"
+      },
+      {
+        "id": 645,
+        "name": "Arnon Grunberg",
+        "created_at": "2026-09-03T19:07:32.283028+00:00",
+        "open_library_id": "OL73644A"
+      },
+      {
+        "id": 857,
+        "name": "Henning Mankell",
+        "created_at": "2026-09-16T15:14:09.34663+00:00",
+        "open_library_id": "OL45364A"
+      },
+      {
+        "id": 1199,
+        "name": "Atul Gawande",
+        "created_at": "2026-09-17T14:27:09.366828+00:00",
+        "open_library_id": "OL1485501A"
+      }
+    ],
+    "editions": [
+      {
+        "id": 176,
+        "title": "The Running Man",
+        "isbn_10": null,
+        "isbn_13": "9781429577083",
+        "work_id": 176,
+        "language": null,
+        "publisher": "Penguin Group USA, Inc.",
+        "created_at": "2026-09-02T08:25:45.865556+00:00",
+        "open_library_edition_id": "OL24281257M"
+      },
+      {
+        "id": 227,
+        "title": "The Dead Zone",
+        "isbn_10": null,
+        "isbn_13": "9781101137949",
+        "work_id": 227,
+        "language": null,
+        "publisher": "Penguin USA, Inc.",
+        "created_at": "2026-09-02T08:27:27.167927+00:00",
+        "open_library_edition_id": "OL24277921M"
+      },
+      {
+        "id": 300,
+        "title": "Different Seasons",
+        "isbn_10": null,
+        "isbn_13": "9780451124340",
+        "work_id": 300,
+        "language": null,
+        "publisher": "New American Library",
+        "created_at": "2026-09-02T08:29:45.731478+00:00",
+        "open_library_edition_id": "OL24205193M"
+      },
+      {
+        "id": 395,
+        "title": "Lord of the Flies",
+        "isbn_10": null,
+        "isbn_13": "9780590040013",
+        "work_id": 395,
+        "language": null,
+        "publisher": "Scholastic",
+        "created_at": "2026-09-02T08:33:23.488808+00:00",
+        "open_library_edition_id": "OL10697919M"
+      },
+      {
+        "id": 498,
+        "title": "Diary of a wimpy kid : the long haul",
+        "isbn_10": null,
+        "isbn_13": "9781419711893",
+        "work_id": 498,
+        "language": null,
+        "publisher": "Penguin",
+        "created_at": "2026-09-02T08:36:50.936496+00:00",
+        "open_library_edition_id": "OL26366428M"
+      },
+      {
+        "id": 557,
+        "title": "The Big Bad Wolf",
+        "isbn_10": "1843956292",
+        "isbn_13": "9781843956297",
+        "work_id": 557,
+        "language": "eng",
+        "publisher": "Charnwood",
+        "created_at": "2026-09-02T08:38:39.057092+00:00",
+        "open_library_edition_id": "OL33870129M"
+      },
+      {
+        "id": 608,
+        "title": "The Tunnel",
+        "isbn_10": null,
+        "isbn_13": "9780345373779",
+        "work_id": 608,
+        "language": null,
+        "publisher": "Ballantine Books",
+        "created_at": "2026-09-02T08:40:39.259201+00:00",
+        "open_library_edition_id": "OL10685619M"
+      },
+      {
+        "id": 681,
+        "title": "It Ends With Us",
+        "isbn_10": null,
+        "isbn_13": "9781471156267",
+        "work_id": 681,
+        "language": null,
+        "publisher": "Simon & Schuster UK Ltd.",
+        "created_at": "2026-09-02T08:42:49.30733+00:00",
+        "open_library_edition_id": "OL27213498M"
+      },
+      {
+        "id": 811,
+        "title": "The obstacle is the way",
+        "isbn_10": null,
+        "isbn_13": "9781591846352",
+        "work_id": 811,
+        "language": null,
+        "publisher": "Portfolio/Penguin",
+        "created_at": "2026-09-02T08:46:56.23395+00:00",
+        "open_library_edition_id": "OL27157819M"
+      },
+      {
+        "id": 1046,
+        "title": "Tirza",
+        "isbn_10": null,
+        "isbn_13": "9781934824696",
+        "work_id": 1046,
+        "language": null,
+        "publisher": "Open Letter",
+        "created_at": "2026-09-03T19:07:34.989449+00:00",
+        "open_library_edition_id": "OL25433172M"
+      },
+      {
+        "id": 2968,
+        "title": "The Outsider",
+        "isbn_10": "1473676436",
+        "isbn_13": "9781473676435",
+        "work_id": 2809,
+        "language": "eng",
+        "publisher": "Hodder",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL32974710M"
+      },
+      {
+        "id": 3272,
+        "title": "Faceless Killers",
+        "isbn_10": "0753169770",
+        "isbn_13": "9780753169773",
+        "work_id": 3113,
+        "language": "eng",
+        "publisher": "ISIS Large Print",
+        "created_at": "2026-10-03T10:24:08.04548+00:00",
+        "open_library_edition_id": "OL32789185M"
+      },
+      {
+        "id": 3831,
+        "title": "Being Mortal",
+        "isbn_10": "1250076226",
+        "isbn_13": "9781250076229",
+        "work_id": 3672,
+        "language": "eng",
+        "publisher": "Picador",
+        "created_at": "2026-10-03T14:36:16.743524+00:00",
+        "open_library_edition_id": "OL35253923M"
+      }
+    ],
+    "metadata": [],
+    "checked_at": "2026-11-02T16:11:44.655461+00:00",
+    "descriptions": []
+  }
+}
