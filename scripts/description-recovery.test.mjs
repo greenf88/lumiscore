@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
 const root=new URL('../catalog/description-recovery-20261104/',import.meta.url);
 const text=n=>fs.readFileSync(new URL(n,root),'utf8'),read=n=>JSON.parse(text(n));
+test('reviewed exact file hashes match the release manifest',()=>{for(const[n,hash]of Object.entries(read('release-hashes.json').sha256))assert.equal(createHash('sha256').update(fs.readFileSync(new URL(n,root))).digest('hex'),hash,n);});
 async function fixture(target){
  const db=new PGlite();
  await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
