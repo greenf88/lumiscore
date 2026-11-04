@@ -1,0 +1,72 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "count",
+    "groupBy": [
+      "botName",
+      "botVerified",
+      "httpStatus"
+    ],
+    "filter": "(clientUserAgent:*Google-InspectionTool*) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "botName": "google-inspectiontool",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "vercel_request_count_count": 440
+    },
+    {
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "vercel_request_count_count": 4
+    }
+  ],
+  "nonzeroBuckets": [
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botName": "google-inspectiontool",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "vercel_request_count_count": 208
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botName": "google-inspectiontool",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "vercel_request_count_count": 108
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botName": "google-inspectiontool",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "vercel_request_count_count": 52
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botName": "google-inspectiontool",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "vercel_request_count_count": 72
+    }
+  ],
+  "groupCap": 100,
+  "sampling": "Not disclosed by this query response; not a raw complete access-log export."
+}

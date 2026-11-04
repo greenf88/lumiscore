@@ -1,0 +1,325 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "count",
+    "groupBy": [
+      "botName",
+      "botVerified",
+      "httpStatus",
+      "wafAction"
+    ],
+    "filter": "(clientUserAgent:*Googlebot*) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 935
+    },
+    {
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 239
+    },
+    {
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 10
+    },
+    {
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "404",
+      "wafAction": "allow",
+      "vercel_request_count_count": 2
+    }
+  ],
+  "nonzeroBuckets": [
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 16
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "404",
+      "wafAction": "allow",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 133
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 297
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 8
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 54
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 7
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 18
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 12
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 76
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 17
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 129
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 57
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 85
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 64
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 48
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 37
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 23
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 12
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 10
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 37
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 6
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 8
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botName": "googlebot",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "wafAction": "allow",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botName": "",
+      "botVerified": "",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "vercel_request_count_count": 5
+    }
+  ],
+  "groupCap": 100,
+  "sampling": "Not disclosed by this query response; not a raw complete access-log export."
+}

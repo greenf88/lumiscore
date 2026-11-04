@@ -1,0 +1,561 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "count",
+    "groupBy": [
+      "botVerified",
+      "httpStatus",
+      "deploymentId"
+    ],
+    "filter": "(botName:googlebot) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 387
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 307
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 171
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 45
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 42
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 34
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 33
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 25
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 22
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 19
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_7oioeXmUmtTNVceasW9jmPtvsNNB",
+      "vercel_request_count_count": 11
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 10
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 10
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_8WYRjVPShVQx3bQVoXPCpFQs5Bo7",
+      "vercel_request_count_count": 8
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 8
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 6
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_8WYRjVPShVQx3bQVoXPCpFQs5Bo7",
+      "vercel_request_count_count": 5
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 5
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 4
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 4
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr",
+      "vercel_request_count_count": 3
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 3
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_5ReBaUHs3UerUmFdBgPr5acHjgxb",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_Gqaqt9h9Gjjhf36j7a7HxZjcP1tg",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_Gqaqt9h9Gjjhf36j7a7HxZjcP1tg",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "404",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 2
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_5ReBaUHs3UerUmFdBgPr5acHjgxb",
+      "vercel_request_count_count": 1
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_7oioeXmUmtTNVceasW9jmPtvsNNB",
+      "vercel_request_count_count": 1
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr",
+      "vercel_request_count_count": 1
+    },
+    {
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 1
+    }
+  ],
+  "nonzeroBuckets": [
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 10
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_5ReBaUHs3UerUmFdBgPr5acHjgxb",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "404",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_5ReBaUHs3UerUmFdBgPr5acHjgxb",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_J8knEL43jWdXiXfsDen6M74X6b4U",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 91
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 42
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 296
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_7oioeXmUmtTNVceasW9jmPtvsNNB",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 8
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 22
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 22
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_7oioeXmUmtTNVceasW9jmPtvsNNB",
+      "vercel_request_count_count": 10
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_7oioeXmUmtTNVceasW9jmPtvsNNB",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 15
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 7
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_EDhbSmCS1qFPcT5Tvc8SiJzTQDjc",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 10
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 30
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 34
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 12
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_Gqaqt9h9Gjjhf36j7a7HxZjcP1tg",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_Gqaqt9h9Gjjhf36j7a7HxZjcP1tg",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 129
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 57
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 85
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 64
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 48
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 37
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 23
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 12
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 9
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_8WYRjVPShVQx3bQVoXPCpFQs5Bo7",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 29
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_8WYRjVPShVQx3bQVoXPCpFQs5Bo7",
+      "vercel_request_count_count": 8
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_8WYRjVPShVQx3bQVoXPCpFQs5Bo7",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 8
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "200",
+      "deploymentId": "dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "botVerified": "pass",
+      "httpStatus": "308",
+      "deploymentId": "dpl_F9XRHgBEGWT52BKkGKCgyZpmUSnr",
+      "vercel_request_count_count": 1
+    }
+  ],
+  "groupCap": 100,
+  "sampling": "Not disclosed by this query response; not a raw complete access-log export."
+}

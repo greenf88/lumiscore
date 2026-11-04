@@ -13,15 +13,19 @@ UAS={
 HEADERS={'content-type','cache-control','age','vary','x-robots-tag','link','server-timing','x-vercel-cache','x-vercel-id','location','etag','content-encoding'}
 class Document(HTMLParser):
  def __init__(self,text):
-  super().__init__(convert_charrefs=True);self.text=text;self.lines=text.splitlines(keepends=True);self.starts=[];self.ends=[];self.tags=[];self.head=False;self.body=False;self.template=0;self.current=None;self.titles=[];self.h1=[]
+  super().__init__(convert_charrefs=True);self.text=text;self.lines=text.splitlines(keepends=True);self.starts=[];self.ends=[];self.tags=[];self.head=False;self.body=False;self.template=0;self.current=None;self.titles=[];self.h1=[];self.headValid=True;self.invalidHeadElements=[]
  def pos(self):
   line,col=self.getpos();return len((''.join(self.lines[:line-1])+self.lines[line-1][:col]).encode('utf-8'))
  def handle_starttag(self,t,attrs):
   a=dict(attrs);at=self.pos()
+  # Google stops reading head metadata at an invalid head element. An explicit
+  # later </head> does not make a canonical after <div>/<img> valid again.
+  if self.head and not self.body and self.template==0 and t not in ('head','title','meta','link','script','style','base','noscript','template'):
+   self.invalidHeadElements.append({'tag':t,'offset':at});self.headValid=False
   if t=='head':self.head=True;self.starts.append(at)
   if t=='body':self.body=True
   if t=='template':self.template+=1
-  effective_head=self.head and not self.body and self.template==0
+  effective_head=self.head and self.headValid and not self.body and self.template==0
   if t in ('title','h1'):self.current={'kind':t,'offset':at,'inHead':effective_head,'text':''}
   kind='canonical' if t=='link' and a.get('rel')=='canonical' else 'hreflang' if t=='link' and a.get('rel')=='alternate' and a.get('hreflang') else a.get('name',a.get('property')) if t=='meta' else None
   if kind in ('canonical','hreflang','description','robots','googlebot','og:title','og:description','og:url','og:image','twitter:card','twitter:image'):
@@ -36,7 +40,7 @@ class Document(HTMLParser):
 
 def inspect(raw):
  text=raw.decode('utf-8','replace');p=Document(text);p.feed(text)
- return {'headOpen':p.starts,'headClose':p.ends,'title':p.titles,'h1':p.h1,'tags':p.tags,'byteHeadClose':p.ends[0] if p.ends else -1,'naiveByteHeadClose':raw.lower().find(b'</head>'),'relevantOutsideHead':[t for t in p.tags+p.titles if not t['inHead']],'duplicateKinds':{**{k:sum(t['kind']==k for t in p.tags) for k in ['canonical','description','robots','og:title','og:image'] if sum(t['kind']==k for t in p.tags)>1},**({'title':len(p.titles)} if len(p.titles)>1 else {})}}
+ return {'headOpen':p.starts,'headClose':p.ends,'invalidHeadElements':p.invalidHeadElements,'title':p.titles,'h1':p.h1,'tags':p.tags,'byteHeadClose':p.ends[0] if p.ends else -1,'naiveByteHeadClose':raw.lower().find(b'</head>'),'relevantOutsideHead':[t for t in p.tags+p.titles if not t['inHead']],'duplicateKinds':{**{k:sum(t['kind']==k for t in p.tags) for k in ['canonical','description','robots','og:title','og:image'] if sum(t['kind']==k for t in p.tags)>1},**({'title':len(p.titles)} if len(p.titles)>1 else {})}}
 
 class Redirects(urllib.request.HTTPRedirectHandler):
  def __init__(self):super().__init__();self.chain=[]

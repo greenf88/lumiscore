@@ -1,0 +1,389 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "count",
+    "groupBy": [
+      "requestHostname",
+      "httpStatus"
+    ],
+    "filter": "(botName:googlebot) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 935
+    },
+    {
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 178
+    },
+    {
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 29
+    },
+    {
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 16
+    },
+    {
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 14
+    },
+    {
+      "requestHostname": "lumisco.re",
+      "httpStatus": "404",
+      "vercel_request_count_count": 2
+    },
+    {
+      "requestHostname": "lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    }
+  ],
+  "nonzeroBuckets": [
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 16
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "404",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 133
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 297
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 6
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 54
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 18
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 76
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 10
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 129
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 53
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 85
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 57
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 48
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 33
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 23
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 12
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 37
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 4
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "www.lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "www.lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "lumiscorebooks.com",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "requestHostname": "lumiscore.nl",
+      "httpStatus": "308",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "200",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "requestHostname": "lumisco.re",
+      "httpStatus": "308",
+      "vercel_request_count_count": 1
+    }
+  ],
+  "groupCap": 100,
+  "sampling": "Not disclosed by this query response; not a raw complete access-log export."
+}
