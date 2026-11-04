@@ -18,6 +18,13 @@ export function safePublicSource(value:unknown):value is string {
     const u=new URL(value);
     if(!publicBibliographicHost(u)||u.hash)return false;
     if(!u.search)return true;
+    // This publisher's stable book URL uses the bibliographic ISBN as its sole
+    // identifier. Preserve that exact source binding; never strip the query.
+    if(u.hostname==='penguinrandomhousehighereducation.com'&&u.pathname==='/book/'&&
+      [...u.searchParams].length===1&&u.searchParams.has('isbn')){
+      const isbn=u.searchParams.get('isbn')!;
+      return /^97[89]\d{10}$/.test(isbn)&&[...isbn].reduce((sum,d,i)=>sum+Number(d)*(i%2?3:1),0)%10===0;
+    }
     // A Google Books volume ID identifies the reviewed bibliographic source.
     // Do not silently discard that binding or allow arbitrary search/tracking
     // parameters, free text, tokens or duplicate identifiers in its place.

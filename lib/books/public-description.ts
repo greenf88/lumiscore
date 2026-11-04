@@ -8,11 +8,19 @@ export async function loadPublicBookDescription(book: Book, locale: Locale, fetc
   return (await loadPublicBookDescriptionState(book, locale, fetchImplementation)).description;
 }
 
+/** Already reviewed by the shared, edition/author-bound storage loader. Keep
+ * this synchronous so SSR can render approved text in the initial main slot. */
+export function getStoredPublicBookDescription(book: Book, locale: Locale): VerifiedBookDescription | null {
+  if (book.editionAvailable === false) return null;
+  const stored = normalizeVerifiedBookDescription(book.storedDescription);
+  return stored?.language === locale ? stored : null;
+}
+
 /** Preserve absence versus transport failure through to the public UI. */
 export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<BookDescriptionResolution> {
   if(book.editionAvailable===false)return {state:'confirmed_missing',description:null};
-  const stored=normalizeVerifiedBookDescription(book.storedDescription);
-  if(stored&&stored.language===locale)
+  const stored=getStoredPublicBookDescription(book,locale);
+  if(stored)
     return {state:'resolved',description:stored};
   const budget = AbortSignal.timeout(4_000);
   const boundedFetch: typeof fetch = (input, init) => {

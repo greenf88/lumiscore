@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getStoredPublicBookDescription } from '@/lib/books/public-description';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
@@ -144,14 +145,15 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     returnNavigationPromise,
   ]);
   if (!book) notFound();
+  const storedDescription = getStoredPublicBookDescription(book, locale);
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd(catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale),locale)).replaceAll('<','\\u003c')}}/>
       <LumiScoreBookDetail
         book={book}
-        description={null}
-        descriptionPromise={descriptionPromise}
+        description={storedDescription}
+        descriptionPromise={storedDescription ? undefined : descriptionPromise}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

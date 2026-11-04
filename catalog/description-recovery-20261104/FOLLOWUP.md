@@ -1,0 +1,40 @@
+# PR76: vijftien taal-URL's, dertien Works
+
+Onderzocht op 4 november 2026. Dit is een begrensde vervolgbeoordeling, geen nieuwe catalogusbrede audit. Productie blijft ongewijzigd. Vier nieuwe, oorspronkelijke samenvattingen staan afzonderlijk in four-summaries.json; alle overige aanvullingen hieronder zijn **niet in de import opgenomen**.
+
+## Vier tijdelijke beschrijvingsfouten
+
+| Productie-URL | Exacte geselecteerde editie | Bevinding | Correctievoorstel |
+|---|---|---|---|
+| /nl/book/6272 | 6431; De heks van Portobello; Paulo Coelho; 9789029564731; OL35326067M | Geen centrale NL-tekst. OL-editie/Work leveren slechts een zeer korte annotatie die de teksttaalcontrole niet haalt. | Oorspronkelijke NL-samenvatting, uitgever + exacte bibliotheekeditie gecontroleerd. |
+| /en/book/1995 | 2191; Crown of Midnight; Sarah J. Maas; 9781619630628; OL25434819M | Geen centrale EN-tekst; exacte OL-editie heeft geen beschrijving. Work heeft wel Engelse inhoud, maar ongebonden Work-tekst wordt terecht niet automatisch overgenomen. | Oorspronkelijke EN-samenvatting; Bloomsbury-catalogus p22 + exact library ISBN. |
+| /en/book/1824 | 1976; The Castle; Franz Kafka; 9780679417354; OL7698685M | Geen centrale EN-tekst; exacte OL-editie zonder tekst, Work met Engelse inhoud. De bestaande goedgekeurde NL-tekst blijft behouden. | Oorspronkelijke EN-samenvatting; Everyman's Library/PRH. |
+| /en/book/8783 | 8942; Skye O'Malley; Bertrice Small; 9780345292568; OL10683537M | Geen centrale EN-tekst; exacte OL-editie zonder tekst, Work met inhoud. | Oorspronkelijke EN-samenvatting; Ballantine/PRH. |
+
+De begrensde bronproef gaf acht OL-responses HTTP200 en vier Google Books ISBN-responses HTTP429. Dat zijn aanvragen vanaf de onderzoekscomputer, **geen bewijs van de exacte Vercel-upstreamfout**. De UI-tempfout is gereproduceerd in het eerdere ongewijzigde productiebewijs. Tijdelijke fouten blijven temporary_failure, niet confirmed_missing; negatieve foutcache blijft kort. Geen taal-/ISBN-/parentvoorwaarden versoepeld. Geen ongecontroleerde externe tekst geïmporteerd.
+
+De applicatie gebruikt de bestaande centrale opslag. Goedgekeurde tekst komt nu synchroon in de eerste beschrijvingssectie van de oorspronkelijke HTML; externe, optionele inhoud blijft streamen. Geen nieuwe tracker, bronadapter of uitzondering per boek in clientcode.
+
+## Overige elf dossiers
+
+| Work / taal | Vastgesteld | Gecontroleerde bronnen | Besluit / exact open bewijs |
+|---|---|---|---|
+| 1109 NL | Tonke Dragt, Aan de andere kant van de deur. Bestaande editie1109 is Duits: Auf der anderen Seite der Tür, ISBN9783772516719; geen Nederlandse taalcorrectie daarop. NL-kandidaat9789025833442, Leopold, hardcover. | [Bureau ISBN](https://metadata.isbn.nl/405077/zeeen-van-tijd-deel-1-aan-de-andere-kant-van-de-deur.html), [DBNL](https://www.dbnl.org/tekst/coil001lexi01_01/lvdj00276.php), eerder reviewed-481.json. | Bestaand onderzoek hergebruikt. Cover14437364 is een binnen-/titelpagina, geen geschikte omslag. Houd tegen totdat echte exacte cover is bewezen. Bestaande eigen samenvatting behouden als voorstel. |
+| 1109 EN | Dezelfde Work; alleen Duitse editie aanwezig. | Bovenstaande bibliografie + bestaande editie/Work-koppeling. | Geen gecontroleerde Engelse editie gevonden in geraadpleegde bronnen. Een Engelse vertaalde bibliografische titel bewijst geen uitgave. Niet aangemerkt als nooit vertaald. |
+| 1745 NL | Gossip & Gucci, Lauren Weisberger; bestaande editie1894 ISBN9789022549162, taalNULL. Bibliotheek bevestigt Nederlands, gedrukt, 11e druk2007, 368p; BoekenBase bevestigt paperback. | [Bibliotheek](https://www.bibliotheek.nl/catalogus/titel.305031562.html/gossip---gucci/), [ONIX-bibliografie](https://boekenbase.nl/boek/gossip-gucci-lauren-weisberger-9789022549162?from=%2Fauteur%2Fsabine-mutsaers). | Taalcorrectie naar nld inhoudelijk onderbouwd; afzonderlijk voorstel, nog geen import. Exacte omslagcontrole en eigen NL-samenvatting ontbreken in dit afgebakende herstelpakket. |
+| 1745 EN | Bibliotheek noemt expliciet vertaling van Everyone worth knowing, Simon & Schuster2005. | Dezelfde bibliotheekvermelding. | Werkidentiteit verklaard; geschikte exacte EN-editie/cover nog te controleren. Geen nieuwe Work of automatische samenvoeging. |
+| 2097 NL | The Castle of Otranto, Horace Walpole. Gevonden NL-ISBN9789027491619 bevat óók Vathek en Frankenstein. | [De Slegte, drie titels/auteurs](https://www.deslegte.com/het-kasteel-van-otranto-vathek-frankenstein-827899/), DBNL historische bibliografie. | Omnibus niet aan één afzonderlijk Work koppelen. Geschikte zelfstandige Nederlandse editie blijft onvoldoende bewezen. |
+| 2740 NL | Lee Child, Bad Luck and Trouble = De rekening. Exacte NL-printkandidaat9789021033655, Luitingh-Sijthoff2023, vertaler Jan Pott; niet Wie wind zaait. | [Bibliotheek Rozet](https://rozet.nl/catalogus/2255394/), expliciete vertaalrelatie, 396p. | Identiteit/vertaling bewezen; exacte omslag en eigen brongebonden NL-tekst vereisen afzonderlijke voltooiing. Niet geïmporteerd. |
+| 4761 NL | Ted Chiang, Exhalation = Wat er van ons wordt verwacht; gehele verhalenbundel, niet één titelverhaal. NL-paperback9789021417691; ebook9789021417707 is andere vorm. | [Bureau ISBN](https://metadata.isbn.nl/1207306/wat-er-van-ons-wordt-verwacht.html), [uitgever Volt](https://www.singeluitgeverijen.nl/volt/boek/wat-er-van-ons-wordt-verwacht/). | Geschikte printkandidaat bewezen; exacte cover en originele NL-samenvatting nog niet acceptatieklaar. |
+| 5467 EN | P.R.D. Stokvis, Nederland emigratieland (1845–1960), ISBN9789071633133; enige gekoppelde editie is Nederlands. | Bestaande bibliografische editie en Work; titel/auteur/ISBN-controle in productie. | Geen geverifieerde Engelse editie uit geraadpleegd materiaal. Engelse beschrijving of interface maakt deze editie niet Engels. Open brononderzoek; geen taalwijziging. |
+| 6507 EN | Herman Portocarero, Door de naamloze vlakte, Manteau1985, ISBN9789022309988; Nederlandse editie. | [ANET bibliografie](https://anet.be/awlijst/1997/aw9707.pdf), 112p, ISBN90-223-0998-3. | Geen geverifieerde Engelse editie aangetroffen. Geen Engelse presentatie fabriceren. |
+| 7833 NL | Losing the Signal = Geen bereik; paperback9789000340439, Spectrum2015. Jacquie McNish én Sean Silcoff; huidig Work noemt McNish. | [uitgever Lannoo, ebookinhoud](https://www.lannoo.com/nl-nl/economie-management/geen-bereik-9789000341382), [printbibliografie](https://boekenbase.nl/boek/geen-bereik-over-de-buitengewone-opkomst-en-spectaculaire-val-van-blac-9789000340439). | Vertaalrelatie/printbewijs gevonden. Co-auteursrepresentatie expliciet beoordelen; ebook niet als print importeren. Exacte cover/tekst niet afgerond. |
+| 8584 NL | A Lineage of Grace = Een spoor van genade; alle vijf novellen over Tamar/Rachab/Ruth/Batseba/Maria. Paperback9789029725934; ebook9789029725941 apart. | [KokBoekencentrum](https://www.kokboekencentrum.nl/boek/een-spoor-van-genade/), [De Slegte exacte paperback](https://www.deslegte.com/een-spoor-van-genade-952207/). | Bundelidentiteit onderbouwd, niet alleen Ontsluierd koppelen. User-added bron noemt ten onrechte Afrikaans/741p; uitgever+ISBN gaan voor. Exacte cover en eigen NL-tekst nog afzonderlijk uitwerken. |
+
+Geen van deze elf dossiers wordt als bewezen ontbrekend boek of onoplosbare uitzondering geteld. Het zijn concrete, gescheiden vervolgvoorstellen/brongaten; geen extra Nederlandse beschikbaarheid uit deze release.
+
+## Bestemmingspagina's en scope
+
+PR74 bevat al passende Suzanne-keuzehulp, boeklinks met returnTo, teruglink naar collectie en de brongebonden leesroutes bij bijbehorende boeken. Fantasy/PHM gebruiken Open Library Work-identiteit, geen test-ID-hardcoding. Nieuwe willekeurige kruislinks tussen inhoudelijk ongerelateerde boeken zijn niet nodig. Hosted linkcontrole wordt bij de acceptatie vastgelegd. Bestaande CTA's, sociale bestemmingen en vormgeving blijven gelijk.
+
+Geen GSC-aanvragen gedaan of als bevestigd geregistreerd. UA-varianten zijn uitsluitend simulaties. Previewbewijs is geen productieherstel, crawl, indexering of verkeersherstel.

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Book } from '@/app/data/books';
-import { loadPublicBookDescription, loadPublicBookDescriptionState } from './public-description.ts';
+import { getStoredPublicBookDescription, loadPublicBookDescription, loadPublicBookDescriptionState } from './public-description.ts';
 import { clearBookDescriptionCacheForTests } from './description-resolution.ts';
 import { publicDescriptionSource } from './description-source.ts';
 import {publicDescriptionCacheControl} from './description-cache.ts';
@@ -14,6 +14,10 @@ test('stored original description renders without providers; withdrawals/failure
  const description={text:'A reviewed original summary that remains available during a provider outage.',language:'en' as const,
   source:'official_publisher' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Verified publisher',verifiedAt:'2026-10-30'};
  let calls=0;const failed:typeof fetch=async()=>{calls++;throw Error('Provider unavailable');};
+ assert.equal(getStoredPublicBookDescription({...book,storedDescription:description},'en')?.text,description.text);
+ assert.equal(getStoredPublicBookDescription({...book,storedDescription:description},'nl'),null);
+ assert.equal(getStoredPublicBookDescription({...book,editionAvailable:false,storedDescription:description},'en'),null);
+ assert.equal(getStoredPublicBookDescription({...book,storedDescription:{...description,text:'Service unavailable'}},'en'),null);
  assert.equal((await loadPublicBookDescriptionState({...book,storedDescription:description},'en',failed)).description?.text,description.text);
  assert.equal((await loadPublicBookDescriptionState({...book,storedDescription:description,englishEditionFallback:true},'nl',failed)).description,null);
  assert.equal(calls,0);

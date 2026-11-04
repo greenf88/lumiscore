@@ -45,7 +45,8 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  assert.doesNotMatch(home,/coverLoaded|setCoverLoaded/);
  assert.match(home,/loading=\{presentation==='detail'\?'eager':'lazy'\}/);
  assert.match(page,/loadCatalogBook\(workId, locale, true\)/);
- assert.match(page,/descriptionPromise=\{descriptionPromise\}/);
+ assert.match(page,/description=\{storedDescription\}/);
+ assert.match(page,/descriptionPromise=\{storedDescription \? undefined : descriptionPromise\}/);
  assert.doesNotMatch(page,/await descriptionPromise/);
  const metadata=page.slice(page.indexOf('export async function generateMetadata'),page.indexOf('export default async function BookPage'));
  assert.match(metadata,/const cover = book\.coverUrls\?\.\[0\]/,'stored exact cover remains available to social metadata');
