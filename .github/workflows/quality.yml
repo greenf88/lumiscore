@@ -37,6 +37,9 @@ jobs:
       - name: Verify original metadata head with slow optional sources
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node scripts/test-metadata-head-http.mjs
+      - name: Verify metadata audit rejects pre-repair streaming
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/test-metadata-fault-sensitivity.mjs
       - id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm build:vercel

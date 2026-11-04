@@ -41,9 +41,10 @@ if(process.argv.includes('--slow-description')){
  const probe=`(()=>{const m={firstMain:null,firstMainVisibleFrame:null,lcp:null,cls:0};let scheduled=false;const publish=()=>{const n=performance.getEntriesByType('navigation')[0];m.ttfb=n?.responseStart;m.responseEnd=n?.responseEnd;document.documentElement.setAttribute('data-local-performance',JSON.stringify(m));};new MutationObserver(()=>{const h=document.querySelector('main h1');if(m.firstMain===null&&h)m.firstMain=performance.now();if(h&&!scheduled&&m.firstMainVisibleFrame===null){scheduled=true;requestAnimationFrame(()=>requestAnimationFrame(()=>{scheduled=false;const r=h.getBoundingClientRect(),s=getComputedStyle(h);if(r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden')m.firstMainVisibleFrame=performance.now();publish();}));}publish();}).observe(document.documentElement,{childList:true,subtree:true});for(const type of ['largest-contentful-paint','layout-shift'])try{new PerformanceObserver(list=>{for(const e of list.getEntries()){if(type==='largest-contentful-paint')m.lcp=e.startTime;else if(!e.hadRecentInput)m.cls+=e.value;}publish();}).observe({type,buffered:true});}catch{}addEventListener('load',publish);})();`;
  modules['app/layout.tsx']=(await readFile(root+'app/layout.tsx','utf8')).replace('<head>',`<head><script dangerouslySetInnerHTML={{__html:${JSON.stringify(probe)}}}/>`);
 }
-const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'node_modules/.vite-seo-critical-'+port,
+const server = await createServer({ root, configFile:false, envFile:false, cacheDir:root+'outputs/node_modules/.vite-seo-critical-'+port,
   css:{postcss:{plugins:[tailwindcss()]}}, resolve:{alias:{'@':root}},
-  plugins:[{name:'loopback-synthetic-seo-loaders',enforce:'pre',load(id){const relative=id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0];return modules[relative]??null}},vinext()],
+  // Fault sensitivity only: the exact pre-PR69 empty config, never a production option.
+  plugins:[{name:'loopback-synthetic-seo-loaders',enforce:'pre',load(id){const relative=id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0];return modules[relative]??null}},vinext(process.argv.includes('--metadata-before-repair')?{nextConfig:{}}:undefined)],
   server:{host:'127.0.0.1',port,strictPort:true,watch:{ignored:['**/outputs/**']}},
 });
 await server.listen();

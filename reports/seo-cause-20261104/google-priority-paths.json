@@ -1,0 +1,267 @@
+{
+  "query": {
+    "metric": "vercel.request.count",
+    "aggregation": "count",
+    "groupBy": [
+      "requestPath",
+      "httpStatus",
+      "wafAction",
+      "cacheResult",
+      "deploymentId"
+    ],
+    "filter": "(botName:googlebot) AND ((requestPath:\"/nl\" OR requestPath:\"/en\" OR requestPath:\"/en/zo-werkt-het\" OR requestPath:\"/en/imdb-for-books\" OR requestPath:\"/en/book/8856\" OR requestPath:\"/book/8856\" OR requestPath:\"/nl/book/7220\" OR requestPath:\"/nl/collection/suzanne-vermeer\" OR requestPath:\"/nl/toplijsten/fantasy-om-mee-te-beginnen\" OR requestPath:\"/nl/toplijsten/na-project-hail-mary\")) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 8
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 3
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 3
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 2
+    },
+    {
+      "requestPath": "/en/imdb-for-books",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 2
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/en/zo-werkt-het",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/nl",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/nl",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 1
+    },
+    {
+      "requestPath": "/nl/collection/suzanne-vermeer",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 1
+    }
+  ],
+  "nonzeroBuckets": [
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BGePcdNE7MqGoLTdZVPzHQhrebqW",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 2
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestPath": "/en/imdb-for-books",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestPath": "/en/zo-werkt-het",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "requestPath": "/nl",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_qQmYmc8YnAF85bxqSQdL687zuFHv",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "requestPath": "/en/imdb-for-books",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_CYbDrbyXxnRmq66KxfJtnwAHdoSR",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_Hq8XJEbGUgBgRqZTLVYJDAZxztTY",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_HJyBm67ieGBQLVTYMNeBesFpFBuP",
+      "vercel_request_count_count": 3
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_A9vbm4z7xyrWoyvdRhyctReacnvS",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 5
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "requestPath": "/nl",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "requestPath": "/en",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_BEvnq6Vxz9xV761YYQHFe4VkFK3n",
+      "vercel_request_count_count": 1
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "requestPath": "/nl/collection/suzanne-vermeer",
+      "httpStatus": "200",
+      "wafAction": "allow",
+      "cacheResult": "MISS",
+      "deploymentId": "dpl_6FV5kzqQHkBzKFE2y4gCmiqYNzK9",
+      "vercel_request_count_count": 1
+    }
+  ],
+  "groupCap": 100,
+  "sampling": "Not disclosed by this query response; not a raw complete access-log export."
+}

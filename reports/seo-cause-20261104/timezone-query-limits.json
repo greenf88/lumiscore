@@ -1,0 +1,195 @@
+[
+  {
+    "file": "primary-domain-pt-days",
+    "requestedArgs": [
+      "metrics",
+      "vercel.request.count",
+      "--aggregation",
+      "count",
+      "--scope",
+      "rgkgroeneveld-9102",
+      "--project",
+      "prj_44WeKduJU042ZAI85eAifSWwoY0i",
+      "--environment",
+      "production",
+      "--granularity",
+      "1d",
+      "--limit",
+      "100",
+      "--json",
+      "--query",
+      "botName:googlebot",
+      "--query",
+      "(requestHostname:lumisco.re OR requestHostname:www.lumisco.re)",
+      "--group-by",
+      "httpStatus",
+      "--group-by",
+      "botVerified",
+      "--since",
+      "2026-10-18T07:00:00Z",
+      "--until",
+      "2026-11-01T07:00:00Z",
+      "--bucket-timezone",
+      "America/Los_Angeles"
+    ],
+    "returnedQuery": null,
+    "error": {
+      "code": "UNSUPPORTED_BUCKET_TIMEZONE",
+      "message": "--bucket-timezone is not supported by the new Observability query API yet."
+    },
+    "usedForExactWeekComparison": false
+  },
+  {
+    "file": "primary-domain-pt-hours",
+    "requestedArgs": [
+      "metrics",
+      "vercel.request.count",
+      "--aggregation",
+      "count",
+      "--scope",
+      "rgkgroeneveld-9102",
+      "--project",
+      "prj_44WeKduJU042ZAI85eAifSWwoY0i",
+      "--environment",
+      "production",
+      "--since",
+      "2026-10-18T07:00:00Z",
+      "--until",
+      "2026-11-01T07:00:00Z",
+      "--granularity",
+      "1h",
+      "--limit",
+      "100",
+      "--json",
+      "--query",
+      "botName:googlebot",
+      "--query",
+      "(requestHostname:lumisco.re OR requestHostname:www.lumisco.re)",
+      "--group-by",
+      "httpStatus",
+      "--group-by",
+      "botVerified"
+    ],
+    "returnedQuery": {
+      "metric": "vercel.request.count",
+      "aggregation": "count",
+      "groupBy": [
+        "httpStatus",
+        "botVerified"
+      ],
+      "filter": "(botName:googlebot) AND ((requestHostname:lumisco.re OR requestHostname:www.lumisco.re)) AND (environment:production)",
+      "startTime": "2026-10-18T04:00:00.000Z",
+      "endTime": "2026-11-01T08:00:00.000Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "error": null,
+    "usedForExactWeekComparison": false
+  },
+  {
+    "file": "primary-domain-pt-source-ips",
+    "requestedArgs": [
+      "metrics",
+      "vercel.request.count",
+      "--aggregation",
+      "count",
+      "--scope",
+      "rgkgroeneveld-9102",
+      "--project",
+      "prj_44WeKduJU042ZAI85eAifSWwoY0i",
+      "--environment",
+      "production",
+      "--since",
+      "2026-10-18T07:00:00Z",
+      "--until",
+      "2026-11-01T07:00:00Z",
+      "--granularity",
+      "1d",
+      "--limit",
+      "100",
+      "--json",
+      "--query",
+      "botName:googlebot",
+      "--query",
+      "(requestHostname:lumisco.re OR requestHostname:www.lumisco.re)",
+      "--group-by",
+      "clientIp",
+      "--group-by",
+      "botVerified"
+    ],
+    "returnedQuery": {
+      "metric": "vercel.request.count",
+      "aggregation": "count",
+      "groupBy": [
+        "clientIp",
+        "botVerified"
+      ],
+      "filter": "(botName:googlebot) AND ((requestHostname:lumisco.re OR requestHostname:www.lumisco.re)) AND (environment:production)",
+      "startTime": "2026-10-18T00:00:00.000Z",
+      "endTime": "2026-11-02T00:00:00.000Z",
+      "granularity": {
+        "days": 1
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "error": null,
+    "usedForExactWeekComparison": false
+  },
+  {
+    "file": "primary-pt-exact-0",
+    "requestedArgs": [
+      "metrics",
+      "vercel.request.count",
+      "--aggregation",
+      "count",
+      "--scope",
+      "rgkgroeneveld-9102",
+      "--project",
+      "prj_44WeKduJU042ZAI85eAifSWwoY0i",
+      "--environment",
+      "production",
+      "--since",
+      "2026-10-18T07:00:00Z",
+      "--until",
+      "2026-10-21T19:00:00Z",
+      "--granularity",
+      "1h",
+      "--limit",
+      "100",
+      "--json",
+      "--query",
+      "botName:googlebot",
+      "--query",
+      "(requestHostname:lumisco.re OR requestHostname:www.lumisco.re)",
+      "--group-by",
+      "clientIp",
+      "--group-by",
+      "httpStatus",
+      "--group-by",
+      "botVerified"
+    ],
+    "returnedQuery": {
+      "metric": "vercel.request.count",
+      "aggregation": "count",
+      "groupBy": [
+        "clientIp",
+        "httpStatus",
+        "botVerified"
+      ],
+      "filter": "(botName:googlebot) AND ((requestHostname:lumisco.re OR requestHostname:www.lumisco.re)) AND (environment:production)",
+      "startTime": "2026-10-18T04:00:00.000Z",
+      "endTime": "2026-10-21T20:00:00.000Z",
+      "granularity": {
+        "hours": 4
+      },
+      "orderBy": "count",
+      "orderDirection": "desc"
+    },
+    "error": null,
+    "usedForExactWeekComparison": false
+  }
+]

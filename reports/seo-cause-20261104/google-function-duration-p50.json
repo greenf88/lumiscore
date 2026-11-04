@@ -1,0 +1,245 @@
+{
+  "query": {
+    "metric": "vercel.function_invocation.function_duration_ms",
+    "aggregation": "p50",
+    "groupBy": [
+      "httpStatus"
+    ],
+    "filter": "(clientUserAgent:*Googlebot*) AND ((requestHostname:lumisco.re OR requestHostname:www.lumisco.re)) AND ((clientIp:\"66.249.74.97\" OR clientIp:\"66.249.68.129\" OR clientIp:\"66.249.74.98\" OR clientIp:\"66.249.68.130\" OR clientIp:\"66.249.74.99\" OR clientIp:\"66.249.68.131\")) AND (environment:production)",
+    "startTime": "2026-10-18T00:00:00.000Z",
+    "endTime": "2026-11-01T00:00:00.000Z",
+    "granularity": {
+      "days": 1
+    },
+    "orderBy": "count",
+    "orderDirection": "desc"
+  },
+  "summary": [
+    {
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 165.3199920654297
+    },
+    {
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": 11
+    }
+  ],
+  "data": [
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 306
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 6
+    },
+    {
+      "timestamp": "2026-10-18T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": 11
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 168
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "timestamp": "2026-10-19T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 92.875
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 6
+    },
+    {
+      "timestamp": "2026-10-20T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 367
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 6
+    },
+    {
+      "timestamp": "2026-10-21T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 747
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "timestamp": "2026-10-22T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 337
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 6
+    },
+    {
+      "timestamp": "2026-10-23T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 699
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "timestamp": "2026-10-24T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 1065
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "timestamp": "2026-10-25T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 1062
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 7
+    },
+    {
+      "timestamp": "2026-10-26T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 117
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 3
+    },
+    {
+      "timestamp": "2026-10-27T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 128
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 8
+    },
+    {
+      "timestamp": "2026-10-28T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 183
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 6
+    },
+    {
+      "timestamp": "2026-10-29T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 115
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 9
+    },
+    {
+      "timestamp": "2026-10-30T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "httpStatus": "200",
+      "vercel_function_invocation_function_duration_ms_p50": 9
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "httpStatus": "308",
+      "vercel_function_invocation_function_duration_ms_p50": 3
+    },
+    {
+      "timestamp": "2026-10-31T00:00:00.000Z",
+      "httpStatus": "404",
+      "vercel_function_invocation_function_duration_ms_p50": null
+    }
+  ],
+  "orderBy": "count",
+  "orderDirection": "desc"
+}

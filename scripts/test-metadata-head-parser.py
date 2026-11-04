@@ -2,6 +2,11 @@ import importlib.util, pathlib, unittest, sys
 sys.dont_write_bytecode=True
 spec=importlib.util.spec_from_file_location('head_audit',pathlib.Path(__file__).with_name('audit-metadata-head.py'));audit=importlib.util.module_from_spec(spec);spec.loader.exec_module(audit)
 class HeadParserTests(unittest.TestCase):
+ def test_invalid_head_child_ends_effective_metadata_head(self):
+  for tag in ['div','img','iframe']:
+   r=audit.inspect(('<head><title>T</title><'+tag+'>'+('</'+tag+'>' if tag!='img' else '')+'<link rel="canonical" href="https://example.test/a"></head>').encode());self.assertEqual(r['invalidHeadElements'][0]['tag'],tag);self.assertFalse(r['tags'][0]['inHead'])
+ def test_inert_template_child_does_not_break_subsequent_valid_head(self):
+  r=audit.inspect(b'<head><template><div>inert</div></template><link rel="canonical" href="https://example.test/a"></head>');self.assertEqual(r['invalidHeadElements'],[]);self.assertTrue(r['tags'][0]['inHead'])
  def test_body_canonical_is_not_a_valid_head_canonical(self):
   r=audit.inspect(b'<html><head><title>T</title></head><body><link rel="canonical" href="https://example.test/a"></body></html>');self.assertFalse(r['tags'][0]['inHead']);self.assertGreater(r['tags'][0]['offset'],r['byteHeadClose'])
  def test_script_and_comment_strings_do_not_create_tags(self):
