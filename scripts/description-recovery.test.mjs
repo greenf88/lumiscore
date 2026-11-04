@@ -3,9 +3,19 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {PGlite} from '@electric-sql/pglite';
+import {applyStoredPresentation} from '../lib/books/stored-presentation.ts';
+import {loadPublicBookDescriptionState} from '../lib/books/public-description.ts';
 const root=new URL('../catalog/description-recovery-20261104/',import.meta.url);
 const text=n=>fs.readFileSync(new URL(n,root),'utf8'),read=n=>JSON.parse(text(n));
 test('reviewed exact file hashes match the release manifest',()=>{for(const[n,hash]of Object.entries(read('release-hashes.json').sha256))assert.equal(createHash('sha256').update(fs.readFileSync(new URL(n,root))).digest('hex'),hash,n);});
+test('all four real proposed rows pass the shared source/language mapping without external requests',async()=>{
+ for(const item of read('four-summaries.json').items){const e=item.expectedEdition;
+  const book={workId:String(item.workId),authorId:String(item.after.bound_author_id),editionId:String(e.id),editionTitle:e.title,title:e.title,author:'Reviewed author',editionLanguage:e.language,isbn13:e.isbn_13,editionAvailable:true};
+  const selected=applyStoredPresentation([book],item.language,[item.after],[])[0];let requests=0;
+  const result=await loadPublicBookDescriptionState(selected,item.language,async()=>{requests++;throw Error('Unexpected upstream');});
+  assert.equal(result.state,'resolved',String(item.workId));assert.equal(result.description?.text,item.after.text);assert.equal(requests,0);
+ }
+});
 async function fixture(target){
  const db=new PGlite();
  await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
