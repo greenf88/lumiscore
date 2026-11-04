@@ -41,6 +41,9 @@ for(const target of ['production','test'])test(target+': exact import, zero-chan
  const receipt=(await db.exec(text(target+'-apply.sql'))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt;assert.equal(receipt.rows.length,plan.actions.length);
  assert.equal((await db.exec(text(target+'-apply.sql'))).find(r=>r.rows?.[0]?.receipt)?.rows[0].receipt.rows.length,0);
  await db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);
+ const tampered=structuredClone(receipt);tampered.rows[0].key={id:42};await db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(tampered)]);
+ await assert.rejects(db.exec(text(target+'-restore.sql')),/Receipt outside reviewed action scope/);await db.exec('rollback');
+ await db.query("select set_config('lumiscore.catalog_release_receipt',$1,false)",[JSON.stringify(receipt)]);
  const d=receipt.rows.find(r=>r.relation==='catalog_work_descriptions');
  await db.query('update catalog_work_descriptions set text=text||$1 where work_id=$2 and language=$3',[' Later independent review.',d.key.work_id,d.key.language]);
  await assert.rejects(db.exec(text(target+'-restore.sql')),/Later legitimate change/);await db.exec('rollback');

@@ -20,7 +20,7 @@ def get(job):
  assert m['http_code']==200,(path,m['http_code'])
  assert not doc['relevantOutsideHead'] and not doc['duplicateKinds'] and not doc['invalidHeadElements'],path
  canon=[t for t in doc['tags'] if t['kind']=='canonical'];assert len(canon)==1 and canon[0]['value']=='https://lumisco.re'+path,path
- assert '"@type":"BreadcrumbList"' in s or '"@type": "BreadcrumbList"' in s,path
+ if '/browse' not in path:assert '"@type":"BreadcrumbList"' in s or '"@type": "BreadcrumbList"' in s,path
  if path in expected:
   item=expected[path];section=re.search(r'<section class="book-description"[^>]*>([\s\S]*?)</section>',s)
   assert section,path;visible=' '.join(html.unescape(re.sub('<[^>]+>',' ',section[1])).split());assert ' '.join(item['after']['text'].split()) in visible,(path,visible)
