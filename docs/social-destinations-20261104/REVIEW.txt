@@ -1,0 +1,127 @@
+SOCIAL DESTINATIONS — FINAL REVIEW, NOT RELEASED — 4 NOVEMBER 2026
+
+PR: https://github.com/greenf88/lumiscore/pull/74 (Draft).
+Tested application SHA: 51539454fc2cd75d66096bd355faf0f56359e186.
+Base / currently released PR73 SHA: 46ae50bce9603f8c0c847c9d300bf2a5258b41e2.
+Ready TEST Preview: https://lumiscore-oi0pnlmaz-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_6nCKBuNh3YWYBWm6jboBJhuTrQ8q.
+Documentation-only final head is available from the PR API; application files must match the manifest.
+Runtime manifest SHA256: 85b82eaac13d8e7d534f87b2ff83db322344c2448fe62a9135d813ce0616ceca (22 changed code/test/generator/asset Git blobs).
+Reference hashes: reference-hashes.json. No PRODUCTION database migration or import.
+4 November follow-up: explicitly authorized TEST-only 17-row fixture; see test-fixture/README.txt,
+manifest.json, execution.json and hashes.json. Runtime/application files are unchanged.
+
+RESULT AND SCOPE
+Three existing NL destinations are improved; no new competing author/list pages:
+- /nl/collection/suzanne-vermeer: sourced choices, two official story relationships,
+  six reading questions, dynamic existing catalogue totals and original personal actions.
+- /nl/toplijsten/fantasy-om-mee-te-beginnen: count-neutral promise and five real NL cards.
+- /nl/toplijsten/na-project-hail-mary: count-neutral promise and two real NL cards.
+The twenty original candidates and their original order remain. Only these two NL routes
+consolidate unavailable choices and omit ranking badges. English copy/behaviour is preserved.
+Available cards keep original relative order, edition identity, public scoring and returnTo.
+No edition, Work, score, classification or recommendation/ranking calculation is changed.
+Choice groups/questions derive from actual availability; unavailable Suzanne links remain plain
+sourced information, never invented book destinations.
+
+Small sourced NL Madonna/Noorderlicht contextual copy and metadata are included, with existing H1,
+edition and scoring untouched. Public book/collection templates now share real visible breadcrumbs:
+Home -> Discover books -> current book; Home -> Collections -> current collection.
+Server-only JSON-LD uses the same entries, clean absolute canonical language URLs and no personal
+return path. Existing metadata, hreflang, noindex/access and optional content streaming stay intact.
+A measured 10px 360px guest-header overflow is fixed only for the three NL destinations by reusing
+the established compact-menu search entry; no global overflow clipping or reduced touch targets.
+
+SOURCE REVIEW
+The prepared 30 October content and 3/4 November overrides were reused; exact input hashes retained.
+Official sources rechecked 4 November: Suzanne Vermeer All-inclusive, Noorderlicht, Madonna,
+Dwaalspoor, Koraalrif; A.W.Bruna biography; Tolkien Estate; Gollancz The Last Wish; Rebecca Yarros
+Fourth Wing; Bloomsbury ACOTAR; Macmillan Once Upon a Broken Heart / The Three-Body Problem;
+PenguinRandomHouse The Martian. Exact public URLs and reviewed date in landing-guides.json.
+Story order is not generalized into a required author reading sequence; Madonna is a short story,
+not a full novel. Reader angles are editorial inferences, not personal experience or match claims.
+No copyrighted full blurbs are imported into the catalogue.
+
+PASSED EVIDENCE, APPLICATION SHA ABOVE
+- Full exact-app CI success: run 41816155976 (#167). Earlier app CI #165 also passed.
+- TypeScript, lint, 34 targeted regressions plus header tests passed.
+- Actual-router synthetic profile SSR passed; metadata regression:150 complete original HTTP
+  responses, five UAs, slow optional sources, correct head and real404 behaviour passed.
+- Vercel build and client secretscan passed. An initial client/server import-boundary issue was
+  caught before deployment and fixed: canonical-origin code remains server-only.
+- Ready Preview original GET bytes:30/30 passed (10 NL/EN route/template examples x desktop,
+  Googlebot and InspectionTool simulations). One in-head clean self-canonical, correct reciprocal
+  language links/x-default, no duplicate/conflicting metadata or unexpected application noindex.
+- Original source and DOM contain exactly one appropriate BreadcrumbList per tested template.
+- 36/36 browser route/width/theme cases:6 routes x360/390/1280 xPaper/Ink, no horizontal overflow.
+- Actual choice anchor -> real Hobbit test detail -> selection return, actual language switch,
+  reload, reading-order anchor, expanded biography and guest rating -> destination-preserving
+  login passed. No password submission, account/rating/status/taste-round writes.
+- Seven existing covers on the two NL reading routes actually loaded.
+- Three original 1200x630 OG PNGs:200, decoded, exact approved bytes, ~35kB each.
+- Additional actual-router synthetic SSR:6 NL/EN pages using seven in-memory identity fixtures
+  verified all seven collection link bindings and locale guards for Madonna/Noorderlicht copy.
+  This is local synthetic rendering, not hosted edition/catalogue proof.
+
+HOSTED SUZANNE GAP RESOLVED — 4 NOVEMBER
+Explicitly authorized TEST-only fixture on hlvujbrmfdlrfxdjwsmb: six real existing Suzanne Works,
+editions and approved NL summaries were reused. One Madonna Work/edition999740001 was added,
+with the unchanged existing reviewed summary. Seven edition-bound cover/format records and seven
+collection links were inserted:17 rows total, no existing rows updated. The52 shared placeholders
+and their memberships remain intact. TEST collection now has7 suitable NL cards among59 links;
+EN correctly has0 verified editions. TEST counts are not production catalogue totals.
+7/7 real editorial links were clicked to the correct book and back;7/7 card and detail covers
+actually loaded, selected ISBNs/identity and source summaries matched. Madonna/Noorderlicht NL
+contextual copy and metadata are visible; EN correctly omits that NL copy and reports unavailable
+English editions. Mobile360px Paper/Ink, language transitions and reload passed, no overflow.
+18/18 additional complete original GET responses passed:collection and both contextual books,
+NL/EN xdesktop/Googlebot/InspectionTool simulations; correct in-head metadata and breadcrumbs.
+Full-row CAS committed recovery removed only the17 own rows.71 preserved records passed exact
+before-value checks;52 original links, six real books/editions/summaries remained. Ratings/status
+fingerprints and account count2 were unchanged. Reapplied17 rows for Preview; both final and first
+repeat imports inserted0. Final-receipt guarded cleanup is provided for later fixture removal.
+No account, rating, status, user progress, rights, schema or number sequence was changed.
+The real production IDs1220,1229,1305,1299,1300,1243,1287 were checked read-only; no production writes.
+The fixtures have TEST IDs and some retained unknown publication years; they are not a proposed
+production import. Exact cover sources and binding evidence are in test-fixture/.
+
+REAL GOOGLE TEST
+Collection Preview URL test:
+https://search.google.com/test/rich-results/result?id=fcHCy7Ufdzxp-hHanBHPqQ
+Google displayed4 November11:51:32 Europe/Amsterdam: page fetch succeeded; indexing disallowed
+by HTTP X-Robots-Tag:noindex. Preview protection/noindex is retained. No successful Rich Results
+URL validation is claimed. A code-editor action was truncated; no incomplete markup was submitted,
+and no substitute successful code test is claimed. Exact source-derived minimal code files are
+saved locally. After a separately approved PUBLIC release, run one real URL test for collection
+and one for a genuine production book template. No mass requests, GSC indexing or security changes.
+
+PERFORMANCE AND EVIDENCE BOUNDARIES
+30 authenticated Preview requests: median curl TTFB277.409ms, complete response295.618ms.
+These are network/server response measures, not visible-content paint or LCP. Different deployment/
+test data (especially empty Suzanne) and unverified cache temperatures prevent a production
+before/after speed claim. New guidance/schema reuse already loaded book/collection data and static
+reviewed content; no new external metadata lookup or database query is added.
+Source links do not fetch publishers on opening a page. Facebook cache/actual platform previews
+were not tested; no platform refresh, planning change or social publication is claimed.
+
+LOCAL EVIDENCE
+outputs/social-destinations-20261104/: before/raw HTML/screenshots; html-verified.json and30
+complete Preview responses; browser-all.json; flows.json; covers.json; assets.json; production-
+seven-links.json; synthetic-suzanne-ssr.json and six original local responses; Rich Results
+status/screenshot; targeted/header/profile/metadata/build/secretscan results; runtime-hashes.json.
+All browser/HTML evidence is bound to the tested application SHA. Preview is not a live fix.
+
+RELEASE ADVICE AND ORDER
+Ready for separate release review; keep Draft until explicitly approved. Hosted Suzanne evidence
+gap is closed. No merge or public release was performed. External-source limitations below remain.
+1. Review exact final head, unchanged application SHA/runtime hashes and TEST-only fixture evidence.
+2. Recheck CI/main compatibility immediately before a separately approved release.
+3. Merge/deploy only the approved package; no database installation or import is required.
+4. Confirm live domain/deployment SHA; repeat changed NL/EN pages, guest paths, metadata, seven real
+   Suzanne destinations and representative mobile/Paper/Ink navigation.
+5. Run actual live Rich Results tests for both changed templates; record exact time/result.
+6. Mark three Social destinations live only after actual live acceptance; no caption/schedule edits.
+Rollback: previous PR73 production deployment dpl_DbrP399SVJeLGwP5YpDnqUFXtXDV or targeted revert
+of this PR; no data rollback. No production publication is authorized for PR74.
+News remains a separate follow-up. PR51, dashboard, GSC execution, catalogue and native Social
+placements/minutes are untouched.

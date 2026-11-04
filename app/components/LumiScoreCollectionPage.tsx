@@ -27,6 +27,10 @@ import {
 } from '@/lib/collections/bulk-progress';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { QUICK_RATING_COLLECTION } from '@/lib/collections/quick-rating';
+import { getLandingGuide } from '@/lib/editorial/landing-guides';
+import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
+import { SuzanneGuideAfter, SuzanneGuideEntries } from './EditorialLandingGuide';
 
 const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
   want_to_read: 'collection.wantToRead',
@@ -38,6 +42,7 @@ const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.r
 export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) {
   const { collection, books, authenticated } = data;
   const { locale, t } = useLumiScoreLocale();
+  const guide = getLandingGuide('/collection/' + collection.slug, locale);
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<Record<string, ReadingStatus>>(data.statuses);
   const [ratings, setRatings] = useState<Record<string, number>>(data.userRatings);
@@ -245,7 +250,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
   };
 
   return (
-    <main className={`site-shell collection-page-shell${bulkActive ? ' has-bulk-mode' : ''}`}>
+    <main className={`site-shell collection-page-shell${guide ? ' editorial-destination' : ''}${bulkActive ? ' has-bulk-mode' : ''}`}>
       <Header
         onThemeToggle={toggleTheme}
         query={query}
@@ -253,10 +258,11 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         authState={{ authenticated }}
         returnTo={returnTo}
       />
+      <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('collection', guide?.h1 ?? collection.name, `/collection/${collection.slug}`, locale)} locale={locale}/>
       <section className="collection-hero">
         <LocaleLink className="detail-back-link" href="/">← {t('collection.backToBooks')}</LocaleLink>
         <span className="eyebrow">{typeLabel.toUpperCase()}</span>
-        <h1>{collection.name}</h1>
+        <h1>{guide?.h1 ?? collection.name}</h1>
         {collection.slug === QUICK_RATING_COLLECTION && <LocaleLink className="ui-control ui-primary collection-rate-entry"
           href={authenticated ? `${returnTo}/rate` : `/login?next=${encodeURIComponent(localizedHref(`${returnTo}/rate`, locale))}`}>
           {t('quickCollection.entry')}
@@ -272,7 +278,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         {unavailableEditionCount > 0 && <p className="collection-edition-availability">{locale==='nl'
           ? `${books.length} van ${progressBooks.length} gekoppelde boeken beschikbaar in deze taal. Voor ${unavailableEditionCount} boeken ontbreekt een passende Nederlandse editie. Je leesvoortgang blijft behouden.`
           : `${books.length} of ${progressBooks.length} linked books available in this language. ${unavailableEditionCount} books have no suitable English edition. Your reading progress is retained.`}</p>}
-        {collection.description && <p>{collection.description}</p>}
+        {guide ? guide.intro.map(p => <p key={p}>{p}</p>) : collection.description && <p>{collection.description}</p>}
         {authenticated ? (
           <>
             <div className="collection-progress" aria-label={progressLabel}>
@@ -300,6 +306,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           <p className="collection-order-note">{t('collection.noOfficialOrder')}</p>
         )}
       </section>
+      {guide && <SuzanneGuideEntries books={books.map(item => item.book)}/>}
 
       {authenticated && (
         <LumiScoreCollectionBulkProgress
@@ -366,6 +373,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           );
         })}
       </section>
+      {guide && <SuzanneGuideAfter books={books.map(item => item.book)}/>}
       <Footer onThemeToggle={toggleTheme} />
     </main>
   );

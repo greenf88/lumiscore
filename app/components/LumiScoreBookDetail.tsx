@@ -28,6 +28,9 @@ import {
   canShowSeriesDenominator,
 } from '@/lib/collections/presentation';
 import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
+import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
+import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { BookEditorialGuide } from './EditorialLandingGuide';
 import {
   calculatePersonalMatch,
   type MatchLabel,
@@ -303,6 +306,7 @@ export function LumiScoreBookDetail({
                   ? 'detail.backToCollections'
                   : 'detail.backToBooks')}
           </LocaleLink>
+          <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale)} locale={locale}/>
           <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
           <p className="detail-author">{t('detail.by', { author: book.author })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
@@ -355,6 +359,7 @@ export function LumiScoreBookDetail({
           {book.workId && (descriptionPromise
             ? <StreamedBookDescription key={`${book.workId}:${book.editionId}:${locale}`} resolution={descriptionPromise} englishEditionFallback={book.englishEditionFallback} />
             : <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />)}
+          <BookEditorialGuide book={book} locale={locale} hasSuzanneCollectionLink={collectionContext?.collection.slug === 'suzanne-vermeer'}/>
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus

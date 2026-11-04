@@ -14,6 +14,9 @@ import {
   type BookReturnNavigation,
 } from '@/lib/navigation/book-return';
 import { measureServerOperation } from '@/lib/performance/server-timing';
+import { suzanneBookGuide } from '@/lib/editorial/landing-guides';
+import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -51,14 +54,15 @@ export async function generateMetadata({
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
+  const guide = suzanneBookGuide(book, locale);
   // A stored, edition-bound cover can be shared immediately. Optional external
   // cover evidence still streams into the page, without blocking its head.
   // Without a stored cover, preserve the existing explicit no-image policy.
   const cover = book.coverUrls?.[0];
 
   return createLocalizedPageMetadata({
-    title,
-    description,
+    title: guide?.title ?? title,
+    description: guide?.description ?? description,
     canonicalPath: `/book/${book.workId}`,
     image: cover ?? null,
     type: 'article',
@@ -143,6 +147,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd(catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale),locale)).replaceAll('<','\\u003c')}}/>
       <LumiScoreBookDetail
         book={book}
         description={null}

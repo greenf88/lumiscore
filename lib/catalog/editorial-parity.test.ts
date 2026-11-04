@@ -44,7 +44,7 @@ test('editorial loader reuses exact edition mapper and public summaries, preserv
   const page=read('app/toplijsten/[slug]/page.tsx'),client=read('app/components/EditorialTopList.tsx');
   assert.match(page,/loadCatalogBooksBySourceIds\(list.workIds.map\(getEditorialWorkSourceId\), locale\)/);
   assert.match(page,/deferEditionCoverEvidence\(books\)/);
-  assert.match(client,/list.workIds.map/);assert.match(client,/books.find\(book => book.openLibraryWorkId === choice.sourceId\)/);
+  assert.match(client,/(?:list.workIds|renderedIds).map/);assert.match(client,/books.find\(book => book.openLibraryWorkId === choice.sourceId\)/);
   assert.match(page,/topListBookHref\(book.workId,list.slug\)/);
   assert.doesNotMatch(client,/import \{.*editorialTopLists|import .*campaigns.*json/);
   assert.doesNotMatch(client,/topListBook\(/);assert.doesNotMatch(read('lib/catalog/top-lists.ts'),/score:|coverUrls:/);

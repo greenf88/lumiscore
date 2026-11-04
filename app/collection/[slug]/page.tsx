@@ -5,6 +5,9 @@ import { LumiScoreCollectionPage } from '@/app/components/LumiScoreCollectionPag
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import { resolveRequestLocale } from '@/lib/i18n/server';
+import { getLandingGuide } from '@/lib/editorial/landing-guides';
+import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
 
 type CollectionPageProps = { params: Promise<{ slug: string }> };
 
@@ -29,10 +32,12 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   const { locale } = await resolveRequestLocale();
   const data = await load(slug,locale);
   if (!data) return createLocalizedPageMetadata({ title: 'Collection not found — LumiScore', canonicalPath: `/collection/${encodeURIComponent(slug)}`, noIndex: true });
+  const guide = getLandingGuide('/collection/' + data.collection.slug, locale);
   return createLocalizedPageMetadata({
-    title: `${data.collection.name} — LumiScore`,
-    description: locale === 'nl' ? `Ontdek de boeken van ${data.collection.name} en houd je leesvoortgang bij.` : data.collection.description ?? `Track your progress through ${data.collection.name}.`,
+    title: guide?.seo_title ?? `${data.collection.name} — LumiScore`,
+    description: guide?.meta_description ?? (locale === 'nl' ? `Ontdek de boeken van ${data.collection.name} en houd je leesvoortgang bij.` : data.collection.description ?? `Track your progress through ${data.collection.name}.`),
     canonicalPath: `/collection/${data.collection.slug}`,
+    ...(guide ? {image:'/images/editorial/suzanne-vermeer-nl.png'} : {}),
   });
 }
 
@@ -41,8 +46,10 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
   const { locale } = await resolveRequestLocale();
   const data = await load(slug,locale);
   if (!data) notFound();
+  const guide = getLandingGuide('/collection/' + data.collection.slug, locale);
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd(catalogBreadcrumbs('collection', guide?.h1 ?? data.collection.name, `/collection/${data.collection.slug}`, locale),locale)).replaceAll('<','\\u003c')}}/>
       <LumiScoreCollectionPage data={locale === 'nl' ? { ...data, collection: { ...data.collection, description: `Ontdek de boeken van ${data.collection.name} en houd je leesvoortgang bij.` } } : data} />
     </>
   );
