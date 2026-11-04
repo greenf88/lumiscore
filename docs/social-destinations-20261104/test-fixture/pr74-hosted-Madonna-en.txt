@@ -1,0 +1,80 @@
+- main:
+  - link "LumiScore home":
+    - /url: /en
+    - generic: LumiScore
+  - link "Taste Test":
+    - /url: /en/taste-test
+  - link "Sign in":
+    - /url: /en/login?next=%2Fbook%2F999740001
+  - group "Language":
+    - link "Dutch":
+      - /url: /nl/book/999740001?returnTo=%2Fcollection%2Fsuzanne-vermeer
+      - text: NL
+    - link "English":
+      - /url: /en/book/999740001?returnTo=%2Fcollection%2Fsuzanne-vermeer
+      - text: EN
+  - button "Toggle Ink and Paper theme":
+    - generic: Paper
+    - generic: ☼
+    - generic: ☾
+  - article:
+    - group "Book covers":
+      - figure:
+        - img "Front cover of Madonna · LumiScore —":
+          - generic: Lumi edition
+          - generic: Madonna
+          - generic: ✦
+          - generic: Suzanne Vermeer
+          - img "LumiScore —":
+            - strong: —
+            - generic: LumiScore
+    - link "← Back to Suzanne Vermeer":
+      - /url: /en/collection/suzanne-vermeer
+    - navigation "Breadcrumb":
+      - list:
+        - link "LumiScore":
+          - /url: /en
+        - text: /
+        - link "Discover books":
+          - /url: /en/browse
+        - listitem: /Madonna
+    - heading "Madonna" [level=1]
+    - status: A verified English edition is not available.
+    - paragraph: by Suzanne Vermeer
+    - paragraph: First published 2013
+    - region "Collection":
+      - link "Part of the Suzanne Vermeer collection View all books →":
+        - /url: /en/collection/suzanne-vermeer
+        - strong: Part of the Suzanne Vermeer collection
+        - generic: View all books →
+    - region "LumiScore":
+      - generic: LumiScore
+      - strong: —
+      - paragraph: Insufficient ratings
+    - region "Your Match":
+      - generic: Your Match
+      - strong: —
+      - paragraph: Take the Taste Test or rate books to see your match.
+    - region "About this book":
+      - heading "About this book" [level=2]
+      - paragraph: A verified English description is not available yet.
+    - button "Want to read":
+      - generic: +
+      - text: Want to read
+    - region "Rate this book":
+      - generic: YOUR RATING
+      - heading "Rate this book" [level=2]
+      - paragraph: Sign in to add your rating. Browsing remains open without an account.
+      - link "Sign in to rate →":
+        - /url: /en/login?next=%2Fbook%2F999740001
+        - text: Sign in to rate
+        - generic: →
+      - status
+    - region "Book information":
+      - heading "Book information" [level=2]
+      - term: Author
+      - definition: Suzanne Vermeer
+      - term: First published
+      - definition: "2013"
+- complementary "Analytics preferences":
+  - button "Analytics preferences"

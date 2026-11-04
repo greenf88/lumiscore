@@ -2,7 +2,10 @@
 import { useState, type ReactNode } from 'react';
 import { Header, Footer } from './LumiScoreHome';
 import type { HeaderAuthState } from '@/lib/auth/header';
+import { useLumiScoreLocale } from './LumiScoreLocale';
+import { getLandingGuide } from '@/lib/editorial/landing-guides';
 export function DiscoveryPageShell({ children, authState, path }: { children: ReactNode; authState: HeaderAuthState; path: string }) {
+  const { locale } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
   const theme = () => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -10,5 +13,5 @@ export function DiscoveryPageShell({ children, authState, path }: { children: Re
     document.documentElement.style.colorScheme = next === 'paper' ? 'light' : 'dark';
     localStorage.setItem('lumiscore-theme', next);
   };
-  return <main className="site-shell"><Header query={query} onQueryChange={setQuery} onThemeToggle={theme} authState={authState} returnTo={path} />{children}<Footer onThemeToggle={theme} /></main>;
+  return <main className={`site-shell${getLandingGuide(path, locale) ? ' editorial-destination' : ''}`}><Header query={query} onQueryChange={setQuery} onThemeToggle={theme} authState={authState} returnTo={path} />{children}<Footer onThemeToggle={theme} /></main>;
 }
