@@ -79,6 +79,8 @@ test('information links are real internal routes and mail links use the approved
     '/voor-uitgevers',
     '/login?next=%2Fzo-werkt-het',
     '/imdb-for-books',
+    '/search',
+    '/toplijsten',
   ]);
 
   for (const locale of ['nl', 'en'] as const) {

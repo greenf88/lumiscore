@@ -2,6 +2,7 @@ import type { Locale } from '../i18n/config.ts';
 import { absoluteLumiScoreUrl } from '../seo/site-origin.ts';
 import { LUMISCORE_WEBSITE_ID } from '../seo/site-identity.ts';
 import { IMDB_COMPARISON_CONTENT } from './imdb-comparison.ts';
+import { HOW_IT_WORKS_NL } from './how-it-works-nl.ts';
 
 export const INFORMATION_PAGE_KEYS = [
   'about',
@@ -41,6 +42,7 @@ export type InformationPageContent = {
   lead: string;
   seoTitle: string;
   seoDescription: string;
+  image?: string;
   schemaType: 'AboutPage' | 'WebPage' | 'ContactPage';
   breadcrumbHome: string;
   sections: InformationSection[];
@@ -102,59 +104,7 @@ const nl: Record<InformationPageKey, InformationPageContent> = {
       },
     ],
   },
-  howItWorks: {
-    key: 'howItWorks',
-    locale: 'nl',
-    path: '/zo-werkt-het',
-    eyebrow: 'ZO WERKT HET',
-    title: 'Zo werkt LumiScore',
-    lead: 'Beoordeel boeken van 1 tot 10, ontdek wat bij je leessmaak past en houd je boeken en reeksen bij. Dit betekenen de scores en persoonlijke leestips op LumiScore.',
-    seoTitle: 'Zo werkt LumiScore | Boeken beoordelen & persoonlijke leestips',
-    seoDescription: 'Lees hoe je boeken beoordeelt van 1 tot 10, wanneer de publieke LumiScore verschijnt en hoe je leesprofiel, persoonlijke matches en reeksvoortgang werken.',
-    schemaType: 'WebPage',
-    breadcrumbHome: 'Home',
-    sections: [
-      {
-        heading: 'Hoe beoordeel je een boek van 1 tot 10?',
-        paragraphs: [
-          ['Log in en zoek een boek dat je hebt gelezen. Tik op een heel cijfer van 1 tot 10 om je beoordeling op te slaan. In de smaaktest verschijnt pas na succesvolle opslag het volgende boek.'],
-          ['Je hebt één beoordeling per boek, ook als je een andere editie bekijkt. Je kunt je eigen cijfer op de boekpagina aanpassen. Niet gelezen? Sla het boek in de smaaktest over; overslaan telt niet als beoordeling.'],
-          [link('Zoek een boek om te beoordelen', '/browse'), ' of ', link('begin met de smaaktest', '/taste-test'), '.'],
-        ],
-      },
-      {
-        heading: 'Hoe ontstaat de publieke LumiScore?',
-        paragraphs: [
-          ['De publieke LumiScore is het gemiddelde van de opgeslagen lezersbeoordelingen, afgerond op één decimaal. De score verschijnt pas vanaf drie verschillende beoordelaars. Daaronder staat een streepje met ‘Onvoldoende beoordelingen’.'],
-          ['We tonen een bandbreedte voor het aantal beoordelaars, bijvoorbeeld 3–4, in plaats van het exacte aantal. Een score op basis van weinig lezers is nog gevoelig voor een nieuw oordeel: het is een eerste indruk, geen vaststaand kwaliteitsoordeel.'],
-        ],
-      },
-      {
-        heading: 'Wat is het verschil tussen een lezersscore en jouw match?',
-        paragraphs: [
-          ['De LumiScore vat de beoordelingen van lezers samen. Jouw persoonlijke match vergelijkt daarentegen je leessmaak met de onderbouwde kenmerken van dat boek. Een hoog gewaardeerd boek hoeft dus niet jouw beste match te zijn.'],
-          ['Bij beperkte onderbouwing blijft een match voorlopig of verschijnt er geen matchcijfer. Een match is geen voorspelde kans dat je het boek leuk vindt en geen garantie.'],
-        ],
-      },
-      {
-        heading: 'Hoe helpen je beoordelingen bij je leesprofiel?',
-        paragraphs: [
-          ['Je hogere én lagere beoordelingen helpen LumiScore je voorkeuren te herkennen. Alleen voldoende onderbouwde boekkenmerken dragen bij aan een inhoudelijke voorkeur. Je leesprofiel en aanbevelingen gebruiken dezelfde smaakberekening.'],
-          ['Met weinig bewijs zijn leestips verkennend. Meer beoordelingen kunnen het profiel verfijnen, maar niet ieder boek levert meteen een duidelijke voorkeur op.'],
-          [link('Ontdek je leessmaak met de smaaktest', '/taste-test'), '. Je opgeslagen beoordelingen blijven gekoppeld aan je account.'],
-        ],
-      },
-      {
-        heading: 'Hoe houd je gelezen boeken en reeksvoortgang bij?',
-        paragraphs: [
-          ['Met een account geef je boeken de status Wil ik lezen, Aan het lezen, Gelezen of Niet uitgelezen. Een beoordeeld boek telt ook als gelezen. In Mijn boeken vind je je eigen overzicht.'],
-          ['Bij een reeks zie je welke opgenomen delen je hebt gelezen. Een volgende-leessuggestie verschijnt wanneer de bekende reeksvolgorde dit ondersteunt. Een voltooiingspercentage betekent niet automatisch dat alle ooit verschenen delen in de catalogus staan.'],
-          [link('Bekijk boekenreeksen en collecties', '/collections'), '. Je kunt zonder account rondkijken; ', link('log in of maak een account aan', '/login?next=%2Fzo-werkt-het'), ' om je eigen voortgang te bewaren.'],
-          ['Zoek je vooral cijfers en overzicht? Lees ', link('LumiScore als IMDb voor boeken', '/imdb-for-books'), '.'],
-        ],
-      },
-    ],
-  },
+  howItWorks: HOW_IT_WORKS_NL,
   publishers: {
     key: 'publishers',
     locale: 'nl',

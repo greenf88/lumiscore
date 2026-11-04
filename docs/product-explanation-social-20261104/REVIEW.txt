@@ -1,0 +1,26 @@
+PRODUCTUITLEG EN SOCIAL — REVIEW, 4 NOVEMBER 2026
+
+BASIS EN SCOPE
+Main en actieve productie read-only bevestigd op cf635417b970869b8759dc36767c965b32a4f592, Ready dpl_QWsecKKK5bJR3WKb1J6Mkp12tbHL. PR71 is gepubliceerd; geen cataloguswerk in dit pakket. Metadata69, bestaande Paper-keuze, PR51 en accounts/ratings/status blijven ongewijzigd.
+Nieuwe geïsoleerde branch content/product-explanation-social-20261104. Werkelijke productbron; social-media/qa/product-browser-app en sources/ niet gewijzigd. Geen repo-AGENTS.md aangetroffen in deze werkboom of bovenliggende opdrachtmappen.
+
+WIJZIGING
+Alleen Nederlandse inhoud van /nl/imdb-voor-boeken en /nl/zo-werkt-het via de bestaande gedeelde information-renderer. Engelse inhoud blijft byte-inhoudelijk gelijk. Beide krijgen eigen title/description/H1/OG en originele lichte typografische deelafbeelding (1200x630, circa32/39kB; Georgia/Arial passend bij bestaande share-renderer; geen externe foto/cover). De gedeelde Metadata API ontvangt alleen een optionele afbeelding. Geen CSS, nieuw analysesysteem, database- of authwijziging.
+Vergelijking beantwoordt vijf leesvragen; handleiding leidt zoeken → aanmelden/eigen cijfer → smaaktest/resultaat. Geen garantie of formule voor persoonlijke match. Gastvragenlijst en opgeslagen boekbeoordelingen duidelijk gescheiden. Bestaande broodkruimels WebPage+Home→pagina hergebruikt, geen FAQPage/AggregateRating of gefingeerde hiërarchie.
+
+VINDBAARHEID
+Bestaande mobiele menu en voettekst bevatten Zo werkt het; homepage heeft onderaan Een IMDb voor boeken?. Contextuele links verbinden beide. Geen tweede navigatie of site gebouwd. Social-routewoorden en kanaalgebonden captions staan in SOCIAL-OVERDRACHT.txt/social-handoff.json.
+
+OVERLAP
+Open PR62 (dystopie/Dune), PR60 (NL-aanbevelingsedities), PR58 (boekbeschrijvingen), PR57 (EN toplists), PR46/44/38/11 blijven apart. Geen van hun selectie-, cache-, editie- of smaaklogica meegenomen. Metadata69/Paper en PR51 zijn al gepubliceerd. Aparte social-destinations-opdracht over Suzanne/fantasy/naPHM en news-articles-v1 niet hier geïmplementeerd. Productie heeft nog53 Suzanne-boekbestemmingen, fantasy5beschikbare/5ontbrekende en naPHM2/8. De laatste H1 belooft nog tien; die afzonderlijke afhankelijkheid mag niet als tien beschikbare boeken worden gepromoot. Nieuwsindex+3artikelen geven echte404. Theo Work2193 heeft geen NL-editie; Engelse fallback is geen NL-beschikbaarheid.
+
+BEWIJS EN CHECKS
+Productclaims met codebronnen: product-claims.json. Referentiehashes: reference-hashes.json. Read-only selectie van tien boekpagina’s: book-selection.json (geen tien nieuwe pagina’s). Versies/Preview/browser/CI volgen in ACCEPTANCE.json na hosted controle.
+Lokale gerichte10informatietests, TypeScript, lint, Vercelbuild en clientsecretscan96bestanden groen. Originele metadataregressie150responses/vijfUAs incl trage optionele bronnen groen. Publieke nulmeting12responses/vieruitlegroutes/drieUAs: geen metadata buitenhead. Volledige lokale suite stuitte op bestaande Windows-checkoutbyteverschillen in8ongewijzigde oudere catalogusbestanden. Exacte Gitblobs kwamen wel overeen; gerichte oorspronkelijke hashguard daarna groen. Geen importinhoud gewijzigd. Volledige Linux-CI is eindcontrole voor de PR.
+
+BEWIJSGRENZEN
+Bot-UAs zijn simulaties, geen echt Googlebot-bezoek. OG-tag/beelddecode is geen Meta-preview. GSC-signaal IMDb8vertoningen/0klikken/positie8,12 geldt5oktober–1november; ontbrekende Zo-werkt-het-rij is onbekend, nietnul. Niet als effect na metadatarelease presenteren. Geen ranking-/klik-/conversieclaim.
+Geen nieuwe GSC-aanvragen, Meta-acties, native plaatsingen, conceptbank-, dashboard-, automatiserings-, profiel- of socialplanningswijzigingen. Oude measurement.json noemt PR51 ten onrechte nogDraft; is alleen als historische referentie gelezen.
+
+RELEASE EN ROLLBACK
+Alleen Draft-PR/Preview ter beoordeling. Afzonderlijk akkoord nodig vóór merge/productie. Bij akkoord: actuele main/CI controleren; uitsluitend beoordeelde applicatiecommit integreren, bestaande Vercelproductierelease gebruiken, live vieruitlegURLs en drieUAvarianten plus OG/CTA opnieuw controleren. GeenSQL/envproductiewijziging. Rollback: gerichte revert van uitsluitend deze inhoud/image-prop en de twee assets, of bestaand vorigeproductiondeployment volgens normale releaseprocedure; gebruikersgegevens worden niet gewijzigd. Social pas na echte livecontrole vrijgeven.
