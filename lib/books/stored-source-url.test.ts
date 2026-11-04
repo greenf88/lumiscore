@@ -19,3 +19,15 @@ test('source URL validation permits only a single bounded Google volume identifi
  for(const url of ['https://books.google.com/books?id=5hUViLO4kWgC','https://books.google.nl/books/about/Ghosts.html?id=5hUViLO4kWgC','https://openlibrary.org/books/OL26336428M'])assert.equal(safePublicSource(url),true,url);
  for(const url of ['https://books.google.com/books?id=abc','https://books.google.com/books?id=5hUViLO4kWgC&id=otherbook','https://books.google.com/books?id=5hUViLO4kWgC&token=private','https://books.google.com/books?q=private+query','https://books.google.com/books?id=private%40example.org','https://books.google.com/redirect?id=5hUViLO4kWgC','https://untrusted.example/books?id=5hUViLO4kWgC','https://books.google.com/books?id=5hUViLO4kWgC#token','https://name:secret@books.google.com/books?id=5hUViLO4kWgC'])assert.equal(safePublicSource(url),false,url);
 });
+
+test('publisher ISBN source keeps reviewed stored text; malformed, duplicate and sensitive queries stay refused',async()=>{
+ const url='https://penguinrandomhousehighereducation.com/book/?isbn=9780679417354';
+ assert.equal(safePublicSource(url),true);
+ for(const bad of [url+'&token=secret',url+'&isbn=9780679417354',url.replace('7354','7355'),url.replace('isbn=9780679417354','isbn=reader%40example.org'),url.replace('/book/','/redirect/'),url.replace('penguinrandomhousehighereducation.com','untrusted.example'),url+'#token'])assert.equal(safePublicSource(bad),false,bad);
+ const row:StoredDescription={work_id:1824,bound_author_id:129,language:'en',text:'K. arrives in a village expecting to work as a land surveyor. His attempts to contact the authorities at the castle become increasingly difficult.',source_type:'official_publisher',source_name:'Everyman’s Library',source_url:url,reviewed_at:'2026-11-04',review_status:'approved'};
+ const book={workId:'1824',authorId:'129',title:'The Castle',author:'Franz Kafka',editionAvailable:true,editionId:'1976',editionTitle:'The Castle',editionLanguage:'eng',isbn13:'9780679417354'} as Book;
+ const selected=applyStoredPresentation([book],'en',[row],[])[0];assert.equal(selected.storedDescription?.sourceUrl,url);
+ let requests=0;const result=await loadPublicBookDescriptionState(selected,'en',async()=>{requests++;throw Error('No upstream needed');});
+ assert.equal(result.state,'resolved');assert.equal(result.description?.text,row.text);assert.equal(requests,0);
+ assert.equal(applyStoredPresentation([book],'nl',[row],[])[0].storedDescription,undefined);
+});
