@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { LumiScoreBrowsePage } from '@/app/components/LumiScoreBrowsePage';
-import { browseHasQuery } from '@/lib/seo/page-metadata';
+import { browsePagePath, publicBrowsePage } from '@/lib/seo/browse-pagination';
+import { redirect } from 'next/navigation';
+import { localizedHref } from '@/lib/i18n/paths';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { browseQuery, editorialHref, type CatalogParams } from '@/lib/catalog/editorial-query';
@@ -8,10 +10,14 @@ import { unavailableEditorialPage } from '@/lib/supabase/editorial-catalog';
 type BrowsePageProps = { searchParams: Promise<CatalogParams> };
 export const dynamic = 'force-dynamic';
 export async function generateMetadata({ searchParams }: BrowsePageProps): Promise<Metadata> {
+  const page = publicBrowsePage(await searchParams);
   return createLocalizedPageMetadata({
     title: 'Browse books — LumiScore',
     description: 'Explore the LumiScore catalog and find your next book.',
-    canonicalPath: '/browse', noIndex: browseHasQuery(await searchParams),
+    canonicalPath: page === null ? '/browse' : browsePagePath(page), noIndex: page === null,
+    // Locale catalogs differ in count/order: page N is not a verified translated
+    // equivalent of page N in another language (and may not even exist there).
+    includeLanguageAlternates: page === 1,
   });
 }
 export default async function BrowsePage({ searchParams }: BrowsePageProps) {
@@ -26,6 +32,11 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');
     data = await loadEditorialCatalog(state, locale, true, true);
   } catch (error) { console.error('Browse editorial catalog load failed.', error); }
+  // The bounded RPC clamps excessive page numbers. Redirect normal pagination
+  // to that real page instead of indexing duplicate final-page content.
+  if (data.available && publicBrowsePage(params) !== null && data.page !== state.page) {
+    redirect(localizedHref(browsePagePath(data.page), locale));
+  }
   const current = { ...state, page: data.page };
   return <LumiScoreBrowsePage data={data} authState={authState}
     returnTo={editorialHref('/browse', current)} filters={current} />;

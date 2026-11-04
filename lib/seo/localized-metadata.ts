@@ -23,6 +23,6 @@ const dutchPages: Record<string, [string, string]> = {
 
 export async function createLocalizedPageMetadata(options: Parameters<typeof createPageMetadata>[0]) {
   const { locale } = await resolveRequestLocale();
-  const localized = locale === 'nl' ? dutchPages[options.canonicalPath] : undefined;
+  const localized = locale === 'nl' ? dutchPages[options.canonicalPath.split('?')[0]] : undefined;
   return createPageMetadata({ ...options, ...(localized ? { title: localized[0], description: localized[1] } : {}), locale });
 }
