@@ -1,0 +1,379 @@
+{
+  "summary": {
+    "batch": "description-recovery-20261104-test",
+    "target": "hlvujbrmfdlrfxdjwsmb",
+    "state": "review_only",
+    "productionActions": 0,
+    "newSummaries": {
+      "nl": 1,
+      "en": 3
+    },
+    "netDutchAvailability": 0
+  },
+  "bindings": [
+    {
+      "work": {
+        "id": 987110006,
+        "title": "Das Schloß",
+        "cover_id": null,
+        "author_id": 987310001,
+        "work_type": null,
+        "source_type": "open_library",
+        "open_library_id": "OL498434W",
+        "first_publish_year": 1926,
+        "native_identity_key": "nlscale:fixture011:1824"
+      },
+      "author": {
+        "id": 987310001,
+        "name": "Franz Kafka",
+        "open_library_id": "OL33146A"
+      }
+    }
+  ],
+  "authorCorpora": [],
+  "actions": [
+    {
+      "relation": "authors",
+      "ref": "test-author",
+      "key": {
+        "id": 988310001
+      },
+      "before": null,
+      "after": {
+        "id": 988310001,
+        "name": "Bertrice Small",
+        "open_library_id": "OL192030A"
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "test-work-988110001",
+      "key": {
+        "id": 988110001
+      },
+      "before": null,
+      "after": {
+        "id": 988110001,
+        "title": "De heks van Portobello",
+        "author_id": 930300040,
+        "first_publish_year": 2007,
+        "open_library_id": "OL26176645W",
+        "cover_id": null,
+        "source_type": null,
+        "work_type": null,
+        "native_identity_key": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "test-edition-988210001",
+      "key": {
+        "id": 988210001
+      },
+      "before": null,
+      "after": {
+        "id": 988210001,
+        "work_id": 988110001,
+        "title": "De heks van Portobello",
+        "language": "dut",
+        "open_library_edition_id": "OL35326067M",
+        "isbn_10": "9029564733",
+        "isbn_13": "9789029564731",
+        "publisher": "De Arbeiderspers",
+        "publish_date": null,
+        "cover_id": null
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description-988110001-nl",
+      "key": {
+        "work_id": 988110001,
+        "language": "nl"
+      },
+      "before": null,
+      "after": {
+        "work_id": 988110001,
+        "language": "nl",
+        "bound_author_id": 930300040,
+        "text": "Athena groeit op bij adoptieouders in Beiroet, nadat zij als baby in een Roemeens weeshuis is achtergelaten. Haar belangstelling voor geloof en spiritualiteit brengt haar op een persoonlijke zoektocht. Ze wil haar afkomst begrijpen en haar biologische moeder vinden. Wanneer zij als zieneres naar buiten treedt, roept dat ook weerstand op. Mensen uit haar omgeving vertellen over hun ontmoetingen met haar; samen vormen hun verschillende herinneringen een beeld van haar leven.",
+        "source_type": "official_publisher",
+        "source_name": "De Arbeiderspers",
+        "source_url": "https://www.singeluitgeverijen.nl/de-arbeiderspers/boek/de-heks-van-portobello-2/",
+        "evidence": [
+          {
+            "url": "https://www.singeluitgeverijen.nl/de-arbeiderspers/boek/de-heks-van-portobello-2/",
+            "role": "content facts; independent original summary",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://www.bibliotheek.nl/catalogus/titel.405341350.html/de-heks-van-portobello/",
+            "role": "exact edition identity/ISBN/language",
+            "isbn13": "9789029564731",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/works/OL26176645W",
+            "role": "cross-check Work and source-edition parent"
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-04T20:00:00+00:00",
+        "review_batch": "description-recovery-20261104"
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "test-work-988110002",
+      "key": {
+        "id": 988110002
+      },
+      "before": null,
+      "after": {
+        "id": 988110002,
+        "title": "Crown of Midnight",
+        "author_id": 924300125,
+        "first_publish_year": 2013,
+        "open_library_id": "OL16809980W",
+        "cover_id": null,
+        "source_type": "open_library",
+        "work_type": null,
+        "native_identity_key": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "test-edition-988210002",
+      "key": {
+        "id": 988210002
+      },
+      "before": null,
+      "after": {
+        "id": 988210002,
+        "work_id": 988110002,
+        "title": "Crown of Midnight",
+        "language": "eng",
+        "open_library_edition_id": "OL25434819M",
+        "isbn_10": "1619630621",
+        "isbn_13": "9781619630628",
+        "publisher": "Bloomsbury",
+        "publish_date": null,
+        "cover_id": null
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description-988110002-en",
+      "key": {
+        "work_id": 988110002,
+        "language": "en"
+      },
+      "before": null,
+      "after": {
+        "work_id": 988110002,
+        "language": "en",
+        "bound_author_id": 924300125,
+        "text": "Celaena Sardothien has become the King’s Champion, but serving him puts her conscience under pressure. She conceals her real loyalties while carrying out a dangerous role at court. Her search for answers draws her friends into conflicts that are difficult to understand and harder to escape. As suspicion spreads around her, she must decide whom to trust and what she is willing to defend. This is the second novel in the Throne of Glass series.",
+        "source_type": "official_publisher",
+        "source_name": "Bloomsbury",
+        "source_url": "https://www.bloomsbury.com/media/gq5hkjjn/badult-w23-catalog.pdf",
+        "evidence": [
+          {
+            "url": "https://www.bloomsbury.com/media/gq5hkjjn/badult-w23-catalog.pdf",
+            "role": "content facts; independent original summary",
+            "checkedOn": "2026-11-04",
+            "page": 22
+          },
+          {
+            "url": "https://catalog.dmpl.org/Record/223098",
+            "role": "exact edition identity/ISBN/language",
+            "isbn13": "9781619630628",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/works/OL16809980W",
+            "role": "cross-check Work and source-edition parent"
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-04T20:00:00+00:00",
+        "review_batch": "description-recovery-20261104"
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description-987110006-en",
+      "key": {
+        "work_id": 987110006,
+        "language": "en"
+      },
+      "before": null,
+      "after": {
+        "work_id": 987110006,
+        "language": "en",
+        "bound_author_id": 987310001,
+        "text": "A man known as K. arrives in a village expecting to work as a land surveyor for the authorities in a nearby castle. Reaching those authorities proves unexpectedly difficult. Messages, intermediaries and encounters with the villagers complicate his efforts to establish his position. The more he tries to understand the rules governing the place, the less secure his situation becomes. Kafka follows his struggle to gain recognition from a distant and elusive power.",
+        "source_type": "official_publisher",
+        "source_name": "Penguin Random House / Everyman’s Library",
+        "source_url": "https://penguinrandomhousehighereducation.com/book/?isbn=9780679417354",
+        "evidence": [
+          {
+            "url": "https://penguinrandomhousehighereducation.com/book/?isbn=9780679417354",
+            "role": "content facts; independent original summary",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/books/OL7698685M",
+            "role": "exact edition identity/ISBN/language",
+            "isbn13": "9780679417354",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/works/OL498434W",
+            "role": "cross-check Work and source-edition parent"
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-04T20:00:00+00:00",
+        "review_batch": "description-recovery-20261104"
+      }
+    },
+    {
+      "relation": "works",
+      "ref": "test-work-988110003",
+      "key": {
+        "id": 988110003
+      },
+      "before": null,
+      "after": {
+        "id": 988110003,
+        "title": "Skye O'Malley",
+        "author_id": 988310001,
+        "first_publish_year": 1980,
+        "open_library_id": "OL1692389W",
+        "cover_id": null,
+        "source_type": null,
+        "work_type": null,
+        "native_identity_key": null
+      }
+    },
+    {
+      "relation": "editions",
+      "ref": "test-edition-988210003",
+      "key": {
+        "id": 988210003
+      },
+      "before": null,
+      "after": {
+        "id": 988210003,
+        "work_id": 988110003,
+        "title": "Skye O'Malley",
+        "language": "eng",
+        "open_library_edition_id": "OL10683537M",
+        "isbn_10": "0345292561",
+        "isbn_13": "9780345292568",
+        "publisher": "Ballantine Books",
+        "publish_date": null,
+        "cover_id": null
+      }
+    },
+    {
+      "relation": "catalog_work_descriptions",
+      "ref": "description-988110003-en",
+      "key": {
+        "work_id": 988110003,
+        "language": "en"
+      },
+      "before": null,
+      "after": {
+        "work_id": 988110003,
+        "language": "en",
+        "bound_author_id": 988310001,
+        "text": "Skye O’Malley builds a life that takes her far beyond her Irish beginnings. Love, family and the demands of a shipping enterprise pull her into dangerous conflicts. Her journeys carry her to Algiers and London, where private ambitions meet the power of the English crown. Skye’s determination brings her into opposition with Queen Elizabeth I. This historical romance follows her attempts to protect the people and independence she values while pursuing a future of her own.",
+        "source_type": "official_publisher",
+        "source_name": "Penguin Random House / Ballantine Books",
+        "source_url": "https://www.penguinrandomhouse.com/books/168589/skye-omalley-by-bertrice-small/",
+        "evidence": [
+          {
+            "url": "https://www.penguinrandomhouse.com/books/168589/skye-omalley-by-bertrice-small/",
+            "role": "content facts; independent original summary",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/books/OL10683537M",
+            "role": "exact edition identity/ISBN/language",
+            "isbn13": "9780345292568",
+            "checkedOn": "2026-11-04"
+          },
+          {
+            "url": "https://openlibrary.org/works/OL1692389W",
+            "role": "cross-check Work and source-edition parent"
+          }
+        ],
+        "provenance": "original_source_reviewed_summary",
+        "review_status": "approved",
+        "reviewed_at": "2026-11-04T20:00:00+00:00",
+        "review_batch": "description-recovery-20261104"
+      }
+    }
+  ],
+  "editionBindings": [
+    {
+      "id": 987210011,
+      "title": "The Castle",
+      "isbn_10": "0679417354",
+      "isbn_13": "9780679417354",
+      "work_id": 987110006,
+      "cover_id": null,
+      "language": "eng",
+      "publisher": "Everyman's Library",
+      "publish_date": null,
+      "open_library_edition_id": "OL7698685M"
+    }
+  ],
+  "retainedDescriptions": [
+    {
+      "text": "Landmeter K. komt aan in een dorp dat onder het gezag van een slot staat. Hij probeert toegang te krijgen tot de autoriteiten, maar raakt verstrikt in onduidelijke boodschappen, tussenpersonen en tegenstrijdige verwachtingen. Ook de dorpsbewoners bieden hem geen vaste plaats. Hoe meer K. zijn positie probeert op te helderen, hoe moeilijker de verhoudingen te begrijpen lijken. In deze onvoltooide roman onderzoekt Kafka een bestaan waarin het verlangen naar erkenning steeds stuit op een bestuur dat onbereikbaar blijft.",
+      "work_id": 987110006,
+      "evidence": [
+        {
+          "note": "Kafka’s unfinished DasSchloss novel. Querido hardback is explicit print; summary explicitly retains unfinished status. Exact current source-edition key is already present; fill its absent ISBN from bound independent KB records, never insert a duplicate edition. Only Pijpelijntjes additionally needs NULL-language→dut based on exact KB language evidence.",
+          "type": "reviewed_identity_and_bibliography",
+          "sources": [
+            "http://data.bibliotheken.nl/id/nbt/p830918485"
+          ],
+          "reference": "work:1824",
+          "checked_at": "2026-11-02T19:45:00.000Z",
+          "canonical_name_resolution": null
+        },
+        {
+          "type": "original_substantive_source_review",
+          "review": "content-review-021.json",
+          "sources": [
+            "https://openlibrary.org/works/OL498434W",
+            "https://data.bibliotheken.nl/id/nbt/p830918485"
+          ]
+        },
+        {
+          "type": "cover_front_review",
+          "sha256": "af55d27f8cbbe31bc7c1bd05896ac1b09ef35976932dad9e6132c20f5f813047",
+          "cover_id": 6765467,
+          "reference": "cover-semantic-review-010.json",
+          "limitation": "Actually read cover-large/sheet-001.jpg. Franz Kafka; Het slot; Querido. Front identity and source-edition attachment are corroboration, not proof of a visible barcode, printing year, language or complete contents. Bibliographic checks remain separate."
+        }
+      ],
+      "language": "nl",
+      "provenance": "original_source_reviewed_summary",
+      "source_url": "https://openlibrary.org/works/OL498434W",
+      "reviewed_at": "2026-11-02T19:45:00+00:00",
+      "source_name": "Gecontroleerde boek- en catalogusbronnen",
+      "source_type": "official_catalog",
+      "review_batch": "nl-scale-20261102-011",
+      "review_status": "approved",
+      "bound_author_id": 987310001
+    }
+  ]
+}
