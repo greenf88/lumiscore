@@ -29,8 +29,8 @@ test('approved NL/EN metadata, visible answers and shared page schema match', ()
   for (const locale of ['nl', 'en'] as const) {
     const page = getInformationPageContent('imdbComparison', locale);
     assert.equal(page, IMDB_COMPARISON_CONTENT[locale]);
-    assert.equal(page.seoTitle, locale === 'nl' ? 'IMDb voor boeken? Ontdek LumiScore' : 'Looking for an IMDb for Books? Meet LumiScore');
-    assert.equal(page.title, locale === 'nl' ? 'Zoek je een IMDb voor boeken?' : 'Looking for an IMDb for books?');
+    assert.equal(page.seoTitle, locale === 'nl' ? 'IMDb voor boeken? Boeken ontdekken met LumiScore' : 'Looking for an IMDb for Books? Meet LumiScore');
+    assert.equal(page.title, locale === 'nl' ? 'Een IMDb voor boeken? Ontdek LumiScore' : 'Looking for an IMDb for books?');
     const meta = createPageMetadata({ title: page.seoTitle, description: page.seoDescription, canonicalPath: page.path, locale });
     assert.equal(meta.alternates.canonical, `https://lumisco.re/${locale}${page.path}`);
     assert.equal(meta.openGraph.siteName, 'LumiScore');

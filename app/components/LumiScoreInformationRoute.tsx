@@ -18,6 +18,7 @@ export async function generateInformationPageMetadata(
     title: content.seoTitle,
     description: content.seoDescription,
     canonicalPath: content.path,
+    image: content.image,
   });
 }
 

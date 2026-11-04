@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-11-04T09:02:35.225Z",
+  "baseSha": "cf635417b970869b8759dc36767c965b32a4f592",
+  "claims": [
+    {
+      "id": "public-browse",
+      "claim": "Boekinformatie en scores bekijken kan zonder login.",
+      "source": "app/book/[id]/page.tsx; lib/supabase/ratings.ts; lib/ratings/card-summaries.ts",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "rating",
+      "claim": "Hele cijfers 1–10, één eigen beoordeling per Work; later wijzigen.",
+      "source": "lib/ratings/model.ts:parseRating; lib/supabase/ratings.ts:saveBookRating; user_id,work_id upsert",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "score",
+      "claim": "Publieke score is afgerond gemiddelde; vanaf drie verschillende beoordelaars, bandbreedte. Onvoldoende bewijs en tijdelijke bronfout zijn verschillend.",
+      "source": "lib/ratings/card-summaries.ts; lib/supabase/public-rating-summaries.ts; supabase/migrations/20261007080316_public_rating_threshold_three.sql (locatie ook via migration-contract.test.ts)",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "match",
+      "claim": "Eigen oordeel, publieke score en persoonlijke match zijn verschillend; beperkte onderbouwing is geen garantie/kans.",
+      "source": "lib/taste-test/rating-result.ts; lib/recommendations/; app/components/LumiScoreBookDetail.tsx",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "taste-auth",
+      "claim": "De rating-smaaktest heeft login nodig; gastvragenlijst is afzonderlijk en schrijft geen accountboekratings.",
+      "source": "app/taste-test/page.tsx; app/components/RatingTasteTest.tsx:153–157; app/taste-test/preferences/page.tsx",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "save-skip",
+      "claim": "Volgende boek pas na succesvolle API-actie. Overslaan is geen rating; voltooiing volgt gekozen aantal opgeslagen ratings, niet alle aangeboden boeken.",
+      "source": "app/components/RatingTasteTest.tsx:act; lib/taste-test/result-presentation.ts:shouldOpenCompletedResult; lib/taste-test/rating-round.ts",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "return",
+      "claim": "Login bewaart toegestane lokale terugbestemming en locale; geen auth-logica gewijzigd.",
+      "source": "lib/auth/request.ts:getSafeNextPath; app/login/page.tsx; app/components/LumiScoreLogin.tsx:hidden next; app/auth/sign-in/route.ts",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "status",
+      "claim": "Eigen boeken en leesstatussen, rating telt als gelezen; reeksvoortgang betreft opgenomen delen.",
+      "source": "lib/supabase/ratings.ts; app/components/LumiScoreReadingStatus.tsx; lib/collections/",
+      "status": "code_verified; browser acceptance recorded separately"
+    },
+    {
+      "id": "analysis",
+      "claim": "Optionele analyse uit zonder toestemming; intrekken stopt nieuwe metingen, wist eerdere totalen niet meteen. Ratings/auth/status blijven onafhankelijk.",
+      "source": "lib/product-metrics/consent.ts; app/components/ProductMeasurements.tsx; docs/product-measurement-privacy-capacity-20261022.txt",
+      "status": "code_verified; browser acceptance recorded separately"
+    }
+  ]
+}

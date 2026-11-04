@@ -5,38 +5,45 @@ export const IMDB_COMPARISON_CONTENT: Record<'nl' | 'en', InformationPageContent
   nl: {
     key: 'imdbComparison', locale: 'nl', path: IMDB_COMPARISON_PATHS.nl, layout: 'compact',
     eyebrow: 'BOEKEN BEOORDELEN',
-    title: 'Zoek je een IMDb voor boeken?',
-    lead: 'Met LumiScore beoordeel je boeken van 1 tot 10, ontdek je lezersscores en houd je bij welke boeken en reeksdelen je hebt gelezen.',
-    seoTitle: 'IMDb voor boeken? Ontdek LumiScore',
-    seoDescription: 'Beoordeel boeken van 1 tot 10, ontdek lezersscores en houd je leesreeksen bij. Maak kennis met LumiScore, een onafhankelijk platform voor lezers.',
+    title: 'Een IMDb voor boeken? Ontdek LumiScore',
+    lead: 'Zoek je voor boeken wat een filmscore je bij films biedt? Op LumiScore bekijk je boekinformatie en lezersscores, geef je gelezen boeken een eigen cijfer en ontdek je nieuwe leestips. Het is een vergelijking van het idee: LumiScore is een onafhankelijk boekenplatform.',
+    seoTitle: 'IMDb voor boeken? Boeken ontdekken met LumiScore',
+    seoDescription: 'Zoek je een IMDb voor boeken? Bekijk boekinformatie en lezersscores op LumiScore. Ontdek het verschil tussen jouw cijfer, de openbare score en een persoonlijke match.',
+    image: '/images/information/imdb-voor-boeken-nl.png',
     schemaType: 'WebPage', breadcrumbHome: 'Home',
     actions: [
       { text: 'Ontdek boeken', href: '/browse', variant: 'primary' },
-      { text: 'Doe de smaaktest', href: '/taste-test', variant: 'secondary' },
+      { text: 'Start de smaaktest', href: '/taste-test', variant: 'secondary' },
     ],
     sections: [
-      { heading: 'Een cijfer voor wat je hebt gelezen', paragraphs: [
-        ['Zoek je bij IMDb vooral een cijfer en overzicht? Bij LumiScore vind je een vergelijkbare aanpak voor boeken, niet alle functies van IMDb.'],
-        ['Log in, zoek een gelezen boek en geef een heel cijfer van 1 tot 10. Je kunt je beoordeling later aanpassen; een andere editie van hetzelfde boek levert geen tweede beoordeling op.'],
+      { heading: 'Wat kun je bekijken en beoordelen?', paragraphs: [
+        ['Je kunt zonder account zoeken op titel of auteur, een boekpagina openen en beschikbare samenvattingen, editiegegevens en openbare scores bekijken. Collecties helpen je boeken van een auteur of uit een reeks te vinden.'],
+        ['Na aanmelden geef je een gelezen boek een heel cijfer van 1 tot 10. Je kunt dat cijfer later wijzigen. Verschillende edities van hetzelfde boek leveren geen aparte beoordelingen in jouw account op.'],
+        [{ type: 'link', text: 'Bekijk boeken en collecties', href: '/collections' }, ' of lees de praktische stappen bij ', { type: 'link', text: 'Zo werkt het', href: '/zo-werkt-het' }, '.'],
       ] },
-      { heading: 'Lezersscore of persoonlijke match?', paragraphs: [
-        ['De publieke LumiScore is het gemiddelde van de lezersbeoordelingen, afgerond op één decimaal. Die verschijnt vanaf drie verschillende beoordelaars. Bij minder beoordelingen zie je een streepje. Het aantal lezers wordt als bandbreedte getoond.'],
-        ['Jouw persoonlijke match vergelijkt je leessmaak met onderbouwde kenmerken van een boek. Het is geen publieke kwaliteitsscore of kans dat je een boek leuk vindt. Bij weinig bewijs blijft een tip verkennend of ontbreekt een matchcijfer.'],
-        ['LumiScore is een groeiend platform. Veel boeken hebben nog weinig beoordelingen; één nieuw cijfer kan een vroege score merkbaar veranderen.'],
+      { heading: 'Wat vertelt de openbare LumiScore?', paragraphs: [
+        ['De publieke LumiScore is het gemiddelde van de opgeslagen lezersbeoordelingen, afgerond op één decimaal. De score verschijnt vanaf drie verschillende beoordelaars. Het getoonde aantal beoordelaars is een bandbreedte, geen volledig lezersaantal.'],
+        ['Een algemeen cijfer helpt je oriënteren, maar vertelt niet of het verhaal bij jou past. Kijk ook naar de samenvatting en wat je zelf graag leest.'],
       ] },
-      { heading: 'Ontdek je volgende boek', paragraphs: [
-        [{ type: 'link', text: 'Doorzoek de boekencatalogus', href: '/browse' }, ' op titel of auteur. Met de ', { type: 'link', text: 'smaaktest', href: '/taste-test' }, ' beoordeel je gelezen boeken en bouw je aan je leesprofiel. Je beoordelingen helpen bij persoonlijke boekentips, voor zover er voldoende onderbouwing is.'],
+      { heading: 'Jouw eigen cijfer en jouw match zijn iets anders', paragraphs: [
+        ['Jouw cijfer is je eigen oordeel nadat je een boek hebt gelezen. Een persoonlijke match vergelijkt je leessmaak met onderbouwde kenmerken van een boek dat je zou kunnen kiezen.'],
+        ['Een boek dat anderen hoog waarderen hoeft dus niet jouw beste match te zijn. Bij weinig onderbouwing blijven tips verkennend of ontbreekt een matchcijfer. Het is geen garantie en geen kanspercentage.'],
+        [{ type: 'link', text: 'Lees hoe de drie soorten cijfers verschillen', href: '/zo-werkt-het' }, '.'],
       ] },
-      { heading: 'Houd je boeken en reeksen bij', paragraphs: [
-        ['Bewaar in je account wat je wilt lezen, leest of hebt gelezen. Een beoordeeld boek telt ook als gelezen. In Mijn boeken vind je je eigen overzicht.'],
-        [{ type: 'link', text: 'Bekijk boekenreeksen en collecties', href: '/collections' }, ' om je voortgang binnen de opgenomen delen te volgen. Waar de bekende reeksvolgorde dat ondersteunt, zie je welk deel hierna komt.'],
+      { heading: 'Wat als er geen openbaar cijfer staat?', paragraphs: [
+        ['Een streepje met ‘Onvoldoende beoordelingen’ betekent dat er nog geen bruikbaar openbaar cijfer is, niet dat het boek slecht is of een nul krijgt. Een cijfer op basis van weinig beoordelingen kan nog merkbaar veranderen.'],
+        ['Bij een tijdelijke storing vermeldt de pagina dat beoordelingen niet beschikbaar zijn. Dat is iets anders dan onvoldoende beoordelingen. Je kunt beschikbare boekinformatie wel gebruiken om zelf een keuze te maken.'],
+      ] },
+      { heading: 'Hoe kies je van hieruit een volgend boek?', paragraphs: [
+        ['Begin bij een boek dat je kent, verken een collectie of kies een redactionele leesroute. Zoek je bijvoorbeeld een eerste fantasyboek, dan helpt een inhoudelijke keuzehulp je verder dan alleen het hoogste cijfer.'],
+        [{ type: 'link', text: 'Bekijk de redactionele leesroutes', href: '/toplijsten' }, ', ', { type: 'link', text: 'ontdek boeken', href: '/browse' }, ' of ', { type: 'link', text: 'start de smaaktest', href: '/taste-test' }, '. Daar beoordeel je gelezen boeken; onbekende boeken mag je overslaan. Voor het bewaren van boekbeoordelingen meld je je aan.'],
       ] },
     ],
     faq: { heading: 'Kort antwoord op je vragen', items: [
-      { question: 'Is er een IMDb voor boeken?', answer: 'Zoek je cijfers en overzicht voor boeken, dan kun je bij LumiScore terecht. Het is een vergelijking van de aanpak, geen belofte van alle IMDb-functies.' },
-      { question: 'Kan ik boeken een cijfer van 1 tot 10 geven?', answer: 'Ja. Na het inloggen geef je een gelezen boek een heel cijfer van 1 tot 10, op de boekpagina of in de smaaktest.' },
-      { question: 'Heb ik een account nodig?', answer: 'Rondkijken kan zonder account. Voor boeken beoordelen en je leesvoortgang in een account bewaren log je in. Gastvoorkeuren zijn geen opgeslagen accountbeoordelingen.' },
-      { question: 'Hoe krijg ik persoonlijke boekentips?', answer: 'Beoordeel boeken die je hebt gelezen. De smaaktest helpt je op weg; je leesprofiel en aanbevelingen gebruiken dezelfde smaakberekening. Bij weinig onderbouwing blijven tips verkennend.' },
+      { question: 'Bestaat er een IMDb voor boeken?', answer: 'LumiScore biedt boekinformatie, lezersscores en je eigen boekbeoordelingen. De vergelijking gaat over cijfers en ontdekken; het is geen officiële IMDb-dienst en geen kopie van alle IMDb-functies.' },
+      { question: 'Moet ik me aanmelden om rond te kijken?', answer: 'Nee. Boekinformatie, collecties en uitleg zijn openbaar. Voor het bewaren en wijzigen van jouw beoordelingen en accountvoortgang meld je je aan.' },
+      { question: 'Is een hoge LumiScore ook een hoge persoonlijke match?', answer: 'Niet automatisch. De openbare score vat lezersoordelen samen. Een persoonlijke match gebruikt je leessmaak en onderbouwde boekkenmerken.' },
+      { question: 'Moet ik ieder boek in de smaaktest kennen?', answer: 'Nee. Beoordeel alleen gelezen boeken. Niet gelezen of onbekend? Sla over; dat telt niet als opgeslagen boekbeoordeling.' },
     ] },
     disclaimer: 'LumiScore is een onafhankelijk platform en is niet verbonden aan IMDb.',
   },

@@ -35,15 +35,22 @@ test('existing H1 and primary taste-test action remain; introduction is not them
   assert.doesNotMatch(css,/\.hero-introduction[^}]*display:\s*none/);
 });
 
-test('how-it-works answers five questions, links to existing services, and adds no website rating schema',()=>{
+test('how-it-works explains scores and links to real product actions without website rating schema',()=>{
   for(const locale of ['en','nl'] as const){
     const page=getInformationPageContent('howItWorks',locale);
-    assert.equal(page.path,'/zo-werkt-het');assert.equal(page.sections.length,5);
+    assert.equal(page.path,'/zo-werkt-het');
+    assert.equal(new Set(page.sections.map(section=>section.heading)).size,page.sections.length);
     const body=JSON.stringify(page);
-    for(const path of ['/browse','/taste-test','/collections'])assert.ok(body.includes(`"href":"${path}"`));
+    for(const path of [locale==='nl'?'/search':'/browse','/taste-test','/collections'])assert.ok(body.includes(`"href":"${path}"`));
     assert.match(body,locale==='nl'?/drie verschillende beoordelaars/:/three different readers/);
-    assert.match(body,/3–4/);
-    assert.match(body,locale==='nl'?/geen voorspelde kans/:/not a predicted probability/);
+    assert.match(body,locale==='nl'?/geen garantie of kanspercentage/:/not a predicted probability/);
+    if(locale==='nl') {
+      assert.equal(page.actions?.filter(action=>action.variant==='primary').length,1);
+      assert.equal(page.actions?.find(action=>action.variant==='primary')?.href,'/search');
+      assert.match(body,/gastvoorkeuren zijn geen opgeslagen boekbeoordelingen/i);
+      assert.match(body,/onvoldoende beoordelingen/i);
+      assert.match(body,/tijdelijke laadfout/i);
+    }
     assert.doesNotMatch(body,/professionele critici|professional critics|written reviews|geschreven reviews|best books website|beste boekenwebsite/i);
     assert.doesNotMatch(JSON.stringify(buildInformationPageJsonLd(page)),/AggregateRating/);
   }
