@@ -985,6 +985,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .editorial-lists > p { color: var(--muted); line-height: 1.65; margin-block: 16px; max-width: 75ch; }
 .editorial-books { list-style: none; padding: 0; margin-block: 30px; }
 .editorial-book { min-width: 0; }
+.landing-guide { max-width: 900px; margin: 24px auto; overflow-wrap: anywhere; }
+.landing-guide p, .landing-guide li { line-height: 1.65; }
+.landing-guide h2 { font-size: clamp(1.25rem, 3vw, 1.65rem); }
+.landing-guide li { margin-block: 12px; }
+.landing-guide details { border-top: 1px solid var(--border); padding-block: 14px; }
+.landing-guide summary { cursor: pointer; }
+.collection-guide-intro, .collection-guide-after { width: calc(100% - 48px); }
+.guide-sources { font-size: .8rem; line-height: 1.5; }
+.editorial-angle { font-family: var(--sans); font-size: 1rem; line-height: 1.4; }
+.editorial-availability { max-width: 900px; margin: 24px auto; }
+.catalog-breadcrumbs { max-width: 1380px; margin: 16px auto; padding-inline: 24px; font-size: .8rem; color: var(--muted); }
+.detail-copy .catalog-breadcrumbs { padding-inline: 0; }
+.catalog-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 6px 10px; list-style: none; padding: 0; }
+.catalog-breadcrumbs li { min-width: 0; overflow-wrap: anywhere; }
+.catalog-breadcrumbs li + li::before { content: '/'; margin-right: 10px; }
 .editorial-lists summary { cursor: pointer; min-height: 44px; padding-block: 10px; color: var(--muted); }
 .editorial-lists a:focus-visible, .editorial-lists summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
 /* Shared overview-card contract. Compact curated rows intentionally remain an exception. */

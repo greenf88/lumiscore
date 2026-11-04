@@ -1,0 +1,53 @@
+SOCIAL DESTINATIONS — SEPARATE DRAFT — 4 NOVEMBER 2026
+
+Base: main / production 46ae50bce9603f8c0c847c9d300bf2a5258b41e2 (released PR73).
+No production deployment, database write, GSC request or social publication is authorized for this package.
+
+Scope: existing NL Suzanne Vermeer collection and two existing reading routes;
+small sourced Madonna/Noorderlicht contextual copy; matching metadata/OG/internal links;
+shared public book/collection breadcrumbs with actual existing parents.
+English editorial copy, candidate IDs and their original order, edition selection,
+public ratings, taste ranking, optional content streaming and PR51 measurements are preserved.
+
+Observed production baseline: Suzanne 53 book destinations; fantasy 5 suitable Dutch cards
+and 5 unavailable cards; after Project Hail Mary 2 Dutch cards and 8 unavailable cards.
+Thirty bounded original-HTML GETs (10 NL/EN route/template examples × desktop, Googlebot,
+InspectionTool simulations) retained valid head metadata. These are not real crawler visits.
+
+The two NL reading guides keep all candidates, show only real available cards in original
+relative order, remove rank badges for these editorial guides, consolidate missing choices
+into one truthful count, and show only applicable choice links/questions. Other lists and
+English behaviour are unchanged. No missing edition was invented or silently substituted.
+
+Suzanne choice links derive from already loaded, selected books and reject ambiguous title/
+author matches. Collection totals/progress remain dynamic. Official story relationships and
+short-story distinction are sourced adjacent to the relevant passages. No complete-bibliography,
+popularity, personal-review or guaranteed-ranking claim.
+
+Primary sources rechecked 4 November: Suzanne official pages All-inclusive, Noorderlicht,
+Madonna, Dwaalspoor, Koraalrif; A.W.Bruna author biography; Tolkien Estate; Gollancz The Last
+Wish; Rebecca Yarros Fourth Wing; Bloomsbury ACOTAR; Macmillan Once Upon a Broken Heart and
+The Three-Body Problem; PenguinRandomHouse The Martian. Exact URLs in landing-guides.json.
+Facts are paraphrased; source content is not imported as catalog descriptions or classifications.
+
+Breadcrumbs: Home → Discover books → current book; Home → Collections → current collection.
+The visible navigation and server-only JSON-LD share entries. No returnTo, personal account,
+invented category or rating is included. Server origin resolution stays out of client bundles.
+Original canonical/hreflang helpers remain unchanged.
+
+Local checks so far: TypeScript, lint and 30 targeted tests passed. A full local run exposed
+one outdated source assertion about the render-loop variable; fixed and retested. Full exact
+head CI remains the final broad check. Windows local dev and Vite-preview commands failed
+in tooling; use the real hosted Preview for browser evidence. Final Vercel build/secretscan
+and hosted acceptance are pending until recorded below. Do not present this draft as released.
+
+Historical product-explanation hashmanifest remains bound to the approved PR73 commit,
+not to this new worktree; only its Social website status is updated to the proven live release.
+
+Rollback: revert only this PR's code/content/assets; no database rollback or import required.
+Release needs an exact reviewed head, green CI, Ready TEST Preview, original HTTP HTML/DOM,
+mobile/desktop/Paper/Ink navigation evidence and real Rich Results validation or a specific
+protected-Preview fetch limitation. No security weakening to make Google access Preview.
+
+News remains an independent unimplemented follow-up. Native Social placements, minutes,
+captions, account data and automation are not changed.

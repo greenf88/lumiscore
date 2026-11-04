@@ -7,13 +7,15 @@ import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { loadCatalogBooksBySourceIds } from '@/lib/supabase/books';
 import { deferEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
 import { editorialPageJsonLd } from '@/lib/seo/editorial';
+import { getLandingGuide } from '@/lib/editorial/landing-guides';
 export const dynamic = 'force-dynamic';
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props) {
   const list = getEditorialTopList((await params).slug);
   if (!list) notFound();
   const { locale } = await resolveRequestLocale();
-  return createLocalizedPageMetadata({ title: list.title[locale]+' — LumiScore', description: list.description[locale], canonicalPath: '/toplijsten/'+list.slug, image: list.shareImage?.replace('.png', '-'+locale+'.png') });
+  const guide = getLandingGuide('/toplijsten/' + list.slug, locale);
+  return createLocalizedPageMetadata({ title: guide?.seo_title ?? list.title[locale]+' — LumiScore', description: list.description[locale], canonicalPath: '/toplijsten/'+list.slug, image: list.shareImage?.replace('.png', '-'+locale+'.png') });
 }
 export default async function TopListPage({ params }: Props) {
   const list = getEditorialTopList((await params).slug);
