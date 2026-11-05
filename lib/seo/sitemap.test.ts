@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildPublicSitemapPaths } from './sitemap.ts';
+import { buildLocalizedSitemap, buildPublicSitemapPaths } from './sitemap.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
 
 test('sitemap paths include all current public books and collections without duplicates', () => {
@@ -50,4 +50,16 @@ test('sitemap includes all public information pages exactly once', () => {
   for (const path of ['/over-ons', '/zo-werkt-het', '/voor-uitgevers', '/contact']) {
     assert.equal(paths.filter((entry) => entry === path).length, 1);
   }
+});
+
+test('editorial sitemap publishes only canonical English toplists and Dutch toplijsten, with reciprocal alternates', () => {
+  const xml=buildLocalizedSitemap([],[]);
+  for(const suffix of ['',...editorialTopLists.map(list=>'/'+list.slug)]){
+    const en='https://lumisco.re/en/toplists'+suffix,nl='https://lumisco.re/nl/toplijsten'+suffix;
+    assert.equal(xml.split('<loc>'+en+'</loc>').length-1,1);
+    assert.equal(xml.split('<loc>'+nl+'</loc>').length-1,1);
+    assert.ok(xml.includes('hreflang="en" href="'+en+'"'));
+    assert.ok(xml.includes('hreflang="nl-NL" href="'+nl+'"'));
+  }
+  assert.doesNotMatch(xml,/https:\/\/lumisco\.re\/(?:en\/toplijsten|nl\/toplists)/);
 });

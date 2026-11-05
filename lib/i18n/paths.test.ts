@@ -29,3 +29,26 @@ test('Auth and onboarding keep a safe localized destination', () => {
   assert.equal(authDestination('/login','//example.org'),'/login');
   assert.equal(getReadingPreferencesOnboardingPath('/nl/book/1'),'/nl/reading-preferences?next=%2Fnl%2Fbook%2F1');
 });
+
+test('English editorial overview and every nested list share existing Dutch content routes without redirect loops',()=>{
+  for(const suffix of ['','/dystopie-vanaf-1990','/na-project-hail-mary']){
+    assert.deepEqual(languageRoute('/en/toplijsten'+suffix),{kind:'redirect',path:'/en/toplists'+suffix});
+    assert.deepEqual(languageRoute('/en/toplists'+suffix),{kind:'rewrite',path:'/toplijsten'+suffix,locale:'en'});
+    assert.deepEqual(languageRoute('/nl/toplijsten'+suffix),{kind:'rewrite',path:'/toplijsten'+suffix,locale:'nl'});
+    assert.deepEqual(languageRoute('/nl/toplists'+suffix),{kind:'redirect',path:'/nl/toplijsten'+suffix});
+    for(const prefix of ['/toplijsten','/toplists'])assert.deepEqual(languageRoute(prefix+suffix),{kind:'redirect',path:'/en/toplists'+suffix});
+    assert.deepEqual(languageRoute('/en/toplijsten'+suffix+'/'),{kind:'redirect',path:'/en/toplists'+suffix});
+    assert.equal(localizedHref('/en/toplists'+suffix+'?utm_source=facebook#books','nl'),'/nl/toplijsten'+suffix+'?utm_source=facebook#books');
+    assert.equal(localizedHref('/nl/toplijsten'+suffix+'?utm_source=facebook#books','en'),'/en/toplists'+suffix+'?utm_source=facebook#books');
+    assert.deepEqual(languageAlternates('/toplijsten'+suffix),{en:'/en/toplists'+suffix,'nl-NL':'/nl/toplijsten'+suffix,'x-default':'/en/toplists'+suffix});
+  }
+});
+
+test('editorial path mapping never rewrites partial segments, assets, APIs or nested return query values',()=>{
+  for(const path of ['/toplijsten-extra','/toplists-extra','/book/toplijsten','/images/toplijsten.jpg','/api/toplijsten']){
+    assert.equal(localizedHref(path,'en'),path.startsWith('/api/')||path.endsWith('.jpg')?path:'/en'+path);
+  }
+  assert.equal(localizedHref('/book/197?returnTo=%2Ftoplijsten%2Feerste-delen-fantasyreeksen','en'),'/en/book/197?returnTo=%2Ftoplijsten%2Feerste-delen-fantasyreeksen');
+  assert.deepEqual(languageRoute('/en/imdb-voor-boeken'),{kind:'redirect',path:'/en/imdb-for-books'});
+  assert.deepEqual(languageRoute('/nl/imdb-voor-boeken'),{kind:'rewrite',path:'/imdb-for-books',locale:'nl'});
+});

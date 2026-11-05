@@ -3,16 +3,25 @@ import { DEFAULT_LOCALE, isLocale, type Locale } from './config.ts';
 export const LOCALE_REQUEST_HEADER = 'x-lumiscore-route-locale';
 export const PATH_REQUEST_HEADER = 'x-lumiscore-route-path';
 
-// One content route, with a canonical slug per language. Other routes stay intact.
+// Shared content routes keep a canonical public path per language.
 export const IMDB_COMPARISON_PATHS = { en: '/imdb-for-books', nl: '/imdb-voor-boeken' } as const;
+export const EDITORIAL_LIST_PATHS = { en: '/toplists', nl: '/toplijsten' } as const;
 
-function comparisonPath(path: string, locale: Locale): string {
+function localizedContentPath(path: string, locale: Locale): string {
   const suffixAt = path.search(/[?#]/);
   const pathname = suffixAt < 0 ? path : path.slice(0, suffixAt);
   const suffix = suffixAt < 0 ? '' : path.slice(suffixAt);
-  return (Object.values(IMDB_COMPARISON_PATHS) as readonly string[]).includes(pathname)
-    ? IMDB_COMPARISON_PATHS[locale] + suffix
-    : path;
+  if ((Object.values(IMDB_COMPARISON_PATHS) as readonly string[]).includes(pathname)) {
+    return IMDB_COMPARISON_PATHS[locale] + suffix;
+  }
+  // Match a whole leading segment only; preserve list identities, query and hash.
+  const editorial = /^\/(?:toplijsten|toplists)(?=\/|$)/.exec(pathname);
+  return editorial ? EDITORIAL_LIST_PATHS[locale] + pathname.slice(editorial[0].length) + suffix : path;
+}
+
+function contentRoutePath(path: string): string {
+  // IMDb's physical route is English; existing editorial pages stay under app/toplijsten.
+  return localizedContentPath(path, 'en').replace(/^\/toplists(?=\/|$)/, '/toplijsten');
 }
 
 export function splitLocalePath(path: string): { locale: Locale | null; path: string } {
@@ -33,7 +42,7 @@ export function localizedHref(href: string, locale: Locale = DEFAULT_LOCALE): st
   if (!href.startsWith('/') || href.startsWith('//') || /[\\\u0000-\u0020\u007f]/u.test(href)) return href;
   const { path } = splitLocalePath(href);
   if (isLanguageNeutralPath(path)) return path;
-  return `/${locale}${comparisonPath(path, locale).replace(/^\/(?=[?#]|$)/, '')}`;
+  return `/${locale}${localizedContentPath(path, locale).replace(/^\/(?=[?#]|$)/, '')}`;
 }
 
 export function languageAlternates(path: string) {
@@ -54,7 +63,7 @@ export function languageRoute(pathname: string):
   if (!parsed.locale || path !== parsed.path || (pathname.length > 1 && pathname.endsWith('/'))) {
     return { kind: 'redirect', path: localizedHref(path.replace(/\/$/, '') || '/', parsed.locale ?? DEFAULT_LOCALE) };
   }
-  const translated = comparisonPath(path, parsed.locale);
+  const translated = localizedContentPath(path, parsed.locale);
   if (translated !== path) return { kind: 'redirect', path: localizedHref(translated, parsed.locale) };
-  return { kind: 'rewrite', path: comparisonPath(parsed.path, 'en'), locale: parsed.locale };
+  return { kind: 'rewrite', path: contentRoutePath(parsed.path), locale: parsed.locale };
 }

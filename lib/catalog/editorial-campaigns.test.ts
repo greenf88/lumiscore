@@ -54,10 +54,13 @@ test('metadata is bilingual, clean of UTM parameters and reuses the single websi
   for (const list of campaigns.lists) for (const locale of ['nl','en'] as const) {
     const path = '/toplijsten/'+list.slug;
     const metadata = createPageMetadata({title:list.title[locale],description:list.description[locale],canonicalPath:path,locale});
-    assert.equal(metadata.alternates.canonical,'https://lumisco.re/'+locale+path);
+    assert.equal(metadata.alternates.canonical,'https://lumisco.re/'+locale+(locale==='en'?'/toplists/':'/toplijsten/')+list.slug);
     assert.ok(sitemap.includes(metadata.alternates.canonical));
     assert.equal(metadata.openGraph.siteName,'LumiScore');assert.equal(metadata.robots.index,true);
     const json = editorialPageJsonLd(list, [], locale);
+    assert.equal(json['@graph'][0].url,metadata.alternates.canonical);
+    assert.equal(json['@graph'][2].itemListElement?.[1]?.item,'https://lumisco.re/'+locale+(locale==='en'?'/toplists':'/toplijsten'));
+    if(locale==='en')assert.doesNotMatch(JSON.stringify(json),/\/en\/toplijsten/);
     assert.ok(JSON.stringify(json).includes('https://lumisco.re/#website'));
     assert.doesNotMatch(JSON.stringify(json),/AggregateRating|"@type":"WebSite"|utm_/);
   }
