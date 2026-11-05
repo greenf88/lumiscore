@@ -1,0 +1,513 @@
+{
+  "rows": [
+    {
+      "key": {
+        "id": 989310001
+      },
+      "seq": 1,
+      "relation": "authors",
+      "after_row": {
+        "id": 989310001,
+        "name": "Ethan Mollick",
+        "open_library_id": "OL8037927A"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989110001
+      },
+      "seq": 2,
+      "relation": "works",
+      "after_row": {
+        "id": 989110001,
+        "title": "A Court of Splintered Harmony",
+        "cover_id": null,
+        "author_id": 924300125,
+        "work_type": "novel",
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": 2026,
+        "native_identity_key": "test:publisher:isbn:9789000378401"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989210001
+      },
+      "seq": 3,
+      "relation": "editions",
+      "after_row": {
+        "id": 989210001,
+        "title": "Hof van versplinterde harmonieën",
+        "isbn_10": null,
+        "isbn_13": "9789000378401",
+        "work_id": 989110001,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Unieboek Het Spectrum",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 989210001
+      },
+      "seq": 4,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 989110001,
+        "evidence": [
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000378401",
+            "facts": [
+              "Exact ISBN paperback, Nederlands, auteur Sarah J. Maas, uitgever Unieboek Het Spectrum, 2026",
+              "Koschei, mensengebied, verdeeld Prythian en Nachthof; reeksdeel 6"
+            ],
+            "access": "Live authenticated-free browser page; current cover dated 20261103. Raw Node request 403, not retried.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000408481",
+            "facts": [
+              "Exact hardcover ISBN, Nederlands, dezelfde Work-identiteit, sprayed edges"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.bloomsbury.com/us/court-of-splintered-harmony-9781639739134/",
+            "facts": [
+              "Oorspronkelijke titel, auteur, reeksdeel 6, jaar 2026 en overeenkomende premisse"
+            ],
+            "access": "Web document; direct Node request 403, not bypassed",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2075711/hof-van-doorns-en-rozen-6.html",
+            "conflict": "ISBN records incorrectly say Engels; primary publisher explicitly Nederlands with Dutch translators. Bibliographic image depicts hardcover and is rejected as paperback asset.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000378401_20261103.jpg",
+            "bytes": 123198,
+            "facts": [
+              "Current exact paperback image observed loaded on publisher page. Old 20261022 image is 404; do not reuse. Front/title/author visually reviewed."
+            ],
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "cover_url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000378401_20261103.jpg",
+        "edition_id": 989210001,
+        "bound_title": "Hof van versplinterde harmonieën",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "bound_isbn13": "9789000378401",
+        "evidence_url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000378401",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000378401_20261103.jpg",
+        "bound_author_id": 924300125
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989210002
+      },
+      "seq": 5,
+      "relation": "editions",
+      "after_row": {
+        "id": 989210002,
+        "title": "Hof van versplinterde harmonieën",
+        "isbn_10": null,
+        "isbn_13": "9789000408481",
+        "work_id": 989110001,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Unieboek Het Spectrum",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 989210002
+      },
+      "seq": 6,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "hardcover",
+        "work_id": 989110001,
+        "evidence": [
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000378401",
+            "facts": [
+              "Exact ISBN paperback, Nederlands, auteur Sarah J. Maas, uitgever Unieboek Het Spectrum, 2026",
+              "Koschei, mensengebied, verdeeld Prythian en Nachthof; reeksdeel 6"
+            ],
+            "access": "Live authenticated-free browser page; current cover dated 20261103. Raw Node request 403, not retried.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000408481",
+            "facts": [
+              "Exact hardcover ISBN, Nederlands, dezelfde Work-identiteit, sprayed edges"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.bloomsbury.com/us/court-of-splintered-harmony-9781639739134/",
+            "facts": [
+              "Oorspronkelijke titel, auteur, reeksdeel 6, jaar 2026 en overeenkomende premisse"
+            ],
+            "access": "Web document; direct Node request 403, not bypassed",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2075711/hof-van-doorns-en-rozen-6.html",
+            "conflict": "ISBN records incorrectly say Engels; primary publisher explicitly Nederlands with Dutch translators. Bibliographic image depicts hardcover and is rejected as paperback asset.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000408481_20261028.jpg",
+            "bytes": 82959,
+            "facts": [
+              "Exact publisher hardcover with sprayed edge, smaller 414x592 variant compared visually against 3.3MB original; same identity."
+            ],
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "cover_url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000408481_20261028.jpg",
+        "edition_id": 989210002,
+        "bound_title": "Hof van versplinterde harmonieën",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "bound_isbn13": "9789000408481",
+        "evidence_url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000408481",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": "https://www.lannoo.com/sites/default/files/styles/product_gallery_media/public/onix_product/cover/16/9789000408481_20261028.jpg",
+        "bound_author_id": 924300125
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 989110001,
+        "language": "nl"
+      },
+      "seq": 7,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "Na de oorlog met Hybern zijn de hoven van Prythian nog verdeeld. Intussen dreigt de terugkeer van Koschei, die vanuit zijn meer nieuwe bondgenoten aantrekt. Machtige Fae willen het land van de stervelingen terugnemen. Het Nachthof probeert de bevolking te beschermen, maar interne breuken maken gezamenlijk optreden moeilijk. Om de dreiging te keren moeten voormalige bondgenoten opnieuw samenwerken. Dit zesde boek vervolgt de gebeurtenissen uit de reeks Hof van doorns en rozen.",
+        "work_id": 989110001,
+        "evidence": [
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000378401",
+            "facts": [
+              "Exact ISBN paperback, Nederlands, auteur Sarah J. Maas, uitgever Unieboek Het Spectrum, 2026",
+              "Koschei, mensengebied, verdeeld Prythian en Nachthof; reeksdeel 6"
+            ],
+            "access": "Live authenticated-free browser page; current cover dated 20261103. Raw Node request 403, not retried.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000408481",
+            "facts": [
+              "Exact hardcover ISBN, Nederlands, dezelfde Work-identiteit, sprayed edges"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.bloomsbury.com/us/court-of-splintered-harmony-9781639739134/",
+            "facts": [
+              "Oorspronkelijke titel, auteur, reeksdeel 6, jaar 2026 en overeenkomende premisse"
+            ],
+            "access": "Web document; direct Node request 403, not bypassed",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2075711/hof-van-doorns-en-rozen-6.html",
+            "conflict": "ISBN records incorrectly say Engels; primary publisher explicitly Nederlands with Dutch translators. Bibliographic image depicts hardcover and is rejected as paperback asset.",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.lannoo.com/nl-be/fantasy-sciencefiction/hof-van-versplinterde-harmonieen-9789000378401",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "source_name": "Lannoo / Unieboek Het Spectrum",
+        "source_type": "official_publisher",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_author_id": 924300125
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989110002
+      },
+      "seq": 8,
+      "relation": "works",
+      "after_row": {
+        "id": 989110002,
+        "title": "Co-existence",
+        "cover_id": null,
+        "author_id": 989310001,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": 2026,
+        "native_identity_key": "test:publisher:isbn:9789465520391"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989210003
+      },
+      "seq": 9,
+      "relation": "editions",
+      "after_row": {
+        "id": 989210003,
+        "title": "Co-existentie",
+        "isbn_10": null,
+        "isbn_13": "9789465520391",
+        "work_id": 989110002,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Maven Publishing / POM.press",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 989210003
+      },
+      "seq": 10,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "paperback",
+        "work_id": 989110002,
+        "evidence": [
+          {
+            "url": "https://www.mavenpublishing.nl/boeken/co-existentie",
+            "facts": [
+              "Ethan Mollick auteur; Alexander Klöpping voorwoord, geen tweede Work-auteur",
+              "Originele titel Co-existence, ISBN9789465520391; ander boek dan Co-intelligentie",
+              "Samenwerking AI, arbeid/bedrijven/onderwijs, menselijk oordeel, mogelijkheden tegenover hype"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2196168/co-existentie.html",
+            "facts": [
+              "Paperback, Nederlands, ISBN9789465520391, Maven Publishing, imprint POM.press, 2026"
+            ],
+            "conflict": "Gecombineerde auteursregel; rolverdeling van primaire uitgever gevolgd.",
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://cdn.mavenpublishing.nl/books/cover_fronts/781/optimized/Mollick-Co-existentie-voorplat.jpg",
+            "bytes": 35995,
+            "facts": [
+              "Publisher HTML front-cover metadata; exact author, title and ISBN verified against publisher full spread. Full-spread asset rejected for cards."
+            ],
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "cover_url": "https://cdn.mavenpublishing.nl/books/cover_fronts/781/optimized/Mollick-Co-existentie-voorplat.jpg",
+        "edition_id": 989210003,
+        "bound_title": "Co-existentie",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "bound_isbn13": "9789465520391",
+        "evidence_url": "https://www.mavenpublishing.nl/boeken/co-existentie",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": "https://cdn.mavenpublishing.nl/books/cover_fronts/781/optimized/Mollick-Co-existentie-voorplat.jpg",
+        "bound_author_id": 989310001
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 989110002,
+        "language": "nl"
+      },
+      "seq": 11,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "Ethan Mollick onderzoekt wat steeds krachtigere kunstmatige intelligentie betekent voor het dagelijks leven. Hij bespreekt samenwerking met AI op het werk en de gevolgen voor bedrijven en onderwijs. Daarbij staat de vraag centraal hoe mensen de mogelijkheden kunnen gebruiken zonder hun eigen oordeel uit handen te geven. Het boek onderscheidt wat de technologie daadwerkelijk kan van overdreven verwachtingen. De Nederlandse uitgave bevat een voorwoord van Alexander Klöpping.",
+        "work_id": 989110002,
+        "evidence": [
+          {
+            "url": "https://www.mavenpublishing.nl/boeken/co-existentie",
+            "facts": [
+              "Ethan Mollick auteur; Alexander Klöpping voorwoord, geen tweede Work-auteur",
+              "Originele titel Co-existence, ISBN9789465520391; ander boek dan Co-intelligentie",
+              "Samenwerking AI, arbeid/bedrijven/onderwijs, menselijk oordeel, mogelijkheden tegenover hype"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://metadata.isbn.nl/2196168/co-existentie.html",
+            "facts": [
+              "Paperback, Nederlands, ISBN9789465520391, Maven Publishing, imprint POM.press, 2026"
+            ],
+            "conflict": "Gecombineerde auteursregel; rolverdeling van primaire uitgever gevolgd.",
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.mavenpublishing.nl/boeken/co-existentie",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "source_name": "Maven Publishing",
+        "source_type": "official_publisher",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_author_id": 989310001
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989110003
+      },
+      "seq": 12,
+      "relation": "works",
+      "after_row": {
+        "id": 989110003,
+        "title": "Insane",
+        "cover_id": null,
+        "author_id": 945300813,
+        "work_type": "novel",
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": 2026,
+        "native_identity_key": "test:publisher:isbn:9789026186790"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 989210004
+      },
+      "seq": 13,
+      "relation": "editions",
+      "after_row": {
+        "id": 989210004,
+        "title": "Insane",
+        "isbn_10": null,
+        "isbn_13": "9789026186790",
+        "work_id": 989110003,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "Uitgeverij De Fontein",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "edition_id": 989210004
+      },
+      "seq": 14,
+      "relation": "catalog_edition_metadata",
+      "after_row": {
+        "format": "hardcover",
+        "work_id": 989110003,
+        "evidence": [
+          {
+            "url": "https://www.uitgeverijdefontein.nl/boek/insane/",
+            "facts": [
+              "Exact ISBN9789026186790, Nederlands, Hardback, auteur en editie",
+              "Emily17, seriemoordenaar, vier slachtoffers, gouden bedeltjes, politie probeert dader te stoppen"
+            ],
+            "checkedAt": "2026-11-05",
+            "dateConflict": "Publisher20October vs bibliographic27October2026; only uncontested year2026 stored."
+          },
+          {
+            "url": "https://www.uitgeverijdefontein.nl/nieuws/interview-met-mel-wallis-de-vries-over-haar-nieuwe-boek-insane/",
+            "facts": [
+              "Auteursinterview bevestigt Emily en goudkleurige bedeltjes; geen spoilerdetails overgenomen"
+            ],
+            "checkedAt": "2026-11-05"
+          },
+          {
+            "url": "https://www.uitgeverijdefontein.nl/wp-content/uploads/2026/10/9789026186790_frontcover_original-320x504.jpg",
+            "bytes": 39562,
+            "facts": [
+              "Publisher exact ISBN frontcover, author and title visually reviewed; 320x504 loaded JPEG."
+            ],
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "cover_url": "https://www.uitgeverijdefontein.nl/wp-content/uploads/2026/10/9789026186790_frontcover_original-320x504.jpg",
+        "edition_id": 989210004,
+        "bound_title": "Insane",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "bound_isbn13": "9789026186790",
+        "evidence_url": "https://www.uitgeverijdefontein.nl/boek/insane/",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_language": "nld",
+        "card_cover_url": "https://www.uitgeverijdefontein.nl/wp-content/uploads/2026/10/9789026186790_frontcover_original-320x504.jpg",
+        "bound_author_id": 945300813
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 989110003,
+        "language": "nl"
+      },
+      "seq": 15,
+      "relation": "catalog_work_descriptions",
+      "after_row": {
+        "text": "De zeventienjarige Emily ontdekt dat een seriemoordenaar haar op het oog heeft. Hij weet veel over haar en heeft al vier slachtoffers gemaakt. Bij iedere moord blijft een goudkleurig bedeltje achter. Terwijl de politie de dader probeert te vinden, wil Emily voorkomen dat zij het volgende slachtoffer wordt. Haar vastberadenheid om te overleven staat tegenover een tegenstander die zich niet gemakkelijk laat opsporen. Deze jeugdthriller volgt haar strijd tegen de dreiging.",
+        "work_id": 989110003,
+        "evidence": [
+          {
+            "url": "https://www.uitgeverijdefontein.nl/boek/insane/",
+            "facts": [
+              "Exact ISBN9789026186790, Nederlands, Hardback, auteur en editie",
+              "Emily17, seriemoordenaar, vier slachtoffers, gouden bedeltjes, politie probeert dader te stoppen"
+            ],
+            "checkedAt": "2026-11-05",
+            "dateConflict": "Publisher20October vs bibliographic27October2026; only uncontested year2026 stored."
+          },
+          {
+            "url": "https://www.uitgeverijdefontein.nl/nieuws/interview-met-mel-wallis-de-vries-over-haar-nieuwe-boek-insane/",
+            "facts": [
+              "Auteursinterview bevestigt Emily en goudkleurige bedeltjes; geen spoilerdetails overgenomen"
+            ],
+            "checkedAt": "2026-11-05"
+          }
+        ],
+        "language": "nl",
+        "provenance": "original_source_reviewed_summary",
+        "source_url": "https://www.uitgeverijdefontein.nl/boek/insane/",
+        "reviewed_at": "2026-11-05T10:35:00+00:00",
+        "source_name": "Uitgeverij De Fontein",
+        "source_type": "official_publisher",
+        "review_batch": "popular-three-20261105-test",
+        "review_status": "approved",
+        "bound_author_id": 945300813
+      },
+      "before_row": null
+    }
+  ],
+  "batch": "popular-three-20261105-test",
+  "project": "hlvujbrmfdlrfxdjwsmb"
+}
