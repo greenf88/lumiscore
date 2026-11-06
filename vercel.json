@@ -14,8 +14,10 @@
       ]
     },
     {
-      "source": "/((nl|en)/(over-ons|zo-werkt-het|voor-uitgevers|contact)|en/imdb-for-books|nl/imdb-voor-boeken)",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/html.*" }],
+      "source": "/:locale(nl|en)/:page(over-ons|zo-werkt-het|voor-uitgevers|contact)",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
       "missing": [
         { "type": "header", "key": "rsc" },
         { "type": "header", "key": "next-router-state-tree" },
@@ -25,11 +27,63 @@
         { "type": "header", "key": "authorization" },
         { "type": "query", "key": "_rsc" }
       ],
-      "headers": [{ "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }]
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
     },
     {
-      "source": "/(auth/callback|update-password|nl/update-password|en/update-password)",
-      "headers": [{ "key": "Referrer-Policy", "value": "no-referrer" }]
+      "source": "/en/imdb-for-books",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
+    },
+    {
+      "source": "/nl/imdb-voor-boeken",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
+    },
+    {
+      "source": "/auth/callback",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/update-password",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/:locale(nl|en)/update-password",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
     }
   ]
 }
