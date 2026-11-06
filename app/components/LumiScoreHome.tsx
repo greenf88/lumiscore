@@ -5,7 +5,6 @@ import {RecommendationMeasurement} from './RecommendationMeasurement';
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
-import Image from 'next/image';
 import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
 import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
@@ -194,17 +193,18 @@ function BookCoverForIdentity({
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
         {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&presentation !== 'detail'&&
           <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>}
-        {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
-        <Image
+        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           ref={coverImage}
           key={displayedCoverUrl}
           className="book-cover-image"
           src={displayedCoverUrl}
           alt={label ?? ''}
-          fill
-          sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
-          loading={presentation==='detail'?'eager':'lazy'}
-          unoptimized
+          srcSet={imageSource?.srcSet}
+          loading={presentation === 'detail' ? 'eager' : 'lazy'}
+          fetchPriority={presentation === 'detail' ? 'high' : undefined}
+          decoding="async"
         />
         </picture>
       )}
