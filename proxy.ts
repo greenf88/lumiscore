@@ -37,15 +37,6 @@ export async function proxy(request: NextRequest) {
   for (const [name, value] of session?.headers ?? []) {
     if (!name.startsWith('x-middleware-') && name !== 'set-cookie') response.headers.set(name, value);
   }
-  if (publicInformation && request.method === 'GET' && !request.nextUrl.search
-    && request.headers.get('accept')?.includes('text/html')
-    && !['rsc', 'next-router-state-tree', 'next-router-prefetch', 'next-router-segment-prefetch', 'next-url', 'authorization']
-      .some(name => request.headers.has(name))) {
-    response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=300');
-    for (const name of ['Accept', 'RSC', 'Next-Router-State-Tree', 'Next-Router-Prefetch', 'Next-Router-Segment-Prefetch', 'Next-Url']) {
-      response.headers.append('Vary', name);
-    }
-  }
   const path = decision.kind === 'rewrite' ? decision.path : request.nextUrl.pathname;
   if (['/account', '/login', '/forgot-password', '/update-password'].includes(path) || path.startsWith('/auth/')) {
     for (const [name, value] of Object.entries(PRIVATE_RESPONSE_HEADERS)) response.headers.set(name, value);

@@ -67,22 +67,14 @@ test('legacy redirect remains fixed; neutral actions receive no caller-supplied 
   assert.equal(action.options?.request?.headers.get(paths.PATH_REQUEST_HEADER),null);
 });
 
-test('only full public explanation documents opt into CDN caching',async()=>{
+test('fixed public information bypasses session refresh, private account state does not',async()=>{
   const f=await fixture();
   for(const path of ['/nl/zo-werkt-het','/en/imdb-for-books','/nl/imdb-voor-boeken']) {
-    const request=f.request(path);
-    request.headers.set('accept','text/html');
-    const response=await f.proxy(request);
-    assert.equal(response.headers.get('vercel-cdn-cache-control'),'public, s-maxage=300');
-    assert.match(response.headers.get('vary')??'',/\bRSC\b/);
+    const response=await f.proxy(f.request(path));
     assert.equal(response.cookies.getAll().length,0);
+    assert.equal(response.headers.get('vercel-cdn-cache-control'),null);
   }
   assert.equal(f.refreshes(),0);
-  for(const [path,header] of [['/nl/zo-werkt-het?returnTo=/nl','accept'],['/nl/zo-werkt-het','rsc'],['/nl/browse','accept'],['/api/account/header','accept']]) {
-    const request=f.request(path);
-    request.headers.set('accept','text/html');
-    if(header==='rsc') request.headers.set('rsc','1');
-    const response=await f.proxy(request);
-    assert.equal(response.headers.get('vercel-cdn-cache-control'),null,path);
-  }
+  await f.proxy(f.request('/api/account/header'));
+  assert.equal(f.refreshes(),1);
 });

@@ -14,6 +14,20 @@
       ]
     },
     {
+      "source": "/((nl|en)/(over-ons|zo-werkt-het|voor-uitgevers|contact)|en/imdb-for-books|nl/imdb-voor-boeken)",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/html.*" }],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [{ "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }]
+    },
+    {
       "source": "/(auth/callback|update-password|nl/update-password|en/update-password)",
       "headers": [{ "key": "Referrer-Policy", "value": "no-referrer" }]
     }
