@@ -17,8 +17,7 @@ import {
 } from '@/lib/navigation/book-return';
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import { suzanneBookGuide } from '@/lib/editorial/landing-guides';
-import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
-import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
+import { bookPageJsonLd } from '@/lib/seo/book-json-ld';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -151,7 +150,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd(catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale),locale)).replaceAll('<','\\u003c')}}/>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
       <LumiScoreBookDetail
         book={book}
         description={storedDescription}
