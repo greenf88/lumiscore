@@ -18,6 +18,7 @@ export function createPageMetadata({
   follow = true,
   type = 'website',
   locale,
+  includeCanonical = true,
   includeLanguageAlternates = true,
   alternatePaths,
 }: {
@@ -29,6 +30,7 @@ export function createPageMetadata({
   follow?: boolean;
   type?: 'website' | 'article';
   locale?: Locale;
+  includeCanonical?: boolean;
   includeLanguageAlternates?: boolean;
   alternatePaths?: Readonly<Record<string, string>>;
 }) {
@@ -37,7 +39,7 @@ export function createPageMetadata({
     ...(image === LUMISCORE_DEFAULT_IMAGE ? { width: 1664, height: 936, alt: title } : {}) }] : [];
   return {
     title, description,
-    alternates: { canonical: url, languages: locale && !noIndex && includeLanguageAlternates ? Object.fromEntries(Object.entries(alternatePaths ?? languageAlternates(canonicalPath)).map(([key, path]) => [key, absoluteLumiScoreUrl(path)])) : {} },
+    alternates: { canonical: includeCanonical ? url : undefined, languages: locale && !noIndex && includeLanguageAlternates ? Object.fromEntries(Object.entries(alternatePaths ?? languageAlternates(canonicalPath)).map(([key, path]) => [key, absoluteLumiScoreUrl(path)])) : {} },
     robots: { index: !noIndex, follow },
     openGraph: { title, description, url, siteName: LUMISCORE_SITE_NAME, type, images, ...(locale ? { locale: locale === 'nl' ? 'nl_NL' : 'en_US', alternateLocale: locale === 'nl' ? ['en_US'] : ['nl_NL'] } : {}) },
     twitter: { card: 'summary_large_image', title, description, images: images.map(({ url }) => url) },

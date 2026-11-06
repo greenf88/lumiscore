@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
-import { bookLanguageAlternates } from '@/lib/seo/book-locales';
+import { bookLanguageAlternates, bookUrlStatus } from '@/lib/seo/book-locales';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -44,7 +44,9 @@ export async function generateMetadata({
   const { locale } = await resolveRequestLocale();
   const book = await getBook(workId, locale);
 
+  const status = bookUrlStatus(book ? book.detailLocales ?? [] : null, locale);
   if (!book) notFound();
+  const indexable = status === 'indexable';
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
@@ -58,6 +60,8 @@ export async function generateMetadata({
     title: guide?.title ?? title,
     description: guide?.description ?? description,
     canonicalPath: `/book/${book.workId}`,
+    noIndex: !indexable,
+    includeCanonical: indexable,
     alternatePaths: bookLanguageAlternates(`/book/${book.workId}`, book.detailLocales ?? []),
     image: cover ?? null,
     type: 'article',
@@ -143,7 +147,9 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
+      {bookUrlStatus(book.detailLocales ?? [], locale) === 'indexable' && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
+      )}
       <LumiScoreBookDetail
         book={book}
         description={storedDescription}

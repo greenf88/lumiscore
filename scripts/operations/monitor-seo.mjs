@@ -62,6 +62,27 @@ for (const path of ['/nl/browse', '/en/browse', '/nl/collection/suzanne-vermeer'
   assert.doesNotMatch(response.headers.get('x-robots-tag') ?? '', /noindex/i, path);
   assert.equal(response.headers.get('x-content-type-options'), 'nosniff', path);
 }
+const bookChecks = [];
+for (const path of ['/en/book/1', '/nl/book/1', '/en/book/2093', '/nl/book/2093', '/en/book/5226', '/nl/book/5226', '/en/book/1048', '/nl/book/1048']) {
+  const url = origin + path;
+  const expectedIndexable = bookEntries.has(url);
+  const { body, response } = await read(url);
+  const head = body.split('</head>')[0];
+  if (expectedIndexable) {
+    assert.equal(response.status, 200, path);
+    assert.ok(head.includes('rel="canonical" href="' + url + '"'), path);
+    assert.match(head, /name="robots" content="index, follow"/, path);
+    assert.doesNotMatch(response.headers.get('x-robots-tag') ?? '', /noindex/i, path);
+  } else if (response.status === 200) {
+    assert.match(head, /name="robots" content="noindex, follow"/, path);
+    assert.doesNotMatch(head, /rel="canonical"|hreflang=/, path);
+    assert.doesNotMatch(body, /<script type="application\/ld\+json">[^<]*"@type":"Book"/, path);
+  } else {
+    assert.ok([404, 410].includes(response.status), path);
+    assert.doesNotMatch(head, /rel="canonical"/, path);
+  }
+  bookChecks.push({ path, status: response.status, expectedIndexable });
+}
 const missing = await read(origin + '/en/monitoring-test-nonexistent');
 assert.equal(missing.response.status, 404);
 const missingHead = missing.body.split('</head>')[0];
@@ -80,4 +101,4 @@ for (let step = 0; step < 5; step++) {
 }
 assert.deepEqual(hops.at(-1), { url: origin + '/en', status: 200 });
 if (hops.length > 2) console.warn('www reaches the preferred URL through ' + (hops.length - 1) + ' redirects.');
-console.log(JSON.stringify({ sitemaps: reports, bookPairs: pairs, checkedAt: new Date().toISOString(), www: hops }, null, 2));
+console.log(JSON.stringify({ sitemaps: reports, bookPairs: pairs, bookChecks, checkedAt: new Date().toISOString(), www: hops }, null, 2));

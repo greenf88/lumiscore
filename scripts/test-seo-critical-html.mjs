@@ -16,9 +16,10 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     const {response,html}=await read('/'+locale+path,locale);
     assert.equal(response.status,200);
     const seo=inspectServerHtml(html),canonical='/'+locale+path.split('?')[0];
+    const offSitemap = path==='/book/2' && locale==='en';
     assert.equal(seo.lang,locale);
-    assert.deepEqual(seo.canonical,['https://lumisco.re'+canonical]);
-    assert.deepEqual(seo.robots,[path.includes('?')||path==='/login'?'noindex, follow':'index, follow']);
+    assert.deepEqual(seo.canonical,offSitemap?[]:['https://lumisco.re'+canonical]);
+    assert.deepEqual(seo.robots,[offSitemap||path.includes('?')||path==='/login'?'noindex, follow':'index, follow']);
     assert.deepEqual(seo.duplicates,[]);
     const alternates = [...html.matchAll(/<link\b[^>]*>/g)].flatMap(([tag]) => {
       const language = tag.match(/\bhreflang="([^"]+)"/i)?.[1];
@@ -33,13 +34,14 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
       assert.ok(html.includes(locale==='nl'?'synthetische Nederlandse beschrijving':'synthetic English description'));
       assert.match(html,/https:\/\/openlibrary.org\/works\/OL1W/);
     }
-    if(path==='/book/2') assert.ok(html.includes(locale==='nl'?'geverifieerde Nederlandse beschrijving':'verified English description'));
+    if(path==='/book/2'&&locale==='nl') assert.ok(html.includes('geverifieerde Nederlandse beschrijving'));
     if(path==='/browse'||path==='/collection/synthetic-series') {
       assert.match(html, /<h2>Synthetic book [1-9]\d*<\/h2>/);
       assert.doesNotMatch(html, /<h3>Synthetic book [1-9]\d*<\/h3>/);
     }
     if(path.startsWith('/browse')) assert.ok(html.includes(`action="/${locale}/browse"`));
-    assert.ok(html.includes(`href="/${locale==='nl'?'en':'nl'}${path.replaceAll('&','&amp;')}"`),'crawlable switch retains query');
+    const target = path==='/book/2' && locale==='nl' ? '/en/browse' : '/' + (locale==='nl'?'en':'nl') + path.replaceAll('&','&amp;');
+    assert.ok(html.includes('href="'+target+'"'),'crawlable switch retains query for valid destinations');
   });
 }
 test('collection schema matches visible public card identity and order in each language',async()=>{
@@ -78,8 +80,11 @@ test('sitemap advertises only eligible book locales and reciprocal pairs',async(
   for(const entry of entries) assert.equal((entry.match(/xhtml:link /g)||[]).length,entry.includes('/nl/book/2')?0:3);
   assert.ok(urls.every(url=>/^https:\/\/lumisco\.re\/(en|nl)(\/|$)/.test(url)&&!url.includes('?')));
   const dated=entries.filter(entry=>entry.includes('<lastmod>'));
-  assert.deepEqual(dated.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]),[
-    'https://lumisco.re/nl/zo-werkt-het','https://lumisco.re/nl/imdb-voor-boeken',
+  assert.deepEqual(dated.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]).sort(),[
+    'https://lumisco.re/nl/imdb-voor-boeken',
+    'https://lumisco.re/nl/toplijsten/fantasy-om-mee-te-beginnen',
+    'https://lumisco.re/nl/toplijsten/na-project-hail-mary',
+    'https://lumisco.re/nl/zo-werkt-het',
   ]);
   assert.ok(dated.every(entry=>entry.includes('<lastmod>2026-11-04</lastmod>')));
 });

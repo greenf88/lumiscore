@@ -24,7 +24,7 @@ test('minimum launch SEO assets use the single Vinext metadata owner', async () 
   ]);
 
   assert.match(metadata, /openGraph:/);
-  assert.match(metadata, /alternates: \{ canonical: url, languages:/);
+  assert.match(metadata, /alternates: \{ canonical: includeCanonical \? url : undefined, languages:/);
   assert.match(metadata, /absoluteLumiScoreUrl/);
   assert.match(robots, /LUMISCORE_SITE_ORIGIN/);
   assert.match(sitemap, /sitemapResponse\(buildSitemapIndex\(\)\)/);
