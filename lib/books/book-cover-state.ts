@@ -32,15 +32,15 @@ export function getInitialBookCoverUrls(
   book: BookCoverInitialFields,
 ): string[] {
   if (book.strictEditionLanguage) return [...new Set(book.coverUrls ?? [])];
-  const reviewedCover = getReviewedCoverOverride(book)?.coverUrl;
+  const reviewed = getReviewedCoverOverride(book);
   if (book.coverUrls !== undefined) {
-    return [...new Set([...book.coverUrls, reviewedCover].filter(
+    return [...new Set([...book.coverUrls, reviewed?.coverUrl, reviewed?.fallbackCoverUrl].filter(
       (url): url is string => Boolean(url),
     ))];
   }
 
   const openLibraryCoverUrl = getOpenLibraryCoverUrl(book.isbn13);
-  return [...new Set([reviewedCover, openLibraryCoverUrl].filter(
+  return [...new Set([reviewed?.coverUrl, reviewed?.fallbackCoverUrl, openLibraryCoverUrl].filter(
     (url): url is string => Boolean(url),
   ))];
 }

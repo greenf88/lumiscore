@@ -85,3 +85,14 @@ test('description needs exact edition and language; no cross-language fallback, 
   clearBookDescriptionCacheForTests();
  }
 });
+
+test('Hail Mary uses the publisher cover with the prior exact-edition image as fallback', () => {
+  const book = { ...base, workId: '1', title: 'Project Hail Mary', author: 'Andy Weir', openLibraryWorkId: 'OL21745884W' };
+  const edition = { id: 1, work_id: 1, title: 'Project Hail Mary', language: 'eng', isbn_13: '9780593135204', open_library_edition_id: 'OL30036715M' };
+  assert.deepEqual(withStrictEdition(book, edition, 'en')?.coverUrls, [
+    'https://images.penguinrandomhouse.com/cover/9780593135204',
+    'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',
+  ]);
+  assert.deepEqual(withStrictEdition(book, { ...edition, isbn_13: '9789401614078', language: 'nld', open_library_edition_id: null }, 'nl')?.coverUrls, []);
+  assert.deepEqual(withStrictEdition(book, { ...edition, open_library_edition_id: 'OL999M' }, 'en')?.coverUrls, []);
+});
