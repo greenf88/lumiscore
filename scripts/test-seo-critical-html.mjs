@@ -19,8 +19,12 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     assert.deepEqual(seo.canonical,['https://lumisco.re'+canonical]);
     assert.deepEqual(seo.robots,[path.includes('?')||path==='/login'?'noindex, follow':'index, follow']);
     assert.deepEqual(seo.duplicates,[]);
-    const alternates=[...html.matchAll(/<link\b[^>]*>/g)].map(m=>m[0]).filter(tag=>tag.includes('rel="alternate"')).map(tag=>[tag.match(/hreflang="([^"]+)"/)[1],tag.match(/href="([^"]+)"/)[1]]);
-    if (path.includes('?')||path==='/login') assert.deepEqual(alternates,[]);
+    const alternates = [...html.matchAll(/<link\b[^>]*>/g)].flatMap(([tag]) => {
+      const language = tag.match(/\bhreflang="([^"]+)"/i)?.[1];
+      if (!language || !tag.includes('rel="alternate"')) return [];
+      return [[language, tag.match(/\bhref="([^"]+)"/)?.[1]]];
+    });
+    if (path.includes('?')||path==='/login'||path==='/book/2') assert.deepEqual(alternates,[]);
     else assert.deepEqual(alternates,[['en','https://lumisco.re/en'+path],['nl-NL','https://lumisco.re/nl'+path],['x-default','https://lumisco.re/en'+path]]);
     assert.doesNotMatch(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,''),/href="\/(?:book|browse|collections|taste-test|categories|over-ons)(?:\/|\?|"|$)/);
     if(path==='/book/1') {
@@ -40,13 +44,15 @@ test('legacy, plural book and slash aliases redirect once without losing query c
     assert.equal((await read(target,'nl')).response.status,200);
   }
 });
-test('sitemap consists only of canonical language pairs with reciprocal alternates',async()=>{
+test('sitemap advertises only eligible book locales and reciprocal pairs',async()=>{
   const {response,html}=await read('/sitemap.xml','en');assert.equal(response.status,200);
   const entries=[...html.matchAll(/<url>(.*?)<\/url>/g)].map(m=>m[1]);
   const urls=entries.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]);
   assert.equal(urls.length,new Set(urls).size);
   for(const path of ['/en','/nl','/en/book/1','/nl/book/1','/en/collection/synthetic-series','/nl/collection/synthetic-series']) assert.ok(urls.includes('https://lumisco.re'+path));
-  for(const entry of entries) assert.equal((entry.match(/xhtml:link /g)||[]).length,3);
+  assert.ok(urls.includes('https://lumisco.re/nl/book/2'));
+  for(const path of ['/en/book/2','/en/book/4','/nl/book/4']) assert.ok(!urls.includes('https://lumisco.re'+path));
+  for(const entry of entries) assert.equal((entry.match(/xhtml:link /g)||[]).length,entry.includes('/nl/book/2')?0:3);
   assert.ok(urls.every(url=>/^https:\/\/lumisco\.re\/(en|nl)(\/|$)/.test(url)&&!url.includes('?')));
   assert.doesNotMatch(html,/<lastmod>/);
 });

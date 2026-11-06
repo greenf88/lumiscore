@@ -53,6 +53,8 @@ export type Book = {
   /** Edition-bound presentation: never resolve a fallback by Work identity. */
   strictEditionLanguage?: 'en' | 'nl';
   editionAvailable?: boolean;
+  /** Verified public detail presentations, populated by the detail loader. */
+  detailLocales?: readonly ('en' | 'nl')[];
   englishEditionFallback?: boolean;
   coverUrls?: string[];
   /** Exact-edition publisher-advertised small asset, mobile cards only. */

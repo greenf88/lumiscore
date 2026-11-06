@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
+import { bookLanguageAlternates } from '@/lib/seo/book-locales';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -65,6 +66,7 @@ export async function generateMetadata({
     title: guide?.title ?? title,
     description: guide?.description ?? description,
     canonicalPath: `/book/${book.workId}`,
+    alternatePaths: bookLanguageAlternates(`/book/${book.workId}`, book.detailLocales ?? []),
     image: cover ?? null,
     type: 'article',
   });

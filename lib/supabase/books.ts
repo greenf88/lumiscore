@@ -1,6 +1,8 @@
 import type { Book } from '@/app/data/books';
 import { normalizeIsbn13, normalizeOpenLibraryId } from '@/lib/books/covers';
-import { selectStrictEdition, withStrictEdition, unavailableEdition, type StrictEditionRow } from '@/lib/books/strict-edition';
+import { withStrictEdition, unavailableEdition, type StrictEditionRow } from '@/lib/books/strict-edition';
+import { selectBookEdition } from '@/lib/books/edition-presentation';
+import { getBookLocales } from '@/lib/seo/book-locales';
 import { withEditionCoverEvidence, deferEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
 import { getWorkFirstPublishYear } from '@/lib/books/edition-ranking';
 import type { Locale } from '@/lib/i18n/config';
@@ -197,7 +199,7 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const edition=selectStrictEdition(strictEditions(relatedEditions),locale,title);
+  const edition=selectBookEdition(workId,title,strictEditions(relatedEditions),locale);
   const base:Book={id:`work-${workId}`,source:'supabase',workId,
     sourceType:readString(work,['source_type']),openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
     title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
@@ -354,7 +356,8 @@ export async function loadCatalogBook(
   if (!rawWork) return null;
   const work=(await completeEditions([rawWork]))[0];
   const book=mapCatalogBook(work,[],[],0,locale);
-  if(book){const stored=await hydrateStoredPresentation([book],locale);
+  if(book){const detailLocales=getBookLocales(workId,readString(work,['title','name'])??'',strictEditions(asRows(work.editions)));
+    const stored=await hydrateStoredPresentation([{...book,detailLocales}],locale);
     // Description-only callers need bibliographic identity, never a cover API.
     if(options.skipExternalCovers)return stored[0];
     return streamCovers ? deferEditionCoverEvidence(stored)[0] : (await withEditionCoverEvidence(stored))[0];}

@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildPublicSitemapPaths } from './sitemap.ts';
+import { buildLocalizedSitemap, buildPublicSitemapPaths } from './sitemap.ts';
+import { selectSitemapBookLocales } from './book-locales.ts';
+import type { StrictEditionRow } from '../books/strict-edition.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
 
 test('sitemap paths include all current public books and collections without duplicates', () => {
@@ -50,4 +52,24 @@ test('sitemap includes all public information pages exactly once', () => {
   for (const path of ['/over-ons', '/zo-werkt-het', '/voor-uitgevers', '/contact']) {
     assert.equal(paths.filter((entry) => entry === path).length, 1);
   }
+});
+
+test('sitemap includes only valid detail presentations with reciprocal pairs', () => {
+  const edition = (id: number, work_id: number, language: string, title = 'Book'): StrictEditionRow =>
+    ({ id, work_id, title, language, isbn_13: null, open_library_edition_id: null });
+  const selected = selectSitemapBookLocales(
+    [1, 2, 3, 4, 5, 6, 0].map(id => ({id, title: id === 6 ? ' ' : 'Book'})),
+    [
+      edition(1, 1, 'en'), edition(2, 1, '/languages/nld'), edition(3, 2, 'nld'),
+      edition(4, 3, 'nld', 'Book Audiobook'), edition(5, 4, 'mul'),
+      edition(6, 5, 'eng', ' '), edition(7, 6, 'eng'), edition(8, 0, 'eng'),
+    ],
+  );
+  assert.deepEqual(selected, [{workId:'1', locales:['en','nl']}, {workId:'2', locales:['nl']}]);
+  const xml = buildLocalizedSitemap([...selected, ...selected], ['dune', 'dune']);
+  const entries = [...xml.matchAll(/<url><loc>(https:\/\/lumisco\.re\/(?:nl|en)\/book\/\d+)<\/loc>(.*?)<\/url>/g)];
+  assert.deepEqual(entries.map(entry => entry[1]), ['https://lumisco.re/en/book/1', 'https://lumisco.re/nl/book/1', 'https://lumisco.re/nl/book/2']);
+  assert.equal(entries[0][2], entries[1][2]);
+  assert.match(entries[0][2], /hreflang="x-default" href="https:\/\/lumisco\.re\/en\/book\/1"/);
+  assert.doesNotMatch(entries[2][2], /hreflang/);
 });
