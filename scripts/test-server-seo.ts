@@ -1,3 +1,4 @@
+import { readSitemapShards } from './sitemap-http-helpers.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { inspectServerHtml } from '../lib/seo/server-html.ts';
@@ -64,9 +65,7 @@ test('legacy book URL and protected recovery redirects remain intact',async()=>{
   }
 });
 test('sitemap retains book and collection coverage and excludes parameter variants',async()=>{
-  const response=await fetch(`${origin}/sitemap.xml`);
-  assert.equal(response.status,200);
-  const xml=await response.text();
+  const xml=(await readSitemapShards(origin)).join('');
   const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
   for(const locale of ['en','nl']) for(const path of ['/browse','/collections','/categories',bookPath,collectionPath]) assert.ok(urls.includes(`https://lumisco.re/${locale}${path}`));
   assert.ok(urls.every(url=>!new URL(url).search));
