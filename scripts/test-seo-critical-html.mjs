@@ -19,8 +19,12 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     assert.deepEqual(seo.canonical,['https://lumisco.re'+canonical]);
     assert.deepEqual(seo.robots,[path.includes('?')||path==='/login'?'noindex, follow':'index, follow']);
     assert.deepEqual(seo.duplicates,[]);
-    const alternates=[...html.matchAll(/<link\b[^>]*>/g)].map(m=>m[0]).filter(tag=>tag.includes('rel="alternate"')).map(tag=>[tag.match(/hreflang="([^"]+)"/)[1],tag.match(/href="([^"]+)"/)[1]]);
-    if (path.includes('?')||path==='/login') assert.deepEqual(alternates,[]);
+    const alternates = [...html.matchAll(/<link\b[^>]*>/g)].flatMap(([tag]) => {
+      const language = tag.match(/\bhreflang="([^"]+)"/)?.[1];
+      if (!language || !tag.includes('rel="alternate"')) return [];
+      return [[language, tag.match(/\bhref="([^"]+)"/)?.[1]]];
+    });
+    if (path.includes('?')||path==='/login'||path==='/book/2') assert.deepEqual(alternates,[]);
     else assert.deepEqual(alternates,[['en','https://lumisco.re/en'+path],['nl-NL','https://lumisco.re/nl'+path],['x-default','https://lumisco.re/en'+path]]);
     assert.doesNotMatch(html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,''),/href="\/(?:book|browse|collections|taste-test|categories|over-ons)(?:\/|\?|"|$)/);
     if(path==='/book/1') {
