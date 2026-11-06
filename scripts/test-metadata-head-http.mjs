@@ -18,6 +18,21 @@ try{
  assert.deepEqual(sitemapBooks.map(m=>m[1]),['/en/book/1','/nl/book/1','/nl/book/2','/en/book/3','/nl/book/3','/en/book/5','/nl/book/5']);
  assert.equal(sitemapBooks[0][2],sitemapBooks[1][2]);assert.match(sitemapBooks[0][2],/hreflang="x-default"/);
  assert.doesNotMatch(sitemapBooks[2][2],/hreflang/);
+ for (const locale of ['en', 'nl']) {
+  const response = await fetch('http://127.0.0.1:' + port + '/' + locale + '/book/1');
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  const graphs = [...html.matchAll(/<script type="application\/ld\+json">([^<]+)<\/script>/g)]
+    .map(match => JSON.parse(match[1]));
+  const graph = graphs.find(value => value['@graph'])['@graph'];
+  const work = graph.find(node => node['@id'] === 'https://lumisco.re/#work-1');
+  const edition = graph.find(node => node['@id'] === 'https://lumisco.re/#edition-1-' + locale);
+  assert.deepEqual(edition.exampleOfWork, { '@id': work['@id'] });
+  assert.equal(edition.inLanguage, locale);
+  assert.equal(edition.isbn, undefined);
+  assert.equal(graph.filter(node => node['@type'] === 'BreadcrumbList').length, 1);
+  assert.equal(graphs.filter(node => node['@type'] === 'WebSite').length, 1);
+ }
  const paths=['','/browse','/book/1','/book/2','/book/3','/book/4','/book/5','/collection/synthetic-series','/toplijsten/dystopie-vanaf-1990','/search?q=test','/browse?page=2&sort=highest','/browse?page=3','/browse?page=999','/browse?page=2&category=fiction_fantasy','/browse?page=2&pageSize=32','/browse?page=bad','/login','/account','/metadata-missing-page','/book/999999999'].flatMap(p=>['/nl'+p,'/en'+p]);paths.push('/nl/imdb-voor-boeken','/en/imdb-for-books');
  const browseCanonical = u => u.pathname.endsWith('/browse') && /^\?page=[235](?:&sort=highest)?$/.test(u.search) ? '?page='+u.searchParams.get('page') : '';
  const legacy=new Map([['/book/1?returnTo=%2Fbrowse%3Fpage%3D2','/en/book/1'],['/books/1','/en/book/1'],['/nl/books/1','/nl/book/1']]);paths.push(...legacy.keys());

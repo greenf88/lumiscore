@@ -27,6 +27,7 @@ export type Book = {
   id: string;
   source: 'demo' | 'supabase';
   workId?: string | null;
+  workTitle?: string | null;
   editionId?: string | null;
   sourceType?: 'open_library' | 'lumiscore_native' | string | null;
   openLibraryWorkId?: string | null;

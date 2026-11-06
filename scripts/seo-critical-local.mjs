@@ -31,7 +31,7 @@ const modules = {
 if(process.argv.includes('--slow-cover')){
  modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('const b=books.find(b=>b.workId===id);',"const found=books.find(b=>b.workId===id);const b=found?{...found,strictEditionLanguage:locale,editionAvailable:true,...(id==='3'?{coverUrls:['https://example.invalid/stored-cover.jpg']}:{}),editionCoverUrls:new Promise(r=>setTimeout(()=>r(['https://example.invalid/reviewed-cover.jpg']),2000))}:null;");
 }
-modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return b&&id', "const locales=id==='2'?['nl']:id==='4'?[]:['en','nl'];const selected=b?{...b,detailLocales:locales,editionAvailable:locales.includes(locale)}:null;return selected&&id").replace('...b,storedDescription','...selected,storedDescription').replace(':b??null}', ':selected}');
+modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return b&&id', "const locales=id==='2'?['nl']:id==='4'?[]:['en','nl'];const selected=b?{...b,workTitle:b.title,editionId:id+'-'+locale,editionLanguage:locale==='nl'?'nld':'eng',strictEditionLanguage:locale,detailLocales:locales,editionAvailable:locales.includes(locale)}:null;return selected&&id").replace('...b,storedDescription','...selected,storedDescription').replace(':b??null}', ':selected}');
 modules['lib/supabase/books.ts']+=`;export async function loadCatalogBooksBySourceIds(ids){return books.filter(b=>ids.includes(b.openLibraryWorkId))}`;
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];

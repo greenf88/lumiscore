@@ -356,8 +356,9 @@ export async function loadCatalogBook(
   if (!rawWork) return null;
   const work=(await completeEditions([rawWork]))[0];
   const book=mapCatalogBook(work,[],[],0,locale);
-  if(book){const detailLocales=getBookLocales(workId,readString(work,['title','name'])??'',strictEditions(asRows(work.editions)));
-    const stored=await hydrateStoredPresentation([{...book,detailLocales}],locale);
+  if(book){const workTitle=readString(work,['title','name'])??'';
+    const detailLocales=getBookLocales(workId,workTitle,strictEditions(asRows(work.editions)));
+    const stored=await hydrateStoredPresentation([{...book,workTitle,detailLocales}],locale);
     // Description-only callers need bibliographic identity, never a cover API.
     if(options.skipExternalCovers)return stored[0];
     return streamCovers ? deferEditionCoverEvidence(stored)[0] : (await withEditionCoverEvidence(stored))[0];}
@@ -367,8 +368,9 @@ export async function loadCatalogBook(
 function mapUnavailableWork(work:DatabaseRow,locale:Locale):Book {
   const workId=getWorkId(work)!;
   const title=readString(work,['title'])??'';
-  return unavailableEdition({id:`work-${workId}`,source:'supabase',workId,title,
+  return unavailableEdition({id:`work-${workId}`,source:'supabase',workId,workTitle:title,title,
     author:readString(getRelatedAuthor(work,[])??{},['name'])??'Unknown author',
+    authorId:readString(work,['author_id']),
     firstPublishYear:getWorkFirstPublishYear(readNumber(work,['first_publish_year'])),
     openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
     cover:'orbit',score:null,ratingsCount:null,match:null},locale);

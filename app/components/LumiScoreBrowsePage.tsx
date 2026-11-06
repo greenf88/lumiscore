@@ -7,6 +7,7 @@ import type { HeaderAuthState } from '@/lib/auth/header';
 import type { EditorialQuery } from '@/lib/catalog/editorial-query';
 import { BrowseCatalogControls } from './BrowseCatalogControls';
 import { browseFilterGroupCount } from '@/lib/catalog/browse-controls';
+import { browseJumpPages } from '@/lib/catalog/browse-jumps';
 import { updateBrowseReturnPath } from '@/lib/navigation/browse-return';
 import { BookCard, Footer, Header } from './LumiScoreHome';
 import { useLumiScoreLocale } from './LumiScoreLocale';
@@ -49,6 +50,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
     () => paginationPages(data.page, data.pageCount),
     [data.page, data.pageCount],
   );
+  const jumpPages = browseJumpPages(data.page, data.pageCount);
   const detailReturnContext = useMemo(
     () => ({ kind: 'browse' as const, path: returnTo }),
     [returnTo],
@@ -143,6 +145,20 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
                 {t('browse.next')} →
               </LocaleLink>
             ) : <span aria-disabled="true">{t('browse.next')} →</span>}
+            {jumpPages.length > 0 && (
+              <div className="browse-jump-links" role="group" aria-label={t('browse.jumpLinks')}>
+                <span>{t('browse.jumpLinks')}</span>
+                {jumpPages.map(page => (
+                  <LocaleLink
+                    key={page}
+                    href={updateBrowseReturnPath(returnTo, { page })}
+                    aria-label={t('browse.pageLabel', { page })}
+                  >
+                    {page}
+                  </LocaleLink>
+                ))}
+              </div>
+            )}
           </nav>
         )}
       </section>
