@@ -288,7 +288,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .score-badge small { margin-top: 2px; font-size: 5px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
 .book-card-body { display: flex; flex: 1; flex-direction: column; padding: 17px 17px 0; }
 .book-genre { display: block; margin-bottom: 6px; overflow: hidden; color: var(--teal); font-size: 8px; font-weight: 800; letter-spacing: .09em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
-.book-card h3 { min-height: 2.4em; margin: 0; overflow-wrap: anywhere; font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
+.book-card :is(h2, h3) { min-height: 2.4em; margin: 0; overflow-wrap: anywhere; font-family: var(--serif); font-size: 17px; font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
 .book-card-body > p { margin: 7px 0 13px; color: var(--muted); font-size: 10px; }
 .book-meta { display: flex; min-height: 22px; align-items: center; justify-content: space-between; gap: 5px; border-top: 1px solid var(--border); color: var(--muted); font-size: 8px; }
 .book-match { display: inline-flex; align-items: center; gap: 4px; color: var(--teal); font-weight: 800; }
@@ -793,7 +793,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .score-badge strong { font-size: 15px; }
   .book-card-body { padding: 14px 12px 0; }
   .book-card-action { padding: 0 12px 12px; }
-  .book-card h3 { min-height: 36px; font-size: 15px; }
+  .book-card :is(h2, h3) { min-height: 36px; font-size: 15px; }
   .book-card-body > p { overflow-wrap: anywhere; }
   .want-button { min-height: 44px; }
   .continue-series { width: calc(100% - 32px); grid-template-columns: 1fr; gap: 22px; margin-top: 34px; padding: 22px 18px; }
@@ -1019,7 +1019,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-book-card .book-card-main-link { flex: none; display: grid; grid-template-columns: minmax(0, .42fr) minmax(0, .58fr); align-items: start; }
 .collection-book-card .card-cover-wrap { padding: 12px 0 12px 12px; background: transparent; }
 .collection-book-card .book-card-body { min-width: 0; padding: 12px; }
-.collection-book-card h3 { min-height: 0; }
+.collection-book-card :is(h2, h3) { min-height: 0; }
 .collection-book-card .book-meta { margin-top: 12px; }
 .collection-book-card .collection-card-context { padding: 8px 17px; display: grid; gap: 5px; font-size: 10px; color: var(--teal); }
 .collection-book-card.is-selected, .collection-book-card.is-highlighted { border-color: var(--teal); }
@@ -1083,8 +1083,8 @@ button, input, select, textarea { font-family: var(--sans); }
 .section-heading h2, .panel-heading h2, .continue-series-heading h2,
 .taste-result h2 { font-size: var(--type-section); line-height: 1.25; letter-spacing: -.01em; }
 .information-section h2, .book-description h2, .rating-section h2, .detail-information h2 { font-size: var(--type-section); line-height: 1.25; letter-spacing: -.01em; }
-.book-card h3, .recommendation-copy strong, .continue-series-book > span strong { font-size: var(--type-book); line-height: 1.25; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
-.book-card h3 { min-height: 2.5em; }
+.book-card :is(h2, h3), .recommendation-copy strong, .continue-series-book > span strong { font-size: var(--type-book); line-height: 1.25; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
+.book-card :is(h2, h3) { min-height: 2.5em; }
 .recommendation-copy strong { white-space: normal; overflow: visible; text-overflow: clip; }
 .book-card-body > p, .recommendation-copy > span:not(.match-line), .detail-author { font-family: var(--sans); font-size: var(--type-meta); line-height: 1.45; }
 .book-year, .book-genre { font-size: var(--type-small); font-weight: 500; letter-spacing: 0; text-transform: none; white-space: normal; overflow: visible; }
@@ -1330,7 +1330,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .book-card.browse-card:hover { transform: none; box-shadow: none; }
 .browse-card .card-cover-wrap { padding: 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
 .browse-card .book-card-body { padding: 14px 0 0; gap: 0; }
-.browse-card h3 { min-height: 0; font-size: var(--type-book); line-height: 1.3; }
+.browse-card :is(h2, h3) { min-height: 0; font-size: var(--type-book); line-height: 1.3; }
 .browse-card .book-card-body > p { margin: 8px 0 12px; font-size: 14px; }
 .browse-card .book-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: auto; padding: 6px 0 10px; border: 0; font-size: 13px; line-height: 1.4; letter-spacing: 0; text-transform: none; }
 .browse-score { display: inline-block; padding: 3px 7px; border-radius: 4px; background: var(--gold); color: #071720; font-family: var(--sans); font-weight: 700; font-size: 16px; }
@@ -1350,7 +1350,7 @@ button, input, select, textarea { font-family: var(--sans); }
   .browse-filter-form { grid-template-columns: 1fr; gap: 20px; }
   .browse-book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 16px; }
   .browse-card .card-cover-wrap { padding: 10px; }
-  .browse-card h3 { font-size: 18px; }
+  .browse-card :is(h2, h3) { font-size: 18px; }
 }
 @media (max-width: 359px) {
   .browse-page-shell .site-header { padding-inline: 6px; column-gap: 4px; }

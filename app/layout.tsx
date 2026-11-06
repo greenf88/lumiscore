@@ -15,12 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
   // unmatched-route title; a root fallback would add a second title there.
   delete metadata.title;
   delete metadata.robots;
-  metadata.alternates = { canonical: metadata.alternates?.canonical };
+  // Pages own their canonicals; the framework fallback represents a missing URL.
+  delete metadata.alternates;
   return {
   ...metadata,
   metadataBase: new URL(LUMISCORE_SITE_ORIGIN),
-  // Relative to the request pathname, including framework not-found boundaries.
-  // Successful pages override this with their explicit canonical policy.
   icons: { icon: '/favicon.ico' },
   };
 }

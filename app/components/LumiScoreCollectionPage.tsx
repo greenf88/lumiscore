@@ -341,7 +341,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           const isHighlighted = item.workId === highlightedUnread;
           const seriesTotal = seriesProgress?.total ?? null;
           return (
-            <BookCard book={item.book} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
+            <BookCard book={item.book} headingLevel={2} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
               className={`collection-book-card${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}`}
               label={collection.collectionType === 'series' && item.sequenceNumber !== null
                 ? canShowSeriesDenominator(item.sequenceNumber,seriesTotal)

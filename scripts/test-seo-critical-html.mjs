@@ -3,7 +3,7 @@ import { readSitemapShards } from './sitemap-http-helpers.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { inspectServerHtml } from '../lib/seo/server-html.ts';
-const origin = 'http://127.0.0.1:3120';
+const origin = 'http://127.0.0.1:' + (process.env.SEO_FIXTURE_PORT ?? '3120');
 const read = async (path, locale, extra = {}) => {
   const response = await fetch(origin + path, {redirect:'manual',signal:AbortSignal.timeout(20000),headers:{
     'accept-language': locale === 'nl' ? 'en-US' : 'nl-NL',cookie:`lumiscore-locale=${locale === 'nl' ? 'en' : 'nl'}`,
@@ -34,6 +34,10 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
       assert.match(html,/https:\/\/openlibrary.org\/works\/OL1W/);
     }
     if(path==='/book/2') assert.ok(html.includes(locale==='nl'?'geverifieerde Nederlandse beschrijving':'verified English description'));
+    if(path==='/browse'||path==='/collection/synthetic-series') {
+      assert.match(html, /<h2>Synthetic book [1-9]\d*<\/h2>/);
+      assert.doesNotMatch(html, /<h3>Synthetic book [1-9]\d*<\/h3>/);
+    }
     if(path.startsWith('/browse')) assert.ok(html.includes(`action="/${locale}/browse"`));
     assert.ok(html.includes(`href="/${locale==='nl'?'en':'nl'}${path.replaceAll('&','&amp;')}"`),'crawlable switch retains query');
   });
@@ -82,11 +86,19 @@ test('API and Auth remain robots blocked; language aliases do not expose API cop
     assert.equal(new URL(response.headers.get('location'),origin).pathname,path.replace(/^\/(en|nl)/,''));
   }
 });
-test('not-found boundaries are noindex, with localized canonical, not a fabricated book',async()=>{
+test('not-found boundaries are noindex, without a canonical, not a fabricated book',async()=>{
   for(const locale of ['en','nl']){
     const {response,html}=await read('/'+locale+'/book/999999','en');assert.equal(response.status,404);
     const seo=inspectServerHtml(html);assert.deepEqual(seo.robots,['noindex']);
-    assert.deepEqual(seo.canonical,['https://lumisco.re/'+locale+'/book/999999']);
+    assert.deepEqual(seo.canonical,[]);
     assert.deepEqual(seo.duplicates,[]);
+  }
+});
+
+test('a collection backend error is not presented as a missing collection',async()=>{
+  for (const locale of ['en','nl']) {
+    const {response,html}=await read('/'+locale+'/collection/synthetic-data-error',locale);
+    assert.ok(response.status>=500);
+    assert.deepEqual(inspectServerHtml(html).canonical,[]);
   }
 });

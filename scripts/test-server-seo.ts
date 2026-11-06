@@ -72,14 +72,14 @@ test('sitemap retains book and collection coverage and excludes parameter varian
   assert.equal(new Set(urls).size,urls.length);
 });
 
-test('not-found HTML has one framework noindex and a request-relative canonical',async()=>{
+test('not-found HTML has one framework noindex and no canonical',async()=>{
   for (const locale of ['en','nl']) for (const suffix of ['/book/99999999','/book/not-a-number','/collection/not-a-real-collection','/not-a-real-route']) {
     const path=`/${locale}${suffix}`;
     const response: Response=await fetch(`${origin}${path}`);
     assert.equal(response.status,404,path);
     const tags=inspectServerHtml(await response.text());
     assert.deepEqual(tags.robots,['noindex'],path);
-    assert.deepEqual(tags.canonical,[`https://lumisco.re${path}`],path);
+    assert.deepEqual(tags.canonical,[],path);
     assert.deepEqual(tags.duplicates,[],path);
   }
 });

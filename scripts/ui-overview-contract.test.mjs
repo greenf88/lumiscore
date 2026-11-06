@@ -13,7 +13,7 @@ test('regular overviews share the card; mobile grids and scores have fixed colum
 test('reference card puts the localized year above its title; compact progress cannot inherit the thin guest bar', async () => {
   const card=await read('app/components/LumiScoreHome.tsx');
   const css=await read('app/globals.css');
-  assert.match(card,/className="book-year"[\s\S]*t\('common.firstPublished'[\s\S]*<h3>\{book.title\}<\/h3>/);
+  assert.match(card,/className="book-year"[\s\S]*t\('common.firstPublished'[\s\S]*<Heading>\{book.title\}<\/Heading>/);
   assert.match(css,/\.book-year \{[^}]*color: var\(--teal\)[^}]*text-transform: uppercase/);
   const taste=await read('app/components/RatingTasteTest.tsx');
   assert.match(taste,/className="taste-direct-progress"/);
