@@ -44,14 +44,7 @@ export async function generateMetadata({
   const { locale } = await resolveRequestLocale();
   const book = await getBook(workId, locale);
 
-  if (!book) {
-    return createLocalizedPageMetadata({
-      title: 'Book not found — LumiScore',
-      canonicalPath: `/book/${encodeURIComponent(workId)}`,
-      noIndex: true,
-      follow: false,
-    });
-  }
+  if (!book) notFound();
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);

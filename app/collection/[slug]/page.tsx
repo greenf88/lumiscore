@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   const { slug } = await params;
   const { locale } = await resolveRequestLocale();
   const data = await load(slug,locale);
-  if (!data) return createLocalizedPageMetadata({ title: 'Collection not found — LumiScore', canonicalPath: `/collection/${encodeURIComponent(slug)}`, noIndex: true });
+  if (!data) notFound();
   const guide = getLandingGuide('/collection/' + data.collection.slug, locale);
   return createLocalizedPageMetadata({
     title: guide?.seo_title ?? `${data.collection.name} — LumiScore`,

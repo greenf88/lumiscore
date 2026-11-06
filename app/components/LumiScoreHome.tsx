@@ -438,6 +438,7 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
 
 type BookCardProps = {
   variant?: 'standard' | 'browse';
+  headingLevel?: 2 | 3;
   book: Book;
   wanted?: boolean;
   status?: ReadingStatus | null;
@@ -453,7 +454,8 @@ type BookCardProps = {
   className?: string;
 };
 
-export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard' }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant'>) {
+export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard', headingLevel = variant === 'browse' ? 2 : 3 }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant' | 'headingLevel'>) {
+  const Heading = headingLevel === 2 ? 'h2' : 'h3';
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
   const ratingDisplay = formatPublicRatingDisplay(score, book.ratingsCount, locale, book.ratingBand, book.publicRatingUnavailable);
@@ -468,7 +470,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
         {variant !== 'browse' && <span className="book-year">{book.firstPublishYear != null
           ? t('common.firstPublished', { year: book.firstPublishYear })
           : t('common.publicationUnavailable')}</span>}
-        <h3>{book.title}</h3><EditionPresentationLabel book={book}/>
+        <Heading>{book.title}</Heading><EditionPresentationLabel book={book}/>
         <p>{book.author}</p>
         {variant !== 'browse' && book.genre && <span className="book-genre">{book.genre}</span>}
         {matchLabel && <span className="book-match">{matchLabel}</span>}
@@ -483,10 +485,10 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
   );
 }
 
-export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard' }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard', headingLevel }: BookCardProps) {
   const { t } = useLumiScoreLocale();
   const href = explicitHref ?? getBookHref(book, detailReturnContext);
-  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} />;
+  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} headingLevel={headingLevel} />;
   return (
     <article className={`book-card${variant === 'browse' ? ' browse-card' : ''}${className ? ' ' + className : ''}`} id={book.id}>
       {href ? (
