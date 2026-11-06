@@ -190,7 +190,7 @@ function BookCoverForIdentity({
       {displayedCoverUrl && (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
         {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&(presentation==='card'||presentation==='compact')&&
-          <source media="(max-width: 430px)" srcSet={book.cardCoverUrl}/>}
+          <source media={presentation === 'compact' ? undefined : '(max-width: 430px)'} srcSet={book.cardCoverUrl}/>}
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
           ref={coverImage}

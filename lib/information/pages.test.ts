@@ -133,7 +133,9 @@ test('information navigation is complete on desktop footer and mobile menu', asy
   for (const path of globalNavigationPaths) assert.ok(mobile.includes(`href="${path}"`));
   assert.match(styles, /\.information-page-shell[^}]*var\(--bg\)/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.information-page/);
-  assert.match(route, /\.catch\(\(\) => \(\{ authenticated: false \}\)\)/);
+  assert.doesNotMatch(route, /loadHeaderAuthState|supabase\/auth/);
+  const privateHeader = await readFile(new URL('../../app/api/account/header/route.ts', import.meta.url), 'utf8');
+  assert.match(privateHeader, /Response\.json\(await loadHeaderAuthState\(\), \{ headers: PRIVATE_RESPONSE_HEADERS \}\)/);
 });
 
 test('information content contains no known address or deployment-host typos', () => {

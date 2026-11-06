@@ -34,7 +34,7 @@ async function fixture() {
   }});
   const request=(pathname:string)=>{
     const url=new URL(pathname,'https://lumisco.re');
-    return {nextUrl:Object.assign(url,{clone:()=>new URL(url)}),headers:new Headers({cookie:'synthetic-session=old',[paths.LOCALE_REQUEST_HEADER]:'en',[paths.PATH_REQUEST_HEADER]:'/attacker'})};
+    return {method:'GET',nextUrl:Object.assign(url,{clone:()=>new URL(url)}),headers:new Headers({cookie:'synthetic-session=old',[paths.LOCALE_REQUEST_HEADER]:'en',[paths.PATH_REQUEST_HEADER]:'/attacker'})};
   };
   return {proxy:runtimeExports.proxy,request,refreshes:()=>refreshes};
 }
@@ -65,4 +65,24 @@ test('legacy redirect remains fixed; neutral actions receive no caller-supplied 
   assert.equal(action.kind,'next');
   assert.equal(action.options?.request?.headers.get(paths.LOCALE_REQUEST_HEADER),null);
   assert.equal(action.options?.request?.headers.get(paths.PATH_REQUEST_HEADER),null);
+});
+
+test('only full public explanation documents opt into CDN caching',async()=>{
+  const f=await fixture();
+  for(const path of ['/nl/zo-werkt-het','/en/imdb-for-books','/nl/imdb-voor-boeken']) {
+    const request=f.request(path);
+    request.headers.set('accept','text/html');
+    const response=await f.proxy(request);
+    assert.equal(response.headers.get('vercel-cdn-cache-control'),'public, s-maxage=300');
+    assert.match(response.headers.get('vary')??'',/\bRSC\b/);
+    assert.equal(response.cookies.getAll().length,0);
+  }
+  assert.equal(f.refreshes(),0);
+  for(const [path,header] of [['/nl/zo-werkt-het?returnTo=/nl','accept'],['/nl/zo-werkt-het','rsc'],['/nl/browse','accept'],['/api/account/header','accept']]) {
+    const request=f.request(path);
+    request.headers.set('accept','text/html');
+    if(header==='rsc') request.headers.set('rsc','1');
+    const response=await f.proxy(request);
+    assert.equal(response.headers.get('vercel-cdn-cache-control'),null,path);
+  }
 });
