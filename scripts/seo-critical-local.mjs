@@ -33,15 +33,6 @@ if(process.argv.includes('--slow-cover')){
 }
 modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return b&&id', "const locales=id==='2'?['nl']:id==='4'?[]:['en','nl'];const selected=b?{...b,detailLocales:locales,editionAvailable:locales.includes(locale)}:null;return selected&&id").replace('...b,storedDescription','...selected,storedDescription').replace(':b??null}', ':selected}');
 modules['lib/supabase/books.ts']+=`;export async function loadCatalogBooksBySourceIds(ids){return books.filter(b=>ids.includes(b.openLibraryWorkId))}`;
-if(process.argv.includes('--audit-cover-lab')){
- const assets=process.argv.find(arg=>arg.startsWith('--assets-origin='))?.split('=').at(-1);
- if(!assets || !/^http:\/\/127\.0\.0\.1:\d+$/.test(assets))throw Error('Loopback cover assets required');
- modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('...b,detailLocales', `...b,coverUrls:id==='1'?['${assets}/external.jpg']:id==='3'?['${assets}/normal.jpg']:[],detailLocales`);
- if(process.argv.includes('--audit-cover-baseline')){
-  const file='app/components/LumiScoreHome.tsx';
-  modules[file]=execFileSync('git',['-c','safe.directory='+root.replace(/\/$/,''),'show','e973988753aa3f167e0904d6704197de008ade2d:'+file],{cwd:root,encoding:'utf8',windowsHide:true});
- }
-}
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];
  modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));if(book.workId==='4')return {state:'temporary_failure',description:null};const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
