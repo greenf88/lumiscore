@@ -20,7 +20,7 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     assert.deepEqual(seo.robots,[path.includes('?')||path==='/login'?'noindex, follow':'index, follow']);
     assert.deepEqual(seo.duplicates,[]);
     const alternates = [...html.matchAll(/<link\b[^>]*>/g)].flatMap(([tag]) => {
-      const language = tag.match(/\bhreflang="([^"]+)"/)?.[1];
+      const language = tag.match(/\bhreflang="([^"]+)"/i)?.[1];
       if (!language || !tag.includes('rel="alternate"')) return [];
       return [[language, tag.match(/\bhref="([^"]+)"/)?.[1]]];
     });
