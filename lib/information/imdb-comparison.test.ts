@@ -54,7 +54,7 @@ test('approved NL/EN metadata, visible answers and shared page schema match', ()
 });
 
 test('new sitemap entries are paired, unique and never list wrong-language aliases', () => {
-  const xml = buildLocalizedSitemap(['8'], ['dune']);
+  const xml = buildLocalizedSitemap([{ workId: '8', locales: ['en', 'nl'] }], ['dune']);
   for (const path of ['/nl/imdb-voor-boeken', '/en/imdb-for-books']) {
     assert.equal(xml.split(`<loc>https://lumisco.re${path}</loc>`).length - 1, 1);
   }

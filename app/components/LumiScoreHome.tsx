@@ -201,6 +201,7 @@ function BookCoverForIdentity({
           fill
           sizes={small ? '43px' : '(max-width: 820px) 245px, (max-width: 1180px) 30vw, 15vw'}
           loading={presentation==='detail'?'eager':'lazy'}
+          fetchPriority={presentation==='detail' && coverIndex===0 && variantIndex===0 ? 'high' : undefined}
           unoptimized
         />
         </picture>

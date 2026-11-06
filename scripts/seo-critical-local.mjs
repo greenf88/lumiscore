@@ -24,14 +24,24 @@ const modules = {
   'lib/supabase/taste-test.ts': `export async function loadBookDetailPersonalization(){return {authenticated:false,hasEvidence:false,candidate:null,match:null}};export async function loadHomepagePersonalization(){return {authenticated:false,hasEvidence:false,recommendations:[],ratingCount:0,tasteTestAnsweredCount:0}}`,
   'lib/books/public-description.ts': `export function getStoredPublicBookDescription(book,locale){return book.storedDescription?.language===locale?book.storedDescription:null};export async function loadPublicBookDescriptionState(book,locale){const description=book.workId==='2'?null:{text:locale==='nl'?'Dit is een synthetische Nederlandse beschrijving. Een reiziger ontdekt een onbekende wereld.':'This is a synthetic English description. A traveller discovers an unknown world.',source:'open_library',sourceKey:book.openLibraryWorkId,verifiedAt:'2026-10-07',language:locale};return {state:description?'resolved':'confirmed_missing',description}}`,
   'lib/supabase/collections.ts': bookSource + `const collection={id:'1',slug:'synthetic-series',name:'Synthetic series',collectionType:'series',description:'Synthetic English series description.',expectedMainSeriesTotal:2};export async function loadCollectionsDirectory(){return {collections:[],total:0}};export async function loadCollectionPageData(slug){return slug!==collection.slug?null:{collection,books:books.slice(0,2).map((book,i)=>({book,workId:book.workId,sequenceNumber:i+1,publicationOrder:i+1,subgroup:null})),authenticated:false,statuses:{},ratedWorkIds:[],userRatings:{},progress:{read:0,cataloguedTotal:2,total:2,percentage:0},highlightedUnreadWorkId:null}};export async function loadBookCollectionContext(){return null};export async function loadVerifiedBookCollectionReturnTarget(id,slug){return slug===collection.slug?{slug,name:collection.name}:null};export async function loadHomepageSeriesContinuations(){return []}`,
-  'lib/supabase/client.ts': `export const supabase={from(table){const rows=table==='works'?[{id:1},{id:2}]:[{slug:'synthetic-series'}];return {select(){return this},order(){return this},async range(start){return {data:start?[]:rows,error:null}}}}}`,
+  'lib/supabase/client.ts': `const rows={works:[1,2,3,4,5].map(id=>({id,title:'Synthetic book '+id})),editions:[[1,1,'eng'],[2,1,'nld'],[3,2,'nld'],[4,3,'eng'],[5,3,'nld'],[6,4,'mul'],[7,5,'eng'],[8,5,'nld']].map(([id,work_id,language])=>({id,work_id,language,title:'Synthetic book '+work_id,isbn_13:null,open_library_edition_id:null})),collections:[{slug:'synthetic-series'}]};export const supabase={from(table){return {select(){return this},order(){return this},gt(){return this},async limit(){return {data:rows[table],error:null}},async range(start){return {data:start?[]:rows[table],error:null}}}}}`,
 };
 // Explicit loopback-only fault/performance comparison. Neither the source
 // replacement nor this probe is part of a deployment or production build.
 if(process.argv.includes('--slow-cover')){
  modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('const b=books.find(b=>b.workId===id);',"const found=books.find(b=>b.workId===id);const b=found?{...found,strictEditionLanguage:locale,editionAvailable:true,...(id==='3'?{coverUrls:['https://example.invalid/stored-cover.jpg']}:{}),editionCoverUrls:new Promise(r=>setTimeout(()=>r(['https://example.invalid/reviewed-cover.jpg']),2000))}:null;");
 }
+modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('return b&&id', "const locales=id==='2'?['nl']:id==='4'?[]:['en','nl'];const selected=b?{...b,detailLocales:locales,editionAvailable:locales.includes(locale)}:null;return selected&&id").replace('...b,storedDescription','...selected,storedDescription').replace(':b??null}', ':selected}');
 modules['lib/supabase/books.ts']+=`;export async function loadCatalogBooksBySourceIds(ids){return books.filter(b=>ids.includes(b.openLibraryWorkId))}`;
+if(process.argv.includes('--audit-cover-lab')){
+ const assets=process.argv.find(arg=>arg.startsWith('--assets-origin='))?.split('=').at(-1);
+ if(!assets || !/^http:\/\/127\.0\.0\.1:\d+$/.test(assets))throw Error('Loopback cover assets required');
+ modules['lib/supabase/books.ts']=modules['lib/supabase/books.ts'].replace('...b,detailLocales', `...b,coverUrls:id==='1'?['${assets}/external.jpg']:id==='3'?['${assets}/normal.jpg']:[],detailLocales`);
+ if(process.argv.includes('--audit-cover-baseline')){
+  const file='app/components/LumiScoreHome.tsx';
+  modules[file]=execFileSync('git',['-c','safe.directory='+root.replace(/\/$/,''),'show','e973988753aa3f167e0904d6704197de008ade2d:'+file],{cwd:root,encoding:'utf8',windowsHide:true});
+ }
+}
 if(process.argv.includes('--slow-description')){
  const original=modules['lib/books/public-description.ts'];
  modules['lib/books/public-description.ts']=original.replace('const description=',"await new Promise(r=>setTimeout(r,2000));if(book.workId==='4')return {state:'temporary_failure',description:null};const description=")+`;export async function loadPublicBookDescription(...args){return (await loadPublicBookDescriptionState(...args)).description}`;
