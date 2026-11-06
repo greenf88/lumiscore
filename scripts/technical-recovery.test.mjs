@@ -43,7 +43,7 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  const css=await readFile(root+'app/globals.css','utf8'),home=await readFile(root+'app/components/LumiScoreHome.tsx','utf8'),page=await readFile(root+'app/book/[workId]/page.tsx','utf8');
  assert.doesNotMatch(css.match(/\.book-cover-image\s*\{[^}]*\}/)[0],/opacity:\s*0/);
  assert.doesNotMatch(home,/coverLoaded|setCoverLoaded/);
- assert.match(home,/loading=\{presentation==='detail'\?'eager':'lazy'\}/);
+ assert.match(home,/loading=\{presentation\s*===\s*'detail'\s*\?\s*'eager'\s*:\s*'lazy'\}/);
  assert.match(page,/loadCatalogBook\(workId, locale, true\)/);
  assert.match(page,/description=\{storedDescription\}/);
  assert.match(page,/descriptionPromise=\{storedDescription \? undefined : descriptionPromise\}/);

@@ -26,8 +26,8 @@ test('NL/EN detail HTML preserves the accessible cover, account, locale and them
       assert.match(html, /score-badge detail-score-badge/);
       assert.match(html, new RegExp(`href="/${locale}/taste-test"`));
       assert.match(html, /class="mobile-navigation-trigger"[^>]*aria-expanded="false"/);
-      assert.match(html, /href="\/nl\/book\/991001"/);
-      assert.match(html, /href="\/en\/book\/991001"/);
+      assert.match(html, new RegExp('href="/' + locale + '/book/991001"'));
+      assert.match(html, new RegExp('href="/' + (locale === 'nl' ? 'en' : 'nl') + '/browse" aria-label='));
       assert.match(html, /class="theme-toggle theme-toggle-labeled"/);
       assert.match(html, /class="detail-sign-in"/);
       const failed=renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:'/book/991001'},createElement(DetailPreview,{profileUnavailable:true})));

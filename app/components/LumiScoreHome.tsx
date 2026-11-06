@@ -193,9 +193,7 @@ function BookCoverForIdentity({
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
         {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&presentation !== 'detail'&&
           <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>}
-        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}        <img
           ref={coverImage}
           key={displayedCoverUrl}
           className="book-cover-image"
