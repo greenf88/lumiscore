@@ -7,6 +7,7 @@ import { measureServerOperation } from '@/lib/performance/server-timing';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { getLandingGuide } from '@/lib/editorial/landing-guides';
 import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
+import { collectionPageJsonLd } from '@/lib/seo/collection-json-ld';
 import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
 
 type CollectionPageProps = { params: Promise<{ slug: string }> };
@@ -50,6 +51,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd(catalogBreadcrumbs('collection', guide?.h1 ?? data.collection.name, `/collection/${data.collection.slug}`, locale),locale)).replaceAll('<','\\u003c')}}/>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(collectionPageJsonLd(data.collection, data.books, locale, guide?.h1)).replaceAll('<','\\u003c')}}/>
       <LumiScoreCollectionPage data={locale === 'nl' ? { ...data, collection: { ...data.collection, description: `Ontdek de boeken van ${data.collection.name} en houd je leesvoortgang bij.` } } : data} />
     </>
   );

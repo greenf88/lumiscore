@@ -64,6 +64,20 @@ def main():
    sr={'status':response.status,'file':'sitemap.xml','bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'initialHtmlCapError':sr.get('error')};(out/'sitemap.xml').write_bytes(raw);rows['https://lumisco.re/sitemap.xml']=sr
   checkpoint.write_text(json.dumps(rows,ensure_ascii=False),encoding='utf-8')
  sitemap=(out/sr['file']).read_text(encoding='utf-8')
+ sitemap_urls=set(re.findall(r'<url><loc>([^<]+)</loc>',sitemap))
+ if '<sitemapindex' in sitemap:
+  shards=re.findall(r'<sitemap><loc>([^<]+)</loc></sitemap>',sitemap)
+  expected={f'https://lumisco.re/sitemap-{name}.xml' for name in ('pages','books-en','books-nl')}
+  if set(shards)!=expected or len(shards)!=len(expected):raise ValueError('Unexpected sitemap index children')
+  for url in shards:
+   with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':head.UAS['desktop']}),timeout=40) as response:
+    if response.geturl()!=url:raise ValueError('Unexpected sitemap child redirect')
+    raw=response.read(15_000_001)
+    if len(raw)>15_000_000:raise ValueError('Sitemap XML exceeds 15MB cap')
+    child=raw.decode('utf-8')
+    if '<urlset' not in child:raise ValueError('Expected sitemap URL set')
+    (out/url.rsplit('/',1)[1]).write_bytes(raw)
+    sitemap_urls.update(re.findall(r'<url><loc>([^<]+)</loc>',child))
  graph={}
  for url,r in rows.items():
   # Book returnTo links address the same public Work page; retain the literal
@@ -83,7 +97,7 @@ def main():
   r=rows[url];h=r.get('html',{});text=r.get('mainText','');can=[t for t in h.get('tags',[]) if t['kind']=='canonical']
   inbound=[{'source':s,'anchor':l['text'],'href':l['href']} for s,x in rows.items() for l in x.get('links',[]) if clean(l['url']).split('?')[0]==url and s!=url and s.split('lumisco.re/')[1][:2]==url.split('lumisco.re/')[1][:2]]
   desc=text.split('Over dit boek',1)[-1] if 'Over dit boek' in text else text.split('About this book',1)[-1] if 'About this book' in text else None
-  report.append({'url':url,'cohorts':[n for n,a in [('excluded-30',cohort),('priority-12',priorities)] if url in a],'status':r.get('status'),'finalUrl':r.get('finalUrl'),'canonical':can,'robots':[t['value'] for t in h.get('tags',[]) if t['kind']=='robots'],'headValid':not h.get('invalidHeadElements') and not h.get('relevantOutsideHead'),'h1':h.get('h1'),'mainWords':len(text.split()),'mainText':text,'descriptionSectionObserved':desc,'inSitemap':'<loc>'+url+'</loc>' in sitemap,'sameLanguageInlinks':inbound,'observedHomePath':path(url),'sourceFile':r.get('file'),'sha256':r.get('sha256'),'ttfbMs':r.get('ttfbMs'),'totalMs':r.get('totalMs'),'error':r.get('error')})
+  report.append({'url':url,'cohorts':[n for n,a in [('excluded-30',cohort),('priority-12',priorities)] if url in a],'status':r.get('status'),'finalUrl':r.get('finalUrl'),'canonical':can,'robots':[t['value'] for t in h.get('tags',[]) if t['kind']=='robots'],'headValid':not h.get('invalidHeadElements') and not h.get('relevantOutsideHead'),'h1':h.get('h1'),'mainWords':len(text.split()),'mainText':text,'descriptionSectionObserved':desc,'inSitemap':url in sitemap_urls,'sameLanguageInlinks':inbound,'observedHomePath':path(url),'sourceFile':r.get('file'),'sha256':r.get('sha256'),'ttfbMs':r.get('ttfbMs'),'totalMs':r.get('totalMs'),'error':r.get('error')})
  result={'checkedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'productionSha':args.sha,'sourceHashes':{str(f):hashlib.sha256(f.read_bytes()).hexdigest() for f in files},'boundaries':{'cohort':len(cohort),'priorities':len(priorities),'uniqueTargets':len(targets),'documents':len(rows),'extraHubCap':100,'parallelism':2,'noInlink':'Not observed in bounded graph, not proven orphan','googleStatus':'Historical GSC status reused; HTTP does not prove current indexing','ua':head.UAS['desktop'],'timing':'Network GET timing; no verified cold cache, no browser paint/CrUX'},'targets':report,'documents':[{'url':u,**{k:r.get(k) for k in ['status','finalUrl','html','links','sha256','file','ttfbMs','totalMs','mainText']}} for u,r in rows.items()]}
  (out/'audit.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps({'targets':len(report),'documents':len(rows),'statuses':{s:sum(r['status']==s for r in report) for s in [200,404,500]},'withInlinks':sum(bool(r['sameLanguageInlinks']) for r in report),'withHomePath':sum(bool(r['observedHomePath']) for r in report)}))
 if __name__=='__main__':main()

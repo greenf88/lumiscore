@@ -1,3 +1,4 @@
+import { readSitemapShards } from './sitemap-http-helpers.mjs';
 // Actual HTTP HTML, no JS and no database writes. Start seo-critical-local.mjs.
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -37,6 +38,24 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     assert.ok(html.includes(`href="/${locale==='nl'?'en':'nl'}${path.replaceAll('&','&amp;')}"`),'crawlable switch retains query');
   });
 }
+test('collection schema matches visible public card identity and order in each language',async()=>{
+  for(const locale of ['en','nl']) {
+    const {response,html}=await read('/'+locale+'/collection/synthetic-series',locale);
+    assert.equal(response.status,200);
+    const scripts=[...html.matchAll(/<script type="application\/ld\+json">([^<]+)<\/script>/g)].map(m=>JSON.parse(m[1]));
+    assert.equal(scripts.filter(x=>x['@type']==='Organization').length,1);
+    assert.equal(scripts.filter(x=>x['@type']==='WebSite').length,1);
+    const graph=scripts.find(x=>x['@graph']?.some(n=>n['@type']==='CollectionPage'))['@graph'];
+    const list=graph.find(n=>n['@type']==='ItemList');
+    const section=html.match(/<section class="book-grid collection-book-list"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+    assert.ok(section);
+    const cards=[...new Set([...section.matchAll(/href="(\/(?:nl|en)\/book\/\d+)(?:[?"])/g)].map(m=>'https://lumisco.re'+m[1]))];
+    assert.equal(cards.length,2);
+    assert.deepEqual(list.itemListElement.map(x=>x.url),cards);
+    assert.deepEqual(list.itemListElement.map(x=>x.position),[1,2]);
+    assert.deepEqual(graph.find(x=>x['@type']==='BookSeries').hasPart,list.itemListElement.map(x=>x.item));
+  }
+});
 test('legacy, plural book and slash aliases redirect once without losing query context',async()=>{
   for(const [path,target] of [['/','/en'],['/book/1?returnTo=%2Fbrowse%3Fpage%3D2','/en/book/1?returnTo=%2Fbrowse%3Fpage%3D2'],['/books/1','/en/book/1'],['/nl/books/1','/nl/book/1'],['/nl/','/nl']]) {
     const {response}=await read(path,'nl');assert.equal(response.status,308);
@@ -45,7 +64,7 @@ test('legacy, plural book and slash aliases redirect once without losing query c
   }
 });
 test('sitemap advertises only eligible book locales and reciprocal pairs',async()=>{
-  const {response,html}=await read('/sitemap.xml','en');assert.equal(response.status,200);
+  const html=(await readSitemapShards(origin)).join('');
   const entries=[...html.matchAll(/<url>(.*?)<\/url>/g)].map(m=>m[1]);
   const urls=entries.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]);
   assert.equal(urls.length,new Set(urls).size);

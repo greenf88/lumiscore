@@ -1,3 +1,4 @@
+import { readSitemapShards } from './sitemap-http-helpers.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {HOME_POSITIONING} from '../lib/seo/home-positioning.ts';
@@ -31,7 +32,7 @@ for(const locale of ['en','nl']){
  });
 }
 test('sitemap includes the four canonical page URLs once, without private entries',async()=>{
- const r=await fetch(origin+'/sitemap.xml');assert.equal(r.status,200);const xml=await r.text();
+ const xml=(await readSitemapShards(origin)).join('');
  for(const locale of ['en','nl'])for(const path of ['', '/zo-werkt-het']){
   const url=`<loc>https://lumisco.re/${locale}${path}</loc>`;
   assert.equal(xml.split(url).length-1,1,url);

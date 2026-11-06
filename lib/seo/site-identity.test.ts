@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {buildWebsiteJsonLd,serializeWebsiteJsonLd,LUMISCORE_WEBSITE_ID,LUMISCORE_WEBSITE_URL} from './site-identity.ts';
+import {buildWebsiteJsonLd,serializeOrganizationJsonLd,serializeWebsiteJsonLd,LUMISCORE_WEBSITE_ID,LUMISCORE_WEBSITE_URL} from './site-identity.ts';
 import {createPageMetadata} from './page-metadata.ts';
 import {getInformationPageContent,buildInformationPageJsonLd,INFORMATION_PAGE_KEYS} from '../information/pages.ts';
 
@@ -10,11 +10,16 @@ test('one root website identity is shared by every language and information-page
   assert.equal(LUMISCORE_WEBSITE_ID,'https://lumisco.re/#website');
   assert.deepEqual(JSON.parse(serializeWebsiteJsonLd()),{
     '@context':'https://schema.org','@type':'WebSite','@id':'https://lumisco.re/#website',
-    name:'LumiScore',url:'https://lumisco.re/',inLanguage:['en','nl'],
+    name:'LumiScore',url:'https://lumisco.re/',inLanguage:['en','nl'],publisher:{'@id':'https://lumisco.re/#organization'},
   });
+  const organization=JSON.parse(serializeOrganizationJsonLd());
+  assert.equal(organization['@type'],'Organization');
+  assert.equal(organization['@id'],'https://lumisco.re/#organization');
+  assert.equal(organization.email,'hello@lumisco.re');
   assert.deepEqual(buildWebsiteJsonLd(),JSON.parse(serializeWebsiteJsonLd()));
   for(const locale of ['en','nl'] as const)for(const key of INFORMATION_PAGE_KEYS){
     const nodes=buildInformationPageJsonLd(getInformationPageContent(key,locale));
+    assert.deepEqual(nodes[0].publisher,{'@id':organization['@id']});
     assert.deepEqual(nodes[0].isPartOf,{'@id':LUMISCORE_WEBSITE_ID});
     assert.doesNotMatch(JSON.stringify(nodes),/\/(?:nl|en)#website|"@type":"WebSite"/);
     const breadcrumb=nodes.find(node=>node['@type']==='BreadcrumbList');

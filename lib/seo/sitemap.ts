@@ -33,7 +33,21 @@ export function buildPublicSitemapPaths(
 
 function escapeXml(value: string): string { return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll("'", '&apos;'); }
 
-export function buildLocalizedSitemap(books: readonly BookLocales[], collectionSlugs: readonly string[]): string {
+export const SITEMAP_SHARDS = {
+  pages: '/sitemap-pages.xml',
+  en: '/sitemap-books-en.xml',
+  nl: '/sitemap-books-nl.xml',
+} as const;
+
+export function buildSitemapIndex(): string {
+  const entries = Object.values(SITEMAP_SHARDS).map(path =>
+    `<sitemap><loc>${escapeXml(absoluteLumiScoreUrl(path))}</loc></sitemap>`).join('');
+  return `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</sitemapindex>`;
+}
+
+export function buildLocalizedSitemap(
+  books: readonly BookLocales[], collectionSlugs: readonly string[], shard?: keyof typeof SITEMAP_SHARDS,
+): string {
   const bookLocales = new Map<string, Set<Locale>>();
   for (const { workId, locales } of books) {
     const path = `/book/${workId}`;
@@ -43,11 +57,12 @@ export function buildLocalizedSitemap(books: readonly BookLocales[], collectionS
   }
   const entries = buildPublicSitemapPaths(books.map(book => book.workId), collectionSlugs).flatMap(path => {
     const locales = bookLocales.get(path);
+    if (shard && (shard === 'pages' ? Boolean(locales) : !locales?.has(shard))) return [];
     const links = locales ? bookLanguageAlternates(path, [...locales]) : languageAlternates(path);
     const alternates = Object.entries(links).map(([language, href]) =>
       `<xhtml:link rel="alternate" hreflang="${language}" href="${escapeXml(absoluteLumiScoreUrl(href))}"/>`).join('');
     const priority = path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6';
-    return (['en', 'nl'] as const).filter(locale => !locales || locales.has(locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${alternates}<priority>${priority}</priority></url>`);
+    return (['en', 'nl'] as const).filter(locale => (!locales || locales.has(locale)) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${alternates}<priority>${priority}</priority></url>`);
   }).join('');
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`;
 }

@@ -14,10 +14,12 @@ test('production catalog failures never fall back to demo ratings', async () => 
 });
 
 test('minimum launch SEO assets use the single Vinext metadata owner', async () => {
-  const [metadata, robots, sitemap, detail] = await Promise.all([
+  const [metadata, robots, sitemap, sitemapData, sitemapResponse, detail] = await Promise.all([
     readFile(new URL('./seo/page-metadata.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/robots.txt/route.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/sitemap.xml/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('./seo/sitemap-server.ts', import.meta.url), 'utf8'),
+    readFile(new URL('./seo/sitemap-response.ts', import.meta.url), 'utf8'),
     readFile(new URL('../app/book/[workId]/page.tsx', import.meta.url), 'utf8'),
   ]);
 
@@ -25,8 +27,9 @@ test('minimum launch SEO assets use the single Vinext metadata owner', async () 
   assert.match(metadata, /alternates: \{ canonical: url, languages:/);
   assert.match(metadata, /absoluteLumiScoreUrl/);
   assert.match(robots, /LUMISCORE_SITE_ORIGIN/);
-  assert.match(sitemap, /from\('collections'\)/);
-  assert.match(sitemap, /s-maxage=3600/);
-  assert.doesNotMatch(sitemap, /REVIEWED_COLLECTION_SEEDS/);
+  assert.match(sitemap, /sitemapResponse\(buildSitemapIndex\(\)\)/);
+  assert.match(sitemapData, /from\('collections'\)/);
+  assert.match(sitemapResponse, /s-maxage=3600/);
+  assert.doesNotMatch(sitemapData, /REVIEWED_COLLECTION_SEEDS/);
   assert.match(detail, /\$\{book\.title\} \$\{locale === 'nl' \? 'van' : 'by'\} \$\{book\.author\} \| LumiScore/);
 });

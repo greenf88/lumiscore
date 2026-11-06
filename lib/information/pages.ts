@@ -1,6 +1,6 @@
 import type { Locale } from '../i18n/config.ts';
 import { absoluteLumiScoreUrl } from '../seo/site-origin.ts';
-import { LUMISCORE_WEBSITE_ID } from '../seo/site-identity.ts';
+import { LUMISCORE_ORGANIZATION_ID, LUMISCORE_WEBSITE_ID } from '../seo/site-identity.ts';
 import { IMDB_COMPARISON_CONTENT } from './imdb-comparison.ts';
 import { HOW_IT_WORKS_NL } from './how-it-works-nl.ts';
 
@@ -415,6 +415,7 @@ export function buildInformationPageJsonLd(page: InformationPageContent) {
       name: page.title,
       description: page.seoDescription,
       inLanguage: page.locale === 'nl' ? 'nl-NL' : 'en',
+      publisher: { '@id': LUMISCORE_ORGANIZATION_ID },
       isPartOf: {
         '@id': LUMISCORE_WEBSITE_ID,
       },

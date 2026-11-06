@@ -4,6 +4,11 @@ import { refreshSupabaseSession } from '@/lib/supabase/proxy';
 import { PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
 
 export async function proxy(request: NextRequest) {
+  // Crawler XML is public and locale-independent. Never refresh a reader's
+  // session on a response marked cacheable by the sitemap handlers.
+  if (/^\/sitemap(?:-pages|-books-(?:en|nl))?\.xml$/.test(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
   const decision = languageRoute(request.nextUrl.pathname);
   if (decision.kind === 'redirect') {
     const target = request.nextUrl.clone();

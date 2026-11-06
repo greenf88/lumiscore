@@ -1,3 +1,4 @@
+import { readSitemapShards } from './sitemap-http-helpers.mjs';
 // Actual Vinext router with isolated synthetic loaders; no database or provider writes.
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
@@ -12,12 +13,11 @@ try{
  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Fixture start timed out\n'+log.slice(-3000))),45000);child.once('exit',c=>{clearTimeout(timer);reject(Error('Fixture exited '+c+'\n'+log.slice(-3000)));});for(const stream of[child.stdout,child.stderr])stream.on('data',b=>{log=(log+b).slice(-10000);if(log.includes('SYNTHETIC SEO SSR PREVIEW')){clearTimeout(timer);resolve();}});});
  // Compile the real home route before the bounded parallel audit; compilation is not metadata latency.
  const warm=await fetch('http://127.0.0.1:'+port+'/en',{signal:AbortSignal.timeout(90000)});assert.equal(warm.status,200);await warm.text();
- const sitemapResponse=await fetch('http://127.0.0.1:'+port+'/sitemap.xml');assert.equal(sitemapResponse.status,200);
- const sitemap=await sitemapResponse.text();
+ const sitemap=(await readSitemapShards('http://127.0.0.1:'+port)).join('');
  const sitemapBooks=[...sitemap.matchAll(/<url><loc>https:\/\/lumisco\.re(\/(?:en|nl)\/book\/\d+)<\/loc>(.*?)<\/url>/g)];
- assert.deepEqual(sitemapBooks.map(m=>m[1]),['/en/book/1','/nl/book/1','/nl/book/2','/en/book/3','/nl/book/3','/en/book/5','/nl/book/5']);
- assert.equal(sitemapBooks[0][2],sitemapBooks[1][2]);assert.match(sitemapBooks[0][2],/hreflang="x-default"/);
- assert.doesNotMatch(sitemapBooks[2][2],/hreflang/);
+ assert.deepEqual(sitemapBooks.map(m=>m[1]),['/en/book/1','/en/book/3','/en/book/5','/nl/book/1','/nl/book/2','/nl/book/3','/nl/book/5']);
+ assert.equal(sitemapBooks[0][2],sitemapBooks[3][2]);assert.match(sitemapBooks[0][2],/hreflang="x-default"/);
+ assert.doesNotMatch(sitemapBooks[4][2],/hreflang/);
  for (const locale of ['en', 'nl']) {
   const response = await fetch('http://127.0.0.1:' + port + '/' + locale + '/book/1');
   assert.equal(response.status, 200);
