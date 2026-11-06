@@ -139,6 +139,9 @@ function BookCoverForIdentity({
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
   const imageSource = imageAttempts[variantIndex] ?? null;
   const displayedCoverUrl = imageSource?.src ?? null;
+  const cardVariantMedia = presentation === 'taste'
+    ? '(max-width: 430px) and (max-resolution: 2dppx)'
+    : '(max-width: 430px)';
 
   const requestResolvedCovers = useCallback(() => {
     if (
@@ -189,8 +192,8 @@ function BookCoverForIdentity({
       <span className="cover-author" aria-hidden="true">{book.author}</span>
       {displayedCoverUrl && (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
-        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&(presentation==='card'||presentation==='compact')&&
-          <source media={presentation === 'compact' ? undefined : '(max-width: 430px)'} srcSet={book.cardCoverUrl}/>}
+        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&presentation !== 'detail'&&
+          <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>}
         {imageSource?.srcSet && <source srcSet={imageSource.srcSet} />}
         <Image
           ref={coverImage}
