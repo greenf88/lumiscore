@@ -11,6 +11,8 @@ export type ReviewedCoverOverride = {
   author: string;
   isbn13: string;
   coverUrl: string;
+  /** Previously verified image for this same edition, used if the primary fails. */
+  fallbackCoverUrl?: string;
   source: 'official_publisher' | 'publisher_registry' | 'reviewed_bookseller' | 'reviewed_open_library' | 'reviewed_google_books';
   editionLanguage?: 'eng' | 'nld';
   openLibraryEditionId?: string;
@@ -61,7 +63,7 @@ export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
   {workId:'2717',openLibraryWorkId:'OL17876096W',title:'Scythe',author:'Neal Shusterman',isbn13:'9781481485265',editionLanguage:'eng',openLibraryEditionId:'OL46932981M',coverUrl:'https://covers.openlibrary.org/b/id/15152462-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL46932981M',reviewedAt:'2026-10-21'},
   {workId:'2724',openLibraryWorkId:'OL1954412W',title:'Unwind',author:'Neal Shusterman',isbn13:'9781416912040',editionLanguage:'eng',openLibraryEditionId:'OL11758843M',coverUrl:'https://covers.openlibrary.org/b/id/2787713-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL11758843M',reviewedAt:'2026-10-21'},
   {workId:'2846',openLibraryWorkId:'OL675774W',title:'The Year of the Flood',author:'Margaret Atwood',isbn13:'9781408461426',editionLanguage:'eng',openLibraryEditionId:'OL36612602M',coverUrl:'https://covers.openlibrary.org/b/id/12508446-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL36612602M',reviewedAt:'2026-10-21'},
-  {workId:'1',openLibraryWorkId:'OL21745884W',title:'Project Hail Mary',author:'Andy Weir',isbn13:'9780593135204',editionLanguage:'eng',openLibraryEditionId:'OL30036715M',coverUrl:'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL30036715M',reviewedAt:'2026-10-21'},
+  {workId:'1',openLibraryWorkId:'OL21745884W',title:'Project Hail Mary',author:'Andy Weir',isbn13:'9780593135204',editionLanguage:'eng',openLibraryEditionId:'OL30036715M',coverUrl:'https://images.penguinrandomhouse.com/cover/9780593135204',fallbackCoverUrl:'https://covers.openlibrary.org/b/id/12455001-L.jpg?default=false',source:'official_publisher',evidenceUrl:'https://penguinrandomhouselibrary.com/book/?isbn=9780593135204',reviewedAt:'2026-11-06'},
   {workId:'4316',openLibraryWorkId:'OL17914663W',title:'All Systems Red: The Murderbot Diaries',author:'Martha Wells',isbn13:'9780765397539',editionLanguage:'eng',openLibraryEditionId:'OL26500848M',coverUrl:'https://covers.openlibrary.org/b/id/9157148-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26500848M',reviewedAt:'2026-10-21'},
   {
     workId: '1305',

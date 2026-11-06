@@ -44,7 +44,7 @@ export function withStrictEdition(book: Book, edition: StrictEditionRow | null, 
   // Work-level cover IDs and resolved Work covers may belong to another edition.
   // An ISBN endpoint returning an image is NOT edition/image evidence. Existing
   // Work-keyed caches are not evidence either. Only reviewed or edition-bound assets.
-  const coverUrls = uniqueCoverUrls([reviewed?.coverUrl, ...verified]);
+  const coverUrls = uniqueCoverUrls([reviewed?.coverUrl, reviewed?.fallbackCoverUrl, ...verified]);
   return { ...book, storedDescription:undefined,cardCoverUrl:undefined,editionFormat:undefined,
     title: edition.title.trim(), editionTitle: edition.title.trim(),
     editionId: String(edition.id), editionLanguage: normalizeEditionLanguage(edition.language??''), editionPublisher: edition.publisher ?? null,

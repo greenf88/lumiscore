@@ -8,7 +8,7 @@ import {applyRatingSummaries,formatPublicRatingDisplay} from '../ratings/card-su
 import {selectStrictEdition,withStrictEdition,unavailableEdition} from '../books/strict-edition.ts';
 import {getVerifiedCoverAttempts} from '../books/covers.ts';
 import {withEditionCoverEvidence,clearEditionCoverEvidenceCacheForTests} from '../books/edition-cover-evidence.ts';
-import {REVIEWED_COVER_OVERRIDES} from '../books/reviewed-cover-overrides.ts';
+import {getReviewedCoverOverride,REVIEWED_COVER_OVERRIDES} from '../books/reviewed-cover-overrides.ts';
 const read=(path:string)=>readFileSync(new URL('../../'+path,import.meta.url),'utf8');
 const base:Book={id:'work-102',workId:'102',source:'supabase',title:'The Hunger Games',author:'Suzanne Collins',firstPublishYear:2008,score:null,ratingsCount:null,match:null,cover:'orbit'};
 
@@ -84,8 +84,13 @@ test('temporary missing edition source is retried after one minute, not cached f
 });
 test('reviewed positive edition covers need no external metadata call on a cold render',async()=>{
   clearEditionCoverEvidenceCacheForTests();
-  const books=REVIEWED_COVER_OVERRIDES.filter(entry=>entry.source==='reviewed_open_library').map(entry=>withStrictEdition({...base,workId:entry.workId,openLibraryWorkId:entry.openLibraryWorkId,title:entry.title,author:entry.author},{id:entry.openLibraryEditionId!,work_id:entry.workId,title:entry.title,language:entry.editionLanguage!,isbn_13:entry.isbn13,open_library_edition_id:entry.openLibraryEditionId!},entry.editionLanguage==='nld'?'nl':'en')!);
+  const books=REVIEWED_COVER_OVERRIDES.filter(entry=>(entry.source==='reviewed_open_library'||entry.fallbackCoverUrl)).map(entry=>withStrictEdition({...base,workId:entry.workId,openLibraryWorkId:entry.openLibraryWorkId,title:entry.title,author:entry.author},{id:entry.openLibraryEditionId!,work_id:entry.workId,title:entry.title,language:entry.editionLanguage!,isbn_13:entry.isbn13,open_library_edition_id:entry.openLibraryEditionId!},entry.editionLanguage==='nld'?'nl':'en')!);
   let calls=0;
   const resolved=await withEditionCoverEvidence(books,async()=>{calls++;throw Error('No runtime source dependency expected');});
-  assert.equal(resolved.length,books.length);assert.ok(resolved.length>=13);assert.equal(calls,0);assert.ok(resolved.every(book=>book.coverUrls?.length===1));
+  assert.equal(resolved.length,books.length);assert.ok(resolved.length>=13);assert.equal(calls,0);
+  for (const book of resolved) {
+    const review=getReviewedCoverOverride(book);
+    assert.ok(review);
+    assert.deepEqual(book.coverUrls,review.fallbackCoverUrl?[review.coverUrl,review.fallbackCoverUrl]:[review.coverUrl]);
+  }
 });
