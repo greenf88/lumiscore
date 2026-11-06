@@ -14,17 +14,14 @@ type CollectionPageProps = { params: Promise<{ slug: string }> };
 export const dynamic = 'force-dynamic';
 
 const load = cache(async (slug: string,locale:'nl'|'en') => {
-  try {
-    const { loadCollectionPageData } = await import('@/lib/supabase/collections');
-    return await measureServerOperation(
-      'collection.page',
-      'mixed',
-      () => loadCollectionPageData(slug,locale,true),
-    );
-  } catch (error) {
-    console.error('Collection page load failed.', error);
-    return null;
-  }
+  // The loader returns null for a missing collection and throws on data errors.
+  // Do not turn a temporary backend failure into a crawler-visible 404.
+  const { loadCollectionPageData } = await import('@/lib/supabase/collections');
+  return measureServerOperation(
+    'collection.page',
+    'mixed',
+    () => loadCollectionPageData(slug,locale,true),
+  );
 });
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {

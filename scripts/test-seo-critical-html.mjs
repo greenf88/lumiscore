@@ -75,3 +75,11 @@ test('not-found boundaries are noindex, without a canonical, not a fabricated bo
     assert.deepEqual(seo.duplicates,[]);
   }
 });
+
+test('a collection backend error is not presented as a missing collection',async()=>{
+  for (const locale of ['en','nl']) {
+    const {response,html}=await read('/'+locale+'/collection/synthetic-data-error',locale);
+    assert.ok(response.status>=500);
+    assert.deepEqual(inspectServerHtml(html).canonical,[]);
+  }
+});
