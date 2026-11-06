@@ -2,5 +2,88 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": "pnpm run build:vercel",
-  "regions": ["dub1"]
+  "regions": ["dub1"],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Content-Security-Policy-Report-Only", "value": "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'" }
+      ]
+    },
+    {
+      "source": "/:locale(nl|en)/:page(over-ons|zo-werkt-het|voor-uitgevers|contact)",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
+    },
+    {
+      "source": "/en/imdb-for-books",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
+    },
+    {
+      "source": "/nl/imdb-voor-boeken",
+      "has": [
+        { "type": "header", "key": "accept", "value": ".*text/html.*" }
+      ],
+      "missing": [
+        { "type": "header", "key": "rsc" },
+        { "type": "header", "key": "next-router-state-tree" },
+        { "type": "header", "key": "next-router-prefetch" },
+        { "type": "header", "key": "next-router-segment-prefetch" },
+        { "type": "header", "key": "next-url" },
+        { "type": "header", "key": "authorization" },
+        { "type": "query", "key": "_rsc" }
+      ],
+      "headers": [
+        { "key": "Vercel-CDN-Cache-Control", "value": "public, s-maxage=300" }
+      ]
+    },
+    {
+      "source": "/auth/callback",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/update-password",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    },
+    {
+      "source": "/:locale(nl|en)/update-password",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
+    }
+  ]
 }

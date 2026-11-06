@@ -419,7 +419,9 @@ export function LumiScoreBookDetail({
           <section className="detail-information" aria-labelledby="book-information-heading">
             <h2 id="book-information-heading">{t('detail.information')}</h2>
             <dl>
-              <div><dt>{t('detail.author')}</dt><dd>{book.author}</dd></div>
+              <div><dt>{t('detail.author')}</dt><dd>{book.authorId && /^[1-9]\d*$/.test(book.authorId) && Number.isSafeInteger(Number(book.authorId))
+                ? <LocaleLink className="detail-author-link" href={'/browse?author=' + book.authorId}>{book.author}</LocaleLink>
+                : book.author}</dd></div>
               <div><dt>{t('detail.firstPublishedLabel')}</dt><dd>{book.firstPublishYear ?? t('common.unknown')}</dd></div>
               {book.editionTitle && book.editionTitle !== book.title && <div><dt>{t('detail.edition')}</dt><dd>{book.editionTitle}</dd></div>}
               {book.editionPublisher && <div><dt>{t('detail.publisher')}</dt><dd>{book.editionPublisher}</dd></div>}

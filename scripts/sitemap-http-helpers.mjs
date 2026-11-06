@@ -16,7 +16,7 @@ export async function readSitemapShards(origin) {
   const xml = await Promise.all(shards.map(url => read(new URL(url).pathname)));
   for (const [i, shard] of xml.entries()) {
     assert.match(shard, /<urlset\b/);
-    assert.doesNotMatch(shard, /<lastmod>/);
+    if (i !== 0) assert.doesNotMatch(shard, /<lastmod>/);
     const urls = [...shard.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => new URL(match[1]).pathname);
     assert.ok(urls.length);
     for (const url of urls) {

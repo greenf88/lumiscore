@@ -27,12 +27,7 @@ export async function LumiScoreInformationRoute({
 }: {
   pageKey: InformationPageKey;
 }) {
-  const [{ locale }, authState] = await Promise.all([
-    resolveRequestLocale(),
-    import('@/lib/supabase/auth')
-      .then(({ loadHeaderAuthState }) => loadHeaderAuthState())
-      .catch(() => ({ authenticated: false })),
-  ]);
+  const { locale } = await resolveRequestLocale();
   const content = getInformationPageContent(pageKey, locale);
 
   return (
@@ -43,7 +38,7 @@ export async function LumiScoreInformationRoute({
           __html: serializeInformationPageJsonLd(content),
         }}
       />
-      <LumiScoreInformationPage content={content} authState={authState} />
+      <LumiScoreInformationPage content={content} />
     </>
   );
 }

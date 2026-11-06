@@ -15,8 +15,11 @@ export async function proxy(request: NextRequest) {
     target.pathname = decision.path;
     return NextResponse.redirect(target, 308);
   }
-  // Retain the existing session refresh and refreshed request cookies.
-  const session = await refreshSupabaseSession(request);
+  // These fixed pages render public content only. The browser asks a separate
+  // private endpoint for the reader's account menu after hydration.
+  const publicInformation = decision.kind === 'rewrite'
+    && /^\/(?:over-ons|zo-werkt-het|imdb-for-books|voor-uitgevers|contact)$/.test(decision.path);
+  const session = publicInformation ? null : await refreshSupabaseSession(request);
   const requestHeaders = new Headers(request.headers);
   // Never accept a caller-supplied language/path header as authority.
   requestHeaders.delete(LOCALE_REQUEST_HEADER);
@@ -30,8 +33,8 @@ export async function proxy(request: NextRequest) {
     requestHeaders.set(PATH_REQUEST_HEADER, request.nextUrl.pathname + request.nextUrl.search);
     response = NextResponse.rewrite(target, { request: { headers: requestHeaders } });
   }
-  for (const cookie of session.cookies.getAll()) response.cookies.set(cookie);
-  for (const [name, value] of session.headers) {
+  for (const cookie of session?.cookies.getAll() ?? []) response.cookies.set(cookie);
+  for (const [name, value] of session?.headers ?? []) {
     if (!name.startsWith('x-middleware-') && name !== 'set-cookie') response.headers.set(name, value);
   }
   const path = decision.kind === 'rewrite' ? decision.path : request.nextUrl.pathname;

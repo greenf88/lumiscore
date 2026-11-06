@@ -2,7 +2,7 @@
 
 import { LocaleLink } from './LumiScoreLocale';
 
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import type {
   InformationPageContent,
@@ -20,12 +20,23 @@ function RichText({ parts }: { parts: InformationTextPart[] }) {
 
 export function LumiScoreInformationPage({
   content,
-  authState,
 }: {
   content: InformationPageContent;
-  authState: HeaderAuthState;
 }) {
   const [query, setQuery] = useState('');
+  const [authState, setAuthState] = useState<HeaderAuthState>({ authenticated: false });
+  useEffect(() => {
+    const request = new AbortController();
+    void fetch('/api/account/header', { cache: 'no-store', signal: request.signal })
+      .then(async response => {
+        if (response.ok && !request.signal.aborted) {
+          const state = await response.json() as HeaderAuthState;
+          if (!request.signal.aborted) setAuthState(state);
+        }
+      })
+      .catch(() => {});
+    return () => request.abort();
+  }, []);
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
     document.documentElement.dataset.theme = next;
@@ -36,6 +47,7 @@ export function LumiScoreInformationPage({
   return (
     <main className={`site-shell information-page-shell${content.locale === 'nl' && (content.key === 'howItWorks' || content.key === 'imdbComparison') ? ' information-product-help' : ''}`}>
       <Header
+        key={authState.authenticated ? 'reader' : 'guest'}
         onThemeToggle={toggleTheme}
         query={query}
         onQueryChange={setQuery}

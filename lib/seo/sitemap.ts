@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { getInformationPageContent, type InformationPageKey } from '../information/pages.ts';
 import { languageAlternates, localizedHref } from '../i18n/paths.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
@@ -45,6 +47,20 @@ export function buildSitemapIndex(): string {
   return `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</sitemapindex>`;
 }
 
+const verifiedContentDates: Partial<Record<string, { key: InformationPageKey; date: string; hash: string }>> = {
+  // Production release 46ae50b, 4 November. Hash the published content so a
+  // later editorial edit cannot silently keep advertising the old date.
+  '/zo-werkt-het': { key: 'howItWorks', date: '2026-11-04', hash: '14f9627a0662fd296d6ca4f1b9fe8657babfba4c8b474497bee856ca9cfd9752' },
+  '/imdb-for-books': { key: 'imdbComparison', date: '2026-11-04', hash: '2d0c45e0255161dc24460ba46d0e168a839b8f730ecbb73f97371f5d6a4f0082' },
+};
+
+function sitemapLastModified(path: string, locale: Locale): string {
+  const entry = locale === 'nl' ? verifiedContentDates[path] : undefined;
+  if (!entry) return '';
+  const hash = createHash('sha256').update(JSON.stringify(getInformationPageContent(entry.key, locale))).digest('hex');
+  return hash === entry.hash ? '<lastmod>' + entry.date + '</lastmod>' : '';
+}
+
 export function buildLocalizedSitemap(
   books: readonly BookLocales[], collectionSlugs: readonly string[], shard?: keyof typeof SITEMAP_SHARDS,
 ): string {
@@ -62,7 +78,7 @@ export function buildLocalizedSitemap(
     const alternates = Object.entries(links).map(([language, href]) =>
       `<xhtml:link rel="alternate" hreflang="${language}" href="${escapeXml(absoluteLumiScoreUrl(href))}"/>`).join('');
     const priority = path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6';
-    return (['en', 'nl'] as const).filter(locale => (!locales || locales.has(locale)) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${alternates}<priority>${priority}</priority></url>`);
+    return (['en', 'nl'] as const).filter(locale => (!locales || locales.has(locale)) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
   }).join('');
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`;
 }

@@ -77,7 +77,11 @@ test('sitemap advertises only eligible book locales and reciprocal pairs',async(
   for(const path of ['/en/book/2','/en/book/4','/nl/book/4']) assert.ok(!urls.includes('https://lumisco.re'+path));
   for(const entry of entries) assert.equal((entry.match(/xhtml:link /g)||[]).length,entry.includes('/nl/book/2')?0:3);
   assert.ok(urls.every(url=>/^https:\/\/lumisco\.re\/(en|nl)(\/|$)/.test(url)&&!url.includes('?')));
-  assert.doesNotMatch(html,/<lastmod>/);
+  const dated=entries.filter(entry=>entry.includes('<lastmod>'));
+  assert.deepEqual(dated.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]),[
+    'https://lumisco.re/nl/zo-werkt-het','https://lumisco.re/nl/imdb-voor-boeken',
+  ]);
+  assert.ok(dated.every(entry=>entry.includes('<lastmod>2026-11-04</lastmod>')));
 });
 test('API and Auth remain robots blocked; language aliases do not expose API copies',async()=>{
   const {html}=await read('/robots.txt','en');assert.match(html,/Disallow: \/api\//);assert.match(html,/Disallow: \/auth\//);
@@ -100,5 +104,18 @@ test('a collection backend error is not presented as a missing collection',async
     const {response,html}=await read('/'+locale+'/collection/synthetic-data-error',locale);
     assert.ok(response.status>=500);
     assert.deepEqual(inspectServerHtml(html).canonical,[]);
+  }
+});
+
+test('the public explanation stays shared while private account responses stay isolated',async()=>{
+  for (const reader of ['Alpha','Beta']) {
+    const cookie='synthetic-seo-reader='+reader;
+    const page=await read('/nl/zo-werkt-het','nl',{cookie,accept:'text/html'});
+    assert.equal(page.response.status,200);
+    assert.doesNotMatch(page.html,/Synthetic Reader (Alpha|Beta)/);
+    assert.equal(page.response.headers.get('set-cookie'),null);
+    const account=await read('/api/account/header','nl',{cookie});
+    assert.match(account.response.headers.get('cache-control')??'',/private.*no-store/);
+    assert.equal(JSON.parse(account.html).displayName,'Synthetic Reader '+reader);
   }
 });

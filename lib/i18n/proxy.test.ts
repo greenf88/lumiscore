@@ -34,7 +34,7 @@ async function fixture() {
   }});
   const request=(pathname:string)=>{
     const url=new URL(pathname,'https://lumisco.re');
-    return {nextUrl:Object.assign(url,{clone:()=>new URL(url)}),headers:new Headers({cookie:'synthetic-session=old',[paths.LOCALE_REQUEST_HEADER]:'en',[paths.PATH_REQUEST_HEADER]:'/attacker'})};
+    return {method:'GET',nextUrl:Object.assign(url,{clone:()=>new URL(url)}),headers:new Headers({cookie:'synthetic-session=old',[paths.LOCALE_REQUEST_HEADER]:'en',[paths.PATH_REQUEST_HEADER]:'/attacker'})};
   };
   return {proxy:runtimeExports.proxy,request,refreshes:()=>refreshes};
 }
@@ -65,4 +65,16 @@ test('legacy redirect remains fixed; neutral actions receive no caller-supplied 
   assert.equal(action.kind,'next');
   assert.equal(action.options?.request?.headers.get(paths.LOCALE_REQUEST_HEADER),null);
   assert.equal(action.options?.request?.headers.get(paths.PATH_REQUEST_HEADER),null);
+});
+
+test('fixed public information bypasses session refresh, private account state does not',async()=>{
+  const f=await fixture();
+  for(const path of ['/nl/zo-werkt-het','/en/imdb-for-books','/nl/imdb-voor-boeken']) {
+    const response=await f.proxy(f.request(path));
+    assert.equal(response.cookies.getAll().length,0);
+    assert.equal(response.headers.get('vercel-cdn-cache-control'),null);
+  }
+  assert.equal(f.refreshes(),0);
+  await f.proxy(f.request('/api/account/header'));
+  assert.equal(f.refreshes(),1);
 });
