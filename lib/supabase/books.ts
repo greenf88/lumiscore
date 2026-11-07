@@ -223,6 +223,7 @@ export async function loadCatalogBooksByIds(
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
   locale: Locale = 'en',
   keepUnavailable = false,
+  signal?: AbortSignal,
 ): Promise<Book[]> {
   const ids = [...new Set(
     workIds
@@ -234,9 +235,9 @@ export async function loadCatalogBooksByIds(
   // All target IDs are already known. Public identity, complete edition metadata
   // and safe aggregates are independent; none needs to wait for another request.
   const [result, editions, summaries] = await Promise.all([
-    supabase.from('works').select(HOMEPAGE_CATALOG_SELECT).in('id', ids),
-    loadEditionRows(supabase, ids.map(String)),
-    prefetchedSummaries ?? loadPublicRatingSummariesBatched(supabase, ids.map(String)),
+    supabase.from('works').select(HOMEPAGE_CATALOG_SELECT).in('id', ids).abortSignal(signal ?? AbortSignal.timeout(5_000)),
+    loadEditionRows(supabase, ids.map(String), signal),
+    prefetchedSummaries ?? loadPublicRatingSummariesBatched(supabase, ids.map(String), signal),
   ]);
   if (result.error) throw result.error;
   const editionRows = asRows(editions);
@@ -252,8 +253,9 @@ export async function loadCatalogBooksByIdsWithStoredCovers(
   prefetchedSummaries?: ReadonlyMap<string, PublicRatingSummary>,
   locale: Locale = 'en',
   streamCovers = false,
+  signal?: AbortSignal,
 ): Promise<Book[]> {
-  const books = await loadCatalogBooksByIds(workIds, prefetchedSummaries, locale);
+  const books = await loadCatalogBooksByIds(workIds, prefetchedSummaries, locale, false, signal);
   // Legacy Work/ISBN cache is not edition evidence and was deliberately discarded.
   // Do not read an unused privileged cache before displaying a public book card.
   return streamCovers ? deferEditionCoverEvidence(books) : withEditionCoverEvidence(books);

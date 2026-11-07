@@ -32,7 +32,7 @@ const themeScript = `
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme === 'paper' ? 'light' : 'dark';
     if (['/en', '/nl', '/en/', '/nl/'].includes(location.pathname)) {
-      const width = matchMedia('(min-width: 1100px), (min-resolution: 1.5dppx)').matches ? 1536 : 1024;
+      const width = matchMedia('(min-width: 1100px)').matches ? 1536 : 1024;
       const artwork = theme === 'paper' ? 'light-book-stack' : 'dark-reading-scene';
       const preload = document.createElement('link');
       preload.rel = 'preload';

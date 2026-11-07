@@ -1,4 +1,5 @@
 'use client';
+import { optimizedCover, coverSizes } from '@/lib/books/cover-delivery';
 
 import {EditionPresentationLabel} from './EditionPresentationLabel';
 import {RecommendationMeasurement} from './RecommendationMeasurement';
@@ -114,6 +115,8 @@ type BookCoverProps = {
   resolveMissing?: boolean;
   /** Already privacy-filtered live display (e.g. the detail rating state). */
   publicScoreDisplay?: string;
+  priority?: boolean;
+  sizes?: string;
 };
 
 function BookCoverForIdentity({
@@ -123,6 +126,8 @@ function BookCoverForIdentity({
   label,
   resolveMissing = true,
   publicScoreDisplay,
+  priority = false,
+  sizes,
 }: BookCoverProps) {
   const { locale, t } = useLumiScoreLocale();
   const scoreDisplay = publicScoreDisplay ?? formatPublicRatingDisplay(book.score, book.ratingsCount, locale, book.ratingBand, book.publicRatingUnavailable).score;
@@ -137,7 +142,12 @@ function BookCoverForIdentity({
   const coverUrl = coverUrls[coverIndex] ?? null;
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
   const imageSource = imageAttempts[variantIndex] ?? null;
-  const displayedCoverUrl = imageSource?.src ?? null;
+  const [optimizationFailed, setOptimizationFailed] = useState(false);
+  const imageSourceUrl = imageSource?.src;
+  const optimized = useMemo(() => imageSourceUrl && variantIndex === 0 && !optimizationFailed
+    ? optimizedCover(imageSourceUrl, presentation, process.env.NEXT_PUBLIC_COVER_DELIVERY === 'vercel') : null,
+    [imageSourceUrl, variantIndex, optimizationFailed, presentation]);
+  const displayedCoverUrl = optimized?.src ?? imageSource?.src ?? null;
   const cardVariantMedia = presentation === 'taste'
     ? '(max-width: 430px) and (max-resolution: 2dppx)'
     : '(max-width: 430px)';
@@ -162,6 +172,7 @@ function BookCoverForIdentity({
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = useCallback((failedUrl?:string) => {
+    if (optimized && failedUrl?.includes('/_vercel/image?')) { setOptimizationFailed(true); return; }
     if(!cardVariantFailed&&book.cardCoverUrl&&failedUrl===book.cardCoverUrl){setCardVariantFailed(true);return;}
     if (variantIndex + 1 < imageAttempts.length) {
       setVariantIndex(variantIndex + 1);
@@ -170,13 +181,13 @@ function BookCoverForIdentity({
       setCoverIndex(coverIndex + 1);
       requestResolvedCovers();
     }
-  },[cardVariantFailed,book.cardCoverUrl,variantIndex,imageAttempts.length,coverIndex,requestResolvedCovers]);
+  },[optimized,cardVariantFailed,book.cardCoverUrl,variantIndex,imageAttempts.length,coverIndex,requestResolvedCovers]);
 
   useEffect(() => {
     const image = coverImage.current;
     if (!image || !displayedCoverUrl) return;
-    return watchCoverImage(image,handleCoverFailure,presentation==='detail');
-  },[displayedCoverUrl,handleCoverFailure,presentation]);
+    return watchCoverImage(image,handleCoverFailure,presentation==='detail'||priority);
+  },[displayedCoverUrl,handleCoverFailure,presentation,priority]);
 
   return (
     <div
@@ -191,17 +202,23 @@ function BookCoverForIdentity({
       <span className="cover-author" aria-hidden="true">{book.author}</span>
       {displayedCoverUrl && (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
-        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&presentation !== 'detail'&&
+        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&!optimized&&presentation !== 'detail'&&
           <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>}
-        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}        <img
+        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}
+        <img
           ref={coverImage}
           key={displayedCoverUrl}
           className="book-cover-image"
           src={displayedCoverUrl}
           alt={label ?? ''}
-          srcSet={imageSource?.srcSet}
-          loading={presentation === 'detail' ? 'eager' : 'lazy'}
-          fetchPriority={presentation === 'detail' ? 'high' : undefined}
+          srcSet={optimized?.srcSet ?? imageSource?.srcSet}
+          sizes={sizes ?? optimized?.sizes ?? coverSizes[presentation]}
+          width={660}
+          height={1000}
+          data-cover-source={coverUrl ?? undefined}
+          data-cover-delivery={optimized ? "vercel" : "native"}
+          loading={presentation === 'detail' || priority ? 'eager' : 'lazy'}
+          fetchPriority={presentation === 'detail' || priority ? 'high' : undefined}
           decoding="async"
         />
         </picture>
@@ -438,6 +455,8 @@ const CARD_STATUS_KEYS: Record<Exclude<ReadingStatus, 'want_to_read'>, 'collecti
 };
 
 type BookCardProps = {
+  coverPriority?: boolean;
+  coverSizes?: string;
   variant?: 'standard' | 'browse';
   headingLevel?: 2 | 3;
   book: Book;
@@ -455,7 +474,7 @@ type BookCardProps = {
   className?: string;
 };
 
-export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard', headingLevel = variant === 'browse' ? 2 : 3 }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant' | 'headingLevel'>) {
+export function BookCardIdentity({ book, resolveMissingCover = true, label, rank, matchLabel, variant = 'standard', coverPriority = false, coverSizes: imageSizes, headingLevel = variant === 'browse' ? 2 : 3 }: Pick<BookCardProps, 'book' | 'resolveMissingCover' | 'label' | 'rank' | 'matchLabel' | 'variant' | 'headingLevel' | 'coverPriority' | 'coverSizes'>) {
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
   const { locale, t } = useLumiScoreLocale();
   const score = book.score;
@@ -465,7 +484,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
       <div className="card-cover-wrap">
         {label && <span className="discovery-card-label">{label}</span>}
         {rank !== undefined && <span className="card-rank">#{rank}</span>}
-        <BookCover book={book} resolveMissing={resolveMissingCover} />
+        <BookCover book={book} resolveMissing={resolveMissingCover} priority={coverPriority} sizes={imageSizes} />
       </div>
       <div className="book-card-body">
         {variant !== 'browse' && <span className="book-year">{book.firstPublishYear != null
@@ -486,10 +505,10 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
   );
 }
 
-export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard', headingLevel }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard', headingLevel, coverPriority, coverSizes: imageSizes }: BookCardProps) {
   const { t } = useLumiScoreLocale();
   const href = explicitHref ?? getBookHref(book, detailReturnContext);
-  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} headingLevel={headingLevel} />;
+  const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} headingLevel={headingLevel} coverPriority={coverPriority} coverSizes={imageSizes} />;
   return (
     <article className={`book-card${variant === 'browse' ? ' browse-card' : ''}${className ? ' ' + className : ''}`} id={book.id}>
       {href ? (

@@ -44,7 +44,7 @@ test('no route can bring back the manual metadata workaround', async () => {
 test('hero preloads only the active theme and matches responsive CSS selection', async () => {
   const layout = await readFile(new URL('../../app/layout.tsx', import.meta.url), 'utf8');
   const css = await readFile(new URL('../../app/globals.css', import.meta.url), 'utf8');
-  for (const source of [layout, css]) assert.match(source, /\(min-width: 1100px\), \(min-resolution: 1\.5dppx\)/);
+  for (const source of [layout, css]) assert.match(source, /\(min-width: 1100px\)/);
   assert.match(layout, /\['\/en', '\/nl', '\/en\/', '\/nl\/'\]\.includes\(location.pathname\)/);
   assert.match(layout, /preload\.fetchPriority = 'high'/);
   assert.match(css, /image-set\(var\(--hero-avif\) type\("image\/avif"\), var\(--hero-image\) type\("image\/webp"\)\)/);

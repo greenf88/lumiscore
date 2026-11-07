@@ -19,3 +19,10 @@ export function collectionMetadataDescription(
   if (collection.collectionType === 'author_collection') return `Explore the books in ${name}. Find titles, check reader ratings and keep track of your reading.`;
   return `Explore ${name} through the books in this collection. See the titles, check reader ratings and choose what to read next.`;
 }
+
+/** Locale-specific purpose, rather than an identical bare series name in both locales. */
+export function collectionMetadataTitle(collection: Pick<CollectionSummary, 'name' | 'collectionType'>, locale: Locale) {
+  const name = collection.name.trim() || (locale === 'nl' ? 'Collectie' : 'Collection');
+  if (collection.collectionType === 'series') return `${name}: ${locale === 'nl' ? 'leesvolgorde en boeken' : 'reading order and books'} — LumiScore`;
+  return `${name}: ${locale === 'nl' ? 'boeken en lezersscores' : 'books and reader ratings'} — LumiScore`;
+}

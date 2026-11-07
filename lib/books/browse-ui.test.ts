@@ -92,7 +92,7 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
   assert.doesNotMatch(booksSource, /loadStoredCoverResolutionsBatched|applyStoredCoverResolutions/);
   assert.doesNotMatch(loader, /for \([^)]*book[^)]*\)[\s\S]*?await/);
   assert.match(browseSource, /resolveMissingCover=\{false\}/);
-  assert.match(homeSource, /loading=\{presentation\s*===\s*'detail'\s*\?\s*'eager'\s*:\s*'lazy'\}/);
+  assert.match(homeSource, /loading=\{presentation\s*===\s*'detail'\s*\|\|\s*priority\s*\?\s*'eager'\s*:\s*'lazy'\}/);
   assert.match(statusRoute, /\.slice\(0, 128\)/);
   assert.match(statusLoader, /MAX_STATUS_LOOKUP_WORK_IDS = 128/);
   const editorialLoader = await readFile(new URL('../supabase/editorial-catalog.ts', import.meta.url), 'utf8');
@@ -102,7 +102,7 @@ test('128-card Browse pages keep ratings batched without unused legacy Work-cove
   assert.match(editorialLoader, /alignEligibleBrowseBooks\(ids, books\)/);
   assert.match(editorialLoader, /if \(error\) throw error/);
   assert.doesNotMatch(editorialLoader, /catalog_editorial_page|catalog_discovery_page/);
-  assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale, streamCovers\)/);
+  assert.match(editorialLoader, /loadCatalogBooksByIdsWithStoredCovers\(ids, undefined, locale, streamCovers, signal\)/);
   const byIdsLoader = booksSource.slice(booksSource.indexOf('export async function loadCatalogBooksByIds('), booksSource.indexOf('export type CatalogBrowsePage'));
   assert.match(byIdsLoader, /loadPublicRatingSummariesBatched\(/);
   assert.match(byIdsLoader, /streamCovers \? deferEditionCoverEvidence\(books\) : withEditionCoverEvidence\(books\)/);

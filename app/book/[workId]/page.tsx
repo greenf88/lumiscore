@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
-import { bookLanguageAlternates, bookUrlStatus } from '@/lib/seo/book-locales';
+import { bookLanguageAlternates, bookUrlPolicy } from '@/lib/seo/book-locales';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -44,9 +44,9 @@ export async function generateMetadata({
   const { locale } = await resolveRequestLocale();
   const book = await getBook(workId, locale);
 
-  const status = bookUrlStatus(book ? book.detailLocales ?? [] : null, locale);
+  const policy = bookUrlPolicy(book ? book.detailLocales ?? [] : null, locale);
   if (!book) notFound();
-  const indexable = status === 'indexable';
+  const indexable = policy.inSitemap;
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
@@ -150,7 +150,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
-      {bookUrlStatus(book.detailLocales ?? [], locale) === 'indexable' && (
+      {bookUrlPolicy(book.detailLocales ?? [], locale).includeBookSchema && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
       )}
       <LumiScoreBookDetail

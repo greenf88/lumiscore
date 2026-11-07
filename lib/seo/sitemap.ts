@@ -1,10 +1,11 @@
+import { verifiedPageLastmod, type VerifiedPageRevision } from './verified-lastmod.ts';
 import { createHash } from 'node:crypto';
 import { getLandingGuide } from '../editorial/landing-guides.ts';
 import { getInformationPageContent, type InformationPageKey } from '../information/pages.ts';
 import { languageAlternates, localizedHref } from '../i18n/paths.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
-import { bookLanguageAlternates, type BookLocales } from './book-locales.ts';
+import { bookLanguageAlternates, bookUrlPolicy, type BookLocales } from './book-locales.ts';
 import type { Locale } from '../i18n/config.ts';
 
 export function buildPublicSitemapPaths(
@@ -74,6 +75,7 @@ function sitemapLastModified(path: string, locale: Locale): string {
 
 export function buildLocalizedSitemap(
   books: readonly BookLocales[], collectionSlugs: readonly string[], shard?: keyof typeof SITEMAP_SHARDS,
+  revisions: ReadonlyMap<string, VerifiedPageRevision> = new Map(),
 ): string {
   const bookLocales = new Map<string, Set<Locale>>();
   for (const { workId, locales } of books) {
@@ -89,7 +91,12 @@ export function buildLocalizedSitemap(
     const alternates = Object.entries(links).map(([language, href]) =>
       `<xhtml:link rel="alternate" hreflang="${language}" href="${escapeXml(absoluteLumiScoreUrl(href))}"/>`).join('');
     const priority = path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6';
-    return (['en', 'nl'] as const).filter(locale => (!locales || locales.has(locale)) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
+    return (['en', 'nl'] as const).filter(locale => (!locales || bookUrlPolicy([...locales], locale).inSitemap) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${locales ? verifiedBookLastmod(path,locale,revisions) : sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
   }).join('');
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`;
+}
+
+function verifiedBookLastmod(path:string,locale:Locale,revisions:ReadonlyMap<string,VerifiedPageRevision>):string {
+ const at=verifiedPageLastmod(revisions.get(localizedHref(path,locale)));
+ return at ? '<lastmod>'+at+'</lastmod>' : '';
 }

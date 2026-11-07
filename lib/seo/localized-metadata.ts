@@ -5,10 +5,10 @@ import { HOME_POSITIONING } from './home-positioning';
 
 const dutchPages: Record<string, [string, string]> = {
   '/': [HOME_POSITIONING.nl.title, HOME_POSITIONING.nl.description],
-  '/browse': ['Boeken ontdekken — LumiScore', 'Verken de LumiScore-catalogus en vind je volgende boek.'],
-  '/collections': ['Collecties ontdekken — LumiScore', 'Ontdek series, universums en auteurscollecties op LumiScore.'],
-  '/categories': ['Categorieën — LumiScore', 'Ontdek boeken per categorie in de LumiScore-catalogus.'],
-  '/taste-test': ['Ontdek je leessmaak — LumiScore', 'Ontdek je leessmaak met expliciete boekbeoordelingen.'],
+  '/browse': ['Boeken ontdekken — LumiScore', 'Ontdek boeken met lezersscores op LumiScore. Filter de catalogus op categorie, publicatiejaar en taal en kies wat je hierna wilt lezen.'],
+  '/collections': ['Collecties ontdekken — LumiScore', 'Ontdek boekenreeksen, universums en auteurscollecties. Bekijk de beschikbare boeken en hun lezersscores en houd bij welke delen je hebt gelezen.'],
+  '/categories': ['Categorieën — LumiScore', 'Verken de LumiScore-catalogus per categorie. Ontdek romans, thrillers, fantasy en non-fictie en bekijk welke boeken bij je volgende leeskeuze passen.'],
+  '/taste-test': ['Ontdek je leessmaak — LumiScore', 'Beoordeel boeken die je kent en ontdek je leessmaak. Met jouw beoordelingen bouwt LumiScore een leesprofiel voor persoonlijke boekaanbevelingen.'],
   '/search': ['Boeken zoeken — LumiScore', 'Zoek boeken en auteurs in de LumiScore-catalogus.'],
   '/recommendations': ['Aanbevelingen — LumiScore', 'Boeken die bij jouw leessmaak passen.'],
   '/my-books': ['Mijn boeken — LumiScore', 'Je eigen leeslijst en boekbeoordelingen.'],

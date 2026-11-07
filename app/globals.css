@@ -148,7 +148,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero { position: relative; isolation: isolate; overflow: hidden; background: var(--bg); }
 .hero-photo { position: absolute; z-index: -3; inset: 0; background-image: var(--hero-image); background-image: image-set(var(--hero-avif) type("image/avif"), var(--hero-image) type("image/webp")); background-size: cover; background-position: center; transition: opacity 260ms ease; }
 /* Keep this selection aligned with the early, theme-aware preload in layout. */
-@media (min-width: 1100px), (min-resolution: 1.5dppx) {
+@media (min-width: 1100px) {
   :root {
     --hero-image: url('/assets/dark-reading-scene-1536.webp');
     --hero-avif: url('/assets/dark-reading-scene-1536.avif');

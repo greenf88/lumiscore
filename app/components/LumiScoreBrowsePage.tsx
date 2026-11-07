@@ -1,4 +1,5 @@
 'use client';
+import { responsiveCoverSizes } from '@/lib/books/cover-delivery';
 
 import { LocaleLink } from './LumiScoreLocale';
 
@@ -64,7 +65,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
   }, []);
 
   return (
-    <main className="site-shell browse-page-shell">
+    <main className="site-shell browse-page-shell" data-browse-state={data.available ? 'available' : 'unavailable'} data-browse-total={data.total}>
       <Header
         onThemeToggle={toggleTheme}
         query={query}
@@ -98,8 +99,10 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
           </div>
         ) : data.books.length > 0 ? (
           <div className="book-grid browse-book-grid">
-            {data.books.map((book) => (
+            {data.books.map((book, index) => (
               <BookCard
+                coverPriority={index === 0}
+                coverSizes={responsiveCoverSizes.browse}
                 key={book.id}
                 book={book}
                 variant="browse"
@@ -119,6 +122,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
           </div>
         )}
 
+        <span hidden data-browse-result-end={data.available ? data.books.length : 'unavailable'} />
         {data.available && data.pageCount > 1 && (
           <nav className="browse-pagination" aria-label={t('browse.pagination')}>
             {data.page > 1 ? (
