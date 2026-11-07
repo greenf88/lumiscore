@@ -12,6 +12,7 @@ test('missing, incomplete, upstream error and unexpectedly empty HTML never beco
  for(const body of['','<head></head>',html(0,40),'<main><span data-browse-result-end="16"></span>', '<main><span data-browse-result-end="unavailable"></span>', '<span data-browse-result-end="0"></span>']){
   const r=await guardBrowseResponse(req,new Response(body,{headers:{'content-type':'text/html'}}));assert.equal(r.status,503);assert.equal(r.headers.get('Retry-After'),'5');assert.equal(r.headers.get('cache-control'),'private, no-store');await r.text();
  }
+ assert.equal((await guardBrowseResponse(req,new Response('{}',{status:500,headers:{'content-type':'application/json'}}))).status,503);
  assert.equal((await guardBrowseResponse(req,new Response('render error',{status:500,headers:{'content-type':'text/html'}}))).status,503);
 });
 test('response guard releases cards without waiting for optional trailing streams',async()=>{

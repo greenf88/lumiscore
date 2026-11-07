@@ -189,6 +189,27 @@ function BookCoverForIdentity({
     return watchCoverImage(image,handleCoverFailure,presentation==='detail'||priority);
   },[displayedCoverUrl,handleCoverFailure,presentation,priority]);
 
+  const hasCardVariant = !cardVariantFailed && coverIndex === 0 && variantIndex === 0
+    && book.cardCoverUrl && book.cardCoverUrl !== imageSourceUrl && !optimized && presentation !== 'detail';
+  const image = displayedCoverUrl ? (
+    <img
+      ref={coverImage}
+      key={displayedCoverUrl}
+      className="book-cover-image"
+      src={displayedCoverUrl}
+      alt={label ?? ''}
+      srcSet={optimized?.srcSet ?? imageSource?.srcSet}
+      sizes={sizes ?? optimized?.sizes ?? coverSizes[presentation]}
+      width={660}
+      height={1000}
+      data-cover-source={coverUrl ?? undefined}
+      data-cover-delivery={optimized ? "vercel" : "native"}
+      loading={presentation === 'detail' || priority ? 'eager' : 'lazy'}
+      fetchPriority={presentation === 'detail' || priority ? 'high' : undefined}
+      decoding="async"
+        />
+  ) : null;
+
   return (
     <div
       className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
@@ -200,29 +221,12 @@ function BookCoverForIdentity({
       <span className="cover-title" aria-hidden="true">{book.title}</span>
       <span className="cover-mark" aria-hidden="true">✦</span>
       <span className="cover-author" aria-hidden="true">{book.author}</span>
-      {displayedCoverUrl && (
+      {hasCardVariant ? (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
-        {!cardVariantFailed&&coverIndex===0&&variantIndex===0&&book.cardCoverUrl&&!optimized&&presentation !== 'detail'&&
-          <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>}
-        {/* Provider variants already identify this edition. The cover box reserves its aspect ratio. */}
-        <img
-          ref={coverImage}
-          key={displayedCoverUrl}
-          className="book-cover-image"
-          src={displayedCoverUrl}
-          alt={label ?? ''}
-          srcSet={optimized?.srcSet ?? imageSource?.srcSet}
-          sizes={sizes ?? optimized?.sizes ?? coverSizes[presentation]}
-          width={660}
-          height={1000}
-          data-cover-source={coverUrl ?? undefined}
-          data-cover-delivery={optimized ? "vercel" : "native"}
-          loading={presentation === 'detail' || priority ? 'eager' : 'lazy'}
-          fetchPriority={presentation === 'detail' || priority ? 'high' : undefined}
-          decoding="async"
-        />
+          <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>
+          {image}
         </picture>
-      )}
+      ) : image}
       <CoverScoreBadge score={scoreDisplay} presentation={presentation} />
     </div>
   );

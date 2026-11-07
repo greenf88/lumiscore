@@ -3,7 +3,9 @@
 export async function guardBrowseResponse(request: {url:string;method:string}, response: Response): Promise<Response> {
   const url = new URL(request.url), locale = url.pathname.startsWith('/nl/') ? 'nl' : 'en';
   if (!/^\/(?:en\/|nl\/)?browse\/?$/.test(url.pathname) || request.method !== 'GET'
-    || !response.headers.get('content-type')?.includes('text/html') || (response.status !== 200 && response.status < 500)) return response;
+    || (response.status !== 200 && response.status < 500)) return response;
+  const html = response.headers.get('content-type')?.includes('text/html');
+  if (!html && response.status < 500) return response;
   const headers = new Headers(response.headers), started = performance.now();
   const failure = (kind: string) => {
     headers.set('Retry-After', '5'); headers.set('Cache-Control', 'private, no-store');
@@ -11,7 +13,7 @@ export async function guardBrowseResponse(request: {url:string;method:string}, r
     console.error(JSON.stringify({event:'browse_response_unavailable',locale,page:Number(url.searchParams.get('page'))||1,
       cardcount:0,upstreamstatus:response.status,latency:Math.round(performance.now()-started),retrycount:0,errorType:kind}));
   };
-  if (response.status >= 500) { failure('render_error'); return new Response(response.body,{status:503,headers}); }
+  if (response.status >= 500) { failure('render_error'); return html ? new Response(response.body,{status:503,headers}) : unavailable(locale,headers); }
   const reader = response.body?.getReader();
   if (!reader) { failure('empty_body'); return unavailable(locale,headers); }
   const decoder = new TextDecoder(), parts: Uint8Array[] = [];let prefix='',bytes=0;

@@ -6,6 +6,13 @@ for(const [query,status]of[['',200],['flaky429',200],['flaky503',200],['timeout'
  const r=await request('/en/browse'+(query?'?q='+query:''));assert.equal(r.status,status,query);
  if(status===503){assert.equal(r.cardcount,0);assert.equal(r.retryAfter,'5');}
  else assert.equal(r.cardcount,query==='emptycatalog'?0:16);
+ if(!query){
+  const head=r.html.slice(0,r.html.indexOf('</head>'));
+  const images=[...head.matchAll(/<link(?=[^>]*rel="preload")(?=[^>]*as="image")[^>]*>/g)];
+  assert.equal(images.length,1,'only the real first cover is preloaded in the original head');
+  assert.match(images[0][0],/imagesrcset=/i);assert.match(images[0][0],/imagesizes=/i);
+  assert.match(r.html,/width="660" height="1000"/);
+ }
  const {path,status:responseStatus,retryAfter,location,ms,cardcount}=r;report.faults.push({path,status:responseStatus,retryAfter,location,ms,cardcount});
 }
 const outside=await request('/en/browse?page=999');assert.equal(outside.status,307);assert.equal(outside.location,'/en/browse?page=399');

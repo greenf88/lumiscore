@@ -23,6 +23,11 @@ const api=createServer(async(req,res)=>{
  }
  if(u.pathname==='/rest/v1/rpc/get_work_rating_summaries_v2'){send(res,[]);return;}
  if(u.pathname==='/rest/v1/catalog_categories'){send(res,[{id:'fiction',label_nl:'Fictie',label_en:'Fiction'}]);return;}
+ if(u.pathname==='/rest/v1/catalog_edition_metadata'){
+  send(res,[{edition_id:2,work_id:1,bound_author_id:1,bound_title:'Synthetic book 1',bound_language:'eng',bound_isbn13:null,
+   format:'paperback',cover_url:'https://covers.openlibrary.org/b/id/240727-L.jpg?default=false',card_cover_url:null,
+   evidence_url:'https://openlibrary.org/books/OL7440033M',review_status:'approved'}]);return;
+ }
  const table=u.pathname.split('/').at(-1);let rows=table==='works'?works:table==='editions'?editions:table==='authors'?[{id:1,name:'Synthetic author'}]:[];
  for(const field of ['id','work_id']){const f=u.searchParams.get(field);if(f?.startsWith('in.(')){const ids=f.slice(4,-1).split(',').map(Number);rows=rows.filter(r=>ids.includes(r[field]));}else if(f?.startsWith('gt.'))rows=rows.filter(r=>r[field]>Number(f.slice(3)));else if(f?.startsWith('eq.'))rows=rows.filter(r=>r[field]===Number(f.slice(3)));}
  const start=Number(u.searchParams.get('offset')??0),limit=Number(u.searchParams.get('limit')??1000);rows=rows.slice(start,start+limit);
