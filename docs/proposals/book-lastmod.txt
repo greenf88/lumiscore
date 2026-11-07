@@ -1,0 +1,40 @@
+Separate design proposal; NOT an approved/installed migration or part of PR85.
+
+Production schema read7November: Works and editions have created_at only.
+Descriptions/edition metadata have reviewed_at, which is a review date, not a
+reliable commit date for every visible field. Collections.updated_at does not
+cover all member/edition/synopsis changes. Full trusted book-lastmod is absent.
+Existing five hash-bound editorial lastmod dates remain unchanged.
+
+Proposed durable ledger: one public Work/locale hash and actual meaningful
+content-change date, recorded only by the existing trusted reviewed-import path.
+Never default to build/request/review time. No initial automatic backfill.
+The date must come from a verified content-change receipt. Repeated identical
+imports return false and retain the date. Expected-hash CAS rejects intervening
+changes; chronology/FK guards reject conflicting dates or absent Works.
+
+Future renderer integration must compare a canonical fingerprint of the current
+visible identity, approved edition fields/format, title/author, approved summary,
+cover binding, relevant collection links and lifecycle with the stored hash.
+Emit lastmod ONLY for an exact match and a fully known, stored presentation.
+Unknown external synopsis/cover outcomes or unmatched hashes mean omission.
+No raw author/email/account/receipt/reading data enters this ledger.
+Changing a runtime projection requires a versioned fingerprint and re-review.
+This integration is deliberately not silently enabled in the current code PR.
+
+Rights: anon/authenticated SELECT under RLS; no client writes. Only service_role
+may execute the small CAS recorder. No service key in browser code. Dedicated
+SQL files have .proposal extension outside migrations; installation requires
+separate reviewed authorization, schema preflight and real Postgres verification.
+Local PGlite tests cover idempotence/CAS/chronology/FK/ACL and unrelated-row
+preservation; they do not prove hosted installation or full lastmod coverage.
+
+Install order after separate approval: verify object absence/current schema;
+snapshot relevant catalogue+ledger; install via official registered migration;
+verify functions/RLS/ACL; add only verified change receipts; deploy fingerprint
+reader separately; compare sitemap consistency and unchanged build dates.
+Rollback reader first (omit dates), retain/export ledger. Empty ledger removal
+uses book-lastmod-restore.sql.proposal; nonempty ledger deliberately blocks.
+No cascade deletion or sequence changes. Existing data remains intact.
+
+Source: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
