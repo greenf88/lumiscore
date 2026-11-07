@@ -17,6 +17,7 @@ const api=createServer(async(req,res)=>{
   if(mode==='flaky429'&&attempt<3){send(res,{message:'Synthetic quota'},429);return;}
   if(mode==='flaky503'&&attempt<3){send(res,{message:'Synthetic upstream'},503);return;}
   if(mode==='invalidjson'){res.writeHead(200,{'content-type':'application/json'});res.end('{invalid');return;}
+  if(mode==='nulltotal'){send(res,{contract:'eligible-browse-v3',locale:p.p_locale,total:null,page:1,pageCount:1,pageSize:p.p_page_size,workIds:[]});return;}
   const n=mode==='emptycatalog'?0:total,pageCount=Math.max(1,Math.ceil(n/p.p_page_size)),page=Math.min(p.p_page,pageCount);
   send(res,{contract:'eligible-browse-v3',locale:p.p_locale,total:n,page,pageCount,pageSize:p.p_page_size,
     workIds:mode==='emptypayload'||n===0?[]:works.slice((page-1)*p.p_page_size,page*p.p_page_size).map(w=>w.id),facets:{},selectionCount:null});return;

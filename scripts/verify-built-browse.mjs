@@ -3,7 +3,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 const origin='http://127.0.0.1:45432',report={applicationSha:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),kind:'actual Vercel production bundle; synthetic loopback PostgREST; not hosted/production data',at:new Date().toISOString(),faults:[],runs:[]};
 async function request(path){const start=performance.now(),r=await fetch(origin+path,{redirect:'manual',signal:AbortSignal.timeout(20000)}),html=await r.text();return {path,status:r.status,retryAfter:r.headers.get('retry-after'),location:r.headers.get('location'),ms:Math.round(performance.now()-start),ids:[...html.matchAll(/<article class="book-card browse-card" id="work-(\d+)"/g)].map(m=>m[1]),cardcount:[...html.matchAll(/class="book-card-main-link"/g)].length,html};}
-for(const [query,status]of[['',200],['flaky429',200],['flaky503',200],['timeout',503],['emptypayload',503],['invalidjson',503],['emptycatalog',200]]){
+for(const [query,status]of[['',200],['flaky429',200],['flaky503',200],['timeout',503],['emptypayload',503],['invalidjson',503],['nulltotal',503],['emptycatalog',200]]){
  const r=await request('/en/browse'+(query?'?q='+query:''));assert.equal(r.status,status,query);
  if(status===503){assert.equal(r.cardcount,0);assert.equal(r.retryAfter,'5');}
  else assert.equal(r.cardcount,query==='emptycatalog'?0:16);
