@@ -1,0 +1,2398 @@
+{
+  "at": "2026-11-07T13:59:21.500Z",
+  "method": "Existing official Lighthouse13.5.0 CLI, mobile simulated throttling, fresh browser/storage per run; alternating paired arm order; same loopback gzip adapter; public production data read-only; server and external cache coldness not asserted. No synthetic events. Only observed trace phases are decomposed; their clock is NOT the simulated LCP clock.",
+  "baselineApp": "52012b5f22524e3c90cdd5949584c12826fe742f",
+  "exploratory": "measurements is the rejected first-cover high-priority experiment, not final shipped code; baseline healthy route measurements retained. An initially incorrect /en/toplists path returned404; corrected to the existing sitemap /en/toplijsten route and failed receipt retained.",
+  "final": "Both measured performance candidates are REJECTED from the release diff. Historical folder names measurements-final/alternate refer to candidate B, not final release code. Final release changes only optional-provider quota handling; no LCP, UI, stylesheet or image-selection change is claimed.",
+  "groups": [
+    {
+      "folder": "measurements",
+      "name": "bookEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3532.515000000001,
+          "min": 3530.2495,
+          "max": 3540.7157499999994
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0.000984108282508936
+        },
+        "tbt": {
+          "n": 5,
+          "median": 72,
+          "min": 40,
+          "max": 118.99999999999977
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 49592,
+          "min": 49592,
+          "max": 49592
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 398.047,
+          "min": 377.738,
+          "max": 487.851
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 18.634,
+          "min": 17.825,
+          "max": 31.802
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 111.038,
+          "min": 90.077,
+          "max": 182.373
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 692.82,
+          "min": 461.941,
+          "max": 826.589
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Front cover of Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "bookEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3538.99875,
+          "min": 3527.675750000001,
+          "max": 3597.4900000000016
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 89,
+          "min": 72.99999999999977,
+          "max": 170
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 49592,
+          "min": 49592,
+          "max": 49599
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 429.715,
+          "min": 301.665,
+          "max": 509.201
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 21.163,
+          "min": 19.042,
+          "max": 47.539
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 83.222,
+          "min": 73.201,
+          "max": 116.18
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 526.502,
+          "min": 502.292,
+          "max": 809.963
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Front cover of Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "bookNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 4869.6304,
+          "min": 4766.218199999999,
+          "max": 4920.314000000002
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0.0009508887821677401
+        },
+        "tbt": {
+          "n": 5,
+          "median": 62,
+          "min": 39,
+          "max": 99
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 300073,
+          "min": 300073,
+          "max": 300073
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 405.4469997558594,
+          "min": 323.244,
+          "max": 519.051
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 17.847,
+          "min": 16.229,
+          "max": 24.174000244140625
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 208.791,
+          "min": 175.665,
+          "max": 215.813
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 454.331,
+          "min": 403.573,
+          "max": 656.359
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Voorkant van Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "bookNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 4860.929,
+          "min": 4774.3544,
+          "max": 4961.294500000002
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0.0009508887821677401
+        },
+        "tbt": {
+          "n": 5,
+          "median": 58,
+          "min": 28,
+          "max": 70
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 300073,
+          "min": 300073,
+          "max": 300073
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 423.70800024414064,
+          "min": 381.867,
+          "max": 431.046
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 19.141,
+          "min": 17.592,
+          "max": 21.334
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 183.277,
+          "min": 164.57,
+          "max": 361.555
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 454.949,
+          "min": 182.424,
+          "max": 688.991
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Voorkant van Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "browseEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3549.5865750000003,
+          "min": 3388.435,
+          "max": 3720.482
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 37.5,
+          "min": 24,
+          "max": 64.5
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 684637,
+          "min": 684630,
+          "max": 684639
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 689.781,
+          "min": 460.645,
+          "max": 917.389
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 185.681,
+          "min": 179.016,
+          "max": 315.89099975585935
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 73.249,
+          "min": 58.973,
+          "max": 94.576
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 349.755,
+          "min": 318.595,
+          "max": 742.07
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "browseEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3798.0150000000003,
+          "min": 3764.45475,
+          "max": 3911.7898749999995
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 54.00000000000023,
+          "min": 27,
+          "max": 74.50000000000023
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 684639,
+          "min": 684637,
+          "max": 684646
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 570.188,
+          "min": 463.7259997558594,
+          "max": 1287.706
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 29.261999755859375,
+          "min": 18.596000244140626,
+          "max": 31.539
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 101.288,
+          "min": 74.559,
+          "max": 178.962
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 773.727,
+          "min": 484.44,
+          "max": 878.323
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "browseNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 6371.196075000001,
+          "min": 4984.434725,
+          "max": 6499.2845
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 42,
+          "min": 29,
+          "max": 46.5
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 1927980,
+          "min": 1927980,
+          "max": 1927981
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 594.794,
+          "min": 470.27,
+          "max": 624.921
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 204.301,
+          "min": 184.355,
+          "max": 226.851
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 75.991,
+          "min": 70.325,
+          "max": 86.909
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 433.039,
+          "min": 367.271,
+          "max": 490.255
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "browseNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 6719.252999999999,
+          "min": 6610.9375,
+          "max": 6745.5445
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0.0001967752058424462
+        },
+        "tbt": {
+          "n": 5,
+          "median": 25.5,
+          "min": 25.5,
+          "max": 45
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 1927981,
+          "min": 1927979,
+          "max": 1927982
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 444.362,
+          "min": 389.741,
+          "max": 743.155
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 22.557,
+          "min": 16.312,
+          "max": 31.233
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 96.087,
+          "min": 84.135,
+          "max": 104.578
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 592.83,
+          "min": 555.324,
+          "max": 728.146
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "collectionEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3367.427050000001,
+          "min": 3071.85775,
+          "max": 3517.919000000001
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 50,
+          "min": 22,
+          "max": 81
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 168889,
+          "min": 168888,
+          "max": 168889
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 556.829,
+          "min": 410.507,
+          "max": 594.531
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 196.552,
+          "min": 173.29199975585936,
+          "max": 326.585
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 221.514,
+          "min": 165.978,
+          "max": 237.507
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 476.344,
+          "min": 256.238,
+          "max": 527.482
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "collectionEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3523.8616500000003,
+          "min": 3078.157199999999,
+          "max": 3532.5516
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0.0007544284732733818
+        },
+        "tbt": {
+          "n": 5,
+          "median": 46.5,
+          "min": 19.5,
+          "max": 52
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 168889,
+          "min": 168888,
+          "max": 168890
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 530.155,
+          "min": 372.249,
+          "max": 678.513
+        },
+        "resourceLoadDelay": {
+          "n": 4,
+          "median": 20.2545,
+          "min": 16.427,
+          "max": 23.927
+        },
+        "resourceLoadDuration": {
+          "n": 4,
+          "median": 208.9775,
+          "min": 206.367,
+          "max": 240.228
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 575.494,
+          "min": 515.437,
+          "max": 693.948
+        }
+      },
+      "lcpImageRuns": 4,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image",
+        "5 of 6 linked books available in this language. 1 books have no suitable Englis…"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "collectionNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3314.0576,
+          "min": 3108.316,
+          "max": 3448.9208
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 38.5,
+          "min": 11,
+          "max": 49
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 222054,
+          "min": 222054,
+          "max": 222055
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 520.532,
+          "min": 417.29200024414064,
+          "max": 546.087
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 661.8099997558594,
+          "min": 478.44,
+          "max": 757.547
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "3 van 6 gekoppelde boeken beschikbaar in deze taal. Voor 3 boeken ontbreekt een…"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "collectionNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3955.0679999999998,
+          "min": 3934.8259999999996,
+          "max": 4304.59155
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 31,
+          "min": 27.5,
+          "max": 59
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 222054,
+          "min": 175228,
+          "max": 222055
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 462.657,
+          "min": 376.036,
+          "max": 562.2029997558594
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 580.585,
+          "min": 543.9520002441407,
+          "max": 803.909
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 1,
+      "failedImages": [
+        {
+          "url": "https://ia800505.us.archive.org/view_archive.php?archive=/35/items/l_covers_0014/l_covers_0014_36.zip&file=0014369929-L.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "3 van 6 gekoppelde boeken beschikbaar in deze taal. Voor 3 boeken ontbreekt een…"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "homeEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3183.227,
+          "min": 3074.666,
+          "max": 3540.035
+        },
+        "cls": {
+          "n": 5,
+          "median": 0.0002211463483055595,
+          "min": 0.0002211463483055595,
+          "max": 0.0002211463483055595
+        },
+        "tbt": {
+          "n": 5,
+          "median": 24,
+          "min": 18,
+          "max": 75
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 366881,
+          "min": 366874,
+          "max": 366882
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 54.879,
+          "min": 35.675,
+          "max": 327.569
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 106.60899975585937,
+          "min": 68.583,
+          "max": 125.207
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 43.799,
+          "min": 38.775,
+          "max": 71.511
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 361.375,
+          "min": 277.402,
+          "max": 1588.85
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "body > main.site-shell > section#top > div.hero-photo"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "homeEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3140.436,
+          "min": 3115.692,
+          "max": 3168.1320000000005
+        },
+        "cls": {
+          "n": 5,
+          "median": 0.0002211463483055595,
+          "min": 0.0002211463483055595,
+          "max": 0.0002211463483055595
+        },
+        "tbt": {
+          "n": 5,
+          "median": 43.5,
+          "min": 18.5,
+          "max": 56.5
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 366882,
+          "min": 366875,
+          "max": 366884
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 56.182,
+          "min": 43.244,
+          "max": 319.1439997558594
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 94.006,
+          "min": 88.68600024414063,
+          "max": 115.16
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 31.776,
+          "min": 18.724,
+          "max": 61.015
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 358.658,
+          "min": 309.953,
+          "max": 470.174
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "body > main.site-shell > section#top > div.hero-photo"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "homeNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3182.2529999999997,
+          "min": 3049.666,
+          "max": 3372.608
+        },
+        "cls": {
+          "n": 5,
+          "median": 0.000221178599486587,
+          "min": 0.000221178599486587,
+          "max": 0.000221178599486587
+        },
+        "tbt": {
+          "n": 5,
+          "median": 35,
+          "min": 24,
+          "max": 164.49999999999955
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 1281388,
+          "min": 1265004,
+          "max": 1405174
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 39.187,
+          "min": 35.065,
+          "max": 64.644
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 121.61,
+          "min": 87.014,
+          "max": 167.55
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 34.233,
+          "min": 22.848,
+          "max": 52.282
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 369.59,
+          "min": 273.725,
+          "max": 635.91
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 3,
+      "failedImages": [
+        {
+          "url": "https://archive.org/download/l_covers_0010/l_covers_0010_71.zip/0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://archive.org/download/l_covers_0010/l_covers_0010_71.zip/0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://ia800404.us.archive.org/view_archive.php?archive=/33/items/l_covers_0010/l_covers_0010_71.zip&file=0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "body > main.site-shell > section#top > div.hero-photo"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "homeNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3405.608,
+          "min": 3229.098,
+          "max": 5083.8575
+        },
+        "cls": {
+          "n": 5,
+          "median": 0.000221178599486587,
+          "min": 0.000221178599486587,
+          "max": 0.000221178599486587
+        },
+        "tbt": {
+          "n": 5,
+          "median": 94.5,
+          "min": 44.5,
+          "max": 137
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 1315016,
+          "min": 1265004,
+          "max": 1405184
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 48.769,
+          "min": 41.507,
+          "max": 52.01900024414063
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 111.454,
+          "min": 100.681,
+          "max": 118.865
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 46.275,
+          "min": 31.277,
+          "max": 69.997
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 575.621,
+          "min": 475.508,
+          "max": 1739.889
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 4,
+      "failedImages": [
+        {
+          "url": "https://archive.org/download/l_covers_0010/l_covers_0010_71.zip/0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://archive.org/download/l_covers_0010/l_covers_0010_71.zip/0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://ia600404.us.archive.org/view_archive.php?archive=/33/items/l_covers_0010/l_covers_0010_71.zip&file=0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://ia600404.us.archive.org/view_archive.php?archive=/33/items/l_covers_0010/l_covers_0010_71.zip&file=0010716091-L.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "body > main.site-shell > section#top > div.hero-photo"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "listEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 5582.47397,
+          "min": 4871.883925,
+          "max": 7403.98225
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 88,
+          "min": 35,
+          "max": 152
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 458702,
+          "min": 458692,
+          "max": 458710
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 361.437,
+          "min": 241.03600024414064,
+          "max": 385.391
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 203.325,
+          "min": 183.34599975585937,
+          "max": 540.38
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 1972.194,
+          "min": 1782.476,
+          "max": 4250.709
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 33.49,
+          "min": 19.007,
+          "max": 61.355
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "listEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 6390.41845,
+          "min": 3411.3472,
+          "max": 7830.22402
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 55,
+          "min": 21,
+          "max": 109
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 458702,
+          "min": 0,
+          "max": 458710
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 375.705,
+          "min": 269.167,
+          "max": 1890.658
+        },
+        "resourceLoadDelay": {
+          "n": 4,
+          "median": 207.9925,
+          "min": 162.854,
+          "max": 414.034
+        },
+        "resourceLoadDuration": {
+          "n": 4,
+          "median": 3043.827,
+          "min": 1766.245,
+          "max": 4947.465
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 38.698,
+          "min": 28.306,
+          "max": 859.326
+        }
+      },
+      "lcpImageRuns": 4,
+      "failedImageRuns": 1,
+      "failedImages": [
+        {
+          "url": "https://covers.openlibrary.org/b/id/10522108-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/8750522-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15251605-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/12455224-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14605482-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15254465-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15170727-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/4648074-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15206417-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14745524-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/10522108-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15251605-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/12455224-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/8750522-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14605482-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15254465-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15170727-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/4648074-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15206417-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14745524-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/10522108-M.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15251605-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/8750522-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/12455224-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14605482-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15254465-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15170727-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/4648074-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/10522108-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15206417-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14745524-L.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15251605-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/8750522-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/12455224-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14605482-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15254465-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15170727-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/4648074-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/10522108-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/15206417-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://covers.openlibrary.org/b/id/14745524-S.jpg?default=false",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [
+        [
+          "https://covers.openlibrary.org/b/id/10522108-L.jpg?default=false",
+          3
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/8750522-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/15251605-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/12455224-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/14605482-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/15254465-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/15170727-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/4648074-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/15206417-L.jpg?default=false",
+          2
+        ],
+        [
+          "https://covers.openlibrary.org/b/id/14745524-L.jpg?default=false",
+          2
+        ]
+      ],
+      "lcpNodes": [
+        "div.card-cover-wrap > div.book-cover > picture > img.book-cover-image",
+        "Ten ways into magic, from a focused quest to romance, fairy tales and a school …"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "listNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3285.4352999999996,
+          "min": 3229.331000000001,
+          "max": 3302.72655
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 59,
+          "min": 30,
+          "max": 69.00000000000023
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 74387,
+          "min": 74387,
+          "max": 74387
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 413.848,
+          "min": 344.982,
+          "max": 530.042
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 809.608,
+          "min": 562.297,
+          "max": 959.047
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 5,
+      "failedImages": [
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Begin bij wat je al graag leest. Bij ieder beschikbaar boek lees je waarom je h…"
+      ]
+    },
+    {
+      "folder": "measurements",
+      "name": "listNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3254.062499999999,
+          "min": 3211.5615,
+          "max": 3368.111950000001
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 41.99999999999977,
+          "min": 23.5,
+          "max": 104
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 74387,
+          "min": 74387,
+          "max": 74396
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 359.75600024414064,
+          "min": 312.786,
+          "max": 394.06600024414064
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 577.9129997558593,
+          "min": 529.4879997558594,
+          "max": 1057.294
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 5,
+      "failedImages": [
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000521990_De_Hobbit_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_3_130_250_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000356389_The_Witcher_-_De_laatste_wens_filmeditie_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000539379_In_steen_gebrand_2_710_130_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000508368_Hof_van_doorns_en_rozen_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Begin bij wat je al graag leest. Bij ieder beschikbaar boek lees je waarom je h…"
+      ]
+    },
+    {
+      "folder": "measurements-final",
+      "name": "bookEn",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3539.3789999999995,
+          "min": 3536.17825,
+          "max": 3548.234500000001
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 50,
+          "min": 34.99999999999977,
+          "max": 60.99999999999977
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 49599,
+          "min": 49592,
+          "max": 49599
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 484.243,
+          "min": 352.643,
+          "max": 489.578
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 18.978,
+          "min": 15.949,
+          "max": 25.499000244140625
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 99.946,
+          "min": 94.832,
+          "max": 108.419
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 494.219,
+          "min": 458.385,
+          "max": 552.348
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Front cover of Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements-final",
+      "name": "bookEn",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3535.2472500000003,
+          "min": 3521.3370000000004,
+          "max": 3557.4337500000006
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 52.999999999999545,
+          "min": 43.99999999999977,
+          "max": 85.99999999999977
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 49592,
+          "min": 49592,
+          "max": 49599
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 358.967,
+          "min": 295.022,
+          "max": 698.172
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 18.523,
+          "min": 14.575,
+          "max": 20.819
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 81.231,
+          "min": 77.162,
+          "max": 97.134
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 517.57,
+          "min": 472.61,
+          "max": 603.531
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Front cover of Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements-final",
+      "name": "bookNl",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3492.312000000001,
+          "min": 3400.205000000001,
+          "max": 3528.9100000000003
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 80.99999999999932,
+          "min": 37.99999999999977,
+          "max": 126.5
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 422.644,
+          "min": 345.31100024414064,
+          "max": 532.586
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 892.562,
+          "min": 541.6300002441407,
+          "max": 917.47
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 5,
+      "failedImages": [
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements-final",
+      "name": "bookNl",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3490.603599999999,
+          "min": 3405.9312500000005,
+          "max": 3543.5474999999997
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 70,
+          "min": 31,
+          "max": 115
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 362.835,
+          "min": 277.887,
+          "max": 409.743
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 743.069,
+          "min": 576.594,
+          "max": 1110.679
+        }
+      },
+      "lcpImageRuns": 0,
+      "failedImageRuns": 5,
+      "failedImages": [
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        },
+        {
+          "url": "https://metadata.isbn.nl/ie_fcache/0000563372_Project_Hail_Mary_0_0.jpg",
+          "status": -1,
+          "bytes": 0
+        }
+      ],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Project Hail Mary"
+      ]
+    },
+    {
+      "folder": "measurements-alternate",
+      "name": "bookNlEven",
+      "arm": "before",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3542.8117500000003,
+          "min": 3522.0272500000005,
+          "max": 3550.334250000001
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 62,
+          "min": 47.99999999999977,
+          "max": 79
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 6786,
+          "min": 6784,
+          "max": 6787
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 419.36,
+          "min": 316.4690002441406,
+          "max": 465.379
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 20.513,
+          "min": 17.198,
+          "max": 22.627
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 92.776,
+          "min": 79.205,
+          "max": 123.171
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 479.151,
+          "min": 472.716,
+          "max": 538.069
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Voorkant van Even simpel"
+      ]
+    },
+    {
+      "folder": "measurements-alternate",
+      "name": "bookNlEven",
+      "arm": "after",
+      "runs": 5,
+      "metrics": {
+        "lcp": {
+          "n": 5,
+          "median": 3538.5432500000006,
+          "min": 3529.448500000001,
+          "max": 3569.6215
+        },
+        "cls": {
+          "n": 5,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tbt": {
+          "n": 5,
+          "median": 60.999999999999545,
+          "min": 36.99999999999932,
+          "max": 105
+        },
+        "imageTransferBytes": {
+          "n": 5,
+          "median": 6786,
+          "min": 6784,
+          "max": 6787
+        }
+      },
+      "observedTraceParts": {
+        "timeToFirstByte": {
+          "n": 5,
+          "median": 341.443,
+          "min": 320.854,
+          "max": 415.112
+        },
+        "resourceLoadDelay": {
+          "n": 5,
+          "median": 19.074,
+          "min": 17.621,
+          "max": 24.998
+        },
+        "resourceLoadDuration": {
+          "n": 5,
+          "median": 86.365,
+          "min": 74.588,
+          "max": 96.56
+        },
+        "elementRenderDelay": {
+          "n": 5,
+          "median": 568.931,
+          "min": 455.45,
+          "max": 754.748
+        }
+      },
+      "lcpImageRuns": 5,
+      "failedImageRuns": 0,
+      "failedImages": [],
+      "duplicateImageUrls": [],
+      "lcpNodes": [
+        "Voorkant van Even simpel"
+      ]
+    }
+  ],
+  "settings": {
+    "output": [
+      "json"
+    ],
+    "maxWaitForFcp": 30000,
+    "maxWaitForLoad": 45000,
+    "pauseAfterFcpMs": 1000,
+    "pauseAfterLoadMs": 1000,
+    "networkQuietThresholdMs": 1000,
+    "cpuQuietThresholdMs": 1000,
+    "formFactor": "mobile",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "throttlingMethod": "simulate",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    },
+    "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+    "auditMode": false,
+    "gatherMode": false,
+    "clearStorageTypes": [
+      "file_systems",
+      "shader_cache",
+      "service_workers",
+      "cache_storage"
+    ],
+    "disableStorageReset": false,
+    "debugNavigation": false,
+    "channel": "cli",
+    "usePassiveGathering": false,
+    "disableFullPageScreenshot": false,
+    "skipAboutBlank": false,
+    "blankPage": "about:blank",
+    "ignoreStatusCode": false,
+    "locale": "en-US",
+    "blockedUrlPatterns": null,
+    "additionalTraceCategories": null,
+    "extraHeaders": null,
+    "precomputedLanternData": null,
+    "onlyAudits": null,
+    "onlyCategories": [
+      "performance"
+    ],
+    "skipAudits": null
+  },
+  "environment": {
+    "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Mobile Safari/537.36",
+    "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+    "benchmarkIndex": 1670.5,
+    "credits": {}
+  },
+  "measuredCandidateB": "44566d8d488d0760fdea545589eb2bd6f57c3e72",
+  "finalReleaseApp": "27d93c118e8abbefea970b6e3fc86f2105cf966f"
+}
