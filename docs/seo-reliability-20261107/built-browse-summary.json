@@ -1,0 +1,89 @@
+{
+  "kind": "actual Vercel production bundle; synthetic loopback PostgREST; not hosted/production data",
+  "at": "2026-11-07T20:46:12.442Z",
+  "faults": [
+    {
+      "path": "/en/browse",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 613,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=flaky429",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 563,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=flaky503",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 484,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=timeout",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 5876,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=emptypayload",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 571,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=invalidjson",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 536,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=emptycatalog",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 60,
+      "cardcount": 0
+    }
+  ],
+  "runs": [
+    {
+      "concurrency": 3,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    },
+    {
+      "concurrency": 6,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    },
+    {
+      "concurrency": 10,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    }
+  ],
+  "fullLocalProof": {
+    "path": "outputs/seo-reliability-20261107/built-browse.json",
+    "sha256": "1d386e5ac3bf1d4a1d8e31f5dd0acc0e5d26d4ca453eba9c0f88a2e4db88e0c2"
+  }
+}
