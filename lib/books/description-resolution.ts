@@ -75,6 +75,18 @@ type CachedResolution = {
 };
 
 const descriptionCache = new Map<string, CachedResolution>();
+// A quota response is shared by this provider, not evidence that every newly
+// opened ISBN lacks a synopsis. Keep reviewed/successful caches usable and
+// avoid a fresh rejected request for each distinct book during the cooldown.
+const providerCooldown = new Map<string, number>();
+
+function quotaCooldownUntil(response: Response): number {
+  const retryAfter=response.headers.get('retry-after');
+  const seconds=retryAfter&&/^\d+$/.test(retryAfter)?Number(retryAfter):null;
+  const date=retryAfter&&seconds===null?Date.parse(retryAfter):NaN;
+  return Math.max(Date.now()+1_000, seconds!==null&&Number.isFinite(seconds)
+    ? Date.now()+seconds*1_000 : Number.isFinite(date)?date:Date.now()+60_000);
+}
 
 function resultTtl(state: DescriptionResolutionState): number {
   return state === 'resolved'
@@ -128,6 +140,7 @@ async function fetchJsonWithRetry<T>(
   url: URL,
   fetchImplementation: typeof fetch,
 ): Promise<{ state: 'ok'; data: T } | { state: Exclude<DescriptionResolutionState, 'resolved'>; data: null }> {
+  if((providerCooldown.get(url.origin)??0)>Date.now())return {state:'temporary_failure',data:null};
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
     try {
       const response = await fetchImplementation(url, {
@@ -135,6 +148,11 @@ async function fetchJsonWithRetry<T>(
         signal: AbortSignal.timeout(8_000),
       });
       if (response.ok) return { state: 'ok', data: (await response.json()) as T };
+      if(response.status===429){
+        providerCooldown.set(url.origin,quotaCooldownUntil(response));
+        await response.body?.cancel();
+        return {state:'temporary_failure',data:null};
+      }
       if (response.status === 404 || response.status === 410) {
         return { state: 'confirmed_missing', data: null };
       }
@@ -328,4 +346,5 @@ export async function resolveBookDescription(
 
 export function clearBookDescriptionCacheForTests(): void {
   descriptionCache.clear();
+  providerCooldown.clear();
 }

@@ -79,3 +79,21 @@ test('a storage outage plus a missing external response is temporary, never cach
  const result=await loadPublicBookDescriptionState({...book,storedPresentationUnavailable:true},'en',async()=>new Response('',{status:404}));
  assert.equal(result.state,'temporary_failure');assert.equal(result.description,null);
 });
+
+test('provider quota cooldown covers different ISBNs, expires and preserves reviewed text',async()=>{
+ clearBookDescriptionCacheForTests();const realNow=Date.now;let now=realNow(),calls=0;
+ Date.now=()=>now;
+ const lookup=(isbn13:string)=>({workId:'quota-'+isbn13,isbn13,editionLanguage:'eng'} as Book);
+ const fetcher:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:{'Retry-After':'60'}});};
+ try{
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780141439518'),'en',fetcher)).state,'temporary_failure');
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780441172719'),'en',fetcher)).state,'temporary_failure');
+  assert.equal(calls,1,'a distinct ISBN does not retry a known shared provider rejection');
+  const stored={text:enCopy,language:'en' as const,source:'official_catalog' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Reviewed catalogue',verifiedAt:'2026-11-07'};
+  assert.equal((await loadPublicBookDescriptionState({...lookup('9780593135204'),storedDescription:stored},'en',fetcher)).description?.text,enCopy);
+  assert.equal(calls,1,'stored reviewed text bypasses the failed provider');
+  now+=60_001;
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780593135204'),'en',fetcher)).state,'temporary_failure');
+  assert.equal(calls,2,'new request permitted after the explicit provider wait; still never absence');
+ }finally{Date.now=realNow;clearBookDescriptionCacheForTests();}
+});

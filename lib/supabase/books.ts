@@ -28,12 +28,6 @@ import {
 } from './public-rating-summaries';
 
 type DatabaseRow = Record<string, unknown>;
-async function completeEditions(works:DatabaseRow[]):Promise<DatabaseRow[]>{
-  const rows=await loadEditionRows(supabase,works.flatMap(w=>getWorkId(w)?[getWorkId(w)!]:[]));
-  const byWork=new Map<string,StrictEditionRow[]>();
-  for(const row of rows){const key=String(row.work_id);byWork.set(key,[...(byWork.get(key)??[]),row]);}
-  return works.map(work=>({...work,editions:byWork.get(getWorkId(work)!)??[]}));
-}
 
 const ISBN_13_COLUMNS = ['isbn13', 'isbn_13', 'isbn-13'] as const;
 const AUTHOR_ID_COLUMNS = ['author_id', 'primary_author_id', 'author'] as const;
