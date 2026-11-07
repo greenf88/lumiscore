@@ -1,5 +1,91 @@
 {
-  "unchanged": false,
-  "beforeLength": 8313,
-  "afterLength": 8313
+  "sameFindings": true,
+  "before": [
+    {
+      "name": "anon_security_definer_function_executable",
+      "count": 3,
+      "findings": [
+        "Function `public.get_work_rating_summaries(target_work_ids bigint[])` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries_v2(target_work_ids bigint[])` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries_v2`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summary(target_work_id bigint)` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summary`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional."
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "count": 1,
+      "findings": [
+        "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security."
+      ]
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "count": 4,
+      "findings": [
+        "Function `public.get_collaborative_recommendation_signals(candidate_limit integer)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_collaborative_recommendation_signals`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries(target_work_ids bigint[])` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries_v2(target_work_ids bigint[])` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries_v2`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summary(target_work_id bigint)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summary`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional."
+      ]
+    },
+    {
+      "name": "rls_enabled_no_policy",
+      "count": 10,
+      "findings": [
+        "Table \\`catalog_private.editorial_records\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.budgets\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.consent_grants\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.daily_counters\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.grant_budgets\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.maintenance_state\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.operational_counts\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.receipts\\` has RLS enabled, but no policies exist",
+        "Table \\`public.work_cover_resolutions\\` has RLS enabled, but no policies exist",
+        "Table \\`taste_private.eligible_inventory_v1\\` has RLS enabled, but no policies exist"
+      ]
+    }
+  ],
+  "after": [
+    {
+      "name": "anon_security_definer_function_executable",
+      "count": 3,
+      "findings": [
+        "Function `public.get_work_rating_summaries(target_work_ids bigint[])` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries_v2(target_work_ids bigint[])` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries_v2`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summary(target_work_id bigint)` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summary`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional."
+      ]
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "count": 1,
+      "findings": [
+        "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security."
+      ]
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "count": 4,
+      "findings": [
+        "Function `public.get_collaborative_recommendation_signals(candidate_limit integer)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_collaborative_recommendation_signals`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries(target_work_ids bigint[])` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summaries_v2(target_work_ids bigint[])` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summaries_v2`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+        "Function `public.get_work_rating_summary(target_work_id bigint)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/get_work_rating_summary`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional."
+      ]
+    },
+    {
+      "name": "rls_enabled_no_policy",
+      "count": 10,
+      "findings": [
+        "Table \\`catalog_private.editorial_records\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.budgets\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.consent_grants\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.daily_counters\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.grant_budgets\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.maintenance_state\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.operational_counts\\` has RLS enabled, but no policies exist",
+        "Table \\`product_metrics_test.receipts\\` has RLS enabled, but no policies exist",
+        "Table \\`public.work_cover_resolutions\\` has RLS enabled, but no policies exist",
+        "Table \\`taste_private.eligible_inventory_v1\\` has RLS enabled, but no policies exist"
+      ]
+    }
+  ]
 }
