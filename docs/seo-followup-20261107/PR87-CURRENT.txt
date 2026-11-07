@@ -1,0 +1,92 @@
+PR87 current review after PR85 release —7November2026
+
+This supersedes REVIEW.txt and the earlier f9bb0e7 review for release purposes.
+Base: main f721e4c7065d8368a88ee129bdfb4eb13b162e48 (published PR85).
+Tested application:99f8603e2873bb5f59d22847f24904faf490fa16.
+Final head,CI,Preview and Git-blob hashes frozen in the local review receipt.
+No merge,production installation/publication,catalogue import or GSC requests.
+
+RUNTIME CHANGE
+Shared optional description fetch path plus description-provider-gate.ts only.
+Open Library metadata shares one provider guard. Google Books guard covers only
+the existing /books/v1/volumes endpoint; it cannot suppress unrelated Google APIs.
+Two concurrent network lookups per provider per warm process. FIFO queue maximum32,
+waiting maximum1000ms; excess/expired work is temporary_failure, never absence.
+Identical book requests also retain the existing in-flight promise cache.
+
+429 activates a bounded shared wait,60seconds when Retry-After is absent/invalid.
+503 activates that wait ONLY with a valid Retry-After service instruction.
+Valid seconds/HTTP dates are bounded1second..24hours. Concurrent instructions
+cannot shorten a longer wait. Pending callers leave without new network calls.
+Cooldown expiry permits new work; existing per-book temporary cache expires in
+two minutes. No persistent negative record is stored. Ordinary500/503without a
+valid wait and network failures retain bounded retries;timeouts are not retried.
+404/410 remain resource-specific and do not pause a provider or other books.
+
+The guard is NOT shared across workers,regions,processes or deployments. Two
+isolated-worker tests each make2calls,4combined; project-wide quota compliance
+cannot be claimed. No new infrastructure,credentials,logging or tracking added.
+Stored approved summaries bypass these optional requests and remain available.
+No tokens,keys,full unnecessary source responses or private fields are logged.
+Title,cover,rating controls and metadata keep their existing independent SSR/
+streaming path. Existing slow-source HTTP CI asserts early head/H1 and late text.
+
+FOCUSED PROOF
+40simultaneous operations:2provider calls,38queued/excess skipped after quota.
+Actual six different valid-ISBN lookups:2initial provider calls,all temporary.
+30identical lookups:1source call,all same verified text. Tests cover successful
+queue/expiry,slot release after exceptions,providers separate,longest wait,
+seconds/dates/invalid/extreme headers,recovery,stored text,404,410,500,503,
+network and timeout. No actual quota exhaustion or production fault injection.
+
+EXACT SEVEN CASES
+Current public API and local candidate observation7November2026 around15:38UTC:
+2093EN /edition2295 /9780742542464 /On Liberty
+3137EN /edition3296 /9781984819956 /The Reckoning
+4182EN /edition4341 /9780143418764 /I Too Had a Love Story
+5226NL /edition5385 /9789089751775 /Auschwitz13917
+7315EN /edition7474 /9780198827092 /Computers and Society
+8359EN /edition8518 /9780393060652 /The Body Never Lies
+9404EN /edition9563 /9781600102370 /Locke & Key,Vol.1
+All seven: no stored approved exact-locale synopsis; APIHTTP200 with aggregate
+temporary_failure,not an upstreamHTTP200success. Exact Open Library edition
+responses areHTTP200. One local Google Books request returns429; the remaining
+six Google requests are suppressed by the candidate's shared wait. All candidate
+states staytemporary_failure. Four had resolved earlier,which is only observed
+source variability. Do not present these as seven permanently missing texts,
+seven new summaries or a structural recovery. Full per-case source/edition/time
+receipts are retained without copied flaptexts or secret-bearing URLs.
+No old algorithm replay against a real rejected provider. Fault comparisons are
+synthetic. Current production and local egress are not interchangeable measures.
+
+LASTMOD — SEPARATE UNINSTALLED PROPOSAL
+book-lastmod-policy.txt expands meaningful content,visible ratings,verified dates,
+backfill,reader,rights,performance and restoration. reviewedBookPageFingerprint
+is review-only code,not imported by app/sitemap. Changed title/edition/synopsis/
+cover/links/public displayed score or band changes hash. Requests/builds/private
+state,raw count within an unchanged band and unchanged reviews do not. Unknown
+presentation means omission. No automatic timestamps,per-visit writes or migration.
+Local PGlite CAS/ACL/rollback and projection tests pass; supplementary synthetic
+2000-row benchmark is not hosted throughput. Real test-project installation,
+role verification and hash-matching reader require a separately frozen proposal.
+
+PERFORMANCE AND SEO
+No performance experiment is in this runtime diff. The separate book-LCP branch
+starts from published main and must demonstrate a benefit before a Draft is
+offered. Existing failed priority/parallel-read experiments remain rejected.
+Current full selection/sitemap evidence from PR85 remains reusable unless data
+or selectors change. Targeted metadata/robots/hreflang checks verify preservation.
+GSC observations stay private/read-only; no request,submission or ranking claim.
+
+RELEASE / RESTORE
+After exact-head CI,Ready TEST Preview and acceptance: recommend only this bounded
+provider package. Verify current main,source hashes and app-equivalence before a
+future release. No SQL/proposal execution or data import belongs to that approval.
+After separately approved deployment verify alias/source,stored/external text
+states,metadata,covers,ordinary rating access,PR86 and PR51 without production
+testwrites. Rollback to then-recorded PR85 Ready deployment; no database rollback.
+Current production reference:dpl_5T45CxLXQucsA1auhoJQU2vzX3cA,onf721e4c7065d8368a88ee129bdfb4eb13b162e48.
+
+References:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After
+https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap

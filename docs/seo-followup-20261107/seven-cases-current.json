@@ -1,0 +1,378 @@
+{
+  "at": "2026-11-07T15:38:49.454Z",
+  "method": "Seven normal public API GETs, public catalogue reads and paced instrumented local candidate resolver. Never replay old algorithm against live quota. Only status/path/ISBN metadata and text hashes stored; no secrets or complete provider responses. API aggregate status is not upstream HTTP status.",
+  "rows": [
+    {
+      "workId": 2093,
+      "locale": "en",
+      "workTitle": "On Liberty",
+      "author": "John Stuart Mill",
+      "selectedEdition": {
+        "id": 2295,
+        "work_id": 2093,
+        "title": "On Liberty",
+        "language": "eng",
+        "isbn_13": "9780742542464",
+        "isbn_10": "0742542467",
+        "open_library_edition_id": "OL7925728M",
+        "publisher": "Rowman & Littlefield Pub Inc",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL7925728M",
+        "isbn13": "9780742542464"
+      },
+      "priorAuditIsbn": "9780742542464",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:40.262Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL7925728M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        },
+        {
+          "at": "2026-11-07T15:38:41.419Z",
+          "provider": "www.googleapis.com",
+          "endpoint": "/books/v1/volumes",
+          "requestedIsbn": "isbn:9780742542464",
+          "http": 429,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:40.257Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 1154,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:42.098Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 3137,
+      "locale": "en",
+      "workTitle": "The Reckoning",
+      "author": "John Grisham",
+      "selectedEdition": {
+        "id": 3296,
+        "work_id": 3137,
+        "title": "THE RECKONING",
+        "language": "eng",
+        "isbn_13": "9781984819956",
+        "isbn_10": "198481995X",
+        "open_library_edition_id": "OL35674672M",
+        "publisher": "RANDOM HOUSE US",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL35674672M",
+        "isbn13": "9781984819956"
+      },
+      "priorAuditIsbn": "9781984819956",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:43.189Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL35674672M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:43.184Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 1078,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:43.393Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 4182,
+      "locale": "en",
+      "workTitle": "I Too Had a Love Story",
+      "author": "Ravinder Singh",
+      "selectedEdition": {
+        "id": 4341,
+        "work_id": 4182,
+        "title": "I Too Had a Love Story",
+        "language": "eng",
+        "isbn_13": "9780143418764",
+        "isbn_10": "0143418769",
+        "open_library_edition_id": "OL36645820M",
+        "publisher": "Penguin Global",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL36645820M",
+        "isbn13": "9780143418764"
+      },
+      "priorAuditIsbn": "9780143418764",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:44.434Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL36645820M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:44.420Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 1026,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:44.641Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 5226,
+      "locale": "nl",
+      "workTitle": "Auschwitz 13917",
+      "author": "Mirjam Blits",
+      "selectedEdition": {
+        "id": 5385,
+        "work_id": 5226,
+        "title": "Auschwitz 13917",
+        "language": "dut",
+        "isbn_13": "9789089751775",
+        "isbn_10": "9089751777",
+        "open_library_edition_id": "OL43872702M",
+        "publisher": "Just Publishers",
+        "languageCodes": [
+          "dut"
+        ],
+        "openLibraryEditionId": "OL43872702M",
+        "isbn13": "9789089751775"
+      },
+      "priorAuditIsbn": "9789089751775",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:45.673Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL43872702M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:45.672Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 1028,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:45.857Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 7315,
+      "locale": "en",
+      "workTitle": "Computers and Society",
+      "author": "Ronald M. Baecker",
+      "selectedEdition": {
+        "id": 7474,
+        "work_id": 7315,
+        "title": "Computers and Society",
+        "language": "eng",
+        "isbn_13": "9780198827092",
+        "isbn_10": null,
+        "open_library_edition_id": "OL28718461M",
+        "publisher": "Oxford University Press",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL28718461M",
+        "isbn13": "9780198827092"
+      },
+      "priorAuditIsbn": "9780198827092",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:46.950Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL28718461M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:46.938Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 1080,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:47.122Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 8359,
+      "locale": "en",
+      "workTitle": "The Body Never Lies",
+      "author": "Alice Miller",
+      "selectedEdition": {
+        "id": 8518,
+        "work_id": 8359,
+        "title": "The Body Never Lies",
+        "language": "eng",
+        "isbn_13": "9780393060652",
+        "isbn_10": "0393060659",
+        "open_library_edition_id": "OL7452083M",
+        "publisher": "W. W. Norton & Company",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL7452083M",
+        "isbn13": "9780393060652"
+      },
+      "priorAuditIsbn": "9780393060652",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:48.099Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL7452083M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:47.593Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 469,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:48.271Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    },
+    {
+      "workId": 9404,
+      "locale": "en",
+      "workTitle": "Locke & Key, Vol. 1",
+      "author": "Joe Hill",
+      "selectedEdition": {
+        "id": 9563,
+        "work_id": 9404,
+        "title": "Locke & Key",
+        "language": "eng",
+        "isbn_13": "9781600102370",
+        "isbn_10": "1600102379",
+        "open_library_edition_id": "OL23106590M",
+        "publisher": "IDW",
+        "languageCodes": [
+          "eng"
+        ],
+        "openLibraryEditionId": "OL23106590M",
+        "isbn13": "9781600102370"
+      },
+      "priorAuditIsbn": "9781600102370",
+      "storedApproved": [],
+      "observations": [
+        {
+          "at": "2026-11-07T15:38:49.251Z",
+          "provider": "openlibrary.org",
+          "endpoint": "/books/OL23106590M.json",
+          "requestedIsbn": null,
+          "http": 200,
+          "retryAfter": null
+        }
+      ],
+      "production": {
+        "at": "2026-11-07T15:38:48.744Z",
+        "http": 200,
+        "state": "temporary_failure",
+        "source": null,
+        "sourceKey": null,
+        "language": null,
+        "textHash": null,
+        "ms": 472,
+        "cache": "public, max-age=0",
+        "age": "0"
+      },
+      "candidate": {
+        "at": "2026-11-07T15:38:49.454Z",
+        "state": "temporary_failure",
+        "source": null,
+        "textHash": null
+      },
+      "decision": "Temporary source failure; do not create missing-content correction"
+    }
+  ]
+}

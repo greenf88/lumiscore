@@ -1,0 +1,201 @@
+{
+  "at": "2026-11-07T14:37:35.900Z",
+  "semantics": "Statuses distinguish existing production fixes, ready Draft code, research and open work; not a claim that all audit advice is deployed. No production writes. PR85 must be approved/released separately. PR87 contains only quota handling plus review-only proposals/evidence.",
+  "items": [
+    {
+      "id": "DEV-001",
+      "status": "gedeeltelijk opgelost",
+      "result": "Complete current edition/lifecycle inventory; content audit40locale routes only, not a full10kcontent/cover review.",
+      "proof": [
+        "PR85 full Work/locale matrix",
+        "content-cases.json"
+      ]
+    },
+    {
+      "id": "DEV-002",
+      "status": "gedeeltelijk opgelost",
+      "result": "PR85 ready: indexing follows edition eligibility only. Supersedes audit word/rating/cover-based exclusion suggestions per explicit user policy.",
+      "proof": [
+        "PR85 release review,20,892decisions,500/404fault proofs"
+      ]
+    },
+    {
+      "id": "DEV-003",
+      "status": "opgelost",
+      "result": "Existing production Browse jumps preserved; all9724IDs match sitemap;399EN/210NLpages reachable, depth6; HTTP56cases.",
+      "proof": [
+        "navigation.json"
+      ]
+    },
+    {
+      "id": "DEV-004",
+      "status": "gedeeltelijk opgelost",
+      "result": "Detail already eager/high. First-card priority experiment rejected: discovery improved but totalLCP did not. Cover LCP target remains open.",
+      "proof": [
+        "measurements.json"
+      ]
+    },
+    {
+      "id": "DEV-005",
+      "status": "gedeeltelijk opgelost",
+      "result": "Existing Book/edition/Person graph retained. PR85 suppresses Book graph only for invalid locale; no hidden exact AggregateRating.",
+      "proof": [
+        "PR85 original HTML/CI235"
+      ]
+    },
+    {
+      "id": "DEV-006",
+      "status": "opgelost",
+      "result": "Existing Organization/WebSite IDs retained; no parallel site identity.",
+      "proof": [
+        "Current main and PR85 metadata CI"
+      ]
+    },
+    {
+      "id": "DEV-007",
+      "status": "gedeeltelijk opgelost",
+      "result": "Existing CollectionPage/ItemList/verified BookSeries retained; broader editorial entity completeness not invented.",
+      "proof": [
+        "Current main,56HTTP navigation cases"
+      ]
+    },
+    {
+      "id": "DEV-008",
+      "status": "open",
+      "result": "No first-party proxy/cache enabled: full derivative/storage rights and sustainable operation unproved. No new host or paid service.",
+      "proof": [
+        "PRH image documentation and marketing terms; rights notes"
+      ]
+    },
+    {
+      "id": "DEV-009",
+      "status": "gedeeltelijk opgelost",
+      "result": "PR85 responsive edition-bound variants and bounded fallback verified; image-byte target not met; source failures remain separate.",
+      "proof": [
+        "PR85 hosted cover receipts,measurements.json"
+      ]
+    },
+    {
+      "id": "DEV-010",
+      "status": "gedeeltelijk opgelost",
+      "result": "Three sitemap shards live;9724book+168otherURLs. Five hash-bound editorial dates retained. Full reliable book-lastmod absent.",
+      "proof": [
+        "PR85 complete sitemap comparison",
+        "../proposals/book-lastmod.txt"
+      ]
+    },
+    {
+      "id": "DEV-011",
+      "status": "onderzocht zonder codewijziging",
+      "result": "No public HTML cache added around mixed account/personalized SSR. Existing public catalogue/description caches remain bounded.",
+      "proof": [
+        "Source inspection; no caching config changes"
+      ]
+    },
+    {
+      "id": "DEV-012",
+      "status": "gedeeltelijk opgelost",
+      "result": "PR85 genuine missing Work404; core DB/network errors500. No invented retirement/blanket redirects. Domain-hop configuration not changed.",
+      "proof": [
+        "PR85 real-loader faults and HTTP matrix"
+      ]
+    },
+    {
+      "id": "DEV-013",
+      "status": "onderzocht zonder codewijziging",
+      "result": "Existing security headers/policy preserved; no CSP enforcement or authorization/security change.",
+      "proof": [
+        "Released config unchanged"
+      ]
+    },
+    {
+      "id": "DEV-014",
+      "status": "gedeeltelijk opgelost",
+      "result": "PR85 one visible Taste TestH1;20prior layouts+new320/1440Paper/Ink DOM checks; no design refactor.",
+      "proof": [
+        "PR85 browser/CI receipts"
+      ]
+    },
+    {
+      "id": "DEV-015",
+      "status": "gedeeltelijk opgelost",
+      "result": "All exact seven source cases investigated; final7temporary failures, not proven missing. PR87 shared429cooldown; no fabricated summaries.",
+      "proof": [
+        "content-cases.json",
+        "quota-pressure.json"
+      ]
+    },
+    {
+      "id": "DEV-016",
+      "status": "open",
+      "result": "Author hubs require verified unique editorial content and coverage; no thin auto-generated hubs. Existing author filters stay noindex.",
+      "proof": [
+        "Existing author-filter policy,source inspection"
+      ]
+    },
+    {
+      "id": "DEV-017",
+      "status": "gedeeltelijk opgelost",
+      "result": "PR85 improves conditional collection descriptions; no series/catal ogue data changes.",
+      "proof": [
+        "PR85 collection metadata tests"
+      ]
+    },
+    {
+      "id": "DEV-018",
+      "status": "onderzocht zonder codewijziging",
+      "result": "Personal ranking/match explanation logic outside this patch; no speculative recommendation changes.",
+      "proof": [
+        "Final runtime diff and retained PR86tests"
+      ]
+    },
+    {
+      "id": "DEV-019",
+      "status": "onderzocht zonder codewijziging",
+      "result": "Existing editorial lists/campaign destinations preserved and checked; no new SEO/social content in this task.",
+      "proof": [
+        "navigation.json"
+      ]
+    },
+    {
+      "id": "DEV-020",
+      "status": "open",
+      "result": "No domain migration. Business case requires separate country/query evidence and decision; not a technical release blocker.",
+      "proof": [
+        "Explicit task boundary"
+      ]
+    },
+    {
+      "id": "DEV-021",
+      "status": "open",
+      "result": "llms.txt remains optional/experimental and is not introduced before main issues are resolved.",
+      "proof": [
+        "Current route inventory"
+      ]
+    },
+    {
+      "id": "DEV-022",
+      "status": "opgelost",
+      "result": "Original-head parser, metadata fault sensitivity, lifecycle/schema and true Work/edition/transport failures are CI-gated.",
+      "proof": [
+        "PR85/PR87 exact-head quality workflows"
+      ]
+    },
+    {
+      "id": "DEV-023",
+      "status": "gedeeltelijk opgelost",
+      "result": "Read-only GSC seven stored inspections and complete displayed7day periods checked. Private report kept local. No new requests/submissions/tasks.",
+      "proof": [
+        "Local gsc/receipts; not published in Git"
+      ]
+    },
+    {
+      "id": "DEV-024",
+      "status": "gedeeltelijk opgelost",
+      "result": "130mobile lab reports with explicit source failures/medians/ranges; no fieldCWV or ranking claim. LCP and image targets still open.",
+      "proof": [
+        "measurements.json"
+      ]
+    }
+  ]
+}

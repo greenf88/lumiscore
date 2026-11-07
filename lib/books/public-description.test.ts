@@ -79,3 +79,76 @@ test('a storage outage plus a missing external response is temporary, never cach
  const result=await loadPublicBookDescriptionState({...book,storedPresentationUnavailable:true},'en',async()=>new Response('',{status:404}));
  assert.equal(result.state,'temporary_failure');assert.equal(result.description,null);
 });
+
+test('provider quota cooldown covers different ISBNs, expires and preserves reviewed text',async()=>{
+ clearBookDescriptionCacheForTests();const realNow=Date.now;let now=realNow(),calls=0;
+ Date.now=()=>now;
+ const lookup=(isbn13:string)=>({workId:'quota-'+isbn13,isbn13,editionLanguage:'eng'} as Book);
+ const fetcher:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:{'Retry-After':'60'}});};
+ try{
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780141439518'),'en',fetcher)).state,'temporary_failure');
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780441172719'),'en',fetcher)).state,'temporary_failure');
+  assert.equal(calls,1,'a distinct ISBN does not retry a known shared provider rejection');
+  const stored={text:enCopy,language:'en' as const,source:'official_catalog' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Reviewed catalogue',verifiedAt:'2026-11-07'};
+  assert.equal((await loadPublicBookDescriptionState({...lookup('9780593135204'),storedDescription:stored},'en',fetcher)).description?.text,enCopy);
+  assert.equal(calls,1,'stored reviewed text bypasses the failed provider');
+  now+=60_001;
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780593135204'),'en',fetcher)).state,'temporary_failure');
+  assert.equal(calls,2,'new request permitted after the explicit provider wait; still never absence');
+ }finally{Date.now=realNow;clearBookDescriptionCacheForTests();}
+});
+
+test('quota Retry-After dates, missing and invalid values are bounded without becoming missing content',async()=>{
+ const realNow=Date.now;let now=realNow();Date.now=()=>now;
+ try{for(const makeHeader of[()=>undefined,()=>'-1',()=>new Date(now+120_000).toUTCString(),()=>'999999999999999999999999']){
+  const header=makeHeader();
+  clearBookDescriptionCacheForTests();let calls=0;const fetcher:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:header?{'Retry-After':header}:{}});};
+  const lookup=(isbn13:string)=>({...book,openLibraryEditionId:null,isbn13});
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780141439518'),'en',fetcher)).state,'temporary_failure');
+  now+=2_000;assert.equal((await loadPublicBookDescriptionState(lookup('9780441172719'),'en',fetcher)).state,'temporary_failure');assert.equal(calls,1);
+  now+=24*60*60*1_000+1;
+  await loadPublicBookDescriptionState(lookup('9780593135204'),'en',fetcher);assert.equal(calls,2,'even extreme upstream waits expire');
+ }}finally{Date.now=realNow;clearBookDescriptionCacheForTests();}
+});
+
+test('simultaneous different book lookups limit the initial provider burst and retain temporary states',async()=>{
+ clearBookDescriptionCacheForTests();let calls=0,active=0,peak=0;let finish!:()=>void;
+ const pending=new Promise<void>(resolve=>{finish=resolve;});
+ const fetcher:typeof fetch=async()=>{calls++;active++;peak=Math.max(peak,active);await pending;active--;return new Response('{}',{status:429});};
+ const isbns=['9780141439518','9780441172719','9780593135204','9780553293357','9780061120084','9780747532699'];
+ const results=isbns.map(isbn13=>loadPublicBookDescriptionState({workId:'synthetic-'+isbn13,isbn13,editionLanguage:'eng'} as Book,'en',fetcher));
+ await new Promise<void>(resolve=>setImmediate(resolve));assert.equal(calls,2);finish();
+ assert.ok((await Promise.all(results)).every(r=>r.state==='temporary_failure'));assert.equal(peak,2);assert.equal(calls,2);
+ clearBookDescriptionCacheForTests();
+});
+
+test('simultaneous identical book lookups share the existing in-flight success cache',async()=>{
+ clearBookDescriptionCacheForTests();let calls=0;
+ const fetcher:typeof fetch=async()=>{calls++;await new Promise<void>(resolve=>setImmediate(resolve));return new Response(JSON.stringify({works:[{key:'/works/OL893415W'}],languages:[{key:'/languages/eng'}],description:enCopy}));};
+ const results=await Promise.all(Array.from({length:30},()=>loadPublicBookDescriptionState(book,'en',fetcher)));
+ assert.equal(calls,1);assert.ok(results.every(r=>r.description?.text===enCopy));clearBookDescriptionCacheForTests();
+});
+
+test('404, server faults and network faults do not become shared quota or durable absence',async()=>{
+ for(const fault of[404,410,500,503,'network','timeout'] as const){
+  clearBookDescriptionCacheForTests();let calls=0;
+  const failing:typeof fetch=async()=>{calls++;if(fault==='network')throw new TypeError('Synthetic network');if(fault==='timeout')throw new DOMException('Synthetic deadline','TimeoutError');return new Response('{}',{status:fault});};
+  const first={workId:'synthetic-first',isbn13:'9780141439518',editionLanguage:'eng'} as Book;
+  assert.equal((await loadPublicBookDescriptionState(first,'en',failing)).state,typeof fault==='number'&&fault<500?'confirmed_missing':'temporary_failure');
+  assert.equal(calls,fault===500||fault===503||fault==='network'?3:1);
+  const before=calls;
+  const next=await loadPublicBookDescriptionState({...first,workId:'synthetic-next',isbn13:'9780441172719'},'en',async()=>{calls++;return new Response(JSON.stringify({items:[]}));});
+  assert.equal(calls,before+1,'a different book can still use this provider');assert.equal(next.state,'confirmed_missing');
+ }
+ clearBookDescriptionCacheForTests();
+});
+
+test('503 Retry-After is a temporary service instruction, not missing content or an eager retry',async()=>{
+ clearBookDescriptionCacheForTests();let calls=0;
+ const lookup=(isbn13:string)=>({workId:'synthetic-'+isbn13,isbn13,editionLanguage:'eng'} as Book);
+ const fetcher:typeof fetch=async()=>{calls++;return new Response('{}',{status:503,headers:{'Retry-After':'30'}});};
+ assert.equal((await loadPublicBookDescriptionState(lookup('9780141439518'),'en',fetcher)).state,'temporary_failure');
+ assert.equal((await loadPublicBookDescriptionState(lookup('9780441172719'),'en',fetcher)).state,'temporary_failure');
+ assert.equal(calls,1);
+ clearBookDescriptionCacheForTests();
+});

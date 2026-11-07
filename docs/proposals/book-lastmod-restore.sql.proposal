@@ -1,0 +1,11 @@
+-- REVIEW ONLY. Remove only an empty ledger; otherwise export and review rows
+-- and dependencies first. Never modifies Works, editions or user data.
+begin;
+do $$begin
+ if exists(select 1 from public.catalog_public_page_revisions)then
+  raise exception 'Refuse removal of nonempty revision ledger: preserve snapshot and review';
+ end if;
+end$$;
+drop function public.record_catalog_public_revision(bigint,text,text,text,timestamptz);
+drop table public.catalog_public_page_revisions;
+commit;

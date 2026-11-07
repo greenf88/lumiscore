@@ -1,0 +1,125 @@
+HISTORICAL REVIEW. Superseded for release by PR87-CURRENT.txt after PR85 release.
+SEO follow-up, separate from PR85 — review preparation7November2026
+
+FINAL APPLICATION:27d93c118e8abbefea970b6e3fc86f2105cf966f.
+BASE: PR85 head835c440cc71f0605d20fc1e1823ec2ba3586af65.
+This Draft is stacked on PR85. Final PR-head,CI,deployment and file hashes are
+frozen separately in outputs/seo-followup-20261107/FINAL-REVIEW.txt.
+No production changes, imports, merge, deployment, GSC requests or social work.
+
+RELEASE SCOPE
+Only lib/books/description-resolution.ts changes runtime behavior versus PR85.
+After HTTP429, a short shared provider-origin cooldown prevents each newly
+opened ISBN from immediately retrying the rejected provider. Default60seconds;
+valid Retry-After seconds/HTTP-date respected within1second..24hours; malformed
+values safely bounded. No blocking sleep, new host, service, credential or data
+write. State remains temporary_failure, never invented absence. Locale/edition/
+ISBN/author-bound success caches and stored approved summaries remain usable.
+This is one warm-process guard, NOT a durable/distributed cache or quota fix.
+No changes to edition eligibility, ordering, ratings, reading state, consent or
+PR51. PR86 cookbook exclusion and normal catalogue ratings preserved.
+
+PROVEN SCOPE AND LIMITS
+The exact seven historical source cases are2093EN,3137EN,4182EN,5226NL,7315EN,
+8359EN,9404EN. Four returned verified Google Books text at the first observation;
+at final cache-expired recheck all seven returned temporary_failure. No credit
+is taken for new texts or seven repaired book pages. Do not call them permanent
+data gaps. The public optional-storage reads currently succeed(HTTP200).
+The separate local unauthenticated Google Books diagnostic returned429/
+RESOURCE_EXHAUSTED; this does not prove every production provider response,
+egress path or secret configuration. No Secret value was read/exported.
+Open Library exact edition responses were reachable, usually lacking text;
+four source texts failed the existing conservative text-language gate. The
+edition-language and text-language checks remain independent and unchanged.
+
+The original30audit routes plus10source-less newer-audit cases are recorded
+separately in content-cases.json(40locale routes,26Works). They are not40new
+Works or a simultaneous full-catalogue content census. Sources, identities,
+selected editions, states and observation times retained; no flaptexts copied
+into this PR. Stored Dutch text does not prove a suitable Dutch edition.
+Remaining source/summary work is an explicit data/review list, not an import.
+Positive resolver caches are process-local; adding Next-style cache options
+does not establish persistent storage in this Vinext/Nitro deployment. Durable
+approved summaries require a separately reviewed data path. No silent raw-text
+backfill, permanent negative cache or new content exceptions were added.
+
+REQUEST-PRESSURE PROOF
+Five independent synthetic ten-book batches through actual old/new resolvers:
+50provider requests before,5after; all states remained temporary. Transport was
+synthetic20ms, not production latency,LCP or distributed behavior. Tests cover
+cache expiry, different ISBNs, reviewed text, Retry-After and invalid headers.
+
+PERFORMANCE: NO UNPROVEN CHANGE SHIPPED
+Both experiments were removed from the final runtime diff and patches retained
+outside Git in outputs/seo-next-20261107:
+ A: first Browse/collection cover eager/high. Discovery improved; totalLCP did
+ not justify shipping.100paired mobile reports across10NL/ENtemplate scenarios.
+ B: concurrent Work/edition reads. No convincing LCP gain; extra indexed read
+ for a missing numeric Work.20book reports plus10NL Even simpel reports.
+ Neither patch is an instruction to apply; both are REJECTED release proposals.
+
+Five-run healthy-book medians in experiment B:
+ EN Project Hail Mary3539.4→3535.2ms; TBT50→53ms; CLS0;~49.6kBimages.
+ NL Even simpel3542.8→3538.5ms; TBT62→61ms; CLS0;~6.8kBimages.
+ Differences do not establish meaningful LCP improvement. NL Project Hail Mary
+ failed its image request(status-1)in all10later runs; its text/placeholder LCP
+ is NOT a cover speed gain. Earlier healthy NL baseline was~4.87seconds.
+ Book target2.5seconds and image-saving target remain OPEN. No fieldCWV claim.
+ Detail cover already eager/high; successful cases showed one selected image
+ request, no duplicate-cover fetch. Fonts already use swap/self-hosted subsets;
+ no entrance animation delays the cover. Observed critical CSS/render work and
+ framework/client resources remain relevant; no broad CSS/component rewrite.
+ First-party image processing was not enabled without full source-rights and
+ provenance review. Existing metadata/covers/identity and layout are preserved.
+
+Method: existing official Lighthouse13.5.0 CLI/default mobile simulated throttle,
+fresh browser/storage, alternating arms, same local gzip adapter, public data
+read-only. Server/provider cache coldness not asserted. Trace timing parts are
+observed timings and must NOT be added to the simulated LCP value. Raw reports,
+medians,range,LCP nodes,CLS,TBT,image bytes and failures retained. Local lab
+measurements are not live-production or field speed improvements.
+
+NAVIGATION
+Full existing STABLE public Browse RPC ID sets match all9724sitemap books:
+EN6377,NL3347,no duplicates/missing/extra. Default16-card graph reaches399EN/
+210NLpages at maximum depth6.77bounded128-ID read pages, not a browser catalogue
+download or HTTP crawl of every book.56real HTTP samples include first3and last
+Browse pages,collections and two priority lists in four simulated UAs. First
+three pages show48unique16-card slots per locale. Static and sampled rendered
+book links do not point at excluded locales. No confirmed orphan was found by
+these checks; a limited historic crawl alone never establishes orphan status.
+
+LASTMOD — SEPARATE REVIEW-ONLY PROPOSAL
+Works/editions lack meaningful update timestamps; reviewed_at is not a full
+content-change date. Existing five hash-bound editorial dates remain.
+../proposals/book-lastmod*.proposal are NOT installable migration inputs for
+this release. The ledger design needs separate authorization,hosted Postgres
+verification and a hash-matching reader. No historical dates are fabricated.
+Local PGlite checks cover CAS,idempotence,chronology,FK,ACL,restore guards and
+unrelated-row preservation; they do not prove a hosted installation.
+
+GSC
+Read-only stored inspections and complete displayed periods checked; private
+receipts/traffic report stay local in outputs/seo-next-20261107/gsc.
+No index requests,live URL tests,sitemap resubmissions or automations. Current
+correct HTTP metadata is separate from old stored crawls and index decisions.
+No ranking recovery or causal traffic conclusion.
+
+RELEASE ORDER AND RESTORE
+After separate approval: release PR85 first; verify its production alias/head;
+retarget this Draft to the resulting main and recheck exact diff/CI/application
+hashes. Release only the quota code+tests/evidence. NO database installation,
+SQL proposal execution,catalogue import or environment/security change.
+Read back Ready deployment/alias and bounded routes; verify temporary states,
+approved summaries,metadata,ordinary ratings access and PR86gate remain intact.
+If this package regresses, restore the recorded PR85 Ready deployment, not a
+pre-PR85 version. No data rollback is required. SQL proposal remains uninstalled.
+
+Primary sources:
+https://github.com/cloudflare/vinext/blob/main/docs/caching.mdx
+https://openlibrary.org/developers/api
+https://developers.google.com/books/docs/v1/using
+https://web.dev/articles/optimize-lcp
+https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
+https://developer.penguinrandomhouse.com/docs/read/enhanced_prh_api/concepts/Images
+https://www.penguinrandomhouse.biz/media/digital
