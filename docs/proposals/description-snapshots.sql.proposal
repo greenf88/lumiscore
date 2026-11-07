@@ -5,6 +5,11 @@ create table public.catalog_description_snapshots (
  edition_id bigint not null references public.editions(id),
  locale text not null check(locale in('en','nl')),
  binding_hash text not null check(binding_hash ~ '^[a-f0-9]{64}$'),
+ bound_author_id bigint not null,
+ bound_title text not null,
+ bound_language text not null,
+ bound_isbn13 text,
+ bound_open_library_work_id text not null,
  text text not null check(length(trim(text)) between 60 and 20000),
  source_key text not null check(source_key ~ '^OL[0-9]+M$'),
  fetched_at timestamptz not null,
@@ -21,7 +26,10 @@ grant insert,update on public.catalog_description_snapshots to service_role;
 create policy description_snapshot_public_read on public.catalog_description_snapshots for select using(true);
 create function public.guard_description_snapshot()returns trigger language plpgsql set search_path=pg_catalog,public as $$
 begin
- if not exists(select 1 from public.editions e where e.id=new.edition_id and e.work_id=new.work_id
+ if not exists(select 1 from public.editions e join public.works w on w.id=e.work_id
+  where e.id=new.edition_id and e.work_id=new.work_id and w.author_id=new.bound_author_id
+  and w.open_library_id=new.bound_open_library_work_id and e.title=new.bound_title
+  and e.language=new.bound_language and e.isbn_13 is not distinct from new.bound_isbn13
   and e.open_library_edition_id=new.source_key and e.language in(case new.locale when 'nl' then 'nld' else 'eng' end,new.locale)) then
   raise exception 'Description edition/Work/source/language binding changed';
  end if;

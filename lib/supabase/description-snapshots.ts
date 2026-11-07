@@ -6,7 +6,7 @@ import type {Locale} from '../i18n/config.ts';
 import {descriptionBinding,type DescriptionSnapshot} from '../books/description-snapshot.ts';
 import {ReviewedPresentationCache} from '../books/reviewed-presentation-cache.ts';
 const table='catalog_description_snapshots';
-const fields='work_id,edition_id,locale,binding_hash,text,source_key,fetched_at,checked_at,provider_status,validation';
+const fields='work_id,edition_id,locale,binding_hash,bound_author_id,bound_title,bound_language,bound_isbn13,bound_open_library_work_id,text,source_key,fetched_at,checked_at,provider_status,validation';
 const cache=new ReviewedPresentationCache<DescriptionSnapshot|null>();
 let unavailableUntil=0;
 function client(write=false){
@@ -31,14 +31,17 @@ export async function saveDescriptionSnapshot(row:DescriptionSnapshot):Promise<v
  const db=client(true);if(!db)return;
  // Schema guards reject older concurrent responses. A failure never replaces
  // valid text with null, error documents or a permanent missing-content marker.
- const r=await db.from(table).upsert(row,{onConflict:'work_id,edition_id,locale'}).abortSignal(AbortSignal.timeout(1000));
- if(r.error){diagnostic('write',r.error.code);return;}cache.invalidate(row.binding_hash);
+ try {
+  const r=await db.from(table).upsert(row,{onConflict:'work_id,edition_id,locale'}).abortSignal(AbortSignal.timeout(1000));
+  if(r.error){diagnostic('write',r.error.code);return;}cache.invalidate(row.binding_hash);
+ } catch {diagnostic('write_transport');}
 }
 
 export async function markDescriptionSnapshotFailure(row:DescriptionSnapshot,status:'temporary_failure'|'confirmed_missing'):Promise<void>{
  if(Date.now()<unavailableUntil)return;const db=client(true);if(!db)return;
- const r=await db.from(table).update({provider_status:status,checked_at:new Date().toISOString()})
+ try {const r=await db.from(table).update({provider_status:status,checked_at:new Date().toISOString()})
   .eq('work_id',row.work_id).eq('edition_id',row.edition_id).eq('locale',row.locale).eq('binding_hash',row.binding_hash)
   .eq('fetched_at',row.fetched_at).abortSignal(AbortSignal.timeout(1000));
  if(r.error)diagnostic('provider_status',r.error.code);else cache.invalidate(row.binding_hash);
+ } catch {diagnostic('provider_status_transport');}
 }

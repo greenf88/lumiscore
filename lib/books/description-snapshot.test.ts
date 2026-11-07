@@ -11,7 +11,7 @@ test('durable snapshots retain exact edition, identity, language, source and fet
  assert.equal(readDescriptionSnapshot(row,book,'en',now+31*86400000)?.fresh,false);
  assert.equal(readDescriptionSnapshot(row,book,'en',now+91*86400000),null);
  assert.equal(readDescriptionSnapshot({...row,provider_status:'temporary_failure'},book,'en',now+31*86400000)?.description.text,description.text);
- for(const changed of [{authorId:'9'},{editionTitle:'Another book'},{editionId:'9'},{editionLanguage:'nld'},{openLibraryEditionId:'OL9M'},{editionAvailable:false}])
+ for(const changed of [{authorId:'9'},{editionTitle:'Another book'},{editionId:'9'},{editionLanguage:'nld'},{openLibraryEditionId:'OL9M'},{openLibraryWorkId:null},{editionAvailable:false}])
   assert.equal(readDescriptionSnapshot(row,{...book,...changed},'en',now+1000),null);
  assert.equal(readDescriptionSnapshot(row,book,'nl',now+1000),null);
 });

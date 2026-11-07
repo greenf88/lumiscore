@@ -36,6 +36,11 @@ Writes require an already authorized server key; without it no writes occur.
 Anon/authenticated have SELECT only; RLS is enabled+forced. No new BYPASSRLS role
 or security setting is introduced. Older concurrent responses are rejected by
 SQL. All writes affect only the new public snapshot table.
+The trigger also compares current parent, author, edition title, language and
+ISBN fields. A delayed response bound to pre-correction metadata cannot replace
+a current row. Local SQL tests exercise service_role INSERT using the existing
+parent SELECT grants (confirmed read-only on production); browser roles cannot
+write. Transport/write failure never discards the successfully resolved text.
 Cover selection continues using reviewed edition bindings and the existing
 cover-resolution store; no Work-cover guess or new third-party cache is added.
 

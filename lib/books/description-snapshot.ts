@@ -5,10 +5,11 @@ import {normalizeVerifiedBookDescription} from './description-text.ts';
 import {sourceDescriptionLocale} from './description-language.ts';
 
 export type DescriptionSnapshot = {work_id:string;edition_id:string;locale:Locale;binding_hash:string;
+ bound_author_id:string;bound_title:string;bound_language:string;bound_isbn13:string|null;bound_open_library_work_id:string;
  text:string;source_key:string;fetched_at:string;checked_at:string;provider_status:'resolved'|'temporary_failure'|'confirmed_missing';
  validation:'identity_and_language_verified';};
 export function descriptionBinding(book:Book,locale:Locale):string|null {
- if(!book.workId||!book.editionId||!book.authorId||!book.editionAvailable||book.strictEditionLanguage!==locale||!book.openLibraryEditionId)return null;
+ if(!book.workId||!book.editionId||!book.authorId||!book.editionAvailable||book.strictEditionLanguage!==locale||!book.openLibraryEditionId||!book.openLibraryWorkId)return null;
  return createHash('sha256').update(JSON.stringify([book.workId,book.authorId,book.editionId,book.editionTitle??book.title,
   book.editionLanguage,book.isbn13??null,book.openLibraryWorkId??null,book.openLibraryEditionId,locale])).digest('hex');
 }
@@ -30,5 +31,7 @@ export function createDescriptionSnapshot(book:Book,locale:Locale,description:Ve
   ||value.language!==locale||sourceDescriptionLocale(value.text)!==locale)return null;
  const at=new Date(now).toISOString();
  return {work_id:book.workId!,edition_id:book.editionId!,locale,binding_hash:binding,text:value.text,
+  bound_author_id:book.authorId!,bound_title:book.editionTitle??book.title,bound_language:book.editionLanguage!,
+  bound_isbn13:book.isbn13??null,bound_open_library_work_id:book.openLibraryWorkId!,
   source_key:value.sourceKey,fetched_at:at,checked_at:at,provider_status:'resolved',validation:'identity_and_language_verified'};
 }
