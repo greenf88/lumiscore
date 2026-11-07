@@ -3,14 +3,24 @@ import { normalizeEditionLanguage, rankRepresentativeEditions, isSuspiciousRepre
 import { uniqueCoverUrls, normalizeOpenLibraryId, normalizeIsbn13 } from './covers.ts';
 import { getReviewedCoverOverride } from './reviewed-cover-overrides.ts';
 import type { Locale } from '../i18n/config.ts';
-import {permittedEditionLanguage,editionHasLanguage} from './edition-language-policy.ts';
-export {permittedEditionLanguage,editionHasLanguage,isBookPresentationAllowed} from './edition-language-policy.ts';
 
 export type StrictEditionRow = {
   id: number | string; work_id?: number | string; title: string | null; language: string | null;
   isbn_10?: string | null; isbn_13: string | null; open_library_edition_id: string | null; publisher?: string | null;
 };
 export type EditionBoundCover = { state: string; source_key: string; cover_url: string | null; editionVerified?:boolean };
+export function permittedEditionLanguage(edition: Pick<StrictEditionRow, 'language'>, locale: Locale): boolean {
+  return editionHasLanguage(edition,locale);
+}
+export function editionHasLanguage(edition: Pick<StrictEditionRow, 'language'>, language: Locale): boolean {
+  return Boolean(edition.language && normalizeEditionLanguage(edition.language.trim()) === (language === 'nl' ? 'nld' : 'eng'));
+}
+/** Reject stale browser responses produced under the superseded NL fallback
+ * policy. A UI-locale marker alone is not edition-language evidence. */
+export function isBookPresentationAllowed(book:Pick<Book,'editionAvailable'|'strictEditionLanguage'|'editionLanguage'>,locale:Locale):boolean {
+  return book.editionAvailable===true && book.strictEditionLanguage===locale &&
+    permittedEditionLanguage({language:book.editionLanguage??null},locale);
+}
 /** Both catalogues are edition-language strict. Unknown/multilingual stays out. */
 export function selectStrictEdition(editions: readonly StrictEditionRow[], language: Locale, title: string): StrictEditionRow | null {
   const possible = editions.filter(e => permittedEditionLanguage(e, language) && e.id != null && String(e.id).trim() && e.title?.trim() && !isSuspiciousRepresentativeEdition(e));

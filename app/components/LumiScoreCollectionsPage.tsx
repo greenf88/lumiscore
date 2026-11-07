@@ -4,7 +4,7 @@ import { LocaleLink } from './LumiScoreLocale';
 
 import { useCallback, useMemo, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
-import { hasBoundCover as hasUsableInitialBookCover } from '@/lib/books/bound-cover-state';
+import { hasUsableInitialBookCover } from '@/lib/books/book-cover-state';
 import {
   COLLECTION_DIRECTORY_FILTERS,
   filterCollectionDirectoryItems,

@@ -6,9 +6,9 @@ import {RecommendationMeasurement} from './RecommendationMeasurement';
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
-import { lazy, memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
-import { isBookPresentationAllowed } from '@/lib/books/edition-language-policy';
+import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import {
   getVerifiedCoverAttempts,
@@ -17,8 +17,8 @@ import {
 import { watchCoverImage } from '@/lib/books/cover-image-watch';
 import {
   getBookCoverIdentity,
-  getInitialBoundCoverUrls as getInitialBookCoverUrls,
-} from '@/lib/books/bound-cover-state';
+  getInitialBookCoverUrls,
+} from '@/lib/books/book-cover-state';
 import { getBookHref } from '@/lib/books/book-navigation';
 import type { BookLinkReturnContext } from '@/lib/navigation/book-return';
 import {
@@ -119,7 +119,7 @@ type BookCoverProps = {
   sizes?: string;
 };
 
-export function BookCoverForIdentity({
+function BookCoverForIdentity({
   book,
   small = false,
   presentation = small ? 'compact' : 'card',
@@ -235,19 +235,12 @@ export function BookCoverForIdentity({
 function StreamedBookCover(props: BookCoverProps) {
   const coverUrls = use(props.book.editionCoverUrls!);
   const book = { ...props.book, coverUrls };
-  if(!book.strictEditionLanguage)return <LegacyReviewedCover {...props} book={book}/>;
   return <BookCoverForIdentity key={getBookCoverIdentity(book)} {...props} book={book} />;
 }
-
-// Legacy unbound fixtures retain their existing reviewed fallback. Normal
-// strict catalogue data never downloads this registry/chunk.
-const LegacyReviewedCover=lazy(()=>import('./LegacyReviewedCover'));
 
 export const BookCover = memo(function BookCover(props: BookCoverProps) {
   const coverIdentity = getBookCoverIdentity(props.book);
   const initial = <BookCoverForIdentity key={coverIdentity} {...props} />;
-  if(!props.book.strictEditionLanguage&&!props.book.editionCoverUrls)
-    return <Suspense fallback={initial}><LegacyReviewedCover {...props}/></Suspense>;
   return props.book.editionCoverUrls
     ? <Suspense fallback={initial}><StreamedBookCover key={coverIdentity} {...props} /></Suspense>
     : initial;

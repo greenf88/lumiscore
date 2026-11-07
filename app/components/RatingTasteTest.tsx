@@ -11,7 +11,7 @@ import { measurementHeaders } from '@/lib/product-metrics/browser';
 import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
-import { isBookPresentationAllowed } from '@/lib/books/edition-language-policy';
+import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import { buildRoundRequest } from '@/lib/taste-test/round-request';
 import { readRoundPause, writeRoundPause } from '@/lib/taste-test/round-pause';
 import { shouldOpenCompletedResult } from '@/lib/taste-test/result-presentation';
