@@ -1,6 +1,13 @@
 import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{createHash}from'node:crypto';import{PGlite}from'@electric-sql/pglite';
 import{applyStoredPresentation,safePublicSource}from'../lib/books/stored-presentation.ts';import{loadPublicBookDescriptionState}from'../lib/books/public-description.ts';import{withStrictEdition,selectStrictEdition}from'../lib/books/strict-edition.ts';
 const root=new URL('../catalog/verified-synopses-20261107/',import.meta.url),text=n=>fs.readFileSync(new URL(n,root),'utf8'),read=n=>JSON.parse(text(n));
+test('hosted evidence binds first commit, zero replay, committed undo, preserved data and actual HTML text',()=>{
+ for(const[n,h]of Object.entries(read('evidence-hashes.json').sha256))assert.equal(createHash('sha256').update(fs.readFileSync(new URL(n,root))).digest('hex'),h,n);
+ const first=read('test-first-commit-receipt.json');assert.equal(first.rows.length,10);assert.deepEqual(read('test-reinstalled-receipt.json'),first);assert.deepEqual(read('test-replay-receipt.json').rows,[]);
+ const undo=read('hosted-committed-restore-readback.json')[0].recovery;assert.equal(undo.descriptions,0);assert.equal(undo.work8856.open_library_id,'OL7989537W');
+ const before=read('hosted-preflight.json'),after=read('hosted-postflight.json')[0].preflight;assert.deepEqual(after.preservation,before.preservation);assert.deepEqual(after.sharedAuthor,before.sharedAuthor);
+ const rows=read('hosted-http-matrix.json').rows;assert.equal(rows.length,27);assert.equal(new Set(rows.map(r=>r.productionWorkId)).size,9);for(const r of rows){assert.equal(r.status,200);assert(r.originalHtmlActualText&&r.originalHtmlSourceAnchor&&r.validOriginalHead);assert.equal(r.canonicalCount,1);assert.deepEqual(r.robots,['index, follow']);}
+});
 test('exact ten-action package is nine original summaries plus one verified alias; no new production Works',()=>{
  const manifest=read('release-hashes.json'),review=read('summary-review.json'),p=read('production-plan.json');
  for(const[n,h]of Object.entries(manifest.sha256))assert.equal(createHash('sha256').update(fs.readFileSync(new URL(n,root))).digest('hex'),h,n);
