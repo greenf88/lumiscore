@@ -2,6 +2,7 @@ import type { Book } from '../../app/data/books.ts';
 import type { Locale } from '../i18n/config.ts';
 import { applyStoredPresentation, storedPresentationSelection, type StoredDescription, type StoredEditionMetadata } from '../books/stored-presentation.ts';
 import { supabase } from './client';
+import { PresentationCoverage } from '../books/presentation-coverage.ts';
 import { ReviewedPresentationCache } from '../books/reviewed-presentation-cache.ts';
 
 /** Two indexed public reads for the visible selection only, never a catalogue load.
@@ -11,6 +12,7 @@ import { ReviewedPresentationCache } from '../books/reviewed-presentation-cache.
  * current Work/author/edition bindings checked again below. A successful empty
  * result revokes the previous value immediately. Existing
  * legacy registry approvals are separate and must be retired explicitly if revoked. */
+const coverage = new PresentationCoverage();
 const cache = new ReviewedPresentationCache<{descriptions:StoredDescription[];editions:StoredEditionMetadata[]}>();
 export async function hydrateStoredPresentation(books:readonly Book[],locale:Locale,onRead?:(requests:number)=>void):Promise<Book[]> {
   const {workIds:ids,editionIds,key}=storedPresentationSelection(books,locale);
@@ -24,8 +26,13 @@ export async function hydrateStoredPresentation(books:readonly Book[],locale:Loc
       supabase.from('catalog_edition_metadata').select('edition_id,work_id,bound_author_id,bound_title,bound_language,bound_isbn13,format,cover_url,card_cover_url,evidence_url,review_status')
         .in('edition_id',editionIds).limit(editionIds.length).abortSignal(signal),
     ]);
-    if(d.error||e.error)throw new Error('Reviewed public presentation unavailable');
+    if(d.error||e.error){
+      console.warn(JSON.stringify({event:'catalog_reviewed_source_unavailable',locale,books:books.length,errorType:'database_read'}));
+      throw new Error('Reviewed public presentation unavailable');
+    }
     return {descriptions:d.data as StoredDescription[],editions:e.data as StoredEditionMetadata[]};
-  });return applyStoredPresentation(books,locale,data.descriptions,data.editions);}
+  });const presented=applyStoredPresentation(books,locale,data.descriptions,data.editions);
+  coverage.observe(key,locale,{books:presented.length,summaries:presented.filter(b=>b.storedDescription).length,covers:presented.filter(b=>b.coverUrls?.length).length});
+  return presented;}
   catch {return books.map(book=>({...book,storedPresentationUnavailable:true}));}
 }

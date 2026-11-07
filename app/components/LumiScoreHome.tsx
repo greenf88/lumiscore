@@ -145,8 +145,8 @@ function BookCoverForIdentity({
   const [optimizationFailed, setOptimizationFailed] = useState(false);
   const imageSourceUrl = imageSource?.src;
   const optimized = useMemo(() => imageSourceUrl && variantIndex === 0 && !optimizationFailed
-    ? optimizedCover(imageSourceUrl, presentation, process.env.NEXT_PUBLIC_COVER_DELIVERY === 'vercel') : null,
-    [imageSourceUrl, variantIndex, optimizationFailed, presentation]);
+    ? optimizedCover(imageSourceUrl, presentation, process.env.NEXT_PUBLIC_COVER_DELIVERY === 'vercel', book.cardCoverUrl) : null,
+    [imageSourceUrl, variantIndex, optimizationFailed, presentation, book.cardCoverUrl]);
   const displayedCoverUrl = optimized?.src ?? imageSource?.src ?? null;
   const cardVariantMedia = presentation === 'taste'
     ? '(max-width: 430px) and (max-resolution: 2dppx)'

@@ -17,8 +17,10 @@ export const coverSizes: Record<CoverPresentation, string> = {
   card: '(max-width: 760px) calc((100vw - 92px) / 2), (max-width: 1200px) calc((100vw - 172px) / 3), 200px',
   detail: '(max-width: 780px) min(calc(78vw - 40px), 250px), 312px',
 };
-export function optimizedCover(url: string, presentation: CoverPresentation, enabled: boolean) {
-  if (!enabled || !canOptimizeCover(url)) return null;
+export function optimizedCover(url: string, presentation: CoverPresentation, enabled: boolean, reviewedCardVariant?: string) {
+  // Preserve an explicitly reviewed mobile/compact source. Do not replace a
+  // working small rendition by a potentially unavailable large one.
+  if (!enabled || !canOptimizeCover(url) || (reviewedCardVariant && presentation !== 'detail')) return null;
   // Resize the one verified identity; never replace it with an ISBN/Work guess.
   const original = new URL(url); original.pathname = original.pathname.replace(/-[SML]\.jpg$/, '-L.jpg');
   original.search = '?default=false';

@@ -24,3 +24,9 @@ test('only the bounded, public Open Library cover endpoint is eligible; no arbit
   assert.ok(new RegExp(pattern.hostname).test('covers.openlibrary.org'));
   assert.ok(!new RegExp(pattern.hostname).test('covers.openlibrary.org.evil.test'));
 });
+
+test('an explicit reviewed card rendition is preserved; detail may optimize its own verified identity',()=>{
+ const large='https://covers.openlibrary.org/b/id/240727-L.jpg?default=false',small=large.replace('-L.jpg','-M.jpg');
+ for(const presentation of ['compact','card','taste'] as const)assert.equal(optimizedCover(large,presentation,true,small),null);
+ assert.ok(optimizedCover(large,'detail',true,small));
+});
