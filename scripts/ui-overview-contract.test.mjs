@@ -57,6 +57,7 @@ test('rating UI directly saves an explicit score, with skip/search and no langua
   assert.match(taste,/act\('skip', workId\)/);
   assert.doesNotMatch(taste,/Save rating|setScore\(/);
   assert.match(taste,/setSaved\(action === 'rate'\)/);
-  assert.match(taste,/\/api\/catalog\/search/);
+  assert.match(taste,/\/api\/taste-test\/candidates/);
+  assert.doesNotMatch(taste,/\/api\/catalog\/search/);
   assert.match(taste,/href="\/taste-test\/result"/);
 });

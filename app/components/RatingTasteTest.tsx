@@ -78,7 +78,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
     if (!searchOpen || pending || paused || query.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      fetch(`/api/catalog/search?q=${encodeURIComponent(query)}&locale=${locale}`, { signal: controller.signal }).then(async r => {
+      fetch(`/api/taste-test/candidates?q=${encodeURIComponent(query)}&locale=${locale}`, { cache: 'no-store', signal: controller.signal }).then(async r => {
         if (!r.ok) throw new Error();
         const result = await r.json() as { results?: Book[] };
         if (!controller.signal.aborted) { setResults(result.results ?? []); setSearchError(false); }

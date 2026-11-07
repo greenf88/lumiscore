@@ -62,3 +62,8 @@ scripts/nl71-* text eol=lf
 catalog/nl-scale-20261102/release/final-decision/*.png binary
 # Preserve the archived browser receipt as captured, including its original CRLF.
 catalog/nl-scale-20261102/history/subbatch045-cover-v1/test-safety-recovered.json -text whitespace=cr-at-eol
+# Preserve the separate Even simpel review/import/receipt bytes on every platform.
+catalog/even-simpel-20261107/** -text
+scripts/taste-content* text eol=lf
+app/api/taste-test/rounds/route.ts text eol=lf
+app/components/RatingTasteTest.tsx text eol=lf

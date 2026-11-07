@@ -1,0 +1,172 @@
+Even simpel + centrale smaaktestgeschiktheid — definitief reviewpakket v2
+7 november 2026. Vervangt uitsluitend het releaseadvies AANHOUDEN uit FINAL-REVIEW.txt.
+De oorspronkelijke catalogusbestanden, 38 bewijshashes en negen actiehashes blijven bytegelijk.
+
+STATUS EN VERSIES
+Draft-PR86: https://github.com/greenf88/lumiscore/pull/86
+Datapakketcommit: 0326face62dfbc2717b193e1e8ffba43b245ad0a.
+Geteste definitieve applicatiecommit: 658f50e4e21f934978456240ee0d4d7ad0e6ae95.
+De uiteindelijke PR-head volgt uit Git/PR. De definitieve SQL-versie is apart gehasht; de applicatie blijft bytegelijk.
+Ready Preview: https://lumiscore-6qiznukis-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_Ct6NRt9NAaTBweQ62x6QL6AMpgcB, target null = Preview, uitsluitend testproject hlvujbrmfdlrfxdjwsmb.
+Main/productie read-only herbevestigd op 98a53a944b12831cbc320812ed79ed4faddf5a7e.
+Productie Ready dpl_9pxDb5uv1xb5HiwqwmfZAXB2F8qt. Geen Even simpel-editie of nieuwe helper op productie.
+PR85, socialplanning, persoonlijke rangschikking, PR51, thema/vormgeving en catalogusvoorwaarden ongewijzigd.
+Geen productie-import, merge of publicatie uitgevoerd. Social-post blijft aangehouden.
+
+OORZAAK EN DAADWERKELIJKE KETEN
+De app gebruikt RatingTasteTest → /api/taste-test/rounds → public.taste_rating_advance_v2.
+Productie: wrapper naar oude taste_private.advance_round_v2; selectie controleerde vooral editie-/taalaanwezigheid,
+eerdere aanbiedingen en beoordelingen. Een positieve inhoudelijke genre-/categoriecontrole ontbrak.
+Test: v2 wrapper naar advance_round_v3 plus private eligible_inventory_v1/inventory_current_v1.
+Die aanvullende, strengere inventaris staat niet op productie; bestaande testinventaris was bovendien verouderd.
+Dit zijn aantoonbare databaseverschillen, geen aanname dat de ruimere productiecollectie hetzelfde beleid gebruikte.
+Snapshotfuncties, ACLs en selectiebodies staan in taste-production-before.json en taste-test-before.json.
+
+Daarnaast doorzocht de smaaktestclient de gewone /api/catalog/search. Deze catalogus mag kookboeken tonen:
+dezelfde ongefilterde resultaten als smaaktestkeuze aanbieden was de omweg. GET/hervatten presenteerde een
+bewaard huidig Work zonder nieuwe inhoudelijke geschiktheidscontrole. Aanvullen kon opnieuw de oude pool gebruiken.
+De niet-gepubliceerde centrale voorstelbranch fix/taste-eligibility-editions-series-20261017 had al een
+kookboekfilter; die was geen actieve centrale regel op main/productie. Alleen de inhoudspoort is hergebruikt.
+De ongerelateerde reeks-/vervolgdeel-, inventarisuitrol- en rangschikkingswijzigingen zijn niet overgenomen.
+
+GERICHTE OPLOSSING
+- lib/taste-test/content-policy.ts: één gegenereerde inhoudspoort, gebruikt in database én API.
+  Expliciete categorie nonfiction_cooking_food sluit uit, ook bij andere labels.
+  Betrouwbare cooking/recipe-labels met confidence >=0,6 sluiten uit. Een bestaande specifiekere
+  gecontroleerde niet-kookcategorie gaat vóór een losse externe onderwerpterm; expliciete handmatige/
+  reviewed_seed-kookbewijzen blijven uitsluiten. Zo wordt niet alle non-fictie geweerd.
+  Positief categorie- of genrebewijs vereist; ontbrekende classificatie is geen goedkeuring.
+  Identiteit en editie-/taalvoorwaarden blijven gelden. Bestaande goedgekeurde formaatmetadata wordt gebruikt;
+  onbekend formaat wordt niet als print geclassificeerd. Geen algemene, nieuwe verplichte printinventaris.
+  Geen Work-ID, titel of auteur als uitsluitingsuitzondering. De generieke bestaande formaattermen blijven.
+- Eén migratie supabase/migrations/20261107103923_taste_content_guard.sql.
+  Patcht productie-v2 of test-v3 uitsluitend bij bekende functiebodies; behoudt bestaande testinventaris als extra poort.
+  Selectie en aanvullen filteren vóór de ONGEWIJZIGDE ORDER BY. Geen persoonlijke reken-/rangschikkingswijziging.
+  GET maskeert een ongeschikt bewaard aanbod read-only. Expliciet resume/start/extend/choose markeert alleen
+  het eigen nog open ongeschikte aanbod skipped; de rij/historie, beoordelingen en ratedCount blijven behouden.
+  choose/rate controleren opnieuw, zodat een oud tabblad geen ongeschikte smaaktestrating kan invoegen.
+- app/api/taste-test/rounds/route.ts: dezelfde inhoudspoort vóór presentatie; bron-/RPC-fouten falen gesloten.
+- app/api/taste-test/candidates/route.ts: ingelogd, privé/no-store, maximaal20, dezelfde ronde- én weergavetaalcontrole;
+  geen terugval naar gewone catalogus bij een fout. Oorspronkelijke Work-titel en bestaande titelaliassen blijven doorzoekbaar;
+  positieve regressietests bewijzen dit ook wanneer de editietitel anders is. Bestaande publicatieselector maakt kaart/detailpresentatie.
+- app/components/RatingTasteTest.tsx: uitsluitend zoekendpoint vervangen. Geen ontwerp-/CSS-wijziging.
+- Gewone catalogus, detail en directe beoordelingsroute ongewijzigd. Een kookboek daar beoordelen blijft toegestaan.
+- Nieuwe bounded read-only private helper is SECURITY DEFINER met lege search_path en auth.uid-controle,
+  om bestaande private inventaris te kunnen toetsen zonder SELECT-/schemagrants. Alleen authenticated krijgt EXECUTE;
+  PUBLIC/anon/service_role worden op de drie nieuwe helpers expliciet ingetrokken. Bestaande ACLs blijven intact.
+  Publieke wrappers zijn SECURITY INVOKER. Security-advisorbevindingen vóór/na inhoudelijk gelijk (taste-advisor-delta.json).
+
+PRODUCTIE-IMPACT — GEHELE CATALOGUS, READ-ONLY
+10.445 unieke Works geëvalueerd, geen HTTP-steekproef. Reproduceerbaar: taste-production-impact.sql/.json.
+EN: oude taalpool6.380 → nieuwe inhoudelijk geschikte pool5.729 (651 niet meer als smaaktestkandidaat).
+NL: oude taalpool3.346 → nieuwe pool2.523 (823 niet meer als smaaktestkandidaat).
+Dit zijn theoretische kandidaten vóór gebruikersuitsluitingen, niet catalogusbeschikbaarheid, aantallen kookboeken
+of nieuwe rangschikkingen. Gewone zoek-/boekpagina’s blijven bestaan en bestaande ratings tellen ongewijzigd mee.
+De 20 raw-labelmatches in taste-production-cooking.json zijn BRONSIGNALEN, geen20 geverifieerde kookboeken.
+Work1442 Simpel en Work1533 5 ingrediënten worden geweerd op kookbewijs; Jamie in30minuten1462 heeft bovendien
+onbekende taal/classificatie en wordt niet stilzwijgend toegelaten. Geen auteurblokkade.
+Educated82 en Atomic Habits107 behouden hun geschikte Nederlandse smaaktestpresentatie.
+Brede externe Cooking-labels bij The Omnivore’s Dilemma92, Fast Food Nation802 en The4-HourWorkweek869
+zijn afzonderlijk beoordeeld: specifiekere cataloguscategorieën worden niet door zo'n losse term vervangen.
+Een taalvariant kan nog om bestaande editievoorwaarden ontbreken; bronvoorrang bewijst geen nieuwe taaleditie.
+
+ONGEWIJZIGD CATALOGUSVOORSTEL — NEGEN ACTIES, NETTO +1
+Nieuw afzonderlijk Work Simple Too/Even simpel; primaire auteur Yotam Ottolenghi hergebruikt.
+NL hardcover Even simpel, ISBN9789464044263, Fontaine2026, categorie nonfiction_cooking_food.
+1 Work +1 editie +1 covermetadata +1 oorspronkelijke bronvermelde NL-samenvatting +4 titelaliassen +1 categorie.
+Geen nieuwe auteur. Simpel Work1442 en alle bestaande gegevens blijven ongewijzigd.
+Exacte test-Work990710001/editie990720001 zijn behouden voor review; productie-ID’s worden veilig toegewezen.
+Identiteits-/bibliotheek-/uitgeversbewijs, bijdragevermelding en oorspronkelijke samenvatting blijven in reviewed-book.json.
+Oorspronkelijk release-hashes.json SHA256:
+75f57439b71871d01d6828cbe3a0d7014a705983efd7476855e6420ab5b45719
+production-apply.sql SHA256:
+544df5a80a49cee28919a957f3f2088e1c019f55be8b65f969b4cc8a37d01b44
+Alle9 oorspronkelijke actiehashes en alle38 historische bewijshashes opnieuw gelijk bevonden.
+Geen catalogusacties toegevoegd om de codefix te laten slagen.
+
+GELDIG EN AANVULLEND BEWIJS
+1. Hergebruikt:28 boekpresentatiecontroles op exacte voorgestelde editie, NL/EN,390/1440, Paper/Ink,
+   kaarten/detail, Nederlandse/originele zoekalias, bron, ISBN, geladen cover en lege publieke score.
+   App966320bf... op bestaande test-Preview; inhoud, loader, themavormgeving en brongegevens ongewijzigd.
+   Geen claim dat dit nieuw productie- of PR85-releasebewijs is.
+   Eerste import9, replay0, gecommitteerd herstel9 en onafhankelijke fingerprints, daarna herinvoer9.
+   Oorspronkelijke eerste receipt blijft bewaard; zie test-first-committed-receipt.json en test-committed-restore-proof.json.
+2. Aanvullend:28 ingelogde hosted smaaktestregistraties op app a527d868... (zelfde runtimebestanden als definitieve app).
+   NL mobiel390, EN desktop1440, Paper/Ink, nieuwe ronde, geschikte fictie en toegestane memoir,
+   kookboeken niet in smaakzoekresultaten, expliciete keuze409, aanvullen10→15, één opgeslagen rating,
+   verouderd kookboekaanbod verbergen zonder GET-write, hervatten met ratedCount1 behouden.
+   Gewone Even simpel-zoekopdracht blijft1 resultaat; directe reguliere beoordeling lukte en is gericht verwijderd.
+3. Definitieve app658f50e... en definitieve geïnstalleerde SQL: zes extra hosted checks in taste-final-hosted-smoke.json.
+   Exact Even simpel in NL én EN ongeschikt voor smaaktest, beide smaakzoekopdrachten leeg,
+   gewone catalogus vindt de exacte test-Work en gast krijgt401 op de privé-smaakzoekroute.
+   De late bronvoorrang-/ACL-refinement verandert geen van de eerder gebruikte fictie/memoir/kookboekclassificaties.
+   Daarom zijn de geldige28 uitgebreidere rondecontroles hergebruikt; de nieuwe bronvoorrang en oorspronkelijke titel-/aliaszoekroute zijn apart in SQL getest.
+   De zes definitieve hosted checks zijn na die laatste zoekcorrectie opnieuw uitgevoerd.
+4.20 gerichte lokale regressietests geslaagd: echte vastgelegde productie-/testfuncties in PostgreSQL/PGlite,
+   nieuwe en opgeslagen kaarten, kiezen, afwijzen, hervatten, aanvullen, NL/EN, privé-inventaris zonder SELECT-grant,
+   bronvoorrang, dubbele installatie, gecommitteerd functieherstel, latere wijzigingsguard, negen dataacties,
+   volledige migratieketen, UI-/ratingcontract. tsc en relevante ESLint groen.
+5. CI op definitieve applicatiecommit: https://github.com/greenf88/lumiscore/actions/runs/42368605120
+   Uiteindelijke exacte PR-head/CI wordt bij oplevering apart vastgelegd. Geen groen claimen voor een nog lopende run.
+   Volledige unit-/type-/lint-/SSR-/metadata-/build-/clientsecretscontroles moeten op die head groen zijn.
+   Twee historische Windows-CRLF-hashafwijkingen uit een eerste brede lokale run zijn niet als productfout verborgen
+   of met gewijzigde oude manifests weggepoetst; de echte Linux-CI controleert de ongewijzigde historische pakketten.
+
+HERSTEL EN OPRUIMING OP TEST
+De definitieve functies waren werkelijk gecommitteerd en zijn via de bestaande geautoriseerde officiële
+Supabase CLI v2.117.0 hersteld. Helper daarna afwezig en beide oude functiebodies exact teruggelezen.
+Tien fingerprints vóór herstel, na herstel en na geregistreerde herinstallatie identiek.
+MCP-herstelbevestiging verliep eenmaal met "This confirmation expired after 2 minutes." Geen identieke retry.
+De bestaande CLI-route was technisch beschikbaar en toegestaan; geen beveiligingsweigering of rechtenwijziging omzeild.
+Installaties/herinstallatie zijn via apply_migration geregistreerd. Geen handmatige migratiehistorie-inserts.
+De vroege testprototypes staan alleen als historische testrecords; productie krijgt uitsluitend de ene definitieve migratie.
+taste-code-committed-restore-proof.json en taste-title-alias-restore-proof.json bevatten de echte gecommitteerde proeven; dit is geen uitsluitend ROLLBACK-dry-run.
+Lokale CAS/body-/ACL-/dependencytests stoppen bij latere wijzigingen; geen CASCADE.
+De15 eigen fictie/memoir/inventarisfixtures en alle eigen synthetische accounts/ratings/rondes zijn gericht verwijderd.
+Tien catalogus-/gebruikersvingerafdrukken zijn weer exact gelijk aan de toestand vóór die tijdelijke fixtures.
+De negen Even simpel-reviewrecords blijven staan. Bestaande gedeelde data en nummerreeksen niet gereset.
+De vooraf al verouderde testinventaris kan na cleanup een lege ronde geven; dat is geen bewijs over productiecapaciteit.
+Het niet-lege, geschikte testprofiel is tijdens de hierboven gedocumenteerde acceptatie daadwerkelijk getest.
+
+VEILIGE UITVOERINGSVOLGORDE — PAS NA AFZONDERLIJK RELEASEAKKOORD
+1. Exacte PR-head, volledige CI, main/productie, release-hashes-v2.json en afzonderlijke hashes hercontroleren.
+   Productie vooraf alleen-lezen: bronfuncties/ACLs, ontbreken helpers/conflicten, auteur763/corpus/ISBN/aliassen.
+   Bewaar actuele functie-/rechtenmomentopname plus begrensde catalogusuitgangstoestand.
+   Stop bij drift; geen oude testinventaris of prototypes naar productie kopiëren.
+2. Installeer uitsluitend supabase/migrations/20261107103923_taste_content_guard.sql via apply_migration met correcte
+   migratieregistratie. Geen volledige db push van ongerelateerde lokale migraties. Canonieke hash:
+   7fd8c888c38f59544d841de4757f0667e80a3fbdd853d620da8bf47e6cc4b964
+   taste-install.sql is bytegelijk. taste-production-install.sql/taste-test-install.sql zijn auditvarianten,
+   NIET aanvullende uit te voeren migraties. test-only-prototype-migration.sql nooit op productie installeren.
+   Lees bronfuncties, helpers, ACLs, lege search_path en registry terug; controleer de productieclassificatie read-only.
+   Bij verlopen bevestiging of afwijking stoppen; geen identieke bevestigingslus.
+3. Merge/publiceer uitsluitend de goedgekeurde app, controleer Ready-alias/SHA en werkende gast-/ingelogde leesroutes.
+   De poort moet geïnstalleerd zijn vóór de nieuwe API. De gewone catalogus blijft kookboeken kunnen zoeken/beoordelen.
+4. Pas pas daarna de9 dataacties uit production-apply.sql transactioneel toe met alle bestaande guards.
+   Bewaar de EERSTE niet-lege receipt; tweede toepassing moet0 wijzigingen geven.
+   Lees exact Work/editie/ISBN/categorie/cover/samenvatting/aliassen terug; bepaal netto Nederlandse beschikbaarheid.
+5. Live: beide titelzoekopdrachten, exacte boekidentiteit, geladen kaart/detailcover, bron/lege score/terugnavigatie,
+   NL/EN, Paper/Ink, mobiel/desktop. Controleer inhoudspoort en bestaande kookboeken, geen echte ratings/testevents schrijven.
+   Een bestaande toegestane ingelogde sessie kan uitsluitend read-only controleren; geen productieaccount aanmaken.
+6. Pas na goedgekeurde release én geslaagde livecontrole bevestigde publieke URL aan Social opleveren.
+   Nu geen publieke URL of publicatieclaim.
+
+GERICHT HERSTELPAD
+Catalogus: uitsluitend production-restore.sql met de eerste eigen receipt, parent-/volledige-rij-CAS-/inkomende-FK-guards.
+Geen gedeelde data of sequence reset; bij latere rating/afhankelijkheid stoppen en legitieme gegevens behouden.
+Code: vorige Ready-deployment beschikbaar. DB-poort zo nodig laten staan totdat een veilige data-/codecombinatie vaststaat.
+Functies: taste-production-restore.sql uitsluitend na codeherstel en controle van exacte geïnstalleerde bodies/ACLs,
+geen latere wijzigingen/dependencies; herstelt oude bronfuncties en verwijdert alleen de drie nieuwe helpers.
+Als de nieuwe boekdata door legitieme afhankelijkheden niet veilig terug kan, de kookboekbeveiliging behouden en gericht
+vooruit repareren; niet blind terug naar de oude ongefilterde smaaktestroute terwijl Even simpel aanwezig blijft.
+SQLherstel SHA256 eb4e75211c6cbf491ce647385a68a2cfa0636b0bb9bad93312021b8412f16181.
+Productiecatalogusherstel SHA256 c2228fc59fc94e0c6481cd16e48805ddb2eb072ae5611a5080ef74382906aa12.
+
+BEPERKINGEN EN RELEASEOORDEEL
+Cover is exact geverifieerd,6.218bytes,220×304. Detailresolutie blijft klein; grotere varianten404, geen nieuwe host/proxy,
+geen rehosting of claim op bulk-/hergebruiksrechten. Dit is een gedocumenteerde kwaliteitsbeperking, geen kapotte cover.
+De volledige bestaande reeks-/revisit-/inventarisuitrol en personalisatielogica zijn niet in dit pakket gewijzigd.
+Bronclassificatie blijft onderhoud vragen; onzekere inhoud wordt niet geschikt verklaard om aantallen te verhogen.
+Geen claim van productieherstel, SEO-indexering, conversie- of snelheidswinst.
+Releaseadvies: verantwoord ter goedkeuring nadat de exacte finale head groen is; code/één migratie eerst,9 dataacties daarna.
