@@ -1,0 +1,244 @@
+-- Restore only after code rollback; guards for the exact installed body required.
+begin;
+do $guard$ begin
+if pg_get_functiondef('taste_private.advance_round_v3(text, uuid, bigint, integer, text, integer)'::regprocedure) is distinct from 'CREATE OR REPLACE FUNCTION taste_private.advance_round_v3(p_action text, p_round_id uuid, p_work_id bigint, p_score integer, p_language text, p_goal integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''''
+AS $function$
+declare
+  uid uuid := auth.uid(); r public.taste_rating_rounds; o public.taste_rating_offers;
+  next_work bigint; inserted integer;
+begin
+  if uid is null then raise exception ''Authentication required'' using errcode=''42501''; end if;
+  if p_action is null or p_action not in (''start'',''resume'',''skip'',''rate'',''choose'',''extend'',''revisit'') then
+    raise exception ''Invalid action'' using errcode=''22023''; end if;
+  -- Same reader lock as v1/v2; transaction scoped, no global table lock per action.
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(''lumiscore-taste:''||uid::text,0));
+  select * into r from public.taste_rating_rounds where user_id=uid order by round_number desc limit 1 for update;
+  if p_action=''start'' then
+    if p_goal is null or p_goal not in (10,15,20,30) or p_language is null or p_language not in (''nl'',''en'') then
+      raise exception ''Invalid round choice'' using errcode=''22023''; end if;
+    -- Stale/double starts cannot erase an open round or advance a completed one.
+    if r.id is not null and r.completed_at is not null and p_round_id is distinct from r.id then
+      raise exception ''Refresh before another round'' using errcode=''22023''; end if;
+    if r.id is null or r.completed_at is not null then
+      insert into public.taste_rating_rounds(user_id,round_number,language,goal)
+        values(uid,coalesce(r.round_number,0)+1,p_language,p_goal) returning * into r;
+    end if;
+  elsif r.id is null or p_round_id is distinct from r.id then
+    raise exception ''Round not current'' using errcode=''22023'';
+  end if;
+  if p_action=''extend'' then
+    if r.goal=20 or p_goal is null or p_goal not in (15,30) or p_goal<r.goal then
+      raise exception ''Invalid extension'' using errcode=''22023''; end if;
+    if p_goal>r.goal then update public.taste_rating_rounds set goal=p_goal,completed_at=null
+      where id=r.id and user_id=uid returning * into r; end if;
+  end if;
+  -- Retire only an ineligible pending offer; keep history, all ratings and counters.
+  -- GET is read-only; explicit resume/extend/start/choose performs this transition.
+  if p_action in (''start'',''resume'',''extend'',''choose'') and r.completed_at is null then
+    update public.taste_rating_offers set decision=''skipped'',decided_at=now()
+      where round_id=r.id and user_id=uid and decision=''offered''
+        and not taste_private.content_eligible_v1(work_id,r.language);
+  end if;
+  if p_action in (''rate'',''skip'') then
+    select * into o from public.taste_rating_offers where user_id=uid and round_id=r.id and work_id=p_work_id for update;
+    if o.work_id is null then raise exception ''Book not offered'' using errcode=''22023''; end if;
+    if o.decision<>''offered'' then
+      if (p_action=''rate'' and o.decision=''rated'' and o.score=p_score) or (p_action=''skip'' and o.decision=''skipped'') then
+        return public.taste_rating_state_v3(); end if;
+      raise exception ''Book already decided'' using errcode=''22023'';
+    end if;
+    if r.completed_at is not null then raise exception ''Round complete'' using errcode=''22023''; end if;
+    if p_action=''rate'' then
+      if not taste_private.content_eligible_v1(p_work_id,r.language) then raise exception ''Book no longer taste eligible; resume'' using errcode=''22023'';end if;
+      if p_score is null or p_score<1 or p_score>10 then raise exception ''Invalid rating'' using errcode=''22023''; end if;
+      if not taste_private.inventory_current_v1(p_work_id,r.language) then
+        raise exception ''Verified inventory unavailable'' using errcode=''22023''; end if;
+      insert into public.ratings(user_id,work_id,rating) values(uid,p_work_id,p_score)
+        on conflict(user_id,work_id) do nothing;
+      get diagnostics inserted=row_count;
+      if inserted<>1 then raise exception ''Existing rating preserved'' using errcode=''23505''; end if;
+      -- Keep the existing rating-implies-read trigger; never write a parallel status.
+      update public.taste_rating_offers set decision=''rated'',score=p_score,decided_at=now()
+        where user_id=uid and round_id=r.id and work_id=p_work_id;
+    else
+      update public.taste_rating_offers set decision=''skipped'',decided_at=now()
+        where user_id=uid and round_id=r.id and work_id=p_work_id;
+    end if;
+  elsif p_action=''choose'' then
+    if not taste_private.content_eligible_v1(p_work_id,r.language) then raise exception ''Choose an eligible book'' using errcode=''22023'';end if;
+    if r.completed_at is not null or p_work_id is null
+      or not taste_private.inventory_current_v1(p_work_id,r.language)
+      or exists(select 1 from public.ratings where user_id=uid and work_id=p_work_id)
+      or exists(select 1 from public.user_book_status where user_id=uid and work_id=p_work_id and status=''read'')
+      or exists(select 1 from public.taste_rating_offers where user_id=uid and work_id=p_work_id and
+        (round_id=r.id or decision<>''skipped'' or not r.revisit_prior_skips)) then
+      raise exception ''Choose another eligible unrated book'' using errcode=''22023''; end if;
+    -- Explicit choosing abandons only the current offer, not old round history.
+    update public.taste_rating_offers set decision=''skipped'',decided_at=now()
+      where user_id=uid and round_id=r.id and decision=''offered'';
+    insert into public.taste_rating_offers(round_id,user_id,work_id) values(r.id,uid,p_work_id);
+  elsif p_action=''revisit'' then
+    if r.completed_at is not null or exists(select 1 from public.taste_rating_offers where user_id=uid and round_id=r.id and decision=''offered'') then
+      raise exception ''Revisit only after exhaustion'' using errcode=''22023''; end if;
+    update public.taste_rating_rounds set revisit_prior_skips=true where id=r.id and user_id=uid returning * into r;
+  end if;
+  if (select count(*) from public.taste_rating_offers where round_id=r.id and user_id=uid and decision=''rated'')>=r.goal then
+    update public.taste_rating_rounds set completed_at=coalesce(completed_at,now()) where id=r.id and user_id=uid;
+  elsif r.completed_at is null and not exists(select 1 from public.taste_rating_offers where round_id=r.id and user_id=uid and decision=''offered'') then
+    select w.id into next_work from public.works w
+    join taste_private.eligible_inventory_v1 i on i.work_id=w.id and i.language=r.language
+    where taste_private.inventory_current_v1(w.id,r.language)
+      and not exists(select 1 from public.ratings x where x.user_id=uid and x.work_id=w.id)
+      and not exists(select 1 from public.user_book_status x where x.user_id=uid and x.work_id=w.id and x.status=''read'')
+      and not exists(select 1 from public.taste_rating_offers x where x.user_id=uid and x.work_id=w.id
+        and (x.round_id=r.id or x.decision<>''skipped'' or not r.revisit_prior_skips))
+      and taste_private.content_eligible_v1(w.id,r.language)
+    order by
+      (select count(*) from public.taste_rating_offers x join public.works prev on prev.id=x.work_id where x.round_id=r.id and prev.author_id=w.author_id),
+      (select count(*) from public.taste_rating_offers x join public.work_catalog_categories prev on prev.work_id=x.work_id
+        where x.round_id=r.id and exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id=prev.category_id)),
+      (select count(*) from public.ratings popularity where popularity.work_id=w.id) desc,
+      (w.cover_id is not null) desc,w.id limit 1;
+    if next_work is not null then insert into public.taste_rating_offers(round_id,user_id,work_id) values(r.id,uid,next_work); end if;
+  end if;
+  return public.taste_rating_state_v3();
+end;
+$function$
+' then raise exception 'Later function change; recovery refused';end if;
+if pg_get_functiondef('public.taste_rating_state()'::regprocedure) is distinct from 'CREATE OR REPLACE FUNCTION public.taste_rating_state()
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE
+ SET search_path TO ''''
+AS $function$
+  select coalesce((select jsonb_build_object(
+    ''round'',jsonb_build_object(''id'',r.id,''number'',r.round_number,''language'',r.language,
+      ''goal'',r.goal,''complete'',r.completed_at is not null,''ratedCount'',(select count(*) from public.taste_rating_offers o where o.round_id=r.id and o.decision=''rated''),
+      ''offeredCount'',(select count(*) from public.taste_rating_offers o where o.round_id=r.id)),
+    ''currentWorkId'',(select work_id::text from public.taste_rating_offers o where o.round_id=r.id and o.decision=''offered'' and taste_private.content_eligible_v1(o.work_id,r.language)),
+    ''exhausted'',r.completed_at is null and not exists(select 1 from public.taste_rating_offers o where o.round_id=r.id and o.decision=''offered'' and taste_private.content_eligible_v1(o.work_id,r.language)))
+    from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1),
+    ''{"round":null,"currentWorkId":null,"exhausted":false}''::jsonb);
+$function$
+' then raise exception 'Later function change; recovery refused';end if;
+end;$guard$;
+CREATE OR REPLACE FUNCTION taste_private.advance_round_v3(p_action text, p_round_id uuid, p_work_id bigint, p_score integer, p_language text, p_goal integer)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO ''
+AS $function$
+declare
+  uid uuid := auth.uid(); r public.taste_rating_rounds; o public.taste_rating_offers;
+  next_work bigint; inserted integer;
+begin
+  if uid is null then raise exception 'Authentication required' using errcode='42501'; end if;
+  if p_action is null or p_action not in ('start','resume','skip','rate','choose','extend','revisit') then
+    raise exception 'Invalid action' using errcode='22023'; end if;
+  -- Same reader lock as v1/v2; transaction scoped, no global table lock per action.
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('lumiscore-taste:'||uid::text,0));
+  select * into r from public.taste_rating_rounds where user_id=uid order by round_number desc limit 1 for update;
+  if p_action='start' then
+    if p_goal is null or p_goal not in (10,15,20,30) or p_language is null or p_language not in ('nl','en') then
+      raise exception 'Invalid round choice' using errcode='22023'; end if;
+    -- Stale/double starts cannot erase an open round or advance a completed one.
+    if r.id is not null and r.completed_at is not null and p_round_id is distinct from r.id then
+      raise exception 'Refresh before another round' using errcode='22023'; end if;
+    if r.id is null or r.completed_at is not null then
+      insert into public.taste_rating_rounds(user_id,round_number,language,goal)
+        values(uid,coalesce(r.round_number,0)+1,p_language,p_goal) returning * into r;
+    end if;
+  elsif r.id is null or p_round_id is distinct from r.id then
+    raise exception 'Round not current' using errcode='22023';
+  end if;
+  if p_action='extend' then
+    if r.goal=20 or p_goal is null or p_goal not in (15,30) or p_goal<r.goal then
+      raise exception 'Invalid extension' using errcode='22023'; end if;
+    if p_goal>r.goal then update public.taste_rating_rounds set goal=p_goal,completed_at=null
+      where id=r.id and user_id=uid returning * into r; end if;
+  end if;
+  if p_action in ('rate','skip') then
+    select * into o from public.taste_rating_offers where user_id=uid and round_id=r.id and work_id=p_work_id for update;
+    if o.work_id is null then raise exception 'Book not offered' using errcode='22023'; end if;
+    if o.decision<>'offered' then
+      if (p_action='rate' and o.decision='rated' and o.score=p_score) or (p_action='skip' and o.decision='skipped') then
+        return public.taste_rating_state_v3(); end if;
+      raise exception 'Book already decided' using errcode='22023';
+    end if;
+    if r.completed_at is not null then raise exception 'Round complete' using errcode='22023'; end if;
+    if p_action='rate' then
+      if p_score is null or p_score<1 or p_score>10 then raise exception 'Invalid rating' using errcode='22023'; end if;
+      if not taste_private.inventory_current_v1(p_work_id,r.language) then
+        raise exception 'Verified inventory unavailable' using errcode='22023'; end if;
+      insert into public.ratings(user_id,work_id,rating) values(uid,p_work_id,p_score)
+        on conflict(user_id,work_id) do nothing;
+      get diagnostics inserted=row_count;
+      if inserted<>1 then raise exception 'Existing rating preserved' using errcode='23505'; end if;
+      -- Keep the existing rating-implies-read trigger; never write a parallel status.
+      update public.taste_rating_offers set decision='rated',score=p_score,decided_at=now()
+        where user_id=uid and round_id=r.id and work_id=p_work_id;
+    else
+      update public.taste_rating_offers set decision='skipped',decided_at=now()
+        where user_id=uid and round_id=r.id and work_id=p_work_id;
+    end if;
+  elsif p_action='choose' then
+    if r.completed_at is not null or p_work_id is null
+      or not taste_private.inventory_current_v1(p_work_id,r.language)
+      or exists(select 1 from public.ratings where user_id=uid and work_id=p_work_id)
+      or exists(select 1 from public.user_book_status where user_id=uid and work_id=p_work_id and status='read')
+      or exists(select 1 from public.taste_rating_offers where user_id=uid and work_id=p_work_id and
+        (round_id=r.id or decision<>'skipped' or not r.revisit_prior_skips)) then
+      raise exception 'Choose another eligible unrated book' using errcode='22023'; end if;
+    -- Explicit choosing abandons only the current offer, not old round history.
+    update public.taste_rating_offers set decision='skipped',decided_at=now()
+      where user_id=uid and round_id=r.id and decision='offered';
+    insert into public.taste_rating_offers(round_id,user_id,work_id) values(r.id,uid,p_work_id);
+  elsif p_action='revisit' then
+    if r.completed_at is not null or exists(select 1 from public.taste_rating_offers where user_id=uid and round_id=r.id and decision='offered') then
+      raise exception 'Revisit only after exhaustion' using errcode='22023'; end if;
+    update public.taste_rating_rounds set revisit_prior_skips=true where id=r.id and user_id=uid returning * into r;
+  end if;
+  if (select count(*) from public.taste_rating_offers where round_id=r.id and user_id=uid and decision='rated')>=r.goal then
+    update public.taste_rating_rounds set completed_at=coalesce(completed_at,now()) where id=r.id and user_id=uid;
+  elsif r.completed_at is null and not exists(select 1 from public.taste_rating_offers where round_id=r.id and user_id=uid and decision='offered') then
+    select w.id into next_work from public.works w
+    join taste_private.eligible_inventory_v1 i on i.work_id=w.id and i.language=r.language
+    where taste_private.inventory_current_v1(w.id,r.language)
+      and not exists(select 1 from public.ratings x where x.user_id=uid and x.work_id=w.id)
+      and not exists(select 1 from public.user_book_status x where x.user_id=uid and x.work_id=w.id and x.status='read')
+      and not exists(select 1 from public.taste_rating_offers x where x.user_id=uid and x.work_id=w.id
+        and (x.round_id=r.id or x.decision<>'skipped' or not r.revisit_prior_skips))
+    order by
+      (select count(*) from public.taste_rating_offers x join public.works prev on prev.id=x.work_id where x.round_id=r.id and prev.author_id=w.author_id),
+      (select count(*) from public.taste_rating_offers x join public.work_catalog_categories prev on prev.work_id=x.work_id
+        where x.round_id=r.id and exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id=prev.category_id)),
+      (select count(*) from public.ratings popularity where popularity.work_id=w.id) desc,
+      (w.cover_id is not null) desc,w.id limit 1;
+    if next_work is not null then insert into public.taste_rating_offers(round_id,user_id,work_id) values(r.id,uid,next_work); end if;
+  end if;
+  return public.taste_rating_state_v3();
+end;
+$function$
+;
+CREATE OR REPLACE FUNCTION public.taste_rating_state()
+ RETURNS jsonb
+ LANGUAGE sql
+ STABLE
+ SET search_path TO ''
+AS $function$
+  select coalesce((select jsonb_build_object(
+    'round',jsonb_build_object('id',r.id,'number',r.round_number,'language',r.language,
+      'goal',r.goal,'complete',r.completed_at is not null,'ratedCount',(select count(*) from public.taste_rating_offers o where o.round_id=r.id and o.decision='rated'),
+      'offeredCount',(select count(*) from public.taste_rating_offers o where o.round_id=r.id)),
+    'currentWorkId',(select work_id::text from public.taste_rating_offers o where o.round_id=r.id and o.decision='offered'),
+    'exhausted',r.completed_at is null and not exists(select 1 from public.taste_rating_offers o where o.round_id=r.id and o.decision='offered'))
+    from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1),
+    '{"round":null,"currentWorkId":null,"exhausted":false}'::jsonb);
+$function$
+;
+drop function public.taste_rating_candidates(text,text);drop function public.taste_rating_allowed(bigint,text);drop function taste_private.content_eligible_v1(bigint,text);
+commit;

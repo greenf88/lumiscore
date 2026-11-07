@@ -10,12 +10,17 @@ function reviewUsesProduction() {
     supabaseUrl: readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL') });
 }
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
-async function present(state: RatingRoundState, request: Request) {
+async function present(state: RatingRoundState, request: Request, client: Awaited<ReturnType<typeof getVerifiedServerUser>>['client']) {
   const { locale } = await resolveRequestLocale(request);
+  if (state.currentWorkId) {
+    const { data, error } = await client.rpc('taste_rating_allowed', { p_work_id: Number(state.currentWorkId), p_language: locale });
+    if (error) throw error; // Missing migration or failed read is never permission to bypass the policy.
+    if (data !== true) return { authenticated: true, available: true, state, book: null };
+  }
   const { loadCatalogBooksByIdsWithStoredCovers, loadCatalogBook } = await import('@/lib/supabase/books');
   const books = state.currentWorkId ? await loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale) : [];
-  // Preserve the offered Work and every stored counter. An unavailable edition
-  // remains skippable/searchable without presenting an unsuitable title or cover.
+  // The DB masks ineligible saved offers, preserving every stored rating/counter.
+  // Explicit resume retires only an invalid pending offer and selects a replacement.
   const book = books[0] ?? (state.currentWorkId ? await loadCatalogBook(state.currentWorkId, locale) : null);
   return { authenticated: true, available: true, state, book };
 }
@@ -27,7 +32,7 @@ export async function GET(request: Request) {
     const { data, error } = await client.rpc('taste_rating_state');
     if (error?.code === 'PGRST202') return json({ authenticated: true, available: false, reason: 'migration-required' });
     if (error) throw error;
-    return json(await present(data as RatingRoundState, request));
+    return json(await present(data as RatingRoundState, request, client));
   } catch { return json({ error: 'Taste round unavailable.' }, 503); }
 }
 export async function POST(request: NextRequest) {
@@ -48,6 +53,6 @@ export async function POST(request: NextRequest) {
     if (error?.code === '22023') return json({ error: 'stale-or-invalid-action' }, 409);
     if (error?.code === 'PGRST202') return json({ error: 'migration-required' }, 503);
     if (error) throw error;
-    return json(await present(data as RatingRoundState, request));
+    return json(await present(data as RatingRoundState, request, client));
   } catch { return json({ error: 'Action could not be confirmed. Refresh to see saved progress.' }, 503); }
 }
