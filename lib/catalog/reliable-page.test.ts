@@ -47,3 +47,15 @@ test('large valid 128-card SSR prefixes fit, and query failures have a short err
  await assert.rejects(cache.get(o));assert.equal(calls,3);
  now=5001;await assert.rejects(cache.get(o));assert.equal(calls,6);
 });
+
+test('permission denial never replays an earlier public snapshot or retries the denied operation',async()=>{
+ for(const fault of [new CatalogUnavailable('upstream_data',401),new CatalogUnavailable('upstream_data',403),Object.assign(Error(),{code:'PGRST301'}),Object.assign(Error(),{status:403})]){
+  let now=0,calls=0;const cache=new ReliableCatalogPages<number>(()=>now,async()=>{},()=>0,()=>{});
+  const o={key:'public',locale:'en',page:1,validate:(n:number)=>n,load:async()=>16};
+  assert.equal(await cache.get(o),16);now=1000;
+  const denied={...o,load:async()=>{calls++;throw fault;}};
+  await assert.rejects(cache.get(denied),CatalogUnavailable);assert.equal(calls,1);
+  await assert.rejects(cache.get(denied),CatalogUnavailable);assert.equal(calls,1);
+  now=6001;assert.equal(await cache.get(o),16,'recovered access performs a new successful read');
+ }
+});

@@ -25,7 +25,7 @@ export class ReliableCatalogPages<T> {
     // Successful reads refresh live public scores. Stored snapshots are used
     // only during a failed read; there is no ordinary five-second score cache.
     if (cached?.retryAt && cached.retryAt > started) {
-      if (cached.value !== undefined && started - cached.at < 30_000) return cached.value;
+      if (cached.value !== undefined && permitsSnapshotFallback(cached.failure) && started - cached.at < 30_000) return cached.value;
       if (cached.failure) throw cached.failure;
     }
     const entry: Entry<T> = cached ?? { at: 0 };
@@ -46,15 +46,16 @@ export class ReliableCatalogPages<T> {
         } catch (error) {
           last = error;
           const failure = classifyCatalogFailure(error);
-          if (failure.upstreamStatus && failure.upstreamStatus < 500 && failure.upstreamStatus !== 429) break;
+          if (!permitsSnapshotFallback(failure)) break;
           if (attempt < 2) await this.sleep(Math.round(120 * 2 ** attempt + this.random() * 80));
         }
       }
       entry.failure = classifyCatalogFailure(last);
       entry.retryAt = this.now() + 5_000;
+      if (!permitsSnapshotFallback(entry.failure)) {entry.value=undefined;entry.at=0;}
       // A real successful empty result replaces an earlier page. Only failed
       // reads may use the exact same query's last-known-good bounded snapshot.
-      if (entry.value !== undefined && this.now() - entry.at < 30_000) {
+      if (entry.value !== undefined && permitsSnapshotFallback(entry.failure) && this.now() - entry.at < 30_000) {
         report('stale_fallback', retries, o.validate(entry.value), last); return entry.value;
       }
       report('unavailable', retries, 0, last); throw classifyCatalogFailure(last);
@@ -65,11 +66,17 @@ export class ReliableCatalogPages<T> {
   }
 }
 
+/** A permission denial or other permanent client error can revoke access.
+ * Never turn that into a successful cached response or repeat it three times. */
+function permitsSnapshotFallback(failure?:CatalogUnavailable):boolean {
+  return !!failure && failure.kind!=='authorization' && (failure.upstreamStatus===null||failure.upstreamStatus===429||failure.upstreamStatus>=500);
+}
+
 export function classifyCatalogFailure(error: unknown): CatalogUnavailable {
   if (error instanceof CatalogUnavailable) return error;
   const e = error as { name?: string; status?: number; code?: string } | null;
   return new CatalogUnavailable(e?.name === 'TimeoutError' || e?.name === 'AbortError' ? 'timeout'
-    : e?.code === 'PGRST301' ? 'authorization' : e?.status === 429 ? 'upstream_429'
+    : e?.code === 'PGRST301'||e?.status===401||e?.status===403 ? 'authorization' : e?.status === 429 ? 'upstream_429'
       : e?.status && e.status >= 500 ? 'upstream_5xx' : 'invalid_or_unavailable_data', e?.status ?? null);
 }
 
