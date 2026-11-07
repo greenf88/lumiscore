@@ -1,0 +1,72 @@
+PR88 — gecontroleerde beschrijvingen en tijdelijke bronuitval
+Datum: 7 november 2026. STATUS: Draft; uitsluitend op TEST uitgevoerd.
+
+Geteste applicatie: ca361835d59cad0dd4b531f32ae4fda000f38267
+Basis en ongewijzigde productie: df0e585c5afd01c18690b891f97a6f1a0a0de451
+PR: https://github.com/greenf88/lumiscore/pull/88
+Ready TEST-Preview: https://lumiscore-i4lv9sdkx-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_4nvi2Xq1YoadZ4vfmVkYep33Kyxa
+CI op geteste applicatie: https://github.com/greenf88/lumiscore/actions/runs/42395772542 — success.
+De definitieve bewijscommit wijzigt geen applicatiecode. De actuele volledige PR-head en CI staan in de PR-beschrijving.
+
+AFBAKENING EN RESULTAAT
+De zeven resterende PR87-gevallen zijn 2093 EN,3137 EN,4182 EN,5226 NL,7315 EN,8359 EN,9404 EN.
+De meegestuurde Soft-404-opdracht betreft daarnaast 8856 EN en9050 EN; beide zijn afzonderlijk onderzocht en meegenomen.
+Voorstel:9 nieuwe gecontroleerde teksten (8 EN,1 NL) en1 externe Work-ID-correctie. Totaal10 productieacties.
+Geen nieuwe Works/edities, geen taal-, ISBN-, cover-, score-, categorie- of gebruikerscorrecties; netto Nederlandse beschikbaarheid +0.
+Production-apply.sql is NIET op productie uitgevoerd. Geen migratie, rechtenwijziging of schedulerinstallatie nodig.
+TEST-fixtures:11 Works,11 exacte edities,10 auteurs (32 inserts); bestaande auteur987339006 hergebruikt en ongewijzigd. Alleen de aparte fixturebestanden bevatten deze TEST-ouders.
+
+GEVALLEN EN BRONONDERZOEK
+Work locale editie ISBN              gecontroleerde inhoudsbron / besluit
+2093 en2295 9780742542464             On Liberty; oorspronkelijke Engelse tekst Project Gutenberg; digitiseringsboilerplate afgewezen.
+3137 en3296 9781984819956             The Reckoning; Penguin Random House. Exact ISBN hoort bij dit boek, niet bij aangrenzende A Time for Mercy-vermelding.
+4182 en4341 9780143418764             I Too Had a Love Story; Penguin India, exacte ISBN en Ravin/Khushi-verhaal bevestigd.
+5226 nl5385 9789089751775             Auschwitz13917; Just Publishers; geen editiegebonden nieuw voorwoord overgenomen.
+7315 en7474 9780198827092             Computers and Society; Oxford; editieISBN afzonderlijk bevestigd, abstract over hetzelfde Work.
+8359 en8518 9780393060652             The Body Never Lies; W.W.Norton; Millers opvattingen als haar opvattingen beschreven.
+9404 en9563 9781600102370             Locke & Key,Vol.1; dezelfde graphic novel, niet de TV-adaptatie; Subterranean/Publishers Weekly.
+8856 en9015 9784770029041             Almost Transparent Blue; Google Books/Kodansha en CiNii, Engelse Nancy Andrew-editie.
+9050 en9209 9780373106141             Jilted; bibliotheekannotatie ED337172 PDFp218; Alexa/Scott/Mark, geen titelgebaseerde invulling.
+Alle teksten70–76 woorden; eigen formulering, feitelijke bronnotities, taal, datum en auteurbinding in summary-review.json.
+Exacte URL's en bibliografische bewijsregels staan in summary-review.json en identity-review.json; de bronresponses zijn gehasht in source-identity-evidence.json.
+
+BEWEZEN OORZAKEN EN GRENZEN
+- Productie had op het voor- én eindmoment0 opgeslagen goedgekeurde teksten voor alle9 gevallen.
+- De9 exacte Open Library-editie-JSON's geven HTTP200 zonder edition.description. Dit is ontbrekende editie-inhoud, geen transportuitval.
+- Sommige gedeelde Work-records bevatten tekst, maar de taal en exacte identiteit mogen niet blind uit een gedeeld record worden afgeleid. De bestaande strikte selectie is behouden.
+- Bij8856 is de oude Work-ID OL7989537W een Open Library JSON-redirect naar OL3741471W. De exacte editie en bestaande auteur wijzen naar het doel. Geen andere interne Work gebruikt dat doel. Eén CAS-beschermde externe verwijzing wordt voorgesteld; interne identiteit en gebruikerskoppelingen blijven gelijk.
+- De productieroute meldde tijdelijke bronuitval. Eén expliciet ongeauthenticeerde lokale Google Books-diagnose gaf429; daarna gestopt. Dit bewijst NIET de exacte foutsoort van de geconfigureerde keyed productieaanvraag. De bestaande Google Books-configuratie is alleen via metadata bevestigd; geen secret gelezen of gewijzigd.
+- Mogelijke quota-, authenticatie-, server- en netwerkuitval blijven onderscheiden van bevestigde afwezigheid. Gecontroleerde foutsimulaties dekken401/403,429,502/503,netwerk/timeout,ongeldige JSON en lege of verkeerd gebonden resultaten. Geen echte quota-uitputting veroorzaakt.
+- De eerdere reviewed-presentation-cache verwijderde een goede entry na mislukte verversing. De nieuwe helper behoudt uitsluitend eerdere succesvolle publieke rijen maximaal5 minuten sinds de laatste geslaagde fetch; vers30s,retryvertraging5s,200 keys. Geen verlenging bij opeenvolgende fouten. Een succesvolle lege/intrekkingsrespons vervangt de vorige gegevens direct; koude fouten worden niet als ontbreken opgeslagen.
+- Work/auteur/editie/taalguards worden bij ieder gebruik opnieuw toegepast. De cache is proceslokaal en geen gedistribueerde voorziening. Tijdens een koude processtart is geen eerdere goede entry beschikbaar. Een onbereikbare intrekking kan dus maximaal5 minuten vertraagd zichtbaar worden; dit is de expliciete stalenessgrens.
+- De9 duurzame teksten maken deze pagina's onafhankelijk van optionele externe beschrijvingsaanvragen. De databaseroute zelf blijft noodzakelijk; titel en bediening behouden hun bestaande streaming/foutisolatie.
+
+BEWIJS
+- Lokale9-rijencontrole via echte strict-edition/shared stored loader,3 herlezingen per boek met0 provideraanvragen; taalbinding en publieke scorevelden behouden.
+- Lokale productie-,test- en fixtureSQL:dry-run metROLLBACK,gecommitteerde import,replay0,gecommitteerd herstel,herinstallatie; verkeerde receipt,latere tekst-/editiewijziging en nieuwe FK-afhankelijkheid blokkeren herstel.
+- Hosted:32 fixtureinserts,replay0;10 testacties,replay0; herstel NA COMMIT van uitsluitend10 acties; onafhankelijke readback0 teksten en oude8856-verwijzing; daarna exact dezelfde10 acties opnieuw geïnstalleerd. Eerste receipt bewaard, niet vervangen door replay.
+-13 beschermde TEST-tabellen behouden identieke aantallen en rijhashes buiten de eigen fixture-ID's, inclusief accounts,ratings,leesstatussen,collecties en smaaktesttabellen. Geen nummerreeksen gewijzigd.
+-27/27 complete oorspronkelijke Preview-HTML-responses:9 boeken ×desktop/Googlebot/InspectionTool-UA. Echte HTML-tekst en bronankers,één canonical in geldige head,index/follow,geen onbewezen taalalternatieven. UA-simulaties zijn geen echte Google-bezoeken.
+-9/9 zichtbare desktopbeschrijvingen en9/9 na herladen. Mobiel320px voor8856,9050,5226;Paper/Ink,bronlinks,ISBN,bruikbare bediening,geen horizontale overflow. TerugnaarBrowsepage2 en ontbrekende taalvariant→Browse werken.
+-235 echte lokale router/metadataresponses,5UA's,15 legacyredirects,8 parsercontroles; vertraagde optionele bronnen blokkeren hoofdinhoud niet.10 echte loader-foutscenario's houden500,404 en geschikte200 gescheiden.
+-Typecheck,lint,build en volledige CI groen op geteste applicatie. De eerste Windows-unitrun had2 historische SHA-fouten doorCRLF; beide controles slagen met de oorspronkelijkeLF-bytes. Geen historische bestanden veranderd of tests afgezwakt. De volledige Linux-CI slaagt.
+-PreviewTTFB27 requests:mediaan269.227ms,min210.898,max565.207. Dit is geautoriseerde GET time_starttransfer,niet zichtbare paint,LCP,een koude cachemeting of productiewinst.
+
+CONTROLES EN RESTPUNTEN
+EN7621 levert in de Preview actuele externe tekst; er is geen nieuw gecontroleerd tekstrecord voor dit controleboek voorgesteld.
+EN917 Kitchen heeft in de actuele catalogus alleen een Koreaanse editie met ontbrekende taalcode. PR85 geeft daarom terecht noindex/follow; het oude positieve Google-bewijs van vóórPR85 is geen bewijs van huidige Engelse geschiktheid. Geen taalversoepeling of verborgen editiecorrectie.
+De NL-fantasylijst blijft index/follow. PR85/PR86/PR51 worden niet gewijzigd.
+Covergegevens blijven gelijk. Drie van de9 fixtures hebben reeds een placeholder; andere covers kunnen nog op de bestaande externe bron wachten. Coverherstel is niet meegeteld en dit pakket claimt geen complete coverdekking of LCP-winst.
+8856 en9050 geven op productie nog zichtbaar de tijdelijke beschrijvingsmelding. Geen productieherstel claimen vóór afzonderlijke release.
+Het bestaande echte Google Soft-404-bewijs is uitgangspunt; er is geen nieuwe Google-live-test,GSC-aanvraag of indexeringsclaim. Herclassificatie door Google moet na een goedgekeurde release afzonderlijk worden gecontroleerd.
+
+VEILIGE LATERE UITVOERINGSVOLGORDE — ALLEEN NA BATCHAKKOORD
+1. Controleer exacte head,CI,runtimehashes en release-hashes.json; productieproject en actuele9 ouders/edities/auteurs vergelijken met production-before/plan. Stop bij drift,conflicten of reeds aanwezige teksten.
+2. Bewaar actuele publieke parent-/beschrijvingsmomentopname en beschermde gebruikersaggregaten. Geen export van individuele privégegevens.
+3. Voer uitsluitend production-apply.sql transactioneel uit. Bewaar eerste volledige10-rijenreceipt. Onafhankelijk teruglezen en herhaalimport0. Geen fixtureSQL op productie.
+4. Publiceer uitsluitend de beoordeelde code via de bestaande releaseprocedure. Controleer9 oorspronkelijkeHTML+DOM,bronlinks,identiteit,indexeringsbeleid,en bestaande functionele controles.
+5. Bij dataproblemen:zet de eigen eerste receipt in lumiscore.catalog_release_receipt en voer uitsluitend production-restore.sql uit. Volledige CAS-,ouder-,FK- enreceiptguards behouden. Stop bij latere wijzigingen/afhankelijkheden; niet forceren. Code rollback naar het vorigeReadydeployment staat afzonderlijk van dataherstel.
+6. TEST-opruiming na review:herstel eerst10 acties met de eerste nog passende receipt,daarna32 eigen fixtures met hun eigen eerste receipt. Laat latere afhankelijkheden of wijzigingen blokkeren. Geen accounts of gedeelde auteur verwijderen.
+
+Advies:beoordelen als afgebakende code+10data-acties. Geen merge,productie-import of publicatie uitgevoerd. Er is in deze opdracht geen releaseakkoord gevraagd of verkregen.
