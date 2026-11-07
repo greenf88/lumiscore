@@ -1,0 +1,118 @@
+Even simpel / Ottolenghi Simple Too — afzonderlijk reviewpakket, 7 november 2026
+
+STATUS
+Identiteit, data-invoer en testpresentatie gereed. Geen productie-import, merge of publicatie.
+Releaseadvies: AANHOUDEN vanwege het hieronder aantoonbaar afwijkende productiesmaaktestbeleid.
+Dit pakket verleent geen toestemming voor aanvullende functie-, schema- of rechtenwijzigingen.
+Social: post blijft aangehouden. Geen bevestigde publieke LumiScore-bestemming afgegeven.
+
+VERSIES EN OMGEVING
+Afzonderlijke branch catalog/even-simpel-20261107, basis main/productie 98a53a944b12831cbc320812ed79ed4faddf5a7e.
+Ready productie dpl_9pxDb5uv1xb5HiwqwmfZAXB2F8qt. Productie qvplwejffhjvxaypmjut uitsluitend read-only.
+Geen runtimecode, afhankelijkheid, appconfiguratie of PR85-bestand gewijzigd.
+Hosted bewijs gebruikt de reeds bestaande, beschermde test-Preview:
+https://lumiscore-o7we8wlnj-rgkgroeneveld-9102.vercel.app/nl/book/990710001
+Geteste applicatie-SHA 966320bfab9494b03e9a166bd5849dc09658d58e, deployment dpl_2wKaJLhkJnpWwP8jSFvzrkoanuSE.
+Dit is de bestaande PR85-testapplicatie, geen nieuwe deployment van deze databranch.
+PR85 blijft Draft op dezelfde head; geen wijziging aan die branch of release uitgevoerd.
+Data en import zijn afzonderlijk; de productie-equivalente SQL is lokaal getest tegen het vastgelegde productieschema.
+Hosted bewijs is niet ten onrechte gelijkgesteld aan een nieuwe applicatiedeployment of productieherstel.
+
+IDENTITEIT EN BRONBESLUIT
+Nieuwe inhoudelijke identiteit: Ottolenghi Simple Too (2026), primaire auteur Yotam Ottolenghi.
+Nederlandse editie Even simpel, ISBN9789464044263 (checksum geldig), Nederlands, hardcover, Fontaine Uitgevers,2026.
+Lannoo geeft1september2026; slechts het onbetwiste jaar wordt in het bestaande datamodel opgeslagen.
+Bibliotheek PPN456853685 noemt expliciet vertaling van Simple too, Ebury Press2026.
+Het oorspronkelijke Simple uit2018 is een ander boek. Productie-Work1442 blijft volledig ongewijzigd.
+Geen match voor NL/US/UK-ISBN9789464044263/9781984860088/9781529109511 of Simple Too/Even simpel in Works, edities en aliassen.
+Primaire auteur hergebruikt: productie763; test930300082. Geen nieuwe of samengevoegde auteur.
+Verena Lochmuller, Milli Taylor, Tara Wigley, Jonathan Lovekin en vertaler Aniek Njiokiktjien met hun rollen in evidence bewaard.
+Het bestaande model heeft één primaire auteur; geen fictieve gecombineerde auteur aangemaakt.
+Conflicterende paginatal303/304/320 niet ingevoerd. Uitgever/library bevestigen135recepten;120uit oude winkelmetadata niet overgenomen.
+
+Bronnen, gecontroleerd7november2026:
+https://www.lannoo.com/nl-nl/kookboeken/even-simpel-9789464044263
+https://www.bibliotheek.nl/catalogus/titel.456853685.html/even-simpel/
+https://rozet.nl/catalogus/2587329/
+https://www.penguinrandomhouse.com/books/673383/ottolenghi-simple-too-by-yotam-ottolenghi/
+https://www.debestseller60.nl/202645
+Lannoo direct403 en Bibliotheek directe ophaalbeperking niet omzeild; hun geïndexeerde metadata vergeleken met direct gelezen Rozet-record.
+De Bestseller60-positie18 is een weekverkoopsignaal, geen lezersaantal.
+
+EXACT VOORSTEL:9 ACTIES
+1 nieuw Work met natuurlijke sleutel isbn:9789464044263, source_type lumiscore_native, work_type NULL.
+1 nieuwe Nederlandse hardcover-editie, ISBN9789464044263.
+1 goedgekeurde edition-bound covermetadataregel.
+1 oorspronkelijke Nederlandse samenvatting van69woorden, centrale opslag, bron en contributors in evidence.
+4 titelaliassen: Even simpel / Ottolenghi even simpel / Simple Too / Ottolenghi Simple Too.
+1 bestaande categorieverbinding nonfiction_cooking_food: Koken & eten.
+Geen alias Simpel; geen fictieclassificatie of nieuwe smaakkenmerken.
+Verwacht netto:+1 uniek Nederlandstalig beschikbaar Work,+1 editie,+1 samenvatting,+1 coverbinding.
+Nul gerealiseerde productiegroei in deze opdracht. Geen Engelse editie toegevoegd.
+Productie-ID's worden bij latere goedgekeurde invoer door bestaande identitykolommen toegewezen; geen nummerreeksen aangepast.
+Test-ID's uitsluitend990710001/990720001. Geen nieuwe testaccounts of testcollecties nodig.
+
+COVER
+https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg
+Exact gekoppeld aan ISBN op de officiële Bestseller60-pagina. Visueel Ottolenghi EVEN SIMPEL, gele citroen op witte achtergrond.
+HTTP200,image/jpeg,6218bytes,220x304; werkelijk gedecodeerd op kaart en detail, mobiel/desktop, Paper/Ink.
+Geen grotere variant verzonnen: onderzochte500/1000-varianten gaven404. De bestaande kleine afbeelding blijft op detail leesbaar maar minder scherp.
+Geen nieuwe opslag, herhosting of proxy. Het openbare bronadres is geen bewijs van een herdistributielicentie; geen bulkgebruik of licentieclaim.
+De tijdelijke PPN-coverredirect had ondertekende parameters en is bewust niet als duurzame coverbinding gebruikt.
+
+WERKELIJK TESTBEWIJS
+3 lokale regressietests groen: exact test- en productieschema, dry-run, eerste COMMIT, replay0, gecommitteerd herstel, herinvoer,
+behoud bestaande fictieve ratings/voortgang, afwijzing latere wijziging, nieuwe FK-afhankelijkheid en vervalste receipt.
+ESLint van de drie eigen scripts zonder errors/warnings; geen applicatiebuild gewijzigd of nieuwe buildwinst geclaimd.
+Testconnector: eerste gecommitteerde import9regels; eerste receipt duurzaam bewaard. Replay0wijzigingen.
+Connector-herstel gaf status expired/INVALID_ARGUMENT: This confirmation expired after2minutes. Geen identieke retry.
+Normale aangemelde SQL Editor op hetzelfde testproject gebruikt. De waarschuwing destructive operations betrof de expliciet goedgekeurde eigen9records.
+test-dashboard-restore.sql vergelijkt SHA256 van volledige eerste gecommitteerde rijen, vergrendelt ouders en controleert ALLE inkomende FK's, inclusief CASCADE.
+Deze COMMIT verwijderde uitsluitend de9eigen records. Onafhankelijke connectornacontrole:10tabelfingerprints exact gelijk aan de beginsituatie.
+Inclusief accounts, ratings, leesstatussen, bestaande Works, auteurs en edities. Geen teruggezette sequences.
+Daarna goedgekeurde testtoestand met9regels hersteld; aparte Preview-receipt bewaard.
+Herstel was dus werkelijk ná een gecommitteerde import; geen ROLLBACK-dry-run als vervanging gepresenteerd.
+Herstel via de ontvangstgebonden production-restore.sql is lokaal bewezen; niet op productie uitgevoerd.
+
+HOSTED ACCEPTATIE
+28 vastgelegde browsertoestanden:390/1440px,Paper/Ink,NL-zoekkaart,interne doorklik,detail,herladen,terug naar dezelfde zoekopdracht,
+zoekopdracht Simple Too en directe EN-route. Alle4zoek-/kaartvarianten en4detailvarianten met werkelijk geladen juiste cover.
+Samenvatting en Fontaine/Lannoo-bron zichtbaar; ISBN en NL-editie correct; detail Onvoldoende beoordelingen en kaart Nog geen betrouwbare score.
+Geen accounts, ratings of voortgang aangemaakt. Nul horizontale overflow in de28waarnemingen.
+EN meldt geverifieerde Engelse editie ontbreekt; geen Nederlandse cover/samenvatting als Engelse editie aangeboden.
+Oorspronkelijke NL-HTML HTTP200 bevat de samenvatting en ISBN. EN-HTML bevat die Nederlandse presentatie niet.
+Preview-noindex-header apart vastgelegd; geen productie-indexeringsclaim.
+Bewijs in hosted-browser.json,*.html en390/1440-paper/ink-detail.png.
+
+CONCRETE RELEASEBLOKKADE: PRODUCTIESMAAKTEST
+De app roept public.taste_rating_advance_v2 aan. De op productie gelezen wrapper verwijst naar taste_private.advance_round_v2.
+Die selector kiest op taal en bestaande beoordelingen, zonder uitsluiting op nonfiction_cooking_food of gecontroleerde inventory.
+Op test loopt dezelfde publieke route via de strengere v3-inventory; inventory_current_v1 voor dit Work is false in NL en EN.
+Daarom bewijst de testuitsluiting NIET dat de productieversie dit kookboek niet zal aanbieden.
+Alleen een categorie toevoegen of work_type NULL laten geeft die productiegarantie niet.
+Benodigde afzonderlijke technische vervolgstap: bestaande praktische-kookboekuitsluiting vóór automatische rondekeuze en expliciete keuze afdwingen,
+met behoud van rangschikking voor geschikte boeken, bestaande beoordelingen en voortgang; ook oude aangeboden kaarten moeten veilig worden afgehandeld.
+Eerst gericht reviewen/testen op de werkelijk gebruikte productiefunctie. Geen brede smaaktestmigratie of stille beleidswijziging in deze9acties gestopt.
+Bewijs: production-taste-entry.json / production-taste-selector.json / test-taste-policy.json.
+
+UITVOERINGSVOLGORDE NA OPLOSSING EN AFZONDERLIJK RELEASEAKKOORD
+1. Bevestig PR85-onafhankelijkheid, actuele main/productie en alle release-hashes.json-bestandshashes.
+2. Herhaal exacte ISBN/titel/alias/author-corpus-controle. Stop bij nieuw equivalent Work, auteurdrift, andere binding of categorieafwijking.
+3. Controleer dat de benodigde smaaktestuitsluiting daadwerkelijk op productie geldt; anders geen import.
+4. Bewaar actuele volledige productiesnapshot en de vastgelegde auteurs-/Work1442-begintoestand.
+5. Voer uitsluitend production-apply.sql transactioneel uit op qvplwejffhjvxaypmjut; verwacht9of bij replay0acties.
+6. Bewaar EERSTE volledige COMMIT-receipt; lees de9records onafhankelijk terug, vergelijkISBN,titel,auteur,cover,bron,category en netto+1.
+7. Herhaal dezelfde import:0mutaties. Geen ander pakket of schema installeren.
+8. Laat bestaande presentatiecache verlopen; controleer actuele publieke zoekkaart/detailcover,samenvatting,bron,lege score en taalgedrag.
+9. Geef pas na geslaagde livecontrole de werkelijk toegewezen publieke NL-Work-URL aan Social. Tot dan aangehouden.
+
+HERSTEL
+Gebruik production-restore.sql met EERSTE productie-COMMIT-receipt in lumiscore.catalog_release_receipt, niet de test- of replayreceipt.
+Scopebinding controleert de exacte9manifestacties; full-row CAS beschermt latere wijzigingen; inkomende FK's beschermen o.a.ratings en voortgang.
+Bij nieuwe afhankelijkheden of afwijking: volledige transactie stopt; niet forceren, niet cascadewissen.
+Na herstel onafhankelijke terugleescontrole en oude beschermde gegevens vergelijken. Geen nummerreeksen resetten.
+Test-dashboard-restore.sql is uitsluitend voor de genoemde huidige test-ID's en SHA256waarden; nooit op productie gebruiken.
+
+BUITEN SCOPE
+Geen productiegegevens, PR85, socialplanning, dashboard, productmetingen, bestaande opmaak, smaakberekening of Work1442 gewijzigd.
+Geen nieuwe onafhankelijke applicatie-Preview, CI-run, merge of release geclaimd. Dit is een data-only reviewpakket met bestaande hosted testapp.

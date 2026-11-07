@@ -1,0 +1,5 @@
+[
+  {
+    "definition": "CREATE OR REPLACE FUNCTION public.taste_rating_advance_v2(p_action text, p_round_id uuid DEFAULT NULL::uuid, p_work_id bigint DEFAULT NULL::bigint, p_score integer DEFAULT NULL::integer, p_language text DEFAULT 'en'::text, p_goal integer DEFAULT 20)\n RETURNS jsonb\n LANGUAGE sql\n SET search_path TO ''\nAS $function$\n  select taste_private.advance_round_v2(p_action,p_round_id,p_work_id,p_score,p_language,p_goal);\n$function$\n"
+  }
+]
