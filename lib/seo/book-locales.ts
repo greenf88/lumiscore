@@ -5,11 +5,23 @@ import { languageAlternates } from '../i18n/paths.ts';
 
 export type SitemapWork = { id: string | number; title: string | null };
 export type BookLocales = { workId: string; locales: readonly Locale[] };
+export type BookUrlStatus = 'indexable' | 'noindex' | 'retired';
+
+export function bookUrlStatus(locales: readonly Locale[] | null, locale: Locale): BookUrlStatus {
+  if (!locales) return 'retired';
+  return locales.includes(locale) ? 'indexable' : 'noindex';
+}
+
+export function resolveBookLifecycle(work: SitemapWork | null, editions: readonly StrictEditionRow[], locale: Locale) {
+  if (!work) return { status: 'retired', edition: null } as const;
+  const edition = selectBookEdition(String(work.id), work.title ?? '', editions, locale);
+  return edition ? { status: 'indexable', edition } as const : { status: 'noindex', edition: null } as const;
+}
 
 // The public detail route has no cross-language edition fallback. Keeping a
 // direct link usable without an edition does not make it a locale equivalent.
 export function getBookLocales(workId: string, title: string, editions: readonly StrictEditionRow[]): Locale[] {
-  return (['en', 'nl'] as const).filter(locale => selectBookEdition(workId, title, editions, locale));
+  return (['en', 'nl'] as const).filter(locale => resolveBookLifecycle({ id: workId, title }, editions, locale).status === 'indexable');
 }
 
 export function selectSitemapBookLocales(works: readonly SitemapWork[], editions: readonly StrictEditionRow[]): BookLocales[] {

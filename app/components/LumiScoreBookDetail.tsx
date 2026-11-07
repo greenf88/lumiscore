@@ -102,7 +102,7 @@ export function LumiScoreBookDetail({
   authState,
   returnNavigation,
 }: LumiScoreBookDetailProps) {
-  const { locale, t } = useLumiScoreLocale();
+  const { locale, pagePath, t } = useLumiScoreLocale();
   const [ratingState, setRatingState] = useState(initialRatingState);
   const [readingStatus, setReadingStatus] = useState<ReadingStatus | null>(
     initialReadingStatus,
@@ -265,7 +265,9 @@ export function LumiScoreBookDetail({
           <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
           <MobileNavigation authenticated={authState.authenticated} />
           {!authState.authenticated && <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />}
-          <LanguageSwitcher />
+          <LanguageSwitcher hrefForLocale={option => localizedHref(
+            option === locale || book.detailLocales?.includes(option) ? pagePath : '/browse', option,
+          )} />
           <ThemeToggle onToggle={toggleTheme} labeled />
           {authState.authenticated && <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />}
         </div>

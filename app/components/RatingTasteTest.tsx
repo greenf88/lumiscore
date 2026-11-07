@@ -143,14 +143,14 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
 
   return <DiscoveryPageShell authState={authState} path="/taste-test">
     <section className="featured-section taste-rating-test taste-direct-test" aria-labelledby="taste-rating-title" aria-busy={pending}>
-      <div className="taste-round-heading"><span className="eyebrow">{t('directTaste.label')}</span>
+      <div className="taste-round-heading"><h1 id="taste-rating-title">{t('directTaste.label')}</h1>
         {active && <button type="button" disabled={pending} onClick={pause}>{t('directTaste.pause')}</button>}
       </div>
       {swipePrototype && <p className="prototype-label">{t('directTaste.prototype')}</p>}
       {error && <div className="taste-action-error" role="alert"><p>{t('directTaste.error')}</p>
         <button type="button" disabled={pending} onClick={reload}>{t('directTaste.refresh')}</button></div>}
       {!data && !error && <p role="status">{t('directTaste.loading')}</p>}
-      {data && !data.authenticated ? <><h1 id="taste-rating-title">{t('directTaste.label')}</h1>
+      {data && !data.authenticated ? <>
         <p>{t('directTaste.signInCopy')}</p><div className="taste-entry-actions">
           <LocaleLink className="primary-cta" href="/login?next=%2Ftaste-test">{t('directTaste.signIn')}</LocaleLink>
           <LocaleLink className="taste-secondary-action" href="/taste-test/preferences">{t('directTaste.guest')}</LocaleLink>
@@ -158,7 +158,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
         : data && !data.available ? <p role="status">{t('directTaste.unavailable')}</p>
         : data?.authenticated && <>
           {(!round || round.complete) && <div className="taste-start-screen">
-            <h1 id="taste-rating-title">{t('directTaste.question')}</h1>
+            <h2>{t('directTaste.question')}</h2>
             <div className="taste-start-choices" role="group" aria-label={t('directTaste.question')}>
               {NEW_ROUND_GOALS.map(n => <button type="button" key={n} disabled={pending}
                 aria-label={t('directTaste.startChoice', { count: n })} onClick={() => act('start', undefined, undefined, n)}>
@@ -167,7 +167,6 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
             </div>
           </div>}
           {round && !round.complete && <>
-            <h1 id="taste-rating-title" className="sr-only">{t('directTaste.label')}</h1>
             <div className="taste-direct-progress" role="status" aria-live="polite" aria-atomic="true">
               <span>{t('directTaste.progress', { rated: progress.rated, goal: progress.goal })}</span>
               <div role="progressbar" aria-label={t('directTaste.ratedBooks')} aria-valuemin={0}

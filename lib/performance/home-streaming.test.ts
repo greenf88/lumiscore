@@ -6,7 +6,7 @@ test('homepage streams unchanged strict-edition loaders without a new shared/pri
  const ui=await readFile(new URL('../../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
  assert.match(page,/loadHighestRatedCatalog\(8,locale,true\)/);
  assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
- assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
+ assert.match(page,/if \(!auth\.authenticated\) return emptyPersonalization;\s*const \{ loadHomepagePersonalization \} = await import/);
  assert.match(page,/const authState = await authPromise/);
  assert.match(page,/export const dynamic = 'force-dynamic'/);
  assert.doesNotMatch(page,/await catalogPromise|await personalizationPromise|unstable_cache|s-maxage/);

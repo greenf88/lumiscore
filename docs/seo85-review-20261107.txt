@@ -1,0 +1,54 @@
+PR85 final review preparation — 7 November2026
+
+Base: ae123c7e30d92817cf7caf733974c03b9df68c11 (published PR86).
+PR79 merged as4bbf88888e3102f224f19f651a63a1d6f173606b. Its strict sitemap selection remains unchanged.
+PR85 branch merged current main without conflict. PR86's recipe gate/search and ordinary catalogue ratings retained.
+No production writes, imports, configuration/security changes or publishing in this task.
+
+Full public production selection, not an HTTP census:10446Works,10929editions,20892Work/locale rows.
+EN6377indexable/4069noindex; NL3347indexable/7099noindex; technical unknown0 after complete successful reads.
+Before: all existing detail locales indexable under main, even11168off-sitemap variants.
+After: only strict edition-qualified locales index; no cover/summary/rating minimum.
+Sitemaps unchanged:6377EN+3347NL+168other, all9724book entries and408reciprocal pairs compared,0differences.
+1130Works have no suitable EN/NL edition; existing Works are not declared permanently retired.
+Examples:2093ENvalid/NLexcluded;5226NLvalid/ENexcluded;1048German/unknownlanguage both excluded;10472NLvalid/ENexcluded.
+
+English-edition fallback: current main's strict-edition policy already supersedes the old NL fallback.
+No active direct-detail fallback is removed by this PR; zero such fallbacks in current selection.
+An English synopsis is a separate concept from edition language and does not create a Dutch edition.
+No language rule broadened, no unknown edition language guessed from title/author/description.
+
+New concrete fault fixed: descriptionPromise derived from a failed core bookPromise could reject unhandled,
+causing an ECONNRESET/process exit in the real Vinext route. Its optional catch now handles that rejection.
+The original core promise still rejects: real Work/edition/network failures return HTTP500, never false404/noindex.
+True missing Work returns404. Valid identity with optional storage failure/no cover/no ratings stays200/index.
+Ten real-loader fault cases cover both locales. Existing235original-head HTTP checks remain part of CI.
+No production error requests were induced; all fault injection is explicit loopback-only loader substitution.
+
+Existing image/fallback/20layout/4hosted proof retained where unchanged; additional320px and updated-head checks follow.
+Performance targets and reliable complete book-lastmod remain open; no invented timestamps or cover proxies.
+PR85 is a code-only package. Performance/source follow-up will use a separate dependent Draft-PR.
+
+Reproducible outputs: outputs/pr85-final-20261107/impact-summary.json,work-locale-matrix.jsonl,
+catalogue-public-snapshot.json,sitemap-impact.json and real-loader-fault-proof.json.
+These capture public data only. Reuse snapshot with scripts/seo85-impact.mjs <directory> --reuse.
+
+Release remains separately authorized. Rollback is previous Ready code deployment only, no data rollback.
+Before release verify exact head/CI, runtime hashes, main, preview and current production; no GSC requests.
+
+Final additional proof on application52012b5f22524e3c90cdd5949584c12826fe742f:
+- Green exact-head CI42373995333, Ready isolated Preview dpl_4oyJaKZkjWyx9TZHHT3BXQpdHs89.
+- 80original production GETs and32original Preview GETs, all parsed with the existing byte-position HTMLParser.
+  Desktop/mobile browsers and desktop/smartphone Googlebot UA simulations; literal strings retained in receipts.
+  Zero relevant tags outside valid head, zero duplicate/conflicting relevant tags. Preview protection noindex separate.
+- Preview cases use exact existing TEST records930100033,977100041,990710001, both locales, plus genuine404s.
+  Dutch indexable, English excluded with no canonical/Book graph; no Dutch cover on English shell.
+- Six actual DOM/layout captures: guest,320px/1440px,Paper/Ink,reload,returnTo and locale-shell behavior.
+  Even simpel exact TEST ISBN9789464044263 cover actually decoded; source summary and empty-score state retained.
+  Existing paired-locale, image-network/failure and20layout proof reused only for unchanged rendering paths.
+- PR86 current main ae123c7 and lumisco.re Ready deployment dpl_5mrbcFHGMHRRMxYixYi2e58pTTaF rechecked.
+  PR85 still Draft. All production access read-only. No data/configuration/auth/metrics changes.
+
+Verdicts: indexing and functional package ready for a separate release decision; responsive identity/fallback
+checks pass. No claim of completed image-byte target,book LCP,full lastmod,field CWV or ranking recovery.
+The separate dependent performance experiment is not part of PR85's release diff.

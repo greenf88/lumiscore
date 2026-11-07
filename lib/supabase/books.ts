@@ -1,8 +1,7 @@
 import type { Book } from '@/app/data/books';
 import { normalizeIsbn13, normalizeOpenLibraryId } from '@/lib/books/covers';
 import { withStrictEdition, unavailableEdition, type StrictEditionRow } from '@/lib/books/strict-edition';
-import { selectBookEdition } from '@/lib/books/edition-presentation';
-import { getBookLocales } from '@/lib/seo/book-locales';
+import { getBookLocales, resolveBookLifecycle } from '@/lib/seo/book-locales';
 import { withEditionCoverEvidence, deferEditionCoverEvidence } from '@/lib/books/edition-cover-evidence';
 import { getWorkFirstPublishYear } from '@/lib/books/edition-ranking';
 import type { Locale } from '@/lib/i18n/config';
@@ -199,7 +198,7 @@ function mapCatalogBook(
 
   const author = getRelatedAuthor(work, authors);
   const relatedEditions = getRelatedEditions(work, editions);
-  const edition=selectBookEdition(workId,title,strictEditions(relatedEditions),locale);
+  const { edition } = resolveBookLifecycle({ id: workId, title }, strictEditions(relatedEditions), locale);
   const base:Book={id:`work-${workId}`,source:'supabase',workId,
     sourceType:readString(work,['source_type']),openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
     title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
@@ -355,14 +354,15 @@ export async function loadCatalogBook(
   const rawWork = asRow(result.data);
   if (!rawWork) return null;
   const work=(await completeEditions([rawWork]))[0];
+  const workTitle=readString(work,['title','name'])??'';
+  const detailLocales=getBookLocales(workId,workTitle,strictEditions(asRows(work.editions)));
   const book=mapCatalogBook(work,[],[],0,locale);
-  if(book){const workTitle=readString(work,['title','name'])??'';
-    const detailLocales=getBookLocales(workId,workTitle,strictEditions(asRows(work.editions)));
+  if(book){
     const stored=await hydrateStoredPresentation([{...book,workTitle,detailLocales}],locale);
     // Description-only callers need bibliographic identity, never a cover API.
     if(options.skipExternalCovers)return stored[0];
     return streamCovers ? deferEditionCoverEvidence(stored)[0] : (await withEditionCoverEvidence(stored))[0];}
-  return mapUnavailableWork(work,locale);
+  return { ...mapUnavailableWork(work,locale), detailLocales };
 }
 
 function mapUnavailableWork(work:DatabaseRow,locale:Locale):Book {

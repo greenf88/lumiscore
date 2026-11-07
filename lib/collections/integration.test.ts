@@ -66,7 +66,7 @@ test('collection pages use reviewed totals and denominator-free fallback copy', 
 test('homepage continuation is private, bounded, and hidden without useful results', () => {
   assert.match(collections, /selectSeriesContinuations\(candidates, Math\.min\(3, limit\)\)/);
   assert.match(collections, /if \(!user\) return \[\]/);
-  assert.match(homePage, /loadHomepageSeriesContinuations\(3,locale\)/);
+  assert.match(homePage, /loadHomepageSeriesContinuations\(3,\s*locale\)/);
   assert.match(home, /seriesContinuations\.length > 0/);
   assert.match(home, /continuations\.map/);
   assert.match(home, /collection\.continueReading/);

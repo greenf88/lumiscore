@@ -23,12 +23,12 @@ test('reference card puts the localized year above its title; compact progress c
 test('home has only a compact authenticated recommendation preview and no guest personal fetch', async () => {
   const page=await read('app/page.tsx');
   const home=await read('app/components/LumiScoreHome.tsx');
-  assert.match(page,/if \(!\(await authPromise\)\.authenticated\) return emptyPersonalization/);
+  assert.match(page,/if \(!auth\.authenticated\) return emptyPersonalization;\s*const \{ loadHomepagePersonalization \} = await import/);
   assert.match(page,/loadHomepagePersonalization\(locale, 3\)/);
   assert.match(page,/loadHighestRatedCatalog\(8,locale,true\)/);
   assert.equal((page.match(/loadHomepagePersonalization\(locale, 3\)/g) ?? []).length, 1);
   assert.match(home,/personalization\.recommendations\.slice\(0, 3\)/);
-  assert.match(home,/loading=\{presentation==='detail'\?'eager':'lazy'\}/);
+  assert.match(home,/loading=\{presentation\s*===\s*'detail'\s*\?\s*'eager'\s*:\s*'lazy'\}/);
   assert.doesNotMatch(home,/<RecommendationsSection|loadGuestHomepagePersonalization|\/api\/recommendations\/guest/);
   assert.match(home,/personalization\.authenticated && <RecommendationPanel/);
   assert.match(home,/href="\/recommendations"/);

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
-import { bookLanguageAlternates } from '@/lib/seo/book-locales';
+import { bookLanguageAlternates, bookUrlStatus } from '@/lib/seo/book-locales';
 import {
   getBookMetadataDescription,
   isCatalogWorkId,
@@ -44,7 +44,9 @@ export async function generateMetadata({
   const { locale } = await resolveRequestLocale();
   const book = await getBook(workId, locale);
 
+  const status = bookUrlStatus(book ? book.detailLocales ?? [] : null, locale);
   if (!book) notFound();
+  const indexable = status === 'indexable';
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
@@ -58,6 +60,8 @@ export async function generateMetadata({
     title: guide?.title ?? title,
     description: guide?.description ?? description,
     canonicalPath: `/book/${book.workId}`,
+    noIndex: !indexable,
+    includeCanonical: indexable,
     alternatePaths: bookLanguageAlternates(`/book/${book.workId}`, book.detailLocales ?? []),
     image: cover ?? null,
     type: 'article',
@@ -128,7 +132,10 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     .catch(() => ({ authenticated: false }));
   const descriptionPromise = bookPromise.then(async book => book
     ? (await import('@/lib/books/public-description')).loadPublicBookDescriptionState(book, locale)
-    : {state:'confirmed_missing' as const,description:null});
+    : {state:'confirmed_missing' as const,description:null})
+    // This optional derived promise may outlive a failed core read. The core
+    // bookPromise still rejects and produces a temporary server error, not404.
+    .catch(() => ({state:'temporary_failure' as const,description:null}));
   const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
     bookPromise,
     ratingStatePromise,
@@ -143,7 +150,9 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
+      {bookUrlStatus(book.detailLocales ?? [], locale) === 'indexable' && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(bookPageJsonLd(book, locale)).replaceAll('<','\\u003c')}}/>
+      )}
       <LumiScoreBookDetail
         book={book}
         description={storedDescription}

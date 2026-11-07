@@ -86,7 +86,7 @@ test('the shared header exposes one accessible language switcher on all main pag
     readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreLogin.tsx', import.meta.url), 'utf8'),
   ]);
-  assert.match(home, /<LanguageSwitcher \/>/);
-  assert.match(detail, /<LanguageSwitcher \/>/);
-  assert.match(login, /<LanguageSwitcher \/>/);
+  assert.match(home, /<LanguageSwitcher(?:\s[\s\S]*?)?\/>/);
+  assert.match(detail, /<LanguageSwitcher(?:\s[\s\S]*?)?\/>/);
+  assert.match(login, /<LanguageSwitcher(?:\s[\s\S]*?)?\/>/);
 });

@@ -75,9 +75,10 @@ export default async function Home() {
     loadHomepageBooks(locale),
     import('@/lib/supabase/categories').then(({ loadPublicCategories }) => loadPublicCategories()).catch(() => null),
   ]).then(([catalog, categories]) => ({...catalog, categoryCount: categories?.length ?? null}));
-  const personalizationPromise = import('@/lib/supabase/taste-test')
-      .then(async ({ loadHomepagePersonalization }) => {
-        if (!(await authPromise).authenticated) return emptyPersonalization;
+  const personalizationPromise = authPromise
+      .then(async auth => {
+        if (!auth.authenticated) return emptyPersonalization;
+        const { loadHomepagePersonalization } = await import('@/lib/supabase/taste-test');
         const personal = await measureServerOperation(
           'homepage.personalization',
           'private',
@@ -94,12 +95,14 @@ export default async function Home() {
         hasEvidence: false,
         recommendations: [],
       }));
-  const seriesPromise = import('@/lib/supabase/collections')
-      .then(async ({ loadHomepageSeriesContinuations }) => (await authPromise).authenticated ? measureServerOperation(
-        'homepage.series_continuations',
-        'private',
-        () => loadHomepageSeriesContinuations(3,locale),
-      ) : [])
+  const seriesPromise = authPromise
+      .then(async auth => {
+        if (!auth.authenticated) return [];
+        const { loadHomepageSeriesContinuations } = await import('@/lib/supabase/collections');
+        return measureServerOperation('homepage.series_continuations', 'private', () =>
+          loadHomepageSeriesContinuations(3, locale),
+        );
+      })
       .catch(() => []);
   const authState = await authPromise;
   return (
