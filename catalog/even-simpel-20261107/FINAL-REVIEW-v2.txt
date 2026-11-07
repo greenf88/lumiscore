@@ -5,8 +5,8 @@ De oorspronkelijke catalogusbestanden, 38 bewijshashes en negen actiehashes blij
 STATUS EN VERSIES
 Draft-PR86: https://github.com/greenf88/lumiscore/pull/86
 Datapakketcommit: 0326face62dfbc2717b193e1e8ffba43b245ad0a.
-Geteste definitieve applicatie-/SQL-commit: 658f50e4e21f934978456240ee0d4d7ad0e6ae95.
-De uiteindelijke PR-head volgt uit Git/PR; latere bewijscommits veranderen geen app- of SQL-inhoud.
+Geteste definitieve applicatiecommit: 658f50e4e21f934978456240ee0d4d7ad0e6ae95.
+De uiteindelijke PR-head volgt uit Git/PR. De definitieve SQL-versie is apart gehasht; de applicatie blijft bytegelijk.
 Ready Preview: https://lumiscore-6qiznukis-rgkgroeneveld-9102.vercel.app
 Deployment: dpl_Ct6NRt9NAaTBweQ62x6QL6AMpgcB, target null = Preview, uitsluitend testproject hlvujbrmfdlrfxdjwsmb.
 Main/productie read-only herbevestigd op 98a53a944b12831cbc320812ed79ed4faddf5a7e.
@@ -48,7 +48,8 @@ GERICHTE OPLOSSING
   choose/rate controleren opnieuw, zodat een oud tabblad geen ongeschikte smaaktestrating kan invoegen.
 - app/api/taste-test/rounds/route.ts: dezelfde inhoudspoort vóór presentatie; bron-/RPC-fouten falen gesloten.
 - app/api/taste-test/candidates/route.ts: ingelogd, privé/no-store, maximaal20, dezelfde ronde- én weergavetaalcontrole;
-  geen terugval naar gewone catalogus bij een fout. Bestaande publicatieselector maakt kaart/detailpresentatie.
+  geen terugval naar gewone catalogus bij een fout. Oorspronkelijke Work-titel en bestaande titelaliassen blijven doorzoekbaar;
+  positieve regressietests bewijzen dit ook wanneer de editietitel anders is. Bestaande publicatieselector maakt kaart/detailpresentatie.
 - app/components/RatingTasteTest.tsx: uitsluitend zoekendpoint vervangen. Geen ontwerp-/CSS-wijziging.
 - Gewone catalogus, detail en directe beoordelingsroute ongewijzigd. Een kookboek daar beoordelen blijft toegestaan.
 - Nieuwe bounded read-only private helper is SECURITY DEFINER met lege search_path en auth.uid-controle,
@@ -100,7 +101,8 @@ GELDIG EN AANVULLEND BEWIJS
    Exact Even simpel in NL én EN ongeschikt voor smaaktest, beide smaakzoekopdrachten leeg,
    gewone catalogus vindt de exacte test-Work en gast krijgt401 op de privé-smaakzoekroute.
    De late bronvoorrang-/ACL-refinement verandert geen van de eerder gebruikte fictie/memoir/kookboekclassificaties.
-   Daarom zijn de geldige28 uitgebreidere rondecontroles hergebruikt; de nieuwe bronvoorrang is apart in SQL getest.
+   Daarom zijn de geldige28 uitgebreidere rondecontroles hergebruikt; de nieuwe bronvoorrang en oorspronkelijke titel-/aliaszoekroute zijn apart in SQL getest.
+   De zes definitieve hosted checks zijn na die laatste zoekcorrectie opnieuw uitgevoerd.
 4.20 gerichte lokale regressietests geslaagd: echte vastgelegde productie-/testfuncties in PostgreSQL/PGlite,
    nieuwe en opgeslagen kaarten, kiezen, afwijzen, hervatten, aanvullen, NL/EN, privé-inventaris zonder SELECT-grant,
    bronvoorrang, dubbele installatie, gecommitteerd functieherstel, latere wijzigingsguard, negen dataacties,
@@ -119,7 +121,7 @@ MCP-herstelbevestiging verliep eenmaal met "This confirmation expired after 2 mi
 De bestaande CLI-route was technisch beschikbaar en toegestaan; geen beveiligingsweigering of rechtenwijziging omzeild.
 Installaties/herinstallatie zijn via apply_migration geregistreerd. Geen handmatige migratiehistorie-inserts.
 De vroege testprototypes staan alleen als historische testrecords; productie krijgt uitsluitend de ene definitieve migratie.
-taste-code-committed-restore-proof.json bevat de echte gecommitteerde proef; dit is geen uitsluitend ROLLBACK-dry-run.
+taste-code-committed-restore-proof.json en taste-title-alias-restore-proof.json bevatten de echte gecommitteerde proeven; dit is geen uitsluitend ROLLBACK-dry-run.
 Lokale CAS/body-/ACL-/dependencytests stoppen bij latere wijzigingen; geen CASCADE.
 De15 eigen fictie/memoir/inventarisfixtures en alle eigen synthetische accounts/ratings/rondes zijn gericht verwijderd.
 Tien catalogus-/gebruikersvingerafdrukken zijn weer exact gelijk aan de toestand vóór die tijdelijke fixtures.
@@ -134,7 +136,7 @@ VEILIGE UITVOERINGSVOLGORDE — PAS NA AFZONDERLIJK RELEASEAKKOORD
    Stop bij drift; geen oude testinventaris of prototypes naar productie kopiëren.
 2. Installeer uitsluitend supabase/migrations/20261107103923_taste_content_guard.sql via apply_migration met correcte
    migratieregistratie. Geen volledige db push van ongerelateerde lokale migraties. Canonieke hash:
-   f6287a68c63028894eafe73c50390295bde2f2d1e03cb93181c4d47b3c31041c
+   7fd8c888c38f59544d841de4757f0667e80a3fbdd853d620da8bf47e6cc4b964
    taste-install.sql is bytegelijk. taste-production-install.sql/taste-test-install.sql zijn auditvarianten,
    NIET aanvullende uit te voeren migraties. test-only-prototype-migration.sql nooit op productie installeren.
    Lees bronfuncties, helpers, ACLs, lege search_path en registry terug; controleer de productieclassificatie read-only.
@@ -158,7 +160,7 @@ Functies: taste-production-restore.sql uitsluitend na codeherstel en controle va
 geen latere wijzigingen/dependencies; herstelt oude bronfuncties en verwijdert alleen de drie nieuwe helpers.
 Als de nieuwe boekdata door legitieme afhankelijkheden niet veilig terug kan, de kookboekbeveiliging behouden en gericht
 vooruit repareren; niet blind terug naar de oude ongefilterde smaaktestroute terwijl Even simpel aanwezig blijft.
-SQLherstel SHA256 a88703747641b6736d8bdc144747ca8254eba6233c683e836063886808387181.
+SQLherstel SHA256 eb4e75211c6cbf491ce647385a68a2cfa0636b0bb9bad93312021b8412f16181.
 Productiecatalogusherstel SHA256 c2228fc59fc94e0c6481cd16e48805ddb2eb072ae5611a5080ef74382906aa12.
 
 BEPERKINGEN EN RELEASEOORDEEL

@@ -165,7 +165,7 @@ create or replace function public.taste_rating_candidates(p_query text,p_languag
  select w.id from current_round r cross join public.works w join public.authors a on a.id=w.author_id
  where r.completed_at is null and p_language in('nl','en') and length(trim(p_query)) between 2 and 100
    and taste_private.content_eligible_v1(w.id,r.language) and taste_private.content_eligible_v1(w.id,p_language)
-   and exists(select 1 from public.editions e where e.work_id=w.id and (e.title ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%' or a.name ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%'))
+   and exists(select 1 from public.editions e where e.work_id=w.id and (e.title ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%' or a.name ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%' or w.title ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%' or exists(select 1 from public.catalog_work_title_aliases alias where alias.work_id=w.id and alias.title ilike '%'||replace(replace(replace(p_query,'\','\\'),'%','\%'),'_','\_')||'%')))
    and not exists(select 1 from public.ratings x where x.user_id=r.user_id and x.work_id=w.id)
    and not exists(select 1 from public.taste_rating_offers x where x.user_id=r.user_id and x.work_id=w.id
      and (x.round_id=r.id or x.decision<>'skipped' or not coalesce((to_jsonb(r)->>'revisit_prior_skips')::boolean,false)))
