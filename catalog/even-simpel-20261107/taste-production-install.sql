@@ -11,7 +11,12 @@ select coalesce((select
    not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id='nonfiction_cooking_food')
    and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
      where t.work_id=w.id and t.mapping_version='taste_traits_v1' and t.source in ('manual','reviewed_seed','open_library','google_books')
-       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M')
+       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M'
+       -- A loose provider subject is not a reviewed cookbook classification.
+       -- Specific existing catalogue categories outrank weaker external labels.
+       and (t.source in ('manual','reviewed_seed') or not exists(
+         select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+         where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')))
    and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
        where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')
      or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version='taste_traits_v1'
@@ -34,7 +39,7 @@ if to_regprocedure('taste_private.inventory_current_v1(bigint,text)') is not nul
  execute 'select taste_private.inventory_current_v1($1,$2)' into eligible using p_work_id,p_language;
 end if;return coalesce(eligible,false);end;
 $policy$;
-revoke all on function taste_private.content_eligible_v1(bigint,text) from public,anon;
+revoke all on function taste_private.content_eligible_v1(bigint,text) from public,anon,service_role;
 grant execute on function taste_private.content_eligible_v1(bigint,text) to authenticated;
 
 CREATE OR REPLACE FUNCTION taste_private.advance_round_v2(p_action text, p_round_id uuid, p_work_id bigint, p_score integer, p_language text, p_goal integer)
@@ -154,7 +159,7 @@ AS $function$
 $function$
 ;
 create or replace function public.taste_rating_allowed(p_work_id bigint,p_language text) returns boolean language sql stable security invoker set search_path='' as $allowed$ select taste_private.content_eligible_v1(p_work_id,p_language); $allowed$;
-revoke all on function public.taste_rating_allowed(bigint,text) from public,anon;grant execute on function public.taste_rating_allowed(bigint,text) to authenticated;
+revoke all on function public.taste_rating_allowed(bigint,text) from public,anon,service_role;grant execute on function public.taste_rating_allowed(bigint,text) to authenticated;
 create or replace function public.taste_rating_candidates(p_query text,p_language text) returns table(work_id bigint) language sql stable security invoker set search_path='' as $candidates$
  with current_round as(select r.* from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1)
  select w.id from current_round r cross join public.works w join public.authors a on a.id=w.author_id
@@ -165,6 +170,6 @@ create or replace function public.taste_rating_candidates(p_query text,p_languag
    and not exists(select 1 from public.taste_rating_offers x where x.user_id=r.user_id and x.work_id=w.id
      and (x.round_id=r.id or x.decision<>'skipped' or not coalesce((to_jsonb(r)->>'revisit_prior_skips')::boolean,false)))
  order by w.id limit 20; $candidates$;
-revoke all on function public.taste_rating_candidates(text,text) from public,anon;grant execute on function public.taste_rating_candidates(text,text) to authenticated;
+revoke all on function public.taste_rating_candidates(text,text) from public,anon,service_role;grant execute on function public.taste_rating_candidates(text,text) to authenticated;
 
 commit;

@@ -2,7 +2,12 @@ select coalesce((select
    not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id='nonfiction_cooking_food')
    and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
      where t.work_id=w.id and t.mapping_version='taste_traits_v1' and t.source in ('manual','reviewed_seed','open_library','google_books')
-       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M')
+       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M'
+       -- A loose provider subject is not a reviewed cookbook classification.
+       -- Specific existing catalogue categories outrank weaker external labels.
+       and (t.source in ('manual','reviewed_seed') or not exists(
+         select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+         where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')))
    and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
        where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')
      or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version='taste_traits_v1'

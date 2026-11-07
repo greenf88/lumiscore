@@ -1,6 +1,6 @@
 import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{PGlite}from'@electric-sql/pglite';
 const dir=new URL('../catalog/even-simpel-20261107/',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL(n,dir))),sql=n=>fs.readFileSync(new URL(n,dir),'utf8'),uid='00000000-0000-4000-8000-000000000001',other='00000000-0000-4000-8000-000000000002';
-export async function fixture(env){const db=new PGlite();await db.exec(`create role anon;create role authenticated;create schema auth;create schema taste_private;grant usage on schema taste_private to authenticated;
+export async function fixture(env){const db=new PGlite();await db.exec(`create role anon;create role service_role;create role authenticated;create schema auth;create schema taste_private;grant usage on schema taste_private to authenticated;
 create function auth.uid()returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
 create table authors(id bigint primary key,name text);create table works(id bigint primary key,title text,author_id bigint references authors,work_type text,open_library_id text,native_identity_key text);
 create table editions(id bigint primary key,work_id bigint references works,title text,language text,isbn_13 text);
@@ -49,4 +49,22 @@ test('authenticated RPC reads private approval through a bounded reader without 
  assert.equal((await db.query("select public.taste_rating_allowed(990710001,'nl') a")).rows[0].a,false);
  const s=await action(db,'start');assert.equal(s.currentWorkId,'1');assert.equal((await state(db)).currentWorkId,'1');
  await db.query("select set_config('request.jwt.claim.sub','',false)");assert.equal((await db.query("select public.taste_rating_allowed(1,'nl') a")).rows[0].a,false);
+}finally{await db.close();}});
+test('guard filters precede unchanged selection ordering; personal ranking code remains outside this patch',()=>{
+ for(const env of['production','test']){const before=read('taste-'+env+'-before.json').functions.find(f=>f.name===(env==='production'?'advance_round_v2':'advance_round_v3')).definition;
+ const after=sql('taste-'+env+'-install.sql');const order=/    order by[\s\S]*?limit 1/.exec(before)?.[0];assert(order);assert(after.includes(order));}
+});
+test('specific non-cooking categories outrank loose provider cooking subjects; explicit reviewed cooking still excludes',async()=>{const db=await fixture('production');try{
+ await db.exec(sql('taste-install.sql'));await db.exec("insert into work_trait_evidence(work_id,trait,source,weight,confidence,raw_labels,mapping_version)values(2,'nonfiction','open_library',1,.85,array['Quick and easy cooking'],'taste_traits_v1')");
+ const allowed=async()=>(await db.query("select public.taste_rating_allowed(2,'en') a")).rows[0].a;assert.equal(await allowed(),true,'specific memoir category, not author/title, controls presentation');
+ await db.exec("update work_trait_evidence set source='manual' where work_id=2");assert.equal(await allowed(),false,'reviewed cooking conflict is not auto-approved');
+ await db.exec("update work_trait_evidence set source='open_library' where work_id=2;insert into work_catalog_categories values(2,'nonfiction_cooking_food')");assert.equal(await allowed(),false,'explicit cookbook category wins');
+}finally{await db.close();}});
+for(const env of['production','test'])test(env+' committed function rollback preserves all existing round rows and ratings',async()=>{const db=await fixture(env);try{
+ await db.exec(sql('taste-install.sql'));const s=await action(db,'start');await action(db,'rate',s.round.id,1,8);
+ const snapshot=async()=>{const data={};for(const t of['works','editions','ratings','user_book_status','taste_rating_rounds','taste_rating_offers'])data[t]=(await db.query(`select to_jsonb(t) r from ${t} t order by to_jsonb(t)::text`)).rows;return data;};const before=await snapshot();
+ await db.exec(sql('taste-'+env+'-restore.sql'));assert.deepEqual(await snapshot(),before);assert.equal((await db.query("select to_regprocedure('taste_private.content_eligible_v1(bigint,text)') r")).rows[0].r,null);
+ await db.exec(sql('taste-install.sql'));assert.deepEqual(await snapshot(),before);
+ await db.exec("create or replace function public.taste_rating_allowed(p_work_id bigint,p_language text)returns boolean language sql stable as $$select false$$");
+ await assert.rejects(db.exec(sql('taste-'+env+'-restore.sql')),/Later helper/);await db.exec('rollback');assert.deepEqual(await snapshot(),before);
 }finally{await db.close();}});

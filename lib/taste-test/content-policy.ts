@@ -20,7 +20,12 @@ export function tasteContentPredicateSql() {
    not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id='${p.cookingCategory}')
    and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
      where t.work_id=w.id and t.mapping_version='${p.mappingVersion}' and t.source in (${list(p.evidenceSources)})
-       and t.confidence>=${p.minimumConfidence} and label ~* '${p.cookingPattern}')
+       and t.confidence>=${p.minimumConfidence} and label ~* '${p.cookingPattern}'
+       -- A loose provider subject is not a reviewed cookbook classification.
+       -- Specific existing catalogue categories outrank weaker external labels.
+       and (t.source in ('manual','reviewed_seed') or not exists(
+         select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+         where c.work_id=w.id and c.category_id<>'${p.cookingCategory}')))
    and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
        where c.work_id=w.id and c.category_id<>'${p.cookingCategory}')
      or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version='${p.mappingVersion}'

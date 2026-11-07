@@ -9,7 +9,12 @@ select coalesce((select
    not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id=''nonfiction_cooking_food'')
    and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
      where t.work_id=w.id and t.mapping_version=''taste_traits_v1'' and t.source in (''manual'',''reviewed_seed'',''open_library'',''google_books'')
-       and t.confidence>=0.6 and label ~* ''\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M'')
+       and t.confidence>=0.6 and label ~* ''\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M''
+       -- A loose provider subject is not a reviewed cookbook classification.
+       -- Specific existing catalogue categories outrank weaker external labels.
+       and (t.source in (''manual'',''reviewed_seed'') or not exists(
+         select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+         where c.work_id=w.id and c.category_id<>''nonfiction_cooking_food'')))
    and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
        where c.work_id=w.id and c.category_id<>''nonfiction_cooking_food'')
      or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version=''taste_traits_v1''
@@ -59,9 +64,47 @@ if not eligible then return false;end if;
 if to_regprocedure(''taste_private.inventory_current_v1(bigint,text)'') is not null then
  execute ''select taste_private.inventory_current_v1($1,$2)'' into eligible using p_work_id,p_language;
 end if;return coalesce(eligible,false);end;
+' and body is distinct from '
+declare eligible boolean;begin
+if auth.uid() is null then return false;end if;
+select coalesce((select
+   not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id=''nonfiction_cooking_food'')
+   and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
+     where t.work_id=w.id and t.mapping_version=''taste_traits_v1'' and t.source in (''manual'',''reviewed_seed'',''open_library'',''google_books'')
+       and t.confidence>=0.6 and label ~* ''\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M'')
+   and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+       where c.work_id=w.id and c.category_id<>''nonfiction_cooking_food'')
+     or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version=''taste_traits_v1''
+       and t.source in (''manual'',''reviewed_seed'',''open_library'',''google_books'') and t.confidence>=0.6 and t.weight>0 and t.weight<=1
+       and t.trait in (''fantasy'',''science_fiction'',''literary'',''romance'',''thriller_mystery'',''nonfiction'')))
+   and exists(select 1 from public.editions e left join public.catalog_edition_metadata m on m.edition_id=e.id
+     and m.work_id=w.id and m.bound_author_id=w.author_id and m.bound_title=e.title and m.bound_isbn13=e.isbn_13
+     and m.bound_language=e.language and m.review_status=''approved''
+     where e.work_id=w.id and length(trim(e.title))>0 and lower(e.language)=any(case p_language
+       when ''nl'' then array[''nl'',''nld'',''dut''] when ''en'' then array[''en'',''eng''] else array[]::text[] end)
+       and (m.edition_id is null or m.format in (''paperback'',''hardcover'',''ebook'') or(w.work_type=''audiobook_original'' and m.format=''audio''))
+       and e.title !~* ''\m(omnibus|boxed[ -]?set|study guide|adaptation|large[ -]?print|book summary)\M''
+       and (w.work_type=''audiobook_original'' or e.title !~* ''\m(audiobook|audio book|mp3|unabridged|abridged|cassette)\M''))
+   from public.works w join public.authors a on a.id=w.author_id
+   where w.id=p_work_id and length(trim(w.title))>0 and length(trim(a.name))>0
+     and coalesce(w.open_library_id,w.native_identity_key) is not null),false) into eligible;
+if not eligible then return false;end if;
+-- Preserve a pre-existing stricter reviewed inventory; never fall back on errors.
+if to_regprocedure(''taste_private.inventory_current_v1(bigint,text)'') is not null then
+ execute ''select taste_private.inventory_current_v1($1,$2)'' into eligible using p_work_id,p_language;
+end if;return coalesce(eligible,false);end;
 ' then raise exception 'Unreviewed helper drift: content_eligible_v1';end if;
-select prosrc into body from pg_proc where oid=to_regprocedure('public.taste_rating_allowed(bigint,text)');if body is not null and body is distinct from ' select taste_private.content_eligible_v1(p_work_id,p_language); ' and body is distinct from ' select taste_private.content_eligible_v1(p_work_id,p_language); ' then raise exception 'Unreviewed helper drift: taste_rating_allowed';end if;
+select prosrc into body from pg_proc where oid=to_regprocedure('public.taste_rating_allowed(bigint,text)');if body is not null and body is distinct from ' select taste_private.content_eligible_v1(p_work_id,p_language); ' and body is distinct from ' select taste_private.content_eligible_v1(p_work_id,p_language); ' and body is distinct from ' select taste_private.content_eligible_v1(p_work_id,p_language); ' then raise exception 'Unreviewed helper drift: taste_rating_allowed';end if;
 select prosrc into body from pg_proc where oid=to_regprocedure('public.taste_rating_candidates(text,text)');if body is not null and body is distinct from '
+ with current_round as(select r.* from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1)
+ select w.id from current_round r cross join public.works w join public.authors a on a.id=w.author_id
+ where r.completed_at is null and p_language in(''nl'',''en'') and length(trim(p_query)) between 2 and 100
+   and taste_private.content_eligible_v1(w.id,r.language) and taste_private.content_eligible_v1(w.id,p_language)
+   and exists(select 1 from public.editions e where e.work_id=w.id and (e.title ilike ''%''||replace(replace(replace(p_query,''\'',''\\''),''%'',''\%''),''_'',''\_'')||''%'' or a.name ilike ''%''||replace(replace(replace(p_query,''\'',''\\''),''%'',''\%''),''_'',''\_'')||''%''))
+   and not exists(select 1 from public.ratings x where x.user_id=r.user_id and x.work_id=w.id)
+   and not exists(select 1 from public.taste_rating_offers x where x.user_id=r.user_id and x.work_id=w.id
+     and (x.round_id=r.id or x.decision<>''skipped'' or not coalesce((to_jsonb(r)->>''revisit_prior_skips'')::boolean,false)))
+ order by w.id limit 20; ' and body is distinct from '
  with current_round as(select r.* from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1)
  select w.id from current_round r cross join public.works w join public.authors a on a.id=w.author_id
  where r.completed_at is null and p_language in(''nl'',''en'') and length(trim(p_query)) between 2 and 100
@@ -88,7 +131,12 @@ select coalesce((select
    not exists(select 1 from public.work_catalog_categories c where c.work_id=w.id and c.category_id='nonfiction_cooking_food')
    and not exists(select 1 from public.work_trait_evidence t cross join lateral unnest(t.raw_labels) label
      where t.work_id=w.id and t.mapping_version='taste_traits_v1' and t.source in ('manual','reviewed_seed','open_library','google_books')
-       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M')
+       and t.confidence>=0.6 and label ~* '\m(cooking|cookbooks?|cookery|recipes?|kookboeken?|kookkunst|recepten(boek(en)?)?)\M'
+       -- A loose provider subject is not a reviewed cookbook classification.
+       -- Specific existing catalogue categories outrank weaker external labels.
+       and (t.source in ('manual','reviewed_seed') or not exists(
+         select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
+         where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')))
    and (exists(select 1 from public.work_catalog_categories c join public.catalog_categories known on known.id=c.category_id
        where c.work_id=w.id and c.category_id<>'nonfiction_cooking_food')
      or exists(select 1 from public.work_trait_evidence t where t.work_id=w.id and t.mapping_version='taste_traits_v1'
@@ -111,7 +159,7 @@ if to_regprocedure('taste_private.inventory_current_v1(bigint,text)') is not nul
  execute 'select taste_private.inventory_current_v1($1,$2)' into eligible using p_work_id,p_language;
 end if;return coalesce(eligible,false);end;
 $policy$;
-revoke all on function taste_private.content_eligible_v1(bigint,text) from public,anon;
+revoke all on function taste_private.content_eligible_v1(bigint,text) from public,anon,service_role;
 grant execute on function taste_private.content_eligible_v1(bigint,text) to authenticated;
 
 do $upgrade$ begin
@@ -348,7 +396,7 @@ $function$
 ;$definition$;
 end;$upgrade$;
 create or replace function public.taste_rating_allowed(p_work_id bigint,p_language text) returns boolean language sql stable security invoker set search_path='' as $allowed$ select taste_private.content_eligible_v1(p_work_id,p_language); $allowed$;
-revoke all on function public.taste_rating_allowed(bigint,text) from public,anon;grant execute on function public.taste_rating_allowed(bigint,text) to authenticated;
+revoke all on function public.taste_rating_allowed(bigint,text) from public,anon,service_role;grant execute on function public.taste_rating_allowed(bigint,text) to authenticated;
 create or replace function public.taste_rating_candidates(p_query text,p_language text) returns table(work_id bigint) language sql stable security invoker set search_path='' as $candidates$
  with current_round as(select r.* from public.taste_rating_rounds r where r.user_id=(select auth.uid()) order by r.round_number desc limit 1)
  select w.id from current_round r cross join public.works w join public.authors a on a.id=w.author_id
@@ -359,6 +407,6 @@ create or replace function public.taste_rating_candidates(p_query text,p_languag
    and not exists(select 1 from public.taste_rating_offers x where x.user_id=r.user_id and x.work_id=w.id
      and (x.round_id=r.id or x.decision<>'skipped' or not coalesce((to_jsonb(r)->>'revisit_prior_skips')::boolean,false)))
  order by w.id limit 20; $candidates$;
-revoke all on function public.taste_rating_candidates(text,text) from public,anon;grant execute on function public.taste_rating_candidates(text,text) to authenticated;
+revoke all on function public.taste_rating_candidates(text,text) from public,anon,service_role;grant execute on function public.taste_rating_candidates(text,text) to authenticated;
 
 commit;
