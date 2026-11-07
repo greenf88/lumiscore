@@ -4,7 +4,7 @@ import{createElement}from'react';import{renderToPipeableStream}from'react-dom/se
 import{getInitialBookCoverUrls}from'../lib/books/book-cover-state.ts';
 import{REVIEWED_COVER_OVERRIDES}from'../lib/books/reviewed-cover-overrides.ts';
 const root=fileURLToPath(new URL('../',import.meta.url));
-test('real shared cover SSR preserves strict sources and lazy legacy fallback without requests',{timeout:30000},async()=>{
+test('real shared cover SSR preserves strict sources and legacy fallback without requests',{timeout:30000},async()=>{
  const saved={url:process.env.NEXT_PUBLIC_SUPABASE_URL,key:process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY};
  process.env.NEXT_PUBLIC_SUPABASE_URL='http://127.0.0.1:1';process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='synthetic-public';
  const server=await createServer({root,configFile:false,plugins:[react()],resolve:{alias:{'@':root}},server:{middlewareMode:true},logLevel:'error'});

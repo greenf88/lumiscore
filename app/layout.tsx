@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { ProductAnalysisConsent } from './components/ProductAnalysisConsent';
 import { LumiScoreLocaleProvider } from './components/LumiScoreLocale';
 import { LUMISCORE_SITE_ORIGIN } from '@/lib/seo/site-origin';
@@ -48,7 +49,8 @@ const themeScript = `
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { locale, hasPersistedChoice } = await resolveRequestLocale();
+  const [{ locale, hasPersistedChoice }, initialPath] = await Promise.all([resolveRequestLocale(),requestPagePath()]);
+  const home=initialPath.split('?')[0]==='/';
 
   return (
     <html lang={locale} data-theme="paper" suppressHydrationWarning>
@@ -58,13 +60,14 @@ export default async function RootLayout({
         <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/lora-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {home ? <Script id="lumiscore-theme-bootstrap" strategy="beforeInteractive" dangerouslySetInnerHTML={{__html:themeScript}}/>
+          : <script dangerouslySetInnerHTML={{ __html: themeScript }} />}
       </head>
       <body>
         <LumiScoreLocaleProvider
           initialLocale={locale}
           hasPersistedChoice={hasPersistedChoice}
-          initialPath={await requestPagePath()}
+          initialPath={initialPath}
         >
           {children}
           <OverviewScrollMemory />

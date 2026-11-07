@@ -5,6 +5,7 @@ const run=(args,env=process.env)=>new Promise((resolve,reject)=>{
 });
 const environment={...process.env};for(const key of Object.keys(environment))if(/SUPABASE|GOOGLE_BOOKS|DATABASE/.test(key))delete environment[key];
 await run(['node_modules/vite/bin/vite.js','build'],{...environment,VERCEL:'1',VERCEL_ENV:'preview',NITRO_PRESET:'vercel',NEXT_PUBLIC_SUPABASE_URL:'http://127.0.0.1:45431',NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:'synthetic-public-fixture'});
+if(process.argv.includes('--build-only'))process.exit(0); // Local sandbox may build and verify under different OS identities. CI runs both.
 const server=spawn(process.execPath,['scripts/browse-built-fixture.mjs'],{cwd:root,stdio:['ignore','pipe','pipe'],windowsHide:true});
 let log='';const streams=[server.stdout,server.stderr];
 try{
