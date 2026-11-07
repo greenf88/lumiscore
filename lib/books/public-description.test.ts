@@ -97,3 +97,16 @@ test('provider quota cooldown covers different ISBNs, expires and preserves revi
   assert.equal(calls,2,'new request permitted after the explicit provider wait; still never absence');
  }finally{Date.now=realNow;clearBookDescriptionCacheForTests();}
 });
+
+test('quota Retry-After dates, missing and invalid values are bounded without becoming missing content',async()=>{
+ const realNow=Date.now;let now=realNow();Date.now=()=>now;
+ try{for(const makeHeader of[()=>undefined,()=>'-1',()=>new Date(now+120_000).toUTCString(),()=>'999999999999999999999999']){
+  const header=makeHeader();
+  clearBookDescriptionCacheForTests();let calls=0;const fetcher:typeof fetch=async()=>{calls++;return new Response('{}',{status:429,headers:header?{'Retry-After':header}:{}});};
+  const lookup=(isbn13:string)=>({...book,openLibraryEditionId:null,isbn13});
+  assert.equal((await loadPublicBookDescriptionState(lookup('9780141439518'),'en',fetcher)).state,'temporary_failure');
+  now+=2_000;assert.equal((await loadPublicBookDescriptionState(lookup('9780441172719'),'en',fetcher)).state,'temporary_failure');assert.equal(calls,1);
+  now+=24*60*60*1_000+1;
+  await loadPublicBookDescriptionState(lookup('9780593135204'),'en',fetcher);assert.equal(calls,2,'even extreme upstream waits expire');
+ }}finally{Date.now=realNow;clearBookDescriptionCacheForTests();}
+});

@@ -83,9 +83,11 @@ const providerCooldown = new Map<string, number>();
 function quotaCooldownUntil(response: Response): number {
   const retryAfter=response.headers.get('retry-after');
   const seconds=retryAfter&&/^\d+$/.test(retryAfter)?Number(retryAfter):null;
-  const date=retryAfter&&seconds===null?Date.parse(retryAfter):NaN;
-  return Math.max(Date.now()+1_000, seconds!==null&&Number.isFinite(seconds)
-    ? Date.now()+seconds*1_000 : Number.isFinite(date)?date:Date.now()+60_000);
+  const date=retryAfter&&seconds===null&&/^[A-Za-z]{3},.* GMT$/i.test(retryAfter)?Date.parse(retryAfter):NaN;
+  const requested=seconds!==null&&Number.isFinite(seconds)
+    ? Date.now()+seconds*1_000 : Number.isFinite(date)?date:Date.now()+60_000;
+  // Bound malformed/extreme upstream values; never turn quota into absence.
+  return Math.min(Date.now()+24*60*60*1_000,Math.max(Date.now()+1_000,requested));
 }
 
 function resultTtl(state: DescriptionResolutionState): number {
