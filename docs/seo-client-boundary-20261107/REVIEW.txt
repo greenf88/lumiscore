@@ -1,0 +1,69 @@
+LumiScore — bounded homepage discovery experiment / review — 7 November 2026
+
+Draft PR90, dependent on Draft PR89 / 13f4d661acc5edfa339e534cb30bd9777652a016.
+Tested application 15e4094433a2906760d747e76e5ae269eca9cbf6.
+Measured head bc6dbbfaa71cc38f19771a3d6174e8bf800643cb.
+Ready TEST Preview: https://lumiscore-h0tum6fs7-rgkgroeneveld-9102.vercel.app
+Deployment dpl_2y4KMSEpu21ZsEasFi7HLAvufrQX.
+The final proof-only head and exact-head CI are recorded in the PR body.
+
+RUNTIME DIFF
+Only app/layout.tsx differs from PR89. The exact existing theme/preload script
+uses the supported next/script beforeInteractive route on the homepage. Other
+pages keep the old inline script. Resolve the existing locale/path together,
+without changing theme choice, consent, ranking, edition selection or markup.
+Vinext's installed before-interactive-head.js splices registered scripts just
+after head opens. The actual compiled HTTP test confirms one bootstrap before
+the blocking stylesheet in both locales. In the old head the stylesheet was
+at byte148 and theme script4151; candidate script68 and stylesheet1096.
+This fixes discovery order. It does NOT by itself prove a faster final LCP.
+
+WHY THIS WAS INVESTIGATED
+The hero is the observed homepage LCP element. Its theme-selected preload was
+discovered after blocking CSS. This uses the framework-supported mechanism,
+not UA content variation, a custom HTML rewrite or changed theme defaults.
+https://nextjs.org/docs/app/api-reference/components/script#beforeinteractive
+Actual runtime is Vinext1.0.0-beta.3 / React19.2.6, not stock Next's server.
+
+REJECTED EXPERIMENT — RUNTIME REVERTED
+Application84919c8840de7bc4d141f385c1ea425205192a38, head930a59dcc8edd141fe54b9da189b7f2f89902e44.
+Splitting the legacy fallback registry reduced the normal home module from
+220302raw/54511gzip to164257/44564gzip, with a separate57031/10357 module.
+24 interleaved hosted lab visits did not establish useful LCP improvement and
+showed higher TBT medians. The application split was reverted in07f49a6.
+All samples remain under lighthouse/; this code is NOT in the releasediff.
+Baseline -> experiment LCP/TBT medians:
+home2674.926/123 ->2698.971/166ms;
+browse3213.027/148.5 ->3334.854/185ms;
+collection3089.989/165 ->3130.938/291ms;
+book2676.449/130 ->2692.508/236ms.
+CPU/cache variability prevents treating these differences as a universal causal
+regression. There was insufficient evidence to ship the experiment.
+
+BOOTSTRAP MEASUREMENT
+Separate lighthouse-bootstrap/medians.json and samples.json retain every outcome.
+Three fresh-profile simulated mobile visits/version/template, alternating AB/BA,
+same isolated TEST catalogue, LH13.6,412x823/DPR1.75,4xCPU,150msRTT,1638kbps.
+No simultaneous local build/test/browser work. CDN warmth was not reset.
+Only exact-origin Preview authentication is attached; no token files, global
+external-provider headers, public share link or deployment-protection changes.
+This is a lab measurement, not production improvement or field CWV evidence.
+See the measured medians/ranges rather than selecting a favourable single run.
+The2.5s LCP target is NOT established. This remains Draft, not release-authorized.
+
+VALIDATION
+Typecheck,focused ESLint and seven focused tests pass. The actual compiled bundle
+checks bootstrap order in both locales and all399Browse pages/6377unique books
+at3,6,10concurrency, zero empty200/duplicates, including quota/network/payload
+faults,503Retry-After and last/outside page handling. No test weakening.
+The retained actual SSR cover test checks strict and historical reviewed fallback
+cards in NL/EN: source,alt,dimensions,provided public score and zero SSR network.
+Exact-head full CI and final browser evidence are attached separately.
+
+SAFE ORDER / RESTORE
+No SQL, catalogue import, new tracking, new credentials or production operation.
+PR89 must be separately approved and released before a PR90 release decision.
+Recheck runtime diff/current main, CI, head order, Paper first visit and preserved
+Ink choice, one correct hero request, canonical/head and PR51/PR86 behaviour.
+If an approved rollout regresses, restore the preceding Ready code deployment;
+no database restore is necessary. Keep unproven performance claims out of release.

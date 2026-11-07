@@ -1,0 +1,280 @@
+{
+  "baselineHead": "13f4d661acc5edfa339e534cb30bd9777652a016",
+  "candidateHead": "bc6dbbfaa71cc38f19771a3d6174e8bf800643cb",
+  "applicationSha": "15e4094433a2906760d747e76e5ae269eca9cbf6",
+  "conditions": "LH13.6,412x823/DPR1.75,simulated4xCPU/150msRTT/1638kbps,fresh profile,alternated,same TEST DB,app guest,CDN not cleared,no concurrent local build/tests. Origin-scoped request interception on BOTH versions, ephemeral existing project development OIDC in memory only; no sharing/security change. Lab only.",
+  "medians": [
+    {
+      "template": "home",
+      "version": "baseline",
+      "performance": {
+        "median": 85,
+        "min": 82,
+        "max": 91
+      },
+      "lcp": {
+        "median": 2717.6639999999998,
+        "min": 2716.2290000000003,
+        "max": 2726.365
+      },
+      "tbt": {
+        "median": 470,
+        "min": 247,
+        "max": 552
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 192209,
+        "min": 192208,
+        "max": 192280
+      },
+      "imageBytes": {
+        "median": 20762,
+        "min": 20737,
+        "max": 20763
+      }
+    },
+    {
+      "template": "home",
+      "version": "candidate",
+      "performance": {
+        "median": 95,
+        "min": 88,
+        "max": 96
+      },
+      "lcp": {
+        "median": 2708.67,
+        "min": 2700.561,
+        "max": 2950.4719999999998
+      },
+      "tbt": {
+        "median": 139.0000000000001,
+        "min": 64,
+        "max": 252
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 194678,
+        "min": 194677,
+        "max": 194700
+      },
+      "imageBytes": {
+        "median": 20737,
+        "min": 20737,
+        "max": 20817
+      }
+    },
+    {
+      "template": "browse",
+      "version": "baseline",
+      "performance": {
+        "median": 92,
+        "min": 74,
+        "max": 93
+      },
+      "lcp": {
+        "median": 3179.967,
+        "min": 3136.929,
+        "max": 3226.5735000000004
+      },
+      "tbt": {
+        "median": 138.5000000000001,
+        "min": 110.50000000000011,
+        "max": 564.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 197938,
+        "min": 197816,
+        "max": 198104
+      },
+      "imageBytes": {
+        "median": 314777,
+        "min": 314772,
+        "max": 314785
+      }
+    },
+    {
+      "template": "browse",
+      "version": "candidate",
+      "performance": {
+        "median": 90,
+        "min": 73,
+        "max": 92
+      },
+      "lcp": {
+        "median": 3187.746,
+        "min": 3186.2809999999995,
+        "max": 3363.3975
+      },
+      "tbt": {
+        "median": 192,
+        "min": 138.0000000000001,
+        "max": 791.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 198543,
+        "min": 198335,
+        "max": 198587
+      },
+      "imageBytes": {
+        "median": 314805,
+        "min": 314779,
+        "max": 314876
+      }
+    },
+    {
+      "template": "collection",
+      "version": "baseline",
+      "performance": {
+        "median": 88,
+        "min": 86,
+        "max": 92
+      },
+      "lcp": {
+        "median": 3093.9469999999997,
+        "min": 3051.229999999999,
+        "max": 3164.1708
+      },
+      "tbt": {
+        "median": 274,
+        "min": 128,
+        "max": 325.9999999999999
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 207912,
+        "min": 207863,
+        "max": 207913
+      },
+      "imageBytes": {
+        "median": 61972,
+        "min": 61928,
+        "max": 61978
+      }
+    },
+    {
+      "template": "collection",
+      "version": "candidate",
+      "performance": {
+        "median": 92,
+        "min": 83,
+        "max": 94
+      },
+      "lcp": {
+        "median": 3055.9975,
+        "min": 3049.664,
+        "max": 3154.0310000000004
+      },
+      "tbt": {
+        "median": 160.0000000000001,
+        "min": 89,
+        "max": 426
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 208475,
+        "min": 208473,
+        "max": 208484
+      },
+      "imageBytes": {
+        "median": 61931,
+        "min": 61927,
+        "max": 61931
+      }
+    },
+    {
+      "template": "book",
+      "version": "baseline",
+      "performance": {
+        "median": 94,
+        "min": 93,
+        "max": 96
+      },
+      "lcp": {
+        "median": 2667.9539999999997,
+        "min": 2665.707,
+        "max": 2725.393
+      },
+      "tbt": {
+        "median": 181,
+        "min": 116,
+        "max": 195.9999999999999
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 233055,
+        "min": 233050,
+        "max": 233152
+      },
+      "imageBytes": {
+        "median": 10840,
+        "min": 10839,
+        "max": 10840
+      }
+    },
+    {
+      "template": "book",
+      "version": "candidate",
+      "performance": {
+        "median": 95,
+        "min": 68,
+        "max": 96
+      },
+      "lcp": {
+        "median": 2713.279,
+        "min": 2709.806,
+        "max": 2878.348
+      },
+      "tbt": {
+        "median": 111,
+        "min": 88,
+        "max": 1691.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 233800,
+        "min": 233632,
+        "max": 233837
+      },
+      "imageBytes": {
+        "median": 10840,
+        "min": 10839,
+        "max": 10846
+      }
+    }
+  ]
+}
