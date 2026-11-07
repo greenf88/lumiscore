@@ -2,10 +2,16 @@ LumiScore — SEO reliability implementation / review — 7 November 2026
 
 STATUS
 Draft PR89: https://github.com/greenf88/lumiscore/pull/89
-Tested application: 63a1902aca4113c28380d4a8128ffda101ccbab2.
+Final application: 9d12f4ee1a311d5bce8562451848c7757d87e776.
+Previous full browser/performance application:63a1902aca4113c28380d4a8128ffda101ccbab2.
 Ready Preview: https://lumiscore-ae6yeffmi-rgkgroeneveld-9102.vercel.app
 Deployment: dpl_82uUveA5geeb1bp5QkgjzxZDn3Gz; isolated TEST hlvujbrmfdlrfxdjwsmb.
-The final documentation/test-helper commit does not change this application.
+The only later runtime change rejects cached fallback after401/403/PGRST301/
+42501 permission errors. Dedicated regression proves no denied-data replay,
+one denied attempt, no repeated attempt during cooldown and fresh recovery.
+Client/layout/cover/SEO files are byte-identical to the measured application;
+its browser and Lighthouse proof remains scoped to that exact earlier SHA.
+The final documentation/test-helper commit does not change the final application.
 Its full head and exact-head CI are recorded in the PR body, avoiding a self-hash.
 No merge, production deployment, database write, GSC action or social change.
 Production/main checked:6009f2c0c6ed9c3b086fe73db9daee3fe23c3cdc, Ready
@@ -39,6 +45,8 @@ Same-query/locale pending requests coalesce. No ordinary cached public-score
 read was added. Only a validated successful exact-query public snapshot may be
 used on failure for at most30s; failure cooldown5s; bounded100keys/process.
 Cache is process-local, not a project-wide/distributed promise or snapshot cache.
+Permission denials and permanent4xx never use old snapshots or retry three times.
+Known Postgres42501 is recognized even when SDK errors omit HTTP status.
 SDK does not expose provider Retry-After here; no claim of honoring hidden429
 headers. Public503 uses our explicit Retry-After:5 and private,no-store.
 
@@ -85,6 +93,12 @@ bounded verified variants and neutral local/CSS placeholder. No ISBN/Work guess.
 
 OpenLibrary-only native Vercel optimizer allowlist,64/96/160/256/384/640widths,
 quality75,AVIF/WebP; arbitrary hosts/paths/query credentials/SVG rejected.
+Actual authorized optimizer GETs:160request ->160x242AVIF5290bytes;
+384request ->265x400AVIF10595bytes (platform correctly does not upscale the
+original265px source). Width hints request optimizer sizes; a small original
+does not acquire detail that it never contained. Both decoded successfully;
+nonallowlisted example.com source returned400. Native resolution is a limitation,
+not a reason to swap to an unverified cover or claim sharper source material.
 Provenance/original URL retained in data attributes. Existing Vercel infrastructure,
 no open custom proxy or new host. Google/PRH/ISBNregistry remain native pending
 verified variant/storage conditions. Thus not ALL native hosts have width srcset;
@@ -172,7 +186,7 @@ No new thin author/category hub or indexable filter combination was invented.
 Search/login and arbitrary filters retain noindex,follow.
 
 EVIDENCE / CHECKS
-CI application63a1902: https://github.com/greenf88/lumiscore/actions/runs/42412379060
+Previous complete CI application63a1902: https://github.com/greenf88/lumiscore/actions/runs/42412379060
 1154unit cases:1138pass,0fail,16skipped. The16are opt-in account SSR tests;
 the dedicated profile SSR job separately executes all16 and passes16/16.
 Typecheck,lint,productionbuild,client-secret scan,diffcheck all green.
@@ -181,6 +195,10 @@ redirect cases; delayed optional content; real DBfault vs missingWork checks pas
 New built Vercel/Nitro HTTP test:399pages/6377unique at3,6,10concurrency,1197GETs,
 zero empty200/duplicates;429/5xx recovery,timeout,invalidJSON,empty payload503,
 genuine empty catalog200,lastpage9cards,outside999->307page399,preload check.
+This full compiled check was repeated successfully on final application9d12f4e
+after the permission-denial fix, plus the explicit401/403/PGRST301/42501 test.
+The final exact-head CI link/status is attached to the PR; no client or SEO policy
+change was made after the broader hosted/browser/Lighthouse63a1902 evidence.
 This large fixture is synthetic; it is not claimed as hosted production coverage.
 Real existing TEST DB:44ENpages/692unique at3,6,10,132GETs,zero empty200/duplicates,
 last-page/out-of-range verified; optional provider failures simulated locally.
