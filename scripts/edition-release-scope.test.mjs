@@ -13,11 +13,13 @@ test('split release retains the production rating/round contracts and shared tas
     assert.equal(read(path), previous(path), path);
   }
   const route = 'app/api/taste-test/rounds/route.ts';
-  assert.equal(read(route).split('export async function POST')[1], previous(route).split('export async function POST')[1]);
+  // Authorized content guard passes the same verified client to presentation.
+  // Persistence, CSRF, metrics and request contract remain exact.
+  assert.equal(read(route).split('export async function POST')[1].replace('request, client)','request)'), previous(route).split('export async function POST')[1]);
   const save = text => text.split('export async function saveTasteTestAnswers')[1].split('export async function loadBookDetailPersonalization')[0];
   assert.equal(save(read('lib/supabase/taste-test.ts')), save(previous('lib/supabase/taste-test.ts')));
   for (const path of ['lib/supabase/taste-round-storage.ts','lib/supabase/taste-safety.ts',
-    'lib/taste-test/eligibility.ts','lib/recommendations/series-priority.ts','app/api/taste-test/candidates/route.ts']) {
+    'lib/taste-test/eligibility.ts','lib/recommendations/series-priority.ts']) {
     assert.equal(existsSync(new URL(path,root)), false, path + ' stays outside this release');
   }
 });
@@ -26,6 +28,7 @@ test('unavailable resumed Work stays skippable; no changed identity or accidenta
   assert.ok(route.includes('loadCatalogBook(state.currentWorkId, locale)'));
   assert.ok(ui.includes('pending={pending || book.editionAvailable === false}'));
   assert.ok(ui.includes("act('skip', workId)"));
-  assert.ok(!ui.includes('/api/taste-test/candidates'));
+  assert.ok(ui.includes('/api/taste-test/candidates'));
+  assert.ok(!ui.includes('/api/catalog/search'));
   assert.ok(!route.includes('loadTasteEligibility'));
 });

@@ -1,0 +1,570 @@
+{
+  "rows": [
+    {
+      "key": {
+        "id": 990730101
+      },
+      "seq": 1,
+      "schema": "public",
+      "relation": "authors",
+      "after_row": {
+        "id": 990730101,
+        "name": "LumiScore synthetische smaaktestfixture",
+        "open_library_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990740101
+      },
+      "seq": 2,
+      "schema": "public",
+      "relation": "works",
+      "after_row": {
+        "id": 990740101,
+        "title": "SYNTHETIC Taste Fiction 20261107",
+        "cover_id": null,
+        "author_id": 990730101,
+        "work_type": "novel",
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": 2026,
+        "native_identity_key": "synthetic:even-simpel-taste:1"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990750111
+      },
+      "seq": 3,
+      "schema": "public",
+      "relation": "editions",
+      "after_row": {
+        "id": 990750111,
+        "title": "SYNTHETIC Taste Fiction 20261107 nld",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 990740101,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "SYNTHETIC fixture; not a real edition",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990750112
+      },
+      "seq": 4,
+      "schema": "public",
+      "relation": "editions",
+      "after_row": {
+        "id": 990750112,
+        "title": "SYNTHETIC Taste Fiction 20261107 eng",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 990740101,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "SYNTHETIC fixture; not a real edition",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740101,
+        "category_id": "fiction_literary_general"
+      },
+      "seq": 5,
+      "schema": "public",
+      "relation": "work_catalog_categories",
+      "after_row": {
+        "work_id": 990740101,
+        "category_id": "fiction_literary_general"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "trait": "literary",
+        "source": "manual",
+        "work_id": 990740101,
+        "source_key": "synthetic:even-simpel-taste:20261107"
+      },
+      "seq": 6,
+      "schema": "public",
+      "relation": "work_trait_evidence",
+      "after_row": {
+        "trait": "literary",
+        "source": "manual",
+        "weight": 1,
+        "work_id": 990740101,
+        "confidence": 1,
+        "raw_labels": [
+          "SYNTHETIC_FIXTURE",
+          "literary"
+        ],
+        "source_key": "synthetic:even-simpel-taste:20261107",
+        "updated_at": "2026-11-07T10:50:00+00:00",
+        "verified_at": "2026-11-07T10:50:00+00:00",
+        "mapping_version": "taste_traits_v1"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740101,
+        "language": "nl"
+      },
+      "seq": 7,
+      "schema": "taste_private",
+      "relation": "eligible_inventory_v1",
+      "after_row": {
+        "work_id": 990740101,
+        "language": "nl",
+        "review_id": "synthetic:even-simpel-taste:20261107",
+        "edition_id": 990750111,
+        "approved_at": "2026-11-07T10:50:00+00:00",
+        "policy_version": "taste_eligibility_v1",
+        "source_snapshot": {
+          "work": {
+            "id": 990740101,
+            "title": "SYNTHETIC Taste Fiction 20261107",
+            "cover_id": null,
+            "author_id": 990730101,
+            "work_type": "novel",
+            "source_type": "lumiscore_native",
+            "open_library_id": null,
+            "first_publish_year": 2026,
+            "native_identity_key": "synthetic:even-simpel-taste:1"
+          },
+          "author": {
+            "id": 990730101,
+            "name": "LumiScore synthetische smaaktestfixture",
+            "open_library_id": null
+          },
+          "traits": [
+            {
+              "trait": "literary",
+              "source": "manual",
+              "weight": 1,
+              "work_id": 990740101,
+              "confidence": 1,
+              "raw_labels": [
+                "SYNTHETIC_FIXTURE",
+                "literary"
+              ],
+              "source_key": "synthetic:even-simpel-taste:20261107",
+              "updated_at": "2026-11-07T10:50:00+00:00",
+              "verified_at": "2026-11-07T10:50:00+00:00",
+              "mapping_version": "taste_traits_v1"
+            }
+          ],
+          "editions": [
+            {
+              "id": 990750111,
+              "title": "SYNTHETIC Taste Fiction 20261107 nld",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740101,
+              "cover_id": null,
+              "language": "nld",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            },
+            {
+              "id": 990750112,
+              "title": "SYNTHETIC Taste Fiction 20261107 eng",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740101,
+              "cover_id": null,
+              "language": "eng",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            }
+          ],
+          "categories": [
+            {
+              "work_id": 990740101,
+              "category_id": "fiction_literary_general"
+            }
+          ],
+          "memberships": []
+        }
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740101,
+        "language": "en"
+      },
+      "seq": 8,
+      "schema": "taste_private",
+      "relation": "eligible_inventory_v1",
+      "after_row": {
+        "work_id": 990740101,
+        "language": "en",
+        "review_id": "synthetic:even-simpel-taste:20261107",
+        "edition_id": 990750112,
+        "approved_at": "2026-11-07T10:50:00+00:00",
+        "policy_version": "taste_eligibility_v1",
+        "source_snapshot": {
+          "work": {
+            "id": 990740101,
+            "title": "SYNTHETIC Taste Fiction 20261107",
+            "cover_id": null,
+            "author_id": 990730101,
+            "work_type": "novel",
+            "source_type": "lumiscore_native",
+            "open_library_id": null,
+            "first_publish_year": 2026,
+            "native_identity_key": "synthetic:even-simpel-taste:1"
+          },
+          "author": {
+            "id": 990730101,
+            "name": "LumiScore synthetische smaaktestfixture",
+            "open_library_id": null
+          },
+          "traits": [
+            {
+              "trait": "literary",
+              "source": "manual",
+              "weight": 1,
+              "work_id": 990740101,
+              "confidence": 1,
+              "raw_labels": [
+                "SYNTHETIC_FIXTURE",
+                "literary"
+              ],
+              "source_key": "synthetic:even-simpel-taste:20261107",
+              "updated_at": "2026-11-07T10:50:00+00:00",
+              "verified_at": "2026-11-07T10:50:00+00:00",
+              "mapping_version": "taste_traits_v1"
+            }
+          ],
+          "editions": [
+            {
+              "id": 990750111,
+              "title": "SYNTHETIC Taste Fiction 20261107 nld",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740101,
+              "cover_id": null,
+              "language": "nld",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            },
+            {
+              "id": 990750112,
+              "title": "SYNTHETIC Taste Fiction 20261107 eng",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740101,
+              "cover_id": null,
+              "language": "eng",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            }
+          ],
+          "categories": [
+            {
+              "work_id": 990740101,
+              "category_id": "fiction_literary_general"
+            }
+          ],
+          "memberships": []
+        }
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990740102
+      },
+      "seq": 9,
+      "schema": "public",
+      "relation": "works",
+      "after_row": {
+        "id": 990740102,
+        "title": "SYNTHETIC Taste Memoir 20261107",
+        "cover_id": null,
+        "author_id": 990730101,
+        "work_type": null,
+        "source_type": "lumiscore_native",
+        "open_library_id": null,
+        "first_publish_year": 2026,
+        "native_identity_key": "synthetic:even-simpel-taste:2"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990750121
+      },
+      "seq": 10,
+      "schema": "public",
+      "relation": "editions",
+      "after_row": {
+        "id": 990750121,
+        "title": "SYNTHETIC Taste Memoir 20261107 nld",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 990740102,
+        "cover_id": null,
+        "language": "nld",
+        "publisher": "SYNTHETIC fixture; not a real edition",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "id": 990750122
+      },
+      "seq": 11,
+      "schema": "public",
+      "relation": "editions",
+      "after_row": {
+        "id": 990750122,
+        "title": "SYNTHETIC Taste Memoir 20261107 eng",
+        "isbn_10": null,
+        "isbn_13": null,
+        "work_id": 990740102,
+        "cover_id": null,
+        "language": "eng",
+        "publisher": "SYNTHETIC fixture; not a real edition",
+        "publish_date": null,
+        "open_library_edition_id": null
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740102,
+        "category_id": "nonfiction_biography_memoir"
+      },
+      "seq": 12,
+      "schema": "public",
+      "relation": "work_catalog_categories",
+      "after_row": {
+        "work_id": 990740102,
+        "category_id": "nonfiction_biography_memoir"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "trait": "nonfiction",
+        "source": "manual",
+        "work_id": 990740102,
+        "source_key": "synthetic:even-simpel-taste:20261107"
+      },
+      "seq": 13,
+      "schema": "public",
+      "relation": "work_trait_evidence",
+      "after_row": {
+        "trait": "nonfiction",
+        "source": "manual",
+        "weight": 1,
+        "work_id": 990740102,
+        "confidence": 1,
+        "raw_labels": [
+          "SYNTHETIC_FIXTURE",
+          "nonfiction"
+        ],
+        "source_key": "synthetic:even-simpel-taste:20261107",
+        "updated_at": "2026-11-07T10:50:00+00:00",
+        "verified_at": "2026-11-07T10:50:00+00:00",
+        "mapping_version": "taste_traits_v1"
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740102,
+        "language": "nl"
+      },
+      "seq": 14,
+      "schema": "taste_private",
+      "relation": "eligible_inventory_v1",
+      "after_row": {
+        "work_id": 990740102,
+        "language": "nl",
+        "review_id": "synthetic:even-simpel-taste:20261107",
+        "edition_id": 990750121,
+        "approved_at": "2026-11-07T10:50:00+00:00",
+        "policy_version": "taste_eligibility_v1",
+        "source_snapshot": {
+          "work": {
+            "id": 990740102,
+            "title": "SYNTHETIC Taste Memoir 20261107",
+            "cover_id": null,
+            "author_id": 990730101,
+            "work_type": null,
+            "source_type": "lumiscore_native",
+            "open_library_id": null,
+            "first_publish_year": 2026,
+            "native_identity_key": "synthetic:even-simpel-taste:2"
+          },
+          "author": {
+            "id": 990730101,
+            "name": "LumiScore synthetische smaaktestfixture",
+            "open_library_id": null
+          },
+          "traits": [
+            {
+              "trait": "nonfiction",
+              "source": "manual",
+              "weight": 1,
+              "work_id": 990740102,
+              "confidence": 1,
+              "raw_labels": [
+                "SYNTHETIC_FIXTURE",
+                "nonfiction"
+              ],
+              "source_key": "synthetic:even-simpel-taste:20261107",
+              "updated_at": "2026-11-07T10:50:00+00:00",
+              "verified_at": "2026-11-07T10:50:00+00:00",
+              "mapping_version": "taste_traits_v1"
+            }
+          ],
+          "editions": [
+            {
+              "id": 990750121,
+              "title": "SYNTHETIC Taste Memoir 20261107 nld",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740102,
+              "cover_id": null,
+              "language": "nld",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            },
+            {
+              "id": 990750122,
+              "title": "SYNTHETIC Taste Memoir 20261107 eng",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740102,
+              "cover_id": null,
+              "language": "eng",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            }
+          ],
+          "categories": [
+            {
+              "work_id": 990740102,
+              "category_id": "nonfiction_biography_memoir"
+            }
+          ],
+          "memberships": []
+        }
+      },
+      "before_row": null
+    },
+    {
+      "key": {
+        "work_id": 990740102,
+        "language": "en"
+      },
+      "seq": 15,
+      "schema": "taste_private",
+      "relation": "eligible_inventory_v1",
+      "after_row": {
+        "work_id": 990740102,
+        "language": "en",
+        "review_id": "synthetic:even-simpel-taste:20261107",
+        "edition_id": 990750122,
+        "approved_at": "2026-11-07T10:50:00+00:00",
+        "policy_version": "taste_eligibility_v1",
+        "source_snapshot": {
+          "work": {
+            "id": 990740102,
+            "title": "SYNTHETIC Taste Memoir 20261107",
+            "cover_id": null,
+            "author_id": 990730101,
+            "work_type": null,
+            "source_type": "lumiscore_native",
+            "open_library_id": null,
+            "first_publish_year": 2026,
+            "native_identity_key": "synthetic:even-simpel-taste:2"
+          },
+          "author": {
+            "id": 990730101,
+            "name": "LumiScore synthetische smaaktestfixture",
+            "open_library_id": null
+          },
+          "traits": [
+            {
+              "trait": "nonfiction",
+              "source": "manual",
+              "weight": 1,
+              "work_id": 990740102,
+              "confidence": 1,
+              "raw_labels": [
+                "SYNTHETIC_FIXTURE",
+                "nonfiction"
+              ],
+              "source_key": "synthetic:even-simpel-taste:20261107",
+              "updated_at": "2026-11-07T10:50:00+00:00",
+              "verified_at": "2026-11-07T10:50:00+00:00",
+              "mapping_version": "taste_traits_v1"
+            }
+          ],
+          "editions": [
+            {
+              "id": 990750121,
+              "title": "SYNTHETIC Taste Memoir 20261107 nld",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740102,
+              "cover_id": null,
+              "language": "nld",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            },
+            {
+              "id": 990750122,
+              "title": "SYNTHETIC Taste Memoir 20261107 eng",
+              "isbn_10": null,
+              "isbn_13": null,
+              "work_id": 990740102,
+              "cover_id": null,
+              "language": "eng",
+              "publisher": "SYNTHETIC fixture; not a real edition",
+              "publish_date": null,
+              "open_library_edition_id": null
+            }
+          ],
+          "categories": [
+            {
+              "work_id": 990740102,
+              "category_id": "nonfiction_biography_memoir"
+            }
+          ],
+          "memberships": []
+        }
+      },
+      "before_row": null
+    }
+  ],
+  "fixture": "even-simpel-taste-20261107",
+  "project": "hlvujbrmfdlrfxdjwsmb"
+}
