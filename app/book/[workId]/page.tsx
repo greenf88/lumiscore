@@ -132,7 +132,10 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     .catch(() => ({ authenticated: false }));
   const descriptionPromise = bookPromise.then(async book => book
     ? (await import('@/lib/books/public-description')).loadPublicBookDescriptionState(book, locale)
-    : {state:'confirmed_missing' as const,description:null});
+    : {state:'confirmed_missing' as const,description:null})
+    // This optional derived promise may outlive a failed core read. The core
+    // bookPromise still rejects and produces a temporary server error, not404.
+    .catch(() => ({state:'temporary_failure' as const,description:null}));
   const [book, initialRatingState, readingStatus, collectionContext, personalization, authState, returnNavigation] = await Promise.all([
     bookPromise,
     ratingStatePromise,

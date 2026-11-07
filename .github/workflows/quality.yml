@@ -40,6 +40,9 @@ jobs:
       - name: Verify metadata audit rejects pre-repair streaming
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node scripts/test-metadata-fault-sensitivity.mjs
+      - name: Verify real catalogue failures do not become missing Works
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/test-book-read-faults.mjs
       - id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm build:vercel
