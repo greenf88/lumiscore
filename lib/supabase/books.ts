@@ -344,16 +344,18 @@ export async function loadCatalogBook(
   streamCovers = false,
   options:{skipExternalCovers?:boolean}={},
 ): Promise<Book | null> {
-  const result = await supabase
-    .from('works')
-    .select(BOOK_DETAIL_SELECT)
-    .eq('id', workId)
-    .maybeSingle();
+  // Both bounded public reads depend only on this already validated Work ID.
+  // Start them together instead of adding an edition round trip after the Work
+  // query. Promise.all observes both failures; neither is treated as absence.
+  const [result, editionRows] = await Promise.all([
+    supabase.from('works').select(BOOK_DETAIL_SELECT).eq('id', workId).maybeSingle(),
+    loadEditionRows(supabase, [workId]),
+  ]);
 
   if (result.error) throw result.error;
   const rawWork = asRow(result.data);
   if (!rawWork) return null;
-  const work=(await completeEditions([rawWork]))[0];
+  const work={...rawWork, editions:editionRows.filter(row=>String(row.work_id)===getWorkId(rawWork))};
   const workTitle=readString(work,['title','name'])??'';
   const detailLocales=getBookLocales(workId,workTitle,strictEditions(asRows(work.editions)));
   const book=mapCatalogBook(work,[],[],0,locale);
