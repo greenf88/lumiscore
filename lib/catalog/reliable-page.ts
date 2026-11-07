@@ -76,7 +76,7 @@ export function classifyCatalogFailure(error: unknown): CatalogUnavailable {
   if (error instanceof CatalogUnavailable) return error;
   const e = error as { name?: string; status?: number; code?: string } | null;
   return new CatalogUnavailable(e?.name === 'TimeoutError' || e?.name === 'AbortError' ? 'timeout'
-    : e?.code === 'PGRST301'||e?.status===401||e?.status===403 ? 'authorization' : e?.status === 429 ? 'upstream_429'
+    : e?.code === 'PGRST301'||e?.code==='42501'||e?.status===401||e?.status===403 ? 'authorization' : e?.status === 429 ? 'upstream_429'
       : e?.status && e.status >= 500 ? 'upstream_5xx' : 'invalid_or_unavailable_data', e?.status ?? null);
 }
 
