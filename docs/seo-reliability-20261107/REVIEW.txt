@@ -2,11 +2,11 @@ LumiScore — SEO reliability implementation / review — 7 November 2026
 
 STATUS
 Draft PR89: https://github.com/greenf88/lumiscore/pull/89
-Final application: 9d12f4ee1a311d5bce8562451848c7757d87e776.
+Final application: 4eb8b724153dfddd28094fd23307fa9a9d807a71.
 Previous full browser/performance application:63a1902aca4113c28380d4a8128ffda101ccbab2.
 Ready Preview: https://lumiscore-ae6yeffmi-rgkgroeneveld-9102.vercel.app
 Deployment: dpl_82uUveA5geeb1bp5QkgjzxZDn3Gz; isolated TEST hlvujbrmfdlrfxdjwsmb.
-The only later runtime change rejects cached fallback after401/403/PGRST301/
+Later runtime changes reject null/coerced catalog totals and cached fallback after401/403/PGRST301/
 42501 permission errors. Dedicated regression proves no denied-data replay,
 one denied attempt, no repeated attempt during cooldown and fresh recovery.
 Client/layout/cover/SEO files are byte-identical to the measured application;
@@ -195,8 +195,10 @@ redirect cases; delayed optional content; real DBfault vs missingWork checks pas
 New built Vercel/Nitro HTTP test:399pages/6377unique at3,6,10concurrency,1197GETs,
 zero empty200/duplicates;429/5xx recovery,timeout,invalidJSON,empty payload503,
 genuine empty catalog200,lastpage9cards,outside999->307page399,preload check.
-This full compiled check was repeated successfully on final application9d12f4e
+This full compiled check was repeated successfully on final application4eb8b72
 after the permission-denial fix, plus the explicit401/403/PGRST301/42501 test.
+Explicit null/boolean/empty-string numeric payloads are rejected: only a real
+numeric zero can confirm an empty catalog. Actual nulltotal HTTP fixture is503.
 The final exact-head CI link/status is attached to the PR; no client or SEO policy
 change was made after the broader hosted/browser/Lighthouse63a1902 evidence.
 This large fixture is synthetic; it is not claimed as hosted production coverage.

@@ -1,5 +1,5 @@
 import{readFile,writeFile,mkdir,readdir}from'node:fs/promises';import{createHash}from'node:crypto';import{execFileSync}from'node:child_process';
-const source='outputs/seo-reliability-20261107',out='docs/seo-reliability-20261107',app='9d12f4ee1a311d5bce8562451848c7757d87e776',measuredApp='63a1902aca4113c28380d4a8128ffda101ccbab2',base='6009f2c0c6ed9c3b086fe73db9daee3fe23c3cdc';
+const source='outputs/seo-reliability-20261107',out='docs/seo-reliability-20261107',app='4eb8b724153dfddd28094fd23307fa9a9d807a71',measuredApp='63a1902aca4113c28380d4a8128ffda101ccbab2',base='6009f2c0c6ed9c3b086fe73db9daee3fe23c3cdc';
 await mkdir(out,{recursive:true});const hash=b=>createHash('sha256').update(b).digest('hex'),json=async p=>JSON.parse(await readFile(source+'/'+p,'utf8'));
 const write=async(name,data)=>writeFile(out+'/'+name,JSON.stringify(data,null,2)+'\n');
 for(const[from,to]of [['selection.json','selection.json'],['browser/matrix.json','browser-matrix.json'],['hosted-http/matrix.json','hosted-head-matrix.json'],['readonly-http/matrix.json','readonly-head-matrix.json'],['lighthouse-hosted-baseline/medians.json','lighthouse-before.json'],['lighthouse-hosted-final/medians.json','lighthouse-after.json'],['lighthouse-paired/samples.json','lighthouse-paired-samples.json']])await write(to,await json(from));
