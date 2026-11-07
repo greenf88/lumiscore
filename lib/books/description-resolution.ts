@@ -7,6 +7,7 @@ import type { Locale } from '../i18n/config.ts';
 import { readServerEnvironment } from '../server-environment.ts';
 import { getReviewedDescription } from './reviewed-descriptions.ts';
 import { sourceDescriptionLocale } from './description-language.ts';
+import { DescriptionProviderGate } from './description-provider-gate.ts';
 
 export type DescriptionResolutionState =
   | 'resolved'
@@ -78,14 +79,21 @@ const descriptionCache = new Map<string, CachedResolution>();
 // A quota response is shared by this provider, not evidence that every newly
 // opened ISBN lacks a synopsis. Keep reviewed/successful caches usable and
 // avoid a fresh rejected request for each distinct book during the cooldown.
-const providerCooldown = new Map<string, number>();
+const providerGate = new DescriptionProviderGate(['open_library', 'google_books']);
 
-function quotaCooldownUntil(response: Response): number {
+function providerKey(url: URL): string {
+  if (url.origin === OPEN_LIBRARY_BASE_URL) return 'open_library';
+  if (url.origin === new URL(GOOGLE_BOOKS_URL).origin && url.pathname === '/books/v1/volumes') return 'google_books';
+  throw new Error('Unexpected public description endpoint');
+}
+
+function providerRetryUntil(response: Response, defaultWait: number | null): number | null {
   const retryAfter=response.headers.get('retry-after');
   const seconds=retryAfter&&/^\d+$/.test(retryAfter)?Number(retryAfter):null;
   const date=retryAfter&&seconds===null&&/^[A-Za-z]{3},.* GMT$/i.test(retryAfter)?Date.parse(retryAfter):NaN;
   const requested=seconds!==null&&Number.isFinite(seconds)
-    ? Date.now()+seconds*1_000 : Number.isFinite(date)?date:Date.now()+60_000;
+    ? Date.now()+seconds*1_000 : Number.isFinite(date)?date:defaultWait===null?null:Date.now()+defaultWait;
+  if (requested === null) return null;
   // Bound malformed/extreme upstream values; never turn quota into absence.
   return Math.min(Date.now()+24*60*60*1_000,Math.max(Date.now()+1_000,requested));
 }
@@ -142,16 +150,20 @@ async function fetchJsonWithRetry<T>(
   url: URL,
   fetchImplementation: typeof fetch,
 ): Promise<{ state: 'ok'; data: T } | { state: Exclude<DescriptionResolutionState, 'resolved'>; data: null }> {
-  if((providerCooldown.get(url.origin)??0)>Date.now())return {state:'temporary_failure',data:null};
+  const provider = providerKey(url);
+  return await providerGate.run(provider, async () => {
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
+    if (providerGate.paused(provider)) return {state:'temporary_failure' as const,data:null};
     try {
       const response = await fetchImplementation(url, {
         headers: { Accept: 'application/json' },
         signal: AbortSignal.timeout(8_000),
       });
       if (response.ok) return { state: 'ok', data: (await response.json()) as T };
-      if(response.status===429){
-        providerCooldown.set(url.origin,quotaCooldownUntil(response));
+      const requestedWait = response.status === 429 ? providerRetryUntil(response,60_000)
+        : response.status === 503 ? providerRetryUntil(response,null) : null;
+      if(requestedWait !== null){
+        providerGate.pause(provider,requestedWait);
         await response.body?.cancel();
         return {state:'temporary_failure',data:null};
       }
@@ -172,7 +184,8 @@ async function fetchJsonWithRetry<T>(
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS_MS[attempt]));
     }
   }
-  return { state: 'temporary_failure', data: null };
+  return { state: 'temporary_failure' as const, data: null };
+  }) ?? { state: 'temporary_failure', data: null };
 }
 
 function resolvedDescription(
@@ -348,5 +361,5 @@ export async function resolveBookDescription(
 
 export function clearBookDescriptionCacheForTests(): void {
   descriptionCache.clear();
-  providerCooldown.clear();
+  providerGate.resetForTests();
 }

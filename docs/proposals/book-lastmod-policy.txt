@@ -1,0 +1,74 @@
+Lastmod policy and bounded migration proposal — review only,7November2026
+
+No production installation, no sitemap integration, no retroactive dates.
+The existing ledger/restore .sql.proposal files remain outside migrations.
+
+MEANINGFUL CHANGES
+The reviewed projection includes Work/author identity and visible first-publication
+year; selected edition,title,language,publisher,ISBN,format; approved synopsis and
+its public source; verified cover identity/provenance; relevant editorial/series
+links; lifecycle and explicit renderer-policy version; visible public score and
+public count band. It reuses the existing selector's lifecycle result, not another
+eligibility rule. No cover/network success criterion is introduced for indexing.
+
+Different responsive sizes of the same verified cover, transient source errors,
+cache misses,request/build/deployment timestamps,unchanged reviews,personal match,
+reading status and returnTo parameters are NOT meaningful content changes.
+An external unreviewed synopsis or uncertain cover means no trustworthy fingerprint
+and hence no lastmod. Confirmed missing content can be represented explicitly.
+
+PUBLIC RATINGS
+A change to the displayed rounded score, availability or public count band changes
+the projection. A raw count changing within the same displayed band does not.
+No per-visitor/per-rating write is added. Until a trusted publisher has an actual
+verified public-score transition timestamp and a matching whole-page fingerprint,
+the reader omits lastmod. It must not use arbitrary latest rating.created_at: that
+does not necessarily identify edits,deletions,the effective display transition or
+all other page changes. The proposal is conservative even if this reduces coverage.
+
+EXISTING DATES / BACKFILL
+Works/editions created_at are insertion dates,not universal publication/change dates.
+Description/edition reviewed_at do not cover later metadata or source withdrawals.
+Existing five hash-bound editorial dates remain valid under their separate policy.
+No automatic ledger bootstrap from created_at,reviewed_at,now() or file mtimes.
+
+Prepare a staged backfill manifest per Work+locale with current projection hash,
+verified immutable execution receipt and timestamp of the last relevant actual
+committed change. Cross-check all later accepted packages and current parent/bound
+fields; exclude conflicts,unrecorded changes,uncertain ratings and incomplete
+provenance. No receipt match means omit. A baseline snapshot date alone cannot
+assert when the page changed. Never import old and superseding proposals together.
+
+INSTALLATION / MINIMAL ACCESS (SEPARATE APPROVAL)
+Use an official registered migration only after schema/object absence checks and
+revalidation against current production. No manual migration-history inserts.
+The exact implementation SQL must be frozen separately before that approval.
+One PK(work_id,locale) record with64hex hash and actual timestamp. RLS enabled+forced.
+Public roles may SELECT; no client INSERT/UPDATE/DELETE. Only the existing trusted
+server/import role may execute the CAS recorder. Its definer owner must be verified
+as an existing permitted BYPASSRLS role; never grant new BYPASSRLS to make it work.
+The local test owner is a superuser and therefore is not proof of hosted role access.
+Fixed qualified table references and safe search_path; no new browser service key.
+
+Reader: bounded lookup of known Work+locale keys alongside the shared presentation;
+emit only when complete current hash equals ledger hash and date has verified origin.
+No write from GET/render/build/sitemap. Unknown/mismatched hash means omission.
+Trusted import: at most one CAS upsert per actually changed locale, no-op returnsfalse
+and retains date. Process controlled batches within transactions. Do not create
+database triggers on every rating or read to compensate for missing publisher data.
+
+VALIDATION / COST
+Local PGlite tests cover CAS,idempotence,chronology,FK,ACL,unchanged date,unrelated
+ratings and protected rollback. Projection tests cover changes and ignored fields.
+A local synthetic2000-row benchmark is supplementary,not hosted throughput evidence.
+Before installation: real isolated Postgres test for roles/RLS/explain plans,
+reader/query bounds,import interruption/retry and restoration after commit.
+PK lookups and bounded batches avoid full catalogue reads on every request.
+
+RESTORE
+Disable any future reader first so dates are omitted; snapshot/export ledger.
+The existing empty-only restore refuses nonempty history and unexpected dependencies.
+Never cascade or change sequences. Nonempty restoration needs a separate exact-row
+manifest with expected-hash guards and preserves Works,editions,ratings and accounts.
+
+Source: https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
