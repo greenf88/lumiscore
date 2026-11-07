@@ -28,6 +28,12 @@ import {
 } from './public-rating-summaries';
 
 type DatabaseRow = Record<string, unknown>;
+async function completeEditions(works:DatabaseRow[]):Promise<DatabaseRow[]>{
+  const rows=await loadEditionRows(supabase,works.flatMap(w=>getWorkId(w)?[getWorkId(w)!]:[]));
+  const byWork=new Map<string,StrictEditionRow[]>();
+  for(const row of rows){const key=String(row.work_id);byWork.set(key,[...(byWork.get(key)??[]),row]);}
+  return works.map(work=>({...work,editions:byWork.get(getWorkId(work)!)??[]}));
+}
 
 const ISBN_13_COLUMNS = ['isbn13', 'isbn_13', 'isbn-13'] as const;
 const AUTHOR_ID_COLUMNS = ['author_id', 'primary_author_id', 'author'] as const;
@@ -338,18 +344,16 @@ export async function loadCatalogBook(
   streamCovers = false,
   options:{skipExternalCovers?:boolean}={},
 ): Promise<Book | null> {
-  // Both bounded public reads depend only on this already validated Work ID.
-  // Start them together instead of adding an edition round trip after the Work
-  // query. Promise.all observes both failures; neither is treated as absence.
-  const [result, editionRows] = await Promise.all([
-    supabase.from('works').select(BOOK_DETAIL_SELECT).eq('id', workId).maybeSingle(),
-    loadEditionRows(supabase, [workId]),
-  ]);
+  const result = await supabase
+    .from('works')
+    .select(BOOK_DETAIL_SELECT)
+    .eq('id', workId)
+    .maybeSingle();
 
   if (result.error) throw result.error;
   const rawWork = asRow(result.data);
   if (!rawWork) return null;
-  const work={...rawWork, editions:editionRows.filter(row=>String(row.work_id)===getWorkId(rawWork))};
+  const work=(await completeEditions([rawWork]))[0];
   const workTitle=readString(work,['title','name'])??'';
   const detailLocales=getBookLocales(workId,workTitle,strictEditions(asRows(work.editions)));
   const book=mapCatalogBook(work,[],[],0,locale);

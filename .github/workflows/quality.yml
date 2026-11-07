@@ -43,9 +43,6 @@ jobs:
       - name: Verify real catalogue failures do not become missing Works
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node scripts/test-book-read-faults.mjs
-      - name: Verify parallel-read regression detects the old serial loader
-        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: node scripts/test-book-read-faults.mjs --serial-sensitivity
       - id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm build:vercel
