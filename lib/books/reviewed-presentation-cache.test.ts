@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import {ReviewedPresentationCache} from './reviewed-presentation-cache.ts';
 import {applyStoredPresentation,storedPresentationSelection,type StoredDescription} from './stored-presentation.ts';
 import {loadPublicBookDescriptionState} from './public-description.ts';
+import type {Book} from '../../app/data/books.ts';
 
 test('reviewed cache coalesces simultaneous reads and keeps the ordinary 30s fresh bound',async()=>{
- let now=0,calls=0;const cache=new ReviewedPresentationCache(()=>now);
+ let now=0,calls=0;const cache=new ReviewedPresentationCache<{text:string}>(()=>now);
  const load=async()=>{calls++;return {text:'reviewed'};};
  const rows=await Promise.all(Array.from({length:20},()=>cache.get('nl:work1:edition1',load)));
  assert.equal(calls,1);assert(rows.every(r=>r===rows[0]));
@@ -13,7 +14,7 @@ test('reviewed cache coalesces simultaneous reads and keeps the ordinary 30s fre
  now=30_001;await cache.get('nl:work1:edition1',load);assert.equal(calls,2);
 });
 test('temporary refresh failure keeps the reviewed value, bounds retries and never extends stale age',async()=>{
- let now=0,calls=0;const cache=new ReviewedPresentationCache(()=>now);
+ let now=0,calls=0;const cache=new ReviewedPresentationCache<{text:string}>(()=>now);
  await cache.get('en:1',async()=>({text:'approved'}));
  const fail=async()=>{calls++;throw new Error('Synthetic timeout');};
  now=31_000;assert.equal((await cache.get('en:1',fail)).text,'approved');
@@ -49,7 +50,7 @@ test('bounded eviction cannot resurrect an evicted entry from its in-flight comp
 test('last-known-good rows still pass current author/edition/locale guards and bypass unavailable providers',async()=>{
  let now=0;const cache=new ReviewedPresentationCache<{descriptions:StoredDescription[]}>(()=>now);
  const row:StoredDescription={work_id:42,language:'en',bound_author_id:7,text:'A reviewed English summary about this synthetic book and its central conflict, kept in durable storage with a verified public source.',source_type:'official_catalog',source_name:'Fixture library',source_url:'https://example.org/books/42',reviewed_at:'2026-11-07T00:00:00Z',review_status:'approved'};
- const book={workId:'42',authorId:'7',editionId:'43',editionAvailable:true,title:'Fixture',author:'Author',editionTitle:'Fixture',editionLanguage:'eng',isbn13:'9780141439471'};
+ const book:Book={id:'42',source:'demo',score:null,ratingsCount:null,match:null,cover:'orbit',workId:'42',authorId:'7',editionId:'43',editionAvailable:true,title:'Fixture',author:'Author',editionTitle:'Fixture',editionLanguage:'eng',isbn13:'9780141439471'};
  const key=storedPresentationSelection([book],'en').key;
  await cache.get(key,async()=>({descriptions:[row]}));now=31_000;
  const data=await cache.get(key,async()=>{throw new Error('Synthetic storage503');});
