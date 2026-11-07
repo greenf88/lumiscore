@@ -2,6 +2,7 @@ import type { Book, VerifiedBookDescription } from '@/app/data/books';
 import type { Locale } from '../i18n/config.ts';
 import { resolveBookDescription, type BookDescriptionResolution } from './description-resolution.ts';
 import { normalizeVerifiedBookDescription } from './description-text.ts';
+import { createDescriptionSnapshot, readDescriptionSnapshot } from './description-snapshot.ts';
 
 /** Public bibliographic sources only. No personal data, own API call or DB write. */
 export async function loadPublicBookDescription(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<VerifiedBookDescription | null> {
@@ -22,6 +23,13 @@ export async function loadPublicBookDescriptionState(book: Book, locale: Locale,
   const stored=getStoredPublicBookDescription(book,locale);
   if(stored)
     return {state:'resolved',description:stored};
+  // Durable, exact-edition snapshots are independent of a server process.
+  // The optional table is separately installed/reviewed; absence fails open to
+  // existing provider behaviour, never to a false missing Work or noindex.
+  const snapshots = await import('../supabase/description-snapshots.ts');
+  const priorRow = await snapshots.loadDescriptionSnapshot(book, locale);
+  const prior = readDescriptionSnapshot(priorRow,book,locale);
+  if (prior?.fresh) return {state:'resolved',description:prior.description};
   const budget = AbortSignal.timeout(4_000);
   const boundedFetch: typeof fetch = (input, init) => {
     budget.throwIfAborted();
@@ -37,5 +45,13 @@ export async function loadPublicBookDescriptionState(book: Book, locale: Locale,
     editionCandidates: book.descriptionCandidates, locale,
   }, boundedFetch);
   const description = normalizeVerifiedBookDescription(result.description);
+  if (description?.language === locale) {
+    const snapshot = createDescriptionSnapshot(book,locale,description);
+    if (snapshot) await snapshots.saveDescriptionSnapshot(snapshot);
+  } else if (prior && result.state === 'temporary_failure') {
+    if (priorRow) await snapshots.markDescriptionSnapshotFailure(priorRow,'temporary_failure');
+    console.info(JSON.stringify({event:'description_snapshot_fallback',locale,providerStatus:result.state}));
+    return {state:'resolved',description:prior.description};
+  }
   return description?.language === locale ? {state:'resolved',description} : {state:result.state==='temporary_failure'||book.storedPresentationUnavailable?'temporary_failure':'confirmed_missing',description:null};
 }

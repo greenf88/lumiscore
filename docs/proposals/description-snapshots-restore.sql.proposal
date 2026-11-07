@@ -1,0 +1,9 @@
+-- Stop application snapshot writes first. Export nonempty rows before any
+-- separately reviewed removal; never discard accumulated last-known-good data.
+begin;
+do $$begin
+ if exists(select 1 from public.catalog_description_snapshots) then raise exception 'Snapshot table not empty; exact-row export/restore manifest required';end if;
+end $$;
+drop table public.catalog_description_snapshots;
+drop function public.guard_description_snapshot();
+commit;

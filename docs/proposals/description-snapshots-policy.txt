@@ -1,0 +1,61 @@
+Exact-edition description snapshots — 7 November 2026
+
+STATUS / SCOPE
+The application adapter is implemented and locally exercised. The separate SQL
+proposal is NOT a migration in supabase/migrations and is NOT installed on
+production. Production was checked read-only: reviewed descriptions/edition
+metadata exist, this new table and public-page revision ledger do not.
+Do not describe the new durable external cache or book lastmod coverage as live.
+
+PRIORITY / IDENTITY
+1. Approved central Work+language summary with current author binding.
+2. Fresh validated exact-edition Open Library snapshot (30 days).
+3. Existing exact-edition Open Library adapter, then exact-ISBN Google Books.
+4. A matching last-good snapshot, up to 90 days from its original fetch, only
+   after a temporary provider failure. Neither retries nor failures extend it.
+A hash covers Work, author, edition, title, language, ISBN, OL parent and edition.
+A title, identity or language change rejects old snapshots. Provider transport
+success alone is insufficient: the existing exact-parent/title/ISBN/language
+checks and text/language validation must pass. Short/empty/error text cannot
+replace a good value. A source response is not a human editorial approval.
+
+Only Open Library persistence is enabled: its current API guidance explicitly
+recommends caching. Google Books remains in the existing process cache until
+its storage/redistribution conditions are separately verified. Do not imply
+source copyright ownership or automatically author new synopsis text.
+Sources: https://openlibrary.org/developers/api
+         https://openlibrary.org/dev/docs/api/covers
+         https://developers.google.com/books/docs/v1/terms
+
+ACCESS / PERFORMANCE
+One bounded PK read for a relevant visible book, cached through the existing
+bounded public cache; approved stored text returns before this optional query.
+An absent schema causes a one-minute process cooldown and uses the existing
+adapter. No relation/history scan, browser service key or reader data.
+Writes require an already authorized server key; without it no writes occur.
+Anon/authenticated have SELECT only; RLS is enabled+forced. No new BYPASSRLS role
+or security setting is introduced. Older concurrent responses are rejected by
+SQL. All writes affect only the new public snapshot table.
+Cover selection continues using reviewed edition bindings and the existing
+cover-resolution store; no Work-cover guess or new third-party cache is added.
+
+INSTALLATION / RECOVERY DECISION
+Freeze the proposal SQL/hash and validate existing role ownership, schema and
+remote/local migration history on the isolated test project before registration
+as a normal official migration. Do not apply unrelated pending migrations.
+Test seeded cache rows, restart persistence, public SELECT and rejected client
+writes on that project; use a synthetic edition and exact cleanup manifest.
+Production installation, server-key configuration and any backfill require a
+separate reviewed release decision. No private key is included in this package.
+Disable application snapshot writes before restoration; export nonempty rows.
+The supplied empty-only restore refuses to discard accumulated snapshots and
+never cascades or changes Works, editions, users, ratings or sequences.
+
+LASTMOD
+The existing proposal and fingerprint policy remain authoritative. The sitemap
+now accepts verified current-hash/recorded-hash/immutable-receipt revisions but
+its production loader supplies NONE without a complete trusted publisher.
+No created_at, review date, request or build time is substituted. Existing five
+hash-bound editorial dates remain. Approving a durable revision publisher and
+verified backfill is an outstanding data/installation decision, not fabricated
+coverage of 9,887 undated entries.
