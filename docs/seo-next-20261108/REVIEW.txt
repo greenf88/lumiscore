@@ -1,5 +1,5 @@
 PERFORMANCE — AFGEBAKEND REVIEWPAKKET, 8 NOVEMBER 2026
-Basis: 823fa99ed87165e5a8bb0d137d87ab8bc9c1378c. PR90 blijft afzonderlijk Draft.
+Actuele compatibele basis: e47f9ce55a10e2c61bb26ad41e2f3f09958fdc27 (PR92 gepubliceerd). PR90 blijft afzonderlijk Draft.
 Applicatie gemeten: 1a337131ea37cb137d1521a682282705a635ae85.
 
 Wijziging: optionele persoonlijke boekmatch voor gasten wordt pas geladen wanneer
@@ -44,9 +44,17 @@ Niet mengen met deze gast-JS-wijziging.
 
 Tests: exacte oude versus uitgestelde persoonlijke match NL/EN, lege/misvormde
 antwoorden en bestaande guest-storage tests; bestaande sourcecontracttest volgt
-nu de gedeelde helper. CI moet groen op definitieve head. Geen SQL of data-import.
+nu de gedeelde helper. Applicatie60c8e6f: CI42524167081 groen, inclusief build/235 HTTP/SSR. Definitieve documentatiehead krijgt eigen CI. Geen SQL of data-import.
 Vrijgaveadvies: beoordeel deze kleine JS-besparing zelfstandig; LCP-doel blijft open.
 Geen claim dat alle auditpunten, Core Web Vitals of rankings zijn opgelost.
 
 Rollback: uitsluitend deze code-PR terugdraaien; eerdere schema-, SEO-, editie-,
 PR51- en kookboekfixes blijven staan. Beide nieuwe PR's zijn onafhankelijk op main.
+
+HOSTED POSITIEVE GASTACCEPTATIE — applicatie60c8e6ff957ada7eede50a613ec99b4f0308b03e.
+Ready Preview: https://lumiscore-atype2vv8-rgkgroeneveld-9102.vercel.app .
+De 18 ontbrekende vaste anker-ID’s waren geen bewijs van 18 ontbrekende echte boeken. Zestien oorspronkelijke ankerboeken bestaan op TEST onder andere Work-ID’s; vaste6/7 zijn bestaande synthetische placeholders. Geen bestaande Works omgenummerd of echte boeken gedupliceerd.
+Uitsluitend voor branchdekking: 18 duidelijk synthetische eigen Works, 40 locale-edities en één auteur (59 rijen). Geen echte ISBN’s/OL-identiteiten of geleende ratings/accounts. Via echte UI tien keuzes; daarna op bestaand boek8800306 positieve Nederlandse Goede match en Engelse Good match, reload, 320px Ink zonder overflow en desktop Paper. Dit bewijst berekening en lazy loading met synthetische invoer, NIET de echte identiteit van twintig ankerboeken of aanbevelingskwaliteit.
+Alle59 eigen rijen met volledige-rijguards verwijderd. Bestaande6/7, echte boeken, accounts, ratings en voortgang behouden. Guest-origin via UI geneutraliseerd; geen productieprofiel gewijzigd. De opgeruimde Preview heeft deze tijdelijke vragenlijstfixtures niet meer.
+Geldige80 metingen zijn hergebruikt omdat de geïsoleerde runtimewijziging identiek is; de main-merge verandert PR92-bronopslag, niet de gast-JS-logica. Geen nieuwe vrijwel identieke PR90-meetronde.
+Open: LCP-doel, renderblokkerende stylesheet/fonts, echte testankeridentiteiten. Geen bewijs voor een veilige algemene coverproxy of hergebruikrechten; geen nieuwe infrastructuur gebouwd.
