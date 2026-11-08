@@ -7,7 +7,8 @@ import {descriptionBinding,type DescriptionSnapshot} from '../books/description-
 import {ReviewedPresentationCache} from '../books/reviewed-presentation-cache.ts';
 const table='catalog_description_snapshots';
 const fields='work_id,edition_id,locale,binding_hash,bound_author_id,bound_title,bound_language,bound_isbn13,bound_open_library_work_id,text,source_key,fetched_at,checked_at,provider_status,validation';
-const cache=new ReviewedPresentationCache<DescriptionSnapshot|null>();
+// The durable row is the cache: share in-flight PK reads, not stale dispositions.
+const cache=new ReviewedPresentationCache<DescriptionSnapshot|null>(Date.now,0,0);
 let unavailableUntil=0;
 function client(write=false){
  const url=readServerEnvironment('NEXT_PUBLIC_SUPABASE_URL');
@@ -17,14 +18,15 @@ function client(write=false){
 }
 function diagnostic(kind:string,code?:string){console.warn(JSON.stringify({event:'description_snapshot_unavailable',kind,code:code??null}));}
 export async function loadDescriptionSnapshot(book:Book,locale:Locale):Promise<DescriptionSnapshot|null>{
- const binding=descriptionBinding(book,locale);if(!binding||Date.now()<unavailableUntil)return null;
+ const binding=descriptionBinding(book,locale);if(!binding)return null;
+ if(Date.now()<unavailableUntil)throw Error('Public snapshot status temporarily unavailable');
  const db=client();if(!db)return null;
  try{return await cache.get(binding,async()=>{
   const r=await db.from(table).select(fields).eq('work_id',book.workId!).eq('edition_id',book.editionId!).eq('locale',locale)
    .abortSignal(AbortSignal.timeout(800)).maybeSingle();
   if(r.error){if(['PGRST205','42P01','42501'].includes(r.error.code))unavailableUntil=Date.now()+60000;throw Error(r.error.code);}
   return r.data as DescriptionSnapshot|null;
- });}catch{diagnostic('read');return null;}
+ });}catch{diagnostic('read');throw Error('Public snapshot status temporarily unavailable');}
 }
 export async function saveDescriptionSnapshot(row:DescriptionSnapshot):Promise<void>{
  if(Date.now()<unavailableUntil)return;

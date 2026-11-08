@@ -1,0 +1,13 @@
+begin;set local lock_timeout='3s';set local statement_timeout='15s';
+do $$ begin
+if exists(select 1 from works where id in(1372,4864)) or exists(select 1 from editions where id in(1407,5023)) or exists(select 1 from authors where id in(157,2537)) then raise exception 'Fixture IDs occupied; stop';end if;
+end $$;
+do $fixture$ begin if not exists(select 1 from authors where id=924300157 and name='Pierce Brown' and open_library_id='OL7621609A') then raise exception 'Existing TEST author drift';end if;end $fixture$;
+insert into public.works(id,title,cover_id,author_id,work_type,source_type,open_library_id,first_publish_year,native_identity_key) values('1372','Iron Gold',null,'924300157',null,'open_library','OL19726995W','2018',null);
+insert into public.editions(id,title,isbn_10,isbn_13,work_id,language,publisher,open_library_edition_id) values('1407','Iron Gold','1473646561','9781473646568','1372','eng','Hodder & Stoughton Ltd','OL45300336M');
+insert into public.authors(id,name,open_library_id) values('2537','Lauren Oliver','OL6605325A');
+insert into public.works(id,title,cover_id,author_id,work_type,source_type,open_library_id,first_publish_year,native_identity_key) values('4864','Pandemonium',null,'2537',null,null,'OL16286212W','1724',null);
+insert into public.editions(id,title,isbn_10,isbn_13,work_id,language,publisher,open_library_edition_id) values('5023','Pandemonium',null,'9780061978067','4864','eng','HarperTeen','OL25104675M');
+insert into catalog_description_snapshots select * from jsonb_populate_record(null::catalog_description_snapshots,'{"work_id":4864,"edition_id":5023,"locale":"en","binding_hash":"9a33e9cf57aa0dfd912ac0ac311e34e12437ca17cbc7672a41461f17cbce4c57","bound_author_id":2537,"bound_title":"Pandemonium","bound_language":"eng","bound_isbn13":"9780061978067","bound_open_library_work_id":"OL16286212W","text":"In an alternate United States, love has been declared a dangerous disease, and the government forces everyone who reaches eighteen to have a procedure called the Cure. Living with her aunt, uncle, and cousins in Portland, Maine, Lena Haloway is very much looking forward to being cured and living a safe, predictable life. She watched love destroy her mother and isn''t about to make the same mistakes.\n\nBut with ninety-five days left until her treatment, Lena meets enigmatic Alex, a boy from the Wilds who lives under the government''s radar. What will happen if they do the unthinkable and fall in love?","source_key":"OL25104675M","fetched_at":"2026-11-08T20:02:54.647+00:00","checked_at":"2026-11-08T20:02:54.648+00:00","provider_status":"resolved","validation":"identity_and_language_verified"}'::jsonb);
+commit;
+select 'source-repair-20261108' fixture,2 works,2 editions;
