@@ -49,10 +49,16 @@ CAS-intrekking alleen door service_role; geen openbaar EXECUTE. De revisierecord
 is eveneens alleen service_role, met vaste search_path en gekwalificeerde tabel.
 Werkelijk bestaande postgres/service_role BYPASSRLS is op TEST bevestigd; geen
 nieuwe rol, sleutel, BYPASSRLS-grant of authinstelling toegevoegd.
-Geen secret in browsercode. De optionele publisher gebruikt uitsluitend reeds
-toegestane serverauthenticatie; zonder die configuratie worden geen writes gedaan.
-Er is geen productiecredential geconfigureerd. Een lege installatie bewijst geen
-volledige automatische productieopslag of gegarandeerd beschikbare bronrechten.
+Geen secret in browsercode. De read-only Production-namencontrole op 8 november
+bevestigt een reeds bestaande SUPABASE_SECRET_KEY; de waarde is niet opgevraagd.
+De eerdere melding dat geen productiecredential bestond was onjuist en vervalt.
+De bestaande description-snapshots-adapter kan daarmee na tabelinstallatie bij
+een gewone boekaanvraag gevalideerde OL-snapshots schrijven. Dit is bestaande
+requestgebonden broncache, geen nieuwe achtergrondpublisher of catalogusimport.
+Alleen de twee nieuwe publieke metadatatabellen krijgen de beschreven rechten.
+De revisietabel wordt niet automatisch gevuld. Er komt geen nieuwe sleutel,
+configuratie, cron, worker, batchpublisher of volledige lastmod-publicatie.
+Een lege installatie bewijst geen volledige dekking of algemene bronrechten.
 
 FOUTEN, CORRECTIES EN RETENTIE
 Mislukte/lege/onbetrouwbare providerteksten vervangen geen goede tekst. Oude
@@ -107,18 +113,32 @@ Ratings, leesstatussen, rondes en offers: aantallen én rijhashes gelijk; accoun
 gelijk. Dit bewijst geen prestaties onder volledige productiebelasting.
 Zie test-evidence.json voor precieze uitvoerings- en herstelreceipts en controles.
 
-UITVOERING NA AFZONDERLIJK AKKOORD
+UITVOERING NA AFZONDERLIJK AKKOORD — GECORRIGEERDE VOLGORDE
 1 Exacte head/CI/hashes/main en actueel productieproject/objectafwezigheid toetsen.
 2 Publieke objectsnapshot en beschermde tellingen bewaren. Bestaande authenticatie
   en minimaal benodigde grants/owner controleren; geen credentials in chat/log.
 3 Remote historie ophalen naar nieuwe stagingmap; uitsluitend goedgekeurde nieuwe
   SQL kopiëren. Dry-runset exact vergelijken; --skip-vault, geen seed/roles.
-4 Officiële geregistreerde installatie; functies/triggers/RLS/ACL teruglezen.
-5 Code publiceren afzonderlijk na expliciet akkoord; bestaande loader werkt ook
-  vóór installatie. Geen automatische contentbackfill/publisher activeren.
-6 Bron-HTML/browser/SEO en bestaande opgeslagen tekst controleren.
-7 Bij regressie eerst optionele publisher stoppen/code terug; data exporteren.
-  Eigen rijen alleen met passende volle receipt/CAS herstellen. Lege, bekende
-  objecten via restore-empty.sql verwijderen; niet-lege of afhankelijke opslag
-  blokkeert. Nooit CASCADE of historie repareren om verwijdering te forceren.
-Rollback van code staat los van data. Productie is in deze opdracht niet gewijzigd.
+4 Eerst uitsluitend PR92-code merge/publiceren en de actieve SHA controleren.
+  De reader werkt veilig zonder tabellen. Dit voorkomt dat oude code vóór de
+  retentiecorrectie al snapshots met een vernieuwde fetchdatum kan opslaan.
+5 Daarna officiële geregistreerde installatie in bestandsvolgorde 21440,21441,
+  23719; functies/triggers/RLS/ACL teruglezen. Geen ongerelateerde migraties.
+  Requestgebonden cachewrites kunnen nu starten met bestaande serverauthenticatie.
+6 Bron-HTML/browser/SEO en bestaande gecontroleerde teksten/bronnen controleren.
+  Geen kunstmatige productie-events of teksten toevoegen om vulling te forceren.
+7 Bij regressie geen blinde code-rollback terwijl oude snapshotcode de nieuwe
+  tabellen kan blijven beschrijven. Lege, bekende objecten eerst via de bewezen
+  geregistreerde restore-empty.sql-route verwijderen, daarna code terugzetten.
+  Niet-lege of afhankelijke opslag blokkeert deze schema-down: bewaren/exporteren
+  en stoppen voor een afgebakende volledige CAS/receipt-herstelactie. Latere
+  wijzigingen nooit overschrijven; geen CASCADE of migratiehistorie repareren.
+Rollback van code staat los van data. De schema-down bewijst geen onbeperkte
+verwijdering van later opgebouwde productiecache. Productie is hier niet gewijzigd.
+
+HERGEBRUIK VAN BEWIJS NA DEZE DOCUMENTATIECORRECTIE
+SQL en applicatiecode zijn identiek aan 03c667a73213350a3148d1329ba2abac6162cd46.
+De 17 gehashte uitvoerings-/herstelreceipts zijn opnieuw intact bevonden. De laatste
+gecommitteerde herinstallatie bevat exact dezelfde drie SQL-bestanden, uitsluitend
+samengevoegd binnen één buitenste transactie met TEST-commentaar. De schema-down
+is bytegelijk aan restore-empty.sql. Geen installaties of testwrites herhaald.
