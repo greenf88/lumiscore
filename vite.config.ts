@@ -5,6 +5,7 @@ import vinext from 'vinext';
 import { defineConfig, loadEnv } from 'vite';
 import hostingConfig from './.openai/hosting.json';
 import { publicAssetUrls } from './lib/build/public-asset-urls';
+import { coverImageConfiguration } from './lib/books/cover-delivery';
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   '00000000-0000-4000-8000-000000000000';
@@ -102,6 +103,7 @@ export default defineConfig(async ({ mode }) => {
     // NEXT_PUBLIC_* follows Next/Vinext semantics: public values are embedded
     // at build time. Server secrets are deliberately absent from this block.
     define: {
+      'process.env.NEXT_PUBLIC_COVER_DELIVERY': JSON.stringify(isVercelBuild && process.env.NITRO_PRESET !== 'node-server' ? 'vercel' : 'native'),
       'process.env.NEXT_PUBLIC_SUPABASE_URL':
         JSON.stringify(publicSupabaseUrl),
       'process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
@@ -114,7 +116,7 @@ export default defineConfig(async ({ mode }) => {
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
     plugins: isVercelBuild
-      ? [vinext(), nitro(), publicAssetUrls()]
+      ? [vinext(), nitro({vercel:{config:{version:3,images:coverImageConfiguration}},handlers:[{route:'/**',middleware:true,handler:'./server/browse-response.ts'}]}), publicAssetUrls()]
       : [
           vinext(),
           sites(),

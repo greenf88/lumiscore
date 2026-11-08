@@ -7,7 +7,7 @@ import { measureServerOperation } from '@/lib/performance/server-timing';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { getLandingGuide } from '@/lib/editorial/landing-guides';
 import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
-import { collectionMetadataDescription } from '@/lib/seo/collection-metadata';
+import { collectionMetadataDescription, collectionMetadataTitle } from '@/lib/seo/collection-metadata';
 import { collectionPageJsonLd } from '@/lib/seo/collection-json-ld';
 import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   if (!data) notFound();
   const guide = getLandingGuide('/collection/' + data.collection.slug, locale);
   return createLocalizedPageMetadata({
-    title: guide?.seo_title ?? `${data.collection.name} — LumiScore`,
+    title: guide?.seo_title ?? collectionMetadataTitle(data.collection, locale),
     description: guide?.meta_description ?? collectionMetadataDescription(data.collection, locale),
     canonicalPath: `/collection/${data.collection.slug}`,
     ...(guide ? {image:'/images/editorial/suzanne-vermeer-nl.png'} : {}),

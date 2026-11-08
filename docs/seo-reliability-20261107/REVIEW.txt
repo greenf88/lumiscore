@@ -1,0 +1,253 @@
+LumiScore — SEO reliability implementation / review — 7 November 2026
+
+STATUS
+Draft PR89: https://github.com/greenf88/lumiscore/pull/89
+Final application: 4eb8b724153dfddd28094fd23307fa9a9d807a71.
+Previous full browser/performance application:63a1902aca4113c28380d4a8128ffda101ccbab2.
+Ready Preview: https://lumiscore-ae6yeffmi-rgkgroeneveld-9102.vercel.app
+Deployment: dpl_82uUveA5geeb1bp5QkgjzxZDn3Gz; isolated TEST hlvujbrmfdlrfxdjwsmb.
+Later runtime changes reject null/coerced catalog totals and cached fallback after401/403/PGRST301/
+42501 permission errors. Dedicated regression proves no denied-data replay,
+one denied attempt, no repeated attempt during cooldown and fresh recovery.
+Client/layout/cover/SEO files are byte-identical to the measured application;
+its browser and Lighthouse proof remains scoped to that exact earlier SHA.
+The final documentation/test-helper commit does not change the final application.
+Its full head and exact-head CI are recorded in the PR body, avoiding a self-hash.
+No merge, production deployment, database write, GSC action or social change.
+Production/main checked:6009f2c0c6ed9c3b086fe73db9daee3fe23c3cdc, Ready
+dpl_8BJwyXQTMfvzw2Mv8bgbF7FfbPB6, actual lumisco.re alias unchanged.
+PR51 consent/measurement and PR86 cooking eligibility source files unchanged.
+
+ADVICE
+Browse reliability, lifecycle consistency and on-page changes have passing
+functional evidence. This is NOT a claim that the full audit definition of done
+is met. Do not release the entire package as a completed performance repair:
+LCP remains above2.5s and the interleaved TBT confirmation exceeds200ms on
+collection/book. A lower image-byte count is not proof of meeting either goal.
+The image part needs further hydration/layout work or separation before release.
+The durable snapshot/revision schemas are separate proposals, not installations.
+No release approval is requested for those SQL files in this report.
+
+ACTUAL ARCHITECTURE / INPUTS
+Read all four requested 7November audit/backlog/Lighthouse files under
+C:/Users/rickg/Documents/Codex/2026-09-30/seo-check, plus existing PR69/79/85/87/88
+code and evidence. Runtime is Vinext1.0.0-beta.3,Vite8,Nitro3.0.260903-beta,
+React19.2.6; Next16.2.6 API compatibility, not the stock Next production server.
+The production HTTP boundary therefore uses supported Nitro middleware, not
+Next private error digests or a browser-only empty-state message.
+
+1. BROWSE: IMPLEMENTED
+lib/catalog/reliable-page.ts; lib/supabase/editorial-catalog.ts:
+Three bounded attempts,120/240ms backoff plus0..80ms jitter;3.5s attempt deadline,
+1.8s RPC and bounded optional metadata. Abort reaches core Work/edition/score
+reads. Malformed/partial payload, timeout,429 and5xx are failures, not no results.
+Same-query/locale pending requests coalesce. No ordinary cached public-score
+read was added. Only a validated successful exact-query public snapshot may be
+used on failure for at most30s; failure cooldown5s; bounded100keys/process.
+Cache is process-local, not a project-wide/distributed promise or snapshot cache.
+Permission denials and permanent4xx never use old snapshots or retry three times.
+Known Postgres42501 is recognized even when SDK errors omit HTTP status.
+SDK does not expose provider Retry-After here; no claim of honoring hidden429
+headers. Public503 uses our explicit Retry-After:5 and private,no-store.
+
+lib/catalog/browse-response.ts; server/browse-response.ts; vite.config.ts:
+Actual GET HTTP middleware validates total, completion marker and selected card
+count before releasing an indexable200. Bounds:1MB initial segment,12seconds.
+It releases main cards without waiting for optional trailing streams. Missing,
+incomplete, errored/empty expected grid becomes503, including framework JSON5xx.
+Confirmed genuinely empty catalog remains an honest200 and emits a diagnostic.
+Out-of-range pages keep the existing307 to the real last page. No global home
+redirect, auth HTML snapshot, private cache or reduced eligibility rule.
+Logs:locale,page,cardcount,upstreamstatus,latency,retrycount,errorType,outcome;
+no query text, reader identifiers, cookies or provider bodies.
+
+2. LIFECYCLE: IMPLEMENTED / PRESERVED
+lib/seo/book-locales.ts central policy now names indexable,locale-excluded,
+noindex and confirmed-missing/retired404. Existing equivalent alias redirects
+remain in the router; no new redirects/retirements are inferred from absent data.
+Book metadata/schema and sitemap use the same policy/edition selector. Temporary
+DB errors throw before missing/eligibility decisions. Covers, summaries and
+rating volume are not eligibility conditions. Single-locale pages have no false
+alternate; paired pages retain reciprocal EN/NL plus EN x-default.
+
+Full public GET snapshot7November20:41:54UTC:10446Works,10929editions.
+EN:indexable6377,locale-excluded2939,noindex1130.
+NL:indexable3347,locale-excluded5969,noindex1130.
+408pairs; live complete XML comparison:6377EN+3347NL+168other, zero missing/extra.
+No lifecycle selection change relative to current production; no new massnoindex.
+13known off-sitemap URLs remain200/noindex,follow, no canonical/hreflang/Book.
+Their actual original candidate HTML was checked against production public
+metadata with optional external providers failed ONLY in the local harness.
+This is not a production fault injection or HTTP test of every sitemap member.
+
+3. COVERS / PERFORMANCE: IMPLEMENTED, GOALS NOT COMPLETED
+Shared BookCover in LumiScoreHome.tsx, cover-delivery.ts, Browse/collection slots:
+width660/height1000, existing fixed CSS aspect/layout, per-template sizes,
+meaningful detail alt; decorative card alt empty only within full named booklink.
+One intended first/LCP cover eager/high; below-fold lazy. React SSR can preload
+plain img; picture is retained only for an actual reviewed distinct card source.
+The compiled test asserts exactly one first-image preload with matching responsive
+hints in the original head. Explicit reviewed small card sources are preserved.
+Optimizer failure falls back once to native same-identity rendition, then existing
+bounded verified variants and neutral local/CSS placeholder. No ISBN/Work guess.
+
+OpenLibrary-only native Vercel optimizer allowlist,64/96/160/256/384/640widths,
+quality75,AVIF/WebP; arbitrary hosts/paths/query credentials/SVG rejected.
+Actual authorized optimizer GETs:160request ->160x242AVIF5290bytes;
+384request ->265x400AVIF10595bytes (platform correctly does not upscale the
+original265px source). Width hints request optimizer sizes; a small original
+does not acquire detail that it never contained. Both decoded successfully;
+nonallowlisted example.com source returned400. Native resolution is a limitation,
+not a reason to swap to an unverified cover or claim sharper source material.
+Provenance/original URL retained in data attributes. Existing Vercel infrastructure,
+no open custom proxy or new host. Google/PRH/ISBNregistry remain native pending
+verified variant/storage conditions. Thus not ALL native hosts have width srcset;
+sizes and dimensions are universal, safe width variants are not fabricated.
+Home chooses1024hero on mobile even highDPR,1536at1100px+, same theme/preload URL.
+
+Same isolated TEST DB baseline Preview ca361835d59cad0dd4b531f32ae4fda000f38267
+is runtime-identical to production6009f2c. Final candidate63a1902. Lighthouse13.6,
+fresh Edge profile each run, simulated412x823,DPR1.75,4xCPU,150msRTT,1638kbps;
+sequential, no parallel build/tests, CDN warmth not cleared, app guest.
+Three runs/template, all valid outcomes retained:
+             baseline perf/LCPms/TBTms/CLS       final perf/LCPms/TBTms/CLS
+home         88 /2945 /262 /0                    91 /3320 /137 /0
+browse       78 /5169 /132 /0                    88 /3668 /165.5 /0
+collection   89 /3279 /156 /0                    81 /3436 /364 /0
+book         76 /4840 /283 /0                    77 /3301 /597 /0
+Maximum final CLS .000222; all below .1. Full min/max and all samples included.
+Image bytes medians:40871->20795;859514->314863;212848->61905;43133->10840.
+These are transferred Image resources in the initial LH visit, not total media
+on disk, all-catalogue savings, LCP savings or field Core Web Vitals.
+
+TBT uncertainty prompted twelve additional interleaved runs,3per version for
+collection/book, alternating order and retaining every sample:
+collection baseline LCP3799/TBT34 -> candidate3415/234;
+book baseline5416/86 -> candidate3194/218. Both remain above the TBT goal.
+BenchmarkIndex741..1524 in this confirmation; CPU/network/cache variability is
+explicit. This does NOT prove that an external service explains every failure.
+Raw LCP phases show native Google download187..700ms on collection, optimized
+book49..158ms, and substantial render delay510..904ms. Main-thread layout and
+React hydration remain genuine investigation items; not blamed solely on images.
+Framework script is the same content-hash between base/candidate. No unproven
+dependency upgrade, font swap, CSS hiding, deferred whole-page hydration or broad
+refactor was added to manufacture a faster lab score.
+Book scenario is existing TEST ProjectHailMary928100001/ISBN9780593135204 with
+reviewed OLcover12455001, NOT productionWork1's PRH rendition. Browse TEST692
+and production6377 are different datasets, never mixed into a percentage.
+Separate current-production baseline:home94/2847/142;Browse86/3743/205;
+collection95/2801/102.5;book91/3425/109. Not an after-release comparison.
+
+4. METADATA: IMPLEMENTED PREPARATION, HOSTED INSTALL OPEN
+Existing approved Work/language descriptions and edition-bound reviewed cover
+metadata remain first choice. New optional adapter stores only validated exact-
+edition OL text, source, actual fetchedAt, current binding, provider status and
+validation result. Fresh30d; matching last-good up to90d ONLY on transient failure;
+failure never extends original age or writes an empty missing-content replacement.
+Bound author/title/ISBN/language/OLparent/edition protect read AND SQL write.
+An old late response cannot replace a post-correction binding, even with newer
+fetch time. Missing schema cooldown1min; one bounded PK read, no history scan.
+Write/transport failure does not discard newly resolved valid text. Approved
+stored summaries bypass this optional query and retain synchronous SSR text.
+
+Separate docs/proposals/description-snapshots*.sql.proposal/policy.txt:
+RLS forced, browser SELECT-only, existing service role INSERT/UPDATE; no DELETE.
+Existing parent SELECT rights checked read-only. Local PGlite tests cover real
+service-role INSERT, forbidden browser deletion, older/changed bindings and
+committed snapshot cleanup preserving parents. Empty-only schema restore refuses
+nonempty history. NO hosted installation or persistent restart proof is claimed.
+Existing server write credential is required; none was requested/exported/added.
+No source text is auto-authored, translated or promoted to human review.
+Google Books persistence remains off until storage terms are verified.
+PresentationCoverage records >=25% drops for the same successful public selection
+and locale; bounded process state, no reader data or new tracking event.
+
+5. LASTMOD: SAFE READER IMPLEMENTED, COMPLETE SOURCE OPEN
+verified-lastmod.ts only accepts matching complete current/recorded fingerprint,
+immutable committed receipt hash, real valid nonfuture changedAt. Sitemap consumes
+that optional map. Production supplies none until a trusted complete publisher
+exists. No request/build/created_at fallback. Existing5verified editorial dates
+remain. All9724book entries correctly omit unproven dates.
+Existing separate book-lastmod-policy/ledger/restore/fingerprint proposal reused;
+CAS,chronology,rights,idempotency and rollback tested locally. Visible rounded score
+or count-band transitions are meaningful; raw count within a band is not. No GET
+write or per-rating trigger. Hosted installation/backfill/publisher still needs
+its own exact reviewed rollout. No claim that9887missing dates were populated.
+
+6. ON-PAGE / HUBS
+All35short descriptions reviewed:6public overview template descriptions made
+more useful;27concise specific English series descriptions retained, not padded
+to meet a numerical threshold. Two English TheaBeckman collection descriptions
+are actually Dutch in shared source data: remain explicit localized-content
+follow-up, not an invented translation/bibliography or database mutation.
+Collection titles distinguish NL reading order / EN reading order naturally.
+Existing indexable pages and both TasteTest locales retain one visible H1.
+No new thin author/category hub or indexable filter combination was invented.
+Search/login and arbitrary filters retain noindex,follow.
+
+EVIDENCE / CHECKS
+Previous complete CI application63a1902: https://github.com/greenf88/lumiscore/actions/runs/42412379060
+1154unit cases:1138pass,0fail,16skipped. The16are opt-in account SSR tests;
+the dedicated profile SSR job separately executes all16 and passes16/16.
+Typecheck,lint,productionbuild,client-secret scan,diffcheck all green.
+235actual-router HTTP cases/five literal UAs;8negative parser tests;15legacy
+redirect cases; delayed optional content; real DBfault vs missingWork checks pass.
+New built Vercel/Nitro HTTP test:399pages/6377unique at3,6,10concurrency,1197GETs,
+zero empty200/duplicates;429/5xx recovery,timeout,invalidJSON,empty payload503,
+genuine empty catalog200,lastpage9cards,outside999->307page399,preload check.
+This full compiled check was repeated successfully on final application4eb8b72
+after the permission-denial fix, plus the explicit401/403/PGRST301/42501 test.
+Explicit null/boolean/empty-string numeric payloads are rejected: only a real
+numeric zero can confirm an empty catalog. Actual nulltotal HTTP fixture is503.
+The final exact-head CI link/status is attached to the PR; no client or SEO policy
+change was made after the broader hosted/browser/Lighthouse63a1902 evidence.
+This large fixture is synthetic; it is not claimed as hosted production coverage.
+Real existing TEST DB:44ENpages/692unique at3,6,10,132GETs,zero empty200/duplicates,
+last-page/out-of-range verified; optional provider failures simulated locally.
+Real public production metadata through the actual compiled candidate:52original
+HTML requests desktop/Googlebot simulation;13excluded+indexable+missing+private.
+Hosted exact Preview:36complete original HTML responses desktop/mobile/Googlebot;
+valid original head, canonical/hreflang/robots,404; Preview X-Robots-Tag:noindex
+is separate from application robots. A Node share-link attempt reached Vercel
+login and was REJECTED, not counted; official authorized CLI replaced that proof.
+Browser11targeted route/width/theme records:320/390/1280,NLEN,PaperInk,reload,
+loaded reviewed covers, source synopsis, singleH1,zero horizontal overflow;
+keyboard Enter ->book->explicit Back returns Browsepage2. No account/rating write.
+Full source snapshot/XML selection comparison is separate from HTTP samples.
+
+FILES / REPRODUCIBILITY
+See evidence-manifest.json for exact Git source and proof hashes.
+Compact results accompany this document. Complete raw HTML,LHR,logs/screenshots
+are retained locally under outputs/seo-reliability-20261107, with all share tokens
+redacted from LHR and access files deleted after measurement. No keys in proof.
+Actual build concurrency: node scripts/test-built-browse.mjs
+Public selection: node --experimental-strip-types scripts/seo-readonly-selection.mjs
+(requires existing ignored PUBLIC read-only configuration, never a service key).
+Real-data local HTTP: seo-readonly-built-server.mjs test|production; explicit GET
+table/read-only RPC allowlist, no writes and locally failed optional providers.
+Sitemap/Book SEO parsers use original bytes plus existing HTMLParser, not a regex
+merely checking whether canonical occurs somewhere in the response.
+
+ROLLOUT / RECOVERY — NOT EXECUTED
+Keep Draft. Resolve/separate performance acceptance before requesting release.
+Any future code release: recheck exact head/main/CI/source manifest, existing
+Ready alias; no SQL installation bundled. Deploy only after explicit release
+approval; verify Browse HTTP/concurrency,13excluded,current sitemap sets,
+canonical/head/robots/hreflang/schema,PR51/PR86 and covers on actual production.
+If regression, restore previously captured Ready deployment/source6009f2c,
+then independently recheck actual lumisco.re alias/HTTP. There is no database
+rollback for this code package: no production/test database was changed here.
+Snapshot/lastmod SQL proposals require their own reviewed official migration,
+history/preflight,test-role/restart proof,exact hashes and empty/nonempty recovery.
+
+PRIMARY REFERENCES
+https://nitro.build/guide/middleware
+https://react.dev/reference/react-dom/components/img
+https://react.dev/reference/react-dom/preload
+https://vercel.com/docs/image-optimization
+https://vercel.com/docs/build-output-api/v3/configuration#images
+https://openlibrary.org/developers/api
+https://openlibrary.org/dev/docs/api/covers
+https://developers.google.com/books/docs/v1/terms
+https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
+No claim of Google crawl/index/ranking recovery or field CWV pass.

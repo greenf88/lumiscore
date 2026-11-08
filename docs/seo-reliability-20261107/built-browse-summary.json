@@ -1,0 +1,98 @@
+{
+  "applicationSha": "4eb8b724153dfddd28094fd23307fa9a9d807a71",
+  "kind": "actual Vercel production bundle; synthetic loopback PostgREST; not hosted/production data",
+  "at": "2026-11-07T21:23:38.057Z",
+  "faults": [
+    {
+      "path": "/en/browse",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 472,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=flaky429",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 531,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=flaky503",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 532,
+      "cardcount": 16
+    },
+    {
+      "path": "/en/browse?q=timeout",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 5878,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=emptypayload",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 467,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=invalidjson",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 566,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=nulltotal",
+      "status": 503,
+      "retryAfter": "5",
+      "location": null,
+      "ms": 477,
+      "cardcount": 0
+    },
+    {
+      "path": "/en/browse?q=emptycatalog",
+      "status": 200,
+      "retryAfter": null,
+      "location": null,
+      "ms": 63,
+      "cardcount": 0
+    }
+  ],
+  "runs": [
+    {
+      "concurrency": 3,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    },
+    {
+      "concurrency": 6,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    },
+    {
+      "concurrency": 10,
+      "pages": 399,
+      "books": 6377,
+      "unique": 6377,
+      "empty200": 0
+    }
+  ],
+  "fullLocalProof": {
+    "path": "outputs/seo-reliability-20261107/built-browse.json",
+    "sha256": "1dd38766c4e4e4167772105f11211f71b0e4c02c5acb8037e1d5696ffd3ed520"
+  }
+}

@@ -1,4 +1,5 @@
 'use client';
+import { responsiveCoverSizes } from '@/lib/books/cover-delivery';
 
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
@@ -341,7 +342,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           const isHighlighted = item.workId === highlightedUnread;
           const seriesTotal = seriesProgress?.total ?? null;
           return (
-            <BookCard book={item.book} headingLevel={2} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
+            <BookCard coverPriority={item.workId === books[0]?.workId} coverSizes={responsiveCoverSizes.collection} book={item.book} headingLevel={2} key={item.workId} detailReturnContext={bookReturnContext} resolveMissingCover={!bulkActive}
               className={`collection-book-card${selectedWorkIds.has(item.workId) ? ' is-selected' : ''}${isAction || isHighlighted ? ' is-highlighted' : ''}`}
               label={collection.collectionType === 'series' && item.sequenceNumber !== null
                 ? canShowSeriesDenominator(item.sequenceNumber,seriesTotal)

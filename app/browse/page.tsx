@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: BrowsePageProps): Promi
   const page = publicBrowsePage(await searchParams);
   return createLocalizedPageMetadata({
     title: 'Browse books — LumiScore',
-    description: 'Explore the LumiScore catalog and find your next book.',
+    description: 'Discover books with reader ratings on LumiScore. Filter the catalog by category, publication year and language to choose your next read.',
     canonicalPath: page === null ? '/browse' : browsePagePath(page), noIndex: page === null,
     // Locale catalogs differ in count/order: page N is not a verified translated
     // equivalent of page N in another language (and may not even exist there).
@@ -31,7 +31,8 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   try {
     const { loadEditorialCatalog } = await import('@/lib/supabase/editorial-catalog');
     data = await loadEditorialCatalog(state, locale, true, true);
-  } catch (error) { console.error('Browse editorial catalog load failed.', error); }
+  } catch { /* Sanitized bounded-read diagnostics are emitted by the shared loader.
+    The HTTP response boundary recognizes the unavailable marker and returns503. */ }
   // The bounded RPC clamps excessive page numbers. Redirect normal pagination
   // to that real page instead of indexing duplicate final-page content.
   if (data.available && publicBrowsePage(params) !== null && data.page !== state.page) {

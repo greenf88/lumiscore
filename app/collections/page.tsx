@@ -33,7 +33,7 @@ export async function generateMetadata({
   const filter = await readFilter(searchParams);
   return createLocalizedPageMetadata({
     title: 'Browse collections — LumiScore',
-    description: 'Explore series, universes and author collections on LumiScore.',
+    description: 'Explore book series, universes and author collections. Find the available books, check reader ratings and keep track of the volumes you have read.',
     canonicalPath: '/collections',
     noIndex: filter !== 'all',
   });

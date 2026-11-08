@@ -9,14 +9,14 @@ import {
 export async function loadPublicRatingSummaries(
   supabase: SupabaseClient,
   workIds: readonly string[],
+  signal?: AbortSignal,
 ): Promise<Map<string, PublicRatingSummary>> {
   const targetWorkIds = normalizeRatingWorkIds(workIds);
   if (targetWorkIds.length === 0) return new Map();
 
   try {
-    const { data, error } = await supabase.rpc('get_work_rating_summaries_v2', {
-      target_work_ids: targetWorkIds,
-    });
+    const query = supabase.rpc('get_work_rating_summaries_v2', { target_work_ids: targetWorkIds });
+    const { data, error } = await (signal ? query.abortSignal(signal) : query);
     if (error || !Array.isArray(data)) return new Map();
     const rows = data as PublicRatingSummaryRow[];
     const summaries = ratingSummaryMap(rows);
@@ -38,6 +38,7 @@ export async function loadPublicRatingSummaries(
 export async function loadPublicRatingSummariesBatched(
   supabase: SupabaseClient,
   workIds: readonly string[],
+  signal?: AbortSignal,
 ): Promise<Map<string, PublicRatingSummary>> {
   const normalized = [...new Set(
     workIds
@@ -52,6 +53,7 @@ export async function loadPublicRatingSummariesBatched(
     batches.map((batch) => loadPublicRatingSummaries(
       supabase,
       batch.map(String),
+      signal,
     )),
   );
   return new Map(batchResults.flatMap((summaries) => [...summaries.entries()]));
