@@ -201,7 +201,7 @@ function mapCatalogBook(
   const { edition } = resolveBookLifecycle({ id: workId, title }, strictEditions(relatedEditions), locale);
   const base:Book={id:`work-${workId}`,source:'supabase',workId,
     sourceType:readString(work,['source_type']),openLibraryWorkId:readOpenLibraryId(work,OPEN_LIBRARY_WORK_ID_COLUMNS,'work'),
-    title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
+    title,workTitle:title,author:author?readString(author,['name','author_name'])??'Unknown author':'Unknown author',
     authorId:readString(work,['author_id'])??(author?readString(author,['id']):null),
     firstPublishYear:getWorkFirstPublishYear(readNumber(work,['first_publish_year','first_published_year'])),
     score:null,ratingsCount:null,match:null,cover:COVER_STYLES[index%COVER_STYLES.length]};
