@@ -15,13 +15,13 @@ export function descriptionBinding(book:Book,locale:Locale):string|null {
 }
 export function readDescriptionSnapshot(row:DescriptionSnapshot|null,book:Book,locale:Locale,now=Date.now()) {
  const binding=descriptionBinding(book,locale);
- if(!row||!binding||row.binding_hash!==binding||String(row.work_id)!==book.workId||String(row.edition_id)!==book.editionId
+ if(!row||row.provider_status==='confirmed_missing'||!binding||row.binding_hash!==binding||String(row.work_id)!==book.workId||String(row.edition_id)!==book.editionId
   ||row.locale!==locale||row.source_key!==book.openLibraryEditionId||row.validation!=='identity_and_language_verified')return null;
  const fetched=Date.parse(row.fetched_at),checked=Date.parse(row.checked_at),age=now-fetched;
  if(!Number.isFinite(fetched)||!Number.isFinite(checked)||checked<fetched||age<0||age>90*86400000)return null;
  const description=normalizeVerifiedBookDescription({text:row.text,source:'open_library',sourceKey:row.source_key,verifiedAt:row.fetched_at,language:locale});
  if(!description||sourceDescriptionLocale(description.text)!==locale)return null;
- return {description,fresh:age<30*86400000,providerStatus:row.provider_status};
+ return {description,fresh:row.provider_status==='resolved'&&age<30*86400000,providerStatus:row.provider_status};
 }
 export function createDescriptionSnapshot(book:Book,locale:Locale,description:VerifiedBookDescription,now=Date.now()):DescriptionSnapshot|null {
  const binding=descriptionBinding(book,locale),value=normalizeVerifiedBookDescription(description);
@@ -29,9 +29,13 @@ export function createDescriptionSnapshot(book:Book,locale:Locale,description:Ve
  // adapter has source-cache permission verified for this implementation.
  if(!binding||!value||value.source!=='open_library'||value.sourceKey!==book.openLibraryEditionId
   ||value.language!==locale||sourceDescriptionLocale(value.text)!==locale)return null;
- const at=new Date(now).toISOString();
+ // A cached provider response is not a new fetch. Retrying must never reset
+ // the maximum retention age of its last-known-good content.
+ const fetched=Date.parse(value.verifiedAt);
+ if(!Number.isFinite(fetched)||fetched>now||now-fetched>90*86400000)return null;
+ const at=new Date(now).toISOString(),fetchedAt=new Date(fetched).toISOString();
  return {work_id:book.workId!,edition_id:book.editionId!,locale,binding_hash:binding,text:value.text,
   bound_author_id:book.authorId!,bound_title:book.editionTitle??book.title,bound_language:book.editionLanguage!,
   bound_isbn13:book.isbn13??null,bound_open_library_work_id:book.openLibraryWorkId!,
-  source_key:value.sourceKey,fetched_at:at,checked_at:at,provider_status:'resolved',validation:'identity_and_language_verified'};
+  source_key:value.sourceKey,fetched_at:fetchedAt,checked_at:at,provider_status:'resolved',validation:'identity_and_language_verified'};
 }
