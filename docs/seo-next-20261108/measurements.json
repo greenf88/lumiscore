@@ -1,0 +1,1596 @@
+{
+  "application": "1a337131ea37cb137d1521a682282705a635ae85",
+  "base": "823fa99ed87165e5a8bb0d137d87ab8bc9c1378c",
+  "conditions": "Lighthouse 13.6, Edge, simulated mobile 412x823/DPR1.75/4xCPU/150msRTT/1638kbps; fresh browser profile each run; same built app/test bridge/public TEST data; alternating AB/BA; Brotli static assets + streamed gzip HTML on BOTH origins; CDN warmth not cleared; optional external metadata deliberately isolated as 503 on BOTH; native public image reads unchanged; no concurrent local build/unit tests during final series",
+  "phaseCaveat": "LCP numericValue is Lighthouse simulated; insight phase breakdown is observed capture. Do not add observed phases to reconstruct simulated LCP.",
+  "scope": "80 complete interleaved lab runs. Some existing TEST fixtures have no stored cover and therefore text is their LCP; this is not a repaired-cover or exact production-edition claim.",
+  "runs": 80,
+  "allValid": true,
+  "allRunsRetained": true,
+  "groups": [
+    {
+      "name": "bookPRH",
+      "version": "baseline",
+      "url": "/en/book/928100001",
+      "runs": 5,
+      "performance": {
+        "median": 86,
+        "min": 75,
+        "max": 92
+      },
+      "lcp": {
+        "median": 3294.3029999999994,
+        "min": 3169.5952499999994,
+        "max": 3398.19475
+      },
+      "tbt": {
+        "median": 299,
+        "min": 114,
+        "max": 677.4026249999994
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 10801,
+        "min": 10801,
+        "max": 10801
+      },
+      "benchmark": {
+        "median": 1503.5,
+        "min": 694,
+        "max": 1565.5
+      },
+      "elements": [
+        "Front cover of Project Hail Mary"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 334.5240002441406,
+          "min": 287.20100024414063,
+          "max": 389.967
+        },
+        "resourceLoadDelay": {
+          "median": 30.435,
+          "min": 28.957999755859376,
+          "max": 94.241
+        },
+        "resourceLoadDuration": {
+          "median": 118.27,
+          "min": 100.11,
+          "max": 134.512
+        },
+        "elementRenderDelay": {
+          "median": 167.472,
+          "min": 164.74,
+          "max": 311.387
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45432/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45432/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45432/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45432/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45432/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bookPRH",
+      "version": "candidate",
+      "url": "/en/book/928100001",
+      "runs": 5,
+      "performance": {
+        "median": 87,
+        "min": 78,
+        "max": 90
+      },
+      "lcp": {
+        "median": 3202.2722,
+        "min": 3189.968,
+        "max": 3340.8972999999996
+      },
+      "tbt": {
+        "median": 285.95487499999956,
+        "min": 212.14499999999998,
+        "max": 547.9273750000001
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 10801,
+        "min": 10801,
+        "max": 10801
+      },
+      "benchmark": {
+        "median": 1235,
+        "min": 637,
+        "max": 1576
+      },
+      "elements": [
+        "Front cover of Project Hail Mary"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 337.531,
+          "min": 299.6440002441406,
+          "max": 429.198
+        },
+        "resourceLoadDelay": {
+          "median": 61.25,
+          "min": 34.127,
+          "max": 67.55399975585938
+        },
+        "resourceLoadDuration": {
+          "median": 105.444,
+          "min": 82.395,
+          "max": 933.409
+        },
+        "elementRenderDelay": {
+          "median": 182.473,
+          "min": 34.226,
+          "max": 233.116
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45433/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45433/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45433/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45433/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "http://127.0.0.1:45433/_vercel/image?url=https%3A%2F%2Fcovers.openlibrary.org%2Fb%2Fid%2F12455001-L.jpg%3Fdefault%3Dfalse&w=640&q=75",
+              "bytes": 10801,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bookStored",
+      "version": "baseline",
+      "url": "/en/book/991880009",
+      "runs": 5,
+      "performance": {
+        "median": 94,
+        "min": 88,
+        "max": 97
+      },
+      "lcp": {
+        "median": 817.08255,
+        "min": 653.80345,
+        "max": 839.2382
+      },
+      "tbt": {
+        "median": 289,
+        "min": 197.4999999999999,
+        "max": 492
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1444,
+        "min": 1155.5,
+        "max": 1535
+      },
+      "elements": [
+        "Almost Transparent Blue"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 320.022,
+          "min": 300.2930002441406,
+          "max": 328.317
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 293.7259997558594,
+          "min": 269.375,
+          "max": 335.80900024414063
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookStored",
+      "version": "candidate",
+      "url": "/en/book/991880009",
+      "runs": 5,
+      "performance": {
+        "median": 96,
+        "min": 89,
+        "max": 98
+      },
+      "lcp": {
+        "median": 836.9397,
+        "min": 697.7533,
+        "max": 1002.0876000000001
+      },
+      "tbt": {
+        "median": 240.45619999999985,
+        "min": 156,
+        "max": 438
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1486,
+        "min": 1176.5,
+        "max": 1553
+      },
+      "elements": [
+        "Almost Transparent Blue"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 289.159,
+          "min": 258.832,
+          "max": 352.445
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 278.20299975585937,
+          "min": 261.3240002441406,
+          "max": 362.411
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookExternal",
+      "version": "baseline",
+      "url": "/en/book/991880007",
+      "runs": 5,
+      "performance": {
+        "median": 94,
+        "min": 87,
+        "max": 98
+      },
+      "lcp": {
+        "median": 856.49785,
+        "min": 825.1874,
+        "max": 974.0695000000001
+      },
+      "tbt": {
+        "median": 294.96524999999997,
+        "min": 172,
+        "max": 503.3493000000001
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1486.5,
+        "min": 1062,
+        "max": 1557
+      },
+      "elements": [
+        "Case Study Research and Applications"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 331.484,
+          "min": 309.521,
+          "max": 418.509
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 322.683,
+          "min": 253.59,
+          "max": 429.917
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookExternal",
+      "version": "candidate",
+      "url": "/en/book/991880007",
+      "runs": 5,
+      "performance": {
+        "median": 98,
+        "min": 93,
+        "max": 98
+      },
+      "lcp": {
+        "median": 837.3238,
+        "min": 753.6666,
+        "max": 979.4489000000001
+      },
+      "tbt": {
+        "median": 174.77555000000007,
+        "min": 153,
+        "max": 323.0000000000001
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1490,
+        "min": 1138.5,
+        "max": 1572.5
+      },
+      "elements": [
+        "Case Study Research and Applications"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 268.793,
+          "min": 199.38999975585938,
+          "max": 278.782
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 289.227,
+          "min": 245.039,
+          "max": 321.0170002441406
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookNL",
+      "version": "baseline",
+      "url": "/nl/book/991880004",
+      "runs": 5,
+      "performance": {
+        "median": 95,
+        "min": 91,
+        "max": 98
+      },
+      "lcp": {
+        "median": 897.08915,
+        "min": 660.156,
+        "max": 1051.3939
+      },
+      "tbt": {
+        "median": 261.5,
+        "min": 180.5,
+        "max": 366.2674499999998
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1519,
+        "min": 966.5,
+        "max": 1582.5
+      },
+      "elements": [
+        "I Too Had a Love Story"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 263.694,
+          "min": 221.807,
+          "max": 343.912
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 293.936,
+          "min": 245.52,
+          "max": 365.717
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookNL",
+      "version": "candidate",
+      "url": "/nl/book/991880004",
+      "runs": 5,
+      "performance": {
+        "median": 94,
+        "min": 82,
+        "max": 99
+      },
+      "lcp": {
+        "median": 810.68795,
+        "min": 657.7145,
+        "max": 829.5234
+      },
+      "tbt": {
+        "median": 280,
+        "min": 146,
+        "max": 751.7914999999999
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1511.5,
+        "min": 1253.5,
+        "max": 1553
+      },
+      "elements": [
+        "I Too Had a Love Story"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 318.42,
+          "min": 250.159,
+          "max": 507.143
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 274.779,
+          "min": 244.613,
+          "max": 527.209
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookFallback",
+      "version": "baseline",
+      "url": "/en/book/991880001",
+      "runs": 5,
+      "performance": {
+        "median": 99,
+        "min": 98,
+        "max": 100
+      },
+      "lcp": {
+        "median": 950.7343000000001,
+        "min": 782.57755,
+        "max": 963.72165
+      },
+      "tbt": {
+        "median": 122,
+        "min": 40,
+        "max": 179.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 2009,
+        "min": 1557,
+        "max": 2094.5
+      },
+      "elements": [
+        "Kitchen"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 344.3079997558594,
+          "min": 294.90700024414065,
+          "max": 380.919
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 238.58100024414063,
+          "min": 211.407,
+          "max": 328.88
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "bookFallback",
+      "version": "candidate",
+      "url": "/en/book/991880001",
+      "runs": 5,
+      "performance": {
+        "median": 98,
+        "min": 96,
+        "max": 100
+      },
+      "lcp": {
+        "median": 951.5070000000001,
+        "min": 773.80305,
+        "max": 965.9657
+      },
+      "tbt": {
+        "median": 150.0000000000001,
+        "min": 43,
+        "max": 237
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "benchmark": {
+        "median": 1661.5,
+        "min": 1308.5,
+        "max": 2080
+      },
+      "elements": [
+        "Kitchen"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 277.937,
+          "min": 231.529,
+          "max": 334.159
+        },
+        "resourceLoadDelay": null,
+        "resourceLoadDuration": null,
+        "elementRenderDelay": {
+          "median": 262.062,
+          "min": 210.611,
+          "max": 329.019
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": []
+        },
+        {
+          "pair": 2,
+          "images": []
+        },
+        {
+          "pair": 3,
+          "images": []
+        },
+        {
+          "pair": 4,
+          "images": []
+        },
+        {
+          "pair": 5,
+          "images": []
+        }
+      ]
+    },
+    {
+      "name": "nativePRH",
+      "version": "baseline",
+      "url": "/en/book/924100228",
+      "runs": 5,
+      "performance": {
+        "median": 93,
+        "min": 92,
+        "max": 93
+      },
+      "lcp": {
+        "median": 3220.2225999999996,
+        "min": 3195.9780000000005,
+        "max": 3232.006999999999
+      },
+      "tbt": {
+        "median": 87,
+        "min": 22,
+        "max": 111.41972499999997
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 60746,
+        "min": 60746,
+        "max": 60753
+      },
+      "benchmark": {
+        "median": 2094.5,
+        "min": 2048.5,
+        "max": 2113.5
+      },
+      "elements": [
+        "Front cover of The Amber Spyglass"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 372.169,
+          "min": 348.20799975585936,
+          "max": 502.659
+        },
+        "resourceLoadDelay": {
+          "median": 33.754,
+          "min": 26.552,
+          "max": 62.130000244140625
+        },
+        "resourceLoadDuration": {
+          "median": 26.992,
+          "min": 20.666,
+          "max": 76.263
+        },
+        "elementRenderDelay": {
+          "median": 132.934,
+          "min": 104.191,
+          "max": 194.105
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60753,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nativePRH",
+      "version": "candidate",
+      "url": "/en/book/924100228",
+      "runs": 5,
+      "performance": {
+        "median": 93,
+        "min": 92,
+        "max": 93
+      },
+      "lcp": {
+        "median": 3233.451600000001,
+        "min": 3179.4752000000003,
+        "max": 3271.093200000001
+      },
+      "tbt": {
+        "median": 84.44060000000013,
+        "min": 49.5,
+        "max": 98.99999999999955
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 60746,
+        "min": 60746,
+        "max": 60746
+      },
+      "benchmark": {
+        "median": 2078.5,
+        "min": 2052,
+        "max": 2096
+      },
+      "elements": [
+        "Front cover of The Amber Spyglass"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 346.627,
+          "min": 313.8960002441406,
+          "max": 790.218
+        },
+        "resourceLoadDelay": {
+          "median": 32.546,
+          "min": 20.042999755859373,
+          "max": 59.513
+        },
+        "resourceLoadDuration": {
+          "median": 29.743,
+          "min": 27.488,
+          "max": 37.404
+        },
+        "elementRenderDelay": {
+          "median": 190.849,
+          "min": 114.483,
+          "max": 201.074
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://images.penguinrandomhouse.com/cover/9780440418566",
+              "bytes": 60746,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nativeUnbidan",
+      "version": "baseline",
+      "url": "/nl/book/990710001",
+      "runs": 5,
+      "performance": {
+        "median": 93,
+        "min": 92,
+        "max": 94
+      },
+      "lcp": {
+        "median": 3057.2082,
+        "min": 3038.0404,
+        "max": 3230.655
+      },
+      "tbt": {
+        "median": 87.5,
+        "min": 13.5,
+        "max": 137.69794999999965
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 6784,
+        "min": 6784,
+        "max": 6795
+      },
+      "benchmark": {
+        "median": 2107.5,
+        "min": 2064.5,
+        "max": 2138.5
+      },
+      "elements": [
+        "Voorkant van Even simpel"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 308.953,
+          "min": 226.518,
+          "max": 377.754
+        },
+        "resourceLoadDelay": {
+          "median": 52.152,
+          "min": 43.804,
+          "max": 69.677
+        },
+        "resourceLoadDuration": {
+          "median": 26.586,
+          "min": 19.226,
+          "max": 71.891
+        },
+        "elementRenderDelay": {
+          "median": 118.063,
+          "min": 83.483,
+          "max": 158.923
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6795,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6785,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nativeUnbidan",
+      "version": "candidate",
+      "url": "/nl/book/990710001",
+      "runs": 5,
+      "performance": {
+        "median": 94,
+        "min": 93,
+        "max": 94
+      },
+      "lcp": {
+        "median": 3027.5840000000007,
+        "min": 3008.8364,
+        "max": 3090.59445
+      },
+      "tbt": {
+        "median": 93.5,
+        "min": 32,
+        "max": 133.4999999999999
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 6784,
+        "min": 6782,
+        "max": 6785
+      },
+      "benchmark": {
+        "median": 2118.5,
+        "min": 2053,
+        "max": 2134.5
+      },
+      "elements": [
+        "Voorkant van Even simpel"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 305.2,
+          "min": 262.184,
+          "max": 455.02
+        },
+        "resourceLoadDelay": {
+          "median": 57.572,
+          "min": 32.412,
+          "max": 67.566
+        },
+        "resourceLoadDuration": {
+          "median": 22.893,
+          "min": 15.676,
+          "max": 26.038
+        },
+        "elementRenderDelay": {
+          "median": 127.706,
+          "min": 108.93,
+          "max": 172.579
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6785,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6784,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://static.unbidan.nl/covers/41caf0db-9887-4cf8-ad42-5515e7864816-220.jpg",
+              "bytes": 6782,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nativeISBN",
+      "version": "baseline",
+      "url": "/nl/book/8800306",
+      "runs": 5,
+      "performance": {
+        "median": 91,
+        "min": 91,
+        "max": 93
+      },
+      "lcp": {
+        "median": 3355.0347999999994,
+        "min": 3196.8171999999995,
+        "max": 3421.443999999999
+      },
+      "tbt": {
+        "median": 92.5,
+        "min": 56.88439999999946,
+        "max": 108.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 195946,
+        "min": 195946,
+        "max": 195946
+      },
+      "imageBytes": {
+        "median": 75912,
+        "min": 75912,
+        "max": 75912
+      },
+      "benchmark": {
+        "median": 1866,
+        "min": 1619.5,
+        "max": 2123.5
+      },
+      "elements": [
+        "Voorkant van Mannen die vrouwen haten"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 367.139,
+          "min": 311.025,
+          "max": 445.26300024414064
+        },
+        "resourceLoadDelay": {
+          "median": 50.394,
+          "min": 32.78999975585938,
+          "max": 52.362
+        },
+        "resourceLoadDuration": {
+          "median": 66.633,
+          "min": 57.449,
+          "max": 134.287
+        },
+        "elementRenderDelay": {
+          "median": 83.756,
+          "min": 58.597,
+          "max": 125.488
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nativeISBN",
+      "version": "candidate",
+      "url": "/nl/book/8800306",
+      "runs": 5,
+      "performance": {
+        "median": 93,
+        "min": 93,
+        "max": 93
+      },
+      "lcp": {
+        "median": 3216.97,
+        "min": 3177.1372000000006,
+        "max": 3250.8455999999996
+      },
+      "tbt": {
+        "median": 22,
+        "min": 14,
+        "max": 54.5
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "scriptBytes": {
+        "median": 189657,
+        "min": 189657,
+        "max": 189657
+      },
+      "imageBytes": {
+        "median": 75912,
+        "min": 75912,
+        "max": 75912
+      },
+      "benchmark": {
+        "median": 2118,
+        "min": 2020.5,
+        "max": 2153.5
+      },
+      "elements": [
+        "Voorkant van Mannen die vrouwen haten"
+      ],
+      "observedPhaseMedians": {
+        "timeToFirstByte": {
+          "median": 341.341,
+          "min": 297.71300024414063,
+          "max": 366.877
+        },
+        "resourceLoadDelay": {
+          "median": 27.182,
+          "min": 23.453,
+          "max": 33.05600024414063
+        },
+        "resourceLoadDuration": {
+          "median": 67.713,
+          "min": 59.055,
+          "max": 73.796
+        },
+        "elementRenderDelay": {
+          "median": 84.042,
+          "min": 75.185,
+          "max": 136.428
+        }
+      },
+      "imageRequests": [
+        {
+          "pair": 1,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 2,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 3,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 4,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        },
+        {
+          "pair": 5,
+          "images": [
+            {
+              "url": "https://metadata.isbn.nl/ie_fcache/0000499132_Mannen_die_vrouwen_haten_-_Millennium_1_0_0.jpg",
+              "bytes": 75912,
+              "status": 200
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
