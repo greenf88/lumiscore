@@ -50,7 +50,8 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const [{ locale, hasPersistedChoice }, initialPath] = await Promise.all([resolveRequestLocale(),requestPagePath()]);
-  const home=initialPath.split('?')[0]==='/';
+  // Lab control only: identical request scheduling, native existing script.
+  const home=false;
 
   return (
     <html lang={locale} data-theme="paper" suppressHydrationWarning>
