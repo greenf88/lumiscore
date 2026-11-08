@@ -48,6 +48,7 @@ async function loadById<T>(table: 'works' | 'editions', fields: string): Promise
 }
 
 import { sitemapResponse } from './sitemap-response';
+import {loadPublishedBookRevisions} from '../supabase/public-revisions.ts';
 
 export async function serveSitemapShard(shard: keyof typeof SITEMAP_SHARDS): Promise<Response> {
   try {
@@ -56,7 +57,8 @@ export async function serveSitemapShard(shard: keyof typeof SITEMAP_SHARDS): Pro
       loadById<SitemapWork>('works', 'id,title'),
       loadById<StrictEditionRow>('editions', EDITION_PRESENTATION_SELECT),
     ]);
-    return sitemapResponse(buildLocalizedSitemap(selectSitemapBookLocales(works, editions), [], shard));
+    const revisions=await loadPublishedBookRevisions(shard);
+    return sitemapResponse(buildLocalizedSitemap(selectSitemapBookLocales(works, editions), [], shard,revisions));
   } catch (error) {
     console.error('Sitemap catalog load failed.', error);
     return new Response('Sitemap temporarily unavailable.', {
