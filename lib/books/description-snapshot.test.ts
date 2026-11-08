@@ -23,3 +23,20 @@ test('bad or very short provider text, wrong source, language and ISBN binding c
  assert.equal(readDescriptionSnapshot({...row,fetched_at:new Date(now+1000).toISOString()},book,'en',now),null);
  assert.equal(readDescriptionSnapshot(row,{...book,isbn13:'9780385472579'},'en',now),null);
 });
+
+test('confirmed withdrawal is never a fresh or last-good description; temporary failure is not permanent absence',()=>{
+ const row=createDescriptionSnapshot(book,'en',description,now)!;
+ assert.equal(readDescriptionSnapshot({...row,provider_status:'confirmed_missing'},book,'en',now+1000),null);
+ const temporary=readDescriptionSnapshot({...row,provider_status:'temporary_failure'},book,'en',now+1000);
+ assert.equal(temporary?.fresh,false);
+ assert.equal(temporary?.description.text,description.text);
+});
+
+test('a cached provider result cannot renew its original fetch date or bypass retention',()=>{
+ const checked=now+31*86400000,row=createDescriptionSnapshot(book,'en',description,checked)!;
+ assert.equal(row.fetched_at,new Date(now).toISOString());
+ assert.equal(row.checked_at,new Date(checked).toISOString());
+ assert.equal(readDescriptionSnapshot(row,book,'en',checked)?.fresh,false);
+ assert.equal(createDescriptionSnapshot(book,'en',description,now+91*86400000),null);
+ for(const verifiedAt of ['not-a-date',new Date(now+1000).toISOString()])assert.equal(createDescriptionSnapshot(book,'en',{...description,verifiedAt},now),null);
+});

@@ -1,0 +1,144 @@
+LumiScore — duurzame publieke metadata en betrouwbare revisies, 8 november 2026
+
+BASIS EN SCOPE
+Basis main/productie 823fa99ed87165e5a8bb0d137d87ab8bc9c1378c; PR87/88/89/91
+zijn reeds gepubliceerd. Dit pakket herimporteert geen van hun catalogusacties.
+Geen performance-, taalgeschiktheids-, rating-, account- of PR51-wijziging.
+Productie is uitsluitend gelezen. Alle installatie- en schrijftests betreffen
+hlvujbrmfdlrfxdjwsmb. De twee nieuwe TEST-tabellen blijven leeg na de proeven.
+
+AFZONDERLIJKE INSTALLATIE-EENHEDEN
+A Metadata: 20261108121440_public_description_snapshots.sql plus
+20261108123719_snapshot_normalized_language_guard.sql en de kleine readerfix.
+B Lastmod: 20261108121441_public_page_revision_ledger.sql. Geen automatische
+backfill, datumpublicatie of nieuwe scheduler. B heeft geen runtimevereiste voor A.
+De exacte bestanden/hashes staan in release-hashes.json. Voer nooit de hele
+historische migrations-map blind uit: local en remote hebben oudere verschillen.
+
+VOORRANG EN IDENTITEIT
+1 Bestaande goedgekeurde Work+taal-samenvatting met actuele auteurbinding.
+2 Gevalideerde exacte OL-editie-snapshot, maximaal 30 dagen vers.
+3 Bestaande OL-/ISBN-providerresolutie met identiteit- en taalcontrole.
+4 Identieke last-good snapshot tot maximaal 90 dagen sinds originele fetch,
+uitsluitend bij tijdelijke fout. Quota-uitval verlengt de bewaartermijn niet.
+Een intrekking/confirmed_missing mag niet als fresh of last-good verschijnen.
+Een tijdelijke providerstatus vraagt hercontrole in plaats van dertig dagen
+als vers te gelden. De bestaande resolver/cooldowns begrenzen herhaalde requests.
+Snapshotbinding omvat Work, auteur, editie, titel, taal, ISBN en beide OL-IDs.
+De nieuwe SQL-guard volgt dezelfde expliciete EN/NL-normalisatie als de applicatie;
+en_US, eng of een geldige language-path betekenen geen verschillende editie.
+Onbekend, mul, vreemde taal en werkelijk ander parent blijven geweigerd.
+Geen nieuwe eligibility- of cover/synopsis-gebaseerde indexeringsregel.
+
+OPSLAG EN RECHTEN
+Goedgekeurde eigen teksten blijven in catalog_work_descriptions. Bibliografie
+blijft in works/editions; beoordeelde formaat-/coverbindings in
+catalog_edition_metadata; bestaande cover-resolution-opslag blijft ongewijzigd.
+Geen afbeeldingen gekopieerd, nieuwe hosts toegestaan of Google Books-teksten
+duurzaam opgeslagen. OL-snapshots zijn broncache, geen redactionele goedkeuring
+of auteursrechtclaim. Source-key, binding, fetched_at, checked_at, validatie en
+providerstatus worden bewaard. Bron-URL volgt rechtstreeks uit de exacte OLID.
+API-cacheadvies verleent geen algemeen auteursrecht op iedere bijdrage:
+https://openlibrary.org/developers/api
+https://openlibrary.org/developers/licensing
+Nieuwe provider-/hergebruikrechten blijven apart te beoordelen. Geen bulkfetch.
+
+Beide nieuwe tabellen: RLS enabled+forced, publieke SELECT, geen browserwrites.
+Snapshot service_role INSERT/UPDATE met actuele parent- en monotonieguards.
+CAS-intrekking alleen door service_role; geen openbaar EXECUTE. De revisierecorder
+is eveneens alleen service_role, met vaste search_path en gekwalificeerde tabel.
+Werkelijk bestaande postgres/service_role BYPASSRLS is op TEST bevestigd; geen
+nieuwe rol, sleutel, BYPASSRLS-grant of authinstelling toegevoegd.
+Geen secret in browsercode. De read-only Production-namencontrole op 8 november
+bevestigt een reeds bestaande SUPABASE_SECRET_KEY; de waarde is niet opgevraagd.
+De eerdere melding dat geen productiecredential bestond was onjuist en vervalt.
+De bestaande description-snapshots-adapter kan daarmee na tabelinstallatie bij
+een gewone boekaanvraag gevalideerde OL-snapshots schrijven. Dit is bestaande
+requestgebonden broncache, geen nieuwe achtergrondpublisher of catalogusimport.
+Alleen de twee nieuwe publieke metadatatabellen krijgen de beschreven rechten.
+De revisietabel wordt niet automatisch gevuld. Er komt geen nieuwe sleutel,
+configuratie, cron, worker, batchpublisher of volledige lastmod-publicatie.
+Een lege installatie bewijst geen volledige dekking of algemene bronrechten.
+
+FOUTEN, CORRECTIES EN RETENTIE
+Mislukte/lege/onbetrouwbare providerteksten vervangen geen goede tekst. Oude
+concurrente antwoorden en gewijzigde payload op dezelfde fetch-revisie worden
+geweigerd. Correctie met nieuwe fetch-revisie is mogelijk; intrekking gebruikt
+exacte binding+fetch-CAS. Gecontroleerd herstel gebruikt bovendien de volledige
+receipt, checked_at, teksthash en actuele parents. Nieuwe afhankelijkheden laten
+herstel stoppen. Geen cascade, nummerreeksreset of gedeelde catalogusdelete.
+Publieke procescache: vers 30s, begrensd last-good maximaal 5min; succesvolle
+lege/intrekkingsread wist de entry. Geen claim van onmiddellijke intrekking bij
+onbereikbare database. Snapshot-leeftijd wordt nooit door fouten verlengd. Een
+hergebruikte providerrespons bewaart verifiedAt als fetched_at; checked_at is
+apart. Ook een positieve procescachehit mag de 90 dagen niet opnieuw starten.
+De reader gebruikt na 90 dagen geen externe cachetekst. Er is geen nieuwe cron
+toegevoegd; fysiek opruimen van verlopen snapshots hoort bij een begrensde,
+afzonderlijk beoordeelde bestaande onderhouds-/publisheractie.
+
+LASTMOD-BELEID EN BEPERKINGEN
+Alleen een volledige actuele paginafingerprint plus identieke opgeslagen hash,
+echte inhoudelijke wijzigingstijd en immutable commitreceipt mogen lastmod geven.
+Nieuw: receipt_sha256 wordt werkelijk bewaard; CAS serialiseert ook de eerste
+gelijktijdige insert. Ongewijzigde hash houdt datum én receipt onveranderd.
+Betekenisvolle velden: Work/auteur/titel/jaar, geschikte editie/taal/ISBN/uitgever/
+formaat, goedgekeurde synopsis+bron, relevante coverbinding, redactionele relaties
+en lifecycle/policyversie. Responsive resolutie, bezoek, build, cache of fout niet.
+Publieke ratings: alleen zichtbare afgeronde score, beschikbaarheid en band zijn
+deel van de bestaande volledige projectie; raw count binnen dezelfde band niet.
+Geen trigger op ratings, accounts, reads of alle Works. Alleen de trusted importer
+kan een bewezen wijziging registreren; hoogstens één rij per gewijzigde locale.
+Onzekere externe inhoud, onbekende scoreovergang of onvolledige fingerprint:
+datum weglaten. Geen created_at/reviewed_at/bronpublicatiedatum als universele datum.
+Er is GEEN automatische historische backfill. Productiesitemaps houden voorlopig
+9.724 boekdatums weg en bewaren vijf bestaande geverifieerde redactionele datums.
+Een complete publisher met actuele projecties en geverifieerde historische
+receipts is nog nodig vóór boek-lastmod op productie kan worden ingeschakeld.
+Dit is een concrete resterende integratie-/databeslissing, geen fictieve dekking.
+https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
+
+WERKELIJK TESTBEWIJS
+Officiële CLI 2.116.0 met bestaande autorisatie; remote historie echt opgehaald
+naar een geïsoleerde stagingmap. Dry-run bevat uitsluitend de exacte nieuwe
+bestanden, geen rollen, seed of Vault. Normale migratieregistratie, geen inserts
+in historie en geen bevestigingsomweg. Het defecte MCP-schrijfvenster niet herhaald.
+Verse installatie, public/service-role ACL, no-op, CAS/chronologie, latere payload,
+intrekking, FK/afhankelijkheden en gecommitteerd herstel lokaal en hosted getest.
+Twee nieuwe Node-processen met de echte gedeelde loader en publieke TEST-SDK
+lezen dezelfde opgeslagen proeftekst met nul provideraanvragen. De eerste
+ambigue proeftekst werd terecht afgewezen; negatieve bewijsbestanden behouden.
+Synthetische parents 979999991/979999992 en hun eigen metadata zijn met de eerste
+en correctiereceipt weer verwijderd. Geen echte boektekst toegevoegd/veranderd.
+Ratings, leesstatussen, rondes en offers: aantallen én rijhashes gelijk; accounts
+gelijk. Dit bewijst geen prestaties onder volledige productiebelasting.
+Zie test-evidence.json voor precieze uitvoerings- en herstelreceipts en controles.
+
+UITVOERING NA AFZONDERLIJK AKKOORD — GECORRIGEERDE VOLGORDE
+1 Exacte head/CI/hashes/main en actueel productieproject/objectafwezigheid toetsen.
+2 Publieke objectsnapshot en beschermde tellingen bewaren. Bestaande authenticatie
+  en minimaal benodigde grants/owner controleren; geen credentials in chat/log.
+3 Remote historie ophalen naar nieuwe stagingmap; uitsluitend goedgekeurde nieuwe
+  SQL kopiëren. Dry-runset exact vergelijken; --skip-vault, geen seed/roles.
+4 Eerst uitsluitend PR92-code merge/publiceren en de actieve SHA controleren.
+  De reader werkt veilig zonder tabellen. Dit voorkomt dat oude code vóór de
+  retentiecorrectie al snapshots met een vernieuwde fetchdatum kan opslaan.
+5 Daarna officiële geregistreerde installatie in bestandsvolgorde 21440,21441,
+  23719; functies/triggers/RLS/ACL teruglezen. Geen ongerelateerde migraties.
+  Requestgebonden cachewrites kunnen nu starten met bestaande serverauthenticatie.
+6 Bron-HTML/browser/SEO en bestaande gecontroleerde teksten/bronnen controleren.
+  Geen kunstmatige productie-events of teksten toevoegen om vulling te forceren.
+7 Bij regressie geen blinde code-rollback terwijl oude snapshotcode de nieuwe
+  tabellen kan blijven beschrijven. Lege, bekende objecten eerst via de bewezen
+  geregistreerde restore-empty.sql-route verwijderen, daarna code terugzetten.
+  Niet-lege of afhankelijke opslag blokkeert deze schema-down: bewaren/exporteren
+  en stoppen voor een afgebakende volledige CAS/receipt-herstelactie. Latere
+  wijzigingen nooit overschrijven; geen CASCADE of migratiehistorie repareren.
+Rollback van code staat los van data. De schema-down bewijst geen onbeperkte
+verwijdering van later opgebouwde productiecache. Productie is hier niet gewijzigd.
+
+HERGEBRUIK VAN BEWIJS NA DEZE DOCUMENTATIECORRECTIE
+SQL en applicatiecode zijn identiek aan 03c667a73213350a3148d1329ba2abac6162cd46.
+De 17 gehashte uitvoerings-/herstelreceipts zijn opnieuw intact bevonden. De laatste
+gecommitteerde herinstallatie bevat exact dezelfde drie SQL-bestanden, uitsluitend
+samengevoegd binnen één buitenste transactie met TEST-commentaar. De schema-down
+is bytegelijk aan restore-empty.sql. Geen installaties of testwrites herhaald.
