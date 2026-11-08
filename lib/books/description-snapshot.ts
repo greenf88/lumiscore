@@ -15,13 +15,13 @@ export function descriptionBinding(book:Book,locale:Locale):string|null {
 }
 export function readDescriptionSnapshot(row:DescriptionSnapshot|null,book:Book,locale:Locale,now=Date.now()) {
  const binding=descriptionBinding(book,locale);
- if(!row||!binding||row.binding_hash!==binding||String(row.work_id)!==book.workId||String(row.edition_id)!==book.editionId
+ if(!row||row.provider_status==='confirmed_missing'||!binding||row.binding_hash!==binding||String(row.work_id)!==book.workId||String(row.edition_id)!==book.editionId
   ||row.locale!==locale||row.source_key!==book.openLibraryEditionId||row.validation!=='identity_and_language_verified')return null;
  const fetched=Date.parse(row.fetched_at),checked=Date.parse(row.checked_at),age=now-fetched;
  if(!Number.isFinite(fetched)||!Number.isFinite(checked)||checked<fetched||age<0||age>90*86400000)return null;
  const description=normalizeVerifiedBookDescription({text:row.text,source:'open_library',sourceKey:row.source_key,verifiedAt:row.fetched_at,language:locale});
  if(!description||sourceDescriptionLocale(description.text)!==locale)return null;
- return {description,fresh:age<30*86400000,providerStatus:row.provider_status};
+ return {description,fresh:row.provider_status==='resolved'&&age<30*86400000,providerStatus:row.provider_status};
 }
 export function createDescriptionSnapshot(book:Book,locale:Locale,description:VerifiedBookDescription,now=Date.now()):DescriptionSnapshot|null {
  const binding=descriptionBinding(book,locale),value=normalizeVerifiedBookDescription(description);
