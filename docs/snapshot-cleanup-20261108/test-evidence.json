@@ -1,0 +1,41 @@
+{
+  "base": "15ff7212365409ce2a8dfa377ae2d9f65833a396",
+  "dependsOn": "PR94 and installed PR92",
+  "productionWrites": 0,
+  "migration": "20261108220729_description_snapshot_retention_utc.sql",
+  "testProject": "hlvujbrmfdlrfxdjwsmb",
+  "actualCron": true,
+  "cronJob": 4,
+  "firstRun": {
+    "id": 3344,
+    "start": "2026-11-08T22:13:00.082255Z",
+    "end": "2026-11-08T22:13:00.096726Z"
+  },
+  "oldOwnSnapshotDeleted": true,
+  "freshOwnSnapshotKept": true,
+  "withdrawalKept": true,
+  "reviewedSummariesKept": 2,
+  "schemaCommitRestoreReinstall": [
+    "20261108221927",
+    "20261108221928"
+  ],
+  "failurePause": {
+    "job": 5,
+    "failures": 3,
+    "paused": true,
+    "cleanupCalled": false,
+    "removedAfterProof": true
+  },
+  "allOwnJobsStopped": true,
+  "temporaryRetentionRowsRemaining": 0,
+  "evidenceHashes": {
+    "final-real-scheduler-proof.json": "dc05f19cf2fdd6aa5d4ab4c2cd8b67c5207c1cfa942077a83b379523d8fd15d6",
+    "final-committed-schema-roundtrip.log": "e9429288a29754371bff3496b0cf8aafa394a5744b4d13dd4ace6411c6fb98e1",
+    "final-cleanup-owned.json": "a8d7bec8e12249de85e0fbb8da12661906a156ecc4da9a3011785fbee1ce70ba",
+    "bounded-failure-proof.json": "6a286a2d02b9fe3f1344c5283fdba67d8ef0d50c997119ec578d313b40b3ba78",
+    "final-all-targeted.log": "28f5035f7d2b9b18608e03f897a85b05e54358bec7931a2e7c0933c9649ea9d3",
+    "concurrent-cleanup.json": "80a64661d138fb4832cab345ec4c13e1c51fbee4bdf7301e6627c249c56d10ab",
+    "overlap-skipped.json": "802509b13691af73927508268c1d6feca7aba212ac0514a4781556d6154bb575",
+    "protected-final.json": "e8b1e626190fec17967d85fad8a01cd1e7507c1c8a3e4c8e4c6aef1915de5e3d"
+  }
+}
