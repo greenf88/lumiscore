@@ -63,7 +63,9 @@ receipt, checked_at, teksthash en actuele parents. Nieuwe afhankelijkheden laten
 herstel stoppen. Geen cascade, nummerreeksreset of gedeelde catalogusdelete.
 Publieke procescache: vers 30s, begrensd last-good maximaal 5min; succesvolle
 lege/intrekkingsread wist de entry. Geen claim van onmiddellijke intrekking bij
-onbereikbare database. Snapshot-leeftijd wordt nooit door fouten verlengd.
+onbereikbare database. Snapshot-leeftijd wordt nooit door fouten verlengd. Een
+hergebruikte providerrespons bewaart verifiedAt als fetched_at; checked_at is
+apart. Ook een positieve procescachehit mag de 90 dagen niet opnieuw starten.
 De reader gebruikt na 90 dagen geen externe cachetekst. Er is geen nieuwe cron
 toegevoegd; fysiek opruimen van verlopen snapshots hoort bij een begrensde,
 afzonderlijk beoordeelde bestaande onderhouds-/publisheractie.

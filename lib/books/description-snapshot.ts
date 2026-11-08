@@ -29,9 +29,13 @@ export function createDescriptionSnapshot(book:Book,locale:Locale,description:Ve
  // adapter has source-cache permission verified for this implementation.
  if(!binding||!value||value.source!=='open_library'||value.sourceKey!==book.openLibraryEditionId
   ||value.language!==locale||sourceDescriptionLocale(value.text)!==locale)return null;
- const at=new Date(now).toISOString();
+ // A cached provider response is not a new fetch. Retrying must never reset
+ // the maximum retention age of its last-known-good content.
+ const fetched=Date.parse(value.verifiedAt);
+ if(!Number.isFinite(fetched)||fetched>now||now-fetched>90*86400000)return null;
+ const at=new Date(now).toISOString(),fetchedAt=new Date(fetched).toISOString();
  return {work_id:book.workId!,edition_id:book.editionId!,locale,binding_hash:binding,text:value.text,
   bound_author_id:book.authorId!,bound_title:book.editionTitle??book.title,bound_language:book.editionLanguage!,
   bound_isbn13:book.isbn13??null,bound_open_library_work_id:book.openLibraryWorkId!,
-  source_key:value.sourceKey,fetched_at:at,checked_at:at,provider_status:'resolved',validation:'identity_and_language_verified'};
+  source_key:value.sourceKey,fetched_at:fetchedAt,checked_at:at,provider_status:'resolved',validation:'identity_and_language_verified'};
 }
