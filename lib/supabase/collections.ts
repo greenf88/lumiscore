@@ -12,6 +12,7 @@ import {
   type SeriesProgress,
 } from '../collections/model.ts';
 import { getReviewedSeriesMetadata } from '../collections/reviewed-series-metadata.ts';
+import { reviewedCollectionDescription } from '../collections/reviewed-descriptions.ts';
 import {
   buildCollectionDirectoryBaseItems,
   type CollectionDirectoryBaseItem,
@@ -101,7 +102,7 @@ function asNumber(value: unknown): number | null {
   return Number.isFinite(number) ? number : null;
 }
 
-function mapCollection(row: CollectionRow): CollectionSummary {
+function mapCollection(row: CollectionRow, locale?: Locale): CollectionSummary {
   const reviewedSeries = row.collection_type === 'series'
     ? getReviewedSeriesMetadata(row.slug)
     : null;
@@ -113,7 +114,7 @@ function mapCollection(row: CollectionRow): CollectionSummary {
     slug: row.slug,
     name: row.name,
     collectionType: row.collection_type,
-    description: row.description,
+    description: reviewedCollectionDescription(row, locale),
     expectedMainSeriesTotal: storedExpectedTotal ?? reviewedSeries?.expectedMainSeriesTotal ?? null,
   };
 }
@@ -168,7 +169,7 @@ export async function loadCollectionsDirectory(locale:Locale='en'): Promise<Coll
   if (membershipsResult.error) throw membershipsResult.error;
 
   const collections = ((collectionsResult.data ?? []) as CollectionRow[])
-    .map(mapCollection);
+    .map(row => mapCollection(row, locale));
   const memberships = (membershipsResult.data ?? []).map(
     (row): CollectionDirectoryMembership => ({
       collectionId: String(row.collection_id),
@@ -215,7 +216,7 @@ export async function loadCollectionPageData(slug: string,locale:Locale='en',str
   if (collectionResult.error) throw collectionResult.error;
   if (!collectionResult.data) return null;
 
-  const collection = mapCollection(collectionResult.data as CollectionRow);
+  const collection = mapCollection(collectionResult.data as CollectionRow, locale);
   const authPromise = measureServerOperation(
     'collection.auth',
     'private',

@@ -1,0 +1,51 @@
+LumiScore — two reviewed collection-language corrections — 7 November 2026
+
+Draft PR91. Application 0c0a5b12f65d6c1f7bab7bc3b52cc875e670c2cd.
+Base Draft PR89 / 13f4d661acc5edfa339e534cb30bd9777652a016.
+No dependency on the separate PR90 performance experiment.
+Ready TEST Preview: https://lumiscore-2idsi1l5o-rgkgroeneveld-9102.vercel.app
+Deployment dpl_BFjrUKgp5ehGbRcJ3Ed4yBKS5hwu.
+Exact final documentation head and CI are recorded in the PR body.
+
+CAUSE / CHANGE
+Two of the 35 short-description audit records have Dutch collection context on
+their English pages. Server collection projection now selects independently
+written English context for those exact reviewed descriptions. Both the visible
+page and existing shared metadata helper receive the same localized field.
+Dutch source records, collection identity, edition selection and availability
+are unchanged. A different slug/name/type or later edited text disables the
+projection; a future editorial correction is not silently overwritten.
+Book-return context and personal continuation calls without a locale are unchanged.
+No new biography, synopsis, English edition claim, indexable hub or database write.
+
+READ-ONLY SOURCE ROWS: BOTH PRODUCTION AND TEST
+7 / geef-me-de-ruimte / Geef me de ruimte / series
+Thea Beckmans historische trilogie over de Honderdjarige Oorlog.
+8 / kinderen-van-moeder-aarde / Kinderen van Moeder Aarde / series
+Thea Beckmans toekomsttrilogie over Thule.
+The same existing TEST rows support acceptance without fixtures or temporary data.
+
+PUBLISHER SOURCES CHECKED 7 NOVEMBER 2026
+https://lemniscaat.nl/boeken/geef-me-de-ruimte
+Confirms Thea Beckman, a trilogy set during the Hundred Years' War, and the
+three constituent titles. Context is independently written, not a copied blurb.
+https://lemniscaat.nl/boeken/kinderen-van-moeder-aarde
+Confirms Thea Beckman, the future setting of Thule and the three-part series.
+https://lemniscaat.nl/library/downloads/brochure/id/599/2026-2-Zomer.pdf
+Additional publisher catalogue reference retained in the reviewed source map.
+The large PDF exceeded the web reader's size limit on the final follow-up;
+the smaller live publisher product page independently confirms the same facts.
+These sources are context evidence, not proof of English print availability.
+
+TESTS
+Two focused regressions pass: English projection, Dutch/unspecified preservation,
+future-copy change, identity/type mismatch and null preservation.
+Typecheck and focused ESLint pass. Full exact-head CI and hosted browser/original
+HTML evidence are recorded with final status in the PR, not assumed from a build.
+
+ROLLOUT / ROLLBACK
+Keep Draft. Merge PR89 first only after its own explicit approval; then recheck
+this exact diff, current source rows, CI and all four NL/EN collection pages.
+No SQL or catalogue import. A future approved code rollback restores the previous
+server projection; it neither changes database text nor removes books or progress.
+No release, production write, GSC or social action was performed.
