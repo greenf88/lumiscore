@@ -19,6 +19,7 @@ test('search loads matching identities once, paginates before rating/cover enric
   assert.match(src,/loadPublicRatingSummariesBatched\(supabase, window.books/);
   assert.match(src,/deferEditionCoverEvidence\(applyRatingSummaries\(books/);
   assert.match(src,/validateProjectedPage\(keys, mapCatalogWorks/);
+  assert.match(src,/editions!editions_work_id_fkey!inner\(/);
   assert.match(src,/if \(projection.error\) throw projection.error/);
   assert.doesNotMatch(src,/searchCatalog\(|\.from\('ratings'\)|\.from\('user_/);
   assert.match(src,/if \(error\) throw error/);
