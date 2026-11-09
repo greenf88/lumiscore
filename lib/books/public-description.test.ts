@@ -152,3 +152,23 @@ test('503 Retry-After is a temporary service instruction, not missing content or
  assert.equal(calls,1);
  clearBookDescriptionCacheForTests();
 });
+
+
+test('withdrawal blocks even a warm provider cache; a read outage fails temporarily, not to a new provider import',async()=>{
+ clearBookDescriptionCacheForTests();
+ const exact={...book,workId:'1',authorId:'2',editionId:'3',editionAvailable:true,strictEditionLanguage:'en',editionTitle:'A verified book'} as Book;
+ const {createDescriptionSnapshot}=await import('./description-snapshot.ts');
+ const row=createDescriptionSnapshot(exact,'en',{text:enCopy,language:'en',source:'open_library',sourceKey:'OL123M',verifiedAt:new Date().toISOString()})!;
+ assert.ok(row);let calls=0,writes=0,checks=0;
+ const provider:typeof fetch=async()=>{calls++;return new Response(JSON.stringify({title:'A verified book',works:[{key:'/works/OL893415W'}],languages:[{key:'/languages/eng'}],description:enCopy}));};
+ let current:typeof row|null=null;
+ const store={loadDescriptionSnapshot:async()=>{checks++;return current;},saveDescriptionSnapshot:async()=>{writes++;},markDescriptionSnapshotFailure:async()=>{throw Error('must not mark withdrawal');}};
+ assert.equal((await loadPublicBookDescriptionState(exact,'en',provider,store)).state,'resolved');assert.equal(calls,1);
+ current={...row,text:null,provider_status:'withdrawn'};
+ for(let i=0;i<3;i++)assert.deepEqual(await loadPublicBookDescriptionState(exact,'en',provider,store),{state:'confirmed_missing',description:null});
+ assert.equal(calls,1);assert.equal(writes,1);assert.equal(checks,4,'disposition checked before cached provider text');
+ const failed={...store,loadDescriptionSnapshot:async()=>{throw Error('synthetic storage outage');}};
+ assert.equal((await loadPublicBookDescriptionState(exact,'en',provider,failed)).state,'temporary_failure');assert.equal(calls,1);
+ assert.equal((await loadPublicBookDescriptionState({...exact,storedDescription:{text:enCopy,source:'official_catalog',sourceKey:'https://example.com',sourceUrl:'https://example.com',sourceName:'Reviewed',language:'en',verifiedAt:'2026-11-08'}},'en',provider,failed)).description?.text,enCopy);
+ clearBookDescriptionCacheForTests();
+});

@@ -2,9 +2,9 @@ import type { Book, VerifiedBookDescription } from '@/app/data/books';
 import type { Locale } from '../i18n/config.ts';
 import { resolveBookDescription, type BookDescriptionResolution } from './description-resolution.ts';
 import { normalizeVerifiedBookDescription } from './description-text.ts';
-import { createDescriptionSnapshot, readDescriptionSnapshot } from './description-snapshot.ts';
+import { createDescriptionSnapshot, readDescriptionSnapshot, isDescriptionSnapshotWithdrawn } from './description-snapshot.ts';
 
-/** Public bibliographic sources only. No personal data, own API call or DB write. */
+/** Public bibliography only; optional PR92 source snapshots use the shared adapter. */
 export async function loadPublicBookDescription(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<VerifiedBookDescription | null> {
   return (await loadPublicBookDescriptionState(book, locale, fetchImplementation)).description;
 }
@@ -18,16 +18,21 @@ export function getStoredPublicBookDescription(book: Book, locale: Locale): Veri
 }
 
 /** Preserve absence versus transport failure through to the public UI. */
-export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<BookDescriptionResolution> {
+export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch,
+  snapshotStore?:Pick<typeof import('../supabase/description-snapshots.ts'),'loadDescriptionSnapshot'|'saveDescriptionSnapshot'|'markDescriptionSnapshotFailure'>): Promise<BookDescriptionResolution> {
   if(book.editionAvailable===false)return {state:'confirmed_missing',description:null};
   const stored=getStoredPublicBookDescription(book,locale);
   if(stored)
     return {state:'resolved',description:stored};
   // Durable, exact-edition snapshots are independent of a server process.
-  // The optional table is separately installed/reviewed; absence fails open to
-  // existing provider behaviour, never to a false missing Work or noindex.
-  const snapshots = await import('../supabase/description-snapshots.ts');
-  const priorRow = await snapshots.loadDescriptionSnapshot(book, locale);
+  // Without a configured snapshot identity the existing provider path remains.
+  // A failed disposition read must not silently revive a withdrawn source.
+  const snapshots = snapshotStore ?? await import('../supabase/description-snapshots.ts');
+  let priorRow;
+  try { priorRow = await snapshots.loadDescriptionSnapshot(book, locale); }
+  catch { return {state:'temporary_failure',description:null}; }
+  // Reviewed central content above still wins; a withdrawn source is not refetched.
+  if(isDescriptionSnapshotWithdrawn(priorRow,book,locale))return {state:'confirmed_missing',description:null};
   const prior = readDescriptionSnapshot(priorRow,book,locale);
   if (prior?.fresh) return {state:'resolved',description:prior.description};
   const budget = AbortSignal.timeout(4_000);
