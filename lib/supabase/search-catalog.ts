@@ -89,7 +89,7 @@ async function loadProjectedPage(keys: readonly Book[], locale: Locale, observat
 
 async function hydrateProjectedPage(keys: readonly Book[], locale: Locale, observation: ReturnType<typeof newSearchObservation>) {
   const started = performance.now(); observation.databaseRequests++;
-  const { data, error } = await supabase.from('works').select(IDENTITY_SELECT + ',editions!inner(' + EDITION_PRESENTATION_SELECT + ')')
+  const { data, error } = await supabase.from('works').select(IDENTITY_SELECT + ',editions!editions_work_id_fkey!inner(' + EDITION_PRESENTATION_SELECT + ')')
     .in('id', keys.map(b => b.workId!)).in('editions.id', keys.map(b => b.editionId!)).order('id').abortSignal(AbortSignal.timeout(5000));
   if (error) throw error;
   if (!Array.isArray(data)) throw new Error('Search page identity unavailable');
