@@ -70,6 +70,7 @@ export async function generateMetadata({
 
 export default async function BookPage({ params, searchParams }: BookPageProps) {
   const { workId } = await params;
+  if (!isCatalogWorkId(workId)) notFound();
   const returnToValue = (await searchParams).returnTo;
   const requestedReturnTo = Array.isArray(returnToValue)
     ? returnToValue[0]
