@@ -18,6 +18,7 @@ import {
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import { suzanneBookGuide } from '@/lib/editorial/landing-guides';
 import { bookPageJsonLd } from '@/lib/seo/book-json-ld';
+import { boundedCoverAttempts } from '@/lib/books/cover-delivery';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -54,7 +55,7 @@ export async function generateMetadata({
   // A stored, edition-bound cover can be shared immediately. Optional external
   // cover evidence still streams into the page, without blocking its head.
   // Without a stored cover, preserve the existing explicit no-image policy.
-  const cover = book.coverUrls?.[0];
+  const cover = book.coverUrls?.map(url => boundedCoverAttempts(url,'detail')[0]?.src).find(Boolean);
 
   return createLocalizedPageMetadata({
     title: guide?.title ?? title,

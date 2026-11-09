@@ -46,5 +46,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/catalog/(?:books|search)|api/open-library/covers|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|woff2|css|js)$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/catalog/(?:books|search|cover)|api/open-library/covers|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|woff2|css|js)$).*)'],
 };

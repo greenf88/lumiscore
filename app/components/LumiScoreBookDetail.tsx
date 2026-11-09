@@ -3,7 +3,7 @@
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 
-import Image from 'next/image';
+import { boundedCoverUrl } from '@/lib/books/bounded-cover-url';
 import { useEffect, useState } from 'react';
 import type { Book, VerifiedBookDescription } from '../data/books';
 import { getVerifiedBackCover } from '@/lib/books/book-detail';
@@ -285,13 +285,17 @@ export function LumiScoreBookDetail({
               <div className="detail-cover-wrap detail-back-cover-wrap">
                 <div className="book-cover detail-back-cover">
                   <CoverScoreBadge score={score} presentation="detail" />
-                  <Image
-                    src={backCover.url}
+                  {boundedCoverUrl(backCover.url) && <img
+                    className="book-cover-image"
+                    src={boundedCoverUrl(backCover.url)!}
                     alt={t('detail.backCoverOf', { title: book.title })}
-                    fill
                     sizes="(max-width: 560px) 78vw, 250px"
-                    unoptimized
-                  />
+                    width={660}
+                    height={1000}
+                    loading="lazy"
+                    decoding="async"
+                    onError={event => { event.currentTarget.hidden = true; }}
+                  />}
                 </div>
               </div>
               <figcaption>{t('detail.backCover')}</figcaption>

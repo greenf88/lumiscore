@@ -20,7 +20,7 @@ test('public catalog APIs bypass session refresh and use shared cache headers', 
     source('../../app/api/catalog/search/route.ts'),
     source('../../app/api/open-library/covers/route.ts'),
   ]);
-  assert.match(proxy, /api\/catalog\/\(\?:books\|search\)/);
+  assert.match(proxy, /api\/catalog\/\(\?:books\|search\|cover\)/);
   assert.match(proxy, /api\/open-library\/covers/);
   for (const route of [books, search, covers]) {
     assert.match(route, /Cache-Control/);
