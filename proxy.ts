@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { languageRoute, LOCALE_REQUEST_HEADER, PATH_REQUEST_HEADER } from './lib/i18n/paths';
 import { refreshSupabaseSession } from '@/lib/supabase/proxy';
 import { PRIVATE_RESPONSE_HEADERS } from '@/lib/auth/request';
+import { resolveLegacyBook } from '@/lib/seo/legacy-book-route';
 
 export async function proxy(request: NextRequest) {
   // Crawler XML is public and locale-independent. Never refresh a reader's
@@ -9,6 +10,25 @@ export async function proxy(request: NextRequest) {
   if (/^\/sitemap(?:-pages|-books-(?:en|nl))?\.xml$/.test(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
+  const legacy = await resolveLegacyBook(request.nextUrl, async workId => {
+    const [{ supabase }, { loadLegacyBook }] = await Promise.all([
+      import('@/lib/supabase/client'), import('@/lib/supabase/legacy-book'),
+    ]);
+    return loadLegacyBook(supabase, workId);
+  });
+  if (legacy === 'missing') {
+    // Use the existing Book 404 boundary without a second lookup. Zero is
+    // rejected by the same Work ID check before any detail reads.
+    const target = request.nextUrl.clone();
+    target.pathname = '/book/0';
+    const headers = new Headers(request.headers);
+    headers.set(LOCALE_REQUEST_HEADER, 'en');
+    headers.set(PATH_REQUEST_HEADER, request.nextUrl.pathname + request.nextUrl.search);
+    return NextResponse.rewrite(target, {
+      request: { headers }, headers: { 'Cache-Control': 'private, no-store' },
+    });
+  }
+  if (legacy) return legacy;
   const decision = languageRoute(request.nextUrl.pathname);
   if (decision.kind === 'redirect') {
     const target = request.nextUrl.clone();

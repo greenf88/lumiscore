@@ -38,7 +38,27 @@ try{
  }
  const paths=['','/browse','/book/1','/book/2','/book/3','/book/4','/book/5','/collection/synthetic-series','/toplijsten/dystopie-vanaf-1990','/taste-test','/search?q=test','/browse?page=2&sort=highest','/browse?page=3','/browse?page=999','/browse?page=2&category=fiction_fantasy','/browse?page=2&pageSize=32','/browse?page=bad','/login','/account','/metadata-missing-page','/book/999999999'].flatMap(p=>['/nl'+p,'/en'+p]);paths.push('/nl/imdb-voor-boeken','/en/imdb-for-books');
  const browseCanonical = u => u.pathname.endsWith('/browse') && /^\?page=[235](?:&sort=highest)?$/.test(u.search) ? '?page='+u.searchParams.get('page') : '';
- const legacy=new Map([['/book/1?returnTo=%2Fbrowse%3Fpage%3D2','/en/book/1'],['/books/1','/en/book/1'],['/nl/books/1','/nl/book/1']]);paths.push(...legacy.keys());
+ const legacy=new Map([['/book/1?returnTo=%2Fbrowse%3Fpage%3D2','/en/book/1'],['/books/1','/en/book/1'],['/book/2?returnTo=%2F','/nl/book/2'],['/books/2?returnTo=%2F','/nl/book/2'],['/nl/books/1','/nl/book/1']]);paths.push(...legacy.keys());
+ // A confirmed missing Work reaches the real book 404 boundary. A known
+ // Work without an eligible edition stays a terminal, noindex 200.
+ for (const prefix of ['book','books']) {
+  for (const [id,status] of [[4,200],[6,503],[999999999,404]]) {
+   const response=await fetch('http://127.0.0.1:'+port+'/'+prefix+'/'+id,{redirect:'manual'});
+   assert.equal(response.status,status,prefix+'/'+id);
+   assert.equal(response.headers.get('location'),null);
+   const body=await response.text();
+   assert.doesNotMatch(body,/<link[^>]+(?:rel="canonical"|hreflang=)|"@type":"Book"/);
+   if(id===4){
+    assert.match(body,/noindex, follow/);
+    assert.match(body,/Synthetic book 4/);
+   }
+   if(status===404)assert.match(body,/This book isn&#x27;t in the catalog|This book isn.t in the catalog/);
+   if(status===503){
+    assert.equal(response.headers.get('retry-after'),'5');
+    assert.match(response.headers.get('cache-control')??'',/no-store/);
+   }
+  }
+ }
  const output='outputs/metadata-head-http-regression';await mkdir(new URL('../'+output+'/',import.meta.url),{recursive:true});
  await run(py,['scripts/test-metadata-head-parser.py']);
  await run(py,['scripts/audit-metadata-head.py','--origin','http://127.0.0.1:'+port,'--output',output,'--paths',...paths]);
