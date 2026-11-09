@@ -28,6 +28,18 @@ export function isCatalogSearchQuery(query: string): boolean {
   return normalizeCatalogSearchQuery(query).length >= CATALOG_SEARCH_MIN_LENGTH;
 }
 
+/** Recognize complete ISBNs only, so ordinary title/author text stays on its existing path. */
+export function normalizeCatalogIsbn(query: string): string | null {
+  const isbn = query.normalize('NFKC').replace(/[\p{Dash_Punctuation}\s−]/gu, '').toUpperCase();
+  if (/^97[89]\d{10}$/.test(isbn)) {
+    const sum = [...isbn].reduce((total, digit, index) => total + Number(digit) * (index % 2 ? 3 : 1), 0);
+    return sum % 10 === 0 ? isbn : null;
+  }
+  if (!/^\d{9}[\dX]$/.test(isbn)) return null;
+  const sum = [...isbn].reduce((total, digit, index) => total + (digit === 'X' ? 10 : Number(digit)) * (10 - index), 0);
+  return sum % 11 === 0 ? isbn : null;
+}
+
 export function normalizeCatalogSearchText(value: string): string {
   return normalizeCatalogSearchQuery(value)
     .toLocaleLowerCase('en-US')
