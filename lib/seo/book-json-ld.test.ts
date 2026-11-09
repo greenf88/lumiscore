@@ -30,7 +30,11 @@ test('one Work and author are shared across two distinct visible editions', () =
   assert.equal(nl[2].name, book.title);
   assert.equal(nl[2].inLanguage, 'nl');
   assert.equal(nl[2].isbn, book.isbn13);
-  assert.equal(nl[2].image, 'https://covers.openlibrary.org/b/id/123-L.jpg?default=false');
+  const cover = new URL(String(nl[2].image));
+  assert.equal(cover.origin,'https://lumisco.re');
+  assert.equal(cover.pathname,'/api/catalog/cover');
+  assert.equal(cover.searchParams.get('source'),'https://covers.openlibrary.org/b/id/123-L.jpg?default=false');
+  assert.equal(cover.searchParams.get('w'),'512');
   assert(!('isbn' in en[2]));
   assert(!('image' in en[2]));
   assert(!nl.some(node => 'aggregateRating' in node));

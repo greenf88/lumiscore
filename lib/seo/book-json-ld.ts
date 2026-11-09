@@ -1,5 +1,5 @@
 import type { Book } from '../../app/data/books.ts';
-import { getBookCoverImageSource } from '../books/covers.ts';
+import { boundedCoverAttempts } from '../books/cover-delivery.ts';
 import { isBookPresentationAllowed } from '../books/strict-edition.ts';
 import type { Locale } from '../i18n/config.ts';
 import { localizedHref } from '../i18n/paths.ts';
@@ -41,12 +41,12 @@ export function bookPageJsonLd(book: Book, locale: Locale) {
   const graph: Record<string, unknown>[] = [page, work];
   if (editionId) {
     const isbn = book.isbn13 || book.isbn10;
-    const cover = book.coverUrls?.[0];
+    const cover = book.coverUrls?.map(url => boundedCoverAttempts(url,'detail')[0]?.src).find(Boolean);
     graph.push({
       '@type': 'Book', '@id': editionId, url, name: book.title, inLanguage: locale,
       exampleOfWork: { '@id': workId }, ...author,
       ...(isbn ? { isbn } : {}),
-      ...(cover && /^https?:\/\//i.test(cover) ? { image: getBookCoverImageSource(cover, 'detail').src } : {}),
+      ...(cover ? { image: absoluteLumiScoreUrl(cover) } : {}),
     });
   }
   if (authorId) graph.push({ '@type': 'Person', '@id': authorId, name: authorName });

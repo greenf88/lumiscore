@@ -1,5 +1,6 @@
 'use client';
-import { optimizedCover, coverSizes } from '@/lib/books/cover-delivery';
+import { boundedCoverAttempts, coverSizes } from '@/lib/books/cover-delivery';
+import { boundedCoverUrl } from '@/lib/books/bounded-cover-url';
 
 import {EditionPresentationLabel} from './EditionPresentationLabel';
 import {RecommendationMeasurement} from './RecommendationMeasurement';
@@ -10,10 +11,7 @@ import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, us
 import type { Book } from '../data/books';
 import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import type { HeaderAuthState } from '@/lib/auth/header';
-import {
-  getVerifiedCoverAttempts,
-  type CoverPresentation,
-} from '@/lib/books/covers';
+import type { CoverPresentation } from '@/lib/books/covers';
 import { watchCoverImage } from '@/lib/books/cover-image-watch';
 import {
   getBookCoverIdentity,
@@ -139,15 +137,13 @@ function BookCoverForIdentity({
   const [cardVariantFailed,setCardVariantFailed]=useState(false);
   const resolvedRequested = useRef(false);
   const coverImage = useRef<HTMLImageElement>(null);
-  const coverUrl = coverUrls[coverIndex] ?? null;
-  const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
+  const eligibleCoverUrls = useMemo(() => [...new Set([...coverUrls,book.cardCoverUrl])]
+    .filter((url): url is string => Boolean(url && boundedCoverUrl(url))), [coverUrls,book.cardCoverUrl]);
+  const coverUrl = eligibleCoverUrls[coverIndex] ?? null;
+  const imageAttempts = useMemo(() => coverUrl ? boundedCoverAttempts(coverUrl,presentation) : [],[coverUrl,presentation]);
   const imageSource = imageAttempts[variantIndex] ?? null;
-  const [optimizationFailed, setOptimizationFailed] = useState(false);
-  const imageSourceUrl = imageSource?.src;
-  const optimized = useMemo(() => imageSourceUrl && variantIndex === 0 && !optimizationFailed
-    ? optimizedCover(imageSourceUrl, presentation, process.env.NEXT_PUBLIC_COVER_DELIVERY === 'vercel', book.cardCoverUrl) : null,
-    [imageSourceUrl, variantIndex, optimizationFailed, presentation, book.cardCoverUrl]);
-  const displayedCoverUrl = optimized?.src ?? imageSource?.src ?? null;
+  const displayedCoverUrl = imageSource?.src ?? null;
+  const cardVariant = boundedCoverUrl(book.cardCoverUrl);
   const cardVariantMedia = presentation === 'taste'
     ? '(max-width: 430px) and (max-resolution: 2dppx)'
     : '(max-width: 430px)';
@@ -172,16 +168,16 @@ function BookCoverForIdentity({
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = useCallback((failedUrl?:string) => {
-    if (optimized && failedUrl?.includes('/_vercel/image?')) { setOptimizationFailed(true); return; }
-    if(!cardVariantFailed&&book.cardCoverUrl&&failedUrl===book.cardCoverUrl){setCardVariantFailed(true);return;}
-    if (variantIndex + 1 < imageAttempts.length) {
-      setVariantIndex(variantIndex + 1);
+    if (!cardVariantFailed && cardVariant && failedUrl?.endsWith(cardVariant)) { setCardVariantFailed(true); return; }
+    const nextVariant = imageAttempts.findIndex((attempt, index) => index > variantIndex && !failedUrl?.endsWith(attempt.src));
+    if (nextVariant !== -1) {
+      setVariantIndex(nextVariant);
     } else {
       setVariantIndex(0);
       setCoverIndex(coverIndex + 1);
       requestResolvedCovers();
     }
-  },[optimized,cardVariantFailed,book.cardCoverUrl,variantIndex,imageAttempts.length,coverIndex,requestResolvedCovers]);
+  },[cardVariantFailed,cardVariant,variantIndex,imageAttempts,coverIndex,requestResolvedCovers]);
 
   useEffect(() => {
     const image = coverImage.current;
@@ -190,7 +186,7 @@ function BookCoverForIdentity({
   },[displayedCoverUrl,handleCoverFailure,presentation,priority]);
 
   const hasCardVariant = !cardVariantFailed && coverIndex === 0 && variantIndex === 0
-    && book.cardCoverUrl && book.cardCoverUrl !== imageSourceUrl && !optimized && presentation !== 'detail';
+    && cardVariant && cardVariant !== displayedCoverUrl && presentation !== 'detail';
   const image = displayedCoverUrl ? (
     <img
       ref={coverImage}
@@ -198,12 +194,12 @@ function BookCoverForIdentity({
       className="book-cover-image"
       src={displayedCoverUrl}
       alt={label ?? ''}
-      srcSet={optimized?.srcSet ?? imageSource?.srcSet}
-      sizes={sizes ?? optimized?.sizes ?? coverSizes[presentation]}
+      srcSet={imageSource?.srcSet}
+      sizes={sizes ?? coverSizes[presentation]}
       width={660}
       height={1000}
       data-cover-source={coverUrl ?? undefined}
-      data-cover-delivery={optimized ? "vercel" : "native"}
+      data-cover-delivery="bounded"
       loading={presentation === 'detail' || priority ? 'eager' : 'lazy'}
       fetchPriority={presentation === 'detail' || priority ? 'high' : undefined}
       decoding="async"
@@ -223,7 +219,7 @@ function BookCoverForIdentity({
       <span className="cover-author" aria-hidden="true">{book.author}</span>
       {hasCardVariant ? (
         <picture key={`${coverIndex}:${variantIndex}:${displayedCoverUrl}`}>
-          <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={book.cardCoverUrl}/>
+          <source media={presentation === 'compact' ? undefined : cardVariantMedia} srcSet={cardVariant}/>
           {image}
         </picture>
       ) : image}
