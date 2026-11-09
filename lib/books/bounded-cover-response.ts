@@ -1,4 +1,7 @@
-import { boundedCoverOrigin, COVER_WIDTHS, MAX_COVER_BYTES, openLibraryCoverParts, type CoverWidth } from './bounded-cover-url.ts';
+import {
+  boundedCoverOrigin, bureauIsbnRendition, COVER_WIDTHS, hasBureauIsbnRenditions, MAX_COVER_BYTES,
+  openLibraryCoverParts, type CoverWidth, type IsbnCoverProfile,
+} from './bounded-cover-url.ts';
 
 const COVER_TIMEOUT_MS = 3500;
 const maxPending = 48;
@@ -60,6 +63,15 @@ async function resizeOpenLibraryCover(cover: CoverBody, width: CoverWidth): Prom
 }
 
 const archiveCoverPath = /^\/download\/([sml]_covers_\d{4})\/(\1_\d{2}\.zip)\/(\d{10})-([SML])\.jpg$/;
+const legacyArchiveCoverPath = /^\/download\/(olcovers\d{1,4})\/(\1-[SML]\.zip)\/(\d{1,10})-([SML])\.jpg$/;
+
+function archiveCoverParts(url: URL) {
+  if (url.hostname !== 'archive.org' || url.search) return null;
+  const current = archiveCoverPath.exec(url.pathname);
+  if (current) return current[1][0] === current[4].toLowerCase() ? current : null;
+  const legacy = legacyArchiveCoverPath.exec(url.pathname);
+  return legacy?.[2].endsWith(`-${legacy[4]}.zip`) ? legacy : null;
+}
 
 function coverRedirect(current: URL, location: string | null) {
   if (!location) return null;
@@ -71,12 +83,12 @@ function coverRedirect(current: URL, location: string | null) {
       const alias = boundedCoverOrigin(target.href);
       const resolved = alias && openLibraryCoverParts(alias);
       if (!parts[1].startsWith('id/') && resolved?.[1].startsWith('id/') && resolved[2] === parts[2]) return alias;
-      const archive = target.hostname === 'archive.org' && !target.search && archiveCoverPath.exec(target.pathname);
-      if (archive && archive[4] === parts[2] && archive[1][0] === parts[2].toLowerCase() &&
+      const archive = archiveCoverParts(target);
+      if (archive && archive[4] === parts[2] &&
           (!parts[1].startsWith('id/') || Number(archive[3]) === Number(parts[1].slice(3)))) return target;
       return null;
     }
-    const archive = current.hostname === 'archive.org' && archiveCoverPath.exec(current.pathname);
+    const archive = archiveCoverParts(current);
     if (archive && /^ia\d+\.(?:us|eu)\.archive\.org$/.test(target.hostname) &&
         target.pathname === '/view_archive.php' && target.searchParams.size === 2 &&
         target.searchParams.get('file') === `${archive[3]}-${archive[4]}.jpg`) {
@@ -88,10 +100,24 @@ function coverRedirect(current: URL, location: string | null) {
   } catch { return null; }
 }
 
-async function loadCover(origin: URL, width: CoverWidth | null, fetcher: typeof fetch): Promise<CoverResult> {
+async function loadCover(origin: URL, width: CoverWidth | null, profile: IsbnCoverProfile | null, fetcher: typeof fetch): Promise<CoverResult> {
   const signal = AbortSignal.timeout(COVER_TIMEOUT_MS);
   const init = { redirect: 'manual' as const, signal, headers:{ Accept:'image/webp,image/png,image/jpeg' } };
   try {
+    if (profile) {
+      // These are the same asset ID's two published Bureau ISBN renditions.
+      // Keep fallback on the server so only one body is delivered to the browser.
+      const candidates = [bureauIsbnRendition(origin,profile),origin];
+      if (profile === 'screen') candidates.push(bureauIsbnRendition(origin,'thumb'));
+      let result: CoverResult = 'source-status';
+      let oversized = false;
+      for (const candidate of candidates) {
+        result = await readCover(await fetcher(candidate,init),MAX_COVER_BYTES);
+        if (typeof result !== 'string') return result;
+        oversized ||= result === 'oversized';
+      }
+      return oversized ? 'oversized' : result;
+    }
     let current = origin;
     for (let hop = 0; hop <= 3; hop++) {
       const response = await fetcher(current,init);
@@ -116,15 +142,19 @@ export async function boundedCoverResponse(request: Request, fetcher: typeof fet
   const parameters = new URL(request.url).searchParams;
   const source = parameters.get('source');
   const requestedWidth = parameters.get('w');
+  const requestedProfile = parameters.get('profile');
   const width = COVER_WIDTHS.find(value => String(value) === requestedWidth) ?? null;
-  const origin = parameters.size === (requestedWidth === null ? 1 : 2) && source ? boundedCoverOrigin(source) : null;
+  const profile = requestedProfile === 'thumb' || requestedProfile === 'screen' ? requestedProfile : null;
+  const variants = Number(requestedWidth !== null) + Number(requestedProfile !== null);
+  const origin = parameters.size === 1 + variants && variants <= 1 && source ? boundedCoverOrigin(source) : null;
   if (!origin) return noImage('unsupported-source',400);
   if (requestedWidth !== null && (!width || !openLibraryCoverParts(origin))) return noImage('unsupported-variant',400);
-  const key = origin.href + '#' + (width ?? '');
+  if (requestedProfile !== null && (!profile || !hasBureauIsbnRenditions(origin))) return noImage('unsupported-variant',400);
+  const key = origin.href + '#' + (width ?? profile ?? '');
   let job = pending.get(key);
   if (!job) {
     if (pending.size >= maxPending) return noImage('busy',503);
-    job = loadCover(origin,width,fetcher).finally(() => pending.delete(key));
+    job = loadCover(origin,width,profile,fetcher).finally(() => pending.delete(key));
     pending.set(key,job);
   }
   const result = await job;

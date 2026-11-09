@@ -143,7 +143,7 @@ function BookCoverForIdentity({
   const imageAttempts = useMemo(() => coverUrl ? boundedCoverAttempts(coverUrl,presentation) : [],[coverUrl,presentation]);
   const imageSource = imageAttempts[variantIndex] ?? null;
   const displayedCoverUrl = imageSource?.src ?? null;
-  const cardVariant = boundedCoverUrl(book.cardCoverUrl);
+  const cardVariant = boundedCoverUrl(book.cardCoverUrl,'thumb');
   const cardVariantMedia = presentation === 'taste'
     ? '(max-width: 430px) and (max-resolution: 2dppx)'
     : '(max-width: 430px)';

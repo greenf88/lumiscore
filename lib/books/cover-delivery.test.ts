@@ -97,6 +97,24 @@ test('non-Open Library sources cannot use the transform or arbitrary size parame
   }
 });
 
+test('Bureau ISBN falls back within the same image ID and sends only the bounded result',async () => {
+  const source = 'https://metadata.isbn.nl/ie_fcache/0000800664_Dog_Man_0_0.jpg';
+  const screen = boundedCoverAttempts(source,'detail')[0].src;
+  assert.equal(new URL(screen,base).searchParams.get('profile'),'screen');
+  const calls: string[] = [];
+  const fetcher: typeof fetch = async url => {
+    calls.push(String(url));
+    if (String(url).includes('_2_710_130_')) return new Response(null,{status:404});
+    return fetchCover(jpeg(String(url) === source ? MAX_COVER_BYTES+1 : 1234))(url);
+  };
+  const response = await boundedCoverResponse(new Request(base+screen),fetcher);
+  assert.equal(response.status,200);
+  assert.equal((await response.arrayBuffer()).byteLength,1234);
+  assert.deepEqual(calls,[
+    source.replace('_0_0.jpg','_2_710_130_0_0.jpg'),source,source.replace('_0_0.jpg','_3_130_250_0_0.jpg'),
+  ]);
+});
+
 test('only identity-bound Open Library archive redirects can be followed', async () => {
   const archive = 'https://archive.org/download/l_covers_0012/l_covers_0012_45.zip/0012455001-L.jpg';
   const server = 'https://ia600100.us.archive.org/view_archive.php?archive=/5/items/l_covers_0012/l_covers_0012_45.zip&file=0012455001-L.jpg';
@@ -121,4 +139,11 @@ test('only identity-bound Open Library archive redirects can be followed', async
     assert.equal(bad.headers.get('x-lumiscore-cover-result'),'source-redirect');
     assert.equal(calls.length,expected);
   }
+  calls = [];
+  const legacySource = 'https://covers.openlibrary.org/b/id/370100-L.jpg?default=false';
+  const legacyArchive = 'https://archive.org/download/olcovers37/olcovers37-L.zip/370100-L.jpg';
+  const legacyServer = 'https://ia600401.us.archive.org/view_archive.php?archive=/33/items/olcovers37/olcovers37-L.zip&file=370100-L.jpg';
+  assert.equal((await boundedCoverResponse(request(legacySource),relay([legacyArchive,legacyServer]))).status,200);
+  assert.deepEqual(calls,[legacySource,legacyArchive,legacyServer]);
+  assert.equal((await boundedCoverResponse(request(legacySource),relay([legacyArchive.replace('olcovers37-L.zip','olcovers37-S.zip')]))).status,404);
 });

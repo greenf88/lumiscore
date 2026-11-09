@@ -2,6 +2,7 @@ export const MAX_COVER_BYTES = 300_000;
 export const BOUNDED_COVER_PATH = '/api/catalog/cover';
 export const COVER_WIDTHS = [96,160,256,384,512,640] as const;
 export type CoverWidth = typeof COVER_WIDTHS[number];
+export type IsbnCoverProfile = 'thumb' | 'screen';
 
 const raster = /\.(?:jpe?g|png|webp)$/i;
 const coverPaths: Record<string, RegExp> = {
@@ -26,6 +27,17 @@ const googleCoverHosts = new Set(['books.google.com', 'books.google.nl', 'books.
 
 export function openLibraryCoverParts(url: URL) {
   return url.hostname === 'covers.openlibrary.org' ? openLibraryPath.exec(url.pathname) : null;
+}
+
+export function hasBureauIsbnRenditions(url: URL) {
+  return url.hostname === 'metadata.isbn.nl' && /(?<!_2_710_130|_3_130_250)_0_0\.jpg$/i.test(url.pathname);
+}
+
+export function bureauIsbnRendition(url: URL, profile: IsbnCoverProfile): URL {
+  const variant = new URL(url);
+  const dimensions = profile === 'thumb' ? '3_130_250' : '2_710_130';
+  variant.pathname = variant.pathname.replace(/_0_0\.jpg$/i,`_${dimensions}_0_0.jpg`);
+  return variant;
 }
 
 /** Only public cover resources already used by the catalogue. No general URL fetching. */
@@ -56,10 +68,11 @@ export function boundedCoverOrigin(value: string): URL | null {
   } catch { return null; }
 }
 
-export function boundedCoverUrl(value: string | null | undefined, width?: CoverWidth): string | null {
+export function boundedCoverUrl(value: string | null | undefined, variant?: CoverWidth | IsbnCoverProfile): string | null {
   const origin = value ? boundedCoverOrigin(value) : null;
   if (!origin) return null;
   const query = new URLSearchParams({ source:origin.href });
-  if (width && openLibraryCoverParts(origin)) query.set('w',String(width));
+  if (typeof variant === 'number' && openLibraryCoverParts(origin)) query.set('w',String(variant));
+  if (typeof variant === 'string' && hasBureauIsbnRenditions(origin)) query.set('profile',variant);
   return BOUNDED_COVER_PATH + '?' + query;
 }

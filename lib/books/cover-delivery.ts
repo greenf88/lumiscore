@@ -13,7 +13,7 @@ export function boundedCoverAttempts(url: string, presentation: CoverPresentatio
   const medium = boundedCoverUrl(getOpenLibraryCoverVariantUrl(url,'M'));
   const large = boundedCoverUrl(getOpenLibraryCoverVariantUrl(url,'L'));
   if (!large || !medium || !small) return [];
-  if (large === medium) return [{ src:large }];
+  if (large === medium) return [{ src:boundedCoverUrl(url,presentation === 'detail' ? 'screen' : 'thumb')! }];
   const widths = COVER_WIDTHS.slice(0,presentation === 'compact' ? 2 : presentation === 'detail' ? 6 : 4);
   const variant = (width: CoverWidth) => boundedCoverUrl(getOpenLibraryCoverVariantUrl(url,width <= 160 ? 'M' : 'L'),width)!;
   const srcSet = widths.map(width => `${variant(width)} ${width}w`).join(', ');
