@@ -49,7 +49,8 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  assert.match(page,/descriptionPromise=\{storedDescription \? undefined : descriptionPromise\}/);
  assert.doesNotMatch(page,/await descriptionPromise/);
  const metadata=page.slice(page.indexOf('export async function generateMetadata'),page.indexOf('export default async function BookPage'));
- assert.match(metadata,/const cover = book\.coverUrls\?\.\[0\]/,'stored exact cover remains available to social metadata');
+ assert.match(metadata,/const cover = book\.coverUrls\?\.map\(url => boundedCoverAttempts\(url,'detail'\)\[0\]\?\.src\)\.find\(Boolean\)/,
+  'social metadata uses the bounded variant of a stored exact cover');
  assert.doesNotMatch(metadata,/await book\.editionCoverUrls/,'blocking head must not await optional external cover');
  assert.match(metadata,/image: cover \?\? null/,'no unrelated image substitutes for an unstored cover');
 });
