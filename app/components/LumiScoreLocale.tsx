@@ -48,9 +48,10 @@ export function LocaleLink({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorEl
 
 export function LanguageSwitcher({ hrefForLocale }: { hrefForLocale?: (locale: Locale) => string } = {}) {
   const { locale, pagePath, t } = useLumiScoreLocale();
+  const isDutchNews = /^\/nieuws(?:[/?#]|$)/.test(pagePath);
   return <div className="language-switcher" role="group" aria-label={t('language.label')}>
     {(['nl', 'en'] as const).map(option => <a key={option}
-      href={hrefForLocale ? hrefForLocale(option) : localizedHref(pagePath, option)}
+      href={hrefForLocale ? hrefForLocale(option) : localizedHref(isDutchNews && option === 'en' ? '/' : pagePath, option)}
       aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
       aria-current={locale === option ? 'page' : undefined}
       onClick={() => rememberLocale(option)}>{option.toUpperCase()}</a>)}

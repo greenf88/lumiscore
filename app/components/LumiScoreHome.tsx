@@ -726,7 +726,7 @@ function ContinueSeries({ continuations }: { continuations: HomepageSeriesContin
 }
 
 export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   return (
     <footer className="site-footer">
       <div className="footer-brand">
@@ -735,6 +735,7 @@ export function Footer({ onThemeToggle }: { onThemeToggle: () => void }) {
         <LocaleLink className="domain-link" href="/">lumisco.re</LocaleLink>
       </div>
       <nav className="footer-nav" aria-label={t('footer.navigation')}>
+        {locale === 'nl' && <LocaleLink href="/nieuws">Nieuws</LocaleLink>}
         <LocaleLink href="/over-ons">{t('footer.about')}</LocaleLink>
         <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
         <LocaleLink href="/voor-uitgevers">{t('footer.publishers')}</LocaleLink>

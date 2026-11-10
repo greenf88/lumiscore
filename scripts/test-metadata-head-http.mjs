@@ -14,6 +14,23 @@ try{
  // Compile the real home route before the bounded parallel audit; compilation is not metadata latency.
  const warm=await fetch('http://127.0.0.1:'+port+'/en',{signal:AbortSignal.timeout(90000)});assert.equal(warm.status,200);await warm.text();
  const sitemap=(await readSitemapShards('http://127.0.0.1:'+port)).join('');
+ const article='/nl/nieuws/andy-weir-volgende-boek-geen-project-hail-mary-2';
+ for (const path of ['/nl/nieuws', article, '/en'+article.slice(3), '/nl/nieuws/onbekend']) {
+  const found = path === '/nl/nieuws' || path === article;
+  const response = await fetch('http://127.0.0.1:'+port+path, {redirect:'manual'});
+  assert.equal(response.status, found ? 200 : 404, path);
+  const html = await response.text();
+  const head = html.split('</head>')[0];
+  assert.doesNotMatch(head, /hreflang=/i, path);
+  assert.deepEqual([...head.matchAll(/rel="canonical" href="([^"]+)"/g)].map(match => match[1]),
+   found ? ['https://lumisco.re'+path] : [], path);
+  if (found) assert.ok(sitemap.includes('<loc>https://lumisco.re'+path+'</loc>'), path);
+  if (path === article) {
+   assert.match(head, /property="og:image" content="https:\/\/lumisco\.re\/assets\/news\/andy-weir-volgende-boek\.jpg"/);
+   assert.match(html, /95\.000 woorden/);
+   assert.match(html, /href="\/nl\/book\/1"/);
+  }
+ }
  const sitemapBooks=[...sitemap.matchAll(/<url><loc>https:\/\/lumisco\.re(\/(?:en|nl)\/book\/\d+)<\/loc>(.*?)<\/url>/g)];
  assert.deepEqual(sitemapBooks.map(m=>m[1]),['/en/book/1','/en/book/3','/en/book/5','/nl/book/1','/nl/book/2','/nl/book/3','/nl/book/5']);
  assert.equal(sitemapBooks[0][2],sitemapBooks[3][2]);assert.match(sitemapBooks[0][2],/hreflang="x-default"/);

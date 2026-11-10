@@ -4,6 +4,16 @@ import { buildLocalizedSitemap, buildPublicSitemapPaths } from './sitemap.ts';
 import { bookUrlStatus, resolveBookLifecycle, selectSitemapBookLocales } from './book-locales.ts';
 import type { StrictEditionRow } from '../books/strict-edition.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
+import { NEWS_PATH, publishedNews } from '../editorial/news.ts';
+
+test('only published Dutch news belongs in the public pages shard', () => {
+  const xml = buildLocalizedSitemap([], [], 'pages');
+  const rows = [...xml.matchAll(/<url><loc>https:\/\/lumisco\.re(\/(?:nl|en)\/nieuws[^<]*)<\/loc>(.*?)<\/url>/g)];
+  assert.deepEqual(rows.map(row => row[1]), [NEWS_PATH, ...publishedNews.map(article => article.path)].map(path => '/nl' + path));
+  assert.ok(rows.every(row => !row[2].includes('hreflang')));
+  assert.doesNotMatch(buildLocalizedSitemap([], [], 'en'), /\/nieuws/);
+  assert.doesNotMatch(buildLocalizedSitemap([], [], 'nl'), /\/nieuws/);
+});
 
 test('sitemap paths include all current public books and collections without duplicates', () => {
   assert.deepEqual(
