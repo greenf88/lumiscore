@@ -1,6 +1,7 @@
 import { verifiedPageLastmod, type VerifiedPageRevision } from './verified-lastmod.ts';
 import { createHash } from 'node:crypto';
 import { getLandingGuide } from '../editorial/landing-guides.ts';
+import { NEWS_PATH, publishedNews } from '../editorial/news.ts';
 import { getInformationPageContent, type InformationPageKey } from '../information/pages.ts';
 import { languageAlternates, localizedHref } from '../i18n/paths.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
@@ -93,7 +94,11 @@ export function buildLocalizedSitemap(
     const priority = path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6';
     return (['en', 'nl'] as const).filter(locale => (!locales || bookUrlPolicy([...locales], locale).inSitemap) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${locales ? verifiedBookLastmod(path,locale,revisions) : sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
   }).join('');
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}</urlset>`;
+  const newsEntries = !shard || shard === 'pages'
+    ? [NEWS_PATH, ...publishedNews.map(article => article.path)].map(path =>
+      `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, 'nl')))}</loc><priority>0.6</priority></url>`).join('')
+    : '';
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${entries}${newsEntries}</urlset>`;
 }
 
 function verifiedBookLastmod(path:string,locale:Locale,revisions:ReadonlyMap<string,VerifiedPageRevision>):string {
