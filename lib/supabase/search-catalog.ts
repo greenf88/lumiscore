@@ -1,5 +1,5 @@
 import type { Book } from '@/app/data/books';
-import { normalizeCatalogIsbn } from '../books/catalog-search.ts';
+import { normalizeCatalogIsbn, reviewedCoauthorSearchWorkIds } from '../books/catalog-search.ts';
 import type { EditorialQuery } from '../catalog/editorial-query.ts';
 import { editorialRpcArgs } from '../catalog/editorial-query.ts';
 import { searchWindow } from '../catalog/search-window.ts';
@@ -78,7 +78,9 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   void _page; void _size;
   const [projection, categories, selectedAuthor] = await Promise.all([
     supabase.rpc('catalog_search_selection_v2', {
-      ...projectionArgs, p_alias_ids: isbnWorkIds ?? projectionArgs.p_alias_ids, p_locale: locale,
+      ...projectionArgs,
+      p_alias_ids: isbnWorkIds ?? [...new Set([...projectionArgs.p_alias_ids, ...reviewedCoauthorSearchWorkIds(state.query)])].slice(0, 100),
+      p_locale: locale,
     }).abortSignal(signal),
     loadPublicCategories(signal),
     state.author ? supabase.from('authors').select('id,name').eq('id', state.author).abortSignal(signal).maybeSingle()

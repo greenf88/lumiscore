@@ -5,6 +5,7 @@ import {EditionPresentationLabel} from './EditionPresentationLabel';
 import {RecommendationMeasurement} from './RecommendationMeasurement';
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
+import { bookAuthorByline } from '@/lib/catalog/reviewed-coauthors';
 
 import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { Book } from '../data/books';
@@ -495,7 +496,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
           ? t('common.firstPublished', { year: book.firstPublishYear })
           : t('common.publicationUnavailable')}</span>}
         <Heading>{book.title}</Heading><EditionPresentationLabel book={book}/>
-        <p>{book.author}</p>
+        <p>{bookAuthorByline(book, locale)}</p>
         {variant !== 'browse' && book.genre && <span className="book-genre">{book.genre}</span>}
         {matchLabel && <span className="book-match">{matchLabel}</span>}
         <div className="book-meta">
@@ -510,7 +511,7 @@ export function BookCardIdentity({ book, resolveMissingCover = true, label, rank
 }
 
 export const BookCard = memo(function BookCard({ book, wanted = false, status, onToggle, resolveMissingCover = true, detailReturnContext, label, rank, matchLabel, href: explicitHref, actions, children, className = '', variant = 'standard', headingLevel, coverPriority, coverSizes: imageSizes }: BookCardProps) {
-  const { t } = useLumiScoreLocale();
+  const { locale, t } = useLumiScoreLocale();
   const href = explicitHref ?? getBookHref(book, detailReturnContext);
   const bookContent = <BookCardIdentity book={book} resolveMissingCover={resolveMissingCover} label={label} rank={rank} matchLabel={matchLabel} variant={variant} headingLevel={headingLevel} coverPriority={coverPriority} coverSizes={imageSizes} />;
   return (
@@ -521,7 +522,7 @@ export const BookCard = memo(function BookCard({ book, wanted = false, status, o
         <LocaleLink
           className="book-card-main-link"
           href={href}
-          aria-label={t('home.viewBook', { title: book.title, author: book.author })}
+          aria-label={t('home.viewBook', { title: book.title, author: bookAuthorByline(book, locale) })}
         >
           {bookContent}
         </LocaleLink>

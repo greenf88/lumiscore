@@ -31,5 +31,5 @@ test('minimum launch SEO assets use the single Vinext metadata owner', async () 
   assert.match(sitemapData, /from\('collections'\)/);
   assert.match(sitemapResponse, /s-maxage=3600/);
   assert.doesNotMatch(sitemapData, /REVIEWED_COLLECTION_SEEDS/);
-  assert.match(detail, /\$\{book\.title\} \$\{locale === 'nl' \? 'van' : 'by'\} \$\{book\.author\} \| LumiScore/);
+  assert.match(detail, /\$\{book\.title\} \$\{locale === 'nl' \? 'van' : 'by'\} \$\{bookAuthorByline\(book, locale\)\} \| LumiScore/);
 });

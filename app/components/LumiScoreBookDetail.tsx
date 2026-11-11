@@ -2,6 +2,7 @@
 
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
+import { bookAuthorByline, reviewedCoauthor } from '@/lib/catalog/reviewed-coauthors';
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -103,6 +104,7 @@ export function LumiScoreBookDetail({
   returnNavigation,
 }: LumiScoreBookDetailProps) {
   const { locale, pagePath, t } = useLumiScoreLocale();
+  const coauthor = reviewedCoauthor(book);
   const [ratingState, setRatingState] = useState(initialRatingState);
   const [readingStatus, setReadingStatus] = useState<ReadingStatus | null>(
     initialReadingStatus,
@@ -310,7 +312,7 @@ export function LumiScoreBookDetail({
           </LocaleLink>
           <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale)} locale={locale}/>
           <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
-          <p className="detail-author">{t('detail.by', { author: book.author })}</p>
+          <p className="detail-author">{t('detail.by', { author: bookAuthorByline(book, locale) })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
 
           {collectionContext && (
@@ -423,7 +425,7 @@ export function LumiScoreBookDetail({
             <dl>
               <div><dt>{t('detail.author')}</dt><dd>{book.authorId && /^[1-9]\d*$/.test(book.authorId) && Number.isSafeInteger(Number(book.authorId))
                 ? <LocaleLink className="detail-author-link" href={'/browse?author=' + book.authorId}>{book.author}</LocaleLink>
-                : book.author}</dd></div>
+                : book.author}{coauthor && [locale === 'nl' ? ' en ' : ' and ', coauthor.name].join('')}</dd></div>
               <div><dt>{t('detail.firstPublishedLabel')}</dt><dd>{book.firstPublishYear ?? t('common.unknown')}</dd></div>
               {book.editionTitle && book.editionTitle !== book.title && <div><dt>{t('detail.edition')}</dt><dd>{book.editionTitle}</dd></div>}
               {book.editionPublisher && <div><dt>{t('detail.publisher')}</dt><dd>{book.editionPublisher}</dd></div>}

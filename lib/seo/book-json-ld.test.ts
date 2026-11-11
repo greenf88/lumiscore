@@ -43,3 +43,15 @@ test('an unavailable locale advertises only the visible Work and known author', 
   assert(!('workExample' in graph[1]));
   assert(!('isbn' in graph[1]));
 });
+
+test('the Waterpark Work and edition credit distinct authors', () => {
+  const graph = bookPageJsonLd({
+    ...book, workId: '10473', editionId: '11109', author: 'Thomas van Grinsven', authorId: '5768',
+  }, 'nl')['@graph'];
+  const people = graph.filter(node => node['@type'] === 'Person');
+  assert.deepEqual(people.map(person => person.name), ['Thomas van Grinsven', 'Rutger Vink']);
+  assert.notEqual(people[0]['@id'], people[1]['@id']);
+  for (const node of graph.filter(node => node['@type'] === 'Book')) {
+    assert.deepEqual(node.author, people.map(person => ({ '@id': person['@id'] })));
+  }
+});
