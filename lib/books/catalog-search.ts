@@ -1,5 +1,6 @@
 import type { Book } from '@/app/data/books';
 import { REVIEWED_WORK_TITLE_ALIASES } from './reviewed-title-aliases.ts';
+import { REVIEWED_COAUTHORS, reviewedCoauthor } from '../catalog/reviewed-coauthors.ts';
 
 export const CATALOG_SEARCH_MIN_LENGTH = 2;
 export const CATALOG_SEARCH_SUGGESTION_LIMIT = 18;
@@ -48,6 +49,13 @@ export function normalizeCatalogSearchText(value: string): string {
     .replace(/\s+/g, ' ');
 }
 
+export function reviewedCoauthorSearchWorkIds(query: string) {
+  const normalized = normalizeCatalogSearchText(query);
+  if (normalized.length < CATALOG_SEARCH_MIN_LENGTH) return [];
+  return REVIEWED_COAUTHORS.filter(credit => normalizeCatalogSearchText(credit.name).includes(normalized))
+    .map(credit => Number(credit.workId));
+}
+
 function textScore(
   value: string,
   query: string,
@@ -74,7 +82,9 @@ function resultScore(
       textScore(alias, query, 0.5, 1.5, 2.5),
     ),
   );
-  const authorScore = textScore(book.author, query, 3, 4, 5);
+  const coauthor = reviewedCoauthor(book);
+  const authorScore = Math.min(textScore(book.author, query, 3, 4, 5),
+    coauthor ? textScore(coauthor.name, query, 3, 4, 5) : Number.POSITIVE_INFINITY);
 
   return Math.min(titleScore, aliasScore, authorScore);
 }

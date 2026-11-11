@@ -7,6 +7,7 @@ import { breadcrumbJsonLd } from './breadcrumb-json-ld.ts';
 import { catalogBreadcrumbs } from './breadcrumbs.ts';
 import { LUMISCORE_WEBSITE_ID } from './site-identity.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
+import { reviewedCoauthor } from '../catalog/reviewed-coauthors.ts';
 
 export function bookPageJsonLd(book: Book, locale: Locale) {
   const path = `/book/${book.workId}`;
@@ -21,7 +22,11 @@ export function bookPageJsonLd(book: Book, locale: Locale) {
       ? absoluteLumiScoreUrl(`/#author-${encodeURIComponent(book.authorId)}`)
       : `${workId}-author`
     : null;
-  const author = authorId ? { author: { '@id': authorId } } : {};
+  const coauthor = reviewedCoauthor(book);
+  const coauthorId = coauthor ? absoluteLumiScoreUrl(`/#author-credit-${coauthor.slug}`) : null;
+  const author = authorId
+    ? { author: coauthorId ? [{ '@id': authorId }, { '@id': coauthorId }] : { '@id': authorId } }
+    : {};
   const { itemListElement } = breadcrumbJsonLd(catalogBreadcrumbs('book', book.title, path, locale), locale);
   const breadcrumbId = `${url}#breadcrumb`;
 
@@ -50,6 +55,7 @@ export function bookPageJsonLd(book: Book, locale: Locale) {
     });
   }
   if (authorId) graph.push({ '@type': 'Person', '@id': authorId, name: authorName });
+  if (coauthor && coauthorId) graph.push({ '@type': 'Person', '@id': coauthorId, name: coauthor.name });
   graph.push({ '@type': 'BreadcrumbList', '@id': breadcrumbId, itemListElement });
   return { '@context': 'https://schema.org', '@graph': graph };
 }

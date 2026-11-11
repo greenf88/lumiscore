@@ -18,6 +18,7 @@ import {
 import { measureServerOperation } from '@/lib/performance/server-timing';
 import { suzanneBookGuide } from '@/lib/editorial/landing-guides';
 import { bookPageJsonLd } from '@/lib/seo/book-json-ld';
+import { bookAuthorByline } from '@/lib/catalog/reviewed-coauthors';
 
 type BookPageProps = {
   params: Promise<{ workId: string }>;
@@ -48,7 +49,7 @@ export async function generateMetadata({
   if (!book) notFound();
   const indexable = policy.inSitemap;
 
-  const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${book.author} | LumiScore`;
+  const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${bookAuthorByline(book, locale)} | LumiScore`;
   const description = getBookMetadataDescription(book, locale);
   const guide = suzanneBookGuide(book, locale);
   // A stored, edition-bound cover can be shared immediately. Optional external
