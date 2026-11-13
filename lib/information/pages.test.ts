@@ -74,6 +74,7 @@ test('information links are real internal routes and mail links use the approved
     '/browse',
     '/collections',
     '/taste-test',
+    '/taste-test/preferences',
     '/over-ons',
     '/zo-werkt-het',
     '/voor-uitgevers',

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getStoredPublicBookDescription } from '@/lib/books/public-description';
+import { getInitialPublicBookDescription } from '@/lib/books/public-description';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { LumiScoreBookDetail } from '@/app/components/LumiScoreBookDetail';
@@ -50,7 +50,7 @@ export async function generateMetadata({
   const indexable = policy.inSitemap;
 
   const title = `${book.title} ${locale === 'nl' ? 'van' : 'by'} ${bookAuthorByline(book, locale)} | LumiScore`;
-  const description = getBookMetadataDescription(book, locale);
+  const description = getBookMetadataDescription(book, locale, getInitialPublicBookDescription(book, locale));
   const guide = suzanneBookGuide(book, locale);
   // A stored, edition-bound cover can be shared immediately. Optional external
   // cover evidence still streams into the page, without blocking its head.
@@ -148,7 +148,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     returnNavigationPromise,
   ]);
   if (!book) notFound();
-  const storedDescription = getStoredPublicBookDescription(book, locale);
+  const initialDescription = getInitialPublicBookDescription(book, locale);
 
   return (
     <>
@@ -157,8 +157,8 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
       )}
       <LumiScoreBookDetail
         book={book}
-        description={storedDescription}
-        descriptionPromise={storedDescription ? undefined : descriptionPromise}
+        description={initialDescription}
+        descriptionPromise={initialDescription ? undefined : descriptionPromise}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

@@ -18,18 +18,23 @@ export function getStoredPublicBookDescription(book: Book, locale: Locale): Veri
   return stored?.language === locale ? stored : null;
 }
 
+/** Content already approved for this selected edition needs no provider or
+ * snapshot read. Use the same synchronous choice in the initial HTML and head. */
+export function getInitialPublicBookDescription(book: Book, locale: Locale): VerifiedBookDescription | null {
+  if (book.editionAvailable === false) return null;
+  return getStoredPublicBookDescription(book, locale)
+    ?? normalizeVerifiedBookDescription(getReviewedDescription(book, locale));
+}
+
 /** Preserve absence versus transport failure through to the public UI. */
 export async function loadPublicBookDescriptionState(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch,
   snapshotStore?:Pick<typeof import('../supabase/description-snapshots.ts'),'loadDescriptionSnapshot'|'saveDescriptionSnapshot'|'markDescriptionSnapshotFailure'>): Promise<BookDescriptionResolution> {
   if(book.editionAvailable===false)return {state:'confirmed_missing',description:null};
-  const stored=getStoredPublicBookDescription(book,locale);
-  if(stored)
-    return {state:'resolved',description:stored};
   // These independently written, identity-bound summaries have publisher or
   // catalogue evidence. An Open Library snapshot outage/withdrawal applies to
   // that source's text, not to this separately reviewed original summary.
-  const reviewed = normalizeVerifiedBookDescription(getReviewedDescription(book, locale));
-  if (reviewed) return {state:'resolved',description:reviewed};
+  const initial = getInitialPublicBookDescription(book, locale);
+  if (initial) return {state:'resolved',description:initial};
   // Durable, exact-edition snapshots are independent of a server process.
   // Without a configured snapshot identity the existing provider path remains.
   // A failed disposition read must not silently revive a withdrawn source.

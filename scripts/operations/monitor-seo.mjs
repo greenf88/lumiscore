@@ -1,6 +1,6 @@
 import { probeCoverTransport } from '../../lib/seo/cover-health.ts';
 import assert from 'node:assert/strict';
-import { inspectPriorityPage, prioritySeoPaths } from './priority-seo-pages.mjs';
+import { inspectPriorityPage, prioritySeoPaths, secondPrioritySeoPaths } from './priority-seo-pages.mjs';
 
 const origin = 'https://lumisco.re';
 const childPaths = ['/sitemap-pages.xml', '/sitemap-books-en.xml', '/sitemap-books-nl.xml'];
@@ -59,8 +59,9 @@ const priorityPages = [];
 for (let offset = 0; offset < prioritySeoPaths.length; offset += 4) {
   priorityPages.push(...await Promise.all(prioritySeoPaths.slice(offset, offset + 4).map(async path => {
     const { body, response } = await read(origin + path);
-    return inspectPriorityPage({ path, status: response.status, html: body,
-      xRobots: response.headers.get('x-robots-tag') ?? '', inSitemap: urls.has(origin + path) });
+    return { ...inspectPriorityPage({ path, status: response.status, html: body,
+      xRobots: response.headers.get('x-robots-tag') ?? '', inSitemap: urls.has(origin + path) }),
+      cohort: secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1' };
   })));
 }
 console.log(JSON.stringify({ priorityPages }, null, 2));

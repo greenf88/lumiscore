@@ -3,6 +3,7 @@ import { readSitemapShards } from './sitemap-http-helpers.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { inspectServerHtml } from '../lib/seo/server-html.ts';
+import { NEWS_PATH, publishedNews } from '../lib/editorial/news.ts';
 const origin = 'http://127.0.0.1:' + (process.env.SEO_FIXTURE_PORT ?? '3120');
 const read = async (path, locale, extra = {}) => {
   const response = await fetch(origin + path, {redirect:'manual',signal:AbortSignal.timeout(20000),headers:{
@@ -77,16 +78,26 @@ test('sitemap advertises only eligible book locales and reciprocal pairs',async(
   for(const path of ['/en','/nl','/en/book/1','/nl/book/1','/en/collection/synthetic-series','/nl/collection/synthetic-series']) assert.ok(urls.includes('https://lumisco.re'+path));
   assert.ok(urls.includes('https://lumisco.re/nl/book/2'));
   for(const path of ['/en/book/2','/en/book/4','/nl/book/4']) assert.ok(!urls.includes('https://lumisco.re'+path));
-  for(const entry of entries) assert.equal((entry.match(/xhtml:link /g)||[]).length,entry.includes('/nl/book/2')?0:3);
+  const dutchOnlyPaths = ['/book/2', NEWS_PATH, ...publishedNews.map(article => article.path)];
+  const dutchOnlyUrls = new Set(dutchOnlyPaths.map(path => 'https://lumisco.re/nl' + path));
+  for(const entry of entries) {
+    const url = entry.match(/<loc>(.*?)<\/loc>/)[1];
+    assert.equal((entry.match(/xhtml:link /g)||[]).length, dutchOnlyUrls.has(url) ? 0 : 3, url);
+  }
+  for (const path of dutchOnlyPaths) assert.ok(!urls.includes('https://lumisco.re/en' + path));
   assert.ok(urls.every(url=>/^https:\/\/lumisco\.re\/(en|nl)(\/|$)/.test(url)&&!url.includes('?')));
   const dated=entries.filter(entry=>entry.includes('<lastmod>'));
   assert.deepEqual(dated.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]).sort(),[
     'https://lumisco.re/nl/imdb-voor-boeken',
+    'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990',
     'https://lumisco.re/nl/toplijsten/fantasy-om-mee-te-beginnen',
     'https://lumisco.re/nl/toplijsten/na-project-hail-mary',
     'https://lumisco.re/nl/zo-werkt-het',
   ]);
-  assert.ok(dated.every(entry=>entry.includes('<lastmod>2026-11-04</lastmod>')));
+  for (const entry of dated) {
+    const updated = /\/nl\/(?:zo-werkt-het|toplijsten\/dystopie-vanaf-1990)<\/loc>/.test(entry);
+    assert.ok(entry.includes('<lastmod>' + (updated ? '2026-11-13' : '2026-11-04') + '</lastmod>'));
+  }
 });
 test('API and Auth remain robots blocked; language aliases do not expose API copies',async()=>{
   const {html}=await read('/robots.txt','en');assert.match(html,/Disallow: \/api\//);assert.match(html,/Disallow: \/auth\//);

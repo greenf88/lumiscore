@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { inspectPriorityPage, prioritySeoPaths } from './operations/priority-seo-pages.mjs';
+import { inspectPriorityPage, prioritySeoPaths, firstPrioritySeoPaths, secondPrioritySeoPaths } from './operations/priority-seo-pages.mjs';
 
 const path = '/en/book/9912';
 const section = content => `<section class="book-description" aria-labelledby="book-description-heading"><h2 id="book-description-heading">About this book</h2>${content}</section>`;
@@ -10,12 +10,29 @@ const streamed = `${loading}<div hidden id="S:0">${resolved}</div><script>$RC("B
 const html = `<html><head><title>A book</title><meta name="description" content="Book details"><link rel="canonical" href="https://lumisco.re/en/book/9912"><meta name="robots" content="index, follow"></head><body><h1>A book</h1>${streamed}<script type="application/ld+json">{"@type":"Book"}</script><a href="/nl/book/17">Mars</a></body></html>`;
 const inspect = overrides => inspectPriorityPage({ path, html, status: 200, inSitemap: true, ...overrides });
 
-test('cohort has twenty unique canonical paths and preserves language exclusions', () => {
-  assert.equal(prioritySeoPaths.length, 20);
-  assert.equal(new Set(prioritySeoPaths).size, 20);
+test('both cohorts retain twenty distinct canonical paths and preserve language exclusions', () => {
+  assert.equal(firstPrioritySeoPaths.length, 20);
+  assert.equal(secondPrioritySeoPaths.length, 20);
+  assert.equal(prioritySeoPaths.length, 40);
+  assert.equal(new Set(prioritySeoPaths).size, 40);
   assert.ok(prioritySeoPaths.every(value => /^\/(?:nl|en)(?:\/[a-z0-9/-]+)?$/.test(value)));
   assert.ok(!prioritySeoPaths.includes('/nl/book/3822'));
   assert.ok(!prioritySeoPaths.includes('/en/book/1219'));
+});
+test('recovered book pages require real synopsis text and a labelled HTTPS source in the same section', () => {
+  const nextPath = '/en/book/2062';
+  const inspectNext = description => inspect({ path: nextPath, html: html.replaceAll(path, nextPath).replace(streamed, description) });
+  assert.deepEqual(inspectNext(resolved).errors, []);
+  assert.deepEqual(inspectNext(streamed).errors, []);
+  for (const incomplete of [loading, section('<p>A verified English description is not available yet.</p>'),
+    section('<p class="description-source"><a href="https://example.com">Publisher</a></p>'),
+    section('<p>Synopsis without attribution.</p>'), resolved.replace('https://example.com/book', 'javascript:alert(1)'),
+    resolved.replace('Reviewed book description.', '  '), resolved.replace('Publisher</a>', '</a>'),
+    ...['&nbsp;', '&#160;', '&#xA0;'].flatMap(space => [
+      resolved.replace('Reviewed book description.', space), resolved.replace('Publisher</a>', space + '</a>'),
+    ])]) {
+    assert.ok(inspectNext(incomplete).errors.includes('Missing verified book synopsis'));
+  }
 });
 test('streamed successful content with a loading fallback passes', () => assert.deepEqual(inspect().errors, []));
 test('missing or aborted description streams fail even with complete metadata and HTTP 200', () => {

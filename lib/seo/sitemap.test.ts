@@ -5,6 +5,8 @@ import { bookUrlStatus, resolveBookLifecycle, selectSitemapBookLocales } from '.
 import type { StrictEditionRow } from '../books/strict-edition.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
 import { NEWS_PATH, publishedNews } from '../editorial/news.ts';
+import { getInformationPageContent } from '../information/pages.ts';
+import { getLandingGuide } from '../editorial/landing-guides.ts';
 
 test('only published Dutch news belongs in the public pages shard', () => {
   const xml = buildLocalizedSitemap([], [], 'pages');
@@ -117,8 +119,40 @@ test('only matching published content advertises a stable lastmod', () => {
   const first = buildLocalizedSitemap([], ['suzanne-vermeer', 'dune'], 'pages');
   assert.equal(buildLocalizedSitemap([], ['suzanne-vermeer', 'dune'], 'pages'), first);
   const dates = [...first.matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)];
-  assert.equal(dates.length, 5);
-  assert.ok(dates.every(([, url, date]) => url.startsWith('https://lumisco.re/nl/') && date === '2026-11-04'));
-  assert.ok(dates.some(([, url]) => url.endsWith('/collection/suzanne-vermeer')));
+  assert.deepEqual(Object.fromEntries(dates.map(([, url, date]) => [url, date])), {
+    'https://lumisco.re/nl/toplijsten/fantasy-om-mee-te-beginnen': '2026-11-04',
+    'https://lumisco.re/nl/toplijsten/na-project-hail-mary': '2026-11-04',
+    'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990': '2026-11-13',
+    'https://lumisco.re/nl/zo-werkt-het': '2026-11-13',
+    'https://lumisco.re/nl/imdb-voor-boeken': '2026-11-04',
+    'https://lumisco.re/nl/collection/suzanne-vermeer': '2026-11-04',
+  });
+  assert.equal(dates.length, 6);
   assert.doesNotMatch(buildLocalizedSitemap([{ workId: '1', locales: ['en'] }], [], 'en'), /<lastmod>/);
+});
+
+test('changed information or guide content loses its lastmod until the new fingerprint is reviewed', () => {
+  const howItWorks = getInformationPageContent('howItWorks', 'nl');
+  const dystopia = getLandingGuide('/toplijsten/dystopie-vanaf-1990', 'nl');
+  assert.ok(dystopia);
+  const originalLead = howItWorks.lead;
+  const originalIntro = dystopia.intro;
+  const sitemap = () => buildLocalizedSitemap([], ['suzanne-vermeer'], 'pages');
+  const original = sitemap();
+  const lastmodFor = (xml: string, path: string) => [...xml.matchAll(/<url><loc>([^<]+)<\/loc>(.*?)<\/url>/g)]
+    .find(([, url]) => url === 'https://lumisco.re/nl' + path)?.[2].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+  try {
+    howItWorks.lead = originalLead + ' Synthetic unreviewed change.';
+    assert.equal(lastmodFor(sitemap(), '/zo-werkt-het'), undefined);
+    assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), '2026-11-13');
+    howItWorks.lead = originalLead;
+    dystopia.intro = [...originalIntro, 'Synthetic unreviewed change.'];
+    assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), undefined);
+    assert.equal(lastmodFor(sitemap(), '/zo-werkt-het'), '2026-11-13');
+    assert.equal(lastmodFor(sitemap(), '/collection/suzanne-vermeer'), '2026-11-04');
+  } finally {
+    howItWorks.lead = originalLead;
+    dystopia.intro = originalIntro;
+  }
+  assert.equal(sitemap(), original);
 });

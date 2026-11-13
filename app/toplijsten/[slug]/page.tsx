@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props) {
   if (!list) notFound();
   const { locale } = await resolveRequestLocale();
   const guide = getLandingGuide('/toplijsten/' + list.slug, locale);
-  return createLocalizedPageMetadata({ title: guide?.seo_title ?? list.title[locale]+' — LumiScore', description: list.description[locale], canonicalPath: '/toplijsten/'+list.slug, image: list.shareImage?.replace('.png', '-'+locale+'.png') });
+  return createLocalizedPageMetadata({ title: guide?.seo_title ?? list.title[locale]+' — LumiScore', description: guide?.meta_description ?? list.description[locale], canonicalPath: '/toplijsten/'+list.slug, image: list.shareImage?.replace('.png', '-'+locale+'.png') });
 }
 export default async function TopListPage({ params }: Props) {
   const list = getEditorialTopList((await params).slug);

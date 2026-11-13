@@ -45,10 +45,13 @@ test('loaded cover paint has no hydration gate; detail title does not await opti
  assert.doesNotMatch(home,/coverLoaded|setCoverLoaded/);
  assert.match(home,/loading=\{presentation\s*===\s*'detail'\s*\|\|\s*priority\s*\?\s*'eager'\s*:\s*'lazy'\}/);
  assert.match(page,/loadCatalogBook\(workId, locale, true\)/);
- assert.match(page,/description=\{storedDescription\}/);
- assert.match(page,/descriptionPromise=\{storedDescription \? undefined : descriptionPromise\}/);
+ assert.match(page,/description=\{initialDescription\}/);
+ assert.match(page,/descriptionPromise=\{initialDescription \? undefined : descriptionPromise\}/);
+ assert.match(page,/const initialDescription = getInitialPublicBookDescription\(book, locale\)/);
  assert.doesNotMatch(page,/await descriptionPromise/);
  const metadata=page.slice(page.indexOf('export async function generateMetadata'),page.indexOf('export default async function BookPage'));
+ assert.match(metadata,/getBookMetadataDescription\(book, locale, getInitialPublicBookDescription\(book, locale\)\)/);
+ assert.doesNotMatch(metadata,/await (?:loadPublicBookDescription|descriptionPromise)/,'metadata uses only already approved synchronous content');
  assert.match(metadata,/const cover = book\.coverUrls\?\.\[0\]/,'stored exact cover remains available to social metadata');
  assert.doesNotMatch(metadata,/await book\.editionCoverUrls/,'blocking head must not await optional external cover');
  assert.match(metadata,/image: cover \?\? null/,'no unrelated image substitutes for an unstored cover');

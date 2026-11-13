@@ -23,10 +23,10 @@ export const HOW_IT_WORKS_NL: InformationPageContent = {
       ['Je hebt één beoordeling per boek in je account, ook als je een andere editie bekijkt. Je eigen cijfer is jouw oordeel, niet de openbare LumiScore en ook geen persoonlijke match.'],
     ] },
     { heading: '3. Ontdek je smaak: niet gelezen mag je overslaan', paragraphs: [
-      ['In de smaaktest beoordeel je boeken die je kent. Een onbekend of niet gelezen boek sla je over: dat schrijft geen boekbeoordeling. Het volgende boek verschijnt na een geslaagde actie; bij een opslagfout kun je opnieuw proberen.'],
-      ['Voor de smaaktest met opgeslagen boekbeoordelingen meld je je aan. Zonder account kun je de aparte vragen over je leesvoorkeuren proberen. Die gastvoorkeuren zijn geen opgeslagen boekbeoordelingen.'],
-      ['Tijdens een ronde kun je pauzeren en later verdergaan. Na het behalen van het gekozen aantal opgeslagen beoordelingen opent je resultaat. Een afgeronde ronde betekent niet dat je ieder aangeboden boek hebt beoordeeld: overgeslagen boeken tellen niet mee.'],
-      [{ type: 'link', text: 'Start de smaaktest', href: '/taste-test' }, '. De bestaande aanmeldroute brengt je daarna terug naar de smaaktest.'],
+      ['In de smaaktest geef je cijfers aan boeken die je hebt gelezen. Een onbekend of niet gelezen boek sla je over. Overgeslagen boeken tellen niet mee voor het aantal beoordelingen dat nodig is voor je resultaat.'],
+      ['Zonder account kun je een gasttest doen. Na tien beoordeelde boeken zie je een eerste beeld van je leessmaak. Deze keuzes en het resultaat blijven alleen in de geopende pagina; ze worden niet als boekbeoordelingen opgeslagen en verdwijnen bij vernieuwen of verlaten van de pagina.'],
+      ['Met een account worden je beoordelingen opgeslagen. Je kiest de lengte van een ronde en kunt pauzeren en later verdergaan. Na het gekozen aantal opgeslagen beoordelingen opent je resultaat. Het volgende boek verschijnt na een geslaagde actie; bij een opslagfout kun je opnieuw proberen.'],
+      [{ type: 'link', text: 'Start de smaaktest', href: '/taste-test' }, ' of ', { type: 'link', text: 'probeer de gasttest', href: '/taste-test/preferences' }, '.'],
     ] },
     { heading: 'Openbare score, jouw cijfer en persoonlijke match', paragraphs: [
       ['De openbare LumiScore vat opgeslagen lezersbeoordelingen samen: het gemiddelde, afgerond op één decimaal, vanaf drie verschillende beoordelaars. Jouw eigen cijfer is je persoonlijke oordeel over dat boek.'],

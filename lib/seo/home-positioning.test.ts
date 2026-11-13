@@ -47,7 +47,7 @@ test('how-it-works explains scores and links to real product actions without web
     if(locale==='nl') {
       assert.equal(page.actions?.filter(action=>action.variant==='primary').length,1);
       assert.equal(page.actions?.find(action=>action.variant==='primary')?.href,'/search');
-      assert.match(body,/gastvoorkeuren zijn geen opgeslagen boekbeoordelingen/i);
+      assert.match(body,/worden niet als boekbeoordelingen opgeslagen/i);
       assert.match(body,/onvoldoende beoordelingen/i);
       assert.match(body,/tijdelijke laadfout/i);
     }
