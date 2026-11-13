@@ -20,6 +20,7 @@ const guestMyBooksSource = page.slice(
 const route = read('../../app/my-books/page.tsx');
 const guestCatalogRoute = read('../../app/api/catalog/books/route.ts');
 const detail = read('../../app/components/LumiScoreBookDetail.tsx');
+const backLink = read('../../app/components/BookBackLink.tsx');
 const detailModel = read('../books/book-detail.ts');
 const statusLoader = read('../supabase/book-status.ts');
 const guestHook = read('../../app/components/useWantToRead.ts');
@@ -170,11 +171,15 @@ test('Open Library source removal is presentation-only', () => {
 });
 
 test('book-detail back navigation remains a plain, stronger accessible link', () => {
-  assert.match(detail, /href=\{returnNavigation\.href\}/);
-  assert.match(detail, /detail\.backToCollection/);
-  assert.match(detail, /detail\.backToCollections/);
-  assert.match(detail, /detail\.backToSearch/);
-  assert.match(detail, /detail\.backToBooks/);
+  assert.match(detail, /import \{ BookBackLink \} from '\.\/BookBackLink'/);
+  assert.match(detail, /<BookBackLink returnNavigation=\{returnNavigation\} collection=\{collectionContext\?\.collection\} \/>/);
+  assert.match(backLink, /const navigation = localReturn \?\? returnNavigation/);
+  assert.match(backLink, /<LocaleLink className="detail-back-link" href=\{navigation\.href\}>← \{label\}<\/LocaleLink>/);
+  assert.doesNotMatch(backLink, /<button\b|onClick=|preventDefault\(|role="button"/);
+  assert.match(backLink, /detail\.backToCollection/);
+  assert.match(backLink, /detail\.backToCollections/);
+  assert.match(backLink, /detail\.backToSearch/);
+  assert.match(backLink, /detail\.backToBooks/);
   assert.match(styles, /\.book-detail \.detail-back-link \{[^}]*font-size: 16px/);
   assert.match(styles, /\.detail-back-link \{[^}]*min-height: 44px/);
 });
