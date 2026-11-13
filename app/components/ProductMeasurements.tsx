@@ -3,12 +3,23 @@ import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { browserMetricContext, browserMetricsEnabled, emitBrowserMetric, flushBrowserMetrics,subscribeAnalysis,analysisRevision,serverAnalysisRevision,analysisChangeReason } from '@/lib/product-metrics/browser';
-import { metricSurfaceForPath } from '@/lib/product-metrics/contract';
+import { metricSurfaceForPath, referralArrivalEligible } from '@/lib/product-metrics/contract';
 
 /** No visible UI, cookies, visitor identifiers or third-party tracker. */
 export function ProductMeasurements() {
   const pathname = usePathname(), { locale } = useLumiScoreLocale(), last = useRef({key:'',markerSent:false,blocked:true});
+  const referralEntry = useRef({ pathname, decided: false });
   const revision=useSyncExternalStore(subscribeAnalysis,analysisRevision,serverAnalysisRevision);
+  useEffect(() => {
+    const entry = referralEntry.current;
+    if (entry.decided) return;
+    // A later route or a new consent choice must never replay an earlier arrival.
+    if (pathname !== entry.pathname || (revision > 0 && analysisChangeReason() !== 'restored')) { entry.decided = true; return; }
+    if (!browserMetricsEnabled()) return;
+    const eligible = referralArrivalEligible({ enabled: true, reason: analysisChangeReason(), atEntry: true, decided: false, url: location.href, referrer: document.referrer });
+    entry.decided = true;
+    if (eligible) emitBrowserMetric('referral_arrival', { locale, surface: metricSurfaceForPath(location.pathname) });
+  }, [locale, pathname, revision]);
   useEffect(() => {
     if (!browserMetricsEnabled()) {last.current={key:`${locale}:${pathname}`,markerSent:true,blocked:true};return;}
     if(analysisChangeReason()==='accepted'&&last.current.key===`${locale}:${pathname}`){last.current.blocked=false;return;} // No pre-consent page replay.

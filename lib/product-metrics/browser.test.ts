@@ -42,6 +42,16 @@ test('no pre-consent IDs, attribution or replay; bounded batches; revocation abo
   process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED='true';assert.equal(browserMetricsEnabled(),true);
   assert.equal(browserMetricContext('nl')?.traffic,'production');
   applyAnalysisPermission(false);assert.equal(browserMetricsEnabled(),false);assert.equal(storage.size,0);
+  install('location',new URL('https://lumisco.re/nl/taste-test?utm_source=leesroutes&utm_medium=referral&utm_campaign=leesroutes&email=PRIVATE'));
+  install('document',{referrer:'https://leesroutes.nl/boeken/private/'});
+  assert.equal(browserMetricContext('nl'),null);emitBrowserMetric('referral_arrival',{locale:'nl',surface:'taste_test'});assert.equal(storage.size,0);
+  applyAnalysisPermission(true,Date.now()+60_000,'restored');
+  install('fetch',async(_url:string,options:RequestInit)=>{sent.push({body:JSON.parse(String(options.body)),signal:options.signal as AbortSignal});return new Response('{}',{status:202});});
+  assert.equal(browserMetricContext('nl')?.source,'leesroutes');
+  emitBrowserMetric('referral_arrival',{locale:'nl',surface:'taste_test'});flushBrowserMetrics();
+  assert.match(JSON.stringify(sent.at(-1)),/referral_arrival/);assert.match(JSON.stringify(sent.at(-1)),/leesroutes/);
+  assert.doesNotMatch(JSON.stringify([...storage.values()]),/PRIVATE|https:|utm_|private/);
+  applyAnalysisPermission(false);assert.equal(storage.size,0);
  }finally{
   applyAnalysisPermission(false);if(env===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_URL;else process.env.NEXT_PUBLIC_SUPABASE_URL=env;
   if(flag===undefined)delete process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED;else process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=flag;

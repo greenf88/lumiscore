@@ -1,8 +1,41 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {parseMetric,measurementTestTarget,measurementTarget,impressionTimer,RANKER_VERSION,campaignContext,parseMetricContext,metricSurfaceForPath} from './contract.ts';
+import {parseMetric,measurementTestTarget,measurementTarget,impressionTimer,RANKER_VERSION,campaignContext,parseMetricContext,metricSurfaceForPath,isLeesroutesReferral,referralArrivalEligible} from './contract.ts';
 import {productMeasurementReport} from './report.ts';
 const event=()=>({event_id:'b0000000-0000-4000-8000-000000000001',event:'recommendation_impression',properties:{locale:'nl',surface:'home',work_id:1,position:1,ranker_version:RANKER_VERSION}});
+
+test('Leesroutes referral uses exact public origin or fixed markers and saves bounded enums only',()=>{
+ const landing='https://lumisco.re/nl/taste-test';
+ const marked=landing+'?utm_source=leesroutes&utm_medium=referral&utm_campaign=leesroutes';
+ for(const ref of ['https://leesroutes.nl/','https://www.leesroutes.nl/boeken/a/?email=PRIVATE'])assert.equal(isLeesroutesReferral(landing,ref),true);
+ for(const ref of ['http://leesroutes.nl/','https://leesroutes.nl.attacker.invalid/','https://attacker.invalid/leesroutes.nl','https://leesroutes.nl:444/','https://user@leesroutes.nl/'])assert.equal(isLeesroutesReferral(landing,ref),false);
+ assert.equal(isLeesroutesReferral(marked,''),true);
+ for(const suffix of ['&utm_content=PRIVATE','&utm_source=leesroutes'])assert.equal(isLeesroutesReferral(marked+suffix,'https://leesroutes.nl/'),false);
+ assert.equal(isLeesroutesReferral(marked.replace('referral','social'),''),false);
+ const c=campaignContext(marked+'&email=PRIVATE','','nl',null,'production');
+ assert.equal(c.source,'leesroutes');assert.equal(c.medium,'referral');assert.equal(c.campaign,'none');assert.ok(parseMetricContext(c));
+ assert.doesNotMatch(JSON.stringify(c),/PRIVATE|https|utm_|email/);
+ assert.equal(campaignContext('https://lumisco.re/en/book/10250','','en',c,'production').source,'leesroutes');
+ assert.equal(campaignContext('https://lumisco.re/en','','en',null,'production').source,'direct_unknown');
+ assert.ok(parseMetric({...event(),event:'referral_arrival',properties:c}));
+ for(const p of [{...c,source:'google',medium:'organic_search'},{...c,url:marked},{locale:'nl',surface:'taste_test'}])assert.equal(parseMetric({...event(),event:'referral_arrival',properties:p}),null);
+ const input={enabled:true,reason:'restored' as const,atEntry:true,decided:false,url:marked,referrer:''};
+ assert.equal(referralArrivalEligible(input),true);
+ for(const change of [{enabled:false},{reason:'accepted' as const},{reason:'revoked' as const},{atEntry:false},{decided:true}])assert.equal(referralArrivalEligible({...input,...change}),false);
+});
+
+test('Leesroutes report counts destination arrivals and confirmed actions without claiming source clicks or linked conversion',()=>{
+ const c=campaignContext('https://lumisco.re/nl/taste-test','https://leesroutes.nl/','nl',null,'production');
+ const report=productMeasurementReport({available:true,period:{from:'2026-11-13',through:'2026-11-13'},rows:[
+  {day:'2026-11-13',event:'referral_arrival',dimensions:c,n:2},
+  {day:'2026-11-13',event:'page_opened',dimensions:c,n:5},
+  {day:'2026-11-13',event:'taste_round_started',dimensions:{...c,goal:10},n:3},
+  {day:'2026-11-13',event:'taste_round_completed',dimensions:{...c,goal:10},n:1},
+  {day:'2026-11-13',event:'want_to_read_saved',dimensions:{...c,work_id:10250},n:1},
+ ]});
+ assert.equal(report.leesroutes?.arrivals,2);assert.equal(report.leesroutes?.pageViews,5);assert.equal(report.leesroutes?.tasteStarts,3);assert.equal(report.leesroutes?.tasteCompletions,1);assert.equal(report.leesroutes?.savedBooks,1);
+ assert.equal(report.leesroutes?.sourceClicks,null);assert.equal(report.leesroutes?.linkedVisitorConversion,null);assert.equal(report.linkedFunnelConversion,null);
+});
 
 test('current NL and EN editorial routes share the existing event surface without importing another draft route',()=>{
  for(const path of ['/nl/toplijsten/dystopie-vanaf-1990','/en/toplijsten/dystopie-vanaf-1990','/en/toplijsten/dystopie-vanaf-1990/'])assert.equal(metricSurfaceForPath(path),'editorial');

@@ -3,6 +3,7 @@ import type { Locale } from '../i18n/config.ts';
 import { resolveBookDescription, type BookDescriptionResolution } from './description-resolution.ts';
 import { normalizeVerifiedBookDescription } from './description-text.ts';
 import { createDescriptionSnapshot, readDescriptionSnapshot, isDescriptionSnapshotWithdrawn } from './description-snapshot.ts';
+import { getReviewedDescription } from './reviewed-descriptions.ts';
 
 /** Public bibliography only; optional PR92 source snapshots use the shared adapter. */
 export async function loadPublicBookDescription(book: Book, locale: Locale, fetchImplementation: typeof fetch = fetch): Promise<VerifiedBookDescription | null> {
@@ -24,6 +25,11 @@ export async function loadPublicBookDescriptionState(book: Book, locale: Locale,
   const stored=getStoredPublicBookDescription(book,locale);
   if(stored)
     return {state:'resolved',description:stored};
+  // These independently written, identity-bound summaries have publisher or
+  // catalogue evidence. An Open Library snapshot outage/withdrawal applies to
+  // that source's text, not to this separately reviewed original summary.
+  const reviewed = normalizeVerifiedBookDescription(getReviewedDescription(book, locale));
+  if (reviewed) return {state:'resolved',description:reviewed};
   // Durable, exact-edition snapshots are independent of a server process.
   // Without a configured snapshot identity the existing provider path remains.
   // A failed disposition read must not silently revive a withdrawn source.

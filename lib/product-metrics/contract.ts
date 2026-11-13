@@ -1,9 +1,9 @@
-export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded'] as const;
+export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded', 'referral_arrival'] as const;
 export const METRIC_SURFACES = ['home', 'recommendations', 'taste_result', 'book_detail', 'collection', 'editorial', 'browse', 'login', 'taste_test', 'other'] as const;
 export const RANKER_VERSION = '8f337dd';
 export const METRIC_CONTEXT_HEADER = 'x-lumiscore-product-context';
 export type MetricEvent = typeof METRIC_EVENTS[number];
-export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' | 'production' };
+export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'leesroutes' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'referral' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' | 'production' };
 export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated' };
 export type MetricEnvelope = { event_id: string; event: MetricEvent; properties: MetricProperties };
 export const isMetricReceipt = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
@@ -24,8 +24,9 @@ export function parseMetricContext(value: unknown): MetricContext | null {
   if (!exact(p, ['locale', 'surface', 'source', 'medium', 'campaign', 'traffic']) || !['nl', 'en'].includes(String(p.locale)) || !METRIC_SURFACES.includes(p.surface as MetricContext['surface']) || !['synthetic','production'].includes(String(p.traffic))) return null;
   const attributed = p.source === 'facebook' && p.medium === 'organic_social' && p.campaign === 'dystopie_202610';
   const search = ['google', 'bing', 'other_search'].includes(String(p.source)) && p.medium === 'organic_search' && p.campaign === 'none';
+  const referral = p.source === 'leesroutes' && p.medium === 'referral' && p.campaign === 'none';
   const unknown = p.source === 'direct_unknown' && p.medium === 'unknown' && p.campaign === 'none';
-  return attributed || search || unknown ? p as MetricContext : null;
+  return attributed || search || referral || unknown ? p as MetricContext : null;
 }
 export function parseMetric(value: unknown): MetricEnvelope | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -37,6 +38,7 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   const contextKeys = ['source', 'medium', 'campaign', 'traffic'];
   const hasContext = contextKeys.some(k => k in p);
   if (hasContext && !parseMetricContext(Object.fromEntries(['locale', 'surface', ...contextKeys].map(k => [k, p[k]])))) return null;
+  if (event === 'referral_arrival' && (!hasContext || p.source !== 'leesroutes')) return null;
   const common = ['locale', 'surface', ...contextKeys];
   const round = event.startsWith('taste_round_'), recommendation = event.startsWith('recommendation_');
   const book = recommendation || ['want_to_read_saved', 'book_card_opened', 'book_detail_opened', 'rating_saved'].includes(event);
@@ -52,7 +54,7 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   if (event === 'rating_saved' && !['new', 'updated'].includes(String(p.operation))) return null;
   return value as MetricEnvelope;
 }
-export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened'];
+export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened', 'referral_arrival'];
 export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   const p = path.replace(/^\/(nl|en)(?=\/|$)/, '') || '/';
   if (p === '/') return 'home';
@@ -66,9 +68,28 @@ export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   if (p.startsWith('/collection/')) return 'collection';
   return 'other';
 }
+/** Fixed partner marker only. Callers must not inspect/store this before consent. */
+export function isLeesroutesReferral(url: string, referrer: string): boolean {
+  try {
+    const current = new URL(url);
+    const utmKeys = [...current.searchParams.keys()].filter(key => key.startsWith('utm_'));
+    if (utmKeys.length) return utmKeys.length === 3 && new Set(utmKeys).size === 3
+      && current.searchParams.get('utm_source') === 'leesroutes'
+      && current.searchParams.get('utm_medium') === 'referral'
+      && current.searchParams.get('utm_campaign') === 'leesroutes';
+    const referring = new URL(referrer);
+    return referring.protocol === 'https:' && !referring.username && !referring.password
+      && ['leesroutes.nl', 'www.leesroutes.nl'].includes(referring.host.toLowerCase());
+  } catch { return false; }
+}
+/** A document entry, never a replay of activity before consent or a SPA navigation. */
+export function referralArrivalEligible(input: { enabled: boolean; reason: 'restored' | 'accepted' | 'revoked'; atEntry: boolean; decided: boolean; url: string; referrer: string }): boolean {
+  return input.enabled && input.reason === 'restored' && input.atEntry && !input.decided && isLeesroutesReferral(input.url, input.referrer);
+}
 export function campaignContext(url: string, referrer: string, locale: 'nl' | 'en', prior: MetricContext | null = null, traffic:MetricContext['traffic']='synthetic'): MetricContext {
   const current = new URL(url), surface = metricSurfaceForPath(current.pathname);
   const base: MetricContext = { locale, surface, source: 'direct_unknown', medium: 'unknown', campaign: 'none', traffic };
+  if (isLeesroutesReferral(url, referrer)) return { ...base, source: 'leesroutes', medium: 'referral' };
   if (current.searchParams.get('utm_source') === 'facebook' && current.searchParams.get('utm_medium') === 'organic_social' && current.searchParams.get('utm_campaign') === 'dystopie_202610') return { ...base, source: 'facebook', medium: 'organic_social', campaign: 'dystopie_202610' };
   if ([...current.searchParams.keys()].some(k => k.startsWith('utm_'))) return base;
   try {
