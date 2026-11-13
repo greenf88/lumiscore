@@ -46,6 +46,30 @@ export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   language:'en',reviewedAt:'2026-10-23',sourceName:'Bookouture',
   sourceUrl:'https://bookouture.com/books/2903/',
   text:'A housemaid takes a job with the wealthy Garricks, hoping to keep her past hidden. The mysterious absence of Mrs Garrick and signs of distress lead her to investigate what is happening behind a closed bedroom door.',
+}, {
+  // Public edition identities and source evidence: docs/operations/reviewed-descriptions-20261113.json.
+  // ISBN, title, author and language bind these summaries across catalogues with different local IDs.
+  title:'10 Things I Hate About You',author:'David Levithan',isbn13:'9780439087308',editionLanguage:'eng',
+  language:'en',reviewedAt:'2026-11-13',source:'official_catalog',sourceName:'Google Books — Scholastic edition',
+  sourceUrl:'https://books.google.com/books/about/10_Things_I_Hate_about_You.html?id=UkSIGwAACAAJ',
+  text:'Bianca Stratford has caught the attention of two boys at school: Cameron James and Joey Donner. Her father, however, has set a condition that puts her romantic plans on hold. Bianca can only date once her older sister starts going out with someone. That family rule ties the sisters’ love lives together and creates an awkward obstacle for Bianca’s admirers. David Levithan’s teenage romance centres on the competing hopes of these schoolmates and the complications of trying to arrange love around a parent’s restrictions.',
+}, {
+  title:'Palace of Solitude',author:'Esfandiary Bakhtiary',isbn13:'9780704370203',editionLanguage:'eng',
+  language:'en',reviewedAt:'2026-11-13',source:'official_publisher',
+  sourceName:'J’ai lu / FeniXX — publisher synopsis via Torrossa',
+  sourceUrl:'https://www.torrossa.com/fr/resources/an/6336125',
+  text:'Princess Soraya recalls a life shaped by royal expectations, public attention and private loneliness. Her account moves from childhood in Isfahan to marriage to the Shah of Iran, where court intrigues complicate the splendour of palace life. Divorce opens a different chapter in Europe, including the possibility of love and a new beginning in Rome. Further losses test that independence. Written with Louis Valentin, these memoirs trace Soraya’s changing circumstances and her efforts to build a life beyond the role that first made her famous.',
+}, {
+  title:"Zlata's Diary",author:'Zlata Filipovic\u0301',isbn13:'9780140242058',editionLanguage:'eng',
+  language:'en',reviewedAt:'2026-11-13',source:'official_publisher',sourceName:'Penguin Random House',
+  sourceUrl:'https://www.penguinrandomhouse.com/books/323402/zlatas-diary-by-zlata-filipovic/',
+  text:'Zlata Filipović begins her diary as an eleven-year-old in Sarajevo, recording the familiar concerns of school, friends, music and celebrations. As war reaches the city, those ordinary routines give way to shortages, bombardments and the loss of people she knows. Writing becomes a way to describe what is happening around her while holding on to the life she remembers. Her observations show how conflict changes a child’s home and friendships, turning a personal diary into a record of civilian life under siege.',
+}, {
+  title:'The Official Filthy Rich Handbook',author:'Christopher Tennant',isbn13:'9780761147039',editionLanguage:'eng',
+  language:'en',reviewedAt:'2026-11-13',source:'official_publisher',
+  sourceName:'Workman Publishing — Spring 2011 catalog, page 94',
+  sourceUrl:'https://edelweiss-assets.abovethetreeline.com/WN/pdfs/Workman_Spring2011.pdf',
+  text:'Christopher Tennant presents the habits of the extremely wealthy through a humorous guide to their social world. Household staff, impressive homes, personal appearance and the rules of exclusive circles all become subjects for advice delivered with a straight face. The book considers such distinctions as the roles of a butler and a majordomo, alongside the etiquette of naming houses and making the right impression. Its handbook format turns the pursuit of status into a comic examination of the choices and customs surrounding extravagant wealth.',
 }];
 
 export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBookDescription['source']): { name: string; href: string } | null {

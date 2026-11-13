@@ -207,13 +207,13 @@ test('book SEO stays canonical and independent from navigation context', async (
 
 test('back navigation remains a keyboard-accessible, mobile-safe anchor', async () => {
   const [detail, styles] = await Promise.all([
-    readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../../app/components/BookBackLink.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/globals.css', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(detail, /<LocaleLink className="detail-back-link" href=\{returnNavigation\.href\}>/);
+  assert.match(detail, /<LocaleLink className="detail-back-link" href=\{navigation\.href\}>/);
   assert.match(detail, /detail\.backToCollection/);
-  assert.match(detail, /returnNavigation\.collectionName/);
+  assert.match(detail, /navigation\.collectionName/);
   assert.match(styles, /\.detail-back-link \{[^}]*min-height: 44px/);
   assert.doesNotMatch(styles, /\.detail-back-link \{[^}]*white-space: nowrap/);
 });

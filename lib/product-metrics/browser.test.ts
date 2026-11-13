@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {browserMetricContext,browserMetricsEnabled,measurementHeaders,emitBrowserMetric,flushBrowserMetrics,applyAnalysisPermission,CAMPAIGN_STORAGE_KEY,browserTransportStatus} from './browser.ts';
+import {browserMetricContext,browserMetricsEnabled,measurementHeaders,emitBrowserMetric,flushBrowserMetrics,applyAnalysisPermission,CAMPAIGN_STORAGE_KEY,browserTransportStatus,measureTasteResultViewOnce} from './browser.ts';
 import {analysisChoiceValue,parseAnalysisChoice,parseAnalysisGrant,grantedAnalysisToken} from './consent.ts';
+import {GUEST_ROUND_GOAL,guestRoundResult,guestRoundState,type GuestDecision,type GuestOffer} from '../taste-test/guest-round.ts';
+import {tasteVector} from '../taste-test/traits.ts';
 
 test('versioned necessary choice is not an analytics ID; missing/invalid/expired grants default off',()=>{
  const now=Date.now(),token=crypto.randomUUID();assert.equal(parseAnalysisChoice(undefined,now),'unknown');
@@ -42,6 +44,33 @@ test('no pre-consent IDs, attribution or replay; bounded batches; revocation abo
   process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED='true';assert.equal(browserMetricsEnabled(),true);
   assert.equal(browserMetricContext('nl')?.traffic,'production');
   applyAnalysisPermission(false);assert.equal(browserMetricsEnabled(),false);assert.equal(storage.size,0);
+  install('location',new URL('https://lumisco.re/nl/taste-test?utm_source=leesroutes&utm_medium=referral&utm_campaign=leesroutes&email=PRIVATE'));
+  install('document',{referrer:'https://leesroutes.nl/boeken/private/'});
+  assert.equal(browserMetricContext('nl'),null);emitBrowserMetric('referral_arrival',{locale:'nl',surface:'taste_test'});assert.equal(storage.size,0);
+  applyAnalysisPermission(true,Date.now()+60_000,'restored');
+  install('fetch',async(_url:string,options:RequestInit)=>{sent.push({body:JSON.parse(String(options.body)),signal:options.signal as AbortSignal});return new Response('{}',{status:202});});
+  assert.equal(browserMetricContext('nl')?.source,'leesroutes');
+  emitBrowserMetric('referral_arrival',{locale:'nl',surface:'taste_test'});flushBrowserMetrics();
+  assert.match(JSON.stringify(sent.at(-1)),/referral_arrival/);assert.match(JSON.stringify(sent.at(-1)),/leesroutes/);
+  assert.doesNotMatch(JSON.stringify([...storage.values()]),/PRIVATE|https:|utm_|private/);
+  applyAnalysisPermission(false);assert.equal(storage.size,0);
+  const offers:GuestOffer[]=Array.from({length:11},(_,i)=>({book:{id:String(i+1),workId:String(i+1),title:'Test book',author:'Test author',source:'supabase',editionAvailable:true,strictEditionLanguage:'nl',editionLanguage:'nl',score:null,ratingsCount:null,match:null,cover:'orbit'},traits:tasteVector({fantasy:1})}));
+  const decisions:GuestDecision[]=[{workId:'1',rating:null},...offers.slice(1,10).map(({book})=>({workId:book.workId,rating:8})),{workId:'999',rating:10}];
+  const displayed=()=>guestRoundState(offers,decisions).ratings.length===GUEST_ROUND_GOAL&&!!guestRoundResult(offers,decisions,'nl');
+  const resultView={seen:false},beforeResult=sent.length;
+  applyAnalysisPermission(true,Date.now()+60_000,'accepted');
+  measureTasteResultViewOnce(resultView,displayed(),'nl');flushBrowserMetrics();
+  assert.equal(resultView.seen,false);assert.equal(sent.length,beforeResult); // Nine valid ratings, skip and unknown work do not complete.
+  decisions.push({workId:'11',rating:9});assert.equal(displayed(),true);
+  measureTasteResultViewOnce(resultView,displayed(),'nl');measureTasteResultViewOnce(resultView,displayed(),'nl');flushBrowserMetrics();
+  assert.equal(sent.length,beforeResult+1);assert.equal(sent.at(-1)?.body.events.length,1);
+  assert.match(JSON.stringify(sent.at(-1)),/taste_result_opened/);assert.doesNotMatch(JSON.stringify(sent.at(-1)),/rating|work_id|PRIVATE|test book/i);
+  applyAnalysisPermission(false);
+  const deniedView={seen:false},beforeDenied=sent.length;
+  measureTasteResultViewOnce(deniedView,displayed(),'nl');flushBrowserMetrics();assert.equal(deniedView.seen,true);assert.equal(sent.length,beforeDenied);
+  applyAnalysisPermission(true,Date.now()+60_000,'accepted');
+  measureTasteResultViewOnce(deniedView,displayed(),'nl');measureTasteResultViewOnce(deniedView,displayed(),'en');flushBrowserMetrics();
+  assert.equal(sent.length,beforeDenied);assert.equal(storage.size,0); // No replay after acceptance, re-render or locale change.
  }finally{
   applyAnalysisPermission(false);if(env===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_URL;else process.env.NEXT_PUBLIC_SUPABASE_URL=env;
   if(flag===undefined)delete process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED;else process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED=flag;

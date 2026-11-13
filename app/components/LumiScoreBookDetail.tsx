@@ -47,6 +47,7 @@ import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
 import { MobileNavigation } from './MobileNavigation';
 import { CoverScoreBadge } from './CoverScoreBadge';
 import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/navigation/book-return';
+import { BookBackLink } from './BookBackLink';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -288,15 +289,7 @@ export function LumiScoreBookDetail({
           )}
         </div>
         <div className="detail-copy">
-          <LocaleLink className="detail-back-link" href={returnNavigation.href}>
-            ← {returnNavigation.kind === 'editorial' ? (locale === 'nl' ? 'Terug naar de selectie' : 'Back to the selection') : returnNavigation.kind === 'collection'
-              ? t('detail.backToCollection', { name: returnNavigation.collectionName })
-              : t(returnNavigation.kind === 'search'
-                ? 'detail.backToSearch'
-                : returnNavigation.kind === 'collections'
-                  ? 'detail.backToCollections'
-                  : 'detail.backToBooks')}
-          </LocaleLink>
+          <BookBackLink returnNavigation={returnNavigation} collection={collectionContext?.collection} />
           <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale)} locale={locale}/>
           <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
           <p className="detail-author">{t('detail.by', { author: bookAuthorByline(book, locale) })}</p>

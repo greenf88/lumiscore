@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, type ReactN
 import { LOCALE_STORAGE_KEY, serializeLocaleCookie, type Locale } from '@/lib/i18n/config';
 import { localizedHref } from '@/lib/i18n/paths';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
+import { bookReturnMemoryKey, cleanBookLink, resolveLocalBookReturn, serializeBookReturnMemory } from '@/lib/navigation/book-return-memory';
 
 type LocaleContextValue = {
   locale: Locale;
@@ -40,20 +41,49 @@ export function useLumiScoreLocale(): LocaleContextValue {
   return context;
 }
 
-/** Ordinary anchors keep routing, query context and crawlability without JS. */
-export function LocaleLink({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) {
+/** Ordinary anchors expose the canonical book URL; optional context stays in this tab. */
+export function LocaleLink({ href, onClick, onAuxClick, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) {
   const { locale } = useLumiScoreLocale();
-  return <a {...props} href={href ? localizedHref(href, locale) : href} />;
+  const target = href ? cleanBookLink(localizedHref(href, locale)) : null;
+  const rememberReturn = () => {
+    if (!target?.returnPath) return;
+    try {
+      const memory = serializeBookReturnMemory(target.href, target.returnPath, location.href);
+      if (memory) sessionStorage.setItem(bookReturnMemoryKey(new URL(target.href, location.href).pathname), memory);
+    } catch { /* Links remain functional if browser storage is disabled. */ }
+  };
+  return <a {...props} href={target?.href ?? href} onClick={event => {
+    onClick?.(event);
+    if (!event.defaultPrevented) rememberReturn();
+  }} onAuxClick={event => {
+    onAuxClick?.(event);
+    if (!event.defaultPrevented && event.button === 1) rememberReturn();
+  }} />;
 }
 
 export function LanguageSwitcher({ hrefForLocale }: { hrefForLocale?: (locale: Locale) => string } = {}) {
   const { locale, pagePath, t } = useLumiScoreLocale();
   const isDutchNews = /^\/nieuws(?:[/?#]|$)/.test(pagePath);
+  const rememberBookLocale = (option: Locale, target: ReturnType<typeof cleanBookLink>) => {
+    rememberLocale(option);
+    try {
+      const stored = sessionStorage.getItem(bookReturnMemoryKey(location.pathname));
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+      const returnPath = target.returnPath ?? resolveLocalBookReturn({ currentUrl: location.href, referrer: document.referrer, stored, navigationType: navigation?.type })?.href ?? null;
+      const memory = serializeBookReturnMemory(target.href, returnPath, location.href);
+      if (memory) sessionStorage.setItem(bookReturnMemoryKey(new URL(target.href, location.href).pathname), memory);
+    } catch { /* The localized URL remains usable without optional storage. */ }
+  };
   return <div className="language-switcher" role="group" aria-label={t('language.label')}>
-    {(['nl', 'en'] as const).map(option => <a key={option}
-      href={hrefForLocale ? hrefForLocale(option) : localizedHref(isDutchNews && option === 'en' ? '/' : pagePath, option)}
-      aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
-      aria-current={locale === option ? 'page' : undefined}
-      onClick={() => rememberLocale(option)}>{option.toUpperCase()}</a>)}
+    {(['nl', 'en'] as const).map(option => {
+      const target = cleanBookLink(hrefForLocale ? hrefForLocale(option) : localizedHref(isDutchNews && option === 'en' ? '/' : pagePath, option));
+      return <a key={option}
+        href={target.href}
+        aria-label={option === 'nl' ? t('language.dutch') : t('language.english')}
+        aria-current={locale === option ? 'page' : undefined}
+        onClick={() => rememberBookLocale(option, target)}
+        onAuxClick={event => { if (event.button === 1) rememberBookLocale(option, target); }}
+      >{option.toUpperCase()}</a>;
+    })}
   </div>;
 }

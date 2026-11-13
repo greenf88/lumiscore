@@ -58,3 +58,9 @@ export function emitBrowserMetric(event:MetricEvent,properties:MetricProperties,
  if(!envelope)return;if(queue.length>=20){transport.queueDropped++;return;}
  queue.push(envelope);if(scheduled===null)scheduled=setTimeout(flushBrowserMetrics,100);
 }
+/** Call after a result is rendered. A denied first display is never replayed later. */
+export function measureTasteResultViewOnce(state:{seen:boolean},shown:boolean,locale:'nl'|'en'){
+ if(!shown||state.seen)return;
+ state.seen=true;
+ emitBrowserMetric('taste_result_opened',{locale,surface:'taste_result'});
+}

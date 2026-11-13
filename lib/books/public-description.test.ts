@@ -172,3 +172,26 @@ test('withdrawal blocks even a warm provider cache; a read outage fails temporar
  assert.equal((await loadPublicBookDescriptionState({...exact,storedDescription:{text:enCopy,source:'official_catalog',sourceKey:'https://example.com',sourceUrl:'https://example.com',sourceName:'Reviewed',language:'en',verifiedAt:'2026-11-08'}},'en',provider,failed)).description?.text,enCopy);
  clearBookDescriptionCacheForTests();
 });
+
+test('independently reviewed summaries survive OL snapshot outages, stale text and withdrawal',async()=>{
+ const exact={workId:'9912',authorId:'42',editionId:'73',editionAvailable:true,strictEditionLanguage:'en',
+  title:'10 Things I Hate About You',editionTitle:'10 Things I Hate About You',author:'David Levithan',
+  isbn13:'9780439087308',editionLanguage:'eng',openLibraryWorkId:'OL123W',openLibraryEditionId:'OL123M'} as Book;
+ const {createDescriptionSnapshot}=await import('./description-snapshot.ts');
+ const {getReviewedDescription}=await import('./reviewed-descriptions.ts');
+ const row=createDescriptionSnapshot(exact,'en',{text:enCopy,language:'en',source:'open_library',sourceKey:'OL123M',verifiedAt:new Date().toISOString()})!;
+ assert.ok(row);
+ const expected=getReviewedDescription(exact,'en');assert.ok(expected);
+ let reads=0,providerCalls=0,writes=0;
+ const provider:typeof fetch=async()=>{providerCalls++;throw Error('Provider unavailable');};
+ for(const disposition of ['outage','resolved','temporary_failure','withdrawn'] as const){
+  const store={loadDescriptionSnapshot:async()=>{reads++;if(disposition==='outage')throw Error('Snapshot outage');
+    return {...row,provider_status:disposition,text:disposition==='withdrawn'?null:row.text};},
+   saveDescriptionSnapshot:async()=>{writes++;},markDescriptionSnapshotFailure:async()=>{writes++;}};
+  assert.deepEqual(await loadPublicBookDescriptionState(exact,'en',provider,store),{state:'resolved',description:expected});
+ }
+ assert.equal(reads,0);assert.equal(providerCalls,0);assert.equal(writes,0);
+ const central={text:enCopy,language:'en' as const,source:'official_catalog' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Central review',verifiedAt:'2026-11-08'};
+ assert.equal((await loadPublicBookDescriptionState({...exact,storedDescription:central},'en',provider)).description?.text,enCopy,'central reviewed content still takes precedence');
+ assert.deepEqual(await loadPublicBookDescriptionState({...exact,editionAvailable:false},'en',provider),{state:'confirmed_missing',description:null});
+});
