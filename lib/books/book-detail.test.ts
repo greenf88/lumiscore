@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import type { Book } from '@/app/data/books';
+import type { Book, VerifiedBookDescription } from '@/app/data/books';
 import {
   getBookMetadataDescription,
   getCatalogSourceLabel,
@@ -80,6 +80,42 @@ test('builds useful metadata without inventing missing publication data', () => 
     ),
     'Vogeleiland by Marion Pauw. View book information and its LumiScore rating status.',
   );
+});
+
+const reviewedSummary = (text: string, language: 'en' | 'nl' = 'en'): VerifiedBookDescription => ({
+  text, language, source: 'official_catalog', sourceKey: 'https://example.com/book',
+  sourceUrl: 'https://example.com/book', sourceName: 'Reviewed catalogue', verifiedAt: '2026-11-13',
+});
+
+test('metadata uses approved visible content, normalizing markup and whitespace', () => {
+  assert.equal(getBookMetadataDescription(fixture(), 'en', reviewedSummary('<p>A reader follows the clues &amp; discovers a family secret.</p>\n\n<p>Her journey changes her life.</p>')),
+    'A reader follows the clues & discovers a family secret. Her journey changes her life.');
+  assert.equal(getBookMetadataDescription(fixture(), 'nl', reviewedSummary('Een lezer ontdekt een familiegeheim.', 'nl')),
+    'Een lezer ontdekt een familiegeheim.');
+});
+
+test('long metadata summaries end at a complete word and preserve Unicode', () => {
+  const text = 'A reader follows the clues through an unfamiliar city, meeting old friends and facing difficult choices. '+
+    'She discovers that her family has kept a secret from her for many years. Her final decision changes everything.';
+  const snippet = getBookMetadataDescription(fixture(), 'en', reviewedSummary(text));
+  assert.ok(Array.from(snippet).length <= 160);
+  assert.ok(snippet.endsWith('…'));
+  assert.ok(text.startsWith(snippet.slice(0, -1) + ' '), 'truncation keeps a complete final word');
+  const unicode = '𐐀stral reader '.repeat(20);
+  const unicodeSnippet = getBookMetadataDescription(fixture(), 'en', reviewedSummary(unicode));
+  assert.ok(Array.from(unicodeSnippet).length <= 160);
+  assert.ok(unicode.startsWith(unicodeSnippet.slice(0, -1) + ' '));
+  assert.doesNotMatch(unicodeSnippet, /\uFFFD/);
+});
+
+test('metadata keeps the generic fallback for absent, unusable or wrong-language content', () => {
+  const fallback = getBookMetadataDescription(fixture());
+  for (const invalid of [null, reviewedSummary('Een lezer ontdekt een geheim.', 'nl'),
+    reviewedSummary('Service unavailable'), reviewedSummary('x'.repeat(180)),
+    {...reviewedSummary('A reader discovers a secret.'), source: 'open_library' as const, sourceKey: 'not-an-open-library-id'}]) {
+    assert.equal(getBookMetadataDescription(fixture(), 'en', invalid), fallback);
+  }
+  assert.equal(getBookMetadataDescription(fixture({editionAvailable:false}), 'en', reviewedSummary('A reader discovers a secret.')), fallback);
 });
 
 test('keeps verified back-cover media separate and tied to the edition ISBN', () => {

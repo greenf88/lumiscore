@@ -1,7 +1,9 @@
-import type { Book } from '@/app/data/books';
+import type { Book, VerifiedBookDescription } from '@/app/data/books';
 import { normalizeIsbn13 } from './covers.ts';
 import type { Locale } from '../i18n/config.ts';
 import { translate } from '../i18n/translations.ts';
+import { normalizeVerifiedBookDescription } from './description-text.ts';
+import { publicDescriptionSource } from './description-source.ts';
 
 export function isCatalogWorkId(value: string): boolean {
   return /^[1-9]\d*$/.test(value);
@@ -13,7 +15,18 @@ export function getCatalogSourceLabel(book: Book, locale: Locale = 'en'): string
     : translate(locale, 'detail.openLibraryCatalog');
 }
 
-export function getBookMetadataDescription(book: Book, locale: Locale = 'en'): string {
+/** Pass only the synchronous, edition-bound choice used by the page body.
+ * Metadata must never await an optional provider or snapshot lookup. */
+export function getBookMetadataDescription(book: Book, locale: Locale = 'en', initialDescription: VerifiedBookDescription | null = null): string {
+  const description = normalizeVerifiedBookDescription(initialDescription);
+  if (book.editionAvailable !== false && description?.language === locale && publicDescriptionSource(description)) {
+    const text = description.text.replace(/\s+/gu, ' ').trim();
+    const characters = Array.from(text);
+    if (characters.length <= 160) return text;
+    const prefix = characters.slice(0, 159).join('');
+    const boundary = prefix.lastIndexOf(' ');
+    if (boundary > 0) return prefix.slice(0, boundary).replace(/[,;:–—-]+$/u, '') + '…';
+  }
   if (locale === 'nl') return `${book.title} van ${book.author}${book.firstPublishYear ? `, voor het eerst verschenen in ${book.firstPublishYear}` : ''}. Bekijk boekinformatie en de beoordelingsstatus op LumiScore.`;
   const year = book.firstPublishYear
     ? `, first published in ${book.firstPublishYear}`

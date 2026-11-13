@@ -20,7 +20,7 @@ export function EditorialTopList({ list, books, selections, relatedLists, unavai
   return <section className="featured-section editorial-lists" data-product-list={list.slug}>
     <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
-    <h1>{list.title[locale]}</h1>{guide ? <ReadingGuideIntro guide={guide} books={books}/> : <p>{list.description[locale]}</p>}
+    <h1>{guide?.h1 ?? list.title[locale]}</h1>{guide ? <ReadingGuideIntro guide={guide} books={books}/> : <p>{list.description[locale]}</p>}
     <details className="editorial-criteria"><summary>{locale === 'nl' ? 'Zo is deze selectie gemaakt' : 'How this selection was made'}</summary><p>{list.criteria?.[locale] ?? (locale === 'nl' ? 'De volgorde is een redactionele leesroute, geen claim over populariteit of consensus.' : 'The order is an editorial reading route, not a claim about popularity or consensus.')}</p></details>
     {unavailable && <p role="alert">{locale === 'nl' ? 'De catalogus kon niet laden. Vernieuw de pagina om opnieuw te proberen.' : 'The catalogue could not load. Refresh the page to try again.'}</p>}
     {guide && !unavailable && missingCount > 0 && <p className="editorial-availability" role="status">{availableIds.length} van de {list.workIds.length} oorspronkelijke keuzes hebben nu een passende Nederlandse editie. De overige {missingCount} keuzes tonen we zodra geschikte editiegegevens beschikbaar zijn. Er wordt geen andere taal als vervanging gebruikt.</p>}

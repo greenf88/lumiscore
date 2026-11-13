@@ -3,7 +3,7 @@ import test from 'node:test';
 import type {Book} from '../../app/data/books.ts';
 import {getReviewedDescription} from './reviewed-descriptions.ts';
 import {resolveBookDescription} from './description-resolution.ts';
-import {loadPublicBookDescriptionState} from './public-description.ts';
+import {getInitialPublicBookDescription,loadPublicBookDescriptionState} from './public-description.ts';
 import {publicDescriptionSource} from './description-source.ts';
 import {normalizeVerifiedBookDescription} from './description-text.ts';
 
@@ -38,6 +38,7 @@ for(const edition of editions){
     assert.equal(resolverResult.state,'resolved');
     assert.deepEqual(publicResult.description,resolverResult.description);
     const description=publicResult.description!;
+    assert.deepEqual(getInitialPublicBookDescription(book,'en'),description,'initial HTML uses the same identity-bound text without awaiting any source');
     assert.match(description.text,edition.subject);
     assert.equal(description.language,'en');
     assert.equal(description.sourceKey,edition.isbn13);
@@ -52,8 +53,11 @@ for(const edition of editions){
       {editionTitle:null},{author:'Unrelated author'},{author:null},
       {editionLanguage:'nld'},{editionLanguage:'fre'},{editionLanguage:null}]){
       assert.equal(getReviewedDescription({...book,...mismatch},'en'),null,JSON.stringify(mismatch));
+      // Include malformed runtime values as well as valid-but-wrong identities.
+      assert.equal(getInitialPublicBookDescription({...book,...mismatch} as Book,'en'),null,JSON.stringify(mismatch));
     }
     assert.equal(getReviewedDescription(book,'nl'),null);
+    assert.equal(getInitialPublicBookDescription(book,'nl'),null);
   });
 
   test(`reviewed recovery ${edition.workId}: source attribution rejects a different source kind`,()=>{

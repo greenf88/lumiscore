@@ -82,11 +82,15 @@ test('sitemap advertises only eligible book locales and reciprocal pairs',async(
   const dated=entries.filter(entry=>entry.includes('<lastmod>'));
   assert.deepEqual(dated.map(entry=>entry.match(/<loc>(.*?)<\/loc>/)[1]).sort(),[
     'https://lumisco.re/nl/imdb-voor-boeken',
+    'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990',
     'https://lumisco.re/nl/toplijsten/fantasy-om-mee-te-beginnen',
     'https://lumisco.re/nl/toplijsten/na-project-hail-mary',
     'https://lumisco.re/nl/zo-werkt-het',
   ]);
-  assert.ok(dated.every(entry=>entry.includes('<lastmod>2026-11-04</lastmod>')));
+  for (const entry of dated) {
+    const updated = /\/nl\/(?:zo-werkt-het|toplijsten\/dystopie-vanaf-1990)<\/loc>/.test(entry);
+    assert.ok(entry.includes('<lastmod>' + (updated ? '2026-11-13' : '2026-11-04') + '</lastmod>'));
+  }
 });
 test('API and Auth remain robots blocked; language aliases do not expose API copies',async()=>{
   const {html}=await read('/robots.txt','en');assert.match(html,/Disallow: \/api\//);assert.match(html,/Disallow: \/auth\//);

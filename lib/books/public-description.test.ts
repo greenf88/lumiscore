@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Book } from '@/app/data/books';
-import { getStoredPublicBookDescription, loadPublicBookDescription, loadPublicBookDescriptionState } from './public-description.ts';
+import { getInitialPublicBookDescription, getStoredPublicBookDescription, loadPublicBookDescription, loadPublicBookDescriptionState } from './public-description.ts';
 import { clearBookDescriptionCacheForTests } from './description-resolution.ts';
 import { publicDescriptionSource } from './description-source.ts';
 import {publicDescriptionCacheControl} from './description-cache.ts';
@@ -15,6 +15,7 @@ test('stored original description renders without providers; withdrawals/failure
   source:'official_publisher' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Verified publisher',verifiedAt:'2026-10-30'};
  let calls=0;const failed:typeof fetch=async()=>{calls++;throw Error('Provider unavailable');};
  assert.equal(getStoredPublicBookDescription({...book,storedDescription:description},'en')?.text,description.text);
+ assert.equal(getInitialPublicBookDescription({...book,storedDescription:description},'en')?.text,description.text);
  assert.equal(getStoredPublicBookDescription({...book,storedDescription:description},'nl'),null);
  assert.equal(getStoredPublicBookDescription({...book,editionAvailable:false,storedDescription:description},'en'),null);
  assert.equal(getStoredPublicBookDescription({...book,storedDescription:{...description,text:'Service unavailable'}},'en'),null);
@@ -193,5 +194,8 @@ test('independently reviewed summaries survive OL snapshot outages, stale text a
  assert.equal(reads,0);assert.equal(providerCalls,0);assert.equal(writes,0);
  const central={text:enCopy,language:'en' as const,source:'official_catalog' as const,sourceKey:'https://example.com/book',sourceUrl:'https://example.com/book',sourceName:'Central review',verifiedAt:'2026-11-08'};
  assert.equal((await loadPublicBookDescriptionState({...exact,storedDescription:central},'en',provider)).description?.text,enCopy,'central reviewed content still takes precedence');
+ assert.equal(getInitialPublicBookDescription({...exact,storedDescription:central},'en')?.text,enCopy,'initial HTML has the same storage precedence');
+ assert.deepEqual(getInitialPublicBookDescription(exact,'en'),expected);
+ assert.equal(getInitialPublicBookDescription({...exact,editionAvailable:false},'en'),null);
  assert.deepEqual(await loadPublicBookDescriptionState({...exact,editionAvailable:false},'en',provider),{state:'confirmed_missing',description:null});
 });
