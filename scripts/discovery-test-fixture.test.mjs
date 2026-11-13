@@ -37,7 +37,7 @@ test('local target guard rejects production, other stacks, paths, query options 
   ]) assert.throws(()=>assertLocalTarget({...good,...override}));
 });
 test('complete hashed migration chain builds from empty synthetic schema, including collection preconditions', async () => {
-  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,28); assert.equal(inputs.categories.length,20);
+  const inputs=await reviewedFixtureInputs(); assert.equal(inputs.files.length,29); assert.equal(inputs.categories.length,20);
   const db=new PGlite(); await db.waitReady;
   try {
     await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
@@ -52,6 +52,11 @@ test('complete hashed migration chain builds from empty synthetic schema, includ
     assert.equal(await count('collections'),46); assert.equal(await count('ratings'),0);
     await assert.rejects(()=>setupDiscoveryFixture(db),/Fresh empty test schema required/);
     await db.exec('set role anon');
+    const guest=(await db.query("select * from public.guest_taste_inventory('nl')")).rows;
+    assert.equal(guest.length,120);
+    assert.equal(new Set(guest.map(row=>row.work_id)).size,guest.length);
+    assert.deepEqual((await db.query("select * from public.guest_taste_inventory('de')")).rows,[]);
+    await assert.rejects(()=>db.query("select taste_private.catalogue_eligible_v1(1,'nl')"),/permission denied/);
     const query=async page=>(await db.query("select public.catalog_discovery_page(p_query=>'Synthetic',p_author_id=>8800001,p_categories=>array['fiction_fantasy'],p_languages=>array['nl'],p_page=>$1) as data",[page])).rows[0].data;
     const pages=await Promise.all([query(1),query(2),query(3),query(4)]);
     assert.ok(pages.every(p=>p.total===100&&p.pageCount===4));
