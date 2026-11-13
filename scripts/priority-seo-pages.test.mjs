@@ -37,6 +37,13 @@ test('detects content failures even after HTTP 200 and valid metadata', () => {
     assert.ok(inspect({ html: html.replace(resolved, section(`<p role="status">${message}</p>`)) }).errors.includes('Visible content failure'));
   }
 });
+test('editorial catalogue failures cannot pass with an intact page shell', () => {
+  const editorialPath = '/nl/toplijsten/na-project-hail-mary';
+  for (const message of ['De catalogus kon niet laden. Vernieuw de pagina om opnieuw te proberen.', 'The catalogue could not load. Refresh the page to try again.']) {
+    const editorialHtml = html.replace(path, editorialPath).replace(streamed, `<p role="alert">${message}</p>`);
+    assert.deepEqual(inspect({ path: editorialPath, html: editorialHtml }).errors, ['Visible content failure']);
+  }
+});
 test('detects status, robots, sitemap and query regressions', () => {
   const result = inspect({ status: 503, xRobots: 'noindex', inSitemap: false, html: html.replace('/nl/book/17', '/nl/book/17?returnTo=%2Fnl') });
   assert.deepEqual(result.errors, ['HTTP 503', 'Not indexable', 'Missing from sitemap', 'Book link exposes returnTo variant']);

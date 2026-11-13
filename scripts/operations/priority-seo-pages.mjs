@@ -28,7 +28,7 @@ export function inspectPriorityPage({ path, status, html, xRobots = '', inSitema
   if (!tags.some(tag => attribute(tag, 'name') === 'description' && attribute(tag, 'content').trim())) errors.push('Missing head description');
   if ([...html.matchAll(/<h1\b[^>]*>/gi)].length !== 1) errors.push('Expected one page heading');
   const visibleText = textContent(html);
-  if (/description could not load|beschrijving kon.*niet|book not found|boek niet gevonden/i.test(visibleText)) errors.push('Visible content failure');
+  if (/description could not load|beschrijving kon.*niet|catalogue could not load|catalogus kon niet laden|book not found|boek niet gevonden/i.test(visibleText)) errors.push('Visible content failure');
   if (/^\/(?:en|nl)\/book\/\d+$/.test(path)) {
     // React keeps the loading fallback in the raw stream after the resolved
     // segment arrives. Require terminal component markup, including its source
