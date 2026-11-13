@@ -32,9 +32,11 @@ test('Leesroutes report counts destination arrivals and confirmed actions withou
   {day:'2026-11-13',event:'taste_round_started',dimensions:{...c,goal:10},n:3},
   {day:'2026-11-13',event:'taste_round_completed',dimensions:{...c,goal:10},n:1},
   {day:'2026-11-13',event:'want_to_read_saved',dimensions:{...c,work_id:10250},n:1},
+  {day:'2026-11-13',event:'taste_result_opened',dimensions:{...c,surface:'taste_result'},n:4},
  ]});
  assert.equal(report.leesroutes?.arrivals,2);assert.equal(report.leesroutes?.pageViews,5);assert.equal(report.leesroutes?.tasteStarts,3);assert.equal(report.leesroutes?.tasteCompletions,1);assert.equal(report.leesroutes?.savedBooks,1);
  assert.equal(report.leesroutes?.sourceClicks,null);assert.equal(report.leesroutes?.linkedVisitorConversion,null);assert.equal(report.linkedFunnelConversion,null);
+ assert.equal(report.leesroutes?.tasteResultViews,4);assert.match(report.leesroutes?.note??'',/not confirmed completions/);
 });
 
 test('current NL and EN editorial routes share the existing event surface without importing another draft route',()=>{

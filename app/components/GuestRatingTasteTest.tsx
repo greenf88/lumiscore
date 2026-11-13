@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { GUEST_ROUND_GOAL, guestRoundResult, guestRoundState, type GuestDecision, type GuestOffer } from '@/lib/taste-test/guest-round';
 import { getTasteProfileConfidenceCopy } from '@/lib/taste-test/profile';
@@ -9,6 +9,7 @@ import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
 import { LocaleLink, useLumiScoreLocale } from './LumiScoreLocale';
+import { measureTasteResultViewOnce } from '@/lib/product-metrics/browser';
 
 export function GuestRatingTasteTest({ offers, authState }: { offers: GuestOffer[] | null; authState: HeaderAuthState }) {
   const { locale, t } = useLumiScoreLocale();
@@ -25,6 +26,11 @@ export function GuestRatingTasteTest({ offers, authState }: { offers: GuestOffer
   const book = next?.book;
   const result = complete && offers ? guestRoundResult(offers, decisions, locale) : null;
   const confidence = result ? getTasteProfileConfidenceCopy(result.confidence, locale) : null;
+  const resultShown = Boolean(result && confidence);
+  const resultMeasurement = useRef({ seen: false });
+  useEffect(() => {
+    measureTasteResultViewOnce(resultMeasurement.current, resultShown, locale);
+  }, [locale, resultShown]);
 
   return <DiscoveryPageShell authState={authState} path="/taste-test/preferences">
     <section className="featured-section taste-rating-test taste-direct-test" aria-labelledby="guest-taste-title">
