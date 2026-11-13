@@ -16,7 +16,7 @@ test('resumed rounds retain stored selection language while presentation/search/
  assert.ok(round.includes('loadCatalogBook(state.currentWorkId, locale)'));
  assert.match(ui,/isBookPresentationAllowed\(b,locale\)/);
  assert.match(read('app/collection/[slug]/rate/page.tsx'),/CollectionQuickRating key=\{locale\}/);
- assert.match(read('app/taste-test/preferences/page.tsx'),/loadCatalogBooksByIdsWithStoredCovers\(TASTE_TEST_WORK_IDS,undefined,locale\)/);
+ assert.match(read('app/taste-test/preferences/page.tsx'),/loadGuestTasteInventory\(locale\)/);
  assert.match(read('app/components/LumiScoreHome.tsx'),/\$\{locale\}:\$\{normalizedQuery\.toLocaleLowerCase/);
  const css=read('app/globals.css');
  assert.match(css,/\.taste-direct-test \.taste-book-identity \.book-cover \{ width: clamp\([^\n]+height: auto; aspect-ratio: \.66; max-width: 35%/);
