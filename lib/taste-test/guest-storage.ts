@@ -5,7 +5,7 @@ import {
   type TasteTestAnswers,
 } from './config.ts';
 
-export const TASTE_TEST_GUEST_STORAGE_KEY = 'lumiscore:taste-test:taste_test_v1';
+export { TASTE_TEST_GUEST_STORAGE_KEY } from './guest-storage-key.ts';
 
 export type GuestTasteTestProgress = {
   answeredCount: number;

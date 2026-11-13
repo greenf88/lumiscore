@@ -1,0 +1,60 @@
+PERFORMANCE — AFGEBAKEND REVIEWPAKKET, 8 NOVEMBER 2026
+Actuele compatibele basis: e47f9ce55a10e2c61bb26ad41e2f3f09958fdc27 (PR92 gepubliceerd). PR90 blijft afzonderlijk Draft.
+Applicatie gemeten: 1a337131ea37cb137d1521a682282705a635ae85.
+
+Wijziging: optionele persoonlijke boekmatch voor gasten wordt pas geladen wanneer
+bestaande smaaktestantwoorden aanwezig zijn. Dezelfde parser, vectoren, algoritmen,
+locale en storagekey blijven behouden. Geen score-/ranking-/auth-/PR51-wijziging.
+Lege nieuwe gast: 195946 naar 189657 gecomprimeerde JS-bytes (6289 bytes; 3,2%).
+Dit is een downloadbesparing, geen bewezen algemene LCP- of veldwinst.
+
+80 geldige, afwisselende lokale mobiele runs: vijf per versie, acht boekscenario's.
+Zie MEASUREMENTS.txt en measurements.json voor ALLE medianen, spreiding, echte
+LCP-elementen, waargenomen fasen, bytes, resourceverzoeken en cachecondities.
+Raw LHR en alle pilots blijven lokaal onder outputs/seo-next-20261108 bewaard.
+Eerste ongecomprimeerde pilot en eerder beperkt gesplitst experiment zijn NIET
+samengevoegd met de definitieve vergelijking. Ongunstige geldige runs behouden.
+Lighthouse simuleert LCP; captured insight-fasen zijn waargenomen netwerkfasen.
+CPU-benchmark varieerde; geen statistisch bewezen algemene snelheidsclaim.
+
+Native PRH: 3220 -> 3233ms; Unbidan: 3057 -> 3028ms; ISBN: 3355 -> 3217ms.
+Alle definitieve CLS-metingen 0. TBT-doel <200ms niet in alle fixturecohorten gehaald.
+Sommige bestaande TEST-boeken hebben een placeholder en dus tekst als LCP.
+Dat bewijst geen coverreparatie. Externe optionele beschrijvingen lokaal in BEIDE
+versies als 503 geïsoleerd; echte bestaande coveraanvragen bleven behouden.
+De labelnaam bookPRH is historisch; dat scenario gebruikt in TEST Open Library.
+NativePRH is de echte PRH-bron. Geen claim van fysieke telefooncontrole.
+
+Productie: elf afzonderlijke diagnostische runs, geen mediane voor/nameting.
+Home NL/EN 2837/2729ms; Browse 3697ms/pagina2 2674ms; collectie en lijst hebben
+tekst als LCP (1194/966ms). Boekcoverroutes circa2660-3292ms. Sommige opgeslagen
+covers kwamen later uit CDN HIT; bronlatentie is niet de enige mogelijke oorzaak.
+Huidig renderblokkerend CSS circa147364 ongecomprimeerde bytes; Inter/Lora fonts
+blijven aanvullende renderkosten. Nieuwe imagehost/proxy/cachingrechten niet nodig.
+
+Extra experiment: experimental.inlineCss is door geïnstalleerde Vinext geaccepteerd,
+maar de echte Nitro/Vercel-output initialiseerde __VINEXT_INLINE_CSS__ niet.
+De response had nog dezelfde externe stylesheet en nul inline style-markers.
+Optie weer verwijderd; geen niet-werkende configuratie in releasediff. Bewijs lokaal:
+inline-css-experiment.html/json en buildlog. Geen frameworkupgrade geïnstalleerd.
+
+PR90: bestaande 40 afwisselende hosted labruns hergebruikt; home2696 ->2705ms,
+TBT73 ->405ms met grote spreiding. Geen overtuigend preloadvoordeel: aangehouden.
+Niet mengen met deze gast-JS-wijziging.
+
+Tests: exacte oude versus uitgestelde persoonlijke match NL/EN, lege/misvormde
+antwoorden en bestaande guest-storage tests; bestaande sourcecontracttest volgt
+nu de gedeelde helper. Applicatie60c8e6f: CI42524167081 groen, inclusief build/235 HTTP/SSR. Definitieve documentatiehead krijgt eigen CI. Geen SQL of data-import.
+Vrijgaveadvies: beoordeel deze kleine JS-besparing zelfstandig; LCP-doel blijft open.
+Geen claim dat alle auditpunten, Core Web Vitals of rankings zijn opgelost.
+
+Rollback: uitsluitend deze code-PR terugdraaien; eerdere schema-, SEO-, editie-,
+PR51- en kookboekfixes blijven staan. Beide nieuwe PR's zijn onafhankelijk op main.
+
+HOSTED POSITIEVE GASTACCEPTATIE — applicatie60c8e6ff957ada7eede50a613ec99b4f0308b03e.
+Ready Preview: https://lumiscore-atype2vv8-rgkgroeneveld-9102.vercel.app .
+De 18 ontbrekende vaste anker-ID’s waren geen bewijs van 18 ontbrekende echte boeken. Zestien oorspronkelijke ankerboeken bestaan op TEST onder andere Work-ID’s; vaste6/7 zijn bestaande synthetische placeholders. Geen bestaande Works omgenummerd of echte boeken gedupliceerd.
+Uitsluitend voor branchdekking: 18 duidelijk synthetische eigen Works, 40 locale-edities en één auteur (59 rijen). Geen echte ISBN’s/OL-identiteiten of geleende ratings/accounts. Via echte UI tien keuzes; daarna op bestaand boek8800306 positieve Nederlandse Goede match en Engelse Good match, reload, 320px Ink zonder overflow en desktop Paper. Dit bewijst berekening en lazy loading met synthetische invoer, NIET de echte identiteit van twintig ankerboeken of aanbevelingskwaliteit.
+Alle59 eigen rijen met volledige-rijguards verwijderd. Bestaande6/7, echte boeken, accounts, ratings en voortgang behouden. Guest-origin via UI geneutraliseerd; geen productieprofiel gewijzigd. De opgeruimde Preview heeft deze tijdelijke vragenlijstfixtures niet meer.
+Geldige80 metingen zijn hergebruikt omdat de geïsoleerde runtimewijziging identiek is; de main-merge verandert PR92-bronopslag, niet de gast-JS-logica. Geen nieuwe vrijwel identieke PR90-meetronde.
+Open: LCP-doel, renderblokkerende stylesheet/fonts, echte testankeridentiteiten. Geen bewijs voor een veilige algemene coverproxy of hergebruikrechten; geen nieuwe infrastructuur gebouwd.

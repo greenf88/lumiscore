@@ -32,16 +32,14 @@ import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
 import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
 import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
 import { BookEditorialGuide } from './EditorialLandingGuide';
-import {
-  calculatePersonalMatch,
-  type MatchLabel,
-  type PersonalMatchResult,
+import type {
+  MatchLabel,
+  PersonalMatchResult,
 } from '@/lib/recommendations/engine';
-import { buildTasteProfile } from '@/lib/taste-test/profile';
+import { loadGuestBookMatch } from '@/lib/performance/guest-book-match';
 import {
-  parseGuestTasteTestAnswers,
   TASTE_TEST_GUEST_STORAGE_KEY,
-} from '@/lib/taste-test/guest-storage';
+} from '@/lib/taste-test/guest-storage-key';
 import { useWantToRead } from './useWantToRead';
 import { measurementHeaders } from '@/lib/product-metrics/browser';
 import type { HeaderAuthState } from '@/lib/auth/header';
@@ -156,29 +154,18 @@ export function LumiScoreBookDetail({
     if (isAuthenticated || !candidate) return;
     let active = true;
 
-    queueMicrotask(() => {
+    const timer = window.setTimeout(() => {
       if (!active) return;
-      const answers = parseGuestTasteTestAnswers(
-        localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY),
-      );
-      const profile = buildTasteProfile(answers, [], locale);
-      const hasEvidence = profile.selectedCount > 0;
-      setGuestPersonalization({
-        key: guestPersonalizationKey,
-        hasEvidence,
-        match: hasEvidence
-          ? calculatePersonalMatch({
-            profile,
-            candidate,
-            workId: book.workId ?? book.id,
-            locale,
-          })
-          : null,
-      });
-    });
+      let raw: string | null = null;
+      try { raw = localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY); } catch { /* Optional browser storage. */ }
+      void loadGuestBookMatch(raw, candidate, book.workId ?? book.id, locale).then(result => {
+        if (active) setGuestPersonalization({key:guestPersonalizationKey,...result});
+      }).catch(() => { /* Keep the existing unlock state; never invent a match. */ });
+    }, 0);
 
     return () => {
       active = false;
+      window.clearTimeout(timer);
     };
   }, [
     book.id,

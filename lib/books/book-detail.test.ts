@@ -116,15 +116,17 @@ test('keeps verified back-cover media separate and tied to the edition ISBN', ()
 });
 
 test('book detail loads shared Taste Test personalization instead of requiring ratings', async () => {
-  const [page, component, loader] = await Promise.all([
+  const [page, component, loader, guestMatch] = await Promise.all([
     readFile(new URL('../../app/book/[workId]/page.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../../app/components/LumiScoreBookDetail.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../supabase/taste-test.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../performance/guest-book-match.ts', import.meta.url), 'utf8'),
   ]);
 
   assert.match(page, /loadBookDetailPersonalization\(workId, locale\)/);
-  assert.match(component, /parseGuestTasteTestAnswers/);
-  assert.match(component, /calculatePersonalMatch/);
+  assert.match(component, /loadGuestBookMatch/);
+  assert.match(guestMatch, /parseGuestTasteTestAnswers/);
+  assert.match(guestMatch, /calculatePersonalMatch/);
   assert.doesNotMatch(component, /detail-match-panel[\s\S]{0,180}<strong>—<\/strong>/);
   assert.match(loader, /loadReaderTasteProfile\(client,user\.id,locale\)/);
   assert.match(loader, /const profile = reader!\.profile/);
