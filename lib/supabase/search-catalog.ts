@@ -1,4 +1,5 @@
 import type { Book } from '@/app/data/books';
+import { normalizeCatalogIsbn, reviewedCoauthorSearchWorkIds } from '../books/catalog-search.ts';
 import type { EditorialQuery } from '../catalog/editorial-query.ts';
 import { editorialRpcArgs } from '../catalog/editorial-query.ts';
 import { searchWindow } from '../catalog/search-window.ts';
@@ -56,6 +57,17 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   // One total selection deadline, not a fresh allowance for every continuation.
   // Timeout/errors stay unavailable; never cache a truncated successful result.
   const signal = AbortSignal.timeout(5000);
+  const isbn = normalizeCatalogIsbn(state.query);
+  let isbnWorkIds: number[] | null = null;
+  if (isbn) {
+    observation.databaseRequests++;
+    const { data, error } = await supabase.from('editions').select('work_id')
+      .eq(isbn.length === 13 ? 'isbn_13' : 'isbn_10', isbn).limit(101).abortSignal(signal);
+    if (error) throw error;
+    if (!Array.isArray(data) || data.length > 100) throw new Error('ISBN search selection unavailable');
+    isbnWorkIds = [...new Set(data.map(row => Number(row.work_id)))];
+    if (isbnWorkIds.some(id => !Number.isSafeInteger(id) || id <= 0)) throw new Error('Invalid ISBN search identity');
+  }
   const rpcArgs = { ...editorialRpcArgs({ ...state, pageSize: 128, page: 1 }),
     p_author_id: state.author ? Number(state.author) : null,
     p_languages: state.languages.length ? state.languages : [locale] };
@@ -65,7 +77,11 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   const { p_page: _page, p_page_size: _size, ...projectionArgs } = rpcArgs;
   void _page; void _size;
   const [projection, categories, selectedAuthor] = await Promise.all([
-    supabase.rpc('catalog_search_selection_v2', { ...projectionArgs, p_locale: locale }).abortSignal(signal),
+    supabase.rpc('catalog_search_selection_v2', {
+      ...projectionArgs,
+      p_alias_ids: isbnWorkIds ?? [...new Set([...projectionArgs.p_alias_ids, ...reviewedCoauthorSearchWorkIds(state.query)])].slice(0, 100),
+      p_locale: locale,
+    }).abortSignal(signal),
     loadPublicCategories(signal),
     state.author ? supabase.from('authors').select('id,name').eq('id', state.author).abortSignal(signal).maybeSingle()
       .then(({ data, error }) => { if (error) throw error; return data ? { id: String(data.id), name: String(data.name) } : null; }) : null,
@@ -73,7 +89,8 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   if (projection.error) throw projection.error;
   const selected = readSearchProjection(projection.data, state.query);
   observation.selectionRowsLoaded += selected.books.length;
-  return { ...selected, categories, selectedAuthor };
+  const books = isbnWorkIds === null ? selected.books : selected.books.filter(book => isbnWorkIds.includes(Number(book.workId)));
+  return { ...selected, categories, selectedAuthor, books };
 }
 
 async function loadProjectedPage(keys: readonly Book[], locale: Locale, observation: ReturnType<typeof newSearchObservation>) {
@@ -89,7 +106,7 @@ async function loadProjectedPage(keys: readonly Book[], locale: Locale, observat
 
 async function hydrateProjectedPage(keys: readonly Book[], locale: Locale, observation: ReturnType<typeof newSearchObservation>) {
   const started = performance.now(); observation.databaseRequests++;
-  const { data, error } = await supabase.from('works').select(IDENTITY_SELECT + ',editions!inner(' + EDITION_PRESENTATION_SELECT + ')')
+  const { data, error } = await supabase.from('works').select(IDENTITY_SELECT + ',editions!editions_work_id_fkey!inner(' + EDITION_PRESENTATION_SELECT + ')')
     .in('id', keys.map(b => b.workId!)).in('editions.id', keys.map(b => b.editionId!)).order('id').abortSignal(AbortSignal.timeout(5000));
   if (error) throw error;
   if (!Array.isArray(data)) throw new Error('Search page identity unavailable');

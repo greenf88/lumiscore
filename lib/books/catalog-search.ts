@@ -1,5 +1,6 @@
 import type { Book } from '@/app/data/books';
 import { REVIEWED_WORK_TITLE_ALIASES } from './reviewed-title-aliases.ts';
+import { REVIEWED_COAUTHORS, reviewedCoauthor } from '../catalog/reviewed-coauthors.ts';
 
 export const CATALOG_SEARCH_MIN_LENGTH = 2;
 export const CATALOG_SEARCH_SUGGESTION_LIMIT = 18;
@@ -28,12 +29,31 @@ export function isCatalogSearchQuery(query: string): boolean {
   return normalizeCatalogSearchQuery(query).length >= CATALOG_SEARCH_MIN_LENGTH;
 }
 
+/** Recognize complete ISBNs only, so ordinary title/author text stays on its existing path. */
+export function normalizeCatalogIsbn(query: string): string | null {
+  const isbn = query.normalize('NFKC').replace(/[\p{Dash_Punctuation}\s−]/gu, '').toUpperCase();
+  if (/^97[89]\d{10}$/.test(isbn)) {
+    const sum = [...isbn].reduce((total, digit, index) => total + Number(digit) * (index % 2 ? 3 : 1), 0);
+    return sum % 10 === 0 ? isbn : null;
+  }
+  if (!/^\d{9}[\dX]$/.test(isbn)) return null;
+  const sum = [...isbn].reduce((total, digit, index) => total + (digit === 'X' ? 10 : Number(digit)) * (10 - index), 0);
+  return sum % 11 === 0 ? isbn : null;
+}
+
 export function normalizeCatalogSearchText(value: string): string {
   return normalizeCatalogSearchQuery(value)
     .toLocaleLowerCase('en-US')
     .replace(/[\p{P}\p{S}]+/gu, ' ')
     .trim()
     .replace(/\s+/g, ' ');
+}
+
+export function reviewedCoauthorSearchWorkIds(query: string) {
+  const normalized = normalizeCatalogSearchText(query);
+  if (normalized.length < CATALOG_SEARCH_MIN_LENGTH) return [];
+  return REVIEWED_COAUTHORS.filter(credit => normalizeCatalogSearchText(credit.name).includes(normalized))
+    .map(credit => Number(credit.workId));
 }
 
 function textScore(
@@ -62,7 +82,9 @@ function resultScore(
       textScore(alias, query, 0.5, 1.5, 2.5),
     ),
   );
-  const authorScore = textScore(book.author, query, 3, 4, 5);
+  const coauthor = reviewedCoauthor(book);
+  const authorScore = Math.min(textScore(book.author, query, 3, 4, 5),
+    coauthor ? textScore(coauthor.name, query, 3, 4, 5) : Number.POSITIVE_INFINITY);
 
   return Math.min(titleScore, aliasScore, authorScore);
 }

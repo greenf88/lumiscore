@@ -1,0 +1,91 @@
+{
+  "base": "e47f9ce55a10e2c61bb26ad41e2f3f09958fdc27",
+  "testedApplication": "ab1921acf2414cdd9d9dddc9d03c5ddaef58ef1f",
+  "preview": "https://lumiscore-gfk14ardp-rgkgroeneveld-9102.vercel.app",
+  "testProject": "hlvujbrmfdlrfxdjwsmb",
+  "productionWrites": 0,
+  "actions": 4,
+  "newWorks": 0,
+  "newDutchAvailability": 0,
+  "controlledSummaries": 2,
+  "withdrawals": 1,
+  "yearCorrections": 1,
+  "ownedTestParents": {
+    "works": [
+      1372,
+      4864
+    ],
+    "editions": [
+      1407,
+      5023
+    ],
+    "author": [
+      2537
+    ],
+    "reusedUnchangedAuthor": 924300157,
+    "retainedForPreview": true
+  },
+  "sourceFindings": {
+    "1372": {
+      "identity": "Iron Gold / Pierce Brown / edition1407 / 9781473646568 / English",
+      "currentProduction": "temporary_failure",
+      "historicalCause": "not proven; no matching retained runtime log",
+      "boundedSourceCheck": "Open Library edition200 but only promotional fragment; work-level prose not borrowed as exact-edition synopsis",
+      "resolution": "original reviewed publisher-based English summary proposal"
+    },
+    "4864": {
+      "identity": "Pandemonium / Lauren Oliver / edition5023 / 9780061978067 / English",
+      "linkCorrect": true,
+      "providerTextForWrongBook": "Delirium, first book rather than sequel",
+      "resolution": "original library-based English summary, exact withdrawal marker, first-year2012 correction"
+    }
+  },
+  "tests": {
+    "targeted": true,
+    "committedImportRestore": true,
+    "hashCASFreshApply": true,
+    "idempotentExactRows": true,
+    "explicitReinstatement": true,
+    "lateCASAndCheckChronology": true,
+    "storedTextDuringOutage": true,
+    "automaticReimportRejected": true,
+    "localEmptySchemaRoundtrip": true,
+    "localLaterDependencyRefused": true,
+    "hostedSchemaDown": "correctly refused while own withdrawal evidence exists; NOT forced"
+  },
+  "browser": {
+    "guest": true,
+    "nlEn": true,
+    "widths": [
+      320,
+      "desktop"
+    ],
+    "paperInk": true,
+    "actualDecodedCovers": {
+      "1372": 13126076,
+      "4864": 6967326
+    },
+    "controlledTextAndSource": true,
+    "reload": true,
+    "nlExcludesEnglishDescription": true,
+    "ratings": "TEST null score/insufficient ratings; no numeric production parity claim"
+  },
+  "safetyReview": {
+    "refusedAction": "delete source-fixture Work parents/editions/author",
+    "reason": "ownership insufficiently established to automatic reviewer",
+    "executed": false,
+    "alternative": "retain reviewable book fixtures and withdrawal evidence; test source schema-down only locally when empty, and verify hosted refusal. No alternate deletion route used."
+  },
+  "receipts": {
+    "test-fixture-receipt-final.json": "32105cafef46d95f8bbed335f213e3a38a3dbfb354692274e49dac8ab6766755",
+    "committed-restore-receipt.json": "f7cda0c2401f0215fd324acf213b7742751cbbbf35d8e573b185a7dc6acfa38e",
+    "final-committed-restore.json": "5b92048e348517692b0dac6d7570c5108d5616868b25735ac61ee739f06b9e32",
+    "final-fresh-apply.json": "f58b36a0032577cd2b853cd6667f4506c284df5c74a3e1be5969b538a6e8d723",
+    "final-replay.json": "7da2418becf3af60b5bda68b77e631ccdbad488e5daf9de015190a08f038da17",
+    "final-correction-hosted-proof.json": "1f3ab4aee3eba76324405b3f8a80e809d7ec01225ebbfd3a05f3f82d88b71d91",
+    "cleanup-one-probe-receipt.json": "322dd0e6cbc890983690649f1ad171109840126569d0d16e26148cf24e4d2dcf",
+    "restore-refused-with-evidence.json": "7f00183ccb092683fea728340f33187021d4d8f6e9913a18993d29aa3d077553",
+    "schema-roundtrip-local.log": "2fb8a8d029d985841bfcd9821cecf47f7aea3a479139befdd4db07d35e8ada7a",
+    "final-guard-tests2.log": "08c029c9c25db0f19128b62015c3830edc827ad34908f23820f6d38d4f892350"
+  }
+}
