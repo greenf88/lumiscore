@@ -21,6 +21,9 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // The exact OL edition incorrectly attaches the Charles Osborne novelisation cover.
+  // Concord's linked acting-script preview confirms ISBN 978-0-573-70234-1.
+  {workId:'10020',openLibraryWorkId:'OL471602W',title:'Black Coffee',author:'Agatha Christie',isbn13:'9780573702341',editionLanguage:'eng',openLibraryEditionId:'OL37024404M',coverUrl:'https://theatrical-cdn2-hbb2fybfcphnf6hc.a01.azurefd.net/media/0051725_black_coffee_300.png',source:'official_publisher',evidenceUrl:'https://www.concordtheatricals.com/s/1120/black-coffee',reviewedAt:'2026-11-14'},
   // Exact Dutch paperback; publisher confirms ISBN/language, KB catalogue confirms
   // translation of The Final Empire. No OL edition ID is invented or required here.
   {workId:'197',openLibraryWorkId:'OL5738148W',title:'Het laatste rijk',author:'Brandon Sanderson',isbn13:'9789024581269',editionLanguage:'nld',coverUrl:'https://www.lsuitgeverij.nl/wp-content/uploads/2026/10/9789024581269_frontcover-320x499.jpg',source:'official_publisher',evidenceUrl:'https://www.lsuitgeverij.nl/boek/het-laatste-rijk/',reviewedAt:'2026-10-28'},
