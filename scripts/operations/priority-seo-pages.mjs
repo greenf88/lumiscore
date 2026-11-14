@@ -77,12 +77,48 @@ export const fifthPrioritySeoPaths = Object.freeze([
   "/nl/book/2372",
   "/en/book/8556"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths]);
-export const prioritySeoCohort = path => fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
+// Requested linked-page repairs; these URLs are not asserted to share a GSC status.
+export const sixthPrioritySeoPaths = Object.freeze([
+  "/en/book/10138",
+  "/en/book/1519",
+  "/en/book/1914",
+  "/en/book/1915",
+  "/en/book/2699",
+  "/en/book/1620",
+  "/en/book/1892",
+  "/en/book/8467",
+  "/en/book/2114",
+  "/en/book/2118",
+  "/en/book/2206",
+  "/en/book/2493",
+  "/en/book/2251",
+  "/nl/book/3505",
+  "/nl/book/5021",
+  "/nl/book/1654",
+  "/nl/book/1724",
+  "/nl/book/3168",
+  "/en/book/4481",
+  "/en/book/2265",
+  "/en/book/2266",
+  "/en/book/2761",
+  "/en/book/8794",
+  "/en/book/4424",
+  "/en/book/7065",
+  "/en/book/2258",
+  "/en/book/8563",
+  "/en/book/2539",
+  "/en/book/8247",
+  "/en/book/2202",
+  "/nl/book/5117",
+  "/en/book/9483"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths]);
+export const prioritySeoCohort = path => sixthPrioritySeoPaths.includes(path) ? 'recovery-6'
+  : fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
