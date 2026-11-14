@@ -2,6 +2,7 @@ import type { Book } from '../../app/data/books.ts';
 import { normalizeEditionLanguage, rankRepresentativeEditions, isSuspiciousRepresentativeEdition } from './edition-ranking.ts';
 import { uniqueCoverUrls, normalizeOpenLibraryId, normalizeIsbn13 } from './covers.ts';
 import { getReviewedCoverOverride } from './reviewed-cover-overrides.ts';
+import { applyReviewedBookDisplay } from './reviewed-display.ts';
 import type { Locale } from '../i18n/config.ts';
 
 export type StrictEditionRow = {
@@ -45,12 +46,12 @@ export function withStrictEdition(book: Book, edition: StrictEditionRow | null, 
   // An ISBN endpoint returning an image is NOT edition/image evidence. Existing
   // Work-keyed caches are not evidence either. Only reviewed or edition-bound assets.
   const coverUrls = uniqueCoverUrls([reviewed?.coverUrl, reviewed?.fallbackCoverUrl, ...verified]);
-  return { ...book, storedDescription:undefined,cardCoverUrl:undefined,editionFormat:undefined,
+  return applyReviewedBookDisplay({ ...book, storedDescription:undefined,cardCoverUrl:undefined,editionFormat:undefined,
     title: edition.title.trim(), editionTitle: edition.title.trim(),
     editionId: String(edition.id), editionLanguage: normalizeEditionLanguage(edition.language??''), editionPublisher: edition.publisher ?? null,
     openLibraryEditionId: editionOlid, isbn10: isbn10 ?? null, isbn13,
     coverUrls, backCover:null, descriptionCandidates:[], strictEditionLanguage: language,
-    editionAvailable:true, englishEditionFallback:false };
+    editionAvailable:true, englishEditionFallback:false }, language);
 }
 
 /** Direct links remain valid even when no permitted edition can be presented. */

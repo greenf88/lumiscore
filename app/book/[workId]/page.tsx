@@ -78,6 +78,9 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
     : returnToValue;
   const { locale } = await resolveRequestLocale();
   const bookPromise = getBook(workId, locale);
+  const authorLinksPromise = bookPromise.then(async book => book
+    ? (await import('@/lib/supabase/author-discovery')).loadAuthorBookLinks(book, locale)
+    : []).catch(() => []);
   const returnNavigationPromise = bookPromise.then(book=>resolveBookReturnNavigation(
     requestedReturnTo,
     workId,
@@ -159,6 +162,7 @@ export default async function BookPage({ params, searchParams }: BookPageProps) 
         book={book}
         description={initialDescription}
         descriptionPromise={initialDescription ? undefined : descriptionPromise}
+        authorLinksPromise={authorLinksPromise}
         initialRatingState={initialRatingState}
         initialReadingStatus={readingStatus.statuses.get(workId) ?? null}
         collectionContext={collectionContext}

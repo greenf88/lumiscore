@@ -50,10 +50,10 @@ export function SuzanneGuideAfter({ books }: { books: Book[] }) {
 export function BookEditorialGuide({ book, locale, hasSuzanneCollectionLink }: { book: Book; locale: Locale; hasSuzanneCollectionLink: boolean }) {
   const copy=suzanneBookGuide(book,locale), routes=bookReadingRoutes(book,locale);
   if (!copy && routes.length===0) return null;
-  return <aside className="landing-guide book-editorial-guide" aria-label="Verder lezen">
+  return <aside className="landing-guide book-editorial-guide" aria-label={locale === 'nl' ? 'Verder lezen' : 'Further reading'}>
     {copy && <section><h2>{copy.heading}</h2>{copy.paragraphs.map(p=><p key={p}>{p}</p>)}<GuideSources sources={[copy.source]}/>
       {!hasSuzanneCollectionLink && <p><LocaleLink href="/collection/suzanne-vermeer">Vergelijk de boeken van Suzanne Vermeer</LocaleLink></p>}
     </section>}
-    {routes.length>0 && <nav aria-label="Leesroutes bij dit boek"><h2>Een volgende leesrichting</h2><ul>{routes.map(route=><li key={route.href}><LocaleLink href={route.href}>{route.title}</LocaleLink></li>)}</ul></nav>}
+    {routes.length>0 && <nav aria-label={locale === 'nl' ? 'Leesroutes bij dit boek' : 'Reading lists featuring this book'}><h2>{locale === 'nl' ? 'Een volgende leesrichting' : 'Explore these reading lists'}</h2><ul>{routes.map(route=><li key={route.href}><LocaleLink href={route.href}>{route.title}</LocaleLink></li>)}</ul></nav>}
   </aside>;
 }

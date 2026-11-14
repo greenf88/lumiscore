@@ -1,7 +1,7 @@
 import data from './landing-guides.json' with { type: 'json' };
 import type { Locale } from '../i18n/config.ts';
 import type { Book } from '../../app/data/books.ts';
-import { getEditorialWorkSourceId } from '../catalog/top-lists.ts';
+import { editorialTopLists, getEditorialWorkSourceId } from '../catalog/top-lists.ts';
 
 export type GuideSource = { title: string; url: string; checkedOn: string };
 export type GuideQuestion = { question: string; answer: string; sources?: GuideSource[]; requires?: string[] };
@@ -36,10 +36,17 @@ export function findSuzanneGuideBook(books: readonly Book[], title: string): Boo
   return matches.length === 1 ? matches[0] : null;
 }
 export function bookReadingRoutes(book: Book, locale: Locale) {
-  if (locale !== 'nl') return [];
-  return LANDING_GUIDES.filter(g => g.cards && (g.cards.some(c => getEditorialWorkSourceId(c.work_id) === book.openLibraryWorkId)
-    || (g.path.endsWith('/na-project-hail-mary') && book.title === 'Project Hail Mary' && book.author === 'Andy Weir')))
-    .map(g => ({ title: g.h1, href: g.path.slice(3) }));
+  if (!book.openLibraryWorkId || book.editionAvailable === false
+    || (book.strictEditionLanguage && book.strictEditionLanguage !== locale)
+    || (book.detailLocales && !book.detailLocales.includes(locale))) return [];
+  // Numeric editorial IDs are selection keys, not database Work identities.
+  // Preserve the richer Dutch guide heading and order before adding other lists.
+  const matches = editorialTopLists.filter(list => list.workIds.some(id => getEditorialWorkSourceId(id) === book.openLibraryWorkId)
+    || (list.slug === 'na-project-hail-mary' && book.openLibraryWorkId === getEditorialWorkSourceId('1')));
+  const guides = locale === 'nl' ? LANDING_GUIDES.filter(g => matches.some(list => g.path === '/nl/toplijsten/' + list.slug)) : [];
+  const routes = [...guides.map(g => ({ title: g.h1, href: g.path.slice(3) })),
+    ...matches.map(list => ({ title: list.title[locale], href: '/toplijsten/' + list.slug }))];
+  return routes.filter((route, i) => routes.findIndex(other => other.href === route.href) === i).slice(0, 3);
 }
 export function suzanneBookGuide(book: Book, locale: Locale) {
   if (locale !== 'nl' || book.author !== 'Suzanne Vermeer') return null;
