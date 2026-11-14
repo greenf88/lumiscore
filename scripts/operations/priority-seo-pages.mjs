@@ -29,10 +29,35 @@ export const thirdPrioritySeoPaths = Object.freeze([
   '/en/book/3789', '/en/book/168', '/en/book/8027', '/nl/book/10139',
   '/nl/book/10172', '/en/book/2733', '/en/book/6762', '/en/book/4505',
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths]);
-export const prioritySeoCohort = path => thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
+// Fourth cohort: submitted, crawled/currently-not-indexed examples captured
+// on 14 November. Prioritised by observed content gaps and search signals.
+export const fourthPrioritySeoPaths = Object.freeze([
+  "/en/book/4884",
+  "/en/book/4770",
+  "/en/book/9586",
+  "/en/book/1468",
+  "/en/book/6640",
+  "/en/book/9644",
+  "/en/book/9741",
+  "/en/book/7731",
+  "/en/book/7971",
+  "/en/book/7094",
+  "/nl/book/5234",
+  "/en/book/8911",
+  "/en/book/8492",
+  "/en/book/8355",
+  "/nl/book/5410",
+  "/en/book/2738",
+  "/en/book/7140",
+  "/en/book/6837",
+  "/en/book/7321",
+  "/nl/book/1229"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths]);
+export const prioritySeoCohort = path => fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
+  : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');

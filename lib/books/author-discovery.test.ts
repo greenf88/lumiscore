@@ -8,7 +8,7 @@ const book=(workId:string,locale:Locale='en',authorId='7'):AuthorDiscoveryBook=>
   workId,authorId,title:`Book ${workId}`,author:`Author ${authorId}`,openLibraryWorkId:`OL${workId}W`,
   editionAvailable:true,editionLanguage:locale==='nl'?'nld':'eng',strictEditionLanguage:locale,
 });
-const page=(locale:Locale='en',ids=['1','2','3','4','5'])=>({contract:'eligible-browse-v3',locale,workIds:ids,total:ids.length,page:1,pageCount:1,pageSize:16});
+const page=(locale:Locale='en',ids=['1','2','3','4','5'])=>({contract:'eligible-browse-v3',locale,workIds:ids,total:ids.length,page:1,pageCount:1,pageSize:64});
 
 test('same-author links exclude self, duplicate Work/source identities, wrong author and ineligible editions',()=>{
   const current=book('1');
@@ -32,7 +32,7 @@ test('loader scopes one eligible query, hydrates four, coalesces identical reads
   const load=createAuthorBookLinksLoader({
     async readPage(args,signal){
       reads++;assert.equal(args.p_author_id,7);assert.equal(args.p_locale,'en');assert.equal(args.p_page,1);
-      assert.equal(args.p_page_size,16);assert.equal(args.p_sort,'az');assert.deepEqual(args.p_categories,[]);
+      assert.equal(args.p_page_size,64);assert.equal(args.p_sort,'az');assert.deepEqual(args.p_categories,[]);
       assert.equal(signal.aborted,false);await gate;return page();
     },
     async readBooks(ids,locale,signal){hydrations++;assert.equal(ids.length,4);assert.equal(locale,'en');assert.equal(signal.aborted,false);
@@ -47,11 +47,11 @@ test('loader scopes one eligible query, hydrates four, coalesces identical reads
   assert.equal(reads,2);assert.equal(hydrations,2);
 });
 
-test('positions five, ten, fifteen and sixteen receive circular neighbours without increasing the eligible page or hydration limit',async()=>{
+test('positions five, ten, fifteen and sixteen retain circular neighbours and the four-Work hydration limit',async()=>{
   const ids=Array.from({length:16},(_,i)=>String(i+1));
   let hydrated:string[]=[];
   const load=createAuthorBookLinksLoader({
-    async readPage(args){assert.equal(args.p_page_size,16);assert.equal(args.p_page,1);return page('en',ids);},
+    async readPage(args){assert.equal(args.p_page_size,64);assert.equal(args.p_page,1);return page('en',ids);},
     async readBooks(selected){hydrated=[...selected];return selected.map(id=>book(id));},
   });
   for(const [current,expected] of [['5',['5','6','7','8']],['10',['10','11','12','13']],
@@ -76,6 +76,24 @@ test('cache separates author and locale, expires, and successful empty selection
   now=15001;empty=true;
   assert.deepEqual(await load(book('1'),'en'),[]);assert.equal(reads,4);
   assert.deepEqual(await load(book('1'),'en'),[]);assert.equal(reads,4);
+});
+
+test('large author catalogues give later titles incoming links without hydrating more books',async()=>{
+  const ids=Array.from({length:64},(_,i)=>String(i+1));
+  let reads=0,hydrations=0;
+  const load=createAuthorBookLinksLoader({
+    async readPage(args){reads++;assert.equal(args.p_page_size,64);return page('en',ids);},
+    async readBooks(selected){hydrations++;assert.ok(selected.length<=4);return selected.map(id=>book(id));},
+  });
+  for(const target of ['35','37','53','64']){
+    const previous=String(Number(target)-1);
+    assert.ok((await load(book(previous),'en')).some(link=>link.workId===target),target+' needs an incoming neighbour');
+    const links=await load(book(target),'en');
+    assert.equal(links.length,3);
+    assert.ok(links.every(link=>link.workId!==target));
+  }
+  assert.equal(reads,8);assert.equal(hydrations,8);
+  assert.deepEqual((await load(book('65'),'en')).map(link=>link.workId),['1','2','3']);
 });
 
 test('absent identities and unavailable source editions never issue a catalogue query',async()=>{

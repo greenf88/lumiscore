@@ -30,7 +30,7 @@ type Dependencies = {
 };
 
 /** Public identities only: <=100 author/locale/Work windows, 15-second freshness,
- * no stale fallback after errors. One eligible page; at most four Works hydrated.
+ * no stale fallback after errors. One page of <=64 IDs; at most four Works hydrated.
  * The optional panel never reads scores, covers, providers or reader state. */
 export function createAuthorBookLinksLoader(deps: Dependencies, now = Date.now, timeoutMs = 1800) {
   const cache = new Map<string, { books?: AuthorDiscoveryBook[]; expires: number; pending?: Promise<AuthorDiscoveryBook[]> }>();
@@ -43,7 +43,7 @@ export function createAuthorBookLinksLoader(deps: Dependencies, now = Date.now, 
       entry = { expires: 0 };
       const current = entry;
       const signal = AbortSignal.timeout(timeoutMs);
-      const state = editorialQuery({ author: book.authorId }, { pageSize: 16, sort: 'az' });
+      const state = editorialQuery({ author: book.authorId }, { pageSize: 64, sort: 'az' });
       const load = async () => {
         signal.throwIfAborted();
         const { ids } = readEligibleBrowsePage(await deps.readPage(eligibleBrowseArgs(state, locale), signal), state, locale);
