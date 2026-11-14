@@ -8,7 +8,8 @@ import { normalizeIsbn13 } from './covers.ts';
  * Preserve editionTitle: source snapshots and descriptions bind to that value. */
 export function applyReviewedBookDisplay(book: Book, locale: Locale): Book {
   if (locale !== 'en' || book.editionAvailable !== true || book.strictEditionLanguage !== locale
-    || normalizeEditionLanguage(book.editionLanguage ?? '') !== 'eng') return book;
+    || normalizeEditionLanguage(book.editionLanguage ?? '') !== 'eng'
+    || typeof book.author !== 'string') return book;
   const isbn = normalizeIsbn13(book.isbn13);
   const author = book.author.trim().normalize('NFC').toLowerCase();
   if (isbn === '9780008312787'

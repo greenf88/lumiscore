@@ -76,3 +76,12 @@ test('publisher correction cannot leak into a different edition or overwrite a c
   }
   assert.equal(applyReviewedBookDisplay(gong, 'nl'), gong);
 });
+
+test('partial catalogue projections without an author remain unchanged', () => {
+  for (const base of [original, gong, { ...gong, isbn13: '9780141439518' }]) {
+    for (const author of [undefined, null]) {
+      const partial = { ...base, author } as unknown as Book;
+      assert.equal(applyReviewedBookDisplay(partial, 'en'), partial);
+    }
+  }
+});
