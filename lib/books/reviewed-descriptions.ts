@@ -5,10 +5,11 @@ import { normalizeIsbn13 } from './covers.ts';
 import { SECOND_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery2.ts';
 import { THIRD_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery3.ts';
 import { FOURTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery4.ts';
+import { FIFTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery5.ts';
 
 /** Own short summaries, reviewed against an exact edition and named primary source. */
 type ReviewedDescription = {
-  workId?:string; editionId?:string; title:string; author:string; isbn13:string;
+  workId?:string; editionId?:string; title:string; author:string; isbn13:string; isbn10?:string;
   openLibraryWorkId?:string; openLibraryEditionId?:string; editionLanguage?:'eng'|'nld';
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
   source?:'official_publisher'|'official_catalog';
@@ -73,7 +74,7 @@ export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   sourceName:'Workman Publishing — Spring 2011 catalog, page 94',
   sourceUrl:'https://edelweiss-assets.abovethetreeline.com/WN/pdfs/Workman_Spring2011.pdf',
   text:'Christopher Tennant presents the habits of the extremely wealthy through a humorous guide to their social world. Household staff, impressive homes, personal appearance and the rules of exclusive circles all become subjects for advice delivered with a straight face. The book considers such distinctions as the roles of a butler and a majordomo, alongside the etiquette of naming houses and making the right impression. Its handbook format turns the pursuit of status into a comic examination of the choices and customs surrounding extravagant wealth.',
-}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS];
+}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS, ...FIFTH_RECOVERY_DESCRIPTIONS];
 
 export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBookDescription['source']): { name: string; href: string } | null {
   const entry = REVIEWED_DESCRIPTIONS.find(row => row.isbn13 === sourceKey &&
@@ -83,12 +84,18 @@ export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBo
 
 export function getReviewedDescription(input: {
   workId?: string | null; editionId?: string | null; editionTitle?: string | null;
-  author?: string | null; isbn13?: string | null; editionLanguage?: string | null;
+  author?: string | null; isbn13?: string | null; isbn10?: string | null; editionLanguage?: string | null;
   openLibraryWorkId?: string | null; openLibraryEditionId?: string | null;
 }, locale: Locale): VerifiedBookDescription | null {
   const normalize = (text?: string | null) => text?.trim().normalize('NFC').toLocaleLowerCase('nl');
+  const isbn13 = normalizeIsbn13(input.isbn13);
+  // Some selected editions only expose an ISBN-10. Accept only an explicitly
+  // reviewed equivalent, retaining all edition/language guards.
+  // A supplied different ISBN-13 must not fall back to an old ISBN-10.
+  const isbn10 = (input.isbn13 || input.isbn10)?.replace(/[\s-]/g, '').toUpperCase();
   const entry = REVIEWED_DESCRIPTIONS.find(row => (!row.workId || row.workId === input.workId) &&
-    (!row.editionId || row.editionId === input.editionId) && row.isbn13 === normalizeIsbn13(input.isbn13) &&
+    (!row.editionId || row.editionId === input.editionId) &&
+    (row.isbn13 === isbn13 || (!!row.isbn10 && row.isbn10 === isbn10)) &&
     (!row.openLibraryWorkId || row.openLibraryWorkId === input.openLibraryWorkId) &&
     (!row.openLibraryEditionId || row.openLibraryEditionId === input.openLibraryEditionId) &&
     normalize(row.title) === normalize(input.editionTitle) && normalize(row.author) === normalize(input.author) &&

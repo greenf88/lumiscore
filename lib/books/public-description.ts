@@ -57,7 +57,7 @@ export async function loadPublicBookDescriptionState(book: Book, locale: Locale,
     workId: book.workId, editionId: book.editionId, author: book.author,
     openLibraryWorkId: book.openLibraryWorkId,
     openLibraryEditionId: book.openLibraryEditionId,
-    isbn13: book.isbn13, editionLanguage: book.editionLanguage, editionTitle:book.editionTitle,
+    isbn13: book.isbn13, isbn10: book.isbn10, editionLanguage: book.editionLanguage, editionTitle:book.editionTitle,
     editionCandidates: book.descriptionCandidates, locale,
   }, boundedFetch);
   const description = normalizeVerifiedBookDescription(result.description);

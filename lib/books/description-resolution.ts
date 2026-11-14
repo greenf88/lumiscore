@@ -21,6 +21,7 @@ export type BookDescriptionLookup = {
   openLibraryWorkId?: string | null;
   openLibraryEditionId?: string | null;
   isbn13?: string | null;
+  isbn10?: string | null;
   editionLanguage?: string | null;
   editionTitle?: string | null;
   editionCandidates?: ReadonlyArray<{
