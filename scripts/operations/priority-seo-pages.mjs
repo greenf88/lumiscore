@@ -128,14 +128,26 @@ export const seventhPrioritySeoPaths = Object.freeze([
   "/en/book/2756",
   "/en/book/2201"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths]);
-export const prioritySeoCohort = path => seventhPrioritySeoPaths.includes(path) ? 'recovery-7'
+// Eight additional source-verified descriptions selected from submitted GSC CNI examples.
+export const eighthPrioritySeoPaths = Object.freeze([
+  "/en/book/8305",
+  "/en/book/9487",
+  "/nl/book/5440",
+  "/en/book/9738",
+  "/en/book/9999",
+  "/en/book/7580",
+  "/en/book/8197",
+  "/en/book/9087"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths]);
+export const prioritySeoCohort = path => eighthPrioritySeoPaths.includes(path) ? 'recovery-8'
+  : seventhPrioritySeoPaths.includes(path) ? 'recovery-7'
   : sixthPrioritySeoPaths.includes(path) ? 'recovery-6'
   : fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
