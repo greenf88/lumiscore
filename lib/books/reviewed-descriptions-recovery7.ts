@@ -1,0 +1,160 @@
+// Original summaries bound to exact reviewed edition identities.
+// Public evidence: docs/operations/reviewed-descriptions-recovery7-20261114.json
+export const SEVENTH_RECOVERY_DESCRIPTIONS = [
+  {
+    "title": "Finale",
+    "author": "Stephanie Garber",
+    "isbn13": "9781473666764",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Flatiron Books / Macmillan",
+    "sourceUrl": "https://us.macmillan.com/books/9781250157669/finale/",
+    "text": "Tella must decide whether she can trust Legend after the events of Caraval have changed both her feelings and the world around her. Scarlett faces a revelation of her own, while the freed Fates make the sisters' choices more dangerous. Finale is the third and concluding main novel in Stephanie Garber's Caraval trilogy. It brings the sisters' stories together through questions of loyalty, power and love, continuing the consequences of Caraval and Legendary rather than beginning a separate adventure."
+  },
+  {
+    "title": "The Eye of the World",
+    "author": "Robert Jordan",
+    "isbn13": "9780812579956",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Tor Books / Macmillan",
+    "sourceUrl": "https://us.macmillan.com/books/9780312850098/theeyeoftheworld/",
+    "text": "Rand al'Thor and his friends leave the Two Rivers after an attack shows that their quiet home is no longer safe. Guided by Moiraine, they enter a wider world in which old stories, dangerous enemies and a prophecy may be connected to their own lives. The Eye of the World opens Robert Jordan's main Wheel of Time sequence. The journey introduces its central companions and the struggle against the Dark One, making this the starting point for the fourteen main novels."
+  },
+  {
+    "title": "The Fires of Heaven",
+    "author": "Robert Jordan",
+    "isbn13": "9780812550306",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Tor Books / Macmillan",
+    "sourceUrl": "https://us.macmillan.com/books/9780765334640/thefiresofheaven/",
+    "text": "Rand al'Thor's growing influence has unsettled rulers and enemies alike. Four of the Forsaken combine their efforts against him, while the Shaido advance and divisions within the White Tower weaken those who might oppose the Shadow. The Fires of Heaven is the fifth main Wheel of Time novel. Robert Jordan continues the series through rival claims to authority, changing alliances and the difficulty of turning prophetic importance into practical leadership in a world that does not agree on whom to trust."
+  },
+  {
+    "title": "Monstrous Regiment",
+    "author": "Terry Pratchett",
+    "isbn13": "9780062307415",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_catalog",
+    "sourceName": "Terry Pratchett — official website",
+    "sourceUrl": "https://www.terrypratchettbooks.com/books/monstrous-regiment/",
+    "text": "Polly Perks disguises herself as a young man and joins the army to search for her missing brother. Borogravia has strict ideas about what women may do, but its military fortunes leave little room for confidence in those rules. Among an unusual group of recruits, Polly encounters the gap between patriotic certainty and the realities of war. Monstrous Regiment is a standalone Discworld novel in which Terry Pratchett uses military comedy to examine identity, authority and unquestioned assumptions."
+  },
+  {
+    "title": "Fall of Giants",
+    "author": "Ken Follett",
+    "isbn13": "9781509848515",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Pan Macmillan",
+    "sourceUrl": "https://www.panmacmillan.com/authors/ken-follett/fall-of-giants/9781035034246",
+    "text": "Billy Williams begins work in a Welsh coal mine in 1911, entering a world divided by class and ownership. His family's story becomes connected with aristocrats, diplomats and Russian brothers as Europe moves toward war. Fall of Giants follows five families through the First World War, the Russian Revolution and the campaign for women's voting rights. The opening volume of Ken Follett's Century trilogy places personal relationships and ambitions within the upheavals that reshape the early twentieth century."
+  },
+  {
+    "title": "Night Over Water",
+    "author": "Ken Follett",
+    "isbn13": "9780451174109",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Penguin Books / Penguin Random House",
+    "sourceUrl": "https://www.penguinrandomhouse.com/books/293259/night-over-water-by-ken-follett/9780451211477/",
+    "text": "In September 1939, passengers leave Southampton aboard a Pan Am Clipper bound for neutral America as Britain enters the war. They have different reasons for escaping Europe, and the aircraft brings their private troubles into close contact. The journey becomes increasingly dangerous as hidden motives and conflicting plans emerge. Ken Follett's Night Over Water is a historical suspense novel built around a transatlantic flight, combining the uncertainty of wartime departure with intrigue among people who cannot easily get away from one another."
+  },
+  {
+    "title": "Eye of the Needle",
+    "author": "Ken Follett",
+    "isbn13": "9780517454152",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Penguin Books / Penguin Random House",
+    "sourceUrl": "https://www.penguinrandomhouse.com/books/318741/eye-of-the-needle-by-ken-follett/9780143132042/",
+    "text": "A German agent known as the Needle becomes the target of an urgent manhunt during the Second World War. His intelligence and willingness to use violence make him difficult to stop, but his escape comes to depend on an English woman whose loyalties he must influence. Ken Follett builds the thriller around that encounter and the wartime consequences of a private decision. Eye of the Needle combines espionage with psychological suspense, keeping the question of trust central to the pursuit."
+  },
+  {
+    "title": "Het bestand",
+    "author": "Arnon Grunberg",
+    "isbn13": "9789038899886",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Nijgh & Van Ditmar",
+    "sourceUrl": "https://www.singeluitgeverijen.nl/nijgh-van-ditmar/boek/het-bestand/",
+    "text": "Lillian ervaart het online leven als echter dan de wereld buiten haar computer. Als receptioniste bij cybersecuritybedrijf BClever raakt ze onder invloed van haar mentor Banri Watanuki steeds sterker gericht op een bestaan dat niet meer aan een lichaam gebonden is. Arnon Grunberg onderzoekt via haar verlangen de verhouding tussen technologie, menselijke beperkingen en het idee van een nieuwe werkelijkheid. Het bestand is een roman waarin digitale idealen en vervreemding samenkomen; het verhaal wordt voortgezet in Het tweede bestand."
+  },
+  {
+    "title": "Het tweede bestand",
+    "author": "Arnon Grunberg",
+    "isbn13": "9789038804125",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Nijgh & Van Ditmar",
+    "sourceUrl": "https://www.singeluitgeverijen.nl/nijgh-van-ditmar/boek/het-tweede-bestand/",
+    "text": "Lillian werkt in het geheim verder aan Christus II, een computervirus dat volgens haar een nieuwe fase van verandering moet inluiden. Ze wacht op haar zolderkamer tot de bestaande wereld begint te verdwijnen, maar krijgt tegelijk te maken met iets dat zich in haar eigen lichaam afspeelt. Het tweede bestand vervolgt Arnon Grunbergs roman Het bestand. De tegenstelling tussen haar digitale toekomstbeeld en haar lichamelijke bestaan brengt vragen over liefde, controle en menselijke afhankelijkheid opnieuw naar voren."
+  },
+  {
+    "title": "Het verraad van de tekst",
+    "author": "Arnon Grunberg",
+    "isbn13": "9789038892979",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "reviewedAt": "2026-11-14",
+    "source": "official_catalog",
+    "sourceName": "Arnon Grunberg — officiële website",
+    "sourceUrl": "https://www.arnongrunberg.com/words/1-netherlands-belgium/4-other/489-het-verraad-van-de-tekst",
+    "text": "Arnon Grunberg onderzoekt de verhouding tussen waarheid en fictie vanuit zijn gastschrijverschap aan de Universiteit Leiden in 2008. Zijn slotlezing over oorlog en waarheid staat naast essays en verhalen van studenten die hun eigen ervaringen in fictie proberen te verwerken. Het verraad van de tekst is daarmee een bundel met verschillende stemmen. Het boek laat zien hoe lezen en schrijven vragen oproepen over getuigenis, verbeelding en de verantwoordelijkheid van degene die een verhaal vertelt."
+  },
+  {
+    "title": "Son of the Mob",
+    "author": "Gordon Korman",
+    "isbn13": "9780786815937",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_catalog",
+    "sourceName": "Gordon Korman — official website",
+    "sourceUrl": "https://gordonkorman.com/the-books/teen/the-son-of-the-mob-novels",
+    "text": "Vince Luca wants an ordinary high-school life, but his father's position at the head of a crime organisation makes that difficult. Dating becomes especially complicated when he falls for a girl whose father is the FBI agent trying to put his own father in prison. Gordon Korman turns the collision between teenage independence and family connections into a comic story about divided loyalties. Son of the Mob introduces Vince's situation before the college adventures of its sequel, Hollywood Hustle."
+  },
+  {
+    "title": "Wyrd Sisters",
+    "author": "Terry Pratchett",
+    "isbn13": "9780061020667",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_catalog",
+    "sourceName": "Terry Pratchett — official website",
+    "sourceUrl": "https://www.terrypratchettbooks.com/books/wyrd-sisters/",
+    "text": "A king has been murdered, a relative has taken his throne, and the missing heir and crown draw three witches into royal affairs. Granny Weatherwax discovers that influencing a kingdom is less straightforward than dealing with the usual problems of witchcraft. Wyrd Sisters combines a struggle over succession with Terry Pratchett's comic use of theatrical conventions and familiar tragic plots. It is the second Witches novel within Discworld, bringing political ambition and the power of stories into the witches' world."
+  },
+  {
+    "title": "World without end",
+    "author": "Ken Follett",
+    "isbn13": "9780525950073",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-14",
+    "source": "official_publisher",
+    "sourceName": "Penguin Random House",
+    "sourceUrl": "https://www.penguinrandomhouse.com/books/292256/world-without-end-by-ken-follett/9780451224996/",
+    "text": "Two centuries after The Pillars of the Earth, Kingsbridge faces conflicts over medicine, trade, building and the authority of its religious institutions. Caris wants to become a physician, while Merthin brings an inventive mind to architecture; their ambitions are caught in wider struggles and the devastation of the Black Death. World Without End returns to the same town with a later generation of characters. Ken Follett's historical novel continues the Kingsbridge setting while telling a story that can also be read independently."
+  }
+] as const;
