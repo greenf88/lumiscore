@@ -51,7 +51,7 @@ function selectedBook(edition: typeof editions[number]): Book {
     id: 'work-' + edition.id, source: 'supabase', workId: edition.id, title: edition.title,
     editionTitle: edition.title, author: edition.author, isbn13: edition.isbn, editionAvailable: true,
     isbn10: edition.isbn10,
-    editionLanguage: edition.locale === 'nl' ? 'nld' : 'eng', strictEditionLanguage: edition.locale,
+    editionLanguage: ({ nl: 'nld', en: 'eng' } as const)[edition.locale], strictEditionLanguage: edition.locale,
     // Remaining storage identifiers are synthetic; tests never query a real catalogue.
     editionId: edition.editionId, authorId: '70002', openLibraryWorkId: 'OL70001W', openLibraryEditionId: 'OL70001M',
     score: null, ratingsCount: null, match: null, cover: 'orbit',
