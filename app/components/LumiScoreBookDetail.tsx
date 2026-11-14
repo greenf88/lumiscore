@@ -32,6 +32,8 @@ import type { BookDetailPersonalization } from '@/lib/supabase/taste-test';
 import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
 import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
 import { BookEditorialGuide } from './EditorialLandingGuide';
+import { StreamedBookAuthorLinks } from './BookAuthorLinks';
+import type { AuthorBookLink } from '@/lib/books/author-discovery';
 import type {
   MatchLabel,
   PersonalMatchResult,
@@ -53,6 +55,7 @@ type LumiScoreBookDetailProps = {
   book: Book;
   description: VerifiedBookDescription | null;
   descriptionPromise?: Promise<BookDescriptionResolution>;
+  authorLinksPromise?: Promise<AuthorBookLink[]>;
   initialRatingState: BookRatingState;
   initialReadingStatus: ReadingStatus | null;
   collectionContext: BookCollectionContext | null;
@@ -95,6 +98,7 @@ export function LumiScoreBookDetail({
   book,
   description,
   descriptionPromise,
+  authorLinksPromise,
   initialRatingState,
   initialReadingStatus,
   collectionContext,
@@ -344,6 +348,7 @@ export function LumiScoreBookDetail({
             ? <StreamedBookDescription key={`${book.workId}:${book.editionId}:${locale}`} resolution={descriptionPromise} englishEditionFallback={book.englishEditionFallback} />
             : <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />)}
           <BookEditorialGuide book={book} locale={locale} hasSuzanneCollectionLink={collectionContext?.collection.slug === 'suzanne-vermeer'}/>
+          {authorLinksPromise && <StreamedBookAuthorLinks key={`${book.workId}:${locale}`} author={book.author} links={authorLinksPromise}/>}
 
           {book.workId && (ratingState.authenticated ? (
             <LumiScoreReadingStatus

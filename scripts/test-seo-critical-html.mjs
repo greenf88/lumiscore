@@ -45,6 +45,41 @@ for (const locale of ['en','nl']) for (const path of ['', '/browse', '/browse?pa
     assert.ok(html.includes('href="'+target+'"'),'crawlable switch retains query for valid destinations');
   });
 }
+test('book page integrates localized author links and isolates missing editions and optional query errors',async()=>{
+  for(const locale of ['en','nl']){
+    const {response,html}=await read('/'+locale+'/book/1',locale);
+    assert.equal(response.status,200);
+    const nav=html.match(/<nav class="landing-guide book-author-links"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    assert.ok(nav,'author links appear in actual server HTML, outside data scripts');
+    assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),['11','12','13'].map(id=>'/'+locale+'/book/'+id));
+    assert.ok(nav.includes(locale==='nl'?'Meer van Synthetic author':'More by Synthetic author'));
+    assert.ok(nav.includes('Synthetic author book 11'));
+    const failure=await read('/'+locale+'/book/4',locale);
+    assert.equal(failure.response.status,200);
+    assert.match(failure.html,/<h1>Synthetic book 4<\/h1>/);
+    assert.doesNotMatch(failure.html,/<nav class="landing-guide book-author-links"/);
+  }
+  assert.doesNotMatch((await read('/en/book/2','en')).html,/<nav class="landing-guide book-author-links"/);
+});
+
+test('slow author links stream after the main title and stored synopsis without delaying metadata',async()=>{
+  const response=await fetch(origin+'/en/book/5',{signal:AbortSignal.timeout(20000)});
+  assert.equal(response.status,200);
+  const reader=response.body.getReader(),decoder=new TextDecoder();
+  let html='',firstMain=null;
+  while(true){
+    const {value,done}=await reader.read();if(done)break;
+    html+=decoder.decode(value,{stream:true});
+    if(firstMain===null&&html.includes('<h1>Synthetic book 5</h1>'))firstMain=html;
+  }
+  assert.ok(firstMain);
+  assert.ok(firstMain.includes('A reviewed English summary is present immediately'));
+  assert.deepEqual(inspectServerHtml(firstMain).canonical,['https://lumisco.re/en/book/5']);
+  assert.doesNotMatch(firstMain,/<nav class="landing-guide book-author-links"/);
+  assert.match(html,/<nav class="landing-guide book-author-links"/);
+  assert.match(html,/href="\/en\/book\/11"/);
+});
+
 test('collection schema matches visible public card identity and order in each language',async()=>{
   for(const locale of ['en','nl']) {
     const {response,html}=await read('/'+locale+'/collection/synthetic-series',locale);

@@ -20,8 +20,19 @@ export const secondPrioritySeoPaths = Object.freeze([
   '/en/book/8463', '/en/book/4363', '/en/book/93', '/en/book/4503',
   '/en/book/9686', '/nl/book/19', '/en/book/10062', '/en/book/4892', '/en/book/2842',
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths]);
-export const requiresVerifiedSynopsis = path => secondPrioritySeoPaths.includes(path) && /\/book\//.test(path);
+// Third cohort: twenty further eligible book URLs from the same Google report,
+// selected on 13 November and repaired in the 14 November release.
+export const thirdPrioritySeoPaths = Object.freeze([
+  '/nl/book/1309', '/en/book/10139', '/en/book/8116', '/en/book/8318',
+  '/en/book/2970', '/en/book/1811', '/en/book/7414', '/en/book/3625',
+  '/en/book/4490', '/en/book/1795', '/en/book/9969', '/en/book/4804',
+  '/en/book/3789', '/en/book/168', '/en/book/8027', '/nl/book/10139',
+  '/nl/book/10172', '/en/book/2733', '/en/book/6762', '/en/book/4505',
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths]);
+export const prioritySeoCohort = path => thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
+  : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');

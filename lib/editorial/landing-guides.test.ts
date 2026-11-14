@@ -15,8 +15,25 @@ test('target guides retain candidates/order while links use real language-select
     const groups=availableGuideGroups(guide,[{...chosen,editionAvailable:false},chosen]);
     assert.deepEqual(groups.flatMap(g=>g.entries),[{candidateId:first,workId:'999999',title:'Actual Dutch edition title'}]);
     assert.equal(availableGuideGroups(guide,[]).length,0);
-    assert.ok(bookReadingRoutes(chosen,'nl').some(r=>r.href===path));assert.deepEqual(bookReadingRoutes(chosen,'en'),[]);
+    assert.ok(bookReadingRoutes(chosen,'nl').some(r=>r.href===path));
+    assert.ok(bookReadingRoutes(chosen,'en').some(r=>r.href===path && r.title===list.title.en));
   }
+});
+test('book reading routes use source identity, localized headings and at most three distinct canonical paths',()=>{
+  const candidate={...book('1'),workId:'987654',title:'Translated title',author:'Different edition credit'};
+  for(const locale of ['nl','en'] as const){
+    const routes=bookReadingRoutes(candidate,locale);
+    assert.ok(routes.length>0 && routes.length<=3);
+    assert.equal(new Set(routes.map(r=>r.href)).size,routes.length);
+    assert.ok(routes.every(r=>/^\/toplijsten\/[a-z0-9-]+$/.test(r.href)));
+    assert.ok(routes.some(r=>r.href==='/toplijsten/na-project-hail-mary'));
+    assert.deepEqual(bookReadingRoutes({...candidate,editionAvailable:false},locale),[]);
+    assert.deepEqual(bookReadingRoutes({...candidate,detailLocales:locale==='nl'?['en']:['nl']},locale),[]);
+    assert.deepEqual(bookReadingRoutes({...candidate,openLibraryWorkId:'OL999999999W',title:'Project Hail Mary',author:'Andy Weir'},locale),[]);
+    assert.deepEqual(bookReadingRoutes({...candidate,openLibraryWorkId:undefined},locale),[]);
+  }
+  const route=bookReadingRoutes(candidate,'nl').find(r=>r.href==='/toplijsten/na-project-hail-mary')!;
+  assert.equal(route.title,getLandingGuide(route.href,'nl')!.h1);
 });
 test('Suzanne links reject ambiguous identities and other authors, never invent test IDs',()=>{
   const item={...book('6','Madonna','Suzanne Vermeer'),workId:'924100301'};
