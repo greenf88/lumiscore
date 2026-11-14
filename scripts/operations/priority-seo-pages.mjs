@@ -112,13 +112,30 @@ export const sixthPrioritySeoPaths = Object.freeze([
   "/nl/book/5117",
   "/en/book/9483"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths]);
-export const prioritySeoCohort = path => sixthPrioritySeoPaths.includes(path) ? 'recovery-6'
+// Thirteen additional linked-page description repairs requested by the user.
+export const seventhPrioritySeoPaths = Object.freeze([
+  "/en/book/2219",
+  "/en/book/135",
+  "/en/book/1900",
+  "/en/book/9770",
+  "/en/book/1425",
+  "/en/book/2848",
+  "/en/book/596",
+  "/nl/book/5108",
+  "/nl/book/5065",
+  "/nl/book/5067",
+  "/en/book/9854",
+  "/en/book/2756",
+  "/en/book/2201"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths]);
+export const prioritySeoCohort = path => seventhPrioritySeoPaths.includes(path) ? 'recovery-7'
+  : sixthPrioritySeoPaths.includes(path) ? 'recovery-6'
   : fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');

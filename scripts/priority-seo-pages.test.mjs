@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { inspectPriorityPage, prioritySeoPaths, firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, prioritySeoCohort } from './operations/priority-seo-pages.mjs';
+import { inspectPriorityPage, prioritySeoPaths, firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, seventhPrioritySeoPaths, prioritySeoCohort } from './operations/priority-seo-pages.mjs';
 
 const path = '/en/book/9912';
 const section = content => `<section class="book-description" aria-labelledby="book-description-heading"><h2 id="book-description-heading">About this book</h2>${content}</section>`;
@@ -10,16 +10,17 @@ const streamed = `${loading}<div hidden id="S:0">${resolved}</div><script>$RC("B
 const html = `<html><head><title>A book</title><meta name="description" content="Book details"><link rel="canonical" href="https://lumisco.re/en/book/9912"><meta name="robots" content="index, follow"></head><body><h1>A book</h1>${streamed}<script type="application/ld+json">{"@type":"Book"}</script><a href="/nl/book/17">Mars</a></body></html>`;
 const inspect = overrides => inspectPriorityPage({ path, html, status: 200, inSitemap: true, ...overrides });
 
-test('six cohorts retain 132 distinct canonical paths and preserve language exclusions', () => {
+test('seven cohorts retain 145 distinct canonical paths and preserve language exclusions', () => {
   assert.equal(firstPrioritySeoPaths.length, 20);
   assert.equal(secondPrioritySeoPaths.length, 20);
   assert.equal(thirdPrioritySeoPaths.length, 20);
   assert.equal(fourthPrioritySeoPaths.length, 20);
   assert.equal(fifthPrioritySeoPaths.length, 20);
   assert.equal(sixthPrioritySeoPaths.length, 32);
-  assert.equal(prioritySeoPaths.length, 132);
-  assert.equal(new Set(prioritySeoPaths).size, 132);
-  for (const [i, cohort] of [firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths].entries()) {
+  assert.equal(seventhPrioritySeoPaths.length, 13);
+  assert.equal(prioritySeoPaths.length, 145);
+  assert.equal(new Set(prioritySeoPaths).size, 145);
+  for (const [i, cohort] of [firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, seventhPrioritySeoPaths].entries()) {
     assert.ok(cohort.every(path => prioritySeoCohort(path) === 'recovery-' + (i + 1)));
   }
   assert.ok(prioritySeoPaths.every(value => /^\/(?:nl|en)(?:\/[a-z0-9/-]+)?$/.test(value)));
@@ -27,7 +28,7 @@ test('six cohorts retain 132 distinct canonical paths and preserve language excl
   assert.ok(!prioritySeoPaths.includes('/en/book/1219'));
 });
 test('recovered book pages require real synopsis text and a labelled HTTPS source in the same section', () => {
-  for (const nextPath of ['/en/book/2062', '/nl/book/1309', '/en/book/168', '/en/book/4884', '/nl/book/1229', '/en/book/1412', '/nl/book/1513', '/en/book/4424', '/nl/book/3168']) {
+  for (const nextPath of ['/en/book/2062', '/nl/book/1309', '/en/book/168', '/en/book/4884', '/nl/book/1229', '/en/book/1412', '/nl/book/1513', '/en/book/4424', '/nl/book/3168', '/en/book/135', '/nl/book/5067']) {
   const inspectNext = description => inspect({ path: nextPath, html: html.replaceAll(path, nextPath).replace(streamed, description) });
   assert.deepEqual(inspectNext(resolved).errors, []);
   assert.deepEqual(inspectNext(streamed).errors, []);
