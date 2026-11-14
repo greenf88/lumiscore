@@ -1,7 +1,22 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { bookUrlPolicy, bookLanguageAlternates, bookUrlStatus } from './book-locales.ts';
+import { bookUrlPolicy, bookLanguageAlternates, bookUrlStatus, getBookLocales } from './book-locales.ts';
 import { buildLocalizedSitemap } from './sitemap.ts';
+
+test('corrected Spanish Rabia edition remains usable without an English or Dutch indexable page', () => {
+  const editions = [{ id: '4533', work_id: '4374', title: 'Rabia / Rage', language: 'spa',
+    isbn_13: '9788497595902', isbn_10: '8497595904', open_library_edition_id: 'OL9154458M' }];
+  const locales = getBookLocales('4374', 'Rage', editions);
+  assert.deepEqual(locales, []);
+  for (const locale of ['en', 'nl'] as const) {
+    const policy = bookUrlPolicy(locales, locale);
+    assert.equal(policy.httpStatus, 200);
+    assert.equal(policy.robots, 'noindex, follow');
+    assert.equal(policy.includeCanonical, false);
+    assert.equal(policy.includeBookSchema, false);
+    assert.ok(!buildLocalizedSitemap([{workId:'4374',locales}], [], locale).includes('/book/4374'));
+  }
+});
 
 test('all confirmed locale selections produce consistent sitemap, robots, canonical and schema policy', () => {
   const combinations = [[], ['en'], ['nl'], ['en', 'nl']] as const;
