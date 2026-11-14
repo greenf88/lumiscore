@@ -53,11 +53,36 @@ export const fourthPrioritySeoPaths = Object.freeze([
   "/en/book/7321",
   "/nl/book/1229"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths]);
-export const prioritySeoCohort = path => fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
+// Fifth cohort: further submitted CNI examples with verified content gaps.
+// Editorial recovery priority; no unsupported traffic-ranking claim.
+export const fifthPrioritySeoPaths = Object.freeze([
+  "/en/book/1412",
+  "/en/book/1385",
+  "/en/book/8442",
+  "/en/book/2187",
+  "/en/book/3084",
+  "/en/book/2070",
+  "/en/book/2426",
+  "/nl/book/4975",
+  "/nl/book/1658",
+  "/nl/book/1513",
+  "/en/book/2437",
+  "/en/book/2468",
+  "/en/book/2779",
+  "/en/book/9126",
+  "/nl/book/6348",
+  "/en/book/9545",
+  "/en/book/1966",
+  "/en/book/2304",
+  "/nl/book/2372",
+  "/en/book/8556"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths]);
+export const prioritySeoCohort = path => fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
+  : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
