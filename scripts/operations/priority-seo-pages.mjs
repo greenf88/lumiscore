@@ -139,15 +139,88 @@ export const eighthPrioritySeoPaths = Object.freeze([
   "/en/book/8197",
   "/en/book/9087"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths]);
-export const prioritySeoCohort = path => eighthPrioritySeoPaths.includes(path) ? 'recovery-8'
+// Remaining source-verified descriptions selected from GSC failures and their linked targets.
+export const ninthPrioritySeoPaths = Object.freeze([
+  "/en/book/8249",
+  "/nl/book/2376",
+  "/en/book/9652",
+  "/en/book/8605",
+  "/en/book/9124",
+  "/en/book/8315",
+  "/en/book/8971",
+  "/en/book/1508",
+  "/en/book/2958",
+  "/en/book/6690",
+  "/en/book/4853",
+  "/en/book/1609",
+  "/en/book/8138",
+  "/en/book/9119",
+  "/en/book/9312",
+  "/en/book/1847",
+  "/en/book/9804",
+  "/en/book/6820",
+  "/en/book/7652",
+  "/en/book/9301",
+  "/en/book/1506",
+  "/en/book/1341",
+  "/en/book/2743",
+  "/en/book/8384",
+  "/en/book/8184",
+  "/en/book/8683",
+  "/en/book/2399",
+  "/en/book/9323",
+  "/en/book/9547",
+  "/en/book/4323",
+  "/en/book/4166",
+  "/en/book/8296",
+  "/en/book/8240",
+  "/en/book/8438",
+  "/en/book/3654",
+  "/en/book/4807",
+  "/en/book/8505",
+  "/en/book/1453",
+  "/en/book/7299",
+  "/en/book/6621",
+  "/en/book/8093",
+  "/en/book/4252",
+  "/en/book/8332",
+  "/en/book/4322",
+  "/en/book/7279",
+  "/en/book/10100",
+  "/en/book/9484",
+  "/en/book/9799",
+  "/en/book/8329",
+  "/en/book/2683",
+  "/en/book/9706",
+  "/en/book/8466",
+  "/en/book/1624",
+  "/en/book/1876",
+  "/en/book/4274",
+  "/en/book/8472",
+  "/en/book/9504",
+  "/en/book/2532",
+  "/en/book/2466",
+  "/nl/book/5074",
+  "/nl/book/5079",
+  "/en/book/2767",
+  "/en/book/9515",
+  "/en/book/1405",
+  "/en/book/9264",
+  "/en/book/9416",
+  "/en/book/4500",
+  "/en/book/8725",
+  "/en/book/9507"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths]);
+export const prioritySeoCohort = path => ninthPrioritySeoPaths.includes(path) ? 'recovery-9'
+  : eighthPrioritySeoPaths.includes(path) ? 'recovery-8'
   : seventhPrioritySeoPaths.includes(path) ? 'recovery-7'
   : sixthPrioritySeoPaths.includes(path) ? 'recovery-6'
   : fifthPrioritySeoPaths.includes(path) ? 'recovery-5'
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
