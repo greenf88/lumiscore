@@ -3,6 +3,7 @@ import type { Book } from '../data/books';
 import { availableGuideGroups, bookReadingRoutes, findSuzanneGuideBook, LANDING_GUIDES, SUZANNE_SOURCES, suzanneBookGuide, type GuideQuestion, type GuideSource, type LandingGuide } from '@/lib/editorial/landing-guides';
 import { getBookHref } from '@/lib/books/book-navigation';
 import type { Locale } from '@/lib/i18n/config';
+import { reviewedBookLinks } from '@/lib/editorial/reviewed-book-links';
 
 export function GuideSources({ sources }: { sources?: GuideSource[] }) {
   return sources?.length ? <p className="guide-sources">Bron: {sources.map((source, i) => <span key={source.url}>{i > 0 ? ' · ' : ''}<a href={source.url}>{source.title}</a></span>)}</p> : null;
@@ -48,12 +49,13 @@ export function SuzanneGuideAfter({ books }: { books: Book[] }) {
   </section><GuideQuestions items={guide.faq}/><p>Andere spanning ontdekken? <LocaleLink href="/toplijsten/thrillers-met-een-twist">Bekijk thrillers die je op het verkeerde been zetten</LocaleLink>.</p></div>;
 }
 export function BookEditorialGuide({ book, locale, hasSuzanneCollectionLink }: { book: Book; locale: Locale; hasSuzanneCollectionLink: boolean }) {
-  const copy=suzanneBookGuide(book,locale), routes=bookReadingRoutes(book,locale);
-  if (!copy && routes.length===0) return null;
+  const copy=suzanneBookGuide(book,locale), routes=bookReadingRoutes(book,locale), readingLinks=reviewedBookLinks(book,locale);
+  if (!copy && routes.length===0 && readingLinks.length===0) return null;
   return <aside className="landing-guide book-editorial-guide" aria-label={locale === 'nl' ? 'Verder lezen' : 'Further reading'}>
     {copy && <section><h2>{copy.heading}</h2>{copy.paragraphs.map(p=><p key={p}>{p}</p>)}<GuideSources sources={[copy.source]}/>
       {!hasSuzanneCollectionLink && <p><LocaleLink href="/collection/suzanne-vermeer">Vergelijk de boeken van Suzanne Vermeer</LocaleLink></p>}
     </section>}
     {routes.length>0 && <nav aria-label={locale === 'nl' ? 'Leesroutes bij dit boek' : 'Reading lists featuring this book'}><h2>{locale === 'nl' ? 'Een volgende leesrichting' : 'Explore these reading lists'}</h2><ul>{routes.map(route=><li key={route.href}><LocaleLink href={route.href}>{route.title}</LocaleLink></li>)}</ul></nav>}
+    {readingLinks.length>0 && <nav className="book-reading-links" aria-label={locale === 'nl' ? 'Boeken om verder te lezen' : 'Books to explore next'}><h2>{locale === 'nl' ? 'Verder lezen' : 'Keep exploring'}</h2><ul>{readingLinks.map(link=><li key={link.href}><LocaleLink href={link.href}>{link.title}</LocaleLink><p>{link.reason}</p></li>)}</ul></nav>}
   </aside>;
 }
