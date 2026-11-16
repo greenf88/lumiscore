@@ -17,11 +17,13 @@ import { THIRTEENTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recove
 import { FOURTEENTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery14.ts';
 import { FIFTEENTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery15.ts';
 import { SIXTEENTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery16.ts';
+import { SEVENTEENTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery17.ts';
 
 /** Own short summaries, reviewed against an exact edition and named primary source. */
 type ReviewedDescription = {
   workId?:string; editionId?:string; title:string; author:string; isbn13:string; isbn10?:string;
   openLibraryWorkId?:string; openLibraryEditionId?:string; editionLanguage?:'eng'|'nld';
+  allowMissingIsbn?:true;
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
   source?:'official_publisher'|'official_catalog';
 };
@@ -85,7 +87,7 @@ export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
   sourceName:'Workman Publishing — Spring 2011 catalog, page 94',
   sourceUrl:'https://edelweiss-assets.abovethetreeline.com/WN/pdfs/Workman_Spring2011.pdf',
   text:'Christopher Tennant presents the habits of the extremely wealthy through a humorous guide to their social world. Household staff, impressive homes, personal appearance and the rules of exclusive circles all become subjects for advice delivered with a straight face. The book considers such distinctions as the roles of a butler and a majordomo, alongside the etiquette of naming houses and making the right impression. Its handbook format turns the pursuit of status into a comic examination of the choices and customs surrounding extravagant wealth.',
-}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS, ...FIFTH_RECOVERY_DESCRIPTIONS, ...SIXTH_RECOVERY_DESCRIPTIONS, ...SEVENTH_RECOVERY_DESCRIPTIONS, ...EIGHTH_RECOVERY_DESCRIPTIONS, ...NINTH_RECOVERY_DESCRIPTIONS, ...TENTH_RECOVERY_DESCRIPTIONS, ...ELEVENTH_RECOVERY_DESCRIPTIONS, ...TWELFTH_RECOVERY_DESCRIPTIONS, ...THIRTEENTH_RECOVERY_DESCRIPTIONS, ...FOURTEENTH_RECOVERY_DESCRIPTIONS, ...FIFTEENTH_RECOVERY_DESCRIPTIONS, ...SIXTEENTH_RECOVERY_DESCRIPTIONS];
+}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS, ...FIFTH_RECOVERY_DESCRIPTIONS, ...SIXTH_RECOVERY_DESCRIPTIONS, ...SEVENTH_RECOVERY_DESCRIPTIONS, ...EIGHTH_RECOVERY_DESCRIPTIONS, ...NINTH_RECOVERY_DESCRIPTIONS, ...TENTH_RECOVERY_DESCRIPTIONS, ...ELEVENTH_RECOVERY_DESCRIPTIONS, ...TWELFTH_RECOVERY_DESCRIPTIONS, ...THIRTEENTH_RECOVERY_DESCRIPTIONS, ...FOURTEENTH_RECOVERY_DESCRIPTIONS, ...FIFTEENTH_RECOVERY_DESCRIPTIONS, ...SIXTEENTH_RECOVERY_DESCRIPTIONS, ...SEVENTEENTH_RECOVERY_DESCRIPTIONS];
 
 export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBookDescription['source']): { name: string; href: string } | null {
   const entry = REVIEWED_DESCRIPTIONS.find(row => row.isbn13 === sourceKey &&
@@ -106,7 +108,11 @@ export function getReviewedDescription(input: {
   const isbn10 = (input.isbn13 || input.isbn10)?.replace(/[\s-]/g, '').toUpperCase();
   const entry = REVIEWED_DESCRIPTIONS.find(row => (!row.workId || row.workId === input.workId) &&
     (!row.editionId || row.editionId === input.editionId) &&
-    (row.isbn13 === isbn13 || (!!row.isbn10 && row.isbn10 === isbn10)) &&
+    (row.isbn13 === isbn13 || (!!row.isbn10 && row.isbn10 === isbn10) ||
+      // Explicitly reviewed catalogue gaps only: never accept title-only identity,
+      // a conflicting ISBN, missing OL identifiers or a reassigned local record.
+      (row.allowMissingIsbn === true && !input.isbn13 && !input.isbn10 &&
+        !!row.workId && !!row.editionId && !!row.openLibraryWorkId && !!row.openLibraryEditionId)) &&
     (!row.openLibraryWorkId || row.openLibraryWorkId === input.openLibraryWorkId) &&
     (!row.openLibraryEditionId || row.openLibraryEditionId === input.openLibraryEditionId) &&
     normalize(row.title) === normalize(input.editionTitle) && normalize(row.author) === normalize(input.author) &&

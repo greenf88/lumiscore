@@ -1,5 +1,5 @@
 // Public book identities and editorial comparisons checked on 2026-11-16.
-// These IDs belong to the production catalogue; the resolver verifies each source identity.
+// The resolver verifies each source identity before displaying production links.
 export const REVIEWED_BOOK_LINKS = [
   {
     "workId": "7801",
@@ -114,6 +114,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7351",
         "reason": "Compare Greer’s companion to one novel with Redfern’s broader reference guide to secret societies and claims about them."
+      },
+      {
+        "workId": "1907",
+        "reason": "Return from this companion guide to Langdon’s fiction with a later mystery set around Prague and human consciousness."
       }
     ]
   },
@@ -128,6 +132,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7248",
         "reason": "Narrow the focus to the symbols and traditions behind Dan Brown’s The Lost Symbol with Greer’s companion guide."
+      },
+      {
+        "workId": "3779",
+        "reason": "Compare this reference guide with a single author’s conspiracy worldview; Icke’s extraordinary claims are presented as his theories."
       }
     ]
   },
@@ -342,6 +350,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6488",
         "reason": "Lees ook hoe persoonlijke ervaringen een andere geschiedenis zichtbaar maken: levensverhalen uit Nederlands-Indië en Indonesië."
+      },
+      {
+        "workId": "1625",
+        "reason": "Lees hoe landbouw en politiek een andere streek vormden: Westerman onderzoekt de Groningse graanboeren en hun omgeving."
       }
     ]
   },
@@ -398,6 +410,606 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9856",
         "reason": "For a shorter animal story, meet Lily, a puppy accidentally left behind when her family moves."
+      }
+    ]
+  },
+  {
+    "workId": "1625",
+    "title": "De graanrepubliek",
+    "author": "Frank Westerman",
+    "openLibraryWorkId": "OL868817W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5714",
+        "reason": "Vergelijk de veranderingen op het Groningse platteland met de invloed van de textielindustrie op een Gentse woonwijk."
+      }
+    ]
+  },
+  {
+    "workId": "9534",
+    "title": "Circuit",
+    "author": "Francisco Jimenez",
+    "openLibraryWorkId": "OL8074352W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8949",
+        "reason": "Compare these autobiographical childhood stories with a fictional refugee boy’s arrival in Minneapolis."
+      }
+    ]
+  },
+  {
+    "workId": "8949",
+    "title": "Home of the brave",
+    "author": "Katherine Applegate",
+    "openLibraryWorkId": "OL15068822W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9534",
+        "reason": "For another child’s experience of finding a place in America, read Jiménez’s autobiographical stories of a migrant farmworker family."
+      }
+    ]
+  },
+  {
+    "workId": "3779",
+    "title": "Children of the Matrix",
+    "author": "David Icke",
+    "openLibraryWorkId": "OL8726662W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7351",
+        "reason": "Explore a broader reference guide to secret organisations and the claims made about them alongside Icke’s speculative account."
+      }
+    ]
+  },
+  {
+    "workId": "1707",
+    "title": "De heilige Antonio",
+    "author": "Arnon Grunberg",
+    "openLibraryWorkId": "OL850959W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6290",
+        "reason": "Lees een ander stadsverhaal over een nieuw begin: Nors volgt Sonja, die via rijlessen meer vrijheid probeert te vinden."
+      }
+    ]
+  },
+  {
+    "workId": "6290",
+    "title": "Spiegel spiegel schouder",
+    "author": "Dorthe Nors",
+    "openLibraryWorkId": "OL17918573W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1707",
+        "reason": "Vergelijk Sonja’s zoektocht naar richting met de liefdesverwachtingen en zakelijke plannen van Grunbergs familie in New York."
+      }
+    ]
+  },
+  {
+    "workId": "3743",
+    "title": "Making of a Manager",
+    "author": "Julie Zhuo",
+    "openLibraryWorkId": "OL20159758W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8727",
+        "reason": "For a fictional contrast to this management guide, explore an assistant’s experience of an exceptionally demanding fashion editor."
+      }
+    ]
+  },
+  {
+    "workId": "8727",
+    "title": "The Devil Wears Prada",
+    "author": "Lauren Weisberger",
+    "openLibraryWorkId": "OL5825377W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3743",
+        "reason": "Move from workplace satire to Julie Zhuo’s practical reflections on becoming a responsible manager."
+      }
+    ]
+  },
+  {
+    "workId": "3674",
+    "title": "Diana Her True Story",
+    "author": "Andrew Morton",
+    "openLibraryWorkId": "OL461064W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7610",
+        "reason": "Compare this biography with a daughter’s memoir about the gap between a famous parent’s public image and family life."
+      }
+    ]
+  },
+  {
+    "workId": "7610",
+    "title": "Small Fry",
+    "author": "Lisa Brennan-Jobs",
+    "openLibraryWorkId": "OL18144320W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3674",
+        "reason": "For another perspective on private life under public expectations, consider Morton’s biography of Princess Diana."
+      }
+    ]
+  },
+  {
+    "workId": "1894",
+    "title": "The Haunting of Hill House",
+    "author": "Shirley Jackson",
+    "openLibraryWorkId": "OL3171069W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9762",
+        "reason": "Try another psychological horror novel in which a mysterious place draws its visitors into an increasingly dangerous obsession."
+      },
+      {
+        "workId": "3660",
+        "reason": "For gothic horror aimed at older teens, follow Silas’s investigation of missing students at a sinister institution."
+      }
+    ]
+  },
+  {
+    "workId": "9762",
+    "title": "Cipher, The",
+    "author": "Kathe Koja",
+    "openLibraryWorkId": "OL1885990W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1894",
+        "reason": "Compare the terror surrounding the Funhole with Jackson’s haunted house and Eleanor’s desire to belong."
+      }
+    ]
+  },
+  {
+    "workId": "605",
+    "title": "Blaze",
+    "author": "Stephen King",
+    "openLibraryWorkId": "OL2794739W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1842",
+        "reason": "Explore another novel first published under King’s Richard Bachman name, this time a dystopian test of endurance."
+      }
+    ]
+  },
+  {
+    "workId": "1842",
+    "title": "The Long Walk",
+    "author": "Stephen King",
+    "openLibraryWorkId": "OL9973101W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "605",
+        "reason": "For a different Richard Bachman story, follow a kidnapper whose attachment to his victim complicates his crime."
+      }
+    ]
+  },
+  {
+    "workId": "1907",
+    "title": "The Secret of Secrets",
+    "author": "Dan Brown",
+    "openLibraryWorkId": "OL42542598W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7248",
+        "reason": "Interested in the background to Langdon’s world? Greer’s reference guide examines a different adventure, The Lost Symbol."
+      }
+    ]
+  },
+  {
+    "workId": "8937",
+    "title": "Rage of Dragons",
+    "author": "Evan Winter",
+    "openLibraryWorkId": "OL20084923W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8872",
+        "reason": "For a young-adult fantasy with a different struggle against inherited power, follow a captive princess reclaiming her agency."
+      }
+    ]
+  },
+  {
+    "workId": "8872",
+    "title": "Ash Princess",
+    "author": "Laura Sebastian",
+    "openLibraryWorkId": "OL19913987W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8937",
+        "reason": "For an adult epic fantasy about resistance and revenge, follow Tau’s pursuit of power through swordsmanship."
+      }
+    ]
+  },
+  {
+    "workId": "2760",
+    "title": "Dangerous Path",
+    "author": "Erin Hunter",
+    "openLibraryWorkId": "OL5714284W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8673",
+        "reason": "Try a separate fantasy adventure in which four young people form powerful bonds with spirit animals."
+      }
+    ]
+  },
+  {
+    "workId": "8673",
+    "title": "Wild born",
+    "author": "Brandon Mull",
+    "openLibraryWorkId": "OL17069311W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2760",
+        "reason": "Move from human companions and spirit beasts to a fantasy told through the rival Clans of wild cats."
+      }
+    ]
+  },
+  {
+    "workId": "3458",
+    "title": "De kleuren van schaduw",
+    "author": "V. E. Schwab",
+    "openLibraryWorkId": "OL17714885W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3494",
+        "reason": "Verken een andere fantasyreeks waarin magie en verbonden werelden het verloop van een grote strijd bepalen."
+      }
+    ]
+  },
+  {
+    "workId": "3494",
+    "title": "Duisternis over Sethanon",
+    "author": "Raymond E. Feist",
+    "openLibraryWorkId": "OL554680W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3458",
+        "reason": "Vergelijk Feists werelden met Schwabs verschillende Londens, waar een magiewedstrijd samenvalt met een groeiende dreiging."
+      }
+    ]
+  },
+  {
+    "workId": "1347",
+    "title": "Jij zegt het",
+    "author": "Connie Palmen",
+    "openLibraryWorkId": "OL23985653W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1828",
+        "reason": "Lees ook een roman waarin een man terugkijkt op een liefde en probeert haar betekenis in zijn eigen verhaal te vangen."
+      }
+    ]
+  },
+  {
+    "workId": "1828",
+    "title": "De droom van de leeuw",
+    "author": "Arthur Japin",
+    "openLibraryWorkId": "OL660522W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1347",
+        "reason": "Vergelijk Snaporaz’ herinneringen met Palmens verbeelde stem van Ted Hughes, die terugblikt op zijn huwelijk met Sylvia Plath."
+      },
+      {
+        "workId": "1703",
+        "reason": "Lees een ander Italiaans liefdesverhaal waarin kunst een hoofdrol speelt, rond een zanger in achttiende-eeuws Napels."
+      }
+    ]
+  },
+  {
+    "workId": "1703",
+    "title": "De virtuoos",
+    "author": "Margriet de Moor",
+    "openLibraryWorkId": "OL548812W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1828",
+        "reason": "Verken liefde en artistieke macht ook buiten de opera: Japin volgt een Italiaanse filmregisseur en een jonge actrice."
+      }
+    ]
+  },
+  {
+    "workId": "3279",
+    "title": "Fascisme",
+    "author": "Madeleine Korbel Albright",
+    "openLibraryWorkId": "OL17931000W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6072",
+        "reason": "Verdiep je daarnaast in concrete Europese gebeurtenissen uit de jaren dertig via Vuillards literaire geschiedverhaal."
+      }
+    ]
+  },
+  {
+    "workId": "6072",
+    "title": "De orde van de dag",
+    "author": "Éric Vuillard",
+    "openLibraryWorkId": "OL19742698W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3279",
+        "reason": "Plaats deze historische taferelen naast Albrights bredere beschouwing over fascisme en de kwetsbaarheid van democratie."
+      }
+    ]
+  },
+  {
+    "workId": "10049",
+    "title": "Rosie Revere, Engineer",
+    "author": "Andrea Beaty",
+    "openLibraryWorkId": "OL17334846W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9494",
+        "reason": "Continue the conversation about creative confidence with a child who learns that a drawing need not be perfect to have value."
+      }
+    ]
+  },
+  {
+    "workId": "9494",
+    "title": "Ish",
+    "author": "Peter H. Reynolds",
+    "openLibraryWorkId": "OL2435177W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10049",
+        "reason": "For another picture book about recovering creative confidence, meet Rosie and the inventions she is afraid to share."
+      }
+    ]
+  },
+  {
+    "workId": "2135",
+    "title": "Little Bear's Visit (An I Can Read Book, Level 1)",
+    "author": "Else Holmelund Minarik",
+    "openLibraryWorkId": "OL2568814W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8444",
+        "reason": "Try another early-reader animal story, switching from a family visit to Elephant and Piggie’s comic preparations for an outing."
+      }
+    ]
+  },
+  {
+    "workId": "8444",
+    "title": "Let's go for a drive!",
+    "author": "Mo Willems",
+    "openLibraryWorkId": "OL16518171W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2135",
+        "reason": "For a quieter early-reader story after Elephant and Piggie, visit Little Bear’s grandparents and listen to their tales."
+      }
+    ]
+  },
+  {
+    "workId": "2353",
+    "title": "Het lammetje dat een varken is",
+    "author": "Pim Lammers",
+    "openLibraryWorkId": "OL39641520W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1103",
+        "reason": "Voor wat oudere lezers: Minoes verkent op speelse wijze de grens tussen mens en dier, in een langer verhaal met een mysterie."
+      }
+    ]
+  },
+  {
+    "workId": "1103",
+    "title": "Minoes",
+    "author": "Annie M. G. Schmidt",
+    "openLibraryWorkId": "OL3173342W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2353",
+        "reason": "Zoek je een prentenboek voor jongere kinderen over jezelf zijn? Dit lammetje vertelt de andere dieren dat het een varkentje is."
+      },
+      {
+        "workId": "5023",
+        "reason": "Lees verder met een avontuurlijk kindermysterie: de vier vrienden en hun hond onderzoeken een geheimzinnig eiland."
+      }
+    ]
+  },
+  {
+    "workId": "5023",
+    "title": "De Vijf en de schat op het Fluistereiland",
+    "author": "Enid Blyton",
+    "openLibraryWorkId": "OL1948516W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1103",
+        "reason": "Probeer een ander kinderboek waarin samenwerking verborgen gebeurtenissen aan het licht brengt, met katten als nieuwsbron."
+      }
+    ]
+  },
+  {
+    "workId": "8029",
+    "title": "Kolyma Tales",
+    "author": "Varlam Tikhonovich Shalamov",
+    "openLibraryWorkId": "OL619700W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7502",
+        "reason": "Compare these camp stories with Funder’s nonfiction encounters with people shaped by East Germany’s surveillance state."
+      }
+    ]
+  },
+  {
+    "workId": "7502",
+    "title": "Stasiland",
+    "author": "Anna Funder",
+    "openLibraryWorkId": "OL5874391W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8029",
+        "reason": "For a different literary response to state repression, read Shalamov’s stories drawn from Soviet forced-labour camps."
+      }
+    ]
+  },
+  {
+    "workId": "10114",
+    "title": "Into the Forest",
+    "author": "Jean Hegland",
+    "openLibraryWorkId": "OL3294077W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2898",
+        "reason": "Explore another family facing a damaged future, in Millet’s young-adult story set in a climate-stricken Hawaii."
+      }
+    ]
+  },
+  {
+    "workId": "2898",
+    "title": "Pills and starships",
+    "author": "Lydia Millet",
+    "openLibraryWorkId": "OL17925619W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10114",
+        "reason": "For an adult novel centred on siblings during societal collapse, follow Nell and Eva in their remote forest home."
+      }
+    ]
+  },
+  {
+    "workId": "3660",
+    "title": "Spirit Bares Its Teeth",
+    "author": "Andrew Joseph White",
+    "openLibraryWorkId": "OL34061150W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1894",
+        "reason": "Explore a different gothic setting where an isolated character and a threatening building become closely entangled."
+      }
+    ]
+  },
+  {
+    "workId": "8854",
+    "title": "The babysitter II",
+    "author": "Robert Lawrence Stine",
+    "openLibraryWorkId": "OL15093826W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4442",
+        "reason": "Try a separate Stine mystery: two siblings investigate their parents’ disappearance in the Fear Street series."
+      }
+    ]
+  },
+  {
+    "workId": "4442",
+    "title": "Missing",
+    "author": "Robert Lawrence Stine",
+    "openLibraryWorkId": "OL72303W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8854",
+        "reason": "For another Stine story about familiar surroundings becoming threatening, follow Jenny’s return to babysitting."
+      }
+    ]
+  },
+  {
+    "workId": "3753",
+    "title": "I Heard You Paint Houses",
+    "author": "Charles Brandt",
+    "openLibraryWorkId": "OL4979625W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3738",
+        "reason": "Compare this interview-based Mafia account with Grillo’s reporting on the rise of Mexico’s drug cartels."
+      }
+    ]
+  },
+  {
+    "workId": "3738",
+    "title": "El Narco",
+    "author": "Ioan Grillo",
+    "openLibraryWorkId": "OL16495247W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3753",
+        "reason": "Explore another criminal world through Brandt’s interviews with Frank Sheeran and Sheeran’s claims about Jimmy Hoffa."
       }
     ]
   }
