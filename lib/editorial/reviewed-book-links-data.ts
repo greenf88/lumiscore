@@ -1880,6 +1880,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5536",
         "reason": "Vergelijk deze handelingspsychologische benadering met een beknopte neuropsychologische inleiding over leer- en ontwikkelingsproblemen."
+      },
+      {
+        "workId": "5566",
+        "reason": "Voor een historische vergelijking met onderwijstheorie: lees hoe Pikkemaat het juridische onderwijs van Viglius van Aytta onderzoekt."
       }
     ]
   },
@@ -2136,6 +2140,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7993",
         "reason": "For a different perspective on disease and society, explore Colomina’s argument about tuberculosis, medical imaging and twentieth-century architecture."
+      },
+      {
+        "workId": "7666",
+        "reason": "For a broader historical comparison, explore how disease, food supply and population change are connected in Henley’s study of Sulawesi."
       }
     ]
   },
@@ -2164,6 +2172,146 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4206",
         "reason": "Compare two very different uses of technology in a school story: Jeremy seeks social approval, while Melody needs a way to express what she already knows."
+      }
+    ]
+  },
+  {
+    "workId": "9368",
+    "title": "Fatal Deception",
+    "author": "Sally Wentworth",
+    "openLibraryWorkId": "OL3770471W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9937",
+        "reason": "Compare Norrie’s distrust of Bruno with Janey’s doubts about a reunion in another romance shaped by an earlier broken promise."
+      }
+    ]
+  },
+  {
+    "workId": "9937",
+    "title": "The Broken Link",
+    "author": "Yvonne Whittal",
+    "openLibraryWorkId": "OL15714082W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9368",
+        "reason": "Try another romance in which a woman’s unresolved feelings must be weighed against an earlier betrayal and concern for her family."
+      }
+    ]
+  },
+  {
+    "workId": "5297",
+    "title": "Koppensnellers, uitrangeerders en selecteurs",
+    "author": "Stefan Lievens",
+    "openLibraryWorkId": "OL26414790W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5340",
+        "reason": "Verplaats de aandacht van arbeidsbemiddeling naar samenwerken op de werkvloer, met een boek over culturele verschillen binnen organisaties."
+      }
+    ]
+  },
+  {
+    "workId": "5340",
+    "title": "Interculturele samenwerking in organisaties",
+    "author": "Herman Blom",
+    "openLibraryWorkId": "OL26188412W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5297",
+        "reason": "Bekijk naast samenwerking binnen organisaties ook een historische benadering van het beroep van arbeidsbemiddelaar."
+      }
+    ]
+  },
+  {
+    "workId": "5566",
+    "title": "Viglius van Aytta als hoogleraar te Ingolstadt",
+    "author": "J. G. B. Pikkemaat",
+    "openLibraryWorkId": "OL13845580W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5707",
+        "reason": "Vergelijk dit historische onderzoek naar rechtscolleges met Van Oers’ moderne theoretische benadering van onderwijs, leren en begripsvorming."
+      }
+    ]
+  },
+  {
+    "workId": "7434",
+    "title": "Diego Rivera: Illustrious Words, 1886–1921",
+    "author": "Diego Rivera",
+    "openLibraryWorkId": "OL2156995W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7033",
+        "reason": "Compare Rivera’s reflections on art with Boylan’s contemporary introduction to how images shape the way people see and understand their world."
+      }
+    ]
+  },
+  {
+    "workId": "7033",
+    "title": "Visual Culture",
+    "author": "Alexis L. Boylan",
+    "openLibraryWorkId": "OL21913149W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7434",
+        "reason": "Read an artist’s own reflections on art through this illustrated collection of Rivera’s writings from his formative years."
+      }
+    ]
+  },
+  {
+    "workId": "7570",
+    "title": "Law and Legal Information Directory",
+    "author": "Laurie J. Fundukian",
+    "openLibraryWorkId": "OL27712336W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6878",
+        "reason": "Move from locating legal institutions and information sources to studying legal principles in Klabbers’s textbook on international law."
+      }
+    ]
+  },
+  {
+    "workId": "6878",
+    "title": "International Law",
+    "author": "Jan Klabbers",
+    "openLibraryWorkId": "OL21144068W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7570",
+        "reason": "For a different kind of legal reference work, explore this historical directory of organizations, services and information sources."
+      }
+    ]
+  },
+  {
+    "workId": "7666",
+    "title": "Fertility, Food and Fever",
+    "author": "David Henley",
+    "openLibraryWorkId": "OL8464207W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7643",
+        "reason": "Compare this long-term demographic study with a history for younger readers about Philadelphia’s yellow fever crisis in 1793."
       }
     ]
   }
