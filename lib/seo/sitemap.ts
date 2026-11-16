@@ -59,10 +59,19 @@ const verifiedContentDates: Partial<Record<string, { key: InformationPageKey; da
 };
 
 const verifiedGuideDates: Readonly<Record<string, { date: string; hash: string }>> = {
+  '/toplijsten/feelgood-voor-een-leesavond': { date: '2026-11-16', hash: 'a869f877726b81e12ccfb1c38f4ed825fba471ae1ec9663f1b41bd759d958f8c' },
+  '/toplijsten/overleven-in-extreme-omstandigheden': { date: '2026-11-16', hash: '7eed9dbf46e85276eb5e83960bf3e463a921f3da834970bd1bac4f49e08c2c29' },
+  '/toplijsten/eerste-delen-fantasyreeksen': { date: '2026-11-16', hash: '96dda723646bacd0a879df49a34aa62ac26a865764dc3ac7fe29349ccc986a05' },
+  '/toplijsten/korte-romans-en-novelles': { date: '2026-11-16', hash: '98bbe305fb3c2baf92e9af2998aa61065599219cb1b31104e3f4da599d51fd9f' },
+  '/toplijsten/historische-romans': { date: '2026-11-16', hash: '3b4d48921ca6342a9242688ea72e5ea72df18c6e0aec8f72f092a5c397e5663f' },
+  '/toplijsten/na-de-rivierkreeften': { date: '2026-11-16', hash: 'a6bcc8380eb629fcb505733e2d0c1a351a2c1c21cc9165da20c97b4e6a83713d' },
+  '/toplijsten/thrillers-met-een-twist': { date: '2026-11-16', hash: 'd3e4a525ce820b1ed153b3637267e64502002f9719bed95d2929892e3c36ef59' },
+  '/toplijsten/sciencefiction-om-mee-te-beginnen': { date: '2026-11-16', hash: 'e742584730b77bd7f644d1297506ec7568dbf1d7fbaf973ba603e1a0a82a1707' },
+  '/toplijsten/fantasy-sciencefiction': { date: '2026-11-16', hash: 'eb52ddeab9aca93817922edd77b4998cc076143a8b73584f59b855ebc3adc32c' },
   // Unchanged published Dutch guides from production release 1cb54df, 4 November.
   '/collection/suzanne-vermeer': { date: '2026-11-04', hash: '9770063db3cd6ae14cdf33d30c79cba1367ea5414758fbfed6573c2569405c1f' },
-  '/toplijsten/fantasy-om-mee-te-beginnen': { date: '2026-11-04', hash: '453c29cf8780afbf371989926b0201e9cd7dd39074768c0e75413010172ecac0' },
-  '/toplijsten/na-project-hail-mary': { date: '2026-11-04', hash: '5a1d49c9cd25fbc955117c136313faef41bae99357cc5fdff312bca1a99bfe29' },
+  '/toplijsten/fantasy-om-mee-te-beginnen': { date: '2026-11-16', hash: '74ab4141155b39eaa8a0a975d49fdef0035ef8fa3a49878221a39ea3612c7d77' },
+  '/toplijsten/na-project-hail-mary': { date: '2026-11-16', hash: 'bd4810ea2fd8fa29467bcf43fca40b09e423e05e42a3817876854789876289cc' },
   // Complete Dutch edition selection and reading guide reviewed 16 November.
   '/toplijsten/dystopie-vanaf-1990': { date: '2026-11-16', hash: 'd2425763e3023caeff137b29971036bd82ef5b6eebec2c0021d8e591d2ad0b47' },
 };

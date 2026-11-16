@@ -18,7 +18,7 @@ test('Dutch dystopia route renders only supported editions, with matching guide 
   try {
     const { LumiScoreLocaleProvider:Provider } = await vite.ssrLoadModule('/app/components/LumiScoreLocale.tsx');
     const { EditorialTopList } = await vite.ssrLoadModule('/app/components/EditorialTopList.tsx');
-    const { getEditorialTopList,getEditorialTopBook,getEditorialWorkSourceId } = await vite.ssrLoadModule('/lib/catalog/top-lists.ts');
+    const { getEditorialTopList,getEditorialTopBook,getEditorialWorkSourceId,editorialTopLists,localizeEditorialList } = await vite.ssrLoadModule('/lib/catalog/top-lists.ts');
     const { getLandingGuide } = await vite.ssrLoadModule('/lib/editorial/landing-guides.ts');
     const { editorialPageJsonLd } = await vite.ssrLoadModule('/lib/seo/editorial.ts');
     const { applyStoredPresentation } = await vite.ssrLoadModule('/lib/books/stored-presentation.ts');
@@ -42,7 +42,7 @@ test('Dutch dystopia route renders only supported editions, with matching guide 
     assert.equal((html.match(/<h1>/g)??[]).length,1);
     assert.ok(html.includes('<h1>'+guide.h1+'</h1>'));
     assert.doesNotMatch(html,/Top 10|editorial-unavailable|Boek tijdelijk niet beschikbaar/);
-    assert.match(html.replaceAll('<!-- -->',''),/3 van de 10 oorspronkelijke keuzes/);
+    assert.match(html.replaceAll('<!-- -->',''),/3 van de 10 geselecteerde boeken/);
     for (const id of Object.keys(titles)) {
       assert.ok(html.includes('href="/nl/book/'+id+'"'));
       assert.ok(html.includes('href="#keuze-'+id+'"'));
@@ -85,6 +85,19 @@ test('Dutch dystopia route renders only supported editions, with matching guide 
       assert.equal(b.cardCoverUrl,r.cover);
       assert.equal(b.editionFormat,r.format);
       assert.ok(b.storedDescription?.sourceUrl);
+    }
+    const reviewed=JSON.parse(readFileSync(new URL('../docs/operations/nl-reading-lists-20261116/editions.json',import.meta.url),'utf8'));
+    for(const original of editorialTopLists.filter(l=>l.slug!=='dystopie-vanaf-1990')){
+      const localized=localizeEditorialList(original,'nl');
+      const items=localized.workIds.map((id,i)=>({id:'db-'+i,workId:String(900000+i),openLibraryWorkId:getEditorialWorkSourceId(id),source:'supabase',editionAvailable:true,editionLanguage:'nld',title:reviewed.find(r=>String(r.id)===id)?.title??getEditorialTopBook(id).title,author:getEditorialTopBook(id).author,cover:'orbit',score:null,ratingsCount:null,match:null}));
+      const choices=Object.fromEntries(localized.workIds.map((id,i)=>[id,{...getEditorialTopBook(id),sourceId:getEditorialWorkSourceId(id),href:'/book/'+items[i].workId}]));
+      const output=renderToStaticMarkup(h(Provider,{initialLocale:'nl',hasPersistedChoice:true,initialPath:'/toplijsten/'+original.slug},h(EditorialTopList,{list:localized,books:items,selections:choices,relatedLists:[],unavailable:false}))).replaceAll('<!-- -->','');
+      assert.equal((output.match(/class="editorial-book"/g)??[]).length,localized.workIds.length,original.slug);
+      assert.equal((output.match(/<h3 class="editorial-angle">/g)??[]).length,items.length);
+      assert.doesNotMatch(output,/De overige \d+ keuzes|editorial-unavailable|undefined/);
+      assert.match(output,new RegExp(items.length+' van de '+items.length+' boeken'));
+      for(const item of items)assert.ok(output.includes('href="/nl/book/'+item.workId+'"'),original.slug);
+      assert.equal(editorialPageJsonLd(localized,items,'nl')['@graph'][1].numberOfItems,items.length);
     }
   } finally { await vite.close(); }
 });

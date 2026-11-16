@@ -1,7 +1,7 @@
 import data from './landing-guides.json' with { type: 'json' };
 import type { Locale } from '../i18n/config.ts';
 import type { Book } from '../../app/data/books.ts';
-import { editorialTopLists, getEditorialWorkSourceId } from '../catalog/top-lists.ts';
+import { editorialTopLists, getEditorialWorkSourceId, localizeEditorialList } from '../catalog/top-lists.ts';
 
 export type GuideSource = { title: string; url: string; checkedOn: string };
 export type GuideQuestion = { question: string; answer: string; sources?: GuideSource[]; requires?: string[] };
@@ -41,7 +41,7 @@ export function bookReadingRoutes(book: Book, locale: Locale) {
     || (book.detailLocales && !book.detailLocales.includes(locale))) return [];
   // Numeric editorial IDs are selection keys, not database Work identities.
   // Preserve the richer Dutch guide heading and order before adding other lists.
-  const matches = editorialTopLists.filter(list => list.workIds.some(id => getEditorialWorkSourceId(id) === book.openLibraryWorkId)
+  const matches = editorialTopLists.map(list => localizeEditorialList(list, locale)).filter(list => list.workIds.some(id => getEditorialWorkSourceId(id) === book.openLibraryWorkId)
     || (list.slug === 'na-project-hail-mary' && book.openLibraryWorkId === getEditorialWorkSourceId('1')));
   const guides = locale === 'nl' ? LANDING_GUIDES.filter(g => matches.some(list => g.path === '/nl/toplijsten/' + list.slug)) : [];
   const routes = [...guides.map(g => ({ title: g.h1, href: g.path.slice(3) })),
