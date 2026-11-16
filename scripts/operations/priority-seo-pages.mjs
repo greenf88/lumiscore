@@ -446,8 +446,42 @@ export const eighteenthPrioritySeoPaths = Object.freeze([
   "/nl/book/5546",
   "/nl/book/1676"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths]);
-export const prioritySeoCohort = path => eighteenthPrioritySeoPaths.includes(path) ? 'recovery-18'
+// Thirty additional canonical GSC examples with reviewed descriptions and reading links.
+export const nineteenthPrioritySeoPaths = Object.freeze([
+  "/en/book/3078",
+  "/en/book/9844",
+  "/en/book/3973",
+  "/en/book/2433",
+  "/en/book/8545",
+  "/en/book/8516",
+  "/en/book/4849",
+  "/en/book/8864",
+  "/en/book/9226",
+  "/nl/book/5520",
+  "/en/book/7716",
+  "/nl/book/5707",
+  "/nl/book/2369",
+  "/en/book/4206",
+  "/en/book/2109",
+  "/nl/book/3501",
+  "/nl/book/3305",
+  "/nl/book/3016",
+  "/nl/book/5756",
+  "/nl/book/6094",
+  "/nl/book/6312",
+  "/nl/book/5923",
+  "/nl/book/6057",
+  "/nl/book/5536",
+  "/en/book/2672",
+  "/en/book/4219",
+  "/en/book/7643",
+  "/en/book/2308",
+  "/en/book/4429",
+  "/en/book/4584"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths, ...nineteenthPrioritySeoPaths]);
+export const prioritySeoCohort = path => nineteenthPrioritySeoPaths.includes(path) ? 'recovery-19'
+  : eighteenthPrioritySeoPaths.includes(path) ? 'recovery-18'
   : seventeenthPrioritySeoPaths.includes(path) ? 'recovery-17'
   : sixteenthPrioritySeoPaths.includes(path) ? 'recovery-16'
   : fifteenthPrioritySeoPaths.includes(path) ? 'recovery-15'
@@ -464,7 +498,7 @@ export const prioritySeoCohort = path => eighteenthPrioritySeoPaths.includes(pat
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path) || nineteenthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
