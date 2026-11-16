@@ -1598,5 +1598,573 @@ export const REVIEWED_BOOK_LINKS = [
         "reason": "Vergelijk het heropenen van een oude geschiedenis met Christies verhaal over een alibi dat pas na de dood van een veroordeelde opduikt."
       }
     ]
+  },
+  {
+    "workId": "3078",
+    "title": "Mister Monday",
+    "author": "Garth Nix",
+    "openLibraryWorkId": "OL2628760W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3973",
+        "reason": "Compare Arthur’s mysterious key with Morgon’s search for the meaning of the stars on his forehead, in another fantasy about an unexpected destiny."
+      },
+      {
+        "workId": "2170",
+        "reason": "For another journey that opens a larger fantasy world, follow Shasta and a talking horse on their escape towards Narnia."
+      }
+    ]
+  },
+  {
+    "workId": "3973",
+    "title": "The Riddle-Master of Hed  (Riddle-Master #1)",
+    "author": "Patricia A. McKillip",
+    "openLibraryWorkId": "OL92495W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3078",
+        "reason": "For a younger hero drawn into an unfamiliar realm, follow Arthur Penhaligon’s attempt to understand a key that has saved his life."
+      }
+    ]
+  },
+  {
+    "workId": "2170",
+    "title": "The Horse and His Boy",
+    "author": "C. S. Lewis",
+    "openLibraryWorkId": "OL71058W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3078",
+        "reason": "Try another young hero’s journey into a hidden world, beginning when Arthur receives a key shaped like a clock hand."
+      }
+    ]
+  },
+  {
+    "workId": "9844",
+    "title": "The marriage surrender",
+    "author": "Michelle Reid",
+    "openLibraryWorkId": "OL4233139W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9226",
+        "reason": "Explore a different romance in which a woman must weigh her feelings against her distrust of the man pursuing her."
+      }
+    ]
+  },
+  {
+    "workId": "9226",
+    "title": "Untamed",
+    "author": "Carole Mortimer",
+    "openLibraryWorkId": "OL3775505W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9844",
+        "reason": "Compare Keilly’s doubts about Rod with Joanna’s attempt to face the secret behind her broken marriage."
+      }
+    ]
+  },
+  {
+    "workId": "2433",
+    "title": "SPQR",
+    "author": "Mary Beard",
+    "openLibraryWorkId": "OL17340134W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2308",
+        "reason": "Read a fictional perspective on Roman public life through Tiro’s account of Cicero’s rise, then compare it with Beard’s historical analysis."
+      }
+    ]
+  },
+  {
+    "workId": "2308",
+    "title": "Imperium",
+    "author": "Robert Harris",
+    "openLibraryWorkId": "OL4297222W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2433",
+        "reason": "Place Harris’s fictional reconstruction alongside Beard’s broader history of Roman politics, citizenship and society."
+      }
+    ]
+  },
+  {
+    "workId": "8545",
+    "title": "Wayward Son",
+    "author": "Rainbow Rowell",
+    "openLibraryWorkId": "OL20142351W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8802",
+        "reason": "For another queer romance shaped by a supernatural world, try Wolfsong, where belonging and chosen family become central questions."
+      }
+    ]
+  },
+  {
+    "workId": "8802",
+    "title": "Wolfsong",
+    "author": "T. J. Klune",
+    "openLibraryWorkId": "OL20565280W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8545",
+        "reason": "Continue with a different kind of paranormal relationship: Simon and Baz’s journey through the aftermath of a fantasy adventure."
+      }
+    ]
+  },
+  {
+    "workId": "8516",
+    "title": "Chain Letter",
+    "author": "Christopher Pike",
+    "openLibraryWorkId": "OL1000782W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4219",
+        "reason": "Compare the friends’ hidden crime with a courtroom novel in which a teenager tries to understand the accusations against him."
+      }
+    ]
+  },
+  {
+    "workId": "4219",
+    "title": "Monster",
+    "author": "Walter Dean Myers",
+    "openLibraryWorkId": "OL98288W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8516",
+        "reason": "For a contrasting suspense story about young people and responsibility, follow seven friends threatened over a shared crime."
+      }
+    ]
+  },
+  {
+    "workId": "4849",
+    "title": "The outsiders",
+    "author": "William Thorndike",
+    "openLibraryWorkId": "OL16599653W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6584",
+        "reason": "Extend the business comparison from how leaders allocate capital to how digital markets can change the economics of niche products."
+      }
+    ]
+  },
+  {
+    "workId": "6584",
+    "title": "The long tail",
+    "author": "Chris Anderson",
+    "openLibraryWorkId": "OL4091759W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4849",
+        "reason": "Compare this account of changing markets with Thorndike’s study of how eight chief executives allocated their companies’ resources."
+      }
+    ]
+  },
+  {
+    "workId": "8864",
+    "title": "Open Water",
+    "author": "Caleb Azumah Nelson",
+    "openLibraryWorkId": "OL21696935W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4375",
+        "reason": "For another novel about young people, art and uncertain intimacy, compare the relationships in Rooney’s Dublin circle with this London love story."
+      }
+    ]
+  },
+  {
+    "workId": "4375",
+    "title": "Conversations With Friends",
+    "author": "Sally Rooney",
+    "openLibraryWorkId": "OL17887575W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8864",
+        "reason": "Compare Rooney’s network of artistic friendships with Nelson’s intimate account of two Black artists falling in love in London."
+      }
+    ]
+  },
+  {
+    "workId": "5520",
+    "title": "Het gevaar van de joodse erfenis",
+    "author": "H. M. Reijzer",
+    "openLibraryWorkId": "OL24117948W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6057",
+        "reason": "Lees daarnaast een autobiografische roman waarin herinnering, zelfbeeld en een beladen politieke geschiedenis met elkaar botsen."
+      }
+    ]
+  },
+  {
+    "workId": "6057",
+    "title": "Stad der engelen of The overcoat of Dr. Freud",
+    "author": "Christa Wolf",
+    "openLibraryWorkId": "OL16646051W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5520",
+        "reason": "Voor een andere, wetenschappelijke invalshoek op identiteit en uitsluiting: Reijzer onderzoekt de geschiedenis van de psychoanalytische beweging."
+      }
+    ]
+  },
+  {
+    "workId": "7716",
+    "title": "Child neglect",
+    "author": "Janet Anne Basarab-Horwath",
+    "openLibraryWorkId": "OL15407787W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7783",
+        "reason": "For a broader theoretical background to questions of childhood, compare Miller’s overview of developmental psychology with Horwath’s focus on professional assessment."
+      }
+    ]
+  },
+  {
+    "workId": "7783",
+    "title": "Theories of developmental psychology",
+    "author": "Patricia H. Miller",
+    "openLibraryWorkId": "OL16010083W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7716",
+        "reason": "Explore how questions about children’s development meet practice in Horwath’s study of identifying and assessing neglect."
+      }
+    ]
+  },
+  {
+    "workId": "5707",
+    "title": "Activiteit en begrip",
+    "author": "B. van Oers",
+    "openLibraryWorkId": "OL39384526W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5536",
+        "reason": "Vergelijk deze handelingspsychologische benadering met een beknopte neuropsychologische inleiding over leer- en ontwikkelingsproblemen."
+      }
+    ]
+  },
+  {
+    "workId": "5536",
+    "title": "Hersenfuncties bij leer- en ontwikkelingsstoornissen",
+    "author": "Peter van Vugt",
+    "openLibraryWorkId": "OL24729349W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5707",
+        "reason": "Bekijk naast de neuropsychologische invalshoek ook Van Oers’ theoretische onderzoek naar activiteit, leren en begripsvorming."
+      }
+    ]
+  },
+  {
+    "workId": "2369",
+    "title": "Bergje",
+    "author": "Bregje Hofstede",
+    "openLibraryWorkId": "OL44381671W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5082",
+        "reason": "Vergelijk de terugkeer naar één vertrouwde berg met Nootebooms reisobservaties tijdens verschillende bezoeken aan Noord-Amerika."
+      }
+    ]
+  },
+  {
+    "workId": "5082",
+    "title": "Avontuur Amerika",
+    "author": "Cees Nooteboom",
+    "openLibraryWorkId": "OL15915510W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2369",
+        "reason": "Lees hoe een reis ook terug kan voeren naar de eigen jeugd, in Hofstedes wandelingen op de Sass Songher."
+      }
+    ]
+  },
+  {
+    "workId": "4206",
+    "title": "Out of my mind",
+    "author": "Sharon M. Draper",
+    "openLibraryWorkId": "OL12489W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4429",
+        "reason": "Compare Melody’s struggle to be heard with Harriet’s discovery that written observations can change the way friends see one another."
+      },
+      {
+        "workId": "4584",
+        "reason": "For older readers, contrast Melody’s communication aid with the imaginary squip that tells Jeremy how to behave in Be More Chill."
+      }
+    ]
+  },
+  {
+    "workId": "4429",
+    "title": "Harriet the Spy",
+    "author": "Louise Fitzhugh",
+    "openLibraryWorkId": "OL5277971W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4206",
+        "reason": "For another child’s perspective on communication and friendship, meet Melody, whose abilities are underestimated by those around her."
+      }
+    ]
+  },
+  {
+    "workId": "2109",
+    "title": "Anne of Avonlea",
+    "author": "Lucy Maud Montgomery",
+    "openLibraryWorkId": "OL77744W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4524",
+        "reason": "Compare Anne’s early experience as a teacher with a school story told through the different pupils of Mr. Terupt’s class."
+      }
+    ]
+  },
+  {
+    "workId": "4524",
+    "title": "Because of Mr. Terupt",
+    "author": "Rob Buyea",
+    "openLibraryWorkId": "OL15400120W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2109",
+        "reason": "For a different classroom perspective, follow Anne Shirley as she begins teaching and discovers the limits of her good intentions."
+      }
+    ]
+  },
+  {
+    "workId": "3501",
+    "title": "Het zingende gras",
+    "author": "Doris Lessing",
+    "openLibraryWorkId": "OL31256W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3305",
+        "reason": "Verken een andere historische roman over koloniale macht, via Roger Casements verzet tegen uitbuiting in Congo en het Amazonegebied."
+      }
+    ]
+  },
+  {
+    "workId": "3305",
+    "title": "De droom van de Ier",
+    "author": "Mario Vargas Llosa",
+    "openLibraryWorkId": "OL15504299W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3501",
+        "reason": "Vergelijk Casements publieke strijd met Lessings verbeelding van koloniale machtsverhoudingen binnen een huishouden in Zuid-Rhodesië."
+      }
+    ]
+  },
+  {
+    "workId": "3016",
+    "title": "Ik mis mezelf",
+    "author": "Lisa Genova",
+    "openLibraryWorkId": "OL9475257W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5923",
+        "reason": "Lees een andere roman over gezien worden voorbij een diagnose: Kingsbury vertelt over een autistische jongeman en een vriendschap via muziek."
+      }
+    ]
+  },
+  {
+    "workId": "5923",
+    "title": "Bevrijdend lied",
+    "author": "Karen Kingsbury",
+    "openLibraryWorkId": "OL15369696W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3016",
+        "reason": "Vergelijk deze schoolvriendschap met Genova’s roman over een volwassen vrouw en haar gezin na een diagnose alzheimer op jonge leeftijd."
+      }
+    ]
+  },
+  {
+    "workId": "5756",
+    "title": "Een tik op het raam",
+    "author": "Linwood Barclay",
+    "openLibraryWorkId": "OL17356081W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6312",
+        "reason": "Probeer een andere thriller waarin persoonlijk verlies en een onderzoek naar verborgen gebeurtenissen steeds dichter bij elkaar komen."
+      }
+    ]
+  },
+  {
+    "workId": "6312",
+    "title": "Voltooid verleden",
+    "author": "Robert Goddard",
+    "openLibraryWorkId": "OL16717223W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5756",
+        "reason": "Vergelijk Jonathans zoektocht naar vroegere gebeurtenissen met Cal Weavers onderzoek naar een verdwijning in zijn eigen stad."
+      }
+    ]
+  },
+  {
+    "workId": "6094",
+    "title": "De verdwenen monnik",
+    "author": "Peter Berresford Ellis",
+    "openLibraryWorkId": "OL77057W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5930",
+        "reason": "Voor een heel andere omgeving met een vrouwelijke speurder: volg Mma Ramotswe tijdens haar werk en dagelijks leven in Botswana."
+      }
+    ]
+  },
+  {
+    "workId": "5930",
+    "title": "Het raadsel van de pompoen",
+    "author": "Alexander McCall Smith",
+    "openLibraryWorkId": "OL2435445W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6094",
+        "reason": "Verplaats je naar het zevende-eeuwse Ierland, waar zuster Fidelma een verdwijning in een abdij onderzoekt."
+      }
+    ]
+  },
+  {
+    "workId": "2672",
+    "title": "Perfume",
+    "author": "Patrick Süskind",
+    "openLibraryWorkId": "OL10834W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2492",
+        "reason": "For shorter approaches to horror, compare Süskind’s sustained portrait of obsession with this anthology of stories by different writers."
+      }
+    ]
+  },
+  {
+    "workId": "2492",
+    "title": "Prime Evil",
+    "author": "Douglas. Winter",
+    "openLibraryWorkId": "OL8140005W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2672",
+        "reason": "For a full-length literary horror novel, follow a perfumer whose pursuit of an ideal scent turns murderous."
+      }
+    ]
+  },
+  {
+    "workId": "7643",
+    "title": "An American Plague",
+    "author": "Jim Murphy",
+    "openLibraryWorkId": "OL7962230W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7993",
+        "reason": "For a different perspective on disease and society, explore Colomina’s argument about tuberculosis, medical imaging and twentieth-century architecture."
+      }
+    ]
+  },
+  {
+    "workId": "7993",
+    "title": "X-ray Architecture",
+    "author": "Beatriz Colomina",
+    "openLibraryWorkId": "OL20882047W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7643",
+        "reason": "Compare this architectural study with a history for younger readers about how the yellow fever epidemic affected Philadelphia in 1793."
+      }
+    ]
+  },
+  {
+    "workId": "4584",
+    "title": "Be More Chill",
+    "author": "Ned Vizzini",
+    "openLibraryWorkId": "OL5850282W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4206",
+        "reason": "Compare two very different uses of technology in a school story: Jeremy seeks social approval, while Melody needs a way to express what she already knows."
+      }
+    ]
   }
 ] as const;
