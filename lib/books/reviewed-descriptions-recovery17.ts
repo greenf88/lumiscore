@@ -96,7 +96,7 @@ export const SEVENTEENTH_RECOVERY_DESCRIPTIONS = [
     "source": "official_publisher",
     "sourceName": "Stephen King — official author site",
     "sourceUrl": "https://stephenking.com/works/novel/blaze.html",
-    "text": "Clayton Blaisdell Jr., known as Blaze, plans to kidnap a wealthy family’s baby. His criminal partner George is dead, yet Blaze still hears the instructions that once guided their schemes. Caring for the child brings memories of his own harsh childhood into the present and complicates the crime he has set in motion. Published under Stephen King’s Richard Bachman name, this suspense novel follows a damaged man whose growing attachment to his victim makes his choices increasingly difficult."
+    "text": "Clayton Blaisdell, known as Blaze, plans to kidnap a wealthy family’s baby. His criminal partner George is dead, yet Blaze still hears the instructions that once guided their schemes. Caring for the child brings memories of his own harsh childhood into the present and complicates the crime he has set in motion. Published under Stephen King’s Richard Bachman name, this suspense novel follows a damaged man whose growing attachment to his victim makes his choices increasingly difficult."
   },
   {
     "title": "The Devil Wears Prada",
@@ -228,7 +228,7 @@ export const SEVENTEENTH_RECOVERY_DESCRIPTIONS = [
     "source": "official_publisher",
     "sourceName": "Candlewick Press",
     "sourceUrl": "https://www.candlewick.com/9780763623449/ish/",
-    "text": "Ramon draws whenever he can, until a dismissive remark from his older brother makes him doubt every picture. Trying to make his drawings perfectly accurate drains the pleasure from an activity he once loved. His younger sister Marisol notices something different in his work and helps him look at it again. Peter H. Reynolds’s picture book explores the freedom of making things without demanding perfection, following a child’s return to curiosity and confidence through encouragement from someone close to him."
+    "text": "Ramon draws whenever he can, until a dismissive remark from his older brother makes him doubt every picture. Trying to make his drawings perfectly accurate drains the pleasure from an activity he once loved. His younger sister Marisol notices something different in his work and helps him look at it again. Reynolds’s picture book explores the freedom of making things without demanding perfection, following a child’s return to curiosity and confidence through encouragement from someone close to him."
   },
   {
     "title": "Little Bear's Visit (An I Can Read Book, Level 1)",

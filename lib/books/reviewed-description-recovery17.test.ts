@@ -142,7 +142,7 @@ const editions = [
     "source": "official_publisher",
     "href": "https://stephenking.com/works/novel/blaze.html",
     "marker": "Clayton Blaisdell",
-    "start": "Clayton Blaisdell Jr.,"
+    "start": "Clayton Blaisdell,"
   },
   {
     "id": "8727",
@@ -611,6 +611,11 @@ test('all thirty recovery summaries render as visible initial HTML with attribut
       const html = renderToStaticMarkup(createElement(Provider, { initialLocale: edition.locale, hasPersistedChoice: true, initialPath: '/book/' + edition.id },
         createElement(Description, { description })));
       assert.match(html, new RegExp(edition.marker), edition.id);
+      assert.ok(description);
+      const renderedParagraphs = [...html.matchAll(/<p>([\s\S]*?)<\/p>/g)].map(match => match[1]);
+      const expectedText = renderToStaticMarkup(createElement('span', null, description.text)).replace(/^<span>|<\/span>$/g, '');
+      assert.equal(renderedParagraphs.join(' ').replace(/\s+/g, ' ').trim(), expectedText.replace(/\s+/g, ' ').trim(), `${edition.id}: paragraph formatting preserves the complete text and punctuation`);
+      if (edition.id === '9494') assert.ok(renderedParagraphs.every(paragraph => !paragraph.endsWith('Peter H.')), 'Ish must not split the author name across paragraphs');
       assert.ok(html.includes('href="' + edition.href + '"'), edition.id);
       assert.match(html, /class="description-source"/);
       assert.doesNotMatch(html, /Loading the description|De beschrijving wordt geladen|could not load|kon tijdelijk niet|not available yet|geen geverifieerde|<[^>]+\shidden(?:\s|=|>)/);
