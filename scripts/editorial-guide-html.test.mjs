@@ -99,5 +99,29 @@ test('Dutch dystopia route renders only supported editions, with matching guide 
       for(const item of items)assert.ok(output.includes('href="/nl/book/'+item.workId+'"'),original.slug);
       assert.equal(editorialPageJsonLd(localized,items,'nl')['@graph'][1].numberOfItems,items.length);
     }
+    for(const original of editorialTopLists){
+      const items=original.workIds.map((id,i)=>({id:'en-db-'+i,workId:String(800000+i),openLibraryWorkId:getEditorialWorkSourceId(id),source:'supabase',editionAvailable:true,editionLanguage:'eng',title:getEditorialTopBook(id).title,author:getEditorialTopBook(id).author,cover:'orbit',score:null,ratingsCount:null,match:null}));
+      const choices=Object.fromEntries(original.workIds.map((id,i)=>[id,{...getEditorialTopBook(id),sourceId:getEditorialWorkSourceId(id),href:'/book/'+items[i].workId}]));
+      const renderEnglish=(available,unavailable=false)=>renderToStaticMarkup(h(Provider,{initialLocale:'en',hasPersistedChoice:true,initialPath:'/toplijsten/'+original.slug},h(EditorialTopList,{list:original,books:available,selections:choices,relatedLists:[],unavailable}))).replaceAll('<!-- -->','');
+      const output=renderEnglish(items),guide=getLandingGuide('/toplijsten/'+original.slug,'en');
+      assert.equal((output.match(/class="editorial-book"/g)??[]).length,original.workIds.length);
+      assert.equal((output.match(/<h3 class="editorial-angle">/g)??[]).length,items.length);
+      assert.match(output,new RegExp(items.length+' of '+items.length+' books'));
+      assert.ok(output.includes('Where would you like to start?')&&output.includes('Questions to help you choose'));
+      assert.doesNotMatch(output,/Nederlandse|van de|Bron:|Vragen bij|Waar wil|undefined/);
+      for(const [i,item] of items.entries()){
+        assert.ok(output.includes('href="/en/book/'+item.workId+'"'));
+        assert.ok(output.includes('href="#keuze-'+original.workIds[i]+'"'));
+      }
+      const graph=editorialPageJsonLd(original,items,'en')['@graph'];
+      assert.equal(graph[0].name,guide.h1);assert.equal(graph[0].description,guide.meta_description);
+      assert.equal(graph[1].numberOfItems,items.length);
+      const partial=renderEnglish(items.slice(1));
+      assert.match(partial,new RegExp((items.length-1)+' of '+items.length+' selected books'));
+      assert.doesNotMatch(partial,/editorial-complete/);
+      assert.ok(!partial.includes('href="#keuze-'+original.workIds[0]+'"'));
+      assert.match(renderEnglish([],true),/role="alert"/);
+      assert.doesNotMatch(renderEnglish([],true),/editorial-complete/);
+    }
   } finally { await vite.close(); }
 });

@@ -12,8 +12,8 @@ test('editorial mobile grid overrides the wider desktop minimum with two shrinka
   assert.match(css.slice(desktop, mobile), /@media \(max-width: 600px\) \{[^}]+\}/);
   assert.equal(/^\.editorial-books \{ grid-template-columns:/m.test(css.slice(mobile + 1)), false,
     'a later global editorial override would defeat the mobile rule');
-  assert.ok(css.indexOf("[data-editorial-guide] .editorial-books { grid-template-columns: minmax(0, 1fr);",mobile)>mobile,
-    'Dutch long-form guides have one readable mobile column');
+  assert.doesNotMatch(css, /\[data-editorial-guide\] \.editorial-books \{ grid-template-columns:/,
+    'reading guides use the shared compact grid, including two mobile columns');
 });
 
 test('all editorial selections retain the same shared BookCard grid', () => {
