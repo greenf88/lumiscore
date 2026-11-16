@@ -63,8 +63,8 @@ const verifiedGuideDates: Readonly<Record<string, { date: string; hash: string }
   '/collection/suzanne-vermeer': { date: '2026-11-04', hash: '9770063db3cd6ae14cdf33d30c79cba1367ea5414758fbfed6573c2569405c1f' },
   '/toplijsten/fantasy-om-mee-te-beginnen': { date: '2026-11-04', hash: '453c29cf8780afbf371989926b0201e9cd7dd39074768c0e75413010172ecac0' },
   '/toplijsten/na-project-hail-mary': { date: '2026-11-04', hash: '5a1d49c9cd25fbc955117c136313faef41bae99357cc5fdff312bca1a99bfe29' },
-  // New guide reviewed for the 13 November recovery release.
-  '/toplijsten/dystopie-vanaf-1990': { date: '2026-11-13', hash: 'b6d3874b0e0be97d1ffb003e0be3e0b5c0427c25ea321e258e2ea5db6daf5cff' },
+  // Complete Dutch edition selection and reading guide reviewed 16 November.
+  '/toplijsten/dystopie-vanaf-1990': { date: '2026-11-16', hash: 'd2425763e3023caeff137b29971036bd82ef5b6eebec2c0021d8e591d2ad0b47' },
 };
 
 function sitemapLastModified(path: string, locale: Locale): string {

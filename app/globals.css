@@ -1498,9 +1498,28 @@ button, input, select, textarea { font-family: var(--sans); }
 .editorial-related { margin-top: 36px; }
 .editorial-related h2 { font-family: var(--serif); font-size: 25px; }
 .editorial-unavailable > p { display: block; overflow: visible; }
+/* Long Dutch reading notes need room; keep the shared catalogue card identity. */
+[data-editorial-guide='dystopie-vanaf-1990'] .editorial-books { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 24px; }
+[data-editorial-guide='dystopie-vanaf-1990'] .editorial-book { scroll-margin-top: 100px; }
+[data-editorial-guide='dystopie-vanaf-1990'] .book-card { height: auto; }
+[data-editorial-guide='dystopie-vanaf-1990'] .book-card-main-link { flex: none; display: grid; grid-template-columns: minmax(96px, .36fr) minmax(0, .64fr); align-items: start; }
+[data-editorial-guide='dystopie-vanaf-1990'] .card-cover-wrap { padding: 18px 0 0 18px; background: transparent; }
+[data-editorial-guide='dystopie-vanaf-1990'] .book-card-body { min-width: 0; padding: 18px; }
+[data-editorial-guide='dystopie-vanaf-1990'] .book-card :is(h2, h3) { min-height: 0; }
+[data-editorial-guide='dystopie-vanaf-1990'] .book-meta { margin-top: 12px; }
+[data-editorial-guide='dystopie-vanaf-1990'] .editorial-angle { margin: 20px 18px 0; font-family: var(--sans); font-size: 1rem; font-weight: 700; line-height: 1.4; }
+[data-editorial-guide='dystopie-vanaf-1990'] .editorial-reason { margin: 10px 18px 0; font-size: 1rem; line-height: 1.65; }
+[data-editorial-guide='dystopie-vanaf-1990'] .guide-sources { position: relative; z-index: 1; margin: 12px 18px 0; overflow-wrap: anywhere; }
+[data-editorial-guide='dystopie-vanaf-1990'] .guide-sources a { display: inline-block; padding-block: 8px; }
+[data-editorial-guide='dystopie-vanaf-1990'] .editorial-complete { padding: 14px 18px; border-left: 3px solid var(--teal); background: var(--surface); color: var(--teal); }
 @media (max-width: 600px) {
   .featured-section.editorial-lists { padding-block: 16px 32px; }
   .editorial-books { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-editorial-guide='dystopie-vanaf-1990'] .editorial-books { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  [data-editorial-guide='dystopie-vanaf-1990'] .book-card-main-link { grid-template-columns: minmax(96px, .38fr) minmax(0, .62fr); }
+  [data-editorial-guide='dystopie-vanaf-1990'] .card-cover-wrap { padding: 14px 0 0 14px; }
+  [data-editorial-guide='dystopie-vanaf-1990'] .book-card-body { padding: 14px; }
+  [data-editorial-guide='dystopie-vanaf-1990'] .book-card h2 { font-size: 1.25rem; }
   .reading-list-grid { margin-top: 20px; gap: 14px; }
   .reading-list-card { padding: 18px; }
   .reading-list-actions > .ui-control { flex: 1 1 100%; }
