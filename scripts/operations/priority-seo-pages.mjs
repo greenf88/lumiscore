@@ -380,8 +380,42 @@ export const sixteenthPrioritySeoPaths = Object.freeze([
   "/en/book/7482",
   "/en/book/9856"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths]);
-export const prioritySeoCohort = path => sixteenthPrioritySeoPaths.includes(path) ? 'recovery-16'
+// Thirty further GSC examples with reviewed descriptions and contextual reading links.
+export const seventeenthPrioritySeoPaths = Object.freeze([
+  "/nl/book/1625",
+  "/en/book/9534",
+  "/en/book/3779",
+  "/nl/book/1707",
+  "/en/book/3743",
+  "/en/book/3674",
+  "/en/book/1894",
+  "/en/book/605",
+  "/en/book/8727",
+  "/en/book/1907",
+  "/en/book/8937",
+  "/en/book/2760",
+  "/nl/book/3458",
+  "/nl/book/1347",
+  "/nl/book/1703",
+  "/nl/book/6290",
+  "/nl/book/3279",
+  "/en/book/10049",
+  "/en/book/9494",
+  "/en/book/2135",
+  "/nl/book/2353",
+  "/nl/book/5023",
+  "/nl/book/1828",
+  "/en/book/8029",
+  "/en/book/10114",
+  "/en/book/3660",
+  "/en/book/9762",
+  "/en/book/8854",
+  "/en/book/4442",
+  "/en/book/3753"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths]);
+export const prioritySeoCohort = path => seventeenthPrioritySeoPaths.includes(path) ? 'recovery-17'
+  : sixteenthPrioritySeoPaths.includes(path) ? 'recovery-16'
   : fifteenthPrioritySeoPaths.includes(path) ? 'recovery-15'
   : fourteenthPrioritySeoPaths.includes(path) ? 'recovery-14'
   : thirteenthPrioritySeoPaths.includes(path) ? 'recovery-13'
@@ -396,7 +430,7 @@ export const prioritySeoCohort = path => sixteenthPrioritySeoPaths.includes(path
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
