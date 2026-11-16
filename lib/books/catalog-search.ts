@@ -49,11 +49,17 @@ export function normalizeCatalogSearchText(value: string): string {
     .replace(/\s+/g, ' ');
 }
 
-export function reviewedCoauthorSearchWorkIds(query: string) {
+export function reviewedCoauthorSearchKeys(query: string) {
   const normalized = normalizeCatalogSearchText(query);
-  if (normalized.length < CATALOG_SEARCH_MIN_LENGTH) return [];
-  return REVIEWED_COAUTHORS.filter(credit => normalizeCatalogSearchText(credit.name).includes(normalized))
-    .map(credit => Number(credit.workId));
+  const workIds: number[] = [], editionIsbns: string[] = [];
+  if (normalized.length >= CATALOG_SEARCH_MIN_LENGTH) {
+    for (const credit of REVIEWED_COAUTHORS) {
+      if (!normalizeCatalogSearchText(credit.name).includes(normalized)) continue;
+      if (credit.workId) workIds.push(Number(credit.workId));
+      else editionIsbns.push(credit.isbn);
+    }
+  }
+  return { workIds, editionIsbns };
 }
 
 function textScore(

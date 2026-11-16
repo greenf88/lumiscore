@@ -1,5 +1,5 @@
 import type { Book } from '@/app/data/books';
-import { normalizeCatalogIsbn, reviewedCoauthorSearchWorkIds } from '../books/catalog-search.ts';
+import { normalizeCatalogIsbn, reviewedCoauthorSearchKeys } from '../books/catalog-search.ts';
 import type { EditorialQuery } from '../catalog/editorial-query.ts';
 import { editorialRpcArgs } from '../catalog/editorial-query.ts';
 import { searchWindow } from '../catalog/search-window.ts';
@@ -58,6 +58,22 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   // Timeout/errors stay unavailable; never cache a truncated successful result.
   const signal = AbortSignal.timeout(5000);
   const isbn = normalizeCatalogIsbn(state.query);
+  const coauthor = reviewedCoauthorSearchKeys(state.query);
+  const coauthorEditions = new Map<string, string>();
+  if (coauthor.editionIsbns.length) {
+    observation.databaseRequests++;
+    const { data, error } = await supabase.from('editions').select('id,work_id,isbn_13')
+      .in('isbn_13', coauthor.editionIsbns).limit(coauthor.editionIsbns.length + 1).abortSignal(signal);
+    if (error) throw error;
+    if (!Array.isArray(data) || new Set(data.map(row => row.isbn_13)).size !== data.length
+      || data.length > coauthor.editionIsbns.length) throw new Error('Ambiguous coauthor edition identity');
+    for (const row of data) {
+      const workId = Number(row.work_id);
+      if (!Number.isSafeInteger(workId) || workId <= 0 || !row.isbn_13) throw new Error('Invalid coauthor edition identity');
+      coauthor.workIds.push(workId);
+      coauthorEditions.set(`${workId}:${row.id}`, row.isbn_13);
+    }
+  }
   let isbnWorkIds: number[] | null = null;
   if (isbn) {
     observation.databaseRequests++;
@@ -79,7 +95,7 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   const [projection, categories, selectedAuthor] = await Promise.all([
     supabase.rpc('catalog_search_selection_v2', {
       ...projectionArgs,
-      p_alias_ids: isbnWorkIds ?? [...new Set([...projectionArgs.p_alias_ids, ...reviewedCoauthorSearchWorkIds(state.query)])].slice(0, 100),
+      p_alias_ids: isbnWorkIds ?? [...new Set([...projectionArgs.p_alias_ids, ...coauthor.workIds])].slice(0, 100),
       p_locale: locale,
     }).abortSignal(signal),
     loadPublicCategories(signal),
@@ -89,7 +105,10 @@ async function loadPublicSearchSelection(state: EditorialQuery, locale: Locale, 
   if (projection.error) throw projection.error;
   const selected = readSearchProjection(projection.data, state.query);
   observation.selectionRowsLoaded += selected.books.length;
-  const books = isbnWorkIds === null ? selected.books : selected.books.filter(book => isbnWorkIds.includes(Number(book.workId)));
+  const books = isbnWorkIds === null ? selected.books.map(book => {
+    const isbn13 = coauthorEditions.get(`${book.workId}:${book.editionId}`);
+    return isbn13 ? { ...book, isbn13 } : book;
+  }) : selected.books.filter(book => isbnWorkIds.includes(Number(book.workId)));
   return { ...selected, categories, selectedAuthor, books };
 }
 
