@@ -1,0 +1,88 @@
+// Original summaries bound to corrected, source-checked edition identities.
+// Evidence: docs/operations/reviewed-descriptions-recovery20-20261116.json
+export const TWENTIETH_RECOVERY_DESCRIPTIONS = [
+  {
+    "title": "Koppensnellers, uitrangeerders en selecteurs",
+    "author": "Stefan Lievens",
+    "isbn13": "9789034105974",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "Universiteit Gent — academische bibliografie",
+    "sourceUrl": "https://biblio.ugent.be/publication/8607876",
+    "text": "Pol Coetsier en Stefan Lievens behandelen arbeidsbemiddeling als een beroep in verandering. Hun boek plaatst het zoeken, selecteren en begeleiden van personeel in het perspectief van de jaren negentig en de aanloop naar het jaar 2000. Het richt de aandacht op de beroepspraktijk achter personeelsbeleid. Deze publicatie uit 1992 biedt daarmee een historische invalshoek op de ontwikkeling van arbeidsbemiddeling."
+  },
+  {
+    "title": "Law and Legal Information Directory",
+    "author": "Laurie J. Fundukian",
+    "isbn13": "9780787698003",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "University of Arizona — Law Library",
+    "sourceUrl": "https://lawlibrary.arizona.edu/law-library-reference-resources",
+    "text": "The nineteenth edition of this reference directory brings together information about legal organizations, services and programmes. It is designed as a starting point for locating institutions and sources within the legal information field. Edited by Laurie J. Fundukian and published by Gale in 2008, it belongs to a series of institutional directories rather than a textbook explaining legal rules. The edition date matters when using its contact details, which describe the organizations as recorded at that time."
+  },
+  {
+    "title": "Fatal Deception",
+    "author": "Sally Wentworth",
+    "isbn13": "9780750503211",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "Open Library — reviewed edition",
+    "sourceUrl": "https://openlibrary.org/books/OL10807049M",
+    "text": "Norrie has rebuilt her life after a disastrous relationship with Bruno Denton, the man who took over her father’s newspaper. Four years earlier, her trust in him helped put her father’s future at risk. Now Bruno returns with ambitions that extend beyond business: he also wants a place in her young nephew’s life. Sally Wentworth’s romance brings Norrie’s unresolved feelings into conflict with her determination to protect her family, as past betrayal shapes a new confrontation."
+  },
+  {
+    "title": "Diego Rivera: Illustrious Words, 1886–1921",
+    "author": "Diego Rivera",
+    "isbn13": "9789708021128",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "CiNii — university library catalogue",
+    "sourceUrl": "https://ci.nii.ac.jp/ncid/BA8912454X",
+    "text": "This illustrated exhibition catalogue presents Diego Rivera through his words and reflections on art. The first volume, covering 1886–1921, follows his childhood, artistic training and encounters with the European avant-garde. Writings and images bring his development as an artist into conversation with his observations about other artists and their work. Produced in connection with the Museo Estudio Diego Rivera, the volume offers a perspective on the muralist as a storyteller and critic as well as a painter."
+  },
+  {
+    "title": "The Broken Link",
+    "author": "Yvonne Whittal",
+    "isbn13": "9780263726503",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "Open Library — reviewed work synopsis",
+    "sourceUrl": "https://openlibrary.org/works/OL15714082W/The_Broken_Link",
+    "text": "Janey still loves Rudolph, but the memory of his broken promise has made trust difficult. When he asks her to marry him for their child’s sake, she must confront feelings that have survived their separation. She believes he promised himself to her while already committed to another woman, and fears that this attachment remains. Yvonne Whittal’s romance centres on the tension between a possible reunion, responsibility for a child and Janey’s need to understand the man she loves."
+  },
+  {
+    "title": "Viglius van Aytta als hoogleraar te Ingolstadt",
+    "author": "J. G. B. Pikkemaat",
+    "isbn13": "9789071478772",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "Staatsbibliothek zu Berlin / GBV — titelblad en inhoudsopgave",
+    "sourceUrl": "https://www.gbv.de/dms/spk/sbb/recht/toc/606081879.pdf",
+    "text": "J.G.B. Pikkemaat onderzoekt de rechtscolleges die Viglius van Aytta tussen 1537 en 1542 in Ingolstadt gaf. Centraal staat hoe rechtspraktijk, traditionele rechtsgeleerdheid en humanisme in dat onderwijs samenkomen. Aan de hand van concrete Romeinsrechtelijke vraagstukken bespreekt hij onder meer eigendomsoverdracht, schenking en de verhouding tussen rechter en wet. Het onderzoek verbindt de uitleg van juridische teksten met het intellectuele klimaat van de zestiende eeuw. Zo wordt zichtbaar welke vragen en methoden het toenmalige universitaire rechtsonderwijs vormgaven."
+  },
+  {
+    "title": "Fertility, Food and Fever",
+    "author": "David Henley",
+    "isbn13": "9789067182096",
+    "language": "en",
+    "editionLanguage": "eng",
+    "reviewedAt": "2026-11-16",
+    "source": "official_catalog",
+    "sourceName": "Google Books — KITLV Press edition",
+    "sourceUrl": "https://books.google.com/books/about/Fertility_Food_and_Fever.html?id=5_ZHAAAAMAAJ",
+    "text": "David Henley examines how population, economic activity and the environment changed in North and Central Sulawesi between 1600 and 1930. Drawing on Dutch historical records, including trading-company and missionary archives, he reconstructs patterns of settlement, livelihoods and landscape change. Disease, food supply and reproductive fertility become connected explanations for the region’s demographic history. The study combines historical geography with demography to question simple assumptions about population growth and its relationship to agricultural resources and environmental change."
+  }
+] as const;
