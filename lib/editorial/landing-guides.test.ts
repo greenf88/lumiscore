@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { availableGuideGroups, bookReadingRoutes, findSuzanneGuideBook, getLandingGuide, LANDING_GUIDES, suzanneBookGuide } from './landing-guides.ts';
+import { availableGuideGroups, bookReadingRoutes, findSuzanneGuideBook, getLandingGuide, LANDING_GUIDES, ENGLISH_LANDING_GUIDES, suzanneBookGuide } from './landing-guides.ts';
 import { editorialTopLists, getEditorialWorkSourceId, localizeEditorialList } from '../catalog/top-lists.ts';
 import type { Book } from '../../app/data/books.ts';
 
@@ -10,7 +10,7 @@ test('target guides retain candidates/order while links use real language-select
   for(const guide of LANDING_GUIDES.slice(1)){
     const path=guide.path.slice(3), list=editorialTopLists.find(l=>'/toplijsten/'+l.slug===path)!;
     const localized=localizeEditorialList(list,'nl');
-    assert.equal(localized.workIds.length,list.slug==='fantasy-sciencefiction'?25:10);assert.equal(getLandingGuide(path,'en'),null);
+    assert.equal(localized.workIds.length,list.slug==='fantasy-sciencefiction'?25:10);assert.equal(getLandingGuide(path,'en')?.path,'/en'+path);
     assert.equal(new Set(localized.workIds).size,localized.workIds.length);
     assert.deepEqual(guide.cards!.map(c=>c.work_id),localized.workIds);
     assert.deepEqual(guide.groups!.flatMap(g=>g.work_ids.map(String)).sort(),[...localized.workIds].sort());
@@ -23,6 +23,22 @@ test('target guides retain candidates/order while links use real language-select
     // in the dedicated replacement regression below to check locale routing.
     assert.ok(bookReadingRoutes(chosen,'nl').length>0);
     assert.ok(bookReadingRoutes(chosen,'en').length>0);
+  }
+});
+
+test('all English guides retain the original selections and give complete, source-bound reading advice',()=>{
+  assert.equal(ENGLISH_LANDING_GUIDES.length,12);
+  for(const guide of ENGLISH_LANDING_GUIDES){
+    const list=editorialTopLists.find(l=>guide.path==='/en/toplijsten/'+l.slug)!;
+    assert.deepEqual(guide.cards!.map(c=>c.work_id),list.workIds);
+    assert.deepEqual(guide.groups!.flatMap(g=>g.work_ids.map(String)).sort(),[...list.workIds].sort());
+    assert.ok(guide.intro.length>=2 && guide.faq.length>=4);
+    assert.ok(guide.cards!.every(c=>c.text.length>=150 && c.reader_angle && c.sources.length>0));
+    const example={...book(list.workIds[0]),workId:'987654'};
+    assert.ok(availableGuideGroups(guide,[example]).some(g=>g.entries.some(e=>e.workId==='987654')));
+    const routes=bookReadingRoutes(example,'en');
+    for(const route of routes)assert.equal(route.title,getLandingGuide(route.href,'en')!.h1);
+    assert.equal(getLandingGuide('/collection/suzanne-vermeer','en'),null);
   }
 });
 test('Dutch substitutions preserve English identities and use portable source links',()=>{

@@ -5,18 +5,18 @@ import { getBookHref } from '@/lib/books/book-navigation';
 import type { Locale } from '@/lib/i18n/config';
 import { reviewedBookLinks } from '@/lib/editorial/reviewed-book-links';
 
-export function GuideSources({ sources }: { sources?: GuideSource[] }) {
-  return sources?.length ? <p className="guide-sources">Bron: {sources.map((source, i) => <span key={source.url}>{i > 0 ? ' · ' : ''}<a href={source.url}>{source.title}</a></span>)}</p> : null;
+export function GuideSources({ sources, locale = 'nl' }: { sources?: GuideSource[]; locale?: Locale }) {
+  return sources?.length ? <p className="guide-sources">{locale === 'nl' ? 'Bron: ' : 'Source: '}{sources.map((source, i) => <span key={source.url}>{i > 0 ? ' · ' : ''}<a href={source.url}>{source.title}</a></span>)}</p> : null;
 }
-export function GuideQuestions({ items }: { items: GuideQuestion[] }) {
-  return <section className="landing-guide guide-questions"><h2>Vragen bij je keuze</h2>{items.map(q => <details key={q.question}>
-    <summary>{q.question}</summary><p>{q.answer}</p><GuideSources sources={q.sources}/>
+export function GuideQuestions({ items, locale = 'nl' }: { items: GuideQuestion[]; locale?: Locale }) {
+  return <section className="landing-guide guide-questions"><h2>{locale === 'nl' ? 'Vragen bij je keuze' : 'Questions to help you choose'}</h2>{items.map(q => <details key={q.question}>
+    <summary>{q.question}</summary><p>{q.answer}</p><GuideSources sources={q.sources} locale={locale}/>
   </details>)}</section>;
 }
-export function ReadingGuideIntro({ guide, books }: { guide: LandingGuide; books: Book[] }) {
+export function ReadingGuideIntro({ guide, books, locale = 'nl' }: { guide: LandingGuide; books: Book[]; locale?: Locale }) {
   const groups = availableGuideGroups(guide, books);
   return <div className="landing-guide reading-guide-intro">{guide.intro.map(p => <p key={p}>{p}</p>)}
-    {groups.length > 0 && <nav aria-label="Kies je leesrichting"><h2>Waar wil je beginnen?</h2><ul>{groups.map(group => <li key={group.heading}>
+    {groups.length > 0 && <nav aria-label={locale === 'nl' ? 'Kies je leesrichting' : 'Choose a reading direction'}><h2>{locale === 'nl' ? 'Waar wil je beginnen?' : 'Where would you like to start?'}</h2><ul>{groups.map(group => <li key={group.heading}>
       <strong>{group.heading}: </strong>{group.entries.map((entry, i) => <span key={entry.workId}>{i > 0 ? ' · ' : ''}<a href={'#keuze-' + entry.candidateId}>{entry.title}</a></span>)}
     </li>)}</ul></nav>}
   </div>;

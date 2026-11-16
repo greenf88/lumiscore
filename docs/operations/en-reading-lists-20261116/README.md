@@ -1,0 +1,11 @@
+# English reading lists and consistent reading cards — 16 November 2026
+
+All twelve English routes retain their original selections: 135 placements representing 109 works. Each now includes an introduction, grouped starting points, individual reading advice, source links, four reading questions, localized metadata, and matching book-to-list links. English sitemap dates are tied to reviewed content fingerprints.
+
+The guarded data batch adds 69 original English summaries for works without stored English descriptions, three verified English editions with exact-ISBN covers, and two publication-year corrections. The existing 40 approved English summaries and all Dutch selections are retained. Sources and cover SHA-256 values are recorded in `records.json`. New cover images were downloaded and visually checked. The three editions replace incomplete library presentations or a large-print representative; existing editions remain in the catalogue.
+
+The card layout is shared by Dutch and English lists. It uses the featured-book cover treatment, two mobile columns, consistent title/author/summary space, and four-line summary previews. Read more expands the full advice and its sources in place, with an accessible expanded state. Full summary text is present in the initial HTML. Reading-list content remains reachable through the book cards and grouped links.
+
+`apply.sql` is an atomic content-only operation, executed separately from deployment. It validates work, author, language, edition and before-state identities and rejects an existing English description. A rollback-only execution against production passed with 69 description and three edition records. `rollback.sql` is a guarded emergency inverse, not a deployment step; later changes or dependencies must be reviewed before using it.
+
+Validation covers all twelve English guides and the existing Dutch routes, correct source identities when database IDs differ, complete/partial/error renders, English labels, structured item counts, immediate synopsis rendering, rejected wrong-author/wrong-edition bindings, edition selection and content-bound sitemap dates. Release verification covers public list and book pages, cover availability, desktop/mobile layout and the read-more interaction.
