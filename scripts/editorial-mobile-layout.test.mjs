@@ -10,8 +10,10 @@ test('editorial mobile grid overrides the wider desktop minimum with two shrinka
   const mobile = css.indexOf('.editorial-books { grid-template-columns: repeat(2, minmax(0, 1fr)); }');
   assert.ok(desktop >= 0 && mobile > desktop, 'mobile rule must win over the 220px desktop minimum');
   assert.match(css.slice(desktop, mobile), /@media \(max-width: 600px\) \{[^}]+\}/);
-  assert.equal(css.slice(mobile + 1).includes('.editorial-books { grid-template-columns:'), false,
-    'a later editorial override would defeat the mobile rule');
+  assert.equal(/^\.editorial-books \{ grid-template-columns:/m.test(css.slice(mobile + 1)), false,
+    'a later global editorial override would defeat the mobile rule');
+  assert.ok(css.indexOf("[data-editorial-guide='dystopie-vanaf-1990'] .editorial-books { grid-template-columns: minmax(0, 1fr);",mobile)>mobile,
+    'the Dutch long-form dystopia guide has one readable mobile column');
 });
 
 test('all editorial selections retain the same shared BookCard grid', () => {

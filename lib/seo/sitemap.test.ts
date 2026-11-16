@@ -122,7 +122,7 @@ test('only matching published content advertises a stable lastmod', () => {
   assert.deepEqual(Object.fromEntries(dates.map(([, url, date]) => [url, date])), {
     'https://lumisco.re/nl/toplijsten/fantasy-om-mee-te-beginnen': '2026-11-04',
     'https://lumisco.re/nl/toplijsten/na-project-hail-mary': '2026-11-04',
-    'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990': '2026-11-13',
+    'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990': '2026-11-16',
     'https://lumisco.re/nl/zo-werkt-het': '2026-11-13',
     'https://lumisco.re/nl/imdb-voor-boeken': '2026-11-04',
     'https://lumisco.re/nl/collection/suzanne-vermeer': '2026-11-04',
@@ -144,7 +144,7 @@ test('changed information or guide content loses its lastmod until the new finge
   try {
     howItWorks.lead = originalLead + ' Synthetic unreviewed change.';
     assert.equal(lastmodFor(sitemap(), '/zo-werkt-het'), undefined);
-    assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), '2026-11-13');
+    assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), '2026-11-16');
     howItWorks.lead = originalLead;
     dystopia.intro = [...originalIntro, 'Synthetic unreviewed change.'];
     assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), undefined);
