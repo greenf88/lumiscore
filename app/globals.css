@@ -1499,7 +1499,7 @@ button, input, select, textarea { font-family: var(--sans); }
 .editorial-related h2 { font-family: var(--serif); font-size: 25px; }
 .editorial-unavailable > p { display: block; overflow: visible; }
 /* Match featured covers and align the closed reading cards in both languages. */
-[data-editorial-guide] .editorial-books { align-items: stretch; }
+[data-editorial-guide] .editorial-books { align-items: stretch; gap: 18px; }
 [data-editorial-guide] .editorial-book { scroll-margin-top: 100px; }
 [data-editorial-guide] .book-card-main-link { flex: none; }
 [data-editorial-guide] .book-card-body { min-width: 0; }
@@ -1519,6 +1519,7 @@ button, input, select, textarea { font-family: var(--sans); }
 @media (max-width: 600px) {
   .featured-section.editorial-lists { padding-block: 16px 32px; }
   .editorial-books { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-editorial-guide] .editorial-books { gap: 12px; }
   .editorial-reading-note { margin-inline: 12px; }
   .reading-list-grid { margin-top: 20px; gap: 14px; }
   .reading-list-card { padding: 18px; }
