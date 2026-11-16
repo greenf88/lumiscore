@@ -465,6 +465,19 @@ test('splits a long unpunctuated paragraph so the disclosure always reveals cont
   assert.equal(paragraphs.join(' '), text);
 });
 
+test('paragraph disclosure preserves punctuation inside names, titles and numbers', () => {
+  for (const text of [
+    'Nisa vertelt over de !Kung-gemeenschap. Haar levensverhaal verbindt herinneringen met gesprekken over haar omgeving.',
+    'De titel Opvoeden… geniet ervan!, gevolgd door een toelichting, bevat leestekens die bij de titel horen. Het boek helpt ouders.',
+    'An author called John Jr., a measurement of 3.14 and the question “Why?” remain intact. A second sentence follows.\nA third follows.',
+    '!Kung begins this account. “Listen!” she says. The final thought has no full stop',
+  ]) {
+    const paragraphs = splitBookDescriptionParagraphs(text, 45);
+    assert.ok(paragraphs.length > 1);
+    assert.equal(paragraphs.join(' ').replace(/\s+/g, ' ').trim(), text.replace(/\s+/g, ' ').trim());
+  }
+});
+
 test('book detail receives server copy without a robots-blocked hydration request', async () => {
   const [component, route] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreBookDescription.tsx', import.meta.url), 'utf8'),
