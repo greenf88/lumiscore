@@ -117,7 +117,9 @@ export function splitBookDescriptionParagraphs(
   const sourceParagraphs = description.split(/\n\s*\n+/).filter(Boolean);
   return sourceParagraphs.flatMap((paragraph) => {
     if (paragraph.length <= targetLength) return [paragraph];
-    const sentences = paragraph.match(/[^.!?…]+(?:[.!?…]+[”’'\"]*|$)/g) ?? [paragraph];
+    // Break only where whitespace already separates sentences. Punctuation
+    // inside names (!Kung), decimals or titles must never create new spaces.
+    const sentences = paragraph.match(/[\s\S]+?(?:[.!?…]+[”’'\"]*(?=\s|$)|$)/g) ?? [paragraph];
     const units = sentences.flatMap((sentence) => {
       const cleanSentence = sentence.trim();
       if (cleanSentence.length <= targetLength) return [cleanSentence];

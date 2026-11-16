@@ -1012,5 +1012,591 @@ export const REVIEWED_BOOK_LINKS = [
         "reason": "Explore another criminal world through Brandt’s interviews with Frank Sheeran and Sheeran’s claims about Jimmy Hoffa."
       }
     ]
+  },
+  {
+    "workId": "7437",
+    "title": "Power of Letting Go",
+    "author": "John Purkiss",
+    "openLibraryWorkId": "OL20744779W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3771",
+        "reason": "For a more specific skill to practise, explore Carnegie’s approach to preparing and delivering a talk with greater confidence."
+      }
+    ]
+  },
+  {
+    "workId": "3771",
+    "title": "How to Develop Self-Confidence",
+    "author": "Dale Carnegie",
+    "openLibraryWorkId": "OL1063296W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7437",
+        "reason": "Compare practical preparation for speaking with Purkiss’s reflections on releasing fixed expectations and the need for control."
+      },
+      {
+        "workId": "3725",
+        "reason": "For a contrasting communication context, explore Egan’s account of working collaboratively with a client in a helping relationship."
+      }
+    ]
+  },
+  {
+    "workId": "1839",
+    "title": "Pericles",
+    "author": "William Shakespeare",
+    "openLibraryWorkId": "OL361665W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "331",
+        "reason": "Vergelijk de reizen en scheidingen in Pericles met een ander toneelstuk waarin een storm de verhoudingen tussen mensen verandert."
+      }
+    ]
+  },
+  {
+    "workId": "331",
+    "title": "De storm",
+    "author": "William Shakespeare",
+    "openLibraryWorkId": "OL362699W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1839",
+        "reason": "Lees daarnaast Pericles, waarin schipbreuken en verre reizen een familie uit elkaar drijven."
+      },
+      {
+        "workId": "1503",
+        "reason": "Lees een ander Shakespeare-stuk over het gebruik van macht, waarin Richard zijn weg naar de Engelse kroon probeert vrij te maken."
+      }
+    ]
+  },
+  {
+    "workId": "5895",
+    "title": "Vlucht Voor De Tovenaar",
+    "author": "Iris Murdoch",
+    "openLibraryWorkId": "OL1326306W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3179",
+        "reason": "Verken een andere roman waarin gesprekken en de invloed van een centrale figuur het beeld van een groep mensen bepalen, rond Goethes kring in Weimar."
+      }
+    ]
+  },
+  {
+    "workId": "3179",
+    "title": "Lotte in Weimar",
+    "author": "Thomas Mann",
+    "openLibraryWorkId": "OL14867077W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5895",
+        "reason": "Vergelijk de kring rond Goethe met Murdochs personages, die zich proberen los te maken van de invloed van Mischa Fox."
+      }
+    ]
+  },
+  {
+    "workId": "5469",
+    "title": "De wanhoopsdaad",
+    "author": "Sidney Smeets",
+    "openLibraryWorkId": "OL23300806W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5579",
+        "reason": "Lees verder over vervolging en de aantasting van de rechtsstaat via Meihuizens onderzoek naar Nederlandse advocaten tijdens de bezetting."
+      }
+    ]
+  },
+  {
+    "workId": "5579",
+    "title": "Smalle marges",
+    "author": "Joggli Meihuizen",
+    "openLibraryWorkId": "OL16005454W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5469",
+        "reason": "Plaats deze beroepsgeschiedenis naast de biografie van Herschel Grynszpan en het gebruik van zijn daad door de nazipropaganda."
+      }
+    ]
+  },
+  {
+    "workId": "6628",
+    "title": "Introductory Econometrics",
+    "author": "Jeffrey M. Wooldridge",
+    "openLibraryWorkId": "OL21108634W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6786",
+        "reason": "Compare this methods textbook with Sowell’s argument about the causes of economic disparities, paying attention to how empirical evidence supports a claim."
+      }
+    ]
+  },
+  {
+    "workId": "6786",
+    "title": "Discrimination and disparities",
+    "author": "Thomas Sowell",
+    "openLibraryWorkId": "OL19744664W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6628",
+        "reason": "For a methods-focused companion to this economic argument, explore Wooldridge’s introduction to analysing cross-sectional, time-series and panel data."
+      }
+    ]
+  },
+  {
+    "workId": "8207",
+    "title": "The day I stopped drinking milk",
+    "author": "Sudha Murti",
+    "openLibraryWorkId": "OL23344895W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7404",
+        "reason": "Continue with a longer personal account of family, hardship and humour in Anh Do’s memoir of migration from Vietnam to Australia."
+      }
+    ]
+  },
+  {
+    "workId": "7404",
+    "title": "The happiest refugee",
+    "author": "Anh Do",
+    "openLibraryWorkId": "OL16962315W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8207",
+        "reason": "For shorter nonfiction encounters rather than a continuous memoir, try Murty’s reflections on people she has met in India."
+      }
+    ]
+  },
+  {
+    "workId": "5408",
+    "title": "Opvoeden",
+    "author": "Emmeliek Boost",
+    "openLibraryWorkId": "OL26190609W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5410",
+        "reason": "Vergelijk Boosts antwoorden vanuit de Opvoeddesk met Desodts benadering van dagelijkse vragen van ouders en grootouders."
+      }
+    ]
+  },
+  {
+    "workId": "5410",
+    "title": "Kinderen opvoeden",
+    "author": "Stef Desodt",
+    "openLibraryWorkId": "OL26189534W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5408",
+        "reason": "Bekijk ook Boosts naslagwerk met vragen uit de Opvoeddesk, van de babytijd tot en met de puberteit."
+      }
+    ]
+  },
+  {
+    "workId": "9298",
+    "title": "Sierra (Spirit of the Cimarron)",
+    "author": "Kathleen Duey",
+    "openLibraryWorkId": "OL88756W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4291",
+        "reason": "For children who prefer a shorter story with reading support, Wilbur’s Prize offers another animal friendship in the I Can Read series."
+      }
+    ]
+  },
+  {
+    "workId": "4291",
+    "title": "Charlotte's Web",
+    "author": "Jennifer Frantz",
+    "openLibraryWorkId": "OL221977W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9298",
+        "reason": "Ready for a longer animal adventure? Follow the young horse Sierra as she searches for safety after being separated from her herd."
+      }
+    ]
+  },
+  {
+    "workId": "1965",
+    "title": "American Notes",
+    "author": "Charles Dickens",
+    "openLibraryWorkId": "OL8300173W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7672",
+        "reason": "For a very different view of America, compare Dickens’s travel observations with Hall’s explicitly esoteric interpretation of the nation’s origins."
+      }
+    ]
+  },
+  {
+    "workId": "7672",
+    "title": "The secret destiny of America",
+    "author": "Manly Palmer Hall",
+    "openLibraryWorkId": "OL11981208W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1965",
+        "reason": "Set Hall’s speculative historical interpretation beside Dickens’s account of what he observed while travelling through America in 1842."
+      }
+    ]
+  },
+  {
+    "workId": "5684",
+    "title": "Zorg voor de ziel bij ziekte",
+    "author": "Moore, Thomas",
+    "openLibraryWorkId": "OL16526045W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5546",
+        "reason": "Wil je verschillende spirituele oefeningen verkennen? Deze meditatiegids kiest een eigen astrologische invalshoek, buiten de zorgcontext van Moore."
+      }
+    ]
+  },
+  {
+    "workId": "5546",
+    "title": "Meditatiegids",
+    "author": "Margit Dahlke",
+    "openLibraryWorkId": "OL24990518W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5684",
+        "reason": "Vergelijk deze spirituele oefengids met Moores beschouwing over betekenis en persoonlijke aandacht tijdens ziekte."
+      }
+    ]
+  },
+  {
+    "workId": "7855",
+    "title": "Play in the System",
+    "author": "Anna Watkins Fisher",
+    "openLibraryWorkId": "OL21674212W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9420",
+        "reason": "Explore another feminist work of cultural criticism, focusing on how Carter reads sexuality and power in Sade and popular culture."
+      }
+    ]
+  },
+  {
+    "workId": "9420",
+    "title": "The Sadeian Woman",
+    "author": "Angela Carter",
+    "openLibraryWorkId": "OL697439W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7855",
+        "reason": "Extend the question of power into contemporary art with Fisher’s study of resistance from within the systems artists depend on."
+      }
+    ]
+  },
+  {
+    "workId": "3217",
+    "title": "Rode regen",
+    "author": "Cees Nooteboom",
+    "openLibraryWorkId": "OL643698W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5130",
+        "reason": "Lees hoe Nooteboom zijn persoonlijke manier van kijken ook onderzoekt tijdens reizen naar schilderijen van Jheronimus Bosch."
+      }
+    ]
+  },
+  {
+    "workId": "5130",
+    "title": "Een duister voorgevoel",
+    "author": "Cees Nooteboom",
+    "openLibraryWorkId": "OL45293903W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3217",
+        "reason": "Vergelijk dit kijken naar kunst met Nootebooms terugblik op reizen en herinneringen vanuit zijn huis op Menorca."
+      }
+    ]
+  },
+  {
+    "workId": "5165",
+    "title": "Nisa",
+    "author": "Marjorie Shostak",
+    "openLibraryWorkId": "OL4217111W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2994",
+        "reason": "Voor een literaire vergelijking: in Tans roman vertelt een Chinese moeder haar dochter over haar verleden; Shostaks boek berust op antropologische gesprekken."
+      }
+    ]
+  },
+  {
+    "workId": "2994",
+    "title": "De vrouw van de keukengod",
+    "author": "Amy Tan",
+    "openLibraryWorkId": "OL15821869W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5165",
+        "reason": "Lees naast deze roman een daadwerkelijk op gesprekken gebaseerd levensverhaal, over Nisa en haar leven in de Kalahari."
+      }
+    ]
+  },
+  {
+    "workId": "3725",
+    "title": "Skilled Helper",
+    "author": "Gerard Egan",
+    "openLibraryWorkId": "OL19902350W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3771",
+        "reason": "Compare the collaborative responsibilities of helping with a different communication skill: preparing to speak clearly before an audience."
+      }
+    ]
+  },
+  {
+    "workId": "1503",
+    "title": "Richard III",
+    "author": "William Shakespeare",
+    "openLibraryWorkId": "OL362684W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "331",
+        "reason": "Vergelijk Richards greep naar de kroon met Prospero’s omgang met macht en vroegere tegenstanders op een afgelegen eiland."
+      },
+      {
+        "workId": "5277",
+        "reason": "Vergelijk deze dramatische machtsstrijd met een praktisch boek dat ook de grenzen van aanvaardbare beïnvloeding bespreekt."
+      }
+    ]
+  },
+  {
+    "workId": "1482",
+    "title": "Powerfood",
+    "author": "Rens Kroes",
+    "openLibraryWorkId": "OL17061410W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1442",
+        "reason": "Zoek je meer ideeën voor dagelijks koken? Ottolenghi benadert eenvoud via recepten met verschillende manieren om tijd en moeite te besparen."
+      }
+    ]
+  },
+  {
+    "workId": "1442",
+    "title": "Simpel",
+    "author": "Yotam Ottolenghi",
+    "openLibraryWorkId": "OL19761298W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1482",
+        "reason": "Bekijk ook Kroes’ recepten voor ontbijt, smoothies, salades en tussendoortjes, met haar persoonlijke keuze van ingrediënten."
+      }
+    ]
+  },
+  {
+    "workId": "3293",
+    "title": "De wereld van Het Lied van Ijs en Vuur",
+    "author": "George R. R. Martin",
+    "openLibraryWorkId": "OL17553509W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3359",
+        "reason": "Voor een historisch avontuur naast deze fantasyverhalen: volg kapitein Alatriste tijdens een missie rond goud voor de Spaanse kroon."
+      }
+    ]
+  },
+  {
+    "workId": "3359",
+    "title": "Het goud van de koning",
+    "author": "Arturo Pérez-Reverte",
+    "openLibraryWorkId": "OL992472W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3293",
+        "reason": "Verplaats je van historische avonturen naar Westeros, waar de hagenridder Dunk en zijn schildknaap Ei met koninklijke belangen te maken krijgen."
+      }
+    ]
+  },
+  {
+    "workId": "5438",
+    "title": "Eerlijke wetenschap",
+    "author": "Gustaaf C. Cornelis",
+    "openLibraryWorkId": "OL23317557W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5271",
+        "reason": "Verbind de vragen over onderzoeksethiek met Lelieveldts praktische gids voor het organiseren en afronden van een promotieonderzoek."
+      }
+    ]
+  },
+  {
+    "workId": "5271",
+    "title": "Promoveren",
+    "author": "Herman T. Lelieveldt",
+    "openLibraryWorkId": "OL27973634W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5438",
+        "reason": "Bekijk naast de praktische organisatie van onderzoek ook Cornelis’ beschouwing over integriteit, publicatiedruk en verantwoordelijkheid."
+      }
+    ]
+  },
+  {
+    "workId": "5820",
+    "title": "Op dit moment",
+    "author": "Karen Kingsbury",
+    "openLibraryWorkId": "OL17800879W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6320",
+        "reason": "Voor een heel andere literaire kijk op schoolleiding: Orths beschrijft in een satire hoe een rector zijn leraren manipuleert."
+      }
+    ]
+  },
+  {
+    "workId": "6320",
+    "title": "De lerarenkamer",
+    "author": "Markus Orths",
+    "openLibraryWorkId": "OL5940220W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5820",
+        "reason": "Vergelijk deze schoolsatire met Kingsbury’s christelijke roman over een rector, een Bijbelgroep en een rechtszaak."
+      }
+    ]
+  },
+  {
+    "workId": "9654",
+    "title": "Deliverance",
+    "author": "James Dickey",
+    "openLibraryWorkId": "OL14856962W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7677",
+        "reason": "For a nonfiction contrast to this dangerous river journey, read Finkel’s investigation of a man who spent years living alone in the woods."
+      }
+    ]
+  },
+  {
+    "workId": "7677",
+    "title": "The stranger in the woods",
+    "author": "Michael Finkel",
+    "openLibraryWorkId": "OL20055689W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9654",
+        "reason": "Compare this nonfiction account of prolonged solitude with Dickey’s novel about a wilderness trip that becomes a struggle for survival."
+      }
+    ]
+  },
+  {
+    "workId": "5277",
+    "title": "Het grote lobbyboek",
+    "author": "Erik van Venetië",
+    "openLibraryWorkId": "OL28767742W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1503",
+        "reason": "Voor een literaire tegenhanger van beïnvloeding en haar grenzen: Shakespeare toont hoe Richard overtuiging en misleiding inzet om macht te verwerven."
+      }
+    ]
+  },
+  {
+    "workId": "1676",
+    "title": "Doem der verdenking",
+    "author": "Agatha Christie",
+    "openLibraryWorkId": "OL472145W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5972",
+        "reason": "Lees nog een misdaadroman waarin onderzoek naar een oude zaak het verleden opnieuw ter discussie stelt, ditmaal in Baltimore."
+      }
+    ]
+  },
+  {
+    "workId": "5972",
+    "title": "Levenslang",
+    "author": "Laura Lippman",
+    "openLibraryWorkId": "OL2538249W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1676",
+        "reason": "Vergelijk het heropenen van een oude geschiedenis met Christies verhaal over een alibi dat pas na de dood van een veroordeelde opduikt."
+      }
+    ]
   }
 ] as const;
