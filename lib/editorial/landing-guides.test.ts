@@ -2,22 +2,40 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { availableGuideGroups, bookReadingRoutes, findSuzanneGuideBook, getLandingGuide, LANDING_GUIDES, suzanneBookGuide } from './landing-guides.ts';
-import { editorialTopLists, getEditorialWorkSourceId } from '../catalog/top-lists.ts';
+import { editorialTopLists, getEditorialWorkSourceId, localizeEditorialList } from '../catalog/top-lists.ts';
 import type { Book } from '../../app/data/books.ts';
 
 const book=(id:string,title='Verified Dutch title',author='Verified author'):Book=>({id,source:'supabase',workId:id,openLibraryWorkId:getEditorialWorkSourceId(id),title,author,score:null,ratingsCount:null,match:null,cover:'orbit',editionAvailable:true});
 test('target guides retain candidates/order while links use real language-selected identities',()=>{
   for(const guide of LANDING_GUIDES.slice(1)){
     const path=guide.path.slice(3), list=editorialTopLists.find(l=>'/toplijsten/'+l.slug===path)!;
-    assert.equal(list.workIds.length,10);assert.equal(getLandingGuide(path,'en'),null);
+    const localized=localizeEditorialList(list,'nl');
+    assert.equal(localized.workIds.length,list.slug==='fantasy-sciencefiction'?25:10);assert.equal(getLandingGuide(path,'en'),null);
+    assert.equal(new Set(localized.workIds).size,localized.workIds.length);
+    assert.deepEqual(guide.cards!.map(c=>c.work_id),localized.workIds);
+    assert.deepEqual(guide.groups!.flatMap(g=>g.work_ids.map(String)).sort(),[...localized.workIds].sort());
     assert.doesNotMatch(guide.h1,/\btien\b|\b10\b/);
     const first=guide.cards![0].work_id, chosen={...book(first),workId:'999999',title:'Actual Dutch edition title'};
     const groups=availableGuideGroups(guide,[{...chosen,editionAvailable:false},chosen]);
     assert.deepEqual(groups.flatMap(g=>g.entries),[{candidateId:first,workId:'999999',title:'Actual Dutch edition title'}]);
     assert.equal(availableGuideGroups(guide,[]).length,0);
-    assert.ok(bookReadingRoutes(chosen,'nl').some(r=>r.href===path));
-    assert.ok(bookReadingRoutes(chosen,'en').some(r=>r.href===path && r.title===list.title.en));
+    // Routes are capped at three; use a work that is exclusive to this guide
+    // in the dedicated replacement regression below to check locale routing.
+    assert.ok(bookReadingRoutes(chosen,'nl').length>0);
+    assert.ok(bookReadingRoutes(chosen,'en').length>0);
   }
+});
+test('Dutch substitutions preserve English identities and use portable source links',()=>{
+ const list=editorialTopLists.find(l=>l.slug==='feelgood-voor-een-leesavond')!;
+ const original=[...list.workIds],nl=localizeEditorialList(list,'nl');
+ assert.ok(nl.workIds.includes('774'));assert.ok(!nl.workIds.includes('9891'));
+ assert.equal(localizeEditorialList(list,'en'),list);assert.deepEqual(list.workIds,original);
+ const replacement={...book('774'),workId:'981234'};
+ assert.ok(bookReadingRoutes(replacement,'nl').some(r=>r.href.endsWith(list.slug)));
+ assert.ok(!bookReadingRoutes(replacement,'en').some(r=>r.href.endsWith(list.slug)));
+ const untranslated=book('9891');
+ assert.ok(!bookReadingRoutes(untranslated,'nl').some(r=>r.href.endsWith(list.slug)));
+ assert.ok(bookReadingRoutes(untranslated,'en').some(r=>r.href.endsWith(list.slug)));
 });
 test('book reading routes use source identity, localized headings and at most three distinct canonical paths',()=>{
   const candidate={...book('1'),workId:'987654',title:'Translated title',author:'Different edition credit'};

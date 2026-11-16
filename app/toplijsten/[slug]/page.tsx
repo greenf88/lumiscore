@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { DiscoveryPageShell } from '@/app/components/DiscoveryPageShell';
 import { EditorialTopList } from '@/app/components/EditorialTopList';
-import { editorialTopLists, getEditorialTopList, getEditorialTopBook, getEditorialWorkSourceId, topListBookHref } from '@/lib/catalog/top-lists';
+import { editorialTopLists, getEditorialTopList, getEditorialTopBook, getEditorialWorkSourceId, localizeEditorialList, topListBookHref } from '@/lib/catalog/top-lists';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { loadCatalogBooksBySourceIds } from '@/lib/supabase/books';
@@ -18,9 +18,10 @@ export async function generateMetadata({ params }: Props) {
   return createLocalizedPageMetadata({ title: guide?.seo_title ?? list.title[locale]+' — LumiScore', description: guide?.meta_description ?? list.description[locale], canonicalPath: '/toplijsten/'+list.slug, image: list.shareImage?.replace('.png', '-'+locale+'.png') });
 }
 export default async function TopListPage({ params }: Props) {
-  const list = getEditorialTopList((await params).slug);
-  if (!list) notFound();
+  const selection = getEditorialTopList((await params).slug);
+  if (!selection) notFound();
   const { locale } = await resolveRequestLocale();
+  const list = localizeEditorialList(selection, locale);
   const [authState, catalog] = await Promise.all([
     import('@/lib/supabase/auth').then(m=>m.loadHeaderAuthState()).catch(()=>({authenticated:false})),
     loadCatalogBooksBySourceIds(list.workIds.map(getEditorialWorkSourceId), locale)
