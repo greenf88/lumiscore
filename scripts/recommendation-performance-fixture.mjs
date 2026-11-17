@@ -53,12 +53,13 @@ export async function createRecommendationFixture({works=10134,evidenceWorks=128
       cross join lateral (select k,case k when 1 then (case when n%2=0 then 'fantasy' else 'science_fiction' end)
         when 2 then 'speculative' when 3 then 'contemporary' else 'fast_paced' end as trait from generate_series(1,
         case when ${dense?'true':'false'} then 6 when n<=1093 then 4 else 3 end) k) t;`);
-  const metrics={requests:0,decodedBytes:0,works:0,evidenceRows:0,rpc:0,queries:[]};
+  const metrics={requests:0,decodedBytes:0,works:0,evidenceRows:0,rpc:0,queries:[],activeEditions:0,maxEditionConcurrency:0};
   let failure=null;
   const client=createClient('http://fixture.invalid','synthetic-public-client',{auth:{persistSession:false,autoRefreshToken:false},
     global:{fetch:async(input,init)=>{
       const url=new URL(String(input)),table=url.pathname.split('/').at(-1);metrics.requests++;
       if(failure?.(url)) return new Response(JSON.stringify({message:'Synthetic failure'}),{status:503,headers:{'Content-Type':'application/json'}});
+      if(table==='editions'){metrics.activeEditions++;metrics.maxEditionConcurrency=Math.max(metrics.maxEditionConcurrency,metrics.activeEditions);}
       let rows,total;
       if(table==='get_work_rating_summaries_v2') {
         metrics.rpc++;
@@ -84,9 +85,10 @@ export async function createRecommendationFixture({works=10134,evidenceWorks=128
       const body=JSON.stringify(rows);metrics.decodedBytes+=Buffer.byteLength(body);
       const headers={'Content-Type':'application/json'};
       if(new Headers(init?.headers).get('prefer')?.includes('count=exact')) headers['Content-Range']=`0-${Math.max(0,rows.length-1)}/${total}`;
+      if(table==='editions')metrics.activeEditions--;
       return new Response(body,{status:200,headers});
     }}});
   return {db,client,metrics,failWhen:predicate=>{failure=predicate;},reset:()=>{
-    metrics.requests=metrics.decodedBytes=metrics.works=metrics.evidenceRows=metrics.rpc=0;metrics.queries=[];
+    metrics.requests=metrics.decodedBytes=metrics.works=metrics.evidenceRows=metrics.rpc=metrics.activeEditions=metrics.maxEditionConcurrency=0;metrics.queries=[];
   }};
 }

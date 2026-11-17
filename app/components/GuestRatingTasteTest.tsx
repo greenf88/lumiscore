@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { GUEST_ROUND_GOAL, guestRoundResult, guestRoundState, type GuestDecision, type GuestOffer } from '@/lib/taste-test/guest-round';
-import { getTasteProfileConfidenceCopy } from '@/lib/taste-test/profile';
 import { emptyTasteVector } from '@/lib/taste-test/traits';
 import { guestRoundSessionKey, newGuestRoundExpiry, readGuestRoundSession } from '@/lib/taste-test/guest-round-session';
 import { parsePublicBooks, type PublicBook } from '@/lib/books/public-book';
@@ -105,18 +104,16 @@ function GuestRatingContent({ offers, authState }: GuestProps) {
     setSelected(null);
   }
   const result = complete ? loaded?.profile ?? guestRoundResult(allOffers, decisions, locale) : null;
-  const confidence = result ? getTasteProfileConfidenceCopy(result.confidence, locale) : null;
   const resultMeasurement = useRef({ seen: Boolean(initial.saved?.result) });
   useEffect(() => { measureTasteResultViewOnce(resultMeasurement.current, Boolean(result), locale); }, [result, locale]);
   const knownResults = searchResults.filter(x => x.workId && !decisions.some(d => d.workId === x.workId));
   return <DiscoveryPageShell authState={authState} path="/taste-test/preferences">
     <section className="featured-section taste-rating-test taste-direct-test guest-direct-test" aria-labelledby="guest-taste-title">
       <h1 id="guest-taste-title">{t(result ? 'taste.readingTaste' : 'directTaste.label')}</h1>
-      {result && confidence ? <div className="guest-taste-result">
+      {result ? <div className="guest-taste-result">
         <TasteProfileSummary profile={result} headingId="guest-taste-profile" level={2} showInsufficient anchors={ratings.filter(x => x.rating >= 7).sort((a,b) => b.rating-a.rating).slice(0,3).flatMap(row => {
           const rated = allOffers.find(x => x.book.workId === row.workId); return rated ? [{ workId: row.workId, title: rated.book.title, rating: row.rating }] : [];
         })} />
-        <div className="taste-confidence"><strong>{confidence.label}</strong><span>{confidence.description}</span></div>
         <h2>{nl ? 'Jouw volgende boek' : 'Your next book'}</h2>
         {failed ? <div role="alert"><p>{nl ? 'Je profiel is klaar, maar je leestips konden niet laden.' : 'Your profile is ready, but your book suggestions could not load.'}</p><button type="button" onClick={() => { setFailed(false); setRetry(x => x+1); }}>{nl ? 'Leestips opnieuw laden' : 'Retry suggestions'}</button></div>
         : !loaded ? <p role="status">{nl ? 'Passende boeken zoeken…' : 'Finding books for you…'}</p>

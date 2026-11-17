@@ -262,15 +262,18 @@ export function recommendBooks(input: {
       const diversifiedBase = candidate.rankingScore - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1) - closest * .06;
       return applyCollaborativeBoost(diversifiedBase, candidate.collaborativeSignal);
     };
-    remaining.sort((left, right) => adjusted(right) - adjusted(left) || Number(left.book.workId) - Number(right.book.workId));
+    // Selection is fixed during this sort. Reuse exact diversity scores rather
+    // than repeating all trait comparisons inside every comparator call.
+    const adjustedScores = new Map(remaining.map(candidate => [candidate, adjusted(candidate)]));
+    remaining.sort((left, right) => adjustedScores.get(right)! - adjustedScores.get(left)! || Number(left.book.workId) - Number(right.book.workId));
     if (input.languagePreference) {
       for (let index = 1; index < remaining.length; index += 1) {
         let currentIndex = index;
         while (currentIndex > 0) {
           const dutchCandidate = remaining[currentIndex];
           const otherCandidate = remaining[currentIndex - 1];
-          const dutchAdjustedScore = adjusted(dutchCandidate);
-          const otherAdjustedScore = adjusted(otherCandidate);
+          const dutchAdjustedScore = adjustedScores.get(dutchCandidate)!;
+          const otherAdjustedScore = adjustedScores.get(otherCandidate)!;
           const strength = Math.max(0, Math.min(1, input.languagePreference.strength));
           if (
             otherAdjustedScore - dutchAdjustedScore >

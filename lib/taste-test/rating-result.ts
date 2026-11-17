@@ -44,7 +44,8 @@ export function recommendRatingResult(input: {
       // Small penalties diversify close matches without replacing a much better fit.
       return item.rank - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1);
     };
-    remaining.sort((a,b) => adjusted(b)-adjusted(a) || Number(a.candidate.book.workId)-Number(b.candidate.book.workId));
+    const adjustedScores = new Map(remaining.map(item => [item, adjusted(item)]));
+    remaining.sort((a,b) => adjustedScores.get(b)!-adjustedScores.get(a)! || Number(a.candidate.book.workId)-Number(b.candidate.book.workId));
     selected.push(remaining.shift()!);
   }
   return selected.map(({candidate,traits}) => ({
