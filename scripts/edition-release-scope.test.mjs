@@ -6,12 +6,17 @@ const base = '5fbd35ed7eafd82ba34c1c45a1fc82e8bc652416';
 const root = new URL('../', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8').replaceAll('\r\n','\n').trimEnd();
 const previous = path => execFileSync('git', ['show', base + ':' + path], {cwd: root, encoding:'utf8'}).replaceAll('\r\n','\n').trimEnd();
-test('split release retains the production rating/round contracts and shared taste calculation byte-for-byte', () => {
+test('production rating/round contracts and shared taste calculation stay unchanged when result ranking evolves', () => {
   for (const path of ['lib/taste-test/rating-round.ts','lib/taste-test/round-request.ts','lib/taste-test/direct-rating.ts',
-    'lib/taste-test/rating-result.ts','lib/recommendations/engine.ts','lib/taste-test/profile.ts',
+    'lib/recommendations/engine.ts','lib/taste-test/profile.ts',
     'lib/supabase/reader-taste-profile.ts','app/api/ratings/[workId]/route.ts']) {
     assert.equal(read(path), previous(path), path);
   }
+  // Ranking is intentionally personalized in the November 17 release and has
+  // behavioral coverage in personalized-results.test.ts. Keep the original
+  // evidence gate and shared profile calculation frozen independently of it.
+  const calculation = text => text.split('export function reliableResultTraits')[1].split('export function recommendRatingResult')[0];
+  assert.equal(calculation(read('lib/taste-test/rating-result.ts')), calculation(previous('lib/taste-test/rating-result.ts')));
   const route = 'app/api/taste-test/rounds/route.ts';
   // Authorized content guard passes the same verified client to presentation.
   // Persistence, CSRF, metrics and request contract remain exact.
