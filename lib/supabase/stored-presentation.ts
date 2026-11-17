@@ -4,6 +4,7 @@ import { applyStoredPresentation, storedPresentationSelection, type StoredDescri
 import { supabase } from './client';
 import { PresentationCoverage } from '../books/presentation-coverage.ts';
 import { ReviewedPresentationCache } from '../books/reviewed-presentation-cache.ts';
+import {withCatalogCoverEvidence} from '../books/catalog-cover-evidence.ts';
 
 /** Two indexed public reads for the visible selection only, never a catalogue load.
  * No scores, profile, cookies or user client enter the cache. Short expiry also
@@ -33,6 +34,6 @@ export async function hydrateStoredPresentation(books:readonly Book[],locale:Loc
     return {descriptions:d.data as StoredDescription[],editions:e.data as StoredEditionMetadata[]};
   });const presented=applyStoredPresentation(books,locale,data.descriptions,data.editions);
   coverage.observe(key,locale,{books:presented.length,summaries:presented.filter(b=>b.storedDescription).length,covers:presented.filter(b=>b.coverUrls?.length).length});
-  return presented;}
+    return withCatalogCoverEvidence(presented);}
   catch {return books.map(book=>({...book,storedPresentationUnavailable:true}));}
 }

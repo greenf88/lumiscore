@@ -9,13 +9,13 @@ const pending=new Map<string,Promise<SourceEdition|null>>();
 const TTL=24*60*60*1000, FAILURE_TTL=60*1000, BATCH=50;
 const normalizedTitle=(s:string)=>s.normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('en');
 export function editionSourceCoverUrls(book:Book,source:SourceEdition|null):string[]{
-  if(!book.editionAvailable || !source || normalizeOpenLibraryId(source.key,'edition')!==book.openLibraryEditionId ||
-    !source.works?.some(w=>normalizeOpenLibraryId(w.key,'work')===book.openLibraryWorkId) ||
-    !source.title || normalizedTitle(source.title)!==normalizedTitle(book.title))return [];
-  const languages=[...new Set((source.languages??[]).map(l=>normalizeEditionLanguage(l.key??'')))];
+  if(!book.editionAvailable || !source || typeof source.key!=='string' || normalizeOpenLibraryId(source.key,'edition')!==book.openLibraryEditionId ||
+    !Array.isArray(source.works) || !source.works.some(w=>typeof w?.key==='string'&&normalizeOpenLibraryId(w.key,'work')===book.openLibraryWorkId) ||
+    typeof source.title!=='string' || normalizedTitle(source.title)!==normalizedTitle(book.editionTitle??book.title))return [];
+  const languages=[...new Set((Array.isArray(source.languages)?source.languages:[]).map(l=>normalizeEditionLanguage(typeof l?.key==='string'?l.key:'')))];
   if(languages.length!==1 || languages[0]!==normalizeEditionLanguage(book.editionLanguage??''))return [];
-  if(book.isbn13 && !source.isbn_13?.some(i=>normalizeIsbn13(i)===book.isbn13))return [];
-  return uniqueCoverUrls((source.covers??[]).filter(id=>Number.isSafeInteger(id)&&id>0).map(getOpenLibraryCoverIdUrl));
+  if(book.isbn13 && (!Array.isArray(source.isbn_13)||!source.isbn_13.some(i=>typeof i==='string'&&normalizeIsbn13(i)===book.isbn13)))return [];
+  return uniqueCoverUrls((Array.isArray(source.covers)?source.covers:[]).filter(id=>Number.isSafeInteger(id)&&id>0).map(getOpenLibraryCoverIdUrl));
 }
 /** One bounded batch per visible page; no ISBN image guesses or Work-cover fallback. */
 export async function withEditionCoverEvidence(books:readonly Book[],fetcher:typeof fetch=fetch):Promise<Book[]>{
