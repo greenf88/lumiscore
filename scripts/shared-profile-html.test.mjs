@@ -8,28 +8,30 @@ import {fileURLToPath} from 'node:url';
 import {buildRatingResultProfile} from '../lib/taste-test/rating-result.ts';
 import {buildEffectiveWorkTraitVector,evidenceRowsForTraits} from '../lib/recommendations/work-trait-evidence.ts';
 
-test('real shared summary React HTML: distinctive combinations, honest coverage, personal examples and retained books, NL/EN',async()=>{
+test('real shared summary React HTML: leading direction, additional traits, personal examples and retained books, NL/EN',async()=>{
  const root=fileURLToPath(new URL('../',import.meta.url));
  const vite=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/shared-profile-html-vite',plugins:[react()],css:{postcss:{plugins:[]}},resolve:{alias:{'@':root,'next/image':root+'node_modules/vinext/dist/shims/image.js'},dedupe:['react','react-dom']},server:{middlewareMode:true,hmr:false}});
  try{
   const {TasteProfileSummary}=await vite.ssrLoadModule('/app/components/TasteProfileSummary.tsx');
   const {LumiScoreLocaleProvider}=await vite.ssrLoadModule('/app/components/LumiScoreLocale.tsx');
-  const {TasteResultContent}=await vite.ssrLoadModule('/app/components/TasteRatingResult.tsx');
+  const {TasteResultContent,TasteRatingResult}=await vite.ssrLoadModule('/app/components/TasteRatingResult.tsx');
   const rows=Array.from({length:10},(_,i)=>({workId:String(i+1),rating:10}));
   const evidence=traits=>new Map(rows.map(r=>[r.workId,buildEffectiveWorkTraitVector(evidenceRowsForTraits({workId:r.workId,traits,confidence:1,source:'manual',sourceKey:'synthetic',rawLabels:[],verifiedAt:'2026-10-15'}))]));
   for(const locale of ['nl','en'])for(const level of [1,2]){
    const render=profile=>renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:level===1?'/taste-test/result':'/account'},createElement(TasteProfileSummary,{profile,headingId:'profile-proof',level,showInsufficient:true})));
-   const rich=render(buildRatingResultProfile(rows,evidence({thriller_mystery:1,dark:.8,fast_paced:.7})));assert.match(rich,locale==='nl'?/Spannende verhalen · donkere verhalen/:/Thrillers and mysteries · darker stories/);assert.equal((rich.match(/<li>/g)??[]).length,3);assert.match(rich,new RegExp(`<h${level}`));
+   const rich=render(buildRatingResultProfile(rows,evidence({thriller_mystery:1,dark:.8,fast_paced:.7})));assert.match(rich,locale==='nl'?/Spannende verhalen/:/Thrillers and mysteries/);assert.equal((rich.match(/<li>/g)??[]).length,2);assert.match(rich,new RegExp(`<h${level}`));
+   assert.equal((rich.match(/class="taste-profile-leading"/g)??[]).length,1);
    for(const traits of [new Map(),evidence({classic:1})]){
     const profile=buildRatingResultProfile(rows,traits),before=JSON.stringify(profile);
     assert.match(render(profile),locale==='nl'?/nog geen voldoende onderbouwde voorkeur/:/not yet enough evidence/);assert.doesNotMatch(render(profile),/taste-preference-track/);assert.equal(JSON.stringify(profile),before);
    }
    const limitedEvidence=new Map([...evidence({thriller_mystery:1,dark:.8,fast_paced:.7})].slice(0,3));
    const supported=buildRatingResultProfile(rows,limitedEvidence);assert.equal(supported.archetype,null);
-   const partial=render(supported);assert.match(partial,locale==='nl'?/Jouw leessmaak/:/Your reading taste/);assert.equal((partial.match(/<li>/g)??[]).length,3);
-   assert.match(partial,locale==='nl'?/Van 3 daarvan/:/available for 3 of them/);
+   const partial=render(supported);assert.match(partial,locale==='nl'?/Jouw leessmaak/:/Your reading taste/);assert.equal((partial.match(/<li>/g)??[]).length,2);
+   assert.match(partial,locale==='nl'?/Gebaseerd op 10 beoordeelde boeken/:/Based on 10 rated books/);
+   assert.doesNotMatch(partial,/Van 3 daarvan|Content traits|available for 3 of them/);
    assert.doesNotMatch(partial,/speurneus|sleuth/);
-   // Percent signs exist only in decorative bar widths, never in visible text.
+   // No score percentages: close model scores are not stretched into a big gap.
    assert.doesNotMatch(rich.replace(/style="[^"]*"/g,''),/%|nauwkeurigheid|accuracy/);
    if(level===1){
     const profile=buildRatingResultProfile(rows,new Map());
@@ -42,6 +44,9 @@ test('real shared summary React HTML: distinctive combinations, honest coverage,
     for(const id of [31,32])assert.match(html,new RegExp('Synthetic retained book '+id));
     assert.doesNotMatch(html,/Strong match|Sterke match/);
     assert.equal(JSON.stringify(result),before);
+    const initial=renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:'/taste-test/result'},createElement(TasteRatingResult,{authState:{authenticated:true},initialResult:result,initialLocale:locale})));
+    assert.match(initial,/Synthetic retained book 31/,'initial HTML contains recommendations before browser hydration');
+    assert.doesNotMatch(initial,/Je persoonlijke resultaat laden|Loading your personal result/);
    }
   }
  }finally{await vite.close();}

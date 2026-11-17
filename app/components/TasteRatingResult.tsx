@@ -14,12 +14,18 @@ import {RecommendationMeasurement} from './RecommendationMeasurement';
 import {emitBrowserMetric} from '@/lib/product-metrics/browser';
 import {useRef} from 'react';
 const EMPTY_BOOKS: never[] = [];
-export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
+export function TasteResultLoading({authState}:{authState:HeaderAuthState}) {
+  const {locale}=useLumiScoreLocale();
+  return <DiscoveryPageShell authState={authState} path="/taste-test/result"><section className="featured-section" role="status">{locale==='nl'?'Je persoonlijke resultaat laden…':'Loading your personal result…'}</section></DiscoveryPageShell>;
+}
+export function TasteRatingResult({authState,initialResult=null,initialLocale,initialFailed=false}: {authState:HeaderAuthState;initialResult?:RatingResult|null;initialLocale?:string;initialFailed?:boolean}) {
   const {locale} = useLumiScoreLocale(), nl=locale==='nl';
-  const [loaded,setLoaded] = useState<{locale:string;result:RatingResult} | null>(null);
-  const [failed,setFailed] = useState(false), [retry,setRetry] = useState(0);
+  const [loaded,setLoaded] = useState<{locale:string;result:RatingResult} | null>(()=>initialResult&&initialLocale?{locale:initialLocale,result:initialResult}:null);
+  const [failed,setFailed] = useState(initialFailed), [retry,setRetry] = useState(0);
+  const useInitial=retry===0 && initialLocale===locale && Boolean(initialResult||initialFailed);
   useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[]);
   useEffect(()=>{
+    if (useInitial) return;
     const controller = new AbortController();
     fetch(`/api/taste-test/result?locale=${locale}`,{cache:'no-store',signal:controller.signal}).then(async response=>{
       if (!response.ok) throw new Error();
@@ -27,10 +33,11 @@ export function TasteRatingResult({authState}: {authState:HeaderAuthState}) {
       if (!controller.signal.aborted) {setLoaded({locale,result});setFailed(false);}
     }).catch(()=>{if (!controller.signal.aborted) setFailed(true);});
     return ()=>controller.abort();
-  },[locale,retry]);
-  const result=loaded?.locale===locale ? loaded.result : null;
+  },[locale,retry,useInitial]);
+  const result=useInitial?initialResult:loaded?.locale===locale ? loaded.result : null;
+  const resultFailed=useInitial?initialFailed:failed;
   return <DiscoveryPageShell authState={authState} path="/taste-test/result">
-    {failed ? <section className="featured-section" role="alert"><h1>{nl?'Je resultaat kon niet laden':'Your result could not load'}</h1>
+    {resultFailed ? <section className="featured-section" role="alert"><h1>{nl?'Je resultaat kon niet laden':'Your result could not load'}</h1>
       <p>{nl?'Dit is een laadfout, geen leeg smaakprofiel. Je opgeslagen beoordelingen blijven behouden.':'This is a loading error, not an empty profile. Your saved ratings remain intact.'}</p>
       <button onClick={()=>{setFailed(false);setLoaded(null);setRetry(x=>x+1);}}>{nl?'Opnieuw proberen':'Try again'}</button></section>
     : !result ? <section className="featured-section" role="status">{nl?'Je persoonlijke resultaat laden…':'Loading your personal result…'}</section>

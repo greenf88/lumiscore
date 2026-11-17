@@ -30,7 +30,7 @@ test('production rating/round contracts and shared taste calculation stay unchan
 });
 test('unavailable resumed Work stays skippable; no changed identity or accidental rating', () => {
   const route = read('app/api/taste-test/rounds/route.ts'), ui = read('app/components/RatingTasteTest.tsx');
-  assert.ok(route.includes('loadCatalogBook(state.currentWorkId, locale)'));
+  assert.ok(route.includes('loadCatalogBook(state.currentWorkId!, locale, false, {skipExternalCovers:true})'));
   assert.ok(ui.includes('pending={pending || book.editionAvailable === false}'));
   assert.ok(ui.includes("act('skip', workId)"));
   assert.ok(ui.includes('/api/taste-test/candidates'));

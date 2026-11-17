@@ -41,13 +41,15 @@ export async function loadRecommendationCatalog(
   ])].map(Number).filter((id) => Number.isSafeInteger(id) && id > 0).sort((a, b) => a - b);
   const batches = Array.from({ length: Math.ceil(ids.length / 200) },
     (_, index) => ids.slice(index * 200, (index + 1) * 200));
-  const results = await Promise.all(batches.map((batch) => client.from('works')
-    .select(RECOMMENDATION_CATALOG_SELECT).in('id', batch).order('id')));
+  const [results, editions] = await Promise.all([
+    Promise.all(batches.map((batch) => client.from('works')
+      .select(RECOMMENDATION_CATALOG_SELECT).in('id', batch).order('id'))),
+    loadEditionRows(client,ids.map(String)),
+  ]);
   const failure = results.find(({ error }) => error);
   if (failure?.error) throw failure.error;
   const rows = (results.flatMap(({ data }) => data ?? []) as unknown as WorkFeatureRow[])
     .sort((left, right) => Number(left.id) - Number(right.id));
-  const editions=await loadEditionRows(client,ids.map(String));
   const editionsByWork=new Map<string,typeof editions>();
   for(const edition of editions){const key=String(edition.work_id);editionsByWork.set(key,[...(editionsByWork.get(key)??[]),edition]);}
   const books = mapWorks(rows.map(row=>({...row,editions:editionsByWork.get(String(row.id))??[]})));

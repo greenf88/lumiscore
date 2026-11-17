@@ -8,11 +8,14 @@ import type { Locale } from '../i18n/config.ts';
 // Presentation only: reuse the existing positive-evidence thresholds and scores.
 // Neutral, negative and under-supported traits are not presented as preferences.
 export function topSupportedAffinities(profile: RatingResultProfile): Affinity[] {
-  return profile.affinities.filter(x => !ERA_TRAITS.has(x.trait)
+  const supported = profile.affinities.filter(x => !ERA_TRAITS.has(x.trait)
     && x.books+x.answerSupport >= PROFILE_POLICY.minimumPreferenceSupport
     && x.positiveBooks+x.answerSupport >= PROFILE_POLICY.minimumPositiveSupport
     && x.score !== null && Number.isFinite(x.score) && x.score >= PROFILE_POLICY.minimumPreferenceScore && x.score <= 100)
-    .sort((a, b) => b.score! - a.score! || a.trait.localeCompare(b.trait,'en')).slice(0, 3);
+    .sort((a, b) => b.score! - a.score! || a.trait.localeCompare(b.trait,'en'));
+  // The umbrella label adds no new direction beside an evidenced specific genre.
+  const specificSpeculation = supported.some(x => x.trait === 'fantasy' || x.trait === 'science_fiction');
+  return supported.filter(x => !(specificSpeculation && x.trait === 'speculative')).slice(0, 5);
 }
 
 /** Hide an empty explanation panel without changing evidence or reliability. */
@@ -31,14 +34,15 @@ export function readingTastePortrait(profile: RatingResultProfile, locale: Local
   const title = labels.length ? labels.join(' · ').replace(/^./u, c => c.toLocaleUpperCase(locale))
     : locale === 'nl' ? 'Je leessmaak is nog in ontwikkeling' : 'Your reading taste is still taking shape';
   const ratingEvidence = locale === 'nl'
-    ? `Gebaseerd op ${profile.ratingCount} beoordeelde boeken. Van ${profile.classifiedCount} daarvan zijn inhoudelijke kenmerken bekend.`
-    : `Based on ${profile.ratingCount} rated books. Content traits are available for ${profile.classifiedCount} of them.`;
+    ? `Gebaseerd op ${profile.ratingCount} beoordeelde boeken.`
+    : `Based on ${profile.ratingCount} rated books.`;
   const choiceEvidence = profile.selectedCount ? locale === 'nl' ? ` Ook ${profile.selectedCount} gekozen boekvoorkeuren tellen mee.` : ` Your ${profile.selectedCount} selected book preferences also contribute.` : '';
   const evidence = ratingEvidence + choiceEvidence;
   const summary = labels.length
     ? locale === 'nl' ? 'Deze combinatie komt naar voren uit je positieve beoordelingen en keuzes.' : 'This combination emerges from your positive ratings and choices.'
     : locale === 'nl' ? 'Er is nog geen voldoende onderbouwde voorkeur. Beoordeel meer boeken die je goed kent, ook boeken die je minder bevielen.' : 'There is not yet enough evidence for a clear preference. Rate more books you know well, including books you liked less.';
-  return { title, summary, evidence, preferences };
+  const clearLeader = preferences.length === 1 || (preferences.length > 1 && preferences[0].score! - preferences[1].score! >= 5);
+  return { title, summary, evidence, preferences, clearLeader };
 }
 
 // Call only after a successful, parsed save response. Neither a skip, a retry

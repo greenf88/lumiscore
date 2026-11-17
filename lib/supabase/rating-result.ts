@@ -1,6 +1,6 @@
 import { createServerSupabaseClient } from './server.ts';
-import { loadRecommendationCatalog } from './recommendation-catalog.ts';
-import { mapCatalogWorks, loadCatalogBooksByIdsWithStoredCovers } from './books.ts';
+import { loadCachedPublicRecommendationCatalog } from './taste-test.ts';
+import { loadCatalogBooksByIds } from './books.ts';
 import { recommendRatingResult } from '../taste-test/rating-result.ts';
 import { loadReaderTasteProfile } from './reader-taste-profile.ts';
 import type { Locale } from '../i18n/config.ts';
@@ -13,7 +13,7 @@ export async function loadRatingResult(locale: Locale) {
   if (!user) return { kind:'signed-out' as const };
   const [reader,roundResult,catalog] = await Promise.all([
     loadReaderTasteProfile(client,user.id,locale),
-    client.rpc('taste_rating_state'), loadRecommendationCatalog(client,rows=>mapCatalogWorks(rows,locale)),
+    client.rpc('taste_rating_state'), loadCachedPublicRecommendationCatalog(locale),
   ]);
   const {ratings,statuses,profile}=reader;
   if (roundResult.error) throw roundResult.error;
@@ -26,7 +26,7 @@ export async function loadRatingResult(locale: Locale) {
     excludedIds:new Set([...TASTE_TEST_WORK_IDS,...ratings.map(x=>String(x.work_id)),...statuses.filter(x=>x.status==='read').map(x=>String(x.work_id))]),
     availableIds,locale});
   const anchorRatings = [...ratings].filter(x=>x.rating>=7).sort((a,b)=>b.rating-a.rating||Number(a.work_id)-Number(b.work_id)).slice(0,3);
-  const hydrated = await loadCatalogBooksByIdsWithStoredCovers([...new Set([...recommendations.map(x=>x.book.workId!),...anchorRatings.map(x=>String(x.work_id))])],undefined,locale);
+  const hydrated = await loadCatalogBooksByIds([...new Set([...recommendations.map(x=>x.book.workId!),...anchorRatings.map(x=>String(x.work_id))])],undefined,locale);
   const books = new Map(hydrated.map(book=>[book.workId,book]));
   return { kind:'result' as const, profile, roundRatedCount:round?.ratedCount ?? 0, language,
     anchors:anchorRatings.flatMap(row=>{const book=books.get(String(row.work_id));return book?[{workId:String(row.work_id),title:book.title,rating:row.rating}]:[];}),
