@@ -15,13 +15,12 @@ import {
   type BookRatingState,
 } from '@/lib/ratings/model';
 import { formatPublicRatingDisplay } from '@/lib/ratings/card-summaries';
-import { BookCover, ThemeToggle } from './LumiScoreHome';
+import { BookCover, Header } from './LumiScoreHome';
 import {EditionPresentationLabel} from './EditionPresentationLabel';
 import { LumiScoreBookDescription, StreamedBookDescription } from './LumiScoreBookDescription';
 import type { BookDescriptionResolution } from '@/lib/books/description-resolution';
-import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
+import { useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreReadingStatus } from './LumiScoreReadingStatus';
-import { LumiScoreWordmark } from './LumiScoreWordmark';
 import type { ReadingStatus } from '@/lib/collections/model';
 import type { BookCollectionContext } from '@/lib/supabase/collections';
 import {
@@ -45,11 +44,11 @@ import {
 import { useWantToRead } from './useWantToRead';
 import { measurementHeaders } from '@/lib/product-metrics/browser';
 import type { HeaderAuthState } from '@/lib/auth/header';
-import { LumiScoreAccountMenu } from './LumiScoreAccountMenu';
-import { MobileNavigation } from './MobileNavigation';
+import { normalizeEditionLanguage } from '@/lib/books/edition-ranking';
 import { CoverScoreBadge } from './CoverScoreBadge';
 import { bookAuthenticationReturnPath, type BookReturnNavigation } from '@/lib/navigation/book-return';
 import { BookBackLink } from './BookBackLink';
+import { guestRoundSessionKey, readGuestRoundSession } from '@/lib/taste-test/guest-round-session';
 
 type LumiScoreBookDetailProps = {
   book: Book;
@@ -77,12 +76,12 @@ const ratingChoices = Array.from(
 );
 
 function GuestWantToRead({ book }: { book: Book }) {
-  const { t } = useLumiScoreLocale();
-  const { wanted, toggleWanted } = useWantToRead(false, [book]);
+  const { t, locale } = useLumiScoreLocale();
+  const { wanted, toggleWanted, error } = useWantToRead(false, [book]);
   const isWanted = wanted.has(getGuestWantedStorageId(book));
 
   return (
-    <button
+    <div className="detail-guest-save"><button
       className={`want-button detail-want-button${isWanted ? ' is-wanted' : ''}`}
       type="button"
       aria-pressed={isWanted}
@@ -90,7 +89,7 @@ function GuestWantToRead({ book }: { book: Book }) {
     >
       <span aria-hidden="true">{isWanted ? '✓' : '+'}</span>
       {t('home.wantToRead')}
-    </button>
+    </button><span className="save-feedback" role="status">{error || (isWanted ? (locale === 'nl' ? 'Bewaard op dit apparaat · ' : 'Saved on this device · ') : '')}{!error && isWanted && <LocaleLink href="/my-books">{t('header.myBooks')}</LocaleLink>}</span></div>
   );
 }
 
@@ -107,6 +106,7 @@ export function LumiScoreBookDetail({
   returnNavigation,
 }: LumiScoreBookDetailProps) {
   const { locale, pagePath, t } = useLumiScoreLocale();
+  const [searchQuery, setSearchQuery] = useState('');
   const coauthor = reviewedCoauthor(book);
   const [ratingState, setRatingState] = useState(initialRatingState);
   const [readingStatus, setReadingStatus] = useState<ReadingStatus | null>(
@@ -118,6 +118,8 @@ export function LumiScoreBookDetail({
     key: string;
     hasEvidence: boolean;
     match: PersonalMatchResult | null;
+    roundExplanation?: string;
+    hasRound?: boolean;
   } | null>(null);
   const detailPath = bookAuthenticationReturnPath(book.workId!, returnNavigation);
   const loginHref = `/login?next=${encodeURIComponent(detailPath)}`;
@@ -139,9 +141,13 @@ export function LumiScoreBookDetail({
     ? `${personalMatch.matchScore}%`
     : personalMatch?.matchLabel
       ? t(MATCH_LABEL_KEYS[personalMatch.matchLabel])
-      : '—';
+      : currentGuestPersonalization?.roundExplanation ? (locale === 'nl' ? 'Leestip' : 'Reading tip') : '—';
   const matchCopy = personalization.unavailable
     ? locale==='nl'?'Je leesprofiel kon niet laden. Probeer later opnieuw.':'Your reading profile could not load. Please try again later.'
+    : currentGuestPersonalization?.roundExplanation
+      ? currentGuestPersonalization.roundExplanation
+    : !hasTasteEvidence && currentGuestPersonalization?.hasRound
+      ? (locale === 'nl' ? 'Je persoonlijke leestips staan bij je smaaktestresultaat.' : 'Your personal reading tips are in your taste-test results.')
     : !hasTasteEvidence
     ? t('detail.unlockMatch')
     : !personalization.candidate ||
@@ -162,9 +168,12 @@ export function LumiScoreBookDetail({
     const timer = window.setTimeout(() => {
       if (!active) return;
       let raw: string | null = null;
+      let round: ReturnType<typeof readGuestRoundSession> = null;
       try { raw = localStorage.getItem(TASTE_TEST_GUEST_STORAGE_KEY); } catch { /* Optional browser storage. */ }
+      try { round = readGuestRoundSession(sessionStorage.getItem(guestRoundSessionKey(locale))); } catch { /* Optional browser storage. */ }
+      const roundExplanation = round?.result?.recommendations.find(item => item.book.workId === (book.workId ?? book.id))?.explanation;
       void loadGuestBookMatch(raw, candidate, book.workId ?? book.id, locale).then(result => {
-        if (active) setGuestPersonalization({key:guestPersonalizationKey,...result});
+        if (active) setGuestPersonalization({key:guestPersonalizationKey,...result,roundExplanation,hasRound:Boolean(round?.result)});
       }).catch(() => { /* Keep the existing unlock state; never invent a match. */ });
     }, 0);
 
@@ -253,21 +262,14 @@ export function LumiScoreBookDetail({
 
   return (
     <main className="book-detail-shell" data-product-work={book.workId}>
-      <header className="detail-header">
-        <LumiScoreWordmark />
-        <div className="detail-header-actions">
-          <LocaleLink className="detail-taste-test-link" href="/taste-test">{t('detail.tasteTest')}</LocaleLink>
-          <MobileNavigation authenticated={authState.authenticated} />
-          {!authState.authenticated && <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />}
-          <LanguageSwitcher hrefForLocale={option => localizedHref(
+      <Header query={searchQuery} onQueryChange={setSearchQuery} onThemeToggle={toggleTheme} authState={authState} returnTo={detailPath}
+          languageHrefForLocale={option => localizedHref(
             option === locale || book.detailLocales?.includes(option) ? pagePath : '/browse', option,
           )} />
-          <ThemeToggle onToggle={toggleTheme} labeled />
-          {authState.authenticated && <LumiScoreAccountMenu authState={authState} returnTo={detailPath} variant="detail" />}
-        </div>
-      </header>
 
       <article className={`book-detail${backCover ? ' has-back-cover' : ''}`}>
+        <div className="detail-context"><BookBackLink returnNavigation={returnNavigation} collection={collectionContext?.collection} />
+          <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale)} locale={locale}/></div>
         <div className="detail-cover-gallery" role="group" aria-label={t('detail.bookCovers')}>
           <figure className="detail-cover-figure">
             <div className="detail-cover-wrap">
@@ -292,13 +294,16 @@ export function LumiScoreBookDetail({
             </figure>
           )}
         </div>
-        <div className="detail-copy">
-          <BookBackLink returnNavigation={returnNavigation} collection={collectionContext?.collection} />
-          <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('book', book.title, `/book/${book.workId}`, locale)} locale={locale}/>
+        <div className="detail-heading">
           <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
           <p className="detail-author">{t('detail.by', { author: bookAuthorByline(book, locale) })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
-
+          <div className="detail-primary-actions">
+            {book.workId && (ratingState.authenticated ? <LumiScoreReadingStatus workId={book.workId} status={readingStatus} authenticated returnTo={detailPath} onStatusChange={setReadingStatus} primarySave /> : <GuestWantToRead book={book} />)}
+            <a className="detail-rate-link" href="#rate-book-heading">{t('detail.rateBook')} ↓</a>
+          </div>
+        </div>
+        <div className="detail-copy">
           {collectionContext && (
             <section className="detail-collection" aria-label={t('collection.collection')}>
               <LocaleLink href={`/collection/${collectionContext.collection.slug}`}>
@@ -341,6 +346,7 @@ export function LumiScoreBookDetail({
               <span id="match-heading">{t('detail.yourMatch')}</span>
               <strong>{matchValue}</strong>
               {matchCopy && <p role={personalization.unavailable?'status':undefined}>{matchCopy}</p>}
+              {!isAuthenticated && currentGuestPersonalization?.hasRound && <LocaleLink href="/taste-test/preferences">{locale === 'nl' ? 'Terug naar mijn leestips' : 'Back to my reading tips'}</LocaleLink>}
             </section>
           </div>
 
@@ -349,18 +355,6 @@ export function LumiScoreBookDetail({
             : <LumiScoreBookDescription description={description} englishEditionFallback={book.englishEditionFallback} />)}
           <BookEditorialGuide book={book} locale={locale} hasSuzanneCollectionLink={collectionContext?.collection.slug === 'suzanne-vermeer'}/>
           {authorLinksPromise && <StreamedBookAuthorLinks key={`${book.workId}:${locale}`} author={book.author} links={authorLinksPromise}/>}
-
-          {book.workId && (ratingState.authenticated ? (
-            <LumiScoreReadingStatus
-              workId={book.workId}
-              status={readingStatus}
-              authenticated
-              returnTo={detailPath}
-              onStatusChange={setReadingStatus}
-            />
-          ) : (
-            <GuestWantToRead book={book} />
-          ))}
 
           <section className="rating-section" aria-labelledby="rate-book-heading">
             <div>
@@ -414,7 +408,7 @@ export function LumiScoreBookDetail({
               <div><dt>{t('detail.firstPublishedLabel')}</dt><dd>{book.firstPublishYear ?? t('common.unknown')}</dd></div>
               {book.editionTitle && book.editionTitle !== book.title && <div><dt>{t('detail.edition')}</dt><dd>{book.editionTitle}</dd></div>}
               {book.editionPublisher && <div><dt>{t('detail.publisher')}</dt><dd>{book.editionPublisher}</dd></div>}
-              {book.editionLanguage && <div><dt>{t('detail.language')}</dt><dd>{book.editionLanguage.toUpperCase()}</dd></div>}
+              {book.editionLanguage && <div><dt>{t('detail.language')}</dt><dd>{normalizeEditionLanguage(book.editionLanguage) === 'nld' ? (locale === 'nl' ? 'Nederlands' : 'Dutch') : normalizeEditionLanguage(book.editionLanguage) === 'eng' ? (locale === 'nl' ? 'Engels' : 'English') : book.editionLanguage}</dd></div>}
               {book.isbn13 && <div><dt>ISBN-13</dt><dd>{book.isbn13}</dd></div>}
               {!book.isbn13 && book.isbn10 && <div><dt>ISBN-10</dt><dd>{book.isbn10}</dd></div>}
             </dl>

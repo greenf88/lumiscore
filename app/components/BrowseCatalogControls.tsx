@@ -47,11 +47,11 @@ export function BrowseCatalogControls({ state, categories, facets, selectedAutho
   }, [open]);
 
   return <div className="browse-discovery-controls">
-    <form className="browse-search" action={action} method="get" role="search" aria-label={t('browse.search')}>
+    <form className="browse-search" action={localizedHref('/search', locale)} method="get" role="search" aria-label={t('browse.search')}>
       <label className="sr-only" htmlFor="browse-query">{t('browse.searchPlaceholder')}</label>
       <input id="browse-query" type="search" name="q" defaultValue={state.query} maxLength={100}
         placeholder={t('browse.searchPlaceholder')} />
-      <AppliedFields state={state} omit="q" />
+      <AppliedFields state={{ ...state, relevance: true }} omit="q" />
       <button type="submit">{t('browse.search')}</button>
     </form>
 

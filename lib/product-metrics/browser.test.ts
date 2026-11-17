@@ -20,7 +20,7 @@ test('no pre-consent IDs, attribution or replay; bounded batches; revocation abo
  const env=process.env.NEXT_PUBLIC_SUPABASE_URL,flag=process.env.NEXT_PUBLIC_PRODUCT_ANALYSIS_ENABLED,storage=new Map<string,string>(),sent:Array<{body:{events:unknown[]};signal:AbortSignal}>=[];
  const install=(name:string,value:unknown)=>Object.defineProperty(globalThis,name,{value,writable:true,configurable:true});
  try{
-  process.env.NEXT_PUBLIC_SUPABASE_URL='https://hlvujbrmfdlrfxdjwsmb.supabase.co';install('window',{});install('navigator',{doNotTrack:'0'});
+  process.env.NEXT_PUBLIC_SUPABASE_URL='https://hlvujbrmfdlrfxdjwsmb.supabase.co';install('window',{matchMedia:()=>({matches:true})});install('navigator',{doNotTrack:'0'});
   install('location',new URL('https://preview.invalid/nl/toplijsten/dystopie-vanaf-1990?utm_source=facebook&utm_medium=organic_social&utm_campaign=dystopie_202610&token=PRIVATE'));
   install('document',{referrer:''});install('sessionStorage',{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>storage.set(k,v),removeItem:(k:string)=>storage.delete(k)});
   install('fetch',async(_url:string,options:RequestInit)=>{sent.push({body:JSON.parse(String(options.body)),signal:options.signal as AbortSignal});return new Response('{}',{status:202});});

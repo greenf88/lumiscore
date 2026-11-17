@@ -6,6 +6,7 @@ import {
   normalizeCatalogSearchQuery,
 } from '@/lib/books/catalog-search';
 import { measureServerOperation } from '@/lib/performance/server-timing';
+import { publicBook } from '@/lib/books/public-book';
 
 export async function GET(request: Request) {
   const {locale}=await resolveRequestLocale(request);
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     );
 
     return NextResponse.json(
-      { results },
+      { results: await Promise.all(results.map(publicBook)) },
       {
         headers: {
           'Cache-Control': 'public, max-age=30, s-maxage=60, stale-while-revalidate=300',

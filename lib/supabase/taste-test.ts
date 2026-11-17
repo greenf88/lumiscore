@@ -125,7 +125,7 @@ async function loadRecommendationCatalog(
   return loadPublicRecommendationCatalog(client, rows => mapCatalogWorks(rows, locale));
 }
 
-function loadGuestRecommendationCatalog(
+export function loadGuestRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
   locale: Locale,
 ): Promise<RecommendationCatalog> {
@@ -141,7 +141,7 @@ function loadGuestRecommendationCatalog(
   return result;
 }
 
-async function hydratePublicRecommendations(
+export async function hydratePublicRecommendations(
   recommendations: readonly PersonalizedRecommendation[],
   locale: Locale,
 ): Promise<PersonalizedRecommendation[]> {

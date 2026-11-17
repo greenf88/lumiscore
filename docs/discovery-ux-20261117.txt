@@ -1,0 +1,47 @@
+Discovery UX release
+
+Purpose: a working search-to-book route, a direct ten-rating guest test with
+new supported suggestions, and visible saving actions on book pages.
+
+Guest ratings are private input to a read-only recommendation endpoint. They
+do not write ratings, user_book_status or account profiles. Session storage
+retains the current test and its result for at most 24 hours per language/tab.
+Guest saved books continue using the existing local reading list convention.
+Recommendations exclude rated and already-saved works when first generated;
+the result is then stable when opening books and returning. A shortage is
+explained rather than filled with unrelated popularity recommendations.
+
+Search JSON resolves optional cover resources, strips the promise field and
+retains identity when a cover fails. RSC cover streaming remains in place.
+CoverBoundary isolates unexpected streamed-image failures. Native book links
+and existing return-memory rules preserve search/filter/sort context.
+
+Measurement reuses the existing consent-gated, bounded aggregate pipeline.
+No raw search query, answers, reader identifier or exact viewport is sent.
+New events: search_started/results/empty/failed/book_opened,
+guest_round_started/completed, guest_book_saved/save_failed,
+guest_suggestions_empty/failed. The only extra dimension is mobile/desktop.
+Existing recommendation_impression/open events remain authoritative for shown
+suggestions. Server-confirmed account writes keep their existing event names.
+Guest saves are counted only after localStorage accepts the write.
+
+Interpretation: search events count completed, distinct query outcomes within
+bounded tab memory; cancelled keystroke requests are excluded. Guest test start
+means the first rating or skip, completion means ten actual ratings. Back and
+re-renders do not repeat those transitions. These are aggregate activity counts,
+not linked visitor cohorts: never label their ratios visitor conversion rates.
+Compare periods, device classes, empty/error outcomes and recommendation opens
+alongside saves; actual conversion uplift requires comparable visitor evidence.
+Mobile is viewport <=759px, not a user-agent or physical-device classification.
+
+Database rollout: supabase/operations/discovery-ux-20261117 contains exact
+function-body-hash-guarded allowlist patches and reversals for test/production.
+Only two function bodies change; grants, RLS, triggers and retention stay intact.
+Install test first, verify consent/deduplication/rollback, then production before
+shipping the client. Reversal keeps counters and user/business data intact.
+
+Checks: tsc, lint, unit and rendering suites, normal LumiScore quality workflow,
+build and client-secret scan. Run scripts/verify-discovery-api.mjs with an exact
+origin for read-only API validation. Browser QA must also cover opening and
+returning, saving/unsaving, both languages, and 360/390/430px editorial layouts.
+Do not infer visual success from an HTTP response alone.

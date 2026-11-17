@@ -43,7 +43,7 @@ function paginationPages(currentPage: number, pageCount: number): Array<number |
 export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: LumiScoreBrowsePageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
-  const { wanted, statuses, toggleWanted } = useWantToRead(
+  const { wanted, statuses, toggleWanted, error } = useWantToRead(
     authState.authenticated,
     data.books,
   );
@@ -75,6 +75,7 @@ export function LumiScoreBrowsePage({ data, authState, returnTo, filters }: Lumi
         searchTargetId="browse-query"
       />
       <section className="browse-page" aria-labelledby="browse-title">
+        {error && <p role="alert">{error}</p>}
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
           <LocaleLink href="/browse" aria-current="page">{t('browse.books')}</LocaleLink>
           <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink>

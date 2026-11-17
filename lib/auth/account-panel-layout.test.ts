@@ -37,13 +37,15 @@ test('both header variants use bounded geometry, scrolling and existing keyboard
   assert.match(menu,/ref=\{panelRef\}/);
   assert.match(menu,/triggerRef\.current\?\.focus\(\)/);
   assert.match(css,/\.header-account-panel \{[^}]*overflow-y: auto[^}]*overscroll-behavior: contain/);
-  assert.match(detail,/<LanguageSwitcher(?:\s[\s\S]*?)?\/>[\s\S]*?<ThemeToggle[^>]+\/>\s*\{authState\.authenticated && <LumiScoreAccountMenu/);
+  assert.match(detail,/<Header[\s\S]*?authState=\{authState\}/);
 });
 
-test('guest sign-in retains its original position; only the authenticated avatar moves right',async()=>{
+test('book detail reuses the shared header and its single account control',async()=>{
   const detail=await readFile(new URL('../../app/components/LumiScoreBookDetail.tsx',import.meta.url),'utf8');
-  assert.match(detail,/<MobileNavigation[^>]+\/>\s*\{!authState\.authenticated && <LumiScoreAccountMenu[^>]+\/\>\}\s*<LanguageSwitcher(?:\s[\s\S]*?)?\/>/);
-  assert.equal((detail.match(/authState\.authenticated && <LumiScoreAccountMenu/g)??[]).length,2);
+  assert.equal((detail.match(/<Header\s/g)??[]).length,1);
+  assert.doesNotMatch(detail,/<LumiScoreAccountMenu|<MobileNavigation/);
+  const home=await readFile(new URL('../../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
+  assert.match(home,/<LumiScoreAccountMenu authState=\{authState\} returnTo=\{returnTo\}/);
   const css=await readFile(new URL('../../app/globals.css',import.meta.url),'utf8');
   assert.match(css,/\.detail-header \.detail-sign-in \{ flex-shrink: 0; \}/);
 });

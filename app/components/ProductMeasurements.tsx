@@ -9,6 +9,7 @@ import { metricSurfaceForPath, referralArrivalEligible } from '@/lib/product-met
 export function ProductMeasurements() {
   const pathname = usePathname(), { locale } = useLumiScoreLocale(), last = useRef({key:'',markerSent:false,blocked:true});
   const referralEntry = useRef({ pathname, decided: false });
+  const openedSearches = useRef(new Set<string>());
   const revision=useSyncExternalStore(subscribeAnalysis,analysisRevision,serverAnalysisRevision);
   useEffect(() => {
     const entry = referralEntry.current;
@@ -59,6 +60,15 @@ export function ProductMeasurements() {
       if (previous !== undefined && performance.now() - previous < 750) return;
       activated.set(anchor, performance.now());
       const surface = metricSurfaceForPath(location.pathname);
+      const search = anchor.closest<HTMLElement>('[data-search-results]');
+      if (search && search.dataset.searchResults) {
+        const key = `${locale}:${surface}:${search.dataset.searchResults.trim().toLocaleLowerCase()}`;
+        if (!openedSearches.current.has(key)) {
+          if (openedSearches.current.size >= 100) openedSearches.current.delete(openedSearches.current.values().next().value!);
+          openedSearches.current.add(key);
+          emitBrowserMetric('search_book_opened', {locale, surface, work_id:Number(match[1])});
+        }
+      }
       emitBrowserMetric('book_card_opened', { locale, surface, work_id: Number(match[1]), list_id: location.pathname.endsWith('/dystopie-vanaf-1990') ? 'dystopie-vanaf-1990' : 'other' });
       flushBrowserMetrics(); // keepalive; never prevent native/keyboard/middle-click navigation.
     };

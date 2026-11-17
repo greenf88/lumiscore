@@ -50,6 +50,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   try {
     const { loadSearchCatalog } = await import('@/lib/supabase/search-catalog');
     data = await loadSearchCatalog(state, locale);
+    searchFailed = !data.available;
   } catch (error) {
     console.error('Search page catalog query failed.', error);
     searchFailed = true;

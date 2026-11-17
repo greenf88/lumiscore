@@ -23,9 +23,9 @@ test('compact detail header reuses the existing accessible mobile navigation, no
   const home = await read('app/components/LumiScoreHome.tsx');
   const navigation = await read('app/components/MobileNavigation.tsx');
   const css = await read('app/globals.css');
-  assert.match(detail, /<MobileNavigation authenticated=\{/);
+  assert.match(detail, /<Header[\s\S]*?authState=\{authState\}/);
   assert.match(home, /<MobileNavigation authenticated=\{/);
-  assert.match(navigation, /href="\/taste-test"/);
+  assert.match(navigation, /authenticated \? '\/taste-test' : '\/taste-test\/preferences'/);
   assert.match(navigation, /aria-expanded=\{open\}/);
   assert.match(navigation, /event.key !== 'Escape'/);
   assert.match(navigation, /trigger.current\?\.focus\(\)/);

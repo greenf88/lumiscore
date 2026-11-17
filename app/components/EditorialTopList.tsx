@@ -28,12 +28,13 @@ function EditorialReadingNote({ id, title, note, text, choice, locale }: { id: s
 }
 export function EditorialTopList({ list, books, selections, relatedLists, unavailable = false, authenticated = false }: { list: EditorialList; books: Book[]; selections: Record<string, EditorialSelection>; relatedLists: Pick<EditorialList,'slug'|'title'>[]; unavailable?: boolean; authenticated?: boolean }) {
   const { locale } = useLumiScoreLocale();
-  const { wanted, statuses, toggleWanted } = useWantToRead(authenticated, books);
+  const { wanted, statuses, toggleWanted, error } = useWantToRead(authenticated, books);
   const guide = getLandingGuide('/toplijsten/' + list.slug, locale);
   const availableIds = list.workIds.filter(id => selections[id]?.href && books.some(book => book.openLibraryWorkId === selections[id].sourceId && book.editionAvailable !== false));
   const renderedIds = guide ? availableIds : list.workIds;
   const missingCount = list.workIds.length - availableIds.length;
   return <section className="featured-section editorial-lists" data-product-list={list.slug} data-editorial-guide={guide ? list.slug : undefined}>
+    {error && <p role="alert">{error}</p>}
     <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
     <h1>{guide?.h1 ?? list.title[locale]}</h1>{guide ? <ReadingGuideIntro guide={guide} books={books} locale={locale}/> : <p>{list.description[locale]}</p>}

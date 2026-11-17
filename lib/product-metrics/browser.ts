@@ -54,7 +54,7 @@ export function emitBrowserMetric(event:MetricEvent,properties:MetricProperties,
  if(!browserMetricsEnabled()||!BROWSER_METRIC_EVENTS.includes(event))return;
  const context=browserMetricContext(properties.locale,properties.surface);
  // No UUID, context or buffer is created before consent.
- const envelope=parseMetric({event_id:eventId??crypto.randomUUID(),event,properties:{...context,...properties}});
+ const envelope=parseMetric({event_id:eventId??crypto.randomUUID(),event,properties:{...context,...properties,device:window.matchMedia('(max-width: 759px)').matches?'mobile':'desktop'}});
  if(!envelope)return;if(queue.length>=20){transport.queueDropped++;return;}
  queue.push(envelope);if(scheduled===null)scheduled=setTimeout(flushBrowserMetrics,100);
 }
