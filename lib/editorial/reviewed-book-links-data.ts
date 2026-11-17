@@ -1,4 +1,4 @@
-// Public book identities and editorial comparisons checked on 2026-11-16.
+// Public book identities and editorial comparisons checked through 2026-11-17.
 // The resolver verifies each source identity before displaying production links.
 export const REVIEWED_BOOK_LINKS = [
   {
@@ -150,6 +150,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3822",
         "reason": "Read a young person’s diary from a different conflict: Zlata records life in Sarajevo during the Bosnian war."
+      },
+      {
+        "workId": "4159",
+        "reason": "For a fictional perspective on courage under Nazi persecution, read Wein’s story of a captured agent and her pilot friend."
       }
     ]
   },
@@ -1726,6 +1730,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8545",
         "reason": "Continue with a different kind of paranormal relationship: Simon and Baz’s journey through the aftermath of a fantasy adventure."
+      },
+      {
+        "workId": "2157",
+        "reason": "For a very different, satirical treatment of the search for lasting intimacy, try Kramer’s portrait of 1970s gay New York."
       }
     ]
   },
@@ -1754,6 +1762,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8516",
         "reason": "For a contrasting suspense story about young people and responsibility, follow seven friends threatened over a shared crime."
+      },
+      {
+        "workId": "9077",
+        "reason": "Follow another young-adult story about violence and accountability, told through the intersecting lives of six teenagers."
       }
     ]
   },
@@ -1768,6 +1780,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6584",
         "reason": "Extend the business comparison from how leaders allocate capital to how digital markets can change the economics of niche products."
+      },
+      {
+        "workId": "2264",
+        "reason": "Contrast the decisions of company leaders with Bogle’s argument for diversified, low-cost index investing."
       }
     ]
   },
@@ -2144,6 +2160,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7666",
         "reason": "For a broader historical comparison, explore how disease, food supply and population change are connected in Henley’s study of Sulawesi."
+      },
+      {
+        "workId": "9364",
+        "reason": "For historical fiction about an earlier world of medicine, follow Rob Cole’s journey from England to Persia."
       }
     ]
   },
@@ -2256,6 +2276,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7033",
         "reason": "Compare Rivera’s reflections on art with Boylan’s contemporary introduction to how images shape the way people see and understand their world."
+      },
+      {
+        "workId": "7895",
+        "reason": "Compare the artist’s public reflections with Frida Kahlo’s drawings, poems and private observations."
       }
     ]
   },
@@ -2312,6 +2336,574 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7643",
         "reason": "Compare this long-term demographic study with a history for younger readers about Philadelphia’s yellow fever crisis in 1793."
+      }
+    ]
+  },
+  {
+    "workId": "7895",
+    "title": "The Diary of Frida Kahlo",
+    "author": "Frida Kahlo",
+    "openLibraryWorkId": "OL2815702W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7434",
+        "reason": "Read Rivera’s reflections on his early artistic life alongside Kahlo’s illustrated private journal."
+      },
+      {
+        "workId": "7355",
+        "reason": "For a different view of the art world, explore the dealers and commercial relationships behind contemporary art."
+      }
+    ]
+  },
+  {
+    "workId": "7355",
+    "title": "Boom",
+    "author": "Michael Shnayerson",
+    "openLibraryWorkId": "OL20149510W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7895",
+        "reason": "Move from the dealers who shape art markets to an artist’s own illustrated account of her inner life."
+      }
+    ]
+  },
+  {
+    "workId": "7120",
+    "title": "The 8th Habit",
+    "author": "Stephen R. Covey",
+    "openLibraryWorkId": "OL2630077W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4105",
+        "reason": "Compare Covey’s emphasis on purpose and leadership with Willink’s focus on discipline and daily action."
+      }
+    ]
+  },
+  {
+    "workId": "4105",
+    "title": "Discipline Equals Freedom",
+    "author": "Jocko Willink",
+    "openLibraryWorkId": "OL19716723W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7120",
+        "reason": "Consider how disciplined action relates to Covey’s questions about personal purpose and helping others contribute."
+      }
+    ]
+  },
+  {
+    "workId": "6900",
+    "title": "Infotopia",
+    "author": "Cass R. Sunstein",
+    "openLibraryWorkId": "OL1952268W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8027",
+        "reason": "Follow the question of how people share knowledge into Kakutani’s examination of misinformation and public trust."
+      }
+    ]
+  },
+  {
+    "workId": "8027",
+    "title": "The Death of Truth [Hardcover] Michiko Kakutani",
+    "author": "Michiko Kakutani",
+    "openLibraryWorkId": "OL20596937W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6900",
+        "reason": "Explore Sunstein’s proposals for pooling knowledge and reducing the errors that groups can reinforce."
+      }
+    ]
+  },
+  {
+    "workId": "2264",
+    "title": "The Little Book of Common Sense Investing",
+    "author": "John C. Bogle",
+    "openLibraryWorkId": "OL3928758W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4849",
+        "reason": "Compare Bogle’s case for index investing with Thorndike’s study of how individual company leaders allocate capital."
+      }
+    ]
+  },
+  {
+    "workId": "7627",
+    "title": "Spoon-Fed",
+    "author": "Tim Spector",
+    "openLibraryWorkId": "OL21657779W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6687",
+        "reason": "Explore a different area of food science: how the senses and surroundings influence the experience of eating."
+      }
+    ]
+  },
+  {
+    "workId": "6687",
+    "title": "Gastrophysics",
+    "author": "Spence, Charles (Experimental psychologist)",
+    "openLibraryWorkId": "OL19712248W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7627",
+        "reason": "Turn from the sensory experience of meals to Spector’s examination of the evidence behind food advice."
+      }
+    ]
+  },
+  {
+    "workId": "4078",
+    "title": "The Essential Ageless Body, Timeless Mind",
+    "author": "Deepak Chopra",
+    "openLibraryWorkId": "OL548765W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8305",
+        "reason": "Compare Chopra’s mind-body perspective with Judith’s attempt to connect chakra traditions and Western psychology."
+      }
+    ]
+  },
+  {
+    "workId": "8305",
+    "title": "Eastern Body, Western Mind",
+    "author": "Anodea Judith",
+    "openLibraryWorkId": "OL3244796W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4078",
+        "reason": "Read another mind-body perspective, focused on Chopra’s reflections about identity and ageing."
+      }
+    ]
+  },
+  {
+    "workId": "1492",
+    "title": "Ararat",
+    "author": "Frank Westerman",
+    "openLibraryWorkId": "OL15170561W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6780",
+        "reason": "Compare this personal journey between science and faith with Manji’s direct argument for religious questioning and reform."
+      }
+    ]
+  },
+  {
+    "workId": "6780",
+    "title": "The Trouble with Islam Today",
+    "author": "Irshad Manji",
+    "openLibraryWorkId": "OL2867231W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1492",
+        "reason": "Explore a different form of questioning faith through Westerman’s journey to Mount Ararat."
+      }
+    ]
+  },
+  {
+    "workId": "7647",
+    "title": "Witches",
+    "author": "Michael Jordan",
+    "openLibraryWorkId": "OL258177W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8197",
+        "reason": "Move from an encyclopedic survey to Juliet Diaz’s more focused presentation of plants within spiritual practice."
+      }
+    ]
+  },
+  {
+    "workId": "8197",
+    "title": "Plant Witchery",
+    "author": "Juliet Diaz",
+    "openLibraryWorkId": "OL21683833W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7647",
+        "reason": "Place this plant-centred spiritual approach beside a broader reference book about paganism, witchcraft and magic."
+      }
+    ]
+  },
+  {
+    "workId": "9077",
+    "title": "People kill people",
+    "author": "Ellen Hopkins",
+    "openLibraryWorkId": "OL19751513W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4219",
+        "reason": "Compare these intersecting lives with a teenager’s account of a criminal trial and questions of responsibility."
+      }
+    ]
+  },
+  {
+    "workId": "6609",
+    "title": "Size 14 Is Not Fat Either",
+    "author": "Meg Cabot",
+    "openLibraryWorkId": "OL492831W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9508",
+        "reason": "Try another comic mystery led by a woman drawn into dangerous investigations, this time with Stephanie Plum."
+      }
+    ]
+  },
+  {
+    "workId": "9508",
+    "title": "Hard Eight (Stephanie Plum Series #8)",
+    "author": "Janet Evanovich",
+    "openLibraryWorkId": "OL48053W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6609",
+        "reason": "Move from Stephanie Plum’s investigation to Heather Wells’s amateur detective work on a college campus."
+      }
+    ]
+  },
+  {
+    "workId": "4373",
+    "title": "Always and Forever, Lara Jean",
+    "author": "Jenny Han",
+    "openLibraryWorkId": "OL19666031W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9042",
+        "reason": "For romance at a different stage of life, visit Cedar Cove, where family changes also shape new relationships."
+      }
+    ]
+  },
+  {
+    "workId": "9042",
+    "title": "16 Lighthouse Road",
+    "author": "Debbie Macomber",
+    "openLibraryWorkId": "OL1911536W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4373",
+        "reason": "For a younger perspective on family change and romance, follow Lara Jean as she prepares to leave for college."
+      }
+    ]
+  },
+  {
+    "workId": "2157",
+    "title": "FAGGOTS",
+    "author": "Larry Kramer",
+    "openLibraryWorkId": "OL3138747W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8802",
+        "reason": "For an adult fantasy romance with a different tone, explore love and belonging within Ox’s found family."
+      }
+    ]
+  },
+  {
+    "workId": "9325",
+    "title": "Master and Apprentice (Star Wars)",
+    "author": "Claudia Gray",
+    "openLibraryWorkId": "OL20077655W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6571",
+        "reason": "Explore Claudia Gray’s fiction outside Star Wars through Bianca and Lucas in the supernatural Evernight series."
+      }
+    ]
+  },
+  {
+    "workId": "6571",
+    "title": "Hourglass",
+    "author": "Claudia Gray",
+    "openLibraryWorkId": "OL9302610W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9325",
+        "reason": "Explore another side of Claudia Gray’s fiction through the relationship between Qui-Gon Jinn and Obi-Wan Kenobi."
+      }
+    ]
+  },
+  {
+    "workId": "2107",
+    "title": "Faust",
+    "author": "Johann Wolfgang von Goethe",
+    "openLibraryWorkId": "OL52456W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8463",
+        "reason": "Compare Faust’s bargain with Lestat’s dangerous experiment in exchanging bodies and experiencing mortality."
+      }
+    ]
+  },
+  {
+    "workId": "8463",
+    "title": "The Tale of the Body Thief",
+    "author": "Anne Rice",
+    "openLibraryWorkId": "OL77842W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2107",
+        "reason": "Return to a classic dramatic bargain about desire, temptation and the consequences of seeking a different life."
+      }
+    ]
+  },
+  {
+    "workId": "4159",
+    "title": "Code Name Verity",
+    "author": "Elizabeth Wein",
+    "openLibraryWorkId": "OL16126144W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7185",
+        "reason": "Pair this fictional wartime friendship with Andrea Warren’s nonfiction account of a young Holocaust survivor."
+      }
+    ]
+  },
+  {
+    "workId": "7587",
+    "title": "Somebody's Daughter",
+    "author": "Ashley C. Ford",
+    "openLibraryWorkId": "OL22061778W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2437",
+        "reason": "Compare Ford’s childhood account with Didion’s theatrical adaptation about loss and adult family life."
+      }
+    ]
+  },
+  {
+    "workId": "2437",
+    "title": "The Year of Magical Thinking",
+    "author": "Joan Didion",
+    "openLibraryWorkId": "OL500171W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7587",
+        "reason": "Read another personal examination of family bonds, shaped by Ford’s childhood and her father’s imprisonment."
+      }
+    ]
+  },
+  {
+    "workId": "1517",
+    "title": "Genesis",
+    "author": "Karin Slaughter",
+    "openLibraryWorkId": "OL15171136W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2526",
+        "reason": "Try a different investigative partnership in Tana French’s Dublin school mystery, where friendships conceal a murder clue."
+      },
+      {
+        "workId": "669",
+        "reason": "Compare this investigation with Lindsay Boxer’s teamwork in Patterson and Gross’s Women’s Murder Club thriller."
+      }
+    ]
+  },
+  {
+    "workId": "2526",
+    "title": "The Secret Place",
+    "author": "Tana French",
+    "openLibraryWorkId": "OL17371637W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1517",
+        "reason": "Move from the guarded friendships of a school to Will Trent’s investigation of captivity and violence in Atlanta."
+      }
+    ]
+  },
+  {
+    "workId": "2789",
+    "title": "Cat and Mouse",
+    "author": "James Patterson",
+    "openLibraryWorkId": "OL167169W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "649",
+        "reason": "Continue with a later Alex Cross investigation in which a killer turns public attention into part of the crime."
+      }
+    ]
+  },
+  {
+    "workId": "649",
+    "title": "Double Cross",
+    "author": "James Patterson",
+    "openLibraryWorkId": "OL167150W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2789",
+        "reason": "Return to an earlier Alex Cross case involving Gary Soneji’s revenge and a second dangerous pursuit."
+      }
+    ]
+  },
+  {
+    "workId": "669",
+    "title": "3rd Degree",
+    "author": "James Patterson",
+    "openLibraryWorkId": "OL167144W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1517",
+        "reason": "For another investigation where personal history complicates the case, follow Will Trent, Faith Mitchell and Sara Linton."
+      }
+    ]
+  },
+  {
+    "workId": "9364",
+    "title": "The Physician",
+    "author": "Noah Gordon",
+    "openLibraryWorkId": "OL2296577W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7643",
+        "reason": "Pair this historical novel about medical learning with a nonfiction account of Philadelphia’s yellow-fever epidemic."
+      }
+    ]
+  },
+  {
+    "workId": "9752",
+    "title": "Dirty",
+    "author": "Megan Hart",
+    "openLibraryWorkId": "OL8030158W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8534",
+        "reason": "Try a different adult romance about emotional boundaries, this time set around a professional hockey team."
+      }
+    ]
+  },
+  {
+    "workId": "8534",
+    "title": "Pucking Around",
+    "author": "Emily Rath",
+    "openLibraryWorkId": "OL36042862W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9752",
+        "reason": "For a more inward-looking adult romance, explore Elle’s struggle to let attraction become trust."
+      }
+    ]
+  },
+  {
+    "workId": "8277",
+    "title": "Letters from Women Who Love Too Much",
+    "author": "Robin Norwood",
+    "openLibraryWorkId": "OL2647504W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8249",
+        "reason": "Compare these personal letters about destructive relationships with Lachkar’s clinical discussion of communication."
+      }
+    ]
+  },
+  {
+    "workId": "8249",
+    "title": "How to Talk to a Narcissist",
+    "author": "Joan Lachkar",
+    "openLibraryWorkId": "OL3358577W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8277",
+        "reason": "Explore readers’ own accounts of painful relationship patterns and Norwood’s responses to their letters."
+      }
+    ]
+  },
+  {
+    "workId": "8702",
+    "title": "Warriors : The Broken Code #1",
+    "author": "Erin Hunter",
+    "openLibraryWorkId": "OL20152848W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2070",
+        "reason": "Compare the warrior Clans’ loyalties and laws with Kipling’s animal stories about belonging and the rules of the jungle."
+      }
+    ]
+  },
+  {
+    "workId": "2070",
+    "title": "The Jungle Book",
+    "author": "Rudyard Kipling",
+    "openLibraryWorkId": "OL19870W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8702",
+        "reason": "Try a later animal fantasy in which cat Clans face a crisis of trust, ancestry and their shared warrior code."
       }
     ]
   }
