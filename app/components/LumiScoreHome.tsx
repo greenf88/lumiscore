@@ -358,7 +358,7 @@ const RecommendationRow = memo(function RecommendationRow({ book, recommendation
   const matchText = recommendation ? recommendationMatchLabel(recommendation, locale) : ratingDisplay.count;
   const content = (
     <>
-      <BookCover book={book} small resolveMissing={false} />
+      <BookCover book={book} small resolveMissing />
       <span className="recommendation-copy">
         <strong>{book.title}</strong><EditionPresentationLabel book={book}/>
         <span>{book.author}</span>
@@ -399,7 +399,7 @@ export function RecommendationsSection({ personalization, limit = 20, returnTo =
       : items.length < 10 && <p role="status">{nl ? 'Er zijn momenteel minder dan tien geschikte, nog niet gelezen kandidaten met voldoende betrouwbare metadata. We tonen alleen de echte resultaten.' : 'There are currently fewer than ten suitable unread candidates with sufficiently reliable metadata. Only genuine results are shown.'}</p>}
     <div className="book-grid">{items.map((item,index) => <RecommendationMeasurement key={`${locale}:${item.book.workId}`} workId={item.book.workId} locale={locale} surface="recommendations" position={index+1}><BookCard book={item.book}
       wanted={wanted.has(getGuestWantedStorageId(item.book))} status={item.book.workId ? statuses.get(item.book.workId) : null}
-      onToggle={toggleWanted} resolveMissingCover={false} matchLabel={recommendationMatchLabel(item, locale)}
+      onToggle={toggleWanted} resolveMissingCover matchLabel={recommendationMatchLabel(item, locale)}
       detailReturnContext={returnTo === '/' ? { kind: 'home' } : { kind: 'recommendations', path: returnTo }} /></RecommendationMeasurement>)}</div>
   </section>;
 }

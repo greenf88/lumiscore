@@ -186,7 +186,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
                     if (!start || !swipePrototype || gate.current?.isBusy()) return;
                     const dx = e.clientX - start.x;
                     if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(e.clientY - start.y) * 2) setPrototypeIntent(dx > 0 ? 'read' : 'skip'); }}>
-                  <div className={`taste-book-identity${book.title.length > 90 || book.author.length > 60 ? ' taste-long-identity' : ''}`}><BookCover book={book} presentation="taste" resolveMissing={false} />
+                  <div className={`taste-book-identity${book.title.length > 90 || book.author.length > 60 ? ' taste-long-identity' : ''}`}><BookCover book={book} presentation="taste" resolveMissing />
                     <div className="book-card-body"><h2 ref={bookHeading} tabIndex={-1}>{book.title}</h2><p>{book.author}</p><EditionPresentationLabel book={book}/></div>
                   </div>
                   <div className="taste-rating-actions">

@@ -21,6 +21,16 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Exact English ISBN pages and linked jacket images inspected together.
+  // Rejected placeholders and conflicting jackets are recorded in the cover audit.
+  {workId:'180',openLibraryWorkId:'OL81626W',title:'Carrie',author:'Stephen King',isbn13:'9780816156887',editionLanguage:'eng',openLibraryEditionId:'OL9787395M',coverUrl:'https://pictures.abebooks.com/isbn/9780816156887-us.jpg',source:'reviewed_bookseller',evidenceUrl:'https://www.abebooks.com/9780816156887/Carrie-Hall-Large-Print-Book-0816156883/plp',reviewedAt:'2026-11-17'},
+  {workId:'648',openLibraryWorkId:'OL181821W',title:'Night Manager',author:'John le Carré',isbn13:'9780517137635',editionLanguage:'eng',openLibraryEditionId:'OL7678305M',coverUrl:'https://pictures.abebooks.com/isbn/9780517137635-us.jpg',source:'reviewed_bookseller',evidenceUrl:'https://www.abebooks.com/9780517137635/Night-Manager-John-Carre-0517137631/plp',reviewedAt:'2026-11-17'},
+  {workId:'1359',openLibraryWorkId:'OL39360W',title:'Orlando',author:'Virginia Woolf',isbn13:'9780701202743',editionLanguage:'eng',openLibraryEditionId:'OL7764748M',coverUrl:'https://pictures.abebooks.com/isbn/9780701202743-uk.jpg',source:'reviewed_bookseller',evidenceUrl:'https://www.abebooks.co.uk/9780701202743/ORLANDO-Woolf-Virginia-0701202742/plp',reviewedAt:'2026-11-17'},
+  {workId:'2144',openLibraryWorkId:'OL81294W',title:'Women in Love',author:'D. H. Lawrence',isbn13:'9788188280650',editionLanguage:'eng',openLibraryEditionId:'OL13180582M',coverUrl:'https://pictures.abebooks.com/isbn/9788188280650-us.jpg',source:'reviewed_bookseller',evidenceUrl:'https://www.abebooks.com/9788188280650/Women-Love-Classic-Library-Lawrence-8188280658/plp',reviewedAt:'2026-11-17'},
+  // The stored Work is an official OL redirect to OL3368231W (checked 2026-11-17).
+  // The exact edition, author, English language and ISBN match; keep the exception
+  // scoped to this edition rather than weakening the general parent-Work check.
+  {workId:'389',openLibraryWorkId:'OL3368288W',title:'The giving tree',author:'Shel Silverstein',isbn13:'9780060256654',editionLanguage:'eng',openLibraryEditionId:'OL22142270M',coverUrl:'https://covers.openlibrary.org/b/id/6616652-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL22142270M.json',reviewedAt:'2026-11-17'},
   // Exact edition JSON and the returned cover image checked together. Avoid
   // waiting for optional external metadata on this frequently rated classic.
   {workId:'7',openLibraryWorkId:'OL27448W',title:'The Lord of the Rings',author:'J.R.R. Tolkien',isbn13:'9780544003415',editionLanguage:'eng',openLibraryEditionId:'OL26885115M',coverUrl:'https://covers.openlibrary.org/b/id/14617723-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26885115M.json',reviewedAt:'2026-11-17'},
