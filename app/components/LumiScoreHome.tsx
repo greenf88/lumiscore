@@ -144,6 +144,7 @@ function BookCoverForIdentity({
   const [cardVariantFailed,setCardVariantFailed]=useState(false);
   const resolvedRequested = useRef(false);
   const coverImage = useRef<HTMLImageElement>(null);
+  const coverContainer = useRef<HTMLDivElement>(null);
   const coverUrl = coverUrls[coverIndex] ?? null;
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
   const imageSource = imageAttempts[variantIndex] ?? null;
@@ -173,7 +174,14 @@ function BookCoverForIdentity({
   }, [book, resolveMissing]);
 
   useEffect(() => {
-    if (!coverUrl) requestResolvedCovers();
+    if (coverUrl) return;
+    const element=coverContainer.current;
+    if(!element||typeof IntersectionObserver==='undefined'){requestResolvedCovers();return;}
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();requestResolvedCovers();}
+    },{rootMargin:'300px'});
+    observer.observe(element);
+    return ()=>observer.disconnect();
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = useCallback((failedUrl?:string) => {
@@ -217,6 +225,7 @@ function BookCoverForIdentity({
 
   return (
     <div
+      ref={coverContainer}
       className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
       data-cover-presentation={presentation}
       role={label ? 'img' : undefined}

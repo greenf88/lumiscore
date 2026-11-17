@@ -2,6 +2,7 @@ import type {Book} from '../../app/data/books.ts';
 type Waiter={book:Book;resolve:(urls:string[])=>void};
 const cache=new Map<string,{expires:number;result:Promise<string[]>}>();
 const queues=new Map<string,Waiter[]>();
+let background=Promise.resolve();
 const key=(book:Book)=>`${book.strictEditionLanguage}:${book.workId}:${book.editionId}`;
 export function coverUrlsForEdition(book:Book,rows:unknown):string[]{
   if(!Array.isArray(rows))return [];
@@ -20,11 +21,11 @@ export function loadExactEditionCovers(book:Book):Promise<string[]>{
     queues.set(locale,[{book,resolve}]);
     setTimeout(()=>{
       const batch=queues.get(locale)??[];queues.delete(locale);
-      for(let i=0;i<batch.length;i+=16){
-        const chunk=batch.slice(i,i+16),ids=[...new Set(chunk.map(x=>x.book.workId))].join(',');
-        fetch(`/api/books/edition-covers?locale=${locale}&ids=${ids}`,{credentials:'omit',signal:AbortSignal.timeout(12000)})
+      for(let i=0;i<batch.length;i+=4){
+        const chunk=batch.slice(i,i+4),ids=[...new Set(chunk.map(x=>x.book.workId))].join(',');
+        background=background.then(()=>fetch(`/api/books/edition-covers?locale=${locale}&ids=${ids}`,{credentials:'omit',signal:AbortSignal.timeout(12000)})
           .then(async r=>r.ok?await r.json() as {covers?:unknown}:null)
-          .catch(()=>null).then(data=>{for(const x of chunk){const urls=coverUrlsForEdition(x.book,data?.covers);cache.set(key(x.book),{expires:Date.now()+(urls.length?3600000:60000),result:Promise.resolve(urls)});x.resolve(urls);}});
+          .catch(()=>null).then(data=>{for(const x of chunk){const urls=coverUrlsForEdition(x.book,data?.covers);cache.set(key(x.book),{expires:Date.now()+(urls.length?3600000:60000),result:Promise.resolve(urls)});x.resolve(urls);}}));
       }
     },25);
   });
