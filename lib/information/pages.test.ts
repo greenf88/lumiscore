@@ -111,7 +111,7 @@ test('information links are real internal routes and mail links use the approved
   }
 });
 
-test('information navigation is complete on desktop footer and mobile menu', async () => {
+test('information navigation stays complete in the footer; mobile prioritizes discovery', async () => {
   const [home, translations, styles, route] = await Promise.all([
     readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../i18n/translations.ts', import.meta.url), 'utf8'),
@@ -130,8 +130,9 @@ test('information navigation is complete on desktop footer and mobile menu', asy
   assert.doesNotMatch(translations, /'footer\.helpComing'/);
   assert.match(home, /<MobileNavigation authenticated=\{authState.authenticated\}/);
   const mobile = await readFile(new URL('../../app/components/MobileNavigation.tsx', import.meta.url), 'utf8');
-  assert.match(mobile, /mobile-navigation-panel[\s\S]*href="\/over-ons"[\s\S]*href="\/contact"/);
-  for (const path of globalNavigationPaths) assert.ok(mobile.includes(`href="${path}"`));
+  for (const path of ['/browse','/toplijsten','/my-books']) assert.ok(mobile.includes(`href="${path}"`));
+  assert.match(mobile, /<details className="mobile-navigation-more">/);
+  assert.match(mobile, /href="\/zo-werkt-het"/);
   assert.match(styles, /\.information-page-shell[^}]*var\(--bg\)/);
   assert.match(styles, /@media \(max-width: 560px\)[\s\S]*\.information-page/);
   assert.doesNotMatch(route, /loadHeaderAuthState|supabase\/auth/);

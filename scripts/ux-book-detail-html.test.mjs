@@ -24,12 +24,14 @@ test('NL/EN detail HTML preserves the accessible cover, account, locale and them
       assert.doesNotMatch(html, /<figcaption/);
       assert.match(html, /role="img" aria-label="[^"]*De uitzonderlijk lange geschiedenis/);
       assert.match(html, /score-badge detail-score-badge/);
-      assert.match(html, new RegExp(`href="/${locale}/taste-test"`));
+      assert.match(html, new RegExp(`href="/${locale}/taste-test/preferences"`));
       assert.match(html, /class="mobile-navigation-trigger"[^>]*aria-expanded="false"/);
       assert.match(html, new RegExp('href="/' + locale + '/book/991001"'));
       assert.match(html, new RegExp('href="/' + (locale === 'nl' ? 'en' : 'nl') + '/browse" aria-label='));
-      assert.match(html, /class="theme-toggle theme-toggle-labeled"/);
-      assert.match(html, /class="detail-sign-in"/);
+      assert.match(html, /class="theme-toggle/);
+      assert.match(html, /class="header-sign-in"/);
+      assert.match(html, /class="header-search"/);
+      assert.ok(html.indexOf('detail-want-button')<html.indexOf('class="detail-copy"'));
       const failed=renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:'/book/991001'},createElement(DetailPreview,{profileUnavailable:true})));
       assert.match(failed,locale==='nl'?/Je leesprofiel kon niet laden/:/Your reading profile could not load/);
       assert.doesNotMatch(failed,locale==='nl'?/Doe de Smaaktest of beoordeel boeken om jouw match te zien/:/Take the Taste Test or rate books to see your match/);

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 
-test('editorial mobile grid overrides the wider desktop minimum with two shrinkable columns', () => {
+test('editorial reading guides give prose a full-width mobile row while compact cards retain their grid', () => {
   const css = read('app/globals.css');
   const desktop = css.indexOf('.editorial-books { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }');
   const mobile = css.indexOf('.editorial-books { grid-template-columns: repeat(2, minmax(0, 1fr)); }');
@@ -12,8 +12,9 @@ test('editorial mobile grid overrides the wider desktop minimum with two shrinka
   assert.match(css.slice(desktop, mobile), /@media \(max-width: 600px\) \{[^}]+\}/);
   assert.equal(/^\.editorial-books \{ grid-template-columns:/m.test(css.slice(mobile + 1)), false,
     'a later global editorial override would defeat the mobile rule');
-  assert.doesNotMatch(css, /\[data-editorial-guide\] \.editorial-books \{ grid-template-columns:/,
-    'reading guides use the shared compact grid, including two mobile columns');
+  const readingRow=css.lastIndexOf('[data-editorial-guide] .editorial-books { grid-template-columns: minmax(0, 1fr);');
+  assert.ok(readingRow>mobile);
+  assert.match(css.slice(readingRow), /grid-template-columns: 104px minmax\(0, 1fr\)/);
 });
 
 test('all editorial selections retain the same shared BookCard grid', () => {

@@ -74,7 +74,9 @@ export function LanguageSwitcher({ hrefForLocale }: { hrefForLocale?: (locale: L
       if (memory) sessionStorage.setItem(bookReturnMemoryKey(new URL(target.href, location.href).pathname), memory);
     } catch { /* The localized URL remains usable without optional storage. */ }
   };
-  return <div className="language-switcher" role="group" aria-label={t('language.label')}>
+  return <details className="language-switcher language-menu" onKeyDown={event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}}>
+    <summary aria-label={t('language.label')} title={locale==='nl'?'Taal: Nederlands':'Language: English'}><span aria-hidden="true">🌐</span></summary>
+    <div className="language-options" role="group" aria-label={t('language.label')}>
     {(['nl', 'en'] as const).map(option => {
       const target = cleanBookLink(hrefForLocale ? hrefForLocale(option) : localizedHref(isDutchNews && option === 'en' ? '/' : pagePath, option));
       return <a key={option}
@@ -83,7 +85,8 @@ export function LanguageSwitcher({ hrefForLocale }: { hrefForLocale?: (locale: L
         aria-current={locale === option ? 'page' : undefined}
         onClick={() => rememberBookLocale(option, target)}
         onAuxClick={event => { if (event.button === 1) rememberBookLocale(option, target); }}
-      >{option.toUpperCase()}</a>;
+      >{option==='nl'?'Nederlands':'English'}</a>;
     })}
-  </div>;
+    </div>
+  </details>;
 }

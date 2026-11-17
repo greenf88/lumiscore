@@ -12,6 +12,7 @@ import type { EditorialQuery } from '@/lib/catalog/editorial-query';
 import { EditorialPagination } from './EditorialCatalogControls';
 import { BrowseCatalogControls } from './BrowseCatalogControls';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
+import { SearchOutcomeMeasurement } from './SearchOutcomeMeasurement';
 import type { PublicCategory, AuthorOption } from '@/lib/catalog/discovery';
 
 type LumiScoreSearchPageProps = {
@@ -40,7 +41,7 @@ export function LumiScoreSearchPage({
 }: LumiScoreSearchPageProps) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState(initialQuery);
-  const { wanted, statuses, toggleWanted } = useWantToRead(authState.authenticated, results);
+  const { wanted, statuses, toggleWanted, error } = useWantToRead(authState.authenticated, results);
   const detailReturnContext = useMemo(
     () => ({ kind: 'search', path: searchReturnTo } as const),
     [searchReturnTo],
@@ -59,6 +60,7 @@ export function LumiScoreSearchPage({
 
   return (
     <main className="site-shell search-page-shell">
+      <SearchOutcomeMeasurement query={initialQuery} count={total} failed={searchFailed} locale={locale} surface="browse" />
       <Header
         onThemeToggle={toggleTheme}
         query={query}
@@ -87,11 +89,13 @@ export function LumiScoreSearchPage({
         </div>
 
         <BrowseCatalogControls key={searchReturnTo} state={filters} facets={facets} selectionCount={selectionCount} route="/search" categories={categories} selectedAuthor={selectedAuthor} discoveryAvailable={discoveryAvailable} resultCount={null} />
+        {error && <p role="alert">{error}</p>}
         {searchFailed ? (
           <div className="empty-results" role="status">
             <span>⌕</span>
             <h2>{t('home.searchUnavailable')}</h2>
             <p>{t('home.tryAgain')} {locale === 'nl' ? 'Probeer ook een specifiekere titel of auteursnaam.' : 'Try a more specific title or author name.'}</p>
+            <button type="button" onClick={() => location.reload()}>{locale === 'nl' ? 'Opnieuw proberen' : 'Try again'}</button>
           </div>
         ) : !hasQuery ? (
           <div className="empty-results">
@@ -103,7 +107,7 @@ export function LumiScoreSearchPage({
             </LocaleLink>
           </div>
         ) : results.length > 0 ? (
-          <div className="book-grid browse-book-grid">
+          <div className="book-grid browse-book-grid" data-search-results={initialQuery}>
             {results.map((book) => (
               <BookCard
                 key={book.id}

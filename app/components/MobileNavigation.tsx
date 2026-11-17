@@ -39,20 +39,18 @@ export function MobileNavigation({ authenticated = false }: { authenticated?: bo
     {open && <div className="mobile-navigation-panel" id={panelId} onClick={event => {
       if ((event.target as HTMLElement).closest('a')) setOpen(false);
     }}>
-      <LocaleLink href="/browse">{t('browse.books')}</LocaleLink>
+      <LocaleLink href="/browse">{t('header.browse')}</LocaleLink>
       <LocaleLink className="mobile-navigation-search-link" href="/search">{t('header.openSearch')}</LocaleLink>
-      <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink>
-      <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
       <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
-      {locale === 'nl' && <LocaleLink href="/nieuws">Nieuws</LocaleLink>}
-      <LocaleLink href="/taste-test">{t('header.tasteTest')}</LocaleLink>
+      <LocaleLink href={authenticated ? '/taste-test' : '/taste-test/preferences'}>{t('header.tasteTest')}</LocaleLink>
       <LocaleLink href="/my-books">{t('header.myBooks')}</LocaleLink>
       {authenticated && <LocaleLink className="ui-control ui-secondary" href="/account">{locale === 'nl' ? 'Mijn leesprofiel' : 'My reading profile'}</LocaleLink>}
       <span className="mobile-navigation-divider" aria-hidden="true" />
-      <LocaleLink href="/over-ons">{t('footer.about')}</LocaleLink>
-      <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
-      <LocaleLink href="/voor-uitgevers">{t('footer.publishers')}</LocaleLink>
-      <LocaleLink href="/contact">{t('footer.contact')}</LocaleLink>
+      <details className="mobile-navigation-more"><summary>{locale === 'nl' ? 'Meer ontdekken' : 'More to explore'}</summary>
+        <LocaleLink href="/collections">{t('browse.collections')}</LocaleLink><LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
+        {locale === 'nl' && <LocaleLink href="/nieuws">Nieuws</LocaleLink>}
+        <LocaleLink href="/zo-werkt-het">{t('footer.howItWorks')}</LocaleLink>
+      </details>
     </div>}
   </div>;
 }

@@ -147,7 +147,7 @@ test('homepage recommendations exclude Taste Test anchors and books marked Read'
 test('Taste Test stays in navigation and low-evidence users get a CTA', async () => {
   const home = await readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8');
   const tasteTest = await readFile(new URL('../../app/components/LumiScoreTasteTest.tsx', import.meta.url), 'utf8');
-  assert.match(home, /href="\/taste-test">\{t\('header\.tasteTest'\)\}/);
+  assert.match(home, /href=\{authState.authenticated \? '\/taste-test' : '\/taste-test\/preferences'\}>\{t\('header\.tasteTest'\)\}/);
   assert.match(home, /t\('home\.improveRecommendations'\)/);
   assert.match(home, /t\('home\.takeTasteTest'\)/);
   assert.match(home, /recommendation\.matchLabel/);

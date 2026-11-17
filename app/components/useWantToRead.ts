@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Book } from '../data/books';
-import {measurementHeaders} from '@/lib/product-metrics/browser';
+import {measurementHeaders, emitBrowserMetric} from '@/lib/product-metrics/browser';
+import {metricSurfaceForPath} from '@/lib/product-metrics/contract';
 import { isReadingStatus, type ReadingStatus } from '@/lib/collections/model';
 import {
   GUEST_WANTED_STORAGE_KEY,
@@ -34,6 +35,8 @@ export async function migrateGuestWantToReadFromLocal(
 }
 
 export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
+  const [error, setError] = useState('');
+  const pending = useRef(new Set<string>());
   const [wanted, setWanted] = useState<Set<string>>(new Set());
   const [statuses, setStatuses] = useState<Map<string, ReadingStatus>>(new Map());
   const wantedRef = useRef<Set<string>>(new Set());
@@ -44,7 +47,9 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   useEffect(() => {
     if (authenticated) return;
     const restore = () => {
-      const restored = new Set(readGuestWantedFromLocalStorage());
+      let restored: Set<string>;
+      try { restored = new Set(readGuestWantedFromLocalStorage()); }
+      catch { setError(document.documentElement.lang === 'nl' ? 'Je leeslijst kan niet op dit apparaat worden geladen.' : 'Your reading list could not load on this device.'); return; }
       wantedRef.current = restored;
       setWanted(restored);
       setStatuses(new Map());
@@ -99,19 +104,25 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
   }, [authenticated, workIdKey, books]);
 
   const toggleWanted = useCallback((book: Book) => {
+    if (pending.current.has(book.id)) return;
+    setError('');
     const existingStatus = book.workId ? statuses.get(book.workId) : null;
     if (authenticated && existingStatus && existingStatus !== 'want_to_read') return;
 
     const storageId = getGuestWantedStorageId(book);
     const wasWanted = wantedRef.current.has(storageId);
     const nextWanted = toggleGuestWantedId(wantedRef.current, storageId);
+    const metric = {locale: document.documentElement.lang === 'nl' ? 'nl' as const : 'en' as const, surface: metricSurfaceForPath(location.pathname), work_id: Number(book.workId)};
+    if (!authenticated || !book.workId) {
+      try { localStorage.setItem(GUEST_WANTED_STORAGE_KEY, JSON.stringify([...nextWanted])); }
+      catch { setError(document.documentElement.lang === 'nl' ? 'Bewaren is niet gelukt. Controleer of deze browser lokale opslag toestaat en probeer opnieuw.' : 'Saving failed. Check that this browser allows local storage and try again.'); if(!wasWanted && book.workId)emitBrowserMetric('guest_save_failed',metric); return; }
+      if (!wasWanted && book.workId) emitBrowserMetric('guest_book_saved',metric);
+    }
     wantedRef.current = nextWanted;
     setWanted(nextWanted);
-    if (!authenticated || !book.workId) {
-      localStorage.setItem(GUEST_WANTED_STORAGE_KEY, JSON.stringify([...nextWanted]));
-    }
 
     if (authenticated && book.workId) {
+      pending.current.add(book.id);
       setStatuses((current) => {
         const next = new Map(current);
         if (wasWanted) next.delete(book.workId!);
@@ -125,6 +136,7 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
       }).then((response) => {
         if (!response.ok) throw new Error('Status update failed.');
       }).catch(() => {
+        setError(document.documentElement.lang === 'nl' ? 'Bewaren is niet gelukt. Probeer het opnieuw.' : 'Saving failed. Please try again.');
         setStatuses((current) => {
           const next = new Map(current);
           if (wasWanted) next.set(book.workId!, 'want_to_read');
@@ -137,9 +149,9 @@ export function useWantToRead(authenticated: boolean, books: readonly Book[]) {
           wantedRef.current = next;
           return next;
         });
-      });
+      }).finally(() => pending.current.delete(book.id));
     }
   }, [authenticated, statuses]);
 
-  return { wanted, statuses, toggleWanted };
+  return { wanted, statuses, toggleWanted, error };
 }

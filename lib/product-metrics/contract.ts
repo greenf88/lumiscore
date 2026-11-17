@@ -1,10 +1,11 @@
-export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded', 'referral_arrival'] as const;
+export const DISCOVERY_EVENTS = ['search_started', 'search_results', 'search_empty', 'search_failed', 'search_book_opened', 'guest_round_started', 'guest_round_completed', 'guest_book_saved', 'guest_save_failed', 'guest_suggestions_empty', 'guest_suggestions_failed'] as const;
+export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded', 'referral_arrival', ...DISCOVERY_EVENTS] as const;
 export const METRIC_SURFACES = ['home', 'recommendations', 'taste_result', 'book_detail', 'collection', 'editorial', 'browse', 'login', 'taste_test', 'other'] as const;
 export const RANKER_VERSION = '8f337dd';
 export const METRIC_CONTEXT_HEADER = 'x-lumiscore-product-context';
 export type MetricEvent = typeof METRIC_EVENTS[number];
 export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'leesroutes' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'referral' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' | 'production' };
-export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated' };
+export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated'; device?: 'mobile' | 'desktop' };
 export type MetricEnvelope = { event_id: string; event: MetricEvent; properties: MetricProperties };
 export const isMetricReceipt = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 const exact = (object: Record<string, unknown>, keys: readonly string[]) => Object.keys(object).every(k => keys.includes(k));
@@ -39,9 +40,10 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   const hasContext = contextKeys.some(k => k in p);
   if (hasContext && !parseMetricContext(Object.fromEntries(['locale', 'surface', ...contextKeys].map(k => [k, p[k]])))) return null;
   if (event === 'referral_arrival' && (!hasContext || p.source !== 'leesroutes')) return null;
-  const common = ['locale', 'surface', ...contextKeys];
+  const common = ['locale', 'surface', 'device', ...contextKeys];
+  if (p.device !== undefined && !['mobile', 'desktop'].includes(String(p.device))) return null;
   const round = event.startsWith('taste_round_'), recommendation = event.startsWith('recommendation_');
-  const book = recommendation || ['want_to_read_saved', 'book_card_opened', 'book_detail_opened', 'rating_saved'].includes(event);
+  const book = recommendation || ['want_to_read_saved', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'search_book_opened', 'guest_book_saved', 'guest_save_failed'].includes(event);
   const allowed = [...common, ...(round ? ['goal'] : []), ...(book ? ['work_id'] : []), ...(recommendation ? ['position', 'ranker_version'] : []), ...(event === 'want_to_read_saved' ? ['ranker_version'] : []), ...(['editorial_list_opened', 'book_card_opened'].includes(event) ? ['list_id'] : []), ...(event === 'rating_saved' ? ['operation'] : [])];
   if (!exact(p, allowed)) return null;
   if (p.surface !== undefined && !METRIC_SURFACES.includes(p.surface as MetricContext['surface'])) return null;
@@ -54,14 +56,14 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   if (event === 'rating_saved' && !['new', 'updated'].includes(String(p.operation))) return null;
   return value as MetricEnvelope;
 }
-export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened', 'referral_arrival'];
+export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened', 'referral_arrival', ...DISCOVERY_EVENTS];
 export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   const p = path.replace(/^\/(nl|en)(?=\/|$)/, '') || '/';
   if (p === '/') return 'home';
   if (/^\/books?\/\d+\/?$/.test(p)) return 'book_detail';
   if (/^\/toplijsten\/[^/]+\/?$/.test(p)) return 'editorial';
   if (p === '/taste-test/result') return 'taste_result';
-  if (p === '/taste-test') return 'taste_test';
+  if (p === '/taste-test' || p === '/taste-test/preferences') return 'taste_test';
   if (p === '/login') return 'login';
   if (p === '/browse' || p === '/search') return 'browse';
   if (p === '/recommendations') return 'recommendations';

@@ -1,5 +1,6 @@
 'use client';
 import { optimizedCover, coverSizes } from '@/lib/books/cover-delivery';
+import { hasDeferredCover, parsePublicBooks } from '@/lib/books/public-book';
 
 import {EditionPresentationLabel} from './EditionPresentationLabel';
 import {RecommendationMeasurement} from './RecommendationMeasurement';
@@ -7,7 +8,7 @@ import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
 import { bookAuthorByline } from '@/lib/catalog/reviewed-coauthors';
 
-import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { memo, Suspense, use, useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import type { Book } from '../data/books';
 import { isBookPresentationAllowed } from '@/lib/books/strict-edition';
 import type { HeaderAuthState } from '@/lib/auth/header';
@@ -40,6 +41,8 @@ import { CoverScoreBadge } from './CoverScoreBadge';
 import type { HomepageSeriesContinuation } from '@/lib/supabase/collections';
 import type { DutchHomepageDiscovery } from '@/lib/supabase/dutch-homepage-discovery';
 import { useWantToRead } from './useWantToRead';
+import { SearchOutcomeMeasurement } from './SearchOutcomeMeasurement';
+import { CoverBoundary } from './CoverBoundary';
 import type { ReadingStatus } from '@/lib/collections/model';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 
@@ -242,21 +245,24 @@ function StreamedBookCover(props: BookCoverProps) {
 export const BookCover = memo(function BookCover(props: BookCoverProps) {
   const coverIdentity = getBookCoverIdentity(props.book);
   const initial = <BookCoverForIdentity key={coverIdentity} {...props} />;
-  return props.book.editionCoverUrls
-    ? <Suspense fallback={initial}><StreamedBookCover key={coverIdentity} {...props} /></Suspense>
+  return hasDeferredCover(props.book.editionCoverUrls)
+    ? <CoverBoundary key={coverIdentity} fallback={initial}><Suspense fallback={initial}><StreamedBookCover key={coverIdentity} {...props} /></Suspense></CoverBoundary>
     : initial;
 });
 
+const subscribePlatform = () => () => {};
 function SearchBar({ query, onChange, mobile = false }: { query: string; onChange: (value: string) => void; mobile?: boolean }) {
   const inputId = useId();
   const { locale, t } = useLumiScoreLocale();
+  const shortcut = useSyncExternalStore(subscribePlatform, () => /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘ K' : 'Ctrl K', () => 'Ctrl K');
 
   return (
     <form className={`search-bar${mobile ? ' search-bar-mobile' : ''}`} action={localizedHref('/search', locale)} method="get" role="search">
       <label className="sr-only" htmlFor={inputId}>{t('header.search')}</label>
       <span className="search-icon" aria-hidden="true" />
       <input id={inputId} name="q" value={query} onChange={(event) => onChange(event.target.value)} placeholder={t('header.search')} />
-      {!mobile && <kbd>⌘ K</kbd>}
+      {!mobile && <kbd>{shortcut}</kbd>}
+      <button className="header-search-submit" type="submit" aria-label={locale === 'nl' ? 'Zoeken' : 'Search'}>→</button>
     </form>
   );
 }
@@ -280,6 +286,7 @@ export function Header({
   authState,
   returnTo,
   searchTargetId,
+  languageHrefForLocale,
 }: {
   onThemeToggle: () => void;
   query: string;
@@ -287,9 +294,22 @@ export function Header({
   authState: HeaderAuthState;
   returnTo: string;
   searchTargetId?: string;
+  languageHrefForLocale?: (locale: Locale) => string;
 }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { locale, t } = useLumiScoreLocale();
+  useEffect(() => {
+    const shortcut = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'k') return;
+      event.preventDefault();
+      const target = searchTargetId ? document.getElementById(searchTargetId) : document.querySelector<HTMLInputElement>('.header-search input');
+      if (target && target.getBoundingClientRect().width > 0) target.focus();
+      else setMobileSearchOpen(true);
+    };
+    window.addEventListener('keydown', shortcut);
+    return () => window.removeEventListener('keydown', shortcut);
+  }, [searchTargetId]);
+  useEffect(() => { if (mobileSearchOpen) document.querySelector<HTMLInputElement>('.mobile-search-drawer input')?.focus(); }, [mobileSearchOpen]);
 
   return (
     <header className="site-header">
@@ -297,9 +317,8 @@ export function Header({
       {!searchTargetId && <div className="header-search"><SearchBar query={query} onChange={onQueryChange} /></div>}
       <nav className="main-nav" aria-label={t('header.mainNavigation')}>
         <LocaleLink href="/browse">{t('header.browse')}</LocaleLink>
-        <LocaleLink href="/categories">{t('home.categories')}</LocaleLink>
         <LocaleLink href="/toplijsten">{locale === 'nl' ? 'Toplijsten' : 'Reading lists'}</LocaleLink>
-        <LocaleLink className="taste-test-nav-link" href="/taste-test">{t('header.tasteTest')}</LocaleLink>
+        <LocaleLink className="taste-test-nav-link" href={authState.authenticated ? '/taste-test' : '/taste-test/preferences'}>{t('header.tasteTest')}</LocaleLink>
         <LocaleLink className="my-books-nav-link" href="/my-books">{t('header.myBooks')}</LocaleLink>
         <MobileNavigation authenticated={authState.authenticated} />
         <button className="mobile-search-button" type="button" aria-label={t('header.openSearch')} aria-expanded={searchTargetId ? undefined : mobileSearchOpen} onClick={() => {
@@ -307,7 +326,7 @@ export function Header({
           setMobileSearchOpen((open) => !open);
         }}><span className="search-icon" aria-hidden="true" /></button>
         <ThemeToggle onToggle={onThemeToggle} />
-        <LanguageSwitcher />
+        <LanguageSwitcher hrefForLocale={languageHrefForLocale} />
         <LumiScoreAccountMenu authState={authState} returnTo={returnTo} />
       </nav>
       {!searchTargetId && mobileSearchOpen && <div className="mobile-search-drawer"><SearchBar query={query} onChange={onQueryChange} mobile /></div>}
@@ -428,23 +447,24 @@ function DeferredHeroStats({data}: {data:DeferredHomepage['catalog']}) {
 function DeferredRecommendationPanel({data}: {data:DeferredHomepage['personalization']}) {
   const personal=use(data);return personal.authenticated?<RecommendationPanel personalization={personal}/>:null;
 }
-const Hero = memo(function Hero({ catalogStats, personalization, deferred, authenticated }: { catalogStats: CatalogStats; personalization: HomepagePersonalization; deferred?:DeferredHomepage;authenticated:boolean }) {
-  const { locale, t } = useLumiScoreLocale();
+const Hero = memo(function Hero({ catalogStats, personalization, deferred, authenticated, query, onQueryChange }: { catalogStats: CatalogStats; personalization: HomepagePersonalization; deferred?:DeferredHomepage;authenticated:boolean; query: string; onQueryChange: (value:string)=>void }) {
+  const { locale } = useLumiScoreLocale();
   return (
-    <section className="hero" id="top">
+    <section className="hero discovery-hero" id="top">
       <div className="hero-photo" aria-hidden="true" />
       <div className="hero-wash" aria-hidden="true" />
       <div className="hero-inner">
         <div className="hero-copy">
-          <span className="eyebrow hero-eyebrow"><i /> {t('home.nextFiveStar')}</span>
-          <h1>{t('home.heroStart')}<br /><em>{t('home.heroEmphasis')}</em></h1>
-          <p className="hero-introduction">{t('home.heroCopy')}</p>
-          <LocaleLink className="primary-cta" href="/taste-test">{t('home.tasteTestCta')} <span>→</span></LocaleLink>
-          <div className="paper-features">
-            <div><i>✦</i><span><strong>{t('home.smartRecommendations')}</strong><small>{t('home.personalizedForYou')}</small></span></div>
-            <div><i>✓</i><span><strong>{t('home.trustedReaders')}</strong><small>{t('home.realMatches')}</small></span></div>
-          </div>
-          <LocaleLink className="learn-link" href="/zo-werkt-het">{t('home.learn')} <span>→</span></LocaleLink>
+          <h1>{locale === 'nl' ? 'Vind een boek dat bij je past' : 'Find a book that fits you'}</h1>
+          <p className="hero-introduction">{locale === 'nl' ? 'Zoek een titel, ontdek een leesroute of laat je leessmaak je op weg helpen.' : 'Search a title, explore a reading list or let your reading taste guide you.'}</p>
+          <form className="hero-search search-bar" action={localizedHref('/search', locale)} method="get" role="search">
+            <label className="sr-only" htmlFor="home-book-search">{locale === 'nl' ? 'Zoek op titel of auteur' : 'Search by title or author'}</label>
+            <span className="search-icon" aria-hidden="true" />
+            <input id="home-book-search" name="q" type="search" maxLength={100} value={query} onChange={event => onQueryChange(event.target.value)} placeholder={locale === 'nl' ? 'Zoek op titel of auteur' : 'Search by title or author'} />
+            <button type="submit">{locale === 'nl' ? 'Zoeken' : 'Search'}</button>
+          </form>
+          <div className="hero-discovery-actions"><LocaleLink className="hero-browse-link" href="/browse">{locale === 'nl' ? 'Ontdek boeken' : 'Explore books'} →</LocaleLink><LocaleLink className="primary-cta" href={authenticated ? '/taste-test' : '/taste-test/preferences'}>{locale === 'nl' ? 'Ontdek mijn leessmaak' : 'Discover my reading taste'} →</LocaleLink></div>
+          {!authenticated && <p className="hero-guest-note">{locale === 'nl' ? 'Zonder account · beoordeel 10 boeken · krijg persoonlijke leestips' : 'No account needed · rate 10 books · get personal suggestions'}</p>}
           {deferred?<Suspense fallback={<HeroStats stats={catalogStats}/>}><DeferredHeroStats data={deferred.catalog}/></Suspense>:<HeroStats stats={catalogStats}/>}
         </div>
         {deferred && authenticated ? <Suspense fallback={<aside className="recommendation-panel" aria-busy="true"><p role="status">{locale==='nl'?'Jouw boeken worden geladen…':'Loading your books…'}</p></aside>}><DeferredRecommendationPanel data={deferred.personalization}/></Suspense> : personalization.authenticated && <RecommendationPanel personalization={personalization} />}
@@ -552,6 +572,7 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
 
   return (
     <section className="featured-section" id="discover" aria-labelledby="featured-title">
+      {searchActive && (searchStatus === 'success' || hasError) && <SearchOutcomeMeasurement query={query} count={displayedBooks.length} failed={hasError} locale={locale} surface="home" />}
       <div className="section-heading">
         <div><span className="eyebrow">{t('home.chosenByReaders')}</span><h2 id="featured-title">{searchActive ? t('home.searchResults') : t('home.highestRated')}</h2></div>
         <div className="section-tools">
@@ -564,11 +585,11 @@ function FeaturedBooks({ books, query, searchResults, searchStatus, wanted, stat
       {!searchActive && catalogUnavailable ? (
         <div className="empty-results" role="status"><span>⌕</span><h3>{t('home.catalogUnavailable')}</h3><p>{t('home.tryAgain')}</p></div>
       ) : hasError ? (
-        <div className="empty-results" role="status"><span>⌕</span><h3>{t('home.searchUnavailable')}</h3><p>{t('home.tryAgain')}</p></div>
+        <div className="empty-results" role="alert"><span>⌕</span><h3>{t('home.searchUnavailable')}</h3><p>{t('home.tryAgain')}</p><LocaleLink className="primary-cta" href={`/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}`}>{locale === 'nl' ? 'Zoek via de catalogus' : 'Search the catalogue'}</LocaleLink></div>
       ) : isLoading && displayedBooks.length === 0 ? (
         <div className="search-loading" role="status">{t('home.searchingCatalog')}</div>
       ) : displayedBooks.length > 0 ? (
-        <div className="book-grid">{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(book.id)} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} detailReturnContext={searchActive ? { kind: 'search', path: `/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}` } : { kind: 'home' }} />)}</div>
+        <div className="book-grid" data-search-results={searchActive ? query : undefined}>{displayedBooks.map((book) => <BookCard key={book.id} book={book} wanted={wanted.has(getGuestWantedStorageId(book))} status={book.workId ? statuses.get(book.workId) : null} onToggle={onToggle} detailReturnContext={searchActive ? { kind: 'search', path: `/search?q=${encodeURIComponent(normalizeCatalogSearchQuery(query))}` } : { kind: 'home' }} />)}</div>
       ) : (
         <div className="empty-results"><span>⌕</span><h3>{t('home.noBooks')}</h3><p>{t('home.tryAnother')}</p></div>
       )}
@@ -753,8 +774,8 @@ type CatalogStats = { books: number | null; categories: number | null };
 function DeferredFeatured({data,query,searchResults,searchStatus,authenticated}: {data:DeferredHomepage['catalog'];query:string;searchResults:Book[];searchStatus:SearchStatus;authenticated:boolean}) {
   const catalog=use(data);
   const tracked=useMemo(()=>[...catalog.books,...searchResults],[catalog.books,searchResults]);
-  const {wanted,statuses,toggleWanted}=useWantToRead(authenticated,tracked);
-  return <FeaturedBooks books={catalog.books} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalog.unavailable}/>;
+  const {wanted,statuses,toggleWanted,error}=useWantToRead(authenticated,tracked);
+  return <>{error && <p role="alert">{error}</p>}<FeaturedBooks books={catalog.books} query={query} searchResults={searchResults} searchStatus={searchStatus} wanted={wanted} statuses={statuses} onToggle={toggleWanted} catalogUnavailable={catalog.unavailable}/></>;
 }
 function DeferredSeries({data}: {data:DeferredHomepage['series']}) {
   const series=use(data);return series.length?<ContinueSeries continuations={series}/>:null;
@@ -788,6 +809,7 @@ export function LumiScoreHome({
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[]>([]);
   const [searchStatus, setSearchStatus] = useState<SearchStatus>('idle');
+  const latestSearch = useRef('');
   const trackedBooks = useMemo(
     () => [...catalogBooks, ...dutchDiscovery.popular.books, ...dutchDiscovery.classics.books, ...searchResults],
     [catalogBooks, dutchDiscovery, searchResults],
@@ -797,6 +819,7 @@ export function LumiScoreHome({
   const updateQuery = useCallback((value: string) => {
     setQuery(value);
     const normalizedQuery = normalizeCatalogSearchQuery(value);
+    latestSearch.current = `${locale}:${normalizedQuery.toLocaleLowerCase('en-US')}`;
     const cachedResults = catalogSearchCache.get(
       `${locale}:${normalizedQuery.toLocaleLowerCase('en-US')}`,
     );
@@ -805,6 +828,7 @@ export function LumiScoreHome({
       setSearchResults(cachedResults);
       setSearchStatus('success');
     } else if (isCatalogSearchQuery(normalizedQuery)) {
+      setSearchResults([]);
       setSearchStatus('loading');
     } else {
       setSearchResults([]);
@@ -827,9 +851,8 @@ export function LumiScoreHome({
         .then(async (response) => {
           if (!response.ok) throw new Error('Catalog search failed.');
           const payload = (await response.json()) as { results?: unknown };
-          const results = Array.isArray(payload.results)
-            ? (payload.results as Book[])
-            : [];
+          const results = parsePublicBooks(payload.results);
+          if (controller.signal.aborted || latestSearch.current !== searchCacheKey) return;
           if (catalogSearchCache.size >= MAX_CACHED_SEARCHES) {
             const oldestKey = catalogSearchCache.keys().next().value;
             if (oldestKey) catalogSearchCache.delete(oldestKey);
@@ -839,7 +862,7 @@ export function LumiScoreHome({
           setSearchStatus('success');
         })
         .catch((error: unknown) => {
-          if (error instanceof DOMException && error.name === 'AbortError') return;
+          if (controller.signal.aborted || latestSearch.current !== searchCacheKey || (error instanceof DOMException && error.name === 'AbortError')) return;
           setSearchResults([]);
           setSearchStatus('error');
         });
@@ -851,16 +874,6 @@ export function LumiScoreHome({
     };
   }, [query,locale]);
 
-  useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault();
-        document.querySelector<HTMLInputElement>('.search-bar input')?.focus();
-      }
-    };
-    window.addEventListener('keydown', handleShortcut);
-    return () => window.removeEventListener('keydown', handleShortcut);
-  }, []);
 
   const toggleTheme = useCallback(() => {
     const next = document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -871,8 +884,8 @@ export function LumiScoreHome({
 
   return (
     <main className="site-shell">
-      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" />
-      <Hero catalogStats={catalogStats} personalization={personalization} deferred={deferred} authenticated={authState.authenticated} />
+      <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" searchTargetId="home-book-search" />
+      <Hero catalogStats={catalogStats} personalization={personalization} deferred={deferred} authenticated={authState.authenticated} query={query} onQueryChange={updateQuery} />
       {deferred?<Suspense fallback={null}><DeferredSeries data={deferred.series}/></Suspense>:seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}

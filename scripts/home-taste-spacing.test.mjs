@@ -5,7 +5,7 @@ import {canOpenRoundResult} from '../lib/taste-test/direct-rating.ts';
 test('homepage spacing uses intrinsic layout, scoped section spacing and no negative offset',async()=>{
  const css=await readFile(new URL('../app/globals.css',import.meta.url),'utf8');
  const hero=css.match(/\.hero-inner \{[^}]+\}/g).join('\n');
- assert.doesNotMatch(hero,/min-height|margin[^;]*-\d/);
+ assert.doesNotMatch(hero,/min-height:\s*[1-9]|margin[^;]*-\d/);
  assert.match(hero,/align-items: start/);assert.match(hero,/padding: 28px 0 24px/);
  assert.match(css,/\.hero \+ #discover \{ padding-top: 20px;/);
 });

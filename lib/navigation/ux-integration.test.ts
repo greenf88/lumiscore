@@ -19,7 +19,9 @@ test('primary homepage CTA uses the existing taste test in both locales', async 
   const home = await readFile(new URL('../../app/components/LumiScoreHome.tsx', import.meta.url), 'utf8');
   const translations = await readFile(new URL('../i18n/translations.ts', import.meta.url), 'utf8');
 
-  assert.match(home, /className="primary-cta" href="\/taste-test">\{t\('home\.tasteTestCta'\)\}/);
+  assert.match(home, /className="primary-cta" href=\{authenticated \? '\/taste-test' : '\/taste-test\/preferences'\}/);
+  assert.match(home, /Ontdek mijn leessmaak/);
+  assert.match(home, /Discover my reading taste/);
   assert.match(translations, /'home\.tasteTestCta': 'Take the taste test'/);
   assert.match(translations, /'home\.tasteTestCta': 'Doe de smaaktest'/);
   assert.doesNotMatch(home, /className="primary-cta" href="#discover">\{t\('home\.findNext'\)\}/);

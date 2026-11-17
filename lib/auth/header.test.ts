@@ -49,7 +49,7 @@ test('shared header renders accessible logged-out and logged-in controls', async
   assert.match(account, /aria-controls=\{panelId\}/);
   assert.match(account, /action="\/auth\/sign-out" method="post"/);
   assert.match(account, /<button type="submit">\{t\('header\.signOut'\)\}<\/button>/);
-  assert.match(source, /<LanguageSwitcher \/>/);
+  assert.match(source, /<LanguageSwitcher hrefForLocale=\{languageHrefForLocale\} \/>/);
   assert.doesNotMatch(source, /className="avatar"[^>]+disabled/);
   assert.doesNotMatch(source, /•••/);
 });

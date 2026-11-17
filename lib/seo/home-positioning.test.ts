@@ -23,13 +23,15 @@ test('homepage metadata and one shared introduction state the approved NL/EN pos
   }
 });
 
-test('existing H1 and primary taste-test action remain; introduction is not theme-hidden duplicated SEO copy',async()=>{
+test('one clear H1, direct search and guest taste-test action; introduction remains visible',async()=>{
   const source=await readFile(new URL('../../app/components/LumiScoreHome.tsx',import.meta.url),'utf8');
   const hero=source.slice(source.indexOf('const Hero ='),source.indexOf('const CARD_STATUS_KEYS'));
-  assert.match(hero,/<h1>\{t\('home.heroStart'\)\}<br \/><em>\{t\('home.heroEmphasis'\)\}<\/em><\/h1>/);
-  assert.match(hero,/<LocaleLink className="primary-cta" href="\/taste-test">/);
-  assert.match(hero,/<LocaleLink className="learn-link" href="\/zo-werkt-het">/);
-  assert.equal((hero.match(/home.heroCopy/g)??[]).length,1);
+  assert.equal((hero.match(/<h1>/g)??[]).length,1);
+  assert.match(hero,/Vind een boek dat bij je past/);
+  assert.match(hero,/Find a book that fits you/);
+  assert.match(hero,/className="primary-cta" href=\{authenticated \? '\/taste-test' : '\/taste-test\/preferences'\}/);
+  assert.match(hero,/id="home-book-search"/);
+  assert.equal((hero.match(/className="hero-introduction"/g)??[]).length,1);
   assert.doesNotMatch(hero,/hero-primary|hero-paper-copy|home.heroPrimary/);
   const css=await readFile(new URL('../../app/globals.css',import.meta.url),'utf8');
   assert.doesNotMatch(css,/\.hero-introduction[^}]*display:\s*none/);

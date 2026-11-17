@@ -6,6 +6,7 @@ import { localizedHref } from '@/lib/i18n/paths';
 import { useState } from 'react';
 import type { ReadingStatus } from '@/lib/collections/model';
 import { useLumiScoreLocale } from './LumiScoreLocale';
+import { measurementHeaders } from '@/lib/product-metrics/browser';
 
 const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
   want_to_read: 'collection.wantToRead',
@@ -22,6 +23,7 @@ export function LumiScoreReadingStatus({
   compact = false,
   showGuestCta = true,
   onStatusChange,
+  primarySave = false,
 }: {
   workId: string;
   status: ReadingStatus | null;
@@ -30,6 +32,7 @@ export function LumiScoreReadingStatus({
   compact?: boolean;
   showGuestCta?: boolean;
   onStatusChange: (status: ReadingStatus | null) => void;
+  primarySave?: boolean;
 }) {
   const { locale, t } = useLumiScoreLocale();
   const [pending, setPending] = useState(false);
@@ -43,6 +46,7 @@ export function LumiScoreReadingStatus({
   }
 
   const updateStatus = async (nextValue: string) => {
+    if (pending) return;
     const previous = status;
     const next = (nextValue || null) as ReadingStatus | null;
     onStatusChange(next);
@@ -51,7 +55,7 @@ export function LumiScoreReadingStatus({
     try {
       const response = await fetch(`/api/books/${workId}/status`, {
         method: next ? 'PUT' : 'DELETE',
-        headers: next ? { 'Content-Type': 'application/json' } : undefined,
+        headers: next ? { 'Content-Type': 'application/json', ...measurementHeaders(locale, 'book_detail') } : undefined,
         body: next ? JSON.stringify({ status: next }) : undefined,
       });
       if (response.status === 401) {
@@ -74,6 +78,9 @@ export function LumiScoreReadingStatus({
 
   return (
     <div className={`reading-status-control${compact ? ' is-compact' : ''}`}>
+      {primarySave && (!status || status === 'want_to_read') && <button type="button" className="want-button detail-want-button" aria-pressed={status === 'want_to_read'} disabled={pending} onClick={() => void updateStatus(status ? '' : 'want_to_read')}>
+        {pending ? t('collection.savingStatus') : `${status ? '✓' : '+'} ${t('collection.wantToRead')}`}
+      </button>}
       <label>
         <span>{t('collection.statusLabel')}</span>
         <select
