@@ -3,18 +3,34 @@ import type { Book } from '../../app/data/books.ts';
 import { normalizeOpenLibraryId, normalizeIsbn13, getOpenLibraryCoverIdUrl, uniqueCoverUrls } from './covers.ts';
 import { normalizeEditionLanguage } from './edition-ranking.ts';
 
-type SourceEdition={key?:string;title?:string;works?:{key?:string}[];languages?:{key?:string}[];isbn_13?:string[];covers?:number[]};
+type SourceEdition={key?:string;title?:string;works?:{key?:string}[];languages?:{key?:string}[];isbn_13?:string[];isbn_10?:string[];covers?:number[]};
 const cache=new Map<string,{expires:number;value:SourceEdition|null}>();
 const pending=new Map<string,Promise<SourceEdition|null>>();
 const TTL=24*60*60*1000, FAILURE_TTL=60*1000, BATCH=50;
 const normalizedTitle=(s:string)=>s.normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('en');
+/** Older edition records sometimes contain only ISBN-10. Convert only a valid
+ * checksum, and never use it to override an explicit conflicting ISBN-13. */
+function sourceHasIsbn(source:SourceEdition,isbn13:string):boolean{
+  if(Array.isArray(source.isbn_13)&&source.isbn_13.length)
+    return source.isbn_13.some(i=>typeof i==='string'&&normalizeIsbn13(i)===isbn13);
+  if(source.isbn_13!=null&&!Array.isArray(source.isbn_13))return false;
+  if(!/^978\d{10}$/.test(isbn13)||!Array.isArray(source.isbn_10))return false;
+  return source.isbn_10.some(value=>{
+    if(typeof value!=='string')return false;
+    const isbn10=value.replace(/[\s-]/g,'').toUpperCase();
+    if(!/^\d{9}[\dX]$/.test(isbn10)||[...isbn10].reduce((sum,d,i)=>sum+(d==='X'?10:Number(d))*(10-i),0)%11!==0)return false;
+    const base='978'+isbn10.slice(0,9);
+    const check=(10-[...base].reduce((sum,d,i)=>sum+Number(d)*(i%2?3:1),0)%10)%10;
+    return base+check===isbn13;
+  });
+}
 export function editionSourceCoverUrls(book:Book,source:SourceEdition|null):string[]{
   if(!book.editionAvailable || !source || typeof source.key!=='string' || normalizeOpenLibraryId(source.key,'edition')!==book.openLibraryEditionId ||
     !Array.isArray(source.works) || !source.works.some(w=>typeof w?.key==='string'&&normalizeOpenLibraryId(w.key,'work')===book.openLibraryWorkId) ||
     typeof source.title!=='string' || normalizedTitle(source.title)!==normalizedTitle(book.editionTitle??book.title))return [];
   const languages=[...new Set((Array.isArray(source.languages)?source.languages:[]).map(l=>normalizeEditionLanguage(typeof l?.key==='string'?l.key:'')))];
   if(languages.length!==1 || languages[0]!==normalizeEditionLanguage(book.editionLanguage??''))return [];
-  if(book.isbn13 && (!Array.isArray(source.isbn_13)||!source.isbn_13.some(i=>typeof i==='string'&&normalizeIsbn13(i)===book.isbn13)))return [];
+  if(book.isbn13 && !sourceHasIsbn(source,book.isbn13))return [];
   return uniqueCoverUrls((Array.isArray(source.covers)?source.covers:[]).filter(id=>Number.isSafeInteger(id)&&id>0).map(getOpenLibraryCoverIdUrl));
 }
 /** One bounded batch per visible page; no ISBN image guesses or Work-cover fallback. */

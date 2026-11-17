@@ -7,13 +7,16 @@ import { editionSourceCoverUrls } from './edition-cover-evidence.ts';
 import { getReviewedCoverOverride, REVIEWED_COVER_OVERRIDES } from './reviewed-cover-overrides.ts';
 
 function fixture(row: typeof evidence[number]): Book {
+  const isbn10 = (row.source as {isbn_10?: string[]}).isbn_10?.[0]?.replace(/[\s-]/g, '');
+  const base = isbn10 ? '978' + isbn10.slice(0, 9) : '';
+  const converted = base ? base + (10 - [...base].reduce((sum, d, i) => sum + Number(d) * (i % 2 ? 3 : 1), 0) % 10) % 10 : undefined;
   return {
     id: 'work-fixture', workId: 'fixture', title: row.source.title,
     author: row.author, source: 'supabase', cover: 'orbit', score: 8,
     ratingsCount: 4, match: null, coverUrls: [], editionAvailable: true,
     openLibraryEditionId: row.source.key.split('/').at(-1),
     openLibraryWorkId: row.source.works[0].key.split('/').at(-1),
-    isbn13: row.source.isbn_13[0], editionLanguage: row.source.languages[0].key,
+    isbn13: row.source.isbn_13[0] ?? converted, editionLanguage: row.source.languages[0].key,
     strictEditionLanguage: row.source.languages[0].key.endsWith('/eng') ? 'en' : 'nl',
   };
 }
