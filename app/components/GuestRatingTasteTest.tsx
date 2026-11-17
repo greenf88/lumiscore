@@ -16,6 +16,7 @@ import { BookCover, BookCard } from './LumiScoreHome';
 import { LocaleLink, useLumiScoreLocale } from './LumiScoreLocale';
 import { measureTasteResultViewOnce, emitBrowserMetric } from '@/lib/product-metrics/browser';
 import { TasteProfileSummary } from './TasteProfileSummary';
+import { TastePainting } from './TastePainting';
 import { RecommendationMeasurement } from './RecommendationMeasurement';
 import { readGuestWantedFromLocalStorage, useWantToRead } from './useWantToRead';
 
@@ -111,15 +112,15 @@ function GuestRatingContent({ offers, authState }: GuestProps) {
     <section className="featured-section taste-rating-test taste-direct-test guest-direct-test" aria-labelledby="guest-taste-title">
       <h1 id="guest-taste-title">{t(result ? 'taste.readingTaste' : 'directTaste.label')}</h1>
       {result ? <div className="guest-taste-result">
-        <TasteProfileSummary profile={result} headingId="guest-taste-profile" level={2} showInsufficient anchors={ratings.filter(x => x.rating >= 7).sort((a,b) => b.rating-a.rating).slice(0,3).flatMap(row => {
+        <TasteProfileSummary profile={result} headingId="guest-taste-profile" level={2} showInsufficient shareable anchors={ratings.filter(x => x.rating >= 7).sort((a,b) => b.rating-a.rating).slice(0,3).flatMap(row => {
           const rated = allOffers.find(x => x.book.workId === row.workId); return rated ? [{ workId: row.workId, title: rated.book.title, rating: row.rating }] : [];
         })} />
         <h2>{nl ? 'Jouw volgende boek' : 'Your next book'}</h2>
         {failed ? <div role="alert"><p>{nl ? 'Je profiel is klaar, maar je leestips konden niet laden.' : 'Your profile is ready, but your book suggestions could not load.'}</p><button type="button" onClick={() => { setFailed(false); setRetry(x => x+1); }}>{nl ? 'Leestips opnieuw laden' : 'Retry suggestions'}</button></div>
-        : !loaded ? <p role="status">{nl ? 'Passende boeken zoeken…' : 'Finding books for you…'}</p>
+        : !loaded ? <TastePainting />
         : loaded.recommendations.length === 0 ? <p role="status">{nl ? 'Met deze beoordelingen en de beschikbare boekkenmerken kunnen we nog geen nieuwe boeken onderbouwen. Probeer ook boeken die je goed vond, of ontdek onze leesroutes.' : 'These ratings and the available book details do not yet support new recommendations. Try books you enjoyed too, or explore our reading lists.'}</p>
         : <div className="book-grid guest-recommendations">{loaded.recommendations.map((item, index) => <RecommendationMeasurement key={item.book.id} workId={item.book.workId} position={index+1} locale={locale} surface="taste_result"><div className="taste-recommendation">
-          <BookCard book={item.book} wanted={wanted.has(getGuestWantedStorageId(item.book))} status={statuses.get(item.book.workId!)} onToggle={toggleWanted} resolveMissingCover={false} detailReturnContext={{ kind: 'recommendations', path: '/taste-test/preferences' }} />
+          <BookCard book={item.book} wanted={wanted.has(getGuestWantedStorageId(item.book))} status={statuses.get(item.book.workId!)} onToggle={toggleWanted} resolveMissingCover detailReturnContext={{ kind: 'recommendations', path: '/taste-test/preferences' }} />
           <p className="taste-recommendation-reason">{item.explanation}</p>
         </div></RecommendationMeasurement>)}</div>}
         {saveError && <p role="alert">{saveError}</p>}
@@ -137,7 +138,7 @@ function GuestRatingContent({ offers, authState }: GuestProps) {
           }}><strong>{item.title}</strong><span>{item.author}</span></button></li>)}</ul> : <p role="status">{nl ? 'Geen nieuwe resultaten. Probeer een andere titel of auteur.' : 'No new results. Try another title or author.'}</p>)}
         </div>
         {book ? <article className="book-card taste-rating-card" key={book.workId}>
-          <div className="taste-book-identity"><BookCover book={book} presentation="taste" resolveMissing={false} /><div className="book-card-body"><h2>{book.title}</h2><p>{book.author}</p><EditionPresentationLabel book={book} /></div></div>
+          <div className="taste-book-identity"><BookCover book={book} presentation="taste" resolveMissing /><div className="book-card-body"><h2>{book.title}</h2><p>{book.author}</p><EditionPresentationLabel book={book} /></div></div>
           <div className="taste-rating-actions"><DirectRatingScores workId={book.workId} pending={false} selection={null} onRate={rating => decide(book.workId, rating)} /><button className="taste-skip-button" type="button" onClick={event => { if (event.detail <= 1) decide(book.workId, null); }}>{t('directTaste.skip')}</button></div>
         </article> : <p role="status">{nl ? 'Zoek hierboven een bekend boek om verder te gaan.' : 'Search for a familiar book above to continue.'}</p>}
         {offers === null && <p role="status">{nl ? 'De voorgestelde boeken konden niet laden. Je kunt zelf een boek zoeken.' : 'Suggested books could not load. You can search for a book yourself.'}</p>}

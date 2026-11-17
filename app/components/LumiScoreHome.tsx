@@ -17,6 +17,7 @@ import {
   type CoverPresentation,
 } from '@/lib/books/covers';
 import { watchCoverImage } from '@/lib/books/cover-image-watch';
+import { loadExactEditionCovers } from '@/lib/books/edition-cover-client';
 import {
   getBookCoverIdentity,
   getInitialBookCoverUrls,
@@ -143,6 +144,7 @@ function BookCoverForIdentity({
   const [cardVariantFailed,setCardVariantFailed]=useState(false);
   const resolvedRequested = useRef(false);
   const coverImage = useRef<HTMLImageElement>(null);
+  const coverContainer = useRef<HTMLDivElement>(null);
   const coverUrl = coverUrls[coverIndex] ?? null;
   const imageAttempts = coverUrl ? getVerifiedCoverAttempts(coverUrl, presentation) : [];
   const imageSource = imageAttempts[variantIndex] ?? null;
@@ -158,13 +160,13 @@ function BookCoverForIdentity({
 
   const requestResolvedCovers = useCallback(() => {
     if (
-        !resolveMissing || book.strictEditionLanguage ||
+        !resolveMissing ||
       resolvedRequested.current ||
       (!book.openLibraryWorkId && !book.isbn13)
     ) return;
 
     resolvedRequested.current = true;
-    void loadResolvedCovers(book).then((resolvedUrls) => {
+    void (book.strictEditionLanguage ? loadExactEditionCovers(book) : loadResolvedCovers(book)).then((resolvedUrls) => {
       setCoverUrls((currentUrls) => [
         ...new Set([...currentUrls, ...resolvedUrls]),
       ]);
@@ -172,7 +174,14 @@ function BookCoverForIdentity({
   }, [book, resolveMissing]);
 
   useEffect(() => {
-    if (!coverUrl) requestResolvedCovers();
+    if (coverUrl) return;
+    const element=coverContainer.current;
+    if(!element||typeof IntersectionObserver==='undefined'){requestResolvedCovers();return;}
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();requestResolvedCovers();}
+    },{rootMargin:'300px'});
+    observer.observe(element);
+    return ()=>observer.disconnect();
   }, [coverUrl, requestResolvedCovers]);
 
   const handleCoverFailure = useCallback((failedUrl?:string) => {
@@ -216,6 +225,7 @@ function BookCoverForIdentity({
 
   return (
     <div
+      ref={coverContainer}
       className={`book-cover cover-${book.cover}${small ? ' book-cover-small' : ''}`}
       data-cover-presentation={presentation}
       role={label ? 'img' : undefined}

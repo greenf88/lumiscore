@@ -19,18 +19,19 @@ test('real shared summary React HTML: leading direction, additional traits, pers
   const evidence=traits=>new Map(rows.map(r=>[r.workId,buildEffectiveWorkTraitVector(evidenceRowsForTraits({workId:r.workId,traits,confidence:1,source:'manual',sourceKey:'synthetic',rawLabels:[],verifiedAt:'2026-10-15'}))]));
   for(const locale of ['nl','en'])for(const level of [1,2]){
    const render=profile=>renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:level===1?'/taste-test/result':'/account'},createElement(TasteProfileSummary,{profile,headingId:'profile-proof',level,showInsufficient:true})));
-   const rich=render(buildRatingResultProfile(rows,evidence({thriller_mystery:1,dark:.8,fast_paced:.7})));assert.match(rich,locale==='nl'?/Spannende verhalen/:/Thrillers and mysteries/);assert.equal((rich.match(/<li>/g)??[]).length,2);assert.match(rich,new RegExp(`<h${level}`));
-   assert.equal((rich.match(/class="taste-profile-leading"/g)??[]).length,1);
+   const rich=render(buildRatingResultProfile(rows,evidence({thriller_mystery:1,dark:.8,fast_paced:.7})));assert.match(rich,locale==='nl'?/spannende verhalen/:/thrillers and mysteries/);assert.equal((rich.match(/role="meter"/g)??[]).length,3);assert.match(rich,new RegExp(`<h${level}`));
+   assert.equal((rich.match(/class="taste-persona-image"/g)??[]).length,1);
+   assert.match(rich,/Hannibal/);
    for(const traits of [new Map(),evidence({classic:1})]){
     const profile=buildRatingResultProfile(rows,traits),before=JSON.stringify(profile);
     assert.match(render(profile),locale==='nl'?/nog geen voldoende onderbouwde voorkeur/:/not yet enough evidence/);assert.doesNotMatch(render(profile),/taste-preference-track/);assert.equal(JSON.stringify(profile),before);
    }
    const limitedEvidence=new Map([...evidence({thriller_mystery:1,dark:.8,fast_paced:.7})].slice(0,3));
    const supported=buildRatingResultProfile(rows,limitedEvidence);assert.equal(supported.archetype,null);
-   const partial=render(supported);assert.match(partial,locale==='nl'?/Jouw leessmaak/:/Your reading taste/);assert.equal((partial.match(/<li>/g)??[]).length,2);
+   const partial=render(supported);assert.match(partial,locale==='nl'?/Jouw leessmaak/:/Your reading taste/);assert.equal((partial.match(/role="meter"/g)??[]).length,3);
    assert.match(partial,locale==='nl'?/Gebaseerd op 10 beoordeelde boeken/:/Based on 10 rated books/);
    assert.doesNotMatch(partial,/Van 3 daarvan|Content traits|available for 3 of them/);
-   assert.doesNotMatch(partial,/speurneus|sleuth/);
+   assert.match(partial,/Hannibal/);
    // No score percentages: close model scores are not stretched into a big gap.
    assert.doesNotMatch(rich.replace(/style="[^"]*"/g,''),/%|nauwkeurigheid|accuracy/);
    if(level===1){

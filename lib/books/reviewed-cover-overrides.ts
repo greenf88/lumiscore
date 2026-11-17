@@ -21,6 +21,9 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Exact edition JSON and the returned cover image checked together. Avoid
+  // waiting for optional external metadata on this frequently rated classic.
+  {workId:'7',openLibraryWorkId:'OL27448W',title:'The Lord of the Rings',author:'J.R.R. Tolkien',isbn13:'9780544003415',editionLanguage:'eng',openLibraryEditionId:'OL26885115M',coverUrl:'https://covers.openlibrary.org/b/id/14617723-L.jpg?default=false',source:'reviewed_open_library',evidenceUrl:'https://openlibrary.org/books/OL26885115M.json',reviewedAt:'2026-11-17'},
   // The exact OL edition incorrectly attaches the Charles Osborne novelisation cover.
   // Concord's linked acting-script preview confirms ISBN 978-0-573-70234-1.
   {workId:'10020',openLibraryWorkId:'OL471602W',title:'Black Coffee',author:'Agatha Christie',isbn13:'9780573702341',editionLanguage:'eng',openLibraryEditionId:'OL37024404M',coverUrl:'https://theatrical-cdn2-hbb2fybfcphnf6hc.a01.azurefd.net/media/0051725_black_coffee_300.png',source:'official_publisher',evidenceUrl:'https://www.concordtheatricals.com/s/1120/black-coffee',reviewedAt:'2026-11-14'},

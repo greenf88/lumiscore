@@ -1,4 +1,5 @@
 import { RatingTasteTest } from '@/app/components/RatingTasteTest';
+import { BufferedRatingTasteTest } from '@/app/components/BufferedRatingTasteTest';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +21,9 @@ export default async function TasteTestPage({ searchParams }: { searchParams: Pr
   ]);
   return (
     <>
-      <RatingTasteTest authState={initialAuthState} swipePrototype={params.prototype === 'swipe' && (process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview')} />
+      {params.prototype === 'swipe' && (process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview')
+        ? <RatingTasteTest authState={initialAuthState} swipePrototype />
+        : <BufferedRatingTasteTest authState={initialAuthState} />}
     </>
   );
 }
