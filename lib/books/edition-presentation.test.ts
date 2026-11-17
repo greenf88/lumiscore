@@ -12,8 +12,8 @@ const en:StrictEditionRow={id:1523,work_id:1456,title:'Homo Deus',language:'eng'
 test('resumed rounds retain stored selection language while presentation/search/caches follow UI locale',()=>{
  const read=(path:string)=>readFileSync(new URL('../../'+path,import.meta.url),'utf8');
  const round=read('app/api/taste-test/rounds/route.ts'),ui=read('app/components/RatingTasteTest.tsx');
- assert.ok(round.includes('loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale)'));
- assert.ok(round.includes('loadCatalogBook(state.currentWorkId, locale)'));
+ assert.ok(round.includes('loadCatalogBooksByIds([state.currentWorkId!], undefined, locale)'));
+ assert.ok(round.includes('loadCatalogBook(state.currentWorkId!, locale, false, {skipExternalCovers:true})'));
  assert.match(ui,/isBookPresentationAllowed\(b,locale\)/);
  assert.match(read('app/collection/[slug]/rate/page.tsx'),/CollectionQuickRating key=\{locale\}/);
  assert.match(read('app/taste-test/preferences/page.tsx'),/loadGuestTasteInventory\(locale\)/);

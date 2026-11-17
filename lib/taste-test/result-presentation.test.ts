@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { topSupportedAffinities, shouldOpenCompletedResult, hasSupportedTasteSummary } from './result-presentation.ts';
+import { topSupportedAffinities, shouldOpenCompletedResult, hasSupportedTasteSummary, readingTastePortrait } from './result-presentation.ts';
 import { buildRatingResultProfile } from './rating-result.ts';
 import { buildEffectiveWorkTraitVector, evidenceRowsForTraits } from '../recommendations/work-trait-evidence.ts';
 import type { RatingRoundState } from './rating-round.ts';
@@ -9,7 +9,7 @@ const evidence = new Map(Array.from({length: 30}, (_, i) => [String(i + 1),
   buildEffectiveWorkTraitVector(evidenceRowsForTraits({workId: String(i + 1),
     traits: {thriller_mystery: 1, dark: .8, fast_paced: .7, contemporary: .6}, confidence: 1,
     source: 'manual', sourceKey: 'synthetic', rawLabels: [], verifiedAt: '2026-10-07'}))]));
-test('presentation preserves scores and calculation; at most three supported positive preferences', () => {
+test('presentation preserves scores and calculation; supported positive preferences only', () => {
   const profile = buildRatingResultProfile(Array.from({length: 10}, (_, i) => ({workId: String(i + 1), rating: 10})), evidence);
   const before = JSON.stringify(profile);
   const preferences = topSupportedAffinities(profile);
@@ -19,6 +19,25 @@ test('presentation preserves scores and calculation; at most three supported pos
   assert.deepEqual(preferences.map(x => x.score), [...preferences.map(x => x.score)].sort((a, b) => b! - a!));
   assert.equal(JSON.stringify(profile), before);
   assert.equal(hasSupportedTasteSummary(profile), true);
+});
+test('up to five evidenced traits, one leading direction, without redundant speculative umbrella', () => {
+  const profile = buildRatingResultProfile(Array.from({length:10},(_,i)=>({workId:String(i+1),rating:10})),evidence);
+  profile.affinities = ['speculative','fantasy','science_fiction','worldbuilding','complex','dark','accessible'].map((trait,i)=>({trait,score:80-i,books:10,positiveBooks:10,answerSupport:0})) as typeof profile.affinities;
+  const original=JSON.stringify(profile);
+  const portrait=readingTastePortrait(profile,'en');
+  assert.deepEqual(portrait.preferences.map(x=>x.trait),['fantasy','science_fiction','worldbuilding','complex','dark']);
+  assert.equal(portrait.clearLeader,false,'one-point differences are not exaggerated');
+  assert.equal(JSON.stringify(profile),original,'presentation never changes ranking input');
+  profile.affinities.find(x=>x.trait==='fantasy')!.score=90;
+  assert.equal(readingTastePortrait(profile,'en').clearLeader,true);
+  profile.affinities=profile.affinities.filter(x=>x.trait!=='fantasy'&&x.trait!=='science_fiction');
+  assert.equal(readingTastePortrait(profile,'en').preferences[0].trait,'speculative','umbrella still useful without a supported specific genre');
+});
+test('both languages retain rating evidence and choices without the content-trait coverage sentence',()=>{
+  const profile=buildRatingResultProfile(Array.from({length:10},(_,i)=>({workId:String(i+1),rating:10})),evidence);
+  profile.selectedCount=8;
+  assert.equal(readingTastePortrait(profile,'en').evidence,'Based on 10 rated books. Your 8 selected book preferences also contribute.');
+  assert.equal(readingTastePortrait(profile,'nl').evidence,'Gebaseerd op 10 beoordeelde boeken. Ook 8 gekozen boekvoorkeuren tellen mee.');
 });
 test('missing, sparse, neutral and negative evidence never becomes invented preferences or types', () => {
   for (const [count, score, traits] of [[2, 10, evidence], [10, 1, evidence], [10, 5, evidence], [10, 10, new Map()]] as const) {

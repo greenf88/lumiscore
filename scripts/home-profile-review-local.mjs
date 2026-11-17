@@ -13,6 +13,7 @@ const auth=`import {cookies} from 'next/headers';import {requestPagePath} from '
  export async function loadHeaderAuthState(){const {user}=await getVerifiedServerUser();return user?{authenticated:true,displayName:user.user_metadata.display_name,avatarLetter:'L'}:{authenticated:false}}`;
 const modules={
  'lib/supabase/auth.ts':auth,
+ 'lib/supabase/rating-result.ts':`import {requestPagePath} from '@/lib/i18n/server';import {profileResult} from ${fixture};export async function loadRatingResult(){const mode=new URL(await requestPagePath(),'http://local').searchParams.get('review')??'reader';if(mode==='error')throw Error('SYNTHETIC_READ_FAILURE');return mode==='guest'?{kind:'signed-out'}:profileResult(mode)}`,
  'lib/supabase/books.ts':`export {books,loadHighestRatedCatalog,loadCatalogBooksByIds,loadCatalogBooksByIdsWithStoredCovers,loadCatalogBook} from ${fixture};`,
  'lib/server-environment.ts':`export function logServerEnvironmentPresence(){};export function readServerEnvironment(){return 'LOCAL_FIXTURE_ONLY'}`,
  'lib/supabase/proxy.ts':`export async function refreshSupabaseSession(){return {cookies:{getAll:()=>[]},headers:new Headers()}}`,

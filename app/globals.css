@@ -982,14 +982,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .taste-profile-anchors ul { padding-left: 20px; }
 .taste-profile-anchors li { overflow-wrap: anywhere; }
 .taste-profile-anchors li span { white-space: nowrap; color: var(--muted); }
-.taste-profile .taste-profile-evidence { font-size: 14px; }
+.taste-profile .taste-profile-evidence { font-size: 14px; margin-top: 18px; }
+.taste-profile-leading { margin-top: 16px; padding: 18px; border-left: 4px solid var(--gold-text); border-radius: 8px; background: color-mix(in srgb, var(--gold-text) 7%, var(--surface)); }
+.taste-leading-label { display: block; color: var(--muted); font-size: 13px; font-weight: 600; }
+.taste-profile .taste-profile-leading :is(h1,h2) { font-family: var(--serif); font-size: clamp(28px, 6vw, 38px); line-height: 1.15; margin: 10px 0 12px; overflow-wrap: anywhere; }
+.taste-profile .taste-profile-leading p { font-size: 16px; }
+.taste-profile-additional { margin-top: 20px; font-size: 15px; }
+.taste-profile-additional .taste-preferences { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.taste-profile-additional .taste-preferences li { display: block; padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-raised); line-height: 1.45; }
 .taste-recommendation { display: flex; flex-direction: column; min-width: 0; }
 .taste-recommendation > .book-card { flex: 1; }
 .taste-recommendation-reason { padding: 12px 4px; margin: 0; font-family: var(--sans); font-size: 14px; line-height: 1.5; color: var(--muted); }
 .taste-preferences { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .taste-preferences li { display: grid; gap: 5px; font-size: 15px; line-height: 1.4; }
-.taste-preference-track { display: block; height: 6px; border-radius: 6px; background: var(--border); overflow: hidden; }
-.taste-preference-track > span { display: block; height: 100%; border-radius: inherit; background: var(--teal); }
+.taste-save-feedback { min-height: 1.5em; margin-block: 8px; color: var(--muted); font-size: 14px; }
 .taste-next-steps a { display: inline-flex; align-items: center; min-height: 44px; color: var(--teal); text-underline-offset: 4px; }
 .editorial-lists { max-width: 1100px; margin-inline: auto; }
 .editorial-lists > .eyebrow { display: block; }

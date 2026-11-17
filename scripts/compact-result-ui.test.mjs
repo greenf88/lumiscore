@@ -6,13 +6,16 @@ test('completion navigation is after response validation, never in failure handl
   const source = await read('app/components/RatingTasteTest.tsx');
   assert.match(source, /if \(!r.ok\) throw new Error\(\);[\s\S]*const next = await r.json\(\) as Response;[\s\S]*if \(!next.authenticated[\s\S]*if \(shouldOpenCompletedResult\(action, before, next\)\) window.location.assign\(localizedHref\('\/taste-test\/result', locale\)\)/);
 });
-test('result shows supported combinations and existing scores as decorative bars', async () => {
+test('result highlights an evidenced leading preference and additional traits without artificial score bars', async () => {
   const source = await read('app/components/TasteRatingResult.tsx');
   const summary = await read('app/components/TasteProfileSummary.tsx');
   assert.match(source, /window.scrollTo\(\{top:0,behavior:'instant'\}\)/);
   assert.match(source, /<TasteProfileSummary profile=\{profile\} headingId="taste-result-title"/);
   assert.match(summary, /readingTastePortrait\(profile,locale\)/);
-  assert.match(summary, /taste-preference-track" aria-hidden="true"/);
+  assert.match(summary, /taste-profile-leading/);
+  assert.match(summary, /taste-profile-additional/);
+  assert.match(summary, /clearLeader/);
+  assert.doesNotMatch(summary, /taste-preference-track|style=\{\{width/);
   assert.doesNotMatch(summary, /x\.(books|positiveBooks)|\/100|<meter|taste-facets/);
   assert.doesNotMatch(source, /profile\.(ratingCount|classifiedCount|missingCount|provisional)|x\.(books|positiveBooks)|\/100|<meter|ARCHETYPE_COPY|taste-facets/);
   assert.match(source, /'Boeken voor jou':'Books for you'/);

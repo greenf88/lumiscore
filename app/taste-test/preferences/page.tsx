@@ -12,7 +12,7 @@ export default async function GuestPreferencesPage() {
     .then(m => m.loadHeaderAuthState()).catch(() => ({ authenticated: false as const }));
   if (authState.authenticated) {
     const books = await import('@/lib/supabase/books')
-      .then(m => m.loadCatalogBooksByIdsWithStoredCovers(TASTE_TEST_WORK_IDS, undefined, locale)).catch(() => []);
+      .then(m => m.loadCatalogBooksByIds(TASTE_TEST_WORK_IDS, undefined, locale)).catch(() => []);
     return <LumiScoreTasteTest key={locale} books={books} initialAuthState={authState} />;
   }
 

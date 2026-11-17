@@ -175,7 +175,7 @@ export function RatingTasteTest({ authState, swipePrototype }: { authState: Head
             {paused ? <div className="taste-paused"><p role="status">{t('directTaste.paused')}</p>
               <button className="primary-cta" type="button" disabled={pending} onClick={() => act('resume')}>{t('directTaste.resume')}</button></div>
               : <>
-                <p className="sr-only" role="status" aria-live="polite">{pending ? t('directTaste.saving') : saved ? t('directTaste.saved') : ''}</p>
+                <p className="taste-save-feedback" role="status" aria-live="polite">{pending ? t('directTaste.saving') : saved ? t('directTaste.saved') : ''}</p>
                 {book && <article className="book-card taste-rating-card" key={`${round.id}:${workId}`}
                   tabIndex={swipePrototype ? 0 : undefined} aria-label={swipePrototype ? t('directTaste.prototype') : undefined}
                   onKeyDown={e => { if (!swipePrototype || gate.current?.isBusy() || e.target !== e.currentTarget) return;

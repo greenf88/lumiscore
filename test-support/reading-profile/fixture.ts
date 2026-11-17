@@ -19,9 +19,9 @@ export function fixtureClient(mode:string){
   }};return q;}};
 }
 export function profileResult(mode='reader'){
- const evidence=new Map(books.slice(0,mode==='sparse'?0:mode==='partial'?3:10).map(b=>[b.workId!,buildEffectiveWorkTraitVector(evidenceFor(b.workId!))]));
+ const evidence=new Map(books.slice(0,mode==='sparse'?0:mode==='partial'?3:10).map(b=>[b.workId!,buildEffectiveWorkTraitVector(mode==='five'?evidenceRowsForTraits({workId:b.workId!,traits:{fantasy:1,science_fiction:.98,speculative:.99,worldbuilding:.96,complex:.94,character_driven:.92},confidence:1,source:'manual',sourceKey:'five-traits-local-review',rawLabels:[],verifiedAt:'2026-11-17'}):evidenceFor(b.workId!))]));
  return {kind:'result',profile:buildRatingResultProfile(books.slice(0,10).map(b=>({workId:b.workId!,rating:8})),evidence),roundRatedCount:10,language:'nl',partial:false,exhausted:false,
-  recommendations:['sparse','partial'].includes(mode)?books.slice(10,12).map(book=>({book,matchScore:null,matchLabel:null,matchConfidence:'low',explanation:'',coverageLevel:'none',metadataConfidence:0,collaborativeExplanation:''})):[]};
+  recommendations:['sparse','partial','five'].includes(mode)?books.slice(10,12).map(book=>({book,matchScore:null,matchLabel:null,matchConfidence:'low',explanation:'',coverageLevel:'none',metadataConfidence:0,collaborativeExplanation:''})):[]};
 }
 export async function loadHighestRatedCatalog(){return {books:books.slice(0,8),total:20};}
 export async function loadCatalogBooksByIds(ids:string[]){return books.filter(b=>ids.includes(b.workId!));}

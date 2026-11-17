@@ -18,7 +18,7 @@ export async function loadGuestRatingResult(ratings: GuestRatingInput[], exclude
   const result = guestRatingRecommendations(ratings.map(row => ({ ...row,
     traits: reliableProfileTraits(buildEffectiveWorkTraitVector(evidence.get(row.workId) ?? [], getReviewedWorkTraitCorrection(row.workId))),
   })), catalog.candidates, excluded, locale);
-  const hydrated = await hydratePublicRecommendations(result.recommendations, locale);
+  const hydrated = await hydratePublicRecommendations(result.recommendations, locale, true);
   return { profile: result.profile, recommendations: await Promise.all(hydrated
     .filter(x => isBookPresentationAllowed(x.book, locale))
     .map(async x => ({ ...x, book: await publicBook(x.book) }))) };

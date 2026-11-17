@@ -12,16 +12,19 @@ function reviewUsesProduction() {
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: PRIVATE_RESPONSE_HEADERS });
 async function present(state: RatingRoundState, request: Request, client: Awaited<ReturnType<typeof getVerifiedServerUser>>['client']) {
   const { locale } = await resolveRequestLocale(request);
-  if (state.currentWorkId) {
-    const { data, error } = await client.rpc('taste_rating_allowed', { p_work_id: Number(state.currentWorkId), p_language: locale });
-    if (error) throw error; // Missing migration or failed read is never permission to bypass the policy.
-    if (data !== true) return { authenticated: true, available: true, state, book: null };
-  }
-  const { loadCatalogBooksByIdsWithStoredCovers, loadCatalogBook } = await import('@/lib/supabase/books');
-  const books = state.currentWorkId ? await loadCatalogBooksByIdsWithStoredCovers([state.currentWorkId], undefined, locale) : [];
+  if (!state.currentWorkId) return { authenticated: true, available: true, state, book: null };
+  const allowed = client.rpc('taste_rating_allowed', { p_work_id: Number(state.currentWorkId), p_language: locale });
+  const presentation = import('@/lib/supabase/books').then(async ({loadCatalogBooksByIds,loadCatalogBook}) => {
+    // Stored edition covers are enough to rate a book. Never make each tap wait
+    // for Open Library's optional 3.5s cover lookup or serialize a cover promise.
+    const books = await loadCatalogBooksByIds([state.currentWorkId!], undefined, locale);
+    return books[0] ?? loadCatalogBook(state.currentWorkId!, locale, false, {skipExternalCovers:true});
+  });
+  const [permission, book] = await Promise.all([allowed, presentation]);
+  if (permission.error) throw permission.error;
+  if (permission.data !== true) return { authenticated: true, available: true, state, book: null };
   // The DB masks ineligible saved offers, preserving every stored rating/counter.
   // Explicit resume retires only an invalid pending offer and selects a replacement.
-  const book = books[0] ?? (state.currentWorkId ? await loadCatalogBook(state.currentWorkId, locale) : null);
   return { authenticated: true, available: true, state, book };
 }
 export async function GET(request: Request) {

@@ -3,7 +3,7 @@ import { buildEffectiveWorkTraitVector, reliableProfileTraits } from '../recomme
 import { getReviewedWorkTraitCorrection } from '../recommendations/reviewed-work-trait-corrections.ts';
 import { selectGuestBooks, type GuestInventoryRow, type GuestOffer } from '../taste-test/guest-round.ts';
 import { supabase } from './client.ts';
-import { loadCatalogBooksByIdsWithStoredCovers } from './books.ts';
+import { loadCatalogBooksByIds } from './books.ts';
 import { loadWorkTraitEvidenceBatched } from './work-trait-evidence.ts';
 
 export async function loadGuestTasteInventory(locale: Locale): Promise<GuestOffer[]> {
@@ -17,13 +17,14 @@ export async function loadGuestTasteInventory(locale: Locale): Promise<GuestOffe
   const inventory = data as GuestInventoryRow[];
   if (new Set(inventory.map(row => row.work_id)).size !== inventory.length) throw new Error('Duplicate guest taste inventory');
 
-  const books = inventory.length
-    ? await loadCatalogBooksByIdsWithStoredCovers(inventory.map(row => String(row.work_id)), undefined, locale)
-    : [];
+  const ids = inventory.map(row => String(row.work_id));
+  const [books, evidence] = await Promise.all([
+    ids.length ? loadCatalogBooksByIds(ids, undefined, locale) : Promise.resolve([]),
+    loadWorkTraitEvidenceBatched(supabase, ids),
+  ]);
   // Without the presentation bindings we cannot verify the chosen edition.
   if (books.some(book => book.storedPresentationUnavailable)) throw new Error('Guest taste editions unavailable');
   const selected = selectGuestBooks(inventory, books, locale);
-  const evidence = await loadWorkTraitEvidenceBatched(supabase, selected.map(book => book.workId));
   return selected.map(book => ({
     book,
     traits: reliableProfileTraits(buildEffectiveWorkTraitVector(

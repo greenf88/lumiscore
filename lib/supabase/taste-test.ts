@@ -34,6 +34,7 @@ import { loadReaderTasteProfile,type ReaderRatingRow } from './reader-taste-prof
 import type { ReaderEraPreferences } from '../preferences/reading-periods.ts';
 import { isReadingStatus, type ReadingStatus } from '../collections/model.ts';
 import { cache } from 'react';
+import { supabase as publicCatalogClient } from './client.ts';
 
 const GUEST_RECOMMENDATION_CATALOG_TTL_MS = 5 * 60 * 1_000;
 const guestRecommendationCatalogCache = new Map<Locale, {
@@ -129,10 +130,16 @@ export function loadGuestRecommendationCatalog(
   client: Awaited<ReturnType<typeof createServerSupabaseClient>>,
   locale: Locale,
 ): Promise<RecommendationCatalog> {
+  void client; // Compatibility: shared cache always reads through the public client.
+  return loadCachedPublicRecommendationCatalog(locale);
+}
+
+/** Only public catalog data is shared; user profiles, exclusions and ranking stay request-local. */
+export function loadCachedPublicRecommendationCatalog(locale: Locale): Promise<RecommendationCatalog> {
   const cached = guestRecommendationCatalogCache.get(locale);
   if (cached && cached.expiresAt > Date.now()) return cached.result;
-  const result = loadRecommendationCatalog(client, locale).catch((error: unknown) => {
-    guestRecommendationCatalogCache.delete(locale);
+  const result = loadRecommendationCatalog(publicCatalogClient, locale).catch((error: unknown) => {
+    if (guestRecommendationCatalogCache.get(locale)?.result === result) guestRecommendationCatalogCache.delete(locale);
     throw error;
   });
   guestRecommendationCatalogCache.set(locale, {
@@ -144,6 +151,7 @@ export function loadGuestRecommendationCatalog(
 export async function hydratePublicRecommendations(
   recommendations: readonly PersonalizedRecommendation[],
   locale: Locale,
+  storedOnly = false,
 ): Promise<PersonalizedRecommendation[]> {
   const recommendationBooks = recommendations.length
     ? await loadCatalogBooksByIds(recommendations.flatMap(({ book }) =>
@@ -154,7 +162,7 @@ export async function hydratePublicRecommendations(
       book.workId ? [[book.workId, book]] : []),
   );
 
-  return withRecommendationEditionCovers(recommendations.map((recommendation) => ({
+  const hydrated = recommendations.map((recommendation) => ({
     book: recommendation.book.workId
       ? recommendationBooksById.get(recommendation.book.workId) ?? recommendation.book
       : recommendation.book,
@@ -165,7 +173,8 @@ export async function hydratePublicRecommendations(
     coverageLevel: recommendation.coverageLevel,
     metadataConfidence: recommendation.metadataConfidence,
     collaborativeExplanation: recommendation.collaborativeExplanation,
-  })));
+  }));
+  return storedOnly ? hydrated : withRecommendationEditionCovers(hydrated);
 }
 
 export async function loadTasteTestServerState(locale:Locale='en'): Promise<TasteTestServerState> {
