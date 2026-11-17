@@ -25,9 +25,11 @@ export async function loadRatingResult(locale: Locale) {
   const recommendations = recommendRatingResult({profile,candidates:catalog.candidates,evidence:catalog.traitsById,
     excludedIds:new Set([...TASTE_TEST_WORK_IDS,...ratings.map(x=>String(x.work_id)),...statuses.filter(x=>x.status==='read').map(x=>String(x.work_id))]),
     availableIds,locale});
-  const hydrated = await loadCatalogBooksByIdsWithStoredCovers(recommendations.map(x=>x.book.workId!),undefined,locale);
+  const anchorRatings = [...ratings].filter(x=>x.rating>=7).sort((a,b)=>b.rating-a.rating||Number(a.work_id)-Number(b.work_id)).slice(0,3);
+  const hydrated = await loadCatalogBooksByIdsWithStoredCovers([...new Set([...recommendations.map(x=>x.book.workId!),...anchorRatings.map(x=>String(x.work_id))])],undefined,locale);
   const books = new Map(hydrated.map(book=>[book.workId,book]));
   return { kind:'result' as const, profile, roundRatedCount:round?.ratedCount ?? 0, language,
+    anchors:anchorRatings.flatMap(row=>{const book=books.get(String(row.work_id));return book?[{workId:String(row.work_id),title:book.title,rating:row.rating}]:[];}),
     partial:round?.ratedCount < (round?.goal ?? 20), exhausted:roundResult.data?.exhausted === true,
     recommendations:recommendations.map(x=>({...x,book:books.get(x.book.workId) ?? x.book})) };
 }

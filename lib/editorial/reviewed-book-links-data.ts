@@ -284,6 +284,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6488",
         "reason": "Plaats deze familiegeschiedenis naast de levensverhalen en literaire beschouwingen in Marije Plomps bundel."
+      },
+      {
+        "workId": "2994",
+        "reason": "Vergelijk Brokkens zoektocht in familiebrieven met Amy Tans roman waarin een moeder haar dochter over haar verzwegen verleden vertelt."
       }
     ]
   },
@@ -456,6 +460,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9534",
         "reason": "For another child’s experience of finding a place in America, read Jiménez’s autobiographical stories of a migrant farmworker family."
+      },
+      {
+        "workId": "4503",
+        "reason": "Compare Kek’s adjustment to life in America with Nisha’s diary of leaving home during the partition of India."
       }
     ]
   },
@@ -1014,6 +1022,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3753",
         "reason": "Explore another criminal world through Brandt’s interviews with Frank Sheeran and Sheeran’s claims about Jimmy Hoffa."
+      },
+      {
+        "workId": "4892",
+        "reason": "Move from the history and power of Mexican cartels to a sociologist’s account of everyday relationships within a Chicago gang."
       }
     ]
   },
@@ -1386,6 +1398,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5165",
         "reason": "Lees naast deze roman een daadwerkelijk op gesprekken gebaseerd levensverhaal, over Nisa en haar leven in de Kalahari."
+      },
+      {
+        "workId": "1606",
+        "reason": "Lees naast Tans fictieve moeder-dochterverhaal hoe Jan Brokken met brieven het onbekende leven van zijn eigen moeder onderzoekt."
       }
     ]
   },
@@ -2904,6 +2920,118 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8702",
         "reason": "Try a later animal fantasy in which cat Clans face a crisis of trust, ancestry and their shared warrior code."
+      }
+    ]
+  },
+  {
+    "workId": "4892",
+    "title": "Gang Leader for a Day",
+    "author": "Sudhir Venkatesh",
+    "openLibraryWorkId": "OL8022521W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3738",
+        "reason": "Compare Venkatesh’s close observation of a Chicago gang with Grillo’s reporting on the growth of Mexico’s drug cartels."
+      }
+    ]
+  },
+  {
+    "workId": "2806",
+    "title": "Daemon",
+    "author": "Daniel Suarez",
+    "openLibraryWorkId": "OL13646905W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8911",
+        "reason": "For a contrasting approach to inventions escaping their makers’ control, try Lem’s comic tales about two ambitious constructors."
+      }
+    ]
+  },
+  {
+    "workId": "8911",
+    "title": "The Cyberiad",
+    "author": "Stanisław Lem",
+    "openLibraryWorkId": "OL2683553W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2806",
+        "reason": "Compare Lem’s comic inventions with a thriller in which an autonomous program acts after its creator’s death."
+      }
+    ]
+  },
+  {
+    "workId": "4503",
+    "title": "The night diary",
+    "author": "Veera Hiranandani",
+    "openLibraryWorkId": "OL19666136W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8949",
+        "reason": "Continue with another child’s search for safety and belonging after displacement, this time in a new home in America."
+      }
+    ]
+  },
+  {
+    "workId": "4953",
+    "title": "De Dixon Regels",
+    "author": "Elle Kennedy",
+    "openLibraryWorkId": "OL37569957W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1362",
+        "reason": "Lees ook Kennedy’s eerdere campusromance, waarin bijles en een afgesproken date de aanleiding zijn voor onverwachte gevoelens."
+      }
+    ]
+  },
+  {
+    "workId": "1362",
+    "title": "De deal",
+    "author": "Elle Kennedy",
+    "openLibraryWorkId": "OL42430111W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "4953",
+        "reason": "Ga verder met een andere campusromance van Kennedy, over buren die voor hun exen een relatie spelen."
+      }
+    ]
+  },
+  {
+    "workId": "1695",
+    "title": "Kilometers cola en knetterende ruzie",
+    "author": "Carry Slee",
+    "openLibraryWorkId": "OL24754099W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1124",
+        "reason": "Lees een ander verhaal van Carry Slee waarin school, vriendschap en de gevolgen van onuitgesproken gevoelens centraal staan."
+      }
+    ]
+  },
+  {
+    "workId": "1124",
+    "title": "Spijt!",
+    "author": "Carry Slee",
+    "openLibraryWorkId": "OL973945W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1695",
+        "reason": "Vergelijk Davids moeite om zich uit te spreken met Boris, die thuis botst en steun zoekt in zijn band."
       }
     ]
   }

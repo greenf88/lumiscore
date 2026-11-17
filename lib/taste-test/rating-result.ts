@@ -1,10 +1,9 @@
-import { TASTE_TRAITS, type TasteVector } from './traits.ts';
-import { buildTasteProfile, type TasteProfile } from './profile.ts';
+import { TASTE_TRAITS, cosineTasteSimilarity, type TasteVector } from './traits.ts';
+import { buildTasteProfile, contentTasteVector, type TasteProfile } from './profile.ts';
 import { reliableProfileTraits, type EffectiveWorkTraits } from '../recommendations/work-trait-evidence.ts';
 import type { TasteTestAnswers } from './config.ts';
 import type { RecommendationCandidate, PersonalizedRecommendation } from '../recommendations/engine.ts';
 import {calculatePersonalMatch} from '../recommendations/engine.ts';
-import {ERA_TRAITS} from './profile-policy.ts';
 import type { Locale } from '../i18n/config.ts';
 
 export type ResultRating = { workId: string; rating: number; updatedAt?:string|null };
@@ -23,16 +22,32 @@ export function recommendRatingResult(input: {
   availableIds: ReadonlySet<string>; locale: Locale;
 }): PersonalizedRecommendation[] {
   const seen = new Set<string>();
-  return input.candidates.flatMap(candidate => {
+  const remaining = input.candidates.flatMap(candidate => {
     const id = candidate.book.workId;
     if (!id || seen.has(id) || input.excludedIds.has(id) || !input.availableIds.has(id)) return [];
     seen.add(id);
     const traits = reliableResultTraits(input.evidence.get(id));
     if (!TASTE_TRAITS.some(trait => traits[trait] > 0)) return [];
-    const overlap = TASTE_TRAITS.reduce((sum,trait) => sum + (ERA_TRAITS.has(trait)?0:input.profile.vector[trait]*traits[trait]),0);
+    // Compare the whole content combination. Raw dot products favour sparsely
+    // tagged, single-genre books over books matching several reader preferences.
+    // Keep the sign: a disliked trait must lower rank, never become a match.
+    const overlap = cosineTasteSimilarity(contentTasteVector(input.profile.vector), contentTasteVector(traits));
     const quality = candidate.book.score !== null ? candidate.book.score / 10 : .55;
     return [{ candidate, traits, rank: overlap + .05*quality }];
-  }).sort((a,c) => c.rank-a.rank || Number(a.candidate.book.workId)-Number(c.candidate.book.workId)).slice(0,20).map(({candidate,traits}) => ({
+  });
+  const selected: typeof remaining = [];
+  while (remaining.length && selected.length < 20) {
+    const adjusted = (item: typeof remaining[number]) => {
+      const author = item.candidate.book.author.trim().toLocaleLowerCase('en');
+      const sameAuthor = author ? selected.filter(x => x.candidate.book.author.trim().toLocaleLowerCase('en') === author).length : 0;
+      const sameSeries = item.candidate.seriesKey ? selected.filter(x => x.candidate.seriesKey === item.candidate.seriesKey).length : 0;
+      // Small penalties diversify close matches without replacing a much better fit.
+      return item.rank - Math.min(.16, sameAuthor * .08) - Math.min(.12, sameSeries * .1);
+    };
+    remaining.sort((a,b) => adjusted(b)-adjusted(a) || Number(a.candidate.book.workId)-Number(b.candidate.book.workId));
+    selected.push(remaining.shift()!);
+  }
+  return selected.map(({candidate,traits}) => ({
     ...calculatePersonalMatch({profile:input.profile,candidate:{...candidate,traits},workId:candidate.book.workId!,locale:input.locale}),
     book:candidate.book,
     coverageLevel:candidate.coverageLevel, metadataConfidence:candidate.metadataConfidence, collaborativeExplanation:'',

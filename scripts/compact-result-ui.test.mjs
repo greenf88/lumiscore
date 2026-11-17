@@ -6,12 +6,12 @@ test('completion navigation is after response validation, never in failure handl
   const source = await read('app/components/RatingTasteTest.tsx');
   assert.match(source, /if \(!r.ok\) throw new Error\(\);[\s\S]*const next = await r.json\(\) as Response;[\s\S]*if \(!next.authenticated[\s\S]*if \(shouldOpenCompletedResult\(action, before, next\)\) window.location.assign\(localizedHref\('\/taste-test\/result', locale\)\)/);
 });
-test('compact result shows labels and existing scores only as decorative bars; no report or counts', async () => {
+test('result shows supported combinations and existing scores as decorative bars', async () => {
   const source = await read('app/components/TasteRatingResult.tsx');
   const summary = await read('app/components/TasteProfileSummary.tsx');
   assert.match(source, /window.scrollTo\(\{top:0,behavior:'instant'\}\)/);
   assert.match(source, /<TasteProfileSummary profile=\{profile\} headingId="taste-result-title"/);
-  assert.match(summary, /topSupportedAffinities\(profile\)/);
+  assert.match(summary, /readingTastePortrait\(profile,locale\)/);
   assert.match(summary, /taste-preference-track" aria-hidden="true"/);
   assert.doesNotMatch(summary, /x\.(books|positiveBooks)|\/100|<meter|taste-facets/);
   assert.doesNotMatch(source, /profile\.(ratingCount|classifiedCount|missingCount|provisional)|x\.(books|positiveBooks)|\/100|<meter|ARCHETYPE_COPY|taste-facets/);
