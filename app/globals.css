@@ -1752,8 +1752,8 @@ button, input, select, textarea { font-family: var(--sans); }
   .book-detail, .book-detail.has-back-cover { width: calc(100% - 28px); grid-template-columns: 96px minmax(0, 1fr); gap: 18px 16px; padding-top: 10px; }
   .detail-context { display: block; }
   .detail-context nav { display: none; }
-  .detail-cover-gallery, .has-back-cover .detail-cover-gallery { grid-column: 1; grid-row: 2; grid-template-columns: 1fr; gap: 12px; }
-  .detail-cover-gallery .detail-cover-wrap { width: 100%; max-width: none; }
+  .detail-cover-gallery, .has-back-cover .detail-cover-gallery { grid-column: 1; grid-row: 2; grid-template-columns: 1fr; gap: 12px; width: 100%; margin: 0; }
+  .detail-cover-gallery .detail-cover-wrap { width: 100%; max-width: none; padding: 6px; }
   .detail-heading { grid-column: 2; grid-row: 2; }
   .detail-heading h1 { font-size: clamp(25px, 6vw, 34px); }
   .detail-heading .detail-author { font-size: 15px; }
