@@ -45,7 +45,7 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
   const books=useMemo(()=>result.recommendations.length ? result.recommendations.map(x=>x.book) : EMPTY_BOOKS,[result.recommendations]);
   const {wanted,statuses,toggleWanted}=useWantToRead(true,books);
   return <section className="featured-section taste-result" aria-labelledby="taste-result-title">
-    <TasteProfileSummary profile={profile} headingId="taste-result-title" anchors={result.anchors} />
+    <TasteProfileSummary profile={profile} headingId="taste-result-title" anchors={result.anchors} showInsufficient />
     <h2>{nl?'Boeken voor jou':'Books for you'}</h2>
     {result.recommendations.length===0 ? <p role="status">{nl?'Nu geen passende boeken beschikbaar.':'No suitable books available right now.'}</p>
     : <div className="book-grid">{result.recommendations.map((x,index)=><RecommendationMeasurement key={`${locale}:${x.book.workId}`} workId={x.book.workId} locale={locale} surface="taste_result" position={index+1}><div className="taste-recommendation"><BookCard book={x.book}

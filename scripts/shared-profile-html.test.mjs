@@ -18,7 +18,7 @@ test('real shared summary React HTML: distinctive combinations, honest coverage,
   const rows=Array.from({length:10},(_,i)=>({workId:String(i+1),rating:10}));
   const evidence=traits=>new Map(rows.map(r=>[r.workId,buildEffectiveWorkTraitVector(evidenceRowsForTraits({workId:r.workId,traits,confidence:1,source:'manual',sourceKey:'synthetic',rawLabels:[],verifiedAt:'2026-10-15'}))]));
   for(const locale of ['nl','en'])for(const level of [1,2]){
-   const render=profile=>renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:level===1?'/taste-test/result':'/account'},createElement(TasteProfileSummary,{profile,headingId:'profile-proof',level})));
+   const render=profile=>renderToStaticMarkup(createElement(LumiScoreLocaleProvider,{initialLocale:locale,hasPersistedChoice:true,initialPath:level===1?'/taste-test/result':'/account'},createElement(TasteProfileSummary,{profile,headingId:'profile-proof',level,showInsufficient:true})));
    const rich=render(buildRatingResultProfile(rows,evidence({thriller_mystery:1,dark:.8,fast_paced:.7})));assert.match(rich,locale==='nl'?/Spannende verhalen · donkere verhalen/:/Thrillers and mysteries · darker stories/);assert.equal((rich.match(/<li>/g)??[]).length,3);assert.match(rich,new RegExp(`<h${level}`));
    for(const traits of [new Map(),evidence({classic:1})]){
     const profile=buildRatingResultProfile(rows,traits),before=JSON.stringify(profile);

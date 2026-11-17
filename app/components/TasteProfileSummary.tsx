@@ -4,9 +4,10 @@ import {readingTastePortrait} from '@/lib/taste-test/result-presentation';
 import {getTraitLabel} from '@/lib/taste-test/traits';
 import {LocaleLink,useLumiScoreLocale} from './LumiScoreLocale';
 export type TasteAnchor = {workId:string;title:string;rating:number};
-export function TasteProfileSummary({profile,headingId,level=1,anchors=[]}:{profile:RatingResultProfile;headingId:string;level?:1|2;anchors?:TasteAnchor[]}){
+export function TasteProfileSummary({profile,headingId,level=1,anchors=[],showInsufficient=false}:{profile:RatingResultProfile;headingId:string;level?:1|2;anchors?:TasteAnchor[];showInsufficient?:boolean}){
   const {locale}=useLumiScoreLocale(),nl=locale==='nl',Heading=level===1?'h1':'h2';
   const {title,summary,evidence,preferences}=readingTastePortrait(profile,locale);
+  if (!showInsufficient && !profile.archetype && preferences.length===0) return null;
   return <div className="taste-profile">
     <span className="eyebrow">{nl?'Jouw leessmaak':'Your reading taste'}</span>
     <Heading id={headingId}><span className="taste-profile-spark" aria-hidden="true">✦</span>{title}</Heading>

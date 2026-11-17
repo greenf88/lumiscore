@@ -210,7 +210,7 @@ export function LumiScoreTasteTest({
           <div className="taste-results">
             <span className="eyebrow">{t('taste.profile')}</span>
             <h1 id="taste-test-title">{t('taste.readingTaste')}</h1>
-            {authenticated&&!savedProfile?<p role="alert">{locale==='nl'?'Je opgeslagen leesprofiel kon niet laden. Probeer het later opnieuw.':'Your saved reading profile could not load. Please try again later.'}</p>:<><TasteProfileSummary profile={profile} headingId="preference-result-title" level={2} />
+            {authenticated&&!savedProfile?<p role="alert">{locale==='nl'?'Je opgeslagen leesprofiel kon niet laden. Probeer het later opnieuw.':'Your saved reading profile could not load. Please try again later.'}</p>:<><TasteProfileSummary profile={profile} headingId="preference-result-title" level={2} showInsufficient />
             <div className="taste-confidence">
               <strong>{confidenceCopy.label}</strong>
               <span>{confidenceCopy.description}</span>
