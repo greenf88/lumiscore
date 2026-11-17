@@ -6,17 +6,18 @@ test('completion navigation is after response validation, never in failure handl
   const source = await read('app/components/RatingTasteTest.tsx');
   assert.match(source, /if \(!r.ok\) throw new Error\(\);[\s\S]*const next = await r.json\(\) as Response;[\s\S]*if \(!next.authenticated[\s\S]*if \(shouldOpenCompletedResult\(action, before, next\)\) window.location.assign\(localizedHref\('\/taste-test\/result', locale\)\)/);
 });
-test('result highlights an evidenced leading preference and additional traits without artificial score bars', async () => {
+test('result restores accurate preference bars beside an illustrated shareable reading character', async () => {
   const source = await read('app/components/TasteRatingResult.tsx');
   const summary = await read('app/components/TasteProfileSummary.tsx');
   assert.match(source, /window.scrollTo\(\{top:0,behavior:'instant'\}\)/);
   assert.match(source, /<TasteProfileSummary profile=\{profile\} headingId="taste-result-title"/);
   assert.match(summary, /readingTastePortrait\(profile,locale\)/);
-  assert.match(summary, /taste-profile-leading/);
-  assert.match(summary, /taste-profile-additional/);
-  assert.match(summary, /clearLeader/);
-  assert.doesNotMatch(summary, /taste-preference-track|style=\{\{width/);
-  assert.doesNotMatch(summary, /x\.(books|positiveBooks)|\/100|<meter|taste-facets/);
+  assert.match(summary, /readerPersona\(profile,locale\)/);
+  assert.match(summary, /taste-profile-bars/);
+  assert.match(summary, /aria-valuenow=\{x.score!\}/);
+  assert.match(summary, /width:`\$\{x.score\}%`/);
+  assert.match(summary, /TastePortraitShare/);
+  assert.doesNotMatch(summary, /x\.(books|positiveBooks)|taste-facets|Content traits/);
   assert.doesNotMatch(source, /profile\.(ratingCount|classifiedCount|missingCount|provisional)|x\.(books|positiveBooks)|\/100|<meter|ARCHETYPE_COPY|taste-facets/);
   assert.match(source, /'Boeken voor jou':'Books for you'/);
   assert.match(source, /'Verfijn je smaak':'Refine your taste'/);

@@ -38,7 +38,7 @@ if(refinements){
  modules['lib/books/public-description.ts']=`import {loadPublicBookDescription} from ${review}; export async function loadPublicBookDescriptionState(...args){const description=await loadPublicBookDescription(...args);return {state:description?'resolved':'confirmed_missing',description}}`;
 }
 const json=(res,data,status=200)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
-let round=null,position=0;
+let round=null,position=0,bufferedDecisions=[],batchSaves=0,batchDelay=0,batchFail=false;
 const server=await createServer({root,configFile:false,envFile:false,cacheDir:root+'.wrangler/node_modules/profile-review-'+port+'-vite',css:{postcss:{plugins:[tailwindcss()]}},resolve:{alias:{'@':root}},plugins:[{
  name:'loopback-profile-review',enforce:'pre',load(id){return modules[id.replaceAll('\\','/').replace(root.replaceAll('\\','/'),'').split('?')[0]]??null;},
  transform(code,id){
@@ -64,6 +64,21 @@ const server=await createServer({root,configFile:false,envFile:false,cacheDir:ro
   if(url.pathname==='/api/book-status')return json(res,{authenticated:mode!=='guest',statuses:{}});
   if(url.pathname==='/api/account/reading-preferences')return json(res,{onboardingDismissed:true});
   if(url.pathname==='/api/taste-test/result'){const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');return json(res,f.profileResult(mode));}
+  if(url.pathname==='/__portrait-control'){
+   if(req.method==='POST'){let text='';for await(const c of req)text+=c;const control=JSON.parse(text);batchDelay=control.delay??0;batchFail=control.fail??false;if(control.reset){round=null;bufferedDecisions=[];batchSaves=0;}}
+   return json(res,{batchSaves,ratings:bufferedDecisions.filter(x=>x.score!==null).length,decisions:bufferedDecisions.length});
+  }
+  if(url.pathname==='/api/taste-test/batch'){
+   const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');
+   if(req.method==='POST'){let text='';for await(const c of req)text+=c;const input=JSON.parse(text);batchSaves++;if(batchDelay)await new Promise(r=>setTimeout(r,batchDelay));if(batchFail){batchFail=false;return json(res,{},503);}
+    for(const d of input.decisions)if(!bufferedDecisions.some(x=>x.workId===d.workId))bufferedDecisions.push(d);
+    round.ratedCount=bufferedDecisions.filter(x=>x.score!==null).length;round.complete=round.ratedCount>=round.goal;
+    return json(res,{state:{round,currentWorkId:null,exhausted:false}});
+   }
+   const language=url.searchParams.get('locale')??'nl';
+   return json(res,{authenticated:mode!=='guest',available:true,owner:'synthetic-reader-a',state:{round,currentWorkId:null,exhausted:false},decided:bufferedDecisions,books:f.books.filter(b=>!bufferedDecisions.some(d=>d.workId===b.workId)).map(b=>({...b,editionAvailable:true,strictEditionLanguage:language,editionLanguage:language==='nl'?'nld':'eng'}))});
+  }
+  if(url.pathname==='/api/taste-test/candidates'){const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');const language=url.searchParams.get('locale')??'nl';return json(res,{results:f.books.slice(10).map(b=>({...b,editionAvailable:true,strictEditionLanguage:language,editionLanguage:language==='nl'?'nld':'eng'}))});}
   if(url.pathname==='/api/taste-test/rounds'){
    const f=await vite.ssrLoadModule('/test-support/reading-profile/fixture.ts');
    if(req.method==='POST'){let text='';for await(const chunk of req){text+=chunk;if(text.length>2048)return json(res,{},413);}const action=JSON.parse(text);

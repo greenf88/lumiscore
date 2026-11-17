@@ -17,8 +17,8 @@ export async function GET(request:Request) {
   if(error)throw error;
   if(!Array.isArray(data)||data.length>20)throw new Error('Invalid candidate window');
   const ids=data.map((r:{work_id:number|string})=>String(r.work_id));
-  const {loadCatalogBooksByIdsWithStoredCovers}=await import('@/lib/supabase/books');
-  const books=await loadCatalogBooksByIdsWithStoredCovers(ids,undefined,locale);
+  const {loadCatalogBooksByIds}=await import('@/lib/supabase/books');
+  const books=await loadCatalogBooksByIds(ids,undefined,locale);
   return json({results:books,language:locale});
  } catch {return json({error:'Taste search unavailable.',results:[]},503);}
 }

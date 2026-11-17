@@ -17,6 +17,7 @@ import {
   type CoverPresentation,
 } from '@/lib/books/covers';
 import { watchCoverImage } from '@/lib/books/cover-image-watch';
+import { loadExactEditionCovers } from '@/lib/books/edition-cover-client';
 import {
   getBookCoverIdentity,
   getInitialBookCoverUrls,
@@ -158,13 +159,13 @@ function BookCoverForIdentity({
 
   const requestResolvedCovers = useCallback(() => {
     if (
-        !resolveMissing || book.strictEditionLanguage ||
+        !resolveMissing ||
       resolvedRequested.current ||
       (!book.openLibraryWorkId && !book.isbn13)
     ) return;
 
     resolvedRequested.current = true;
-    void loadResolvedCovers(book).then((resolvedUrls) => {
+    void (book.strictEditionLanguage ? loadExactEditionCovers(book) : loadResolvedCovers(book)).then((resolvedUrls) => {
       setCoverUrls((currentUrls) => [
         ...new Set([...currentUrls, ...resolvedUrls]),
       ]);
