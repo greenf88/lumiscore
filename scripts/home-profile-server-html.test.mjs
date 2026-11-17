@@ -7,7 +7,7 @@ for(const locale of ['nl','en']){
  for(const mode of ['five','guest','error'])test(`${locale}: taste result streams initial private HTML ${mode}`,{skip:!origin},async()=>{
   const response=await fetch(`${origin}/${locale}/taste-test/result?review=${mode}`),html=await response.text();
   assert.equal(response.status,200);assert.match(response.headers.get('cache-control'),/private.*no-store/);assert.match(html,/noindex/);
-  if(mode==='five'){assert.match(html,/taste-profile-leading/);assert.match(html,/Een nieuwe horizon 11/);assert.doesNotMatch(html,/Content traits are available|inhoudelijke kenmerken beschikbaar/);}
+  if(mode==='five'){assert.match(html,/taste-profile-bars/);assert.match(html,/Een nieuwe horizon 11/);assert.doesNotMatch(html,/Content traits are available|inhoudelijke kenmerken beschikbaar/);}
   if(mode==='guest'){assert.match(html,locale==='nl'?/Meld je aan/:/Sign in to use/);assert.doesNotMatch(html,/Een nieuwe horizon 11/);}
   if(mode==='error')assert.match(html,locale==='nl'?/Je resultaat kon niet laden/:/Your result could not load/);
  });
