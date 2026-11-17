@@ -10,6 +10,7 @@ import { EditionPresentationLabel } from './EditionPresentationLabel';
 import { BookCover } from './LumiScoreHome';
 import { LocaleLink, useLumiScoreLocale } from './LumiScoreLocale';
 import { measureTasteResultViewOnce } from '@/lib/product-metrics/browser';
+import { TasteProfileSummary } from './TasteProfileSummary';
 
 export function GuestRatingTasteTest({ offers, authState }: { offers: GuestOffer[] | null; authState: HeaderAuthState }) {
   const { locale, t } = useLumiScoreLocale();
@@ -39,7 +40,9 @@ export function GuestRatingTasteTest({ offers, authState }: { offers: GuestOffer
         <p>{t('directTaste.unavailable')}</p>
         <button type="button" onClick={() => window.location.reload()}>{t('guestTaste.retry')}</button>
       </div> : result && confidence ? <div className="taste-results">
-        <p className="taste-result-summary">{result.summary}</p>
+        <TasteProfileSummary profile={result} headingId="guest-taste-profile" level={2} anchors={ratings.filter(x=>x.rating>=7).sort((a,b)=>b.rating-a.rating||Number(a.workId)-Number(b.workId)).slice(0,3).flatMap(row=>{
+          const rated=offers?.find(x=>x.book.workId===row.workId);return rated?[{workId:row.workId,title:rated.book.title,rating:row.rating}]:[];
+        })} />
         <div className="taste-confidence"><strong>{confidence.label}</strong><span>{confidence.description}</span></div>
         <p>{t('guestTaste.localOnly')}</p>
         <LocaleLink href="/browse">{t('taste.backToBooks')}</LocaleLink>

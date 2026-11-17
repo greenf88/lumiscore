@@ -10,7 +10,6 @@ import { DiscoveryPageShell } from './DiscoveryPageShell';
 import { BookCard, recommendationMatchLabel } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
 import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
-import { hasSupportedTasteSummary } from '@/lib/taste-test/result-presentation';
 import {RecommendationMeasurement} from './RecommendationMeasurement';
 import {emitBrowserMetric} from '@/lib/product-metrics/browser';
 import {useRef} from 'react';
@@ -45,15 +44,13 @@ export function TasteResultContent({result}: {result:Extract<RatingResult,{kind:
   useEffect(() => { if (!measured.current) { measured.current = true; emitBrowserMetric('taste_result_opened', {locale,surface:'taste_result'}); } }, [locale]);
   const books=useMemo(()=>result.recommendations.length ? result.recommendations.map(x=>x.book) : EMPTY_BOOKS,[result.recommendations]);
   const {wanted,statuses,toggleWanted}=useWantToRead(true,books);
-  const hasSummary=hasSupportedTasteSummary(profile);
   return <section className="featured-section taste-result" aria-labelledby="taste-result-title">
-    {hasSummary ? <><TasteProfileSummary profile={profile} headingId="taste-result-title" />
-      <h2>{nl?'Boeken voor jou':'Books for you'}</h2></>
-      : <h1 id="taste-result-title">{nl?'Meer boeken voor jou':'More books for you'}</h1>}
+    <TasteProfileSummary profile={profile} headingId="taste-result-title" anchors={result.anchors} />
+    <h2>{nl?'Boeken voor jou':'Books for you'}</h2>
     {result.recommendations.length===0 ? <p role="status">{nl?'Nu geen passende boeken beschikbaar.':'No suitable books available right now.'}</p>
-    : <div className="book-grid">{result.recommendations.map((x,index)=><RecommendationMeasurement key={`${locale}:${x.book.workId}`} workId={x.book.workId} locale={locale} surface="taste_result" position={index+1}><BookCard book={x.book}
+    : <div className="book-grid">{result.recommendations.map((x,index)=><RecommendationMeasurement key={`${locale}:${x.book.workId}`} workId={x.book.workId} locale={locale} surface="taste_result" position={index+1}><div className="taste-recommendation"><BookCard book={x.book}
       wanted={wanted.has(getGuestWantedStorageId(x.book))} status={statuses.get(x.book.workId!)} onToggle={toggleWanted}
-      resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} /></RecommendationMeasurement>)}</div>}
+      resolveMissingCover={false} matchLabel={recommendationMatchLabel(x,locale)} detailReturnContext={{kind:'recommendations',path:'/taste-test/result'}} /><p className="taste-recommendation-reason">{x.explanation}</p></div></RecommendationMeasurement>)}</div>}
     <nav aria-label={nl?'Volgende stap':'Next step'} className="taste-next-steps"><LocaleLink href="/taste-test">{nl?'Verfijn je smaak':'Refine your taste'}</LocaleLink></nav>
   </section>;
 }
