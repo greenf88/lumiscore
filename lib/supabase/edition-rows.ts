@@ -1,6 +1,6 @@
 import type {SupabaseClient} from '@supabase/supabase-js';
 import type {StrictEditionRow} from '../books/strict-edition.ts';
-export const EDITION_PRESENTATION_SELECT='id,work_id,title,language,isbn_10,isbn_13,open_library_edition_id,publisher';
+export const EDITION_PRESENTATION_SELECT='id,work_id,title,language,isbn_10,isbn_13,open_library_edition_id,publisher,preferred_for_catalog';
 /** Deterministic REST pagination, shared by catalog and taste. No N+1 per Work. */
 export async function loadEditionRows(client:SupabaseClient,workIds:readonly string[],signal?:AbortSignal,observePage?:(rows:number)=>void):Promise<StrictEditionRow[]>{
   const ids=[...new Set(workIds)];const rows:StrictEditionRow[]=[];
