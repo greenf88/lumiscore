@@ -8,10 +8,18 @@ const read = path => readFileSync(new URL(path, root), 'utf8').replaceAll('\r\n'
 const previous = path => execFileSync('git', ['show', base + ':' + path], {cwd: root, encoding:'utf8'}).replaceAll('\r\n','\n').trimEnd();
 test('production rating/round contracts and shared taste calculation stay unchanged when result ranking evolves', () => {
   for (const path of ['lib/taste-test/rating-round.ts','lib/taste-test/round-request.ts','lib/taste-test/direct-rating.ts',
-    'lib/recommendations/engine.ts','lib/taste-test/profile.ts',
+    'lib/taste-test/profile.ts',
     'lib/supabase/reader-taste-profile.ts','app/api/ratings/[workId]/route.ts']) {
     assert.equal(read(path), previous(path), path);
   }
+  // The engine's only allowed difference is memoizing unchanged scores within
+  // each selection pass; taste-ranking-equivalence also executes both versions.
+  const engine=read('lib/recommendations/engine.ts')
+    .replace('    // Selection is fixed during this sort. Reuse exact diversity scores rather\n    // than repeating all trait comparisons inside every comparator call.\n    const adjustedScores = new Map(remaining.map(candidate => [candidate, adjusted(candidate)]));\n','')
+    .replace('adjustedScores.get(right)! - adjustedScores.get(left)!','adjusted(right) - adjusted(left)')
+    .replace('adjustedScores.get(dutchCandidate)!','adjusted(dutchCandidate)')
+    .replace('adjustedScores.get(otherCandidate)!','adjusted(otherCandidate)');
+  assert.equal(engine,previous('lib/recommendations/engine.ts'));
   // Ranking is intentionally personalized in the November 17 release and has
   // behavioral coverage in personalized-results.test.ts. Keep the original
   // evidence gate and shared profile calculation frozen independently of it.

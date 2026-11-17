@@ -41,10 +41,21 @@ export async function loadRecommendationCatalog(
   ])].map(Number).filter((id) => Number.isSafeInteger(id) && id > 0).sort((a, b) => a - b);
   const batches = Array.from({ length: Math.ceil(ids.length / 200) },
     (_, index) => ids.slice(index * 200, (index + 1) * 200));
+  const readEditions = async () => {
+    const rows: Awaited<ReturnType<typeof loadEditionRows>> = [];
+    // Independent ID batches can overlap; pagination within each batch stays
+    // ordered and complete. Bound concurrency rather than opening every request.
+    for (let start = 0; start < batches.length; start += 4) {
+      const group = await Promise.all(batches.slice(start, start + 4)
+        .map(batch => loadEditionRows(client, batch.map(String))));
+      rows.push(...group.flat());
+    }
+    return rows;
+  };
   const [results, editions] = await Promise.all([
     Promise.all(batches.map((batch) => client.from('works')
       .select(RECOMMENDATION_CATALOG_SELECT).in('id', batch).order('id'))),
-    loadEditionRows(client,ids.map(String)),
+    readEditions(),
   ]);
   const failure = results.find(({ error }) => error);
   if (failure?.error) throw failure.error;
