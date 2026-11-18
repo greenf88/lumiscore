@@ -26,6 +26,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7801",
         "reason": "Compare this regional environmental history with Scott’s account of farming and the earliest states."
+      },
+      {
+        "workId": "7696",
+        "reason": "Broaden this account of damaged farmland with Wilson’s explanation of biodiversity, ecological relationships and conservation."
       }
     ]
   },
@@ -224,6 +228,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9797",
         "reason": "For shorter scares, explore the stories and poems in this anthology edited by R. L. Stine."
+      },
+      {
+        "workId": "8953",
+        "reason": "Older readers seeking more intense supernatural horror can follow Grubbs Grady into the first Demonata novel."
       }
     ]
   },
@@ -830,6 +838,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "10049",
         "reason": "For another picture book about recovering creative confidence, meet Rosie and the inventions she is afraid to share."
+      },
+      {
+        "workId": "8860",
+        "reason": "After Ramon’s story, try a hands-on journal that encourages readers to write and draw from their own experiences."
       }
     ]
   },
@@ -1052,6 +1064,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3771",
         "reason": "For a more specific skill to practise, explore Carnegie’s approach to preparing and delivering a talk with greater confidence."
+      },
+      {
+        "workId": "9765",
+        "reason": "See personal change explored through fiction, as Camille reconsiders routines that have left her dissatisfied."
       }
     ]
   },
@@ -2322,6 +2338,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7434",
         "reason": "Read an artist’s own reflections on art through this illustrated collection of Rivera’s writings from his formative years."
+      },
+      {
+        "workId": "7168",
+        "reason": "Apply these questions about images and power to a collection of Cuban political and cultural posters."
       }
     ]
   },
@@ -2680,6 +2700,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6571",
         "reason": "Explore Claudia Gray’s fiction outside Star Wars through Bianca and Lucas in the supernatural Evernight series."
+      },
+      {
+        "workId": "8337",
+        "reason": "Follow a later generation of Jedi training as Anakin meets Ahsoka in this novelisation of the animated Clone Wars film."
       }
     ]
   },
@@ -3244,6 +3268,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5050",
         "reason": "Een korter magisch avontuur met een duidelijk doel: Sanne en Eva helpen Nora het plezier van de maandag terug te vinden."
+      },
+      {
+        "workId": "1131",
+        "reason": "Voor lezers die een griezeliger raamverhaal zoeken: ontdek hoe Onnovals verdwijning en verhalen in de griezelbus samenhangen."
       }
     ]
   },
@@ -3314,6 +3342,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5004",
         "reason": "Atwater-Rhodes kiest de blik van een eeuwenoude vampier. Een zwarte roos dwingt Risika terug te kijken op haar menselijke bestaan."
+      },
+      {
+        "workId": "5758",
+        "reason": "Lees een andere paranormale jeugdromance waarin bovennatuurlijke afkomst en gevaar een relatie onder druk zetten; begin daarvoor eerst met Angel."
       }
     ]
   },
@@ -3626,6 +3658,462 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8027",
         "reason": "For a wider view of the same political information crisis, Kakutani examines how rhetoric, media habits and distrust undermine shared facts."
+      },
+      {
+        "workId": "6789",
+        "reason": "For a management perspective on digital systems, compare Wylie’s account of data misuse with Daugherty and Wilson’s framework for human–AI cooperation."
+      }
+    ]
+  },
+  {
+    "workId": "3981",
+    "title": "My Wicked Marquess",
+    "author": "Gaelen Foley",
+    "openLibraryWorkId": "OL5689029W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8770",
+        "reason": "Compare this Regency courtship with a contemporary reunion in which a wealthy former partner and a concealed pregnancy complicate trust."
+      }
+    ]
+  },
+  {
+    "workId": "8770",
+    "title": "Tempestuous Reunion",
+    "author": "Lynne Graham",
+    "openLibraryWorkId": "OL3773976W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3981",
+        "reason": "For another romance shaped by unequal power and withheld information, follow Max and Daphne through Regency courtship and a secret mission."
+      }
+    ]
+  },
+  {
+    "workId": "4220",
+    "title": "Revolution 2020",
+    "author": "Chetan Bhagat",
+    "openLibraryWorkId": "OL16459607W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9180",
+        "reason": "Follow another coming-of-age story shaped by unequal opportunities, moving from ambitions in Varanasi to Darling’s migration from Zimbabwe to America."
+      }
+    ]
+  },
+  {
+    "workId": "9180",
+    "title": "We need new names",
+    "author": "NoViolet Bulawayo",
+    "openLibraryWorkId": "OL16814507W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4220",
+        "reason": "Compare Darling’s search for a future abroad with three friends whose ambitions and loyalties collide in Varanasi."
+      }
+    ]
+  },
+  {
+    "workId": "4706",
+    "title": "The Prisoner of Heaven",
+    "author": "Carlos Ruiz Zafón",
+    "openLibraryWorkId": "OL16708051W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3691",
+        "reason": "Continue with a historical mystery about hidden origins, this time following the daughters of figures from Gothic fiction through Victorian London."
+      }
+    ]
+  },
+  {
+    "workId": "3691",
+    "title": "The strange case of the alchemist's daughter",
+    "author": "Theodora Goss",
+    "openLibraryWorkId": "OL20100879W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4706",
+        "reason": "For another mystery in which the past returns through literary connections, follow Daniel and Fermín in postwar Barcelona."
+      }
+    ]
+  },
+  {
+    "workId": "6789",
+    "title": "Human + machine",
+    "author": "Paul R. Daugherty",
+    "openLibraryWorkId": "OL17993541W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3802",
+        "reason": "Set this framework for human–AI cooperation alongside an insider’s account of personal-data misuse and its political consequences."
+      }
+    ]
+  },
+  {
+    "workId": "7168",
+    "title": "Revolucion!",
+    "author": "Lincoln Cushing",
+    "openLibraryWorkId": "OL8485161W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7033",
+        "reason": "Use Boylan’s introduction to examine how these posters communicate, who their intended viewers are and how images express power."
+      }
+    ]
+  },
+  {
+    "workId": "7696",
+    "title": "The Diversity of Life",
+    "author": "Edward Osborne Wilson",
+    "openLibraryWorkId": "OL1378177W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7611",
+        "reason": "Move from biodiversity and conservation to a focused environmental history of farming, land use and the American Dust Bowl."
+      }
+    ]
+  },
+  {
+    "workId": "8337",
+    "title": "Star Wars: The Clone Wars",
+    "author": "Karen Traviss",
+    "openLibraryWorkId": "OL17449003W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9325",
+        "reason": "Go back to Obi-Wan’s own apprenticeship with Qui-Gon for a different Jedi teacher–student relationship, before the Clone Wars."
+      }
+    ]
+  },
+  {
+    "workId": "8860",
+    "title": "Share Your Smile",
+    "author": "Raina Telgemeier",
+    "openLibraryWorkId": "OL20162318W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9494",
+        "reason": "For younger readers hesitant about drawing, Ramon’s story offers a playful introduction to making pictures without demanding perfection."
+      }
+    ]
+  },
+  {
+    "workId": "9765",
+    "title": "Your second life begins when you realize you only have one",
+    "author": "Raphaëlle Giordano",
+    "openLibraryWorkId": "OL19750130W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7437",
+        "reason": "Explore similar questions about fixed habits and expectations in a nonfiction guide, after following Camille’s fictional journey."
+      }
+    ]
+  },
+  {
+    "workId": "5128",
+    "title": "In weerwil van de woorden",
+    "author": "Dimitri Verhulst",
+    "openLibraryWorkId": "OL44320396W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6119",
+        "reason": "Onderzoek na Pols angst voor letters een andere verhouding tot taal: hoe verhalen worden gemaakt en wie ze mag vertellen."
+      }
+    ]
+  },
+  {
+    "workId": "6119",
+    "title": "De vos",
+    "author": "Dubravka Ugrešić",
+    "openLibraryWorkId": "OL19738179W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5128",
+        "reason": "Lees een kortere, absurdistische roman waarin de verhouding tot taal een persoonlijk probleem wordt: Pol Verholst vreest letters."
+      }
+    ]
+  },
+  {
+    "workId": "5758",
+    "title": "Angel Fire",
+    "author": "Lee Weatherly",
+    "openLibraryWorkId": "OL16471215W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5877",
+        "reason": "Vergelijk Willows strijd en verdeelde loyaliteit met Ever, die haar onsterfelijke geliefde probeert te redden; ook dit is een tweede deel."
+      }
+    ]
+  },
+  {
+    "workId": "1223",
+    "title": "Cruise: A Thriller",
+    "author": "Suzanne Vermeer",
+    "openLibraryWorkId": "OL21609237W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9729",
+        "reason": "Try a classic detective puzzle in which a suspicious death exposes the competing stories of a difficult family, after this modern disappearance at sea."
+      }
+    ]
+  },
+  {
+    "workId": "9729",
+    "title": "Death in the stocks",
+    "author": "Georgette Heyer",
+    "openLibraryWorkId": "OL4092670W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1223",
+        "reason": "Move from Hannasyde’s village investigation to a modern cruise thriller in which a missing husband unsettles everything his wife believes."
+      }
+    ]
+  },
+  {
+    "workId": "1131",
+    "title": "De Griezelbus 7",
+    "author": "Paul van Loon",
+    "openLibraryWorkId": "OL26376875W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6354",
+        "reason": "Voor een minder griezelige raamvertelling: volg een verhalenverteller in Damascus, waar verhalen en prenten kinderen een andere wereld binnenvoeren."
+      }
+    ]
+  },
+  {
+    "workId": "1153",
+    "title": "De meeste mensen deugen",
+    "author": "Rutger Bregman",
+    "openLibraryWorkId": "OL20726133W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "140",
+        "reason": "Onderzoek vertrouwen en samenwerking ook via fictie: Le Guin laat een wetenschapper twee samenlevingen met tegengestelde idealen vergelijken."
+      }
+    ]
+  },
+  {
+    "workId": "140",
+    "title": "De ontheemde",
+    "author": "Ursula K. Le Guin",
+    "openLibraryWorkId": "OL59863W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1153",
+        "reason": "Vergelijk deze fictieve samenlevingen met Bregmans betoog over vertrouwen, samenwerking en ons beeld van de menselijke natuur."
+      }
+    ]
+  },
+  {
+    "workId": "2852",
+    "title": "When she woke",
+    "author": "Hillary Jordan",
+    "openLibraryWorkId": "OL16099610W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2920",
+        "reason": "Compare Hannah’s public punishment with a dystopia for younger readers in which a child learns to question a supposedly protective authority."
+      },
+      {
+        "workId": "2877",
+        "reason": "Follow another woman pushed outside the rules of her society in this YA sequel; read The Book of Ivy before beginning it."
+      }
+    ]
+  },
+  {
+    "workId": "2920",
+    "title": "The other side of the island",
+    "author": "Allegra Goodman",
+    "openLibraryWorkId": "OL445765W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2852",
+        "reason": "For an adult dystopia about enforced conformity, follow Hannah as she confronts a society that marks convictions on people’s skin."
+      }
+    ]
+  },
+  {
+    "workId": "2877",
+    "title": "The revolution of Ivy",
+    "author": "Amy Engel",
+    "openLibraryWorkId": "OL20871448W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2852",
+        "reason": "Compare Ivy’s exile with an adult dystopia in which public punishment makes Hannah an outsider in her own society."
+      }
+    ]
+  },
+  {
+    "workId": "8953",
+    "title": "Demonata #1, The: Lord Loss",
+    "author": "Darren Shan",
+    "openLibraryWorkId": "OL5727066W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4186",
+        "reason": "For a shorter, younger-reader introduction to horror, try Amanda and Josh’s unsettling arrival in Dark Falls."
+      }
+    ]
+  },
+  {
+    "workId": "715",
+    "title": "Wildfire",
+    "author": "Hannah Grace",
+    "openLibraryWorkId": "OL34955908W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2003",
+        "reason": "Follow another contemporary romance built on close proximity and family pressures, as childhood friends leave a failed wedding behind on a road trip."
+      }
+    ]
+  },
+  {
+    "workId": "2003",
+    "title": "Powerless",
+    "author": "Elsie Silver",
+    "openLibraryWorkId": "OL34030756W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "715",
+        "reason": "Compare Jasper and Sloane’s long friendship with a summer-camp reunion between two people who expected their encounter to be brief."
+      }
+    ]
+  },
+  {
+    "workId": "1948",
+    "title": "The Two Gentlemen of Verona",
+    "author": "William Shakespeare",
+    "openLibraryWorkId": "OL362671W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1430",
+        "reason": "Compare Julia’s disguise and divided loyalties with Viola’s disguised role in another Shakespeare comedy of mistaken identity and desire."
+      }
+    ]
+  },
+  {
+    "workId": "1430",
+    "title": "Twelfth Night",
+    "author": "William Shakespeare",
+    "openLibraryWorkId": "OL362694W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1948",
+        "reason": "Explore an earlier Shakespeare comedy in which disguise and romantic rivalry put friendship and loyalty to the test."
+      }
+    ]
+  },
+  {
+    "workId": "183",
+    "title": "Spotgaai",
+    "author": "Suzanne Collins",
+    "openLibraryWorkId": "OL14908941W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "278",
+        "reason": "Ga na Katniss’ strijd terug naar Haymitch als jonge tribuut tijdens de vijftigste Hongerspelen; deze voorgeschiedenis speelt eerder in Panems tijdlijn."
+      }
+    ]
+  },
+  {
+    "workId": "278",
+    "title": "Dageraad boven de boete",
+    "author": "Suzanne Collins",
+    "openLibraryWorkId": "OL43426400W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "183",
+        "reason": "Volg na Haymitch’ voorgeschiedenis hoe het verzet zich in Katniss’ generatie ontwikkelt; Spotgaai is het derde deel van haar trilogie."
+      }
+    ]
+  },
+  {
+    "workId": "2229",
+    "title": "Witte dood",
+    "author": "Robert Galbraith",
+    "openLibraryWorkId": "OL17929558W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2520",
+        "reason": "Wil je een eerdere zaak van Strike en Robin lezen? In dit tweede deel leidt een verdwenen schrijver hen naar een omstreden manuscript."
+      }
+    ]
+  },
+  {
+    "workId": "2520",
+    "title": "Zijderups",
+    "author": "Robert Galbraith",
+    "openLibraryWorkId": "OL17324632W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2229",
+        "reason": "Lees later in de reeks hoe Strike en Robin een oude misdaad onderzoeken; Witte dood is hun vierde zaak, dus er zit nog een deel tussen."
       }
     ]
   }
