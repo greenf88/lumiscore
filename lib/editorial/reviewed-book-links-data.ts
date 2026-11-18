@@ -314,6 +314,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8326",
         "reason": "For a different kind of suspense, follow Jimmy Tock’s attempts to face five foretold days of danger."
+      },
+      {
+        "workId": "4347",
+        "reason": "Stokoe takes extreme horror towards the surreal, following a lonely man’s increasingly grotesque attempt to find an ordinary family life."
       }
     ]
   },
@@ -448,6 +452,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5714",
         "reason": "Vergelijk de veranderingen op het Groningse platteland met de invloed van de textielindustrie op een Gentse woonwijk."
+      },
+      {
+        "workId": "5628",
+        "reason": "Een geïllustreerde stadsgeschiedenis laat zien hoe politieke idealen in Nijmegen uitmondden in actiegroepen en culturele initiatieven."
       }
     ]
   },
@@ -536,6 +544,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8727",
         "reason": "For a fictional contrast to this management guide, explore an assistant’s experience of an exceptionally demanding fashion editor."
+      },
+      {
+        "workId": "6857",
+        "reason": "Lewis adds an international dimension to management, examining how cultural expectations affect communication and decisions."
       }
     ]
   },
@@ -578,6 +590,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3674",
         "reason": "For another perspective on private life under public expectations, consider Morton’s biography of Princess Diana."
+      },
+      {
+        "workId": "4740",
+        "reason": "Sloss offers a different family insider’s account of a public figure, centred on Krishnamurti and her parents’ relationship with him."
       }
     ]
   },
@@ -1076,6 +1092,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9765",
         "reason": "See personal change explored through fiction, as Camille reconsiders routines that have left her dissatisfied."
+      },
+      {
+        "workId": "7418",
+        "reason": "For readers seeking explicitly Christian reflection, this volume approaches trust and reassurance through Scripture and the Footprints poem."
       }
     ]
   },
@@ -1744,6 +1764,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2308",
         "reason": "Read a fictional perspective on Roman public life through Tiro’s account of Cicero’s rise, then compare it with Beard’s historical analysis."
+      },
+      {
+        "workId": "1983",
+        "reason": "Horace’s poems offer a literary perspective on Roman private pleasures and public life alongside Beard’s historical account."
       }
     ]
   },
@@ -1938,6 +1962,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7716",
         "reason": "Explore how questions about children’s development meet practice in Horwath’s study of identifying and assessing neglect."
+      },
+      {
+        "workId": "3913",
+        "reason": "For a focused approach to the earliest years, Montanaro connects Montessori ideas with a young child’s care and surroundings."
       }
     ]
   },
@@ -1956,6 +1984,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5566",
         "reason": "Voor een historische vergelijking met onderwijstheorie: lees hoe Pikkemaat het juridische onderwijs van Viglius van Aytta onderzoekt."
+      },
+      {
+        "workId": "5342",
+        "reason": "Rigters overzicht helpt deze handelingspsychologische benadering te plaatsen naast andere verklaringen van menselijk gedrag."
       }
     ]
   },
@@ -2238,6 +2270,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7643",
         "reason": "Compare this architectural study with a history for younger readers about how the yellow fever epidemic affected Philadelphia in 1793."
+      },
+      {
+        "workId": "4096",
+        "reason": "Zumthor approaches architecture from the experience of materials, light and memory, complementing Colomina’s historical analysis."
       }
     ]
   },
@@ -2358,6 +2394,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7168",
         "reason": "Apply these questions about images and power to a collection of Cuban political and cultural posters."
+      },
+      {
+        "workId": "7798",
+        "reason": "Martin applies questions of representation and truth to performances drawn from real events, testimony and personal memory."
       }
     ]
   },
@@ -2510,6 +2550,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4849",
         "reason": "Compare Bogle’s case for index investing with Thorndike’s study of how individual company leaders allocate capital."
+      },
+      {
+        "workId": "4141",
+        "reason": "Perkins shifts the question from how to invest towards when and why to use money for experiences during a finite life."
       }
     ]
   },
@@ -2998,6 +3042,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3738",
         "reason": "Compare Venkatesh’s close observation of a Chicago gang with Grillo’s reporting on the growth of Mexico’s drug cartels."
+      },
+      {
+        "workId": "4163",
+        "reason": "Yin’s methods guide provides a framework for thinking about case selection, evidence and the reporting of research such as field observations."
       }
     ]
   },
@@ -3096,6 +3144,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1695",
         "reason": "Vergelijk Davids moeite om zich uit te spreken met Boris, die thuis botst en steun zoekt in zijn band."
+      },
+      {
+        "workId": "5958",
+        "reason": "Waar Spijt! pestgedrag op school volgt, onderzoekt Blauwe plekken hoe een kind thuis onveiligheid verbergt en steun leert zoeken."
       }
     ]
   },
@@ -3222,6 +3274,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1037",
         "reason": "Voor een ander verhaal over ambitie en ontsnappen aan je afkomst: Wieringa onderzoekt de invloed van een ondernemende nieuwkomer op een Nederlands dorp."
+      },
+      {
+        "workId": "2020",
+        "reason": "Vuijsje keert de beweging om: een jongeman uit een welgesteld gezin zoekt buiten zijn eigen milieu naar een andere identiteit."
       }
     ]
   },
@@ -3922,6 +3978,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9729",
         "reason": "Try a classic detective puzzle in which a suspicious death exposes the competing stories of a difficult family, after this modern disappearance at sea."
+      },
+      {
+        "workId": "2800",
+        "reason": "A locked psychiatric ward provides a different setting for disappearances and the uncertainty of whom to trust."
       }
     ]
   },
@@ -4526,6 +4586,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2473",
         "reason": "Move from Selina’s family in Brooklyn to a mother and adult son in Beirut, where affection and interference make independence difficult."
+      },
+      {
+        "workId": "9366",
+        "reason": "Clare’s childhood in Jamaica offers a different perspective on Caribbean inheritance and the pressure to accept a family’s version of belonging."
       }
     ]
   },
@@ -4610,6 +4674,434 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8027",
         "reason": "Set this introduction to responsible communication alongside Kakutani’s account of misinformation and the erosion of shared facts."
+      }
+    ]
+  },
+  {
+    "workId": "9481",
+    "title": "The De Santis Marriage",
+    "author": "Michelle Reid",
+    "openLibraryWorkId": "OL4233114W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8404",
+        "reason": "Another romance in which financial pressure leads to a relationship agreement, here a paid engagement rather than marriage."
+      }
+    ]
+  },
+  {
+    "workId": "8404",
+    "title": "Impossible Bargain (Harlequin Presents, No 1125)",
+    "author": "Patricia Wilson",
+    "openLibraryWorkId": "OL8315359W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9481",
+        "reason": "A marriage bargain shaped by money and unequal power offers another version of a relationship begun for practical reasons."
+      }
+    ]
+  },
+  {
+    "workId": "8754",
+    "title": "Passionate Scandal",
+    "author": "Michelle Reid",
+    "openLibraryWorkId": "OL4233148W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8720",
+        "reason": "A concealed decision threatens a marriage in this romance, offering another story about love strained by past choices."
+      }
+    ]
+  },
+  {
+    "workId": "8720",
+    "title": "Except My Love",
+    "author": "Mary Burchell",
+    "openLibraryWorkId": "OL15335027W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8754",
+        "reason": "Former lovers face a broken engagement and family resentment in this other romance about rebuilding trust."
+      }
+    ]
+  },
+  {
+    "workId": "7418",
+    "title": "Footprints",
+    "author": "Margaret Fishback Powers",
+    "openLibraryWorkId": "OL1920675W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7437",
+        "reason": "For another reflective approach to worry and control, this book explores awareness and letting go rather than biblical devotion."
+      }
+    ]
+  },
+  {
+    "workId": "5958",
+    "title": "Blauwe plekken",
+    "author": "Anke De Vries",
+    "openLibraryWorkId": "OL30157271W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1124",
+        "reason": "Ook een jeugdroman over een kind dat onrecht ondergaat en de moeilijke stap van zwijgen naar ingrijpen."
+      }
+    ]
+  },
+  {
+    "workId": "2800",
+    "title": "Ward D",
+    "author": "Freida McFadden",
+    "openLibraryWorkId": "OL42406707W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1223",
+        "reason": "Another thriller built around a disappearance and concealed personal history, moving the uncertainty from a ward to a marriage."
+      }
+    ]
+  },
+  {
+    "workId": "5131",
+    "title": "Revue Lanoye",
+    "author": "Tom Lanoye",
+    "openLibraryWorkId": "OL45258418W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5441",
+        "reason": "Voor historische verdieping bij het politieke debat: Fennema onderzoekt democratie, vertegenwoordiging en populisme."
+      },
+      {
+        "workId": "5159",
+        "reason": "Dit schrijversdagboek toont de wisselwerking tussen publieke aandacht, persoonlijke ervaringen en het culturele leven van binnenuit."
+      }
+    ]
+  },
+  {
+    "workId": "5441",
+    "title": "Van Thomas Jefferson tot Pim Fortuyn",
+    "author": "M. Fennema",
+    "openLibraryWorkId": "OL22742188W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5131",
+        "reason": "Lanoyes polemieken laten zien hoe een schrijver zich mengt in actuele politieke en maatschappelijke discussies."
+      }
+    ]
+  },
+  {
+    "workId": "5159",
+    "title": "Dagboek 1975",
+    "author": "Jan Wolkers",
+    "openLibraryWorkId": "OL22368141W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5131",
+        "reason": "Vergelijk Wolkers’ persoonlijke dagboekaantekeningen met de manier waarop Lanoye als schrijver reageert op het openbare leven."
+      }
+    ]
+  },
+  {
+    "workId": "9366",
+    "title": "Abeng",
+    "author": "Michelle Cliff",
+    "openLibraryWorkId": "OL2736255W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4784",
+        "reason": "Another coming-of-age novel connecting Caribbean family history with race, class and a girl’s search for independence."
+      }
+    ]
+  },
+  {
+    "workId": "5628",
+    "title": "70's in Nijmegen",
+    "author": "Hans Timmermans",
+    "openLibraryWorkId": "OL18629662W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1625",
+        "reason": "Vergelijk de Nijmeegse actiecultuur met Westermans streekgeschiedenis over politieke keuzes en machtsverhoudingen in Groningen."
+      }
+    ]
+  },
+  {
+    "workId": "1859",
+    "title": "Hopscotch",
+    "author": "Julio Cortázar",
+    "openLibraryWorkId": "OL14860424W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1376",
+        "reason": "Another unconventional novel in which intellectual and aesthetic pursuits become entangled with isolation and dissatisfaction."
+      }
+    ]
+  },
+  {
+    "workId": "1376",
+    "title": "Against The Grain",
+    "author": "Joris-Karl Huysmans",
+    "openLibraryWorkId": "OL2239396W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1859",
+        "reason": "Cortázar turns a search for meaning into an experiment with the order of a novel’s chapters, moving between Paris and Buenos Aires."
+      }
+    ]
+  },
+  {
+    "workId": "2020",
+    "title": "Alleen maar nette mensen",
+    "author": "Robert Vuijsje",
+    "openLibraryWorkId": "OL20662980W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6186",
+        "reason": "Ook een roman over Joodse afkomst, klasse en verlangen naar een ander milieu, hier vanuit sociale stijging in Amerika."
+      }
+    ]
+  },
+  {
+    "workId": "3913",
+    "title": "Understanding the Human Being",
+    "author": "Silvana Q. Montanaro",
+    "openLibraryWorkId": "OL8889586W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7783",
+        "reason": "Place this Montessori view of early childhood alongside Miller’s comparison of several major developmental theories."
+      }
+    ]
+  },
+  {
+    "workId": "4163",
+    "title": "Case study research",
+    "author": "Robert K. Yin",
+    "openLibraryWorkId": "OL3918803W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4892",
+        "reason": "This account of sociological fieldwork offers a concrete comparison with questions about observation, evidence and a researcher’s role."
+      }
+    ]
+  },
+  {
+    "workId": "4740",
+    "title": "Lives in the Shadow With J. Krishnamurti",
+    "author": "Radha Rajagopal Sloss",
+    "openLibraryWorkId": "OL4307141W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7610",
+        "reason": "Another memoir in which a family member examines the distance between a celebrated public figure and private relationships."
+      }
+    ]
+  },
+  {
+    "workId": "5342",
+    "title": "Het palet van de psychologie",
+    "author": "Jakop Rigter",
+    "openLibraryWorkId": "OL26191388W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5707",
+        "reason": "Verdiep je in één theoretische traditie: Van Oers werkt de betekenis van handelingspsychologie voor onderwijs en begripsvorming uit."
+      }
+    ]
+  },
+  {
+    "workId": "6857",
+    "title": "When cultures collide",
+    "author": "Richard D. Lewis",
+    "openLibraryWorkId": "OL2977156W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3743",
+        "reason": "For the day-to-day practice of leading a team, Zhuo discusses feedback, trust and difficult conversations alongside this cross-cultural perspective."
+      }
+    ]
+  },
+  {
+    "workId": "2314",
+    "title": "Lexie en pneumonoultramicroscopicsilicovolcanoconiosis",
+    "author": "Kevin Hassing",
+    "openLibraryWorkId": "OL44330659W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1675",
+        "reason": "Voor een uitgebreider toekomstavontuur over zelf durven onderzoeken: Edu twijfelt aan de waarschuwingen over het bos op Venus."
+      }
+    ]
+  },
+  {
+    "workId": "1675",
+    "title": "Torenhoog en mijlen breed",
+    "author": "Tonke Dragt",
+    "openLibraryWorkId": "OL3793469W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2314",
+        "reason": "Een speelser taalavontuur voor jongere lezers, waarin Lexie ondanks haar angst op onderzoek uit moet wanneer haar wens misgaat."
+      }
+    ]
+  },
+  {
+    "workId": "4096",
+    "title": "Thinking Architecture",
+    "author": "Peter Zumthor",
+    "openLibraryWorkId": "OL586802W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7993",
+        "reason": "Colomina offers a historical counterpoint to Zumthor’s reflections, examining how ideas about the body and medical images shaped architecture."
+      }
+    ]
+  },
+  {
+    "workId": "6361",
+    "title": "Het lelietheater",
+    "author": "Lulu Wang",
+    "openLibraryWorkId": "OL850460W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6518",
+        "reason": "Ook een roman waarin een kind door politieke vervolging een ander leven moet aannemen en de gevolgen later blijven doorwerken."
+      }
+    ]
+  },
+  {
+    "workId": "6518",
+    "title": "Parnassia",
+    "author": "Josha Zwaan",
+    "openLibraryWorkId": "OL16804097W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6361",
+        "reason": "Lians jeugd tijdens de Culturele Revolutie biedt een andere historische context voor botsingen tussen afkomst, familie en opgelegde overtuigingen."
+      },
+      {
+        "workId": "6476",
+        "reason": "Bakker onderzoekt afzondering en verzwegen gebeurtenissen vanuit een vrouw die zich terugtrekt in Wales; de aanleiding en vertelwijze verschillen."
+      }
+    ]
+  },
+  {
+    "workId": "6476",
+    "title": "De omweg",
+    "author": "Gerbrand Bakker",
+    "openLibraryWorkId": "OL22625196W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6518",
+        "reason": "Ook een roman over verzwegen ervaringen en de afstand die daardoor binnen persoonlijke relaties ontstaat, hier verbonden met een oorlogsgeschiedenis."
+      }
+    ]
+  },
+  {
+    "workId": "1983",
+    "title": "The Odes and Carmen Saeculare of Horace",
+    "author": "Horace",
+    "openLibraryWorkId": "OL88217W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2433",
+        "reason": "For historical context around the civic world of these poems, Beard examines Roman power, citizenship and society."
+      }
+    ]
+  },
+  {
+    "workId": "4141",
+    "title": "Die with Zero",
+    "author": "Bill Perkins",
+    "openLibraryWorkId": "OL20756743W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2264",
+        "reason": "Compare Perkins’s focus on using resources for experiences with Bogle’s argument about the structure and costs of long-term investing."
+      }
+    ]
+  },
+  {
+    "workId": "4347",
+    "title": "Cows",
+    "author": "Matthew Stokoe",
+    "openLibraryWorkId": "OL5964735W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8713",
+        "reason": "Another extreme horror novel about captivity and desperate attempts to escape violence, with a more direct survival-story structure."
+      }
+    ]
+  },
+  {
+    "workId": "7798",
+    "title": "Theatre Of The Real",
+    "author": "Carol Martin",
+    "openLibraryWorkId": "OL17469834W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7033",
+        "reason": "Boylan provides a broader introduction to how representation and viewers’ assumptions shape the interpretation of what they see."
       }
     ]
   }
