@@ -10,6 +10,8 @@ import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
 import { collectionMetadataDescription, collectionMetadataTitle } from '@/lib/seo/collection-metadata';
 import { collectionPageJsonLd } from '@/lib/seo/collection-json-ld';
 import { breadcrumbJsonLd } from '@/lib/seo/breadcrumb-json-ld';
+import { collectionLanguageAlternates } from '@/lib/seo/collection-locales';
+import { loadCollectionIndexableLocales } from '@/lib/supabase/collection-locales';
 
 type CollectionPageProps = { params: Promise<{ slug: string }> };
 
@@ -19,11 +21,15 @@ const load = cache(async (slug: string,locale:'nl'|'en') => {
   // The loader returns null for a missing collection and throws on data errors.
   // Do not turn a temporary backend failure into a crawler-visible 404.
   const { loadCollectionPageData } = await import('@/lib/supabase/collections');
-  return measureServerOperation(
+  const data = await measureServerOperation(
     'collection.page',
     'mixed',
     () => loadCollectionPageData(slug,locale,true),
   );
+  if (!data) return null;
+  const indexableLocales = await loadCollectionIndexableLocales(data.collection.slug,
+    (data.progressBooks ?? data.books).flatMap(item => item.book.workId ? [item.book.workId] : []));
+  return { ...data, indexableLocales };
 });
 
 export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
@@ -36,6 +42,9 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
     title: guide?.seo_title ?? collectionMetadataTitle(data.collection, locale),
     description: guide?.meta_description ?? collectionMetadataDescription(data.collection, locale),
     canonicalPath: `/collection/${data.collection.slug}`,
+    noIndex: !data.indexableLocales.includes(locale),
+    includeCanonical: data.indexableLocales.includes(locale),
+    alternatePaths: collectionLanguageAlternates(data.collection.slug, data.indexableLocales),
     ...(guide ? {image:'/images/editorial/suzanne-vermeer-nl.png'} : {}),
   });
 }

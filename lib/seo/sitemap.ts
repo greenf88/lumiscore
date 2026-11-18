@@ -9,6 +9,7 @@ import { absoluteLumiScoreUrl } from './site-origin.ts';
 import { editorialTopLists } from '../catalog/top-lists.ts';
 import { bookLanguageAlternates, bookUrlPolicy, type BookLocales } from './book-locales.ts';
 import type { Locale } from '../i18n/config.ts';
+import { collectionLanguageAlternates } from './collection-locales.ts';
 
 export function buildPublicSitemapPaths(
   workIds: readonly string[],
@@ -91,6 +92,7 @@ function sitemapLastModified(path: string, locale: Locale): string {
 export function buildLocalizedSitemap(
   books: readonly BookLocales[], collectionSlugs: readonly string[], shard?: keyof typeof SITEMAP_SHARDS,
   revisions: ReadonlyMap<string, VerifiedPageRevision> = new Map(),
+  collectionLocales?: ReadonlyMap<string, readonly Locale[]>,
 ): string {
   const bookLocales = new Map<string, Set<Locale>>();
   for (const { workId, locales } of books) {
@@ -100,13 +102,15 @@ export function buildLocalizedSitemap(
     bookLocales.set(path, known);
   }
   const entries = buildPublicSitemapPaths(books.map(book => book.workId), collectionSlugs).flatMap(path => {
-    const locales = bookLocales.get(path);
-    if (shard && (shard === 'pages' ? Boolean(locales) : !locales?.has(shard))) return [];
-    const links = locales ? bookLanguageAlternates(path, [...locales]) : languageAlternates(path);
+    const isBook = bookLocales.has(path);
+    const slug = path.startsWith('/collection/') ? decodeURIComponent(path.slice('/collection/'.length)) : null;
+    const locales = bookLocales.get(path) ?? (slug && collectionLocales ? new Set(collectionLocales.get(slug) ?? []) : undefined);
+    if (shard && (shard === 'pages' ? isBook : !isBook || !locales?.has(shard))) return [];
+    const links = locales ? (isBook ? bookLanguageAlternates(path, [...locales]) : collectionLanguageAlternates(slug!, [...locales])) : languageAlternates(path);
     const alternates = Object.entries(links).map(([language, href]) =>
       `<xhtml:link rel="alternate" hreflang="${language}" href="${escapeXml(absoluteLumiScoreUrl(href))}"/>`).join('');
     const priority = path === '/' ? '1.0' : path === '/taste-test' ? '0.8' : path.startsWith('/book/') ? '0.7' : '0.6';
-    return (['en', 'nl'] as const).filter(locale => (!locales || bookUrlPolicy([...locales], locale).inSitemap) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${locales ? verifiedBookLastmod(path,locale,revisions) : sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
+    return (['en', 'nl'] as const).filter(locale => (!locales || bookUrlPolicy([...locales], locale).inSitemap) && (!shard || shard === 'pages' || shard === locale)).map(locale => `<url><loc>${escapeXml(absoluteLumiScoreUrl(localizedHref(path, locale)))}</loc>${isBook ? verifiedBookLastmod(path,locale,revisions) : sitemapLastModified(path, locale)}${alternates}<priority>${priority}</priority></url>`);
   }).join('');
   const newsEntries = !shard || shard === 'pages'
     ? [NEWS_PATH, ...publishedNews.map(article => article.path)].map(path =>

@@ -14,6 +14,18 @@ try{
  // Compile the real home route before the bounded parallel audit; compilation is not metadata latency.
  const warm=await fetch('http://127.0.0.1:'+port+'/en',{signal:AbortSignal.timeout(90000)});assert.equal(warm.status,200);await warm.text();
  const sitemap=(await readSitemapShards('http://127.0.0.1:'+port)).join('');
+ for (const slug of ['synthetic-nl-only', 'synthetic-empty']) for (const locale of ['en', 'nl']) {
+  const path = '/' + locale + '/collection/' + slug;
+  const indexable = slug === 'synthetic-nl-only' && locale === 'nl';
+  const response = await fetch('http://127.0.0.1:' + port + path);
+  assert.equal(response.status, 200, 'Keep existing collection accessible: ' + path);
+  const html = await response.text(), head = html.split('</head>')[0];
+  assert.equal(head.includes('name="robots" content="noindex, follow"'), !indexable, path);
+  assert.equal(head.includes('rel="canonical"'), indexable, path);
+  assert.doesNotMatch(head, /hreflang=/, path);
+  assert.equal(sitemap.includes('<loc>https://lumisco.re' + path + '</loc>'), indexable, path);
+  assert.match(html, /Synthetic series/, path);
+ }
  const article='/nl/nieuws/andy-weir-volgende-boek-geen-project-hail-mary-2';
  for (const path of ['/nl/nieuws', article, '/en'+article.slice(3), '/nl/nieuws/onbekend']) {
   const found = path === '/nl/nieuws' || path === article;
