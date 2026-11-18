@@ -4,6 +4,17 @@ import type { Book } from '../../app/data/books.ts';
 import { rankCatalogSearchResults, reviewedCoauthorSearchKeys } from '../books/catalog-search.ts';
 import { bookAuthorByline, REVIEWED_COAUTHORS } from './reviewed-coauthors.ts';
 
+test('Mismatch credits and finds Mark van Vugt on the verified English paperback', () => {
+  const book: Book = { id: 'work-1787', source: 'supabase', workId: '1787', title: 'Mismatch',
+    author: 'Ronald Giphart', isbn13: '9781472139702', cover: 'orbit', score: null, match: null, ratingsCount: null };
+  const other = { ...book, isbn13: '9781472139719' };
+  assert.equal(bookAuthorByline(book, 'en'), 'Ronald Giphart and Mark van Vugt');
+  assert.equal(bookAuthorByline(other, 'en'), 'Ronald Giphart');
+  assert.equal(bookAuthorByline({ ...book, author: 'Another author' }, 'en'), 'Another author');
+  assert.deepEqual(reviewedCoauthorSearchKeys('Mark van Vugt'), { workIds: [], editionIsbns: ['9781472139702'] });
+  assert.deepEqual(rankCatalogSearchResults([other, book], 'Mark van Vugt'), [book]);
+});
+
 const books: Book[] = [
   { id: 'work-10473', workId: '10473', title: 'Het Waterpark', author: 'Thomas van Grinsven', source: 'supabase', cover: 'orbit', score: null, match: null, ratingsCount: null },
   { id: 'work-10474', workId: '10474', title: 'Ollie & Moos: Opgeruimd staat netjes', author: 'Mark Haayema', source: 'supabase', cover: 'orbit', score: null, match: null, ratingsCount: null },

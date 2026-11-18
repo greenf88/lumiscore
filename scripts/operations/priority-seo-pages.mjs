@@ -593,8 +593,42 @@ export const twentyFourthPrioritySeoPaths = Object.freeze([
   "/nl/book/140",
   "/nl/book/2229"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths, ...nineteenthPrioritySeoPaths, ...twentiethPrioritySeoPaths, ...twentyFirstPrioritySeoPaths, ...twentyThirdPrioritySeoPaths, ...twentyFourthPrioritySeoPaths]);
-export const prioritySeoCohort = path => twentyFourthPrioritySeoPaths.includes(path) ? 'recovery-24'
+// Thirty additional canonical URLs freshly confirmed CNI on 2026-11-18.
+export const twentyFifthPrioritySeoPaths = Object.freeze([
+  "/en/book/1787",
+  "/nl/book/5609",
+  "/nl/book/5984",
+  "/en/book/7709",
+  "/en/book/8139",
+  "/en/book/9914",
+  "/en/book/2473",
+  "/en/book/3066",
+  "/en/book/6995",
+  "/en/book/9115",
+  "/nl/book/3214",
+  "/en/book/2876",
+  "/nl/book/1099",
+  "/en/book/4472",
+  "/nl/book/106",
+  "/nl/book/1306",
+  "/nl/book/1049",
+  "/nl/book/3562",
+  "/nl/book/1894",
+  "/en/book/4784",
+  "/nl/book/36",
+  "/nl/book/2409",
+  "/nl/book/3276",
+  "/nl/book/1181",
+  "/nl/book/6004",
+  "/nl/book/5133",
+  "/nl/book/6327",
+  "/nl/book/96",
+  "/nl/book/2973",
+  "/nl/book/125"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths, ...nineteenthPrioritySeoPaths, ...twentiethPrioritySeoPaths, ...twentyFirstPrioritySeoPaths, ...twentyThirdPrioritySeoPaths, ...twentyFourthPrioritySeoPaths, ...twentyFifthPrioritySeoPaths]);
+export const prioritySeoCohort = path => twentyFifthPrioritySeoPaths.includes(path) ? 'recovery-25'
+  : twentyFourthPrioritySeoPaths.includes(path) ? 'recovery-24'
   : twentyThirdPrioritySeoPaths.includes(path) ? 'recovery-23'
   : twentyFirstPrioritySeoPaths.includes(path) ? 'recovery-21'
   : twentiethPrioritySeoPaths.includes(path) ? 'recovery-20'
@@ -616,7 +650,7 @@ export const prioritySeoCohort = path => twentyFourthPrioritySeoPaths.includes(p
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path) || nineteenthPrioritySeoPaths.includes(path) || twentiethPrioritySeoPaths.includes(path) || twentyFirstPrioritySeoPaths.includes(path) || twentyThirdPrioritySeoPaths.includes(path) || twentyFourthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path) || nineteenthPrioritySeoPaths.includes(path) || twentiethPrioritySeoPaths.includes(path) || twentyFirstPrioritySeoPaths.includes(path) || twentyThirdPrioritySeoPaths.includes(path) || twentyFourthPrioritySeoPaths.includes(path) || twentyFifthPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');

@@ -1,5 +1,5 @@
 // Public book identities and editorial comparisons checked through 2026-11-18.
-// The resolver verifies each source identity before displaying production links.
+// The resolver verifies each source identity and locale before displaying production links.
 export const REVIEWED_BOOK_LINKS = [
   {
     "workId": "7801",
@@ -374,6 +374,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1625",
         "reason": "Lees hoe landbouw en politiek een andere streek vormden: Westerman onderzoekt de Groningse graanboeren en hun omgeving."
+      },
+      {
+        "workId": "5609",
+        "reason": "Ga vanuit deze arbeiderswijk verder terug in de geschiedenis van stedelijk wonen, naar meubels en huisraad uit de Bourgondische tijd."
       }
     ]
   },
@@ -976,6 +980,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "10114",
         "reason": "For an adult novel centred on siblings during societal collapse, follow Nell and Eva in their remote forest home."
+      },
+      {
+        "workId": "3066",
+        "reason": "Explore a different encounter with Earth’s future as Paige’s space mission turns into a journey through catastrophe and unfamiliar time."
       }
     ]
   },
@@ -1532,6 +1540,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5271",
         "reason": "Verbind de vragen over onderzoeksethiek met Lelieveldts praktische gids voor het organiseren en afronden van een promotieonderzoek."
+      },
+      {
+        "workId": "2409",
+        "reason": "Bekijk vragen over bewijs en wetenschappelijke betrouwbaarheid in een concreet vakgebied: Dawkins bespreekt de onderzoeksresultaten achter evolutie."
       }
     ]
   },
@@ -2088,6 +2100,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5923",
         "reason": "Lees een andere roman over gezien worden voorbij een diagnose: Kingsbury vertelt over een autistische jongeman en een vriendschap via muziek."
+      },
+      {
+        "workId": "1181",
+        "reason": "Vergelijk deze roman over geheugenverlies met Hendrik Groens dagboek, waarin ouder worden, zelfstandigheid en vriendschap samenkomen."
       }
     ]
   },
@@ -2476,6 +2492,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3802",
         "reason": "Wylie narrows the focus to a participant’s account of Cambridge Analytica, personal-data profiling and efforts to influence voters."
+      },
+      {
+        "workId": "6783",
+        "reason": "For an applied communication perspective, explore how Freberg connects research and ethical choices with public-relations campaigns."
       }
     ]
   },
@@ -2504,6 +2524,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6687",
         "reason": "Explore a different area of food science: how the senses and surroundings influence the experience of eating."
+      },
+      {
+        "workId": "1787",
+        "reason": "Explore another science-based challenge to everyday assumptions: Giphart and Van Vugt examine how evolved habits meet modern environments."
       }
     ]
   },
@@ -3272,6 +3296,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1131",
         "reason": "Voor lezers die een griezeliger raamverhaal zoeken: ontdek hoe Onnovals verdwijning en verhalen in de griezelbus samenhangen."
+      },
+      {
+        "workId": "96",
+        "reason": "Lees een klassiek kinderboek waarin nieuwsgierigheid naar een afgesloten tuin leidt tot nieuwe contacten en verandering."
       }
     ]
   },
@@ -3630,6 +3658,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3648",
         "reason": "For a nonfiction companion to Beatty’s racial satire, Alexander argues that mass incarceration sustains a racial caste system in the United States."
+      },
+      {
+        "workId": "9914",
+        "reason": "Read another satire that reverses an established social order, as expelled beggars refuse the role officials still need them to play."
       }
     ]
   },
@@ -3690,6 +3722,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3981",
         "reason": "For another romance shaped by unequal power and withheld information, follow Max and Daphne through Regency courtship and a secret mission."
+      },
+      {
+        "workId": "9115",
+        "reason": "Compare that reunion with a workplace romance in which Dinah fears a new colleague wants control of her television series."
       }
     ]
   },
@@ -3960,6 +3996,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2877",
         "reason": "Follow another woman pushed outside the rules of her society in this YA sequel; read The Book of Ivy before beginning it."
+      },
+      {
+        "workId": "2876",
+        "reason": "For another adult dystopia about control over bodies, follow Elisha as inherited debt draws him into a system of contractual servitude."
       }
     ]
   },
@@ -4114,6 +4154,462 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2229",
         "reason": "Lees later in de reeks hoe Strike en Robin een oude misdaad onderzoeken; Witte dood is hun vierde zaak, dus er zit nog een deel tussen."
+      }
+    ]
+  },
+  {
+    "workId": "106",
+    "title": "IT",
+    "author": "Stephen King",
+    "openLibraryWorkId": "OL81613W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1894",
+        "reason": "Vergelijk de terugkeer van jeugdangst in Derry met Eleanors verblijf in een huis waar dreiging en kwetsbaarheid moeilijk te scheiden zijn."
+      }
+    ]
+  },
+  {
+    "workId": "1894",
+    "title": "De geesten van Hill house",
+    "author": "Shirley Jackson",
+    "openLibraryWorkId": "OL3171069W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "106",
+        "reason": "Voor een omvangrijkere horrorroman over angst die blijft doorwerken: volg zeven vrienden die als volwassenen naar Derry terugkeren."
+      }
+    ]
+  },
+  {
+    "workId": "1099",
+    "title": "Het bloemenmeisje",
+    "author": "Anya Niewierra",
+    "openLibraryWorkId": "OL44488387W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2973",
+        "reason": "Lees na Nina’s onderzoek naar haar afkomst een familieroman waarin Ruby via een oude foto op verborgen familiegeschiedenis stuit."
+      }
+    ]
+  },
+  {
+    "workId": "2973",
+    "title": "Ruby",
+    "author": "V.C. Andrews",
+    "openLibraryWorkId": "OL134875W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1099",
+        "reason": "Vergelijk Ruby’s zoektocht naar haar ouders met een thriller waarin twee zussen het onopgeloste verleden van hun moeder onderzoeken."
+      },
+      {
+        "workId": "5133",
+        "reason": "Lees een historische familieroman waarin een tweeling binnen een Antwerpse bankiersfamilie probeert te ontsnappen aan opgelegde verwachtingen."
+      }
+    ]
+  },
+  {
+    "workId": "1306",
+    "title": "In de mist",
+    "author": "Suzanne Vermeer",
+    "openLibraryWorkId": null,
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5984",
+        "reason": "Voor een langere psychologische thriller na dit korte verhaal: volg een teruggetrokken schrijfster die haar herinnering aan een moord probeert te toetsen."
+      }
+    ]
+  },
+  {
+    "workId": "5984",
+    "title": "De val",
+    "author": "Melanie Raabe",
+    "openLibraryWorkId": "OL20231411W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1306",
+        "reason": "Zoek je hierna een kort spanningsverhaal, lees dan hoe een zeiltocht door mist en een botsing omslaat in gevaar."
+      },
+      {
+        "workId": "6327",
+        "reason": "Voor een andere psychologische moordzaak: volg psychiater Charlie Flint terug naar haar oude college in Oxford."
+      }
+    ]
+  },
+  {
+    "workId": "3562",
+    "title": "Levenslijn",
+    "author": "Harlan Coben",
+    "openLibraryWorkId": "OL15673313W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6004",
+        "reason": "Volg na Myrons zoektocht een andere speurder die een verdwijning moet oplossen terwijl zijn privéleven en het onderzoek elkaar raken."
+      }
+    ]
+  },
+  {
+    "workId": "6004",
+    "title": "Verzoendag",
+    "author": "Faye Kellerman",
+    "openLibraryWorkId": "OL462936W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3562",
+        "reason": "Vergelijk Deckers zoektocht naar een verdwenen jongen met Myron Bolitars onderzoek, waarin familiebreuken en verborgen informatie een rol spelen."
+      }
+    ]
+  },
+  {
+    "workId": "1049",
+    "title": "Het smelt",
+    "author": "Lize Spit",
+    "openLibraryWorkId": "OL34323377W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "36",
+        "reason": "Vergelijk Eva’s pijnlijke verhouding tot haar jeugdvrienden met Holdens eenzaamheid en zijn moeite om aansluiting te vinden in New York."
+      }
+    ]
+  },
+  {
+    "workId": "36",
+    "title": "De vanger in het graan",
+    "author": "J. D. Salinger",
+    "openLibraryWorkId": "OL3335245W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1049",
+        "reason": "Lees een donkerder verhaal over opgroeien en uitsluiting, waarin Eva als volwassene terugkeert naar de plek van een beschadigende jeugd."
+      }
+    ]
+  },
+  {
+    "workId": "2409",
+    "title": "Het grootste spektakel ter wereld",
+    "author": "Richard Dawkins",
+    "openLibraryWorkId": "OL1966487W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5438",
+        "reason": "Verdiep je na de voorbeelden van evolutieonderzoek in de vraag hoe wetenschappers betrouwbaar en verantwoord onderzoek behoren te doen."
+      }
+    ]
+  },
+  {
+    "workId": "3276",
+    "title": "De verloren wereld",
+    "author": "Michael Crichton",
+    "openLibraryWorkId": "OL46876W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "125",
+        "reason": "Voor een veel groter uitgewerkte ramp door een ontspoord experiment: volg Amy en een latere gemeenschap die buiten haar veilige muren moet treden."
+      }
+    ]
+  },
+  {
+    "workId": "125",
+    "title": "De oversteek",
+    "author": "Justin Cronin",
+    "openLibraryWorkId": "OL15168588W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3276",
+        "reason": "Lees een compacter avontuur waarin de gevolgen van genetische experimenten voortleven op een eiland met dinosauriërs."
+      }
+    ]
+  },
+  {
+    "workId": "1181",
+    "title": "Zolang er leven is",
+    "author": "Hendrik Groen",
+    "openLibraryWorkId": "OL19740472W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3016",
+        "reason": "Lees een andere benadering van het verliezen van zelfstandigheid: een roman die het perspectief volgt van een vrouw met vroege alzheimer."
+      }
+    ]
+  },
+  {
+    "workId": "5609",
+    "title": "Huusraet",
+    "author": "B. Dubbe",
+    "openLibraryWorkId": "OL32806190W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5714",
+        "reason": "Vergelijk het materiële leven in middeleeuwse stadshuizen met een latere stedelijke leefwereld: de Gentse arbeiderswijk Rabot."
+      }
+    ]
+  },
+  {
+    "workId": "5133",
+    "title": "De wonderen",
+    "author": "Jeroen Olyslaegers",
+    "openLibraryWorkId": "OL44702832W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2973",
+        "reason": "Vergelijk de opgelegde verwachtingen van een Antwerpse bankiersfamilie met Ruby’s zoektocht naar erkenning binnen een onbekende familie."
+      }
+    ]
+  },
+  {
+    "workId": "6327",
+    "title": "Blinde obsessie",
+    "author": "Val McDermid",
+    "openLibraryWorkId": "OL17297952W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5984",
+        "reason": "Vergelijk Charlies onderzoek naar een moord in Oxford met een schrijfster die zelf een verdachte probeert te ontmaskeren op basis van een oude herinnering."
+      }
+    ]
+  },
+  {
+    "workId": "96",
+    "title": "De geheime tuin",
+    "author": "Frances Hodgson Burnett",
+    "openLibraryWorkId": "OL69612W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6354",
+        "reason": "Ontdek na Mary’s verborgen tuin een verhaal waarin een verhalenverteller en zijn prenten kinderen een andere wereld binnenleiden."
+      }
+    ]
+  },
+  {
+    "workId": "1787",
+    "title": "Mismatch",
+    "author": "Ronald Giphart",
+    "openLibraryWorkId": "OL21616033W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7627",
+        "reason": "Compare this evolutionary account of behaviour with Tim Spector’s examination of common assumptions about food and nutrition."
+      }
+    ]
+  },
+  {
+    "workId": "7709",
+    "title": "People & Places (World of Wonder)",
+    "author": "Laurie Triefeldt",
+    "openLibraryWorkId": "OL9850946W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6995",
+        "reason": "For a focused introduction to one historical figure, try this short biography of Martin Luther King Jr., written for B1 learners of English."
+      }
+    ]
+  },
+  {
+    "workId": "6995",
+    "title": "Martin Luther King",
+    "author": "Alan C. McLean",
+    "openLibraryWorkId": "OL5900189W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7709",
+        "reason": "After this focused biography, browse illustrated introductions to other people, places and historical topics in World of Wonder."
+      }
+    ]
+  },
+  {
+    "workId": "8139",
+    "title": "The Practice of Dream Healing",
+    "author": "Edward Tick",
+    "openLibraryWorkId": "OL4815742W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4472",
+        "reason": "Compare Tick’s nonfiction exploration of Greek dream traditions with a spiritual adventure novel built around a manuscript discovered in Peru."
+      }
+    ]
+  },
+  {
+    "workId": "4472",
+    "title": "The Celestine Prophecy",
+    "author": "James Redfield",
+    "openLibraryWorkId": "OL53168W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8139",
+        "reason": "For a nonfiction perspective on spiritual experience, explore Tick’s account of ancient Greek dream rituals and their interpretation."
+      }
+    ]
+  },
+  {
+    "workId": "9914",
+    "title": "The Beggars' Strike",
+    "author": "Aminata Sow Fall",
+    "openLibraryWorkId": "OL3075656W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8771",
+        "reason": "Compare Sow Fall’s satire of exclusion and official hypocrisy with Paul Beatty’s provocative satire of race and segregation in contemporary America."
+      }
+    ]
+  },
+  {
+    "workId": "2473",
+    "title": "The True True Story of Raja the Gullible (and His Mother)",
+    "author": "Rabih Alameddine",
+    "openLibraryWorkId": "OL44257696W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4784",
+        "reason": "Compare Raja’s struggle for privacy within his family with Selina’s coming of age between her parents’ conflicting ambitions in Brooklyn."
+      }
+    ]
+  },
+  {
+    "workId": "4784",
+    "title": "Brown girl, brownstones",
+    "author": "Paule Marshall",
+    "openLibraryWorkId": "OL15829612W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2473",
+        "reason": "Move from Selina’s family in Brooklyn to a mother and adult son in Beirut, where affection and interference make independence difficult."
+      }
+    ]
+  },
+  {
+    "workId": "3066",
+    "title": "The Starlight Crystal",
+    "author": "Christopher Pike",
+    "openLibraryWorkId": "OL1000803W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2898",
+        "reason": "Try another young-adult science-fiction story about a damaged Earth and an uncertain future, told from a teenager’s perspective."
+      }
+    ]
+  },
+  {
+    "workId": "9115",
+    "title": "Love Games",
+    "author": "Charlotte Lamb",
+    "openLibraryWorkId": "OL11277328W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8770",
+        "reason": "For another romance shaped by mistrust and an unequal balance of power, follow a reunion complicated by a concealed pregnancy."
+      }
+    ]
+  },
+  {
+    "workId": "2876",
+    "title": "Docile",
+    "author": "K. M. Szpara",
+    "openLibraryWorkId": "OL20755817W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2852",
+        "reason": "Compare this adult dystopia about debt and coercion with a society that makes punishment visible on people’s skin, forcing Hannah outside its rules."
+      }
+    ]
+  },
+  {
+    "workId": "3214",
+    "title": "Wie Begrijpt Ooit Wat?",
+    "author": "Jeroen Brouwers",
+    "openLibraryWorkId": "OL702818W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1066",
+        "reason": "Lees naast deze korte uitspraken een roman van Brouwers waarin herinnering, schuld en de dood van een moeder nauw verweven zijn."
+      }
+    ]
+  },
+  {
+    "workId": "1066",
+    "title": "Bezonken rood",
+    "author": "Jeroen Brouwers",
+    "openLibraryWorkId": "OL702827W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3214",
+        "reason": "Maak na de roman kennis met Brouwers’ polemische stem in deze door Gerd de Ley verzamelde uitspraken over literatuur en het leven."
+      }
+    ]
+  },
+  {
+    "workId": "6783",
+    "title": "Discovering Public Relations",
+    "author": "Karen Freberg",
+    "openLibraryWorkId": "OL22004789W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8027",
+        "reason": "Set this introduction to responsible communication alongside Kakutani’s account of misinformation and the erosion of shared facts."
       }
     ]
   }

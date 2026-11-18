@@ -39,14 +39,26 @@ test('each comparison stays within the same language and links to a distinct rev
   for(const entry of REVIEWED_BOOK_LINKS){
     assert.ok(entry.links.length>0 && entry.links.length<=3);
     for(const link of entry.links){
-      const target=REVIEWED_BOOK_LINKS.find(e=>e.workId===link.workId);
+      const target=REVIEWED_BOOK_LINKS.find(e=>e.workId===link.workId && e.language===entry.language);
       assert.ok(target);
       assert.equal(target.language,entry.language);
       assert.notEqual(target.workId,entry.workId);
-      const key=entry.workId+'>'+target.workId;
+      const key=entry.language+':'+entry.workId+'>'+target.workId;
       assert.ok(!seen.has(key));seen.add(key);
     }
   }
+});
+
+test('Hill House keeps independent Dutch and English reading suggestions', () => {
+  const base: Book = { ...english, id: 'work-1894', workId: '1894', author: 'Shirley Jackson', openLibraryWorkId: 'OL3171069W' };
+  const nl = { ...base, editionTitle: 'De geesten van Hill house', editionLanguage: 'nld', strictEditionLanguage: 'nl' as const };
+  const en = { ...base, editionTitle: 'The Haunting of Hill House' };
+  assert.deepEqual(reviewedBookLinks(nl, 'nl').map(l => l.href), ['/book/106']);
+  const enLinks = reviewedBookLinks(en, 'en');
+  assert.equal(enLinks.length, 2);
+  assert.ok(enLinks.every(l => l.href !== '/book/106'));
+  assert.deepEqual(reviewedBookLinks(nl, 'en'), []);
+  assert.deepEqual(reviewedBookLinks(en, 'nl'), []);
 });
 
 test('the book page renders visible, localized reading links with context in server HTML', async () => {

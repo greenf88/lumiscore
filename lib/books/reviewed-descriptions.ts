@@ -25,6 +25,7 @@ import { TWENTY_FIRST_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-reco
 import { TWENTY_SECOND_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery22.ts';
 import { TWENTY_THIRD_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery23.ts';
 import { TWENTY_FOURTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery24.ts';
+import { TWENTY_FIFTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery25.ts';
 import { GSC_PRIORITY_DESCRIPTIONS } from './reviewed-descriptions-gsc-priorities.ts';
 
 /** Own short summaries, reviewed against an exact edition and named primary source. */
@@ -95,7 +96,7 @@ export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [...GSC_PRIO
   sourceName:'Workman Publishing — Spring 2011 catalog, page 94',
   sourceUrl:'https://edelweiss-assets.abovethetreeline.com/WN/pdfs/Workman_Spring2011.pdf',
   text:'Christopher Tennant presents the habits of the extremely wealthy through a humorous guide to their social world. Household staff, impressive homes, personal appearance and the rules of exclusive circles all become subjects for advice delivered with a straight face. The book considers such distinctions as the roles of a butler and a majordomo, alongside the etiquette of naming houses and making the right impression. Its handbook format turns the pursuit of status into a comic examination of the choices and customs surrounding extravagant wealth.',
-}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS, ...FIFTH_RECOVERY_DESCRIPTIONS, ...SIXTH_RECOVERY_DESCRIPTIONS, ...SEVENTH_RECOVERY_DESCRIPTIONS, ...EIGHTH_RECOVERY_DESCRIPTIONS, ...NINTH_RECOVERY_DESCRIPTIONS, ...TENTH_RECOVERY_DESCRIPTIONS, ...ELEVENTH_RECOVERY_DESCRIPTIONS, ...TWELFTH_RECOVERY_DESCRIPTIONS, ...THIRTEENTH_RECOVERY_DESCRIPTIONS, ...FOURTEENTH_RECOVERY_DESCRIPTIONS, ...FIFTEENTH_RECOVERY_DESCRIPTIONS, ...SIXTEENTH_RECOVERY_DESCRIPTIONS, ...SEVENTEENTH_RECOVERY_DESCRIPTIONS, ...EIGHTEENTH_RECOVERY_DESCRIPTIONS, ...NINETEENTH_RECOVERY_DESCRIPTIONS, ...TWENTIETH_RECOVERY_DESCRIPTIONS, ...TWENTY_FIRST_RECOVERY_DESCRIPTIONS, ...TWENTY_SECOND_RECOVERY_DESCRIPTIONS, ...TWENTY_THIRD_RECOVERY_DESCRIPTIONS, ...TWENTY_FOURTH_RECOVERY_DESCRIPTIONS];
+}, ...SECOND_RECOVERY_DESCRIPTIONS, ...THIRD_RECOVERY_DESCRIPTIONS, ...FOURTH_RECOVERY_DESCRIPTIONS, ...FIFTH_RECOVERY_DESCRIPTIONS, ...SIXTH_RECOVERY_DESCRIPTIONS, ...SEVENTH_RECOVERY_DESCRIPTIONS, ...EIGHTH_RECOVERY_DESCRIPTIONS, ...NINTH_RECOVERY_DESCRIPTIONS, ...TENTH_RECOVERY_DESCRIPTIONS, ...ELEVENTH_RECOVERY_DESCRIPTIONS, ...TWELFTH_RECOVERY_DESCRIPTIONS, ...THIRTEENTH_RECOVERY_DESCRIPTIONS, ...FOURTEENTH_RECOVERY_DESCRIPTIONS, ...FIFTEENTH_RECOVERY_DESCRIPTIONS, ...SIXTEENTH_RECOVERY_DESCRIPTIONS, ...SEVENTEENTH_RECOVERY_DESCRIPTIONS, ...EIGHTEENTH_RECOVERY_DESCRIPTIONS, ...NINETEENTH_RECOVERY_DESCRIPTIONS, ...TWENTIETH_RECOVERY_DESCRIPTIONS, ...TWENTY_FIRST_RECOVERY_DESCRIPTIONS, ...TWENTY_SECOND_RECOVERY_DESCRIPTIONS, ...TWENTY_THIRD_RECOVERY_DESCRIPTIONS, ...TWENTY_FOURTH_RECOVERY_DESCRIPTIONS, ...TWENTY_FIFTH_RECOVERY_DESCRIPTIONS];
 
 export function reviewedDescriptionSource(sourceKey: string, source?: VerifiedBookDescription['source']): { name: string; href: string } | null {
   const entry = REVIEWED_DESCRIPTIONS.find(row => row.isbn13 === sourceKey &&
