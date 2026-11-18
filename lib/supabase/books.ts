@@ -149,6 +149,7 @@ function strictEditions(rows:DatabaseRow[]):StrictEditionRow[]{
     id,work_id:readString(row,WORK_ID_COLUMNS)??undefined,title:readString(row,['title']),language:readString(row,['language','language_code']),
     isbn_10:readString(row,['isbn_10','isbn10']),isbn_13:readIsbn13(row),publisher:readString(row,['publisher']),
     open_library_edition_id:readOpenLibraryId(row,OPEN_LIBRARY_EDITION_ID_COLUMNS,'edition'),
+    preferred_for_catalog:row.preferred_for_catalog===true,
   }]:[];});
 }
 

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'vite';
 import {fileURLToPath} from 'node:url';
+import {readFileSync} from 'node:fs';
 import {capturedWorks,reviewedProposalWorks,sourceEditions} from '../test-support/edition-presentation/cases.ts';
 test('actual catalog/search/detail loaders share NL/EN edition identity, locale changes and neutral cover fallback',async t=>{
  const root=fileURLToPath(new URL('../',import.meta.url)),marker='__editionPresentationTransport';
@@ -30,5 +31,21 @@ test('actual catalog/search/detail loaders share NL/EN edition identity, locale 
   assert.equal((await books.loadCatalogBook('1410','nl')).editionAvailable,false,'only after separate metadata correction; no runtime per-book exception');
   assert.ok(fixture.queries.every(table=>['works','editions','authors','catalog_work_descriptions','catalog_edition_metadata'].includes(table)),'no ratings/status/Auth writes or queries');
   assert.ok(fixture.sourceCalls<=3,'batched and cached, no per-Work metadata request waterfall');
+  // Exercise the real raw-row adapter, not only selectStrictEdition: dropping
+  // the reviewed flag here silently restores the previous missing-cover edition.
+  const proposal=JSON.parse(readFileSync(new URL('../catalog/remaining-covers-20261117/proposal.json',import.meta.url),'utf8'));
+  for(const locale of ['nl','en']){
+   const expected=proposal.filter(r=>r.locale===locale);
+   fixture.rows=expected.map((r,i)=>({id:r.workId,title:r.workTitle,author_id:r.authorId,authors:{id:r.authorId,name:r.author},open_library_id:r.workOlid,
+    editions:[{...r.oldEdition,preferred_for_catalog:false},{id:20000+i,work_id:r.workId,title:r.title,language:r.language,isbn_13:r.isbn13,isbn_10:r.isbn10,publisher:r.publisher,open_library_edition_id:r.openLibraryEditionId,preferred_for_catalog:true}]}));
+   const mapped=books.mapCatalogWorks(fixture.rows,locale);assert.equal(mapped.length,expected.length);
+   for(const [i,r]of expected.entries())assert.equal(mapped[i].editionId,String(20000+i),r.title);
+   for(let start=0;start<expected.length;start+=100){
+    const batch=expected.slice(start,start+100),loaded=await books.loadCatalogBooksByIds(batch.map(r=>String(r.workId)),undefined,locale);
+    for(const r of batch){const b=loaded.find(b=>b.workId===String(r.workId));assert.ok(b,r.title);assert.equal(b.editionTitle,r.title.trim());assert.equal(b.isbn13,r.isbn13);assert.ok(b.coverUrls.includes(r.coverUrl),r.title);}
+   }
+   const r=expected[0],detail=await books.loadCatalogBook(String(r.workId),locale);
+   assert.equal(detail.editionId,'20000');assert.ok(detail.coverUrls.includes(r.coverUrl),r.title);
+  }
  }finally{await vite.close();delete globalThis[marker];}
 });
