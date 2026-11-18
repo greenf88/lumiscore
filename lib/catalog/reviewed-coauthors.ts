@@ -13,6 +13,11 @@ type ReviewedCoauthor = {
 
 export const REVIEWED_COAUTHORS: readonly ReviewedCoauthor[] = [
   {
+    primaryAuthor: 'Ronald Giphart', isbn: '9781472139702',
+    name: 'Mark van Vugt', slug: 'mark-van-vugt',
+    source: 'https://www.hachette.co.uk/titles/ronald-giphart-2/mismatch/9781472139702/',
+  },
+  {
     workId: '10473', primaryAuthor: 'Thomas van Grinsven', isbn: '9789030511731',
     name: 'Rutger Vink', slug: 'rutger-vink',
     source: 'https://metadata.isbn.nl/2095854/de-avonturen-van-rutger-thomas-en-paco.html',
