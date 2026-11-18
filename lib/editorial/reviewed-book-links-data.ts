@@ -240,6 +240,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8953",
         "reason": "Older readers seeking more intense supernatural horror can follow Grubbs Grady into the first Demonata novel."
+      },
+      {
+        "workId": "8865",
+        "reason": "Move from a sinister house to Slappy’s encounter with a second living dummy in another Goosebumps story."
       }
     ]
   },
@@ -556,6 +560,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6857",
         "reason": "Lewis adds an international dimension to management, examining how cultural expectations affect communication and decisions."
+      },
+      {
+        "workId": "7498",
+        "reason": "Explore Schein’s focused account of asking questions and building trust across differences in workplace status."
       }
     ]
   },
@@ -1426,6 +1434,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7855",
         "reason": "Extend the question of power into contemporary art with Fisher’s study of resistance from within the systems artists depend on."
+      },
+      {
+        "workId": "3584",
+        "reason": "Explore gender and power through satire in a society where women hold authority and men are assigned domestic roles."
       }
     ]
   },
@@ -1518,6 +1530,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5277",
         "reason": "Vergelijk deze dramatische machtsstrijd met een praktisch boek dat ook de grenzen van aanvaardbare beïnvloeding bespreekt."
+      },
+      {
+        "workId": "5119",
+        "reason": "Lees Lanoyes bewerking van Marlowe voor een ander Engels koningsdrama over machtsstrijd, familie en bedreigde heerschappij."
       }
     ]
   },
@@ -1676,6 +1692,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1503",
         "reason": "Voor een literaire tegenhanger van beïnvloeding en haar grenzen: Shakespeare toont hoe Richard overtuiging en misleiding inzet om macht te verwerven."
+      },
+      {
+        "workId": "1167",
+        "reason": "Vergelijk de invloed van lobbywerk met Luyendijks onderzoek naar de achtergronden van mensen op machtige posities."
       }
     ]
   },
@@ -2062,6 +2082,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2369",
         "reason": "Lees hoe een reis ook terug kan voeren naar de eigen jeugd, in Hofstedes wandelingen op de Sass Songher."
+      },
+      {
+        "workId": "1148",
+        "reason": "Volg Geert Mak tijdens zijn vergelijking van het Amerika van 2010 met Steinbecks reis uit 1960."
       }
     ]
   },
@@ -3192,6 +3216,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5958",
         "reason": "Waar Spijt! pestgedrag op school volgt, onderzoekt Blauwe plekken hoe een kind thuis onveiligheid verbergt en steun leert zoeken."
+      },
+      {
+        "workId": "1684",
+        "reason": "Vergelijk het pesten van Jochem met de discriminatie die Murat bij zijn toneelclub tegenkomt."
       }
     ]
   },
@@ -3776,6 +3804,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8771",
         "reason": "For a fictional and deliberately provocative treatment of race, Beatty uses a neighbourhood’s disappearance and a Supreme Court case as the frame for satire."
+      },
+      {
+        "workId": "8965",
+        "reason": "Explore related questions of incarceration and unequal treatment through a legal thriller about a prisoner maintaining his innocence."
       }
     ]
   },
@@ -4516,6 +4548,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5984",
         "reason": "Vergelijk Charlies onderzoek naar een moord in Oxford met een schrijfster die zelf een verdachte probeert te ontmaskeren op basis van een oude herinnering."
+      },
+      {
+        "workId": "3166",
+        "reason": "Vergelijk Charlies onderzoek met een korte thriller waarin een succesvolle schrijfster door haar dominante ex wordt bedreigd."
       }
     ]
   },
@@ -5036,6 +5072,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5718",
         "reason": "Bekijk hoe een afgebakend maatschappelijk onderwerp wordt onderzocht in deze bundel over seksuele gezondheid en zorggebruik."
+      },
+      {
+        "workId": "5508",
+        "reason": "Verdiep je in een specifieke historische benadering via Stemerdings boek over lichaam, spanning en psychotherapie."
       }
     ]
   },
@@ -5150,6 +5190,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6518",
         "reason": "Ook een roman over verzwegen ervaringen en de afstand die daardoor binnen persoonlijke relaties ontstaat, hier verbonden met een oorlogsgeschiedenis."
+      },
+      {
+        "workId": "6191",
+        "reason": "Vergelijk deze terugtrekking met Giovanni’s keuze voor poëzie en zijn blijvende banden met het familiebedrijf."
       }
     ]
   },
@@ -5336,6 +5380,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9941",
         "reason": "For a younger-reader adventure, follow a boy and an engine driver into a fantastical world beyond their island."
+      },
+      {
+        "workId": "8970",
+        "reason": "Follow Drizzt and his companions on a quest where personal loyalties and the recovery of a homeland meet."
       }
     ]
   },
@@ -5498,6 +5546,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4968",
         "reason": "Ook hier raakt een alledaags bestaan ontregeld, nu wanneer een duif de vaste gewoonten van een eenzame bewaker doorbreekt."
+      },
+      {
+        "workId": "6551",
+        "reason": "Vergelijk Maya’s slapeloze bestaan met een pokerprofessional wiens strak geregelde leven door lichamelijke uitputting instort."
       }
     ]
   },
@@ -5734,6 +5786,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8340",
         "reason": "Narrow the focus from Western military history to Britain’s rulers, succession and disputed early traditions."
+      },
+      {
+        "workId": "4150",
+        "reason": "For younger readers, narrow the focus to an illustrated comparison of Washington and George III during the American Revolution."
       }
     ]
   },
@@ -5878,6 +5934,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4096",
         "reason": "Follow this cultural history with an architect’s reflections on the experience of materials, light and space."
+      },
+      {
+        "workId": "7728",
+        "reason": "Explore another way of reading architectural history through essays on urban space, institutions and planning."
       }
     ]
   },
@@ -6036,6 +6096,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3650",
         "reason": "Try a school-centred story about friendship and exclusion, with the Wakefield twins divided over who deserves to belong."
+      },
+      {
+        "workId": "9671",
+        "reason": "Read another novel about isolation and the difficulty of rebuilding a life, following Dolores Price into adulthood."
       }
     ]
   },
@@ -6078,6 +6142,450 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3066",
         "reason": "Compare Harry’s repeated lifetimes with a young space traveller who experiences time differently from the people on Earth."
+      }
+    ]
+  },
+  {
+    "workId": "4560",
+    "title": "Betrayal in Bali",
+    "author": "Sally Wentworth",
+    "openLibraryWorkId": "OL3770466W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9011",
+        "reason": "Compare a marriage arranged for revenge with another relationship whose outward advantages conceal conflicting motives."
+      }
+    ]
+  },
+  {
+    "workId": "9011",
+    "title": "Jake Howard's Wife",
+    "author": "Anne Mather",
+    "openLibraryWorkId": "OL3771277W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4560",
+        "reason": "Read another marriage romance in which discovering a husband’s hidden motives changes the relationship completely."
+      },
+      {
+        "workId": "9036",
+        "reason": "Explore another romance in which an outwardly fortunate marriage conceals emotional distance and mistrust."
+      }
+    ]
+  },
+  {
+    "workId": "8965",
+    "title": "The Guardians",
+    "author": "John Grisham",
+    "openLibraryWorkId": "OL20285172W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2519",
+        "reason": "Compare the effort to reopen a wrongful conviction with Strike’s investigation of a death treated as suicide."
+      },
+      {
+        "workId": "3648",
+        "reason": "Read nonfiction about racial inequality and incarceration alongside this fictional fight against a wrongful conviction."
+      }
+    ]
+  },
+  {
+    "workId": "2519",
+    "title": "The Cuckoo's Calling",
+    "author": "Robert Galbraith",
+    "openLibraryWorkId": "OL16806416W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8965",
+        "reason": "Follow another investigator challenging an accepted account of a death, this time through the fight against a wrongful conviction."
+      }
+    ]
+  },
+  {
+    "workId": "8970",
+    "title": "Streams of Silver",
+    "author": "R. A. Salvatore",
+    "openLibraryWorkId": "OL516753W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9588",
+        "reason": "Try a very different quest: a modern father must navigate a strange fantasy landscape to return to his family."
+      },
+      {
+        "workId": "8905",
+        "reason": "Try another fantasy adventure in which a community’s survival depends on an unlikely defender and wider alliances."
+      }
+    ]
+  },
+  {
+    "workId": "9588",
+    "title": "The Hike",
+    "author": "Drew Magary",
+    "openLibraryWorkId": "OL20035177W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8970",
+        "reason": "Move from Ben’s solitary ordeal to a group of fantasy companions seeking a lost dwarven homeland."
+      }
+    ]
+  },
+  {
+    "workId": "9036",
+    "title": "Dark Pursuit",
+    "author": "Charlotte Lamb",
+    "openLibraryWorkId": "OL11277284W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9011",
+        "reason": "Compare Caitlin’s troubled marriage with Helen and Jake’s struggle to see beyond the roles they expect each other to play."
+      }
+    ]
+  },
+  {
+    "workId": "9108",
+    "title": "Loving",
+    "author": "Penny Jordan",
+    "openLibraryWorkId": "OL11327956W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9524",
+        "reason": "Read another marriage romance in which parenthood brings adults together despite serious misunderstandings."
+      }
+    ]
+  },
+  {
+    "workId": "9524",
+    "title": "The Spaniard's Marriage Bargain",
+    "author": "Abby Green",
+    "openLibraryWorkId": "OL15152632W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9108",
+        "reason": "Compare Rowan’s return to her son with Claire’s attempt to create security for her daughter through a practical marriage."
+      }
+    ]
+  },
+  {
+    "workId": "9300",
+    "title": "Heartland Volume One",
+    "author": "Lauren Brooke",
+    "openLibraryWorkId": "OL5687691W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9403",
+        "reason": "For another young person’s response to family loss, read Phoebe’s memories of her brother Mick."
+      }
+    ]
+  },
+  {
+    "workId": "9403",
+    "title": "Mick Harte was here",
+    "author": "Barbara Park",
+    "openLibraryWorkId": "OL66285W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9300",
+        "reason": "Follow another young person coping with bereavement, this time through caring for horses and continuing a mother’s work."
+      }
+    ]
+  },
+  {
+    "workId": "7728",
+    "title": "The scenes of the street and other essays",
+    "author": "Anthony Vidler",
+    "openLibraryWorkId": "OL16121161W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6913",
+        "reason": "Set these historical analyses of urban space beside Krier’s illustrated proposals for designing communities."
+      },
+      {
+        "workId": "7054",
+        "reason": "Place these essays on European urban ideas beside a chronological study of architecture in the United States."
+      }
+    ]
+  },
+  {
+    "workId": "6913",
+    "title": "The architecture of community",
+    "author": "Léon Krier",
+    "openLibraryWorkId": "OL857950W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7728",
+        "reason": "Explore the history of urban ideas through Vidler’s essays on streets, institutions and utopian planning."
+      }
+    ]
+  },
+  {
+    "workId": "3572",
+    "title": "A Nation of Idiots",
+    "author": "Daksh Tyagi",
+    "openLibraryWorkId": "OL27968141W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7275",
+        "reason": "Compare Tyagi’s social satire with Cottom’s essays on the relationship between personal experience and public inequalities in the United States."
+      }
+    ]
+  },
+  {
+    "workId": "7275",
+    "title": "Thick",
+    "author": "Tressie McMillan Cottom",
+    "openLibraryWorkId": "OL19781746W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3572",
+        "reason": "Try a different form of social commentary: Tyagi uses humour to question everyday contradictions in modern India."
+      }
+    ]
+  },
+  {
+    "workId": "7484",
+    "title": "Introduction to work and organizational behaviour",
+    "author": "John Bratton",
+    "openLibraryWorkId": "OL22316292W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7498",
+        "reason": "Focus on one workplace practice through Schein’s account of curiosity, status and the questions that help build trust."
+      }
+    ]
+  },
+  {
+    "workId": "7498",
+    "title": "Humble inquiry",
+    "author": "Schein, Edgar H.",
+    "openLibraryWorkId": "OL19980772W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7484",
+        "reason": "Place this approach to conversation within a broader study of people, power and behaviour in organisations."
+      },
+      {
+        "workId": "3743",
+        "reason": "Apply questions about trust and listening to the everyday responsibilities of a new manager."
+      }
+    ]
+  },
+  {
+    "workId": "9671",
+    "title": "She's Come Undone",
+    "author": "Wally Lamb",
+    "openLibraryWorkId": "OL1952158W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4465",
+        "reason": "Compare Dolores’s isolation with a novel about a teenager trying to reach a young woman living on the streets."
+      }
+    ]
+  },
+  {
+    "workId": "3166",
+    "title": "Afgunst",
+    "author": "Saskia Noort",
+    "openLibraryWorkId": "OL17203627W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6327",
+        "reason": "Lees een andere thriller waarin verborgen verhoudingen en een verleden dat terugkeert de hoofdpersoon in gevaar brengen."
+      }
+    ]
+  },
+  {
+    "workId": "5352",
+    "title": "Jiujitsu",
+    "author": "Hans-Erik Petermann",
+    "openLibraryWorkId": "OL8947267W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5508",
+        "reason": "Verken naast de vechtsport een andere historische kijk op lichaamsbeweging: Stemerdings uiteenzetting van lichaamsgerichte therapie."
+      }
+    ]
+  },
+  {
+    "workId": "5508",
+    "title": "Groei en evenwicht",
+    "author": "A.H.S. Stemerding",
+    "openLibraryWorkId": "OL24749291W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5352",
+        "reason": "Voor een andere invalshoek op het lichaam en beweging biedt Petermann een geïllustreerde introductie tot jiujitsu."
+      },
+      {
+        "workId": "5342",
+        "reason": "Plaats deze historische lichaamsgerichte benadering naast een overzicht van verschillende psychologische stromingen."
+      }
+    ]
+  },
+  {
+    "workId": "8865",
+    "title": "Slappy's Nightmare",
+    "author": "Robert Lawrence Stine",
+    "openLibraryWorkId": "OL15094768W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4186",
+        "reason": "Try another Goosebumps story that turns something apparently familiar into a threat, this time a family’s new home."
+      }
+    ]
+  },
+  {
+    "workId": "4150",
+    "title": "George vs. George",
+    "author": "Rosalyn Schanzer",
+    "openLibraryWorkId": "OL1888018W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3948",
+        "reason": "For a broader historical study, compare this illustrated introduction to the American Revolution with a history of Western warfare."
+      }
+    ]
+  },
+  {
+    "workId": "1684",
+    "title": "Bikkels",
+    "author": "Carry Slee",
+    "openLibraryWorkId": "OL24251025W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1124",
+        "reason": "Lees een ander verhaal van Carry Slee over groepsdruk en de verantwoordelijkheid om voor een buitengesloten klasgenoot op te komen."
+      }
+    ]
+  },
+  {
+    "workId": "3584",
+    "title": "Egalia's Daughters",
+    "author": "Gerd Brantenberg",
+    "openLibraryWorkId": "OL16251842W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9420",
+        "reason": "Compare this fictional reversal of gender roles with Angela Carter’s criticism of sexuality, social roles and domination."
+      }
+    ]
+  },
+  {
+    "workId": "5119",
+    "title": "De felomstreden kroon en deerniswekkende dood van koning Edward II & zijn favoriet, jonkheer Gaveston, onder wiens betovering hij zich afkeerde van zijn koningin en kroonprins, tot steeds grotere woede van de verzamelde adel en het voor de rest onwetende gewone volk",
+    "author": "Tom Lanoye",
+    "openLibraryWorkId": "OL43445080W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1503",
+        "reason": "Vergelijk de strijd rond Edward en Gaveston met Shakespeares toneelstuk over Richards weg naar de Engelse troon."
+      }
+    ]
+  },
+  {
+    "workId": "6551",
+    "title": "Tilt",
+    "author": "Michiel Stroink",
+    "openLibraryWorkId": "OL39584410W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1689",
+        "reason": "Lees een andere roman waarin een ontregeld lichaam en een verstoord dagelijks ritme de hoofdpersoon steeds verder afzonderen."
+      }
+    ]
+  },
+  {
+    "workId": "1167",
+    "title": "De zeven vinkjes",
+    "author": "Joris Luyendijk",
+    "openLibraryWorkId": "OL28216089W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5277",
+        "reason": "Onderzoek naast persoonlijke achtergrond ook hoe georganiseerde belangen toegang tot politieke besluitvorming krijgen."
+      }
+    ]
+  },
+  {
+    "workId": "1148",
+    "title": "Reizen zonder John",
+    "author": "Geert Mak",
+    "openLibraryWorkId": "OL23233125W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5082",
+        "reason": "Vergelijk Maks reis in Steinbecks voetspoor met een andere Nederlandse blik op het leven en reizen in Amerika."
+      }
+    ]
+  },
+  {
+    "workId": "6191",
+    "title": "De ijsmakers",
+    "author": "Ernest Van der Kwast",
+    "openLibraryWorkId": "OL20302179W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6476",
+        "reason": "Lees een andere roman over afstand nemen van een vertrouwd bestaan, waarin literatuur en een nieuw landschap een rol spelen."
       }
     ]
   }
