@@ -68,7 +68,7 @@ test('rollback refuses a newer review and repeat apply cannot overwrite an exist
  }finally{await db.close();}
 });
 test('every jacket has a checked public image, edition ISBN and visual evidence',()=>{
- assert.equal(covers.length,134);assert.equal(new Set(covers.map(r=>r.key)).size,covers.length);
+ assert.equal(covers.length,133);assert.equal(new Set(covers.map(r=>r.key)).size,covers.length);
  for(const r of covers){assert.equal([...r.isbn13].reduce((s,d,i)=>s+Number(d)*(i%2?3:1),0)%10,0,r.key);assert.ok(safePublicCoverUrl(r.coverUrl),r.key);assert.ok(r.visualReviewed&&r.image.valid);assert.equal(r.image.url,r.coverUrl);assert.ok(r.image.width>=90&&r.image.height>=90);assert.match(r.image.sha256,/^[a-f0-9]{64}$/);assert.match(r.evidenceUrl,/^https:\/\//);assert.ok((r.locale==='nl'?['nl','nld','dut']:['en','eng']).includes(r.language));}
  assert.match(sql,/rollback;\s*$/);assert.doesNotMatch(sql,/update public\.(ratings|user_book_status|collection_books)|delete from/i);
 });

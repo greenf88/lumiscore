@@ -1,10 +1,10 @@
 # Remaining cover recovery: 18 November 2026
 
-The input is the 217 Work/language pairs left by the previous 469-cover audit. All 23 edition/source conflicts were examined first. The reviewed proposal restores 134 fronts (86 Dutch, 48 English), including eight verified alternative editions. Images were downloaded, checked for valid raster dimensions and visually reviewed against the ISBN source. Interior pages, multilingual substitutes and prepublication placeholders are excluded.
+The input is the 217 Work/language pairs left by the previous 469-cover audit. All 23 edition/source conflicts were examined first. The reviewed proposal restores 133 fronts (86 Dutch, 47 English), including seven verified alternative editions. Images were downloaded, checked for valid raster dimensions and visually reviewed against the ISBN source. Interior pages, multilingual substitutes and prepublication placeholders are excluded.
 
 Eight edition language labels are corrected from explicit bibliographic evidence, including one additional Latin/English parallel edition found during image review. This is a metadata repair, not a recovered cover. Martin Heylen and Lisa Goudsmit receive their own author identities; the subject/designers are not globally renamed. The isolated Bart/Bert Nederlof typo, two truncated/wrong titles and four missing volume labels are corrected.
 
-`conflicts.json` records all 23 conflict decisions. `audit.json` retains every original input that has not received a verified cover; there are 83 such pairs in this proposal. Seven of these have a wrong original language classification. Do not report their exclusion as recovered covers. The eight alternative editions retain the originals and use the existing per-language preferred-edition mechanism. The review does not modify scores, ratings, user lists, collections or recommendation algorithms.
+`conflicts.json` records all 23 conflict decisions. `audit.json` retains every original input that has not received a verified cover; there are 84 such pairs in this proposal. Eight of these have a wrong original language classification. Do not report their exclusion as recovered covers. The seven alternative editions retain the originals and use the existing per-language preferred-edition mechanism. The review does not modify scores, ratings, user lists, collections or recommendation algorithms.
 
 Public bibliographic sources include the ISBN publisher registry, publisher catalogues, public Google Books volume records, NetGalley, institutional catalogues and exact-ISBN bookseller records. Source and image hashes are in `proposal.json`; source downloads and contact sheets are in the local audit directory. A generic title/author match is insufficient when an ISBN, volume or language conflicts.
 
@@ -14,4 +14,4 @@ Public bibliographic sources include the ISBN publisher registry, publisher cata
 
 Regenerate the SQL with `node scripts/build-remaining-cover-conflicts.mjs`. Run `node --experimental-strip-types --test scripts/remaining-cover-conflicts.test.mjs`. The PGlite tests exercise the actual strict edition selector, SQL search selector and stored presentation binding for every proposal, atomic drift rejection, dry run and guarded rollback, with user ratings and lists preserved.
 
-Local tests passed; the production dry run returned all 134 intended ISBN-bound reviews. Production application and mobile verification are recorded separately after execution.
+Local tests passed; the production dry run returned the intended ISBN-bound reviews; one art-catalogue replacement was subsequently withdrawn when a different subject focus was established. Production application and mobile verification are recorded separately after execution.
