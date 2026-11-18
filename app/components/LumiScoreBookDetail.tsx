@@ -295,7 +295,7 @@ export function LumiScoreBookDetail({
           )}
         </div>
         <div className="detail-heading">
-          <h1>{book.title}</h1><EditionPresentationLabel book={book}/>
+          <h1>{book.title}</h1><EditionPresentationLabel book={book} showAlternatives/>
           <p className="detail-author">{t('detail.by', { author: bookAuthorByline(book, locale) })}</p>
           <p className="detail-year">{book.firstPublishYear ? t('common.firstPublished', { year: book.firstPublishYear }) : t('common.publicationUnavailable')}</p>
           <div className="detail-primary-actions">

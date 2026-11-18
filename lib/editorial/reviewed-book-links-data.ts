@@ -830,6 +830,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3279",
         "reason": "Plaats deze historische taferelen naast Albrights bredere beschouwing over fascisme en de kwetsbaarheid van democratie."
+      },
+      {
+        "workId": "5276",
+        "reason": "Onderzoek hoe Nederland na de oorlog de slachtoffers is blijven herdenken en hoe dat ritueel veranderde."
       }
     ]
   },
@@ -1258,6 +1262,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8207",
         "reason": "For shorter nonfiction encounters rather than a continuous memoir, try Murty’s reflections on people she has met in India."
+      },
+      {
+        "workId": "8132",
+        "reason": "For a different personal essay collection, try Shane Dawson’s comic accounts of embarrassing and revealing experiences."
       }
     ]
   },
@@ -1966,6 +1974,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3913",
         "reason": "For a focused approach to the earliest years, Montanaro connects Montessori ideas with a young child’s care and surroundings."
+      },
+      {
+        "workId": "7902",
+        "reason": "Explore a focused account of how biology, experience and culture contribute to emotional life."
       }
     ]
   },
@@ -4038,6 +4050,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1153",
         "reason": "Vergelijk deze fictieve samenlevingen met Bregmans betoog over vertrouwen, samenwerking en ons beeld van de menselijke natuur."
+      },
+      {
+        "workId": "2035",
+        "reason": "Lees een ander fictief toekomstbeeld waarin maatschappelijke ontwrichting doorwerkt in het leven van één man."
       }
     ]
   },
@@ -4306,6 +4322,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6327",
         "reason": "Voor een andere psychologische moordzaak: volg psychiater Charlie Flint terug naar haar oude college in Oxford."
+      },
+      {
+        "workId": "2660",
+        "reason": "Voor een directere, gewelddadige achtervolging: een overlevende jaagt vierentwintig uur op de moordenaar van een gezin."
       }
     ]
   },
@@ -4590,6 +4610,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9366",
         "reason": "Clare’s childhood in Jamaica offers a different perspective on Caribbean inheritance and the pressure to accept a family’s version of belonging."
+      },
+      {
+        "workId": "1877",
+        "reason": "For a darker examination of wealth and family dependence, follow a financier whose health and security are failing."
       }
     ]
   },
@@ -4660,6 +4684,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3214",
         "reason": "Maak na de roman kennis met Brouwers’ polemische stem in deze door Gerd de Ley verzamelde uitspraken over literatuur en het leven."
+      },
+      {
+        "workId": "5515",
+        "reason": "Voor een persoonlijke getuigenis over familieverlies: een zus beschrijft de zoektocht naar Loubna en het gerechtelijke onderzoek."
       }
     ]
   },
@@ -4804,6 +4832,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5131",
         "reason": "Lanoyes polemieken laten zien hoe een schrijver zich mengt in actuele politieke en maatschappelijke discussies."
+      },
+      {
+        "workId": "5475",
+        "reason": "Bekijk hoe politieke overtuigingen een leven vormgeven in deze biografie van socialist en anarchist Domela Nieuwenhuis."
       }
     ]
   },
@@ -4902,6 +4934,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7783",
         "reason": "Place this Montessori view of early childhood alongside Miller’s comparison of several major developmental theories."
+      },
+      {
+        "workId": "7234",
+        "reason": "Place this Montessori approach alongside the wider history of educational ideas and their advocates."
       }
     ]
   },
@@ -4916,6 +4952,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4892",
         "reason": "This account of sociological fieldwork offers a concrete comparison with questions about observation, evidence and a researcher’s role."
+      },
+      {
+        "workId": "7621",
+        "reason": "Continue with Yin’s later treatment, including eleven extended applications and greater attention to rival explanations."
       }
     ]
   },
@@ -5102,6 +5142,434 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7033",
         "reason": "Boylan provides a broader introduction to how representation and viewers’ assumptions shape the interpretation of what they see."
+      }
+    ]
+  },
+  {
+    "workId": "6664",
+    "title": "Painting and experience in fifteenth century Italy",
+    "author": "Michael Baxandall",
+    "openLibraryWorkId": "OL16047060W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7781",
+        "reason": "Explore another illustrated history, this time tracing the images and practices of magic across cultures."
+      }
+    ]
+  },
+  {
+    "workId": "7781",
+    "title": "The occult, witchcraft & magic",
+    "author": "Christopher Dell",
+    "openLibraryWorkId": "OL20048190W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6664",
+        "reason": "For a closer study of images in their social setting, turn to fifteenth-century Italian painting."
+      }
+    ]
+  },
+  {
+    "workId": "6936",
+    "title": "A history of Calcutta's streets",
+    "author": "P. Thankappan Nair",
+    "openLibraryWorkId": "OL3433416W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7546",
+        "reason": "Move from the history of one city’s streets to a comparison of how global economic forces reshape three cities."
+      }
+    ]
+  },
+  {
+    "workId": "7546",
+    "title": "The Global City",
+    "author": "Saskia Sassen",
+    "openLibraryWorkId": "OL94054W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6936",
+        "reason": "For a city history at street level, explore Kolkata through its changing street names and places."
+      }
+    ]
+  },
+  {
+    "workId": "7234",
+    "title": "Historical and Philosophical Foundations of Education",
+    "author": "Gerald L. Gutek",
+    "openLibraryWorkId": "OL7943161W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3913",
+        "reason": "Explore one educational tradition in practice through a Montessori account of the first three years of life."
+      }
+    ]
+  },
+  {
+    "workId": "7902",
+    "title": "How Emotions Are Made",
+    "author": "Lisa Feldman Barrett",
+    "openLibraryWorkId": "OL20216664W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7783",
+        "reason": "Compare this theory of emotion with competing explanations of how children’s minds develop."
+      }
+    ]
+  },
+  {
+    "workId": "8667",
+    "title": "Girl in the Locked Room",
+    "author": "Mary Downing Hahn",
+    "openLibraryWorkId": "OL19752430W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8722",
+        "reason": "For more short-form scares after this two-voice ghost story, try Pike’s five-story horror collection."
+      }
+    ]
+  },
+  {
+    "workId": "8722",
+    "title": "Christopher Pike's #2 tales of terror",
+    "author": "Christopher Pike",
+    "openLibraryWorkId": "OL16022496W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8667",
+        "reason": "For a longer ghost story, follow two girls communicating across a century in an old house."
+      },
+      {
+        "workId": "4217",
+        "reason": "For reflection on how frightening stories work, read Stephen King’s discussion of horror across books and screens."
+      }
+    ]
+  },
+  {
+    "workId": "8905",
+    "title": "Furies of Calderon (Codex Alera)",
+    "author": "Jim Butcher",
+    "openLibraryWorkId": "OL5961774W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9941",
+        "reason": "For a younger-reader adventure, follow a boy and an engine driver into a fantastical world beyond their island."
+      }
+    ]
+  },
+  {
+    "workId": "9941",
+    "title": "Jim Button and Luke the engine driver",
+    "author": "Michael Ende",
+    "openLibraryWorkId": "OL2271583W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8905",
+        "reason": "For a more politically intricate fantasy, meet a boy without elemental powers in the threatened land of Alera."
+      },
+      {
+        "workId": "4461",
+        "reason": "For an adventure grounded in wartime Norway, follow children carrying hidden gold past occupying soldiers."
+      }
+    ]
+  },
+  {
+    "workId": "4461",
+    "title": "Snow Treasure",
+    "author": "Marie McSwigan",
+    "openLibraryWorkId": "OL5844479W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9941",
+        "reason": "Try a fantastical rescue journey after this historical adventure in which children take on a dangerous mission."
+      }
+    ]
+  },
+  {
+    "workId": "8908",
+    "title": "Mansion for My Love",
+    "author": "Robyn Donald",
+    "openLibraryWorkId": "OL3476079W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9859",
+        "reason": "Another romance in which marriage is shaped by unresolved feelings, this time a former rejection and a plan for revenge."
+      }
+    ]
+  },
+  {
+    "workId": "9859",
+    "title": "Virgin on Her Wedding Night",
+    "author": "Lynne Graham",
+    "openLibraryWorkId": "OL15172352W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8908",
+        "reason": "For another emotionally unequal marriage, follow a woman who learns she is standing in for someone else."
+      }
+    ]
+  },
+  {
+    "workId": "1877",
+    "title": "David Golder",
+    "author": "Irène Némirovsky",
+    "openLibraryWorkId": "OL8299145W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4784",
+        "reason": "Explore another family divided by money and competing ambitions, through a girl growing up in immigrant Brooklyn."
+      }
+    ]
+  },
+  {
+    "workId": "7621",
+    "title": "Case Study Research and Applications",
+    "author": "Robert K. Yin",
+    "openLibraryWorkId": "OL20221416W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4163",
+        "reason": "Compare Yin’s expanded applications with the fourth edition’s treatment of case study design and methods."
+      }
+    ]
+  },
+  {
+    "workId": "4217",
+    "title": "Stephen King's Danse Macabre",
+    "author": "Stephen King",
+    "openLibraryWorkId": "OL81605W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8722",
+        "reason": "Put the discussion of horror into practice with five short tales by Christopher Pike."
+      }
+    ]
+  },
+  {
+    "workId": "8132",
+    "title": "It Gets Worse",
+    "author": "Shane Dawson",
+    "openLibraryWorkId": "OL20032218W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7404",
+        "reason": "For another memoir that brings humour to difficult experiences, follow Anh Do’s life from refugee childhood to comedy."
+      }
+    ]
+  },
+  {
+    "workId": "6105",
+    "title": "Lage streken",
+    "author": "Herta Müller",
+    "openLibraryWorkId": "OL1732445W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5950",
+        "reason": "Lees verder over opgroeien in een omgeving die je plaats bepaalt, nu bij een meisje tussen achterstandswijk en gymnasium."
+      }
+    ]
+  },
+  {
+    "workId": "5950",
+    "title": "Het gym",
+    "author": "Karin Amatmoekrim",
+    "openLibraryWorkId": "OL26177419W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6105",
+        "reason": "Voor een beklemmender blik op gemeenschap en afkomst: Müllers verhalen over een Duitstalig dorp in Roemenië."
+      }
+    ]
+  },
+  {
+    "workId": "1689",
+    "title": "Slaap!",
+    "author": "Annelies Verbeke",
+    "openLibraryWorkId": "OL9120965W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "4968",
+        "reason": "Ook hier raakt een alledaags bestaan ontregeld, nu wanneer een duif de vaste gewoonten van een eenzame bewaker doorbreekt."
+      }
+    ]
+  },
+  {
+    "workId": "4968",
+    "title": "De duif",
+    "author": "Patrick Süskind",
+    "openLibraryWorkId": "OL2182299W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1689",
+        "reason": "Lees over een andere vorm van ontregeling en afzondering, bij een vrouw die door slapeloosheid haar houvast verliest."
+      }
+    ]
+  },
+  {
+    "workId": "2990",
+    "title": "Ronja de roversdochter",
+    "author": "Astrid Lindgren",
+    "openLibraryWorkId": "OL14872976W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3177",
+        "reason": "Voor jongere lezers: een nieuw meisje vindt in het bos vriendschap met een heks."
+      }
+    ]
+  },
+  {
+    "workId": "3177",
+    "title": "Hester de witte heks",
+    "author": "Simone van der Vlugt",
+    "openLibraryWorkId": "OL24442457W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2990",
+        "reason": "Voor een uitgebreider bosavontuur: volg Ronja, die vriendschap sluit over de grens van een familievete heen."
+      }
+    ]
+  },
+  {
+    "workId": "1705",
+    "title": "De dikke Lena Lijstje",
+    "author": "Francine Oomen",
+    "openLibraryWorkId": "OL27971079W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1706",
+        "reason": "Volg na Lena een andere jonge ik-verteller, tijdens een onverwacht avontuur in een gestolen auto in Zweden."
+      }
+    ]
+  },
+  {
+    "workId": "1706",
+    "title": "Tien dagen in een gestolen auto",
+    "author": "Anna Woltz",
+    "openLibraryWorkId": "OL28166582W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1705",
+        "reason": "Voor meer verhalen vanuit een twijfelende jonge ik-verteller: Lena probeert haar leven met lijstjes te ordenen."
+      }
+    ]
+  },
+  {
+    "workId": "5475",
+    "title": "Ferdinand Domela Nieuwenhuis",
+    "author": "Jan Willem Stutje",
+    "openLibraryWorkId": "OL23192240W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5441",
+        "reason": "Plaats Domela’s politieke optreden naast een bredere geschiedenis van democratische ideeën en leiderschap."
+      }
+    ]
+  },
+  {
+    "workId": "5276",
+    "title": "Zestig jaar herrie om twee minuten stilte",
+    "author": "Maud van de Reijt",
+    "openLibraryWorkId": "OL33376622W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6072",
+        "reason": "Lees naast de geschiedenis van herdenken een korte historische vertelling over de machtsvorming vóór de Tweede Wereldoorlog."
+      }
+    ]
+  },
+  {
+    "workId": "5515",
+    "title": "In naam van mijn zus",
+    "author": "Nabela Benaïssa",
+    "openLibraryWorkId": "OL24641593W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1066",
+        "reason": "Voor een literaire benadering van familieverlies en herinnering: Brouwers verbindt de dood van zijn moeder met zijn kampjeugd."
+      }
+    ]
+  },
+  {
+    "workId": "2035",
+    "title": "Het recht op terugkeer",
+    "author": "Léon de Winter",
+    "openLibraryWorkId": "OL1725559W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "140",
+        "reason": "Vergelijk dit politieke toekomstbeeld met een roman waarin een wetenschapper twee anders ingerichte samenlevingen verkent."
+      }
+    ]
+  },
+  {
+    "workId": "2660",
+    "title": "De sadist",
+    "author": "Dean Koontz",
+    "openLibraryWorkId": "OL263301W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5984",
+        "reason": "Voor een psychologische zoektocht naar een moordenaar: een teruggetrokken schrijfster probeert de dader van vroeger te ontmaskeren."
       }
     ]
   }
