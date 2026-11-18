@@ -72,3 +72,20 @@ test('every jacket has a checked public image, edition ISBN and visual evidence'
  for(const r of covers){assert.equal([...r.isbn13].reduce((s,d,i)=>s+Number(d)*(i%2?3:1),0)%10,0,r.key);assert.ok(safePublicCoverUrl(r.coverUrl),r.key);assert.ok(r.visualReviewed&&r.image.valid);assert.equal(r.image.url,r.coverUrl);assert.ok(r.image.width>=90&&r.image.height>=90);assert.match(r.image.sha256,/^[a-f0-9]{64}$/);assert.match(r.evidenceUrl,/^https:\/\//);assert.ok((r.locale==='nl'?['nl','nld','dut']:['en','eng']).includes(r.language));}
  assert.match(sql,/rollback;\s*$/);assert.doesNotMatch(sql,/update public\.(ratings|user_book_status|collection_books)|delete from/i);
 });
+
+test('the reclassified English technical volume gets its own bound front, never a Dutch fallback',async()=>{
+ const db=await fixture(),extra=JSON.parse(read('language-cover.json')),extraSql=read('language-cover.sql').replace(/rollback;\s*$/i,'commit;');
+ try{
+  await assert.rejects(db.exec(extraSql),/binding drift/);await db.exec('rollback');
+  await db.exec(commit);await db.exec(extraSql);
+  const editions=(await db.query('select * from editions where work_id=5586')).rows;
+  assert.equal(selectStrictEdition(editions,'nl'),null);
+  const e=selectStrictEdition(editions,'en');assert.equal(e.id,5745);
+  const book=withStrictEdition({id:'work-5586',workId:'5586',title:'Electronic Power Control : Volume 1',author:'Jean Pollefliet',authorId:'2998',cover:'orbit'},e,'en');
+  const metadata=(await db.query('select * from catalog_edition_metadata where edition_id=5745')).rows;
+  assert.deepEqual(applyStoredPresentation([book],'en',[],metadata)[0].coverUrls,[extra.coverUrl]);
+  await db.exec(read('language-cover-rollback.sql').replace(/rollback;\s*$/i,'commit;'));
+  await db.exec(rollback);
+  assert.equal((await db.query('select language from editions where id=5745')).rows[0].language,'dut');
+ }finally{await db.close();}
+});
