@@ -55,7 +55,7 @@ test('Hill House keeps independent Dutch and English reading suggestions', () =>
   const en = { ...base, editionTitle: 'The Haunting of Hill House' };
   assert.deepEqual(reviewedBookLinks(nl, 'nl').map(l => l.href), ['/book/106']);
   const enLinks = reviewedBookLinks(en, 'en');
-  assert.equal(enLinks.length, 2);
+  assert.deepEqual(enLinks.map(l => l.href), ['/book/9762', '/book/3660', '/book/2273']);
   assert.ok(enLinks.every(l => l.href !== '/book/106'));
   assert.deepEqual(reviewedBookLinks(nl, 'en'), []);
   assert.deepEqual(reviewedBookLinks(en, 'nl'), []);
