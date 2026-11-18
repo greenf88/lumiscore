@@ -5711,7 +5711,7 @@ export const REVIEWED_BOOK_LINKS = [
       },
       {
         "workId": "2337",
-        "reason": "Lees daarnaast een kinderavontuur van Jacques Vriens waarin een ontsnapping en onverwachte verwikkelingen centraal staan."
+        "reason": "Probeer een ander chaotisch kinderavontuur, waarin een ontsnapte muis het familiehotel De Korenwolf op stelten zet."
       }
     ]
   },
@@ -6697,7 +6697,7 @@ export const REVIEWED_BOOK_LINKS = [
       },
       {
         "workId": "3527",
-        "reason": "Vergelijk dit familiebedrijf met een roman over de druk om voor ieder gezinslid het beste te bereiken."
+        "reason": "Lees daarnaast een roman over jonge vrouwen in een uitgeverij, die hun loopbaan en persoonlijke verlangens proberen te combineren."
       }
     ]
   },
@@ -7131,7 +7131,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "9924",
-        "reason": "For another adult romance, move from a seaside encounter to a marriage arrangement complicated by attraction."
+        "reason": "Move from three resort-set erotic stories to an adult romance about a marriage arrangement complicated by attraction."
       }
     ]
   },
@@ -7145,7 +7145,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "8637",
-        "reason": "Move from a negotiated marriage to a queer seaside romance built around an unexpected encounter."
+        "reason": "Try a collection of three erotic romance stories set at an island resort."
       }
     ]
   },
@@ -7877,7 +7877,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "6554",
-        "reason": "Lees daarnaast een roman waarin een onderzoek naar de dood van een moeder het familieverleden openbreekt."
+        "reason": "Lees daarnaast een roman waarin een rechercheur een dode baby onderzoekt terwijl hij bij het sterfbed van zijn moeder wordt verwacht."
       }
     ]
   },
@@ -7891,7 +7891,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "1715",
-        "reason": "Vergelijk het onderzoek naar een moeder met een roman over het naderende afscheid van ouders en de onhandigheid van rouw."
+        "reason": "Vergelijk de spanning tussen werk en afscheid met een autobiografische roman over een zoon en zijn ongeneeslijk zieke vader."
       }
     ]
   },
@@ -7905,7 +7905,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "6191",
-        "reason": "Lees een andere familieroman waarin eigen ambities botsen met verwachtingen en verplichtingen tegenover naasten."
+        "reason": "Vergelijk de ambities van deze werkende vrouwen met een familieroman over kiezen tussen een eigen roeping en een overgeleverd beroep."
       }
     ]
   },
@@ -7919,7 +7919,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "6447",
-        "reason": "Vergelijk deze geschiedenis van inlichtingendiensten met een fictieve thriller over een informant en een naderende aanslag."
+        "reason": "Vergelijk dit onderzoek naar Duitse spionage in België met een fictieve Nederlandse thriller over een informant en een naderende aanslag."
       }
     ]
   },
@@ -7933,7 +7933,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "5370",
-        "reason": "Lees naast deze fictieve intrige een historisch onderzoek naar buitenlandse spionage en Nederlandse veiligheidsdiensten."
+        "reason": "Lees naast deze fictieve intrige een historisch onderzoek naar agenten van de Duitse Abwehr in België tussen 1936 en 1945."
       }
     ]
   },
@@ -7947,7 +7947,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "6496",
-        "reason": "Vervolg deze studie van herkenbare personen in fictie met een praktische blik op het schrijven en uitgeven van een roman."
+        "reason": "Vervolg deze satire op het schrijverswereldje met een praktische blik op het schrijven en uitgeven van een roman."
       }
     ]
   },
@@ -7961,7 +7961,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "5936",
-        "reason": "Onderzoek daarnaast hoe echte personen en gebeurtenissen herkenbaar kunnen worden verwerkt in een sleutelroman."
+        "reason": "Vergelijk deze schrijfadviezen met een satirische roman over rivaliteit en ambities op een schrijverscongres in Zagreb."
       }
     ]
   },
@@ -8045,7 +8045,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "1706",
-        "reason": "Probeer nog een jeugdavontuur waarin kinderen zelf op pad gaan en meer risico lopen dan ze hadden verwacht."
+        "reason": "Verruil de chaos in hotel De Korenwolf voor een jeugdavontuur over een vakantie die door een gestolen auto anders loopt dan gepland."
       }
     ]
   },
@@ -8059,7 +8059,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "6446",
-        "reason": "Volg een andere rechercheur die onder druk een moord probeert te ontrafelen, ditmaal Harry Hole in Bangkok."
+        "reason": "Vergelijk Libby’s heronderzoek van haar familiegeschiedenis met een politiethriller waarin Harry Hole een moord in Bangkok onderzoekt."
       }
     ]
   },
@@ -8073,7 +8073,7 @@ export const REVIEWED_BOOK_LINKS = [
     "links": [
       {
         "workId": "2666",
-        "reason": "Lees daarnaast een misdaadverhaal waarin een ander onderzoek de rechercheur steeds verder een duistere zaak in trekt."
+        "reason": "Lees daarnaast een thriller waarin een overlevende terugkeert naar de moord op haar familie en begint te twijfelen aan haar eigen getuigenis."
       },
       {
         "workId": "3539",
