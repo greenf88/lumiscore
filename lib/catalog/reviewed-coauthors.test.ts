@@ -36,3 +36,15 @@ test('an unrelated Work or unexpected primary author does not acquire a credit',
   assert.equal(bookAuthorByline({ ...books[0], workId: '30' }, 'nl'), books[0].author);
   assert.equal(bookAuthorByline({ ...books[0], author: 'Unexpected author' }, 'nl'), 'Unexpected author');
 });
+
+test('Human + Machine credits and finds Wilson on the verified 2018 edition only', () => {
+  const book: Book = { ...books[0], id: 'work-6789', workId: '6789', title: 'Human + machine',
+    author: 'Paul R. Daugherty', isbn13: '9781633693869' };
+  const otherEdition = { ...book, isbn13: '9781647827203' };
+  assert.deepEqual(reviewedCoauthorSearchKeys('H. James Wilson'), { workIds: [], editionIsbns: ['9781633693869'] });
+  assert.deepEqual(rankCatalogSearchResults([otherEdition, book], 'H. James Wilson'), [book]);
+  assert.equal(bookAuthorByline(book, 'en'), 'Paul R. Daugherty and H. James Wilson');
+  assert.equal(bookAuthorByline(book, 'nl'), 'Paul R. Daugherty en H. James Wilson');
+  assert.equal(bookAuthorByline(otherEdition, 'en'), 'Paul R. Daugherty');
+  assert.equal(bookAuthorByline({ ...book, author: 'Another author' }, 'en'), 'Another author');
+});

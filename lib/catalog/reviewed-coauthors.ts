@@ -27,6 +27,11 @@ export const REVIEWED_COAUTHORS: readonly ReviewedCoauthor[] = [
     name: 'Alex Khan', slug: 'alex-khan',
     source: 'https://www.lannoo.com/nl-be/thrillers-spanning/haar-laatste-adem-9789049213343',
   },
+  {
+    primaryAuthor: 'Paul R. Daugherty', isbn: '9781633693869',
+    name: 'H. James Wilson', slug: 'h-james-wilson',
+    source: 'https://books.google.com/books?id=SpECtAEACAAJ',
+  },
 ];
 
 type WorkCreditIdentity = { workId?: string | null; isbn13?: string | null; author: string };
