@@ -1596,7 +1596,7 @@ const editions = [
     "openLibraryEditionId": "OL35331003M",
     "sourceKey": "9789023475484",
     "source": "official_publisher",
-    "href": "https://www.uitgeverijcargo.nl/boek/de-kakkerlak/",
+    "href": "https://uitgeverijcargo.nl/product/kakkerlak-special-book-service-e-boek/",
     "marker": "Bangkok",
     "start": "De Noorse ambassadeur"
   },
@@ -1612,7 +1612,7 @@ const editions = [
     "openLibraryEditionId": "OL35331238M",
     "sourceKey": "9789023483014",
     "source": "official_publisher",
-    "href": "https://www.uitgeverijcargo.nl/boek/de-tweede-november/",
+    "href": "https://uitgeverijcargo.nl/product/tweede-november-paperback/",
     "marker": "Hamid",
     "start": "Eind oktober 2004"
   }

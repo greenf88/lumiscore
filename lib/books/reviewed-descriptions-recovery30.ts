@@ -1188,7 +1188,7 @@ export const THIRTIETH_RECOVERY_DESCRIPTIONS = [
     "reviewedAt": "2026-11-18",
     "source": "official_publisher",
     "sourceName": "Cargo — De kakkerlak",
-    "sourceUrl": "https://www.uitgeverijcargo.nl/boek/de-kakkerlak/",
+    "sourceUrl": "https://uitgeverijcargo.nl/product/kakkerlak-special-book-service-e-boek/",
     "text": "De Noorse ambassadeur wordt dood aangetroffen in een motelkamer in Bangkok. Harry Hole krijgt de opdracht de zaak samen met zijn collega Liz Crumley zo stil mogelijk op te lossen. Al snel blijken er belangen te spelen die verder reiken dan de moord zelf.\n\nIn het tweede Harry Hole-verhaal onderzoekt Jo Nesbø de spanning tussen waarheidsvinding en diplomatieke terughoudendheid. Harry vermoedt dat ook zijn vertrek uit Noorwegen iemand goed uitkomt, maar laat zich niet gemakkelijk tot een onopvallende afhandeling beperken."
   },
   {
@@ -1200,7 +1200,7 @@ export const THIRTIETH_RECOVERY_DESCRIPTIONS = [
     "reviewedAt": "2026-11-18",
     "source": "official_publisher",
     "sourceName": "Cargo — De tweede november",
-    "sourceUrl": "https://www.uitgeverijcargo.nl/boek/de-tweede-november/",
+    "sourceUrl": "https://uitgeverijcargo.nl/product/tweede-november-paperback/",
     "text": "Eind oktober 2004 waarschuwt AIVD-informant Hamid Mansur voor een geplande aanslag. Wanneer zijn contactpersoon De Wolf kort daarna wordt vermoord, wordt Hamid zelf verdacht. Misdaadverslaggeefster Puck Labrie ontvangt intussen een bericht dat een ander verband suggereert.\n\nTomas Ross verweeft fictieve intriges met bekende Nederlandse personen en gebeurtenissen rond de moord op Theo van Gogh. Hamid en Puck zoeken onder druk naar de waarheid, terwijl bureaucratie, verraad en verborgen belangen de naderende dreiging moeilijk zichtbaar maken."
   }
 ] as const;
