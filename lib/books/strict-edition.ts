@@ -8,6 +8,7 @@ import type { Locale } from '../i18n/config.ts';
 export type StrictEditionRow = {
   id: number | string; work_id?: number | string; title: string | null; language: string | null;
   isbn_10?: string | null; isbn_13: string | null; open_library_edition_id: string | null; publisher?: string | null;
+  preferred_for_catalog?: boolean;
 };
 export type EditionBoundCover = { state: string; source_key: string; cover_url: string | null; editionVerified?:boolean };
 export function permittedEditionLanguage(edition: Pick<StrictEditionRow, 'language'>, locale: Locale): boolean {
@@ -26,7 +27,9 @@ export function isBookPresentationAllowed(book:Pick<Book,'editionAvailable'|'str
 export function selectStrictEdition(editions: readonly StrictEditionRow[], language: Locale, title: string): StrictEditionRow | null {
   const possible = editions.filter(e => permittedEditionLanguage(e, language) && e.id != null && String(e.id).trim() && e.title?.trim() && !isSuspiciousRepresentativeEdition(e));
   const preferred=possible.filter(e=>editionHasLanguage(e,language));
-  const allowed=preferred.length?preferred:possible;
+  const permitted=preferred.length?preferred:possible;
+  const reviewed=permitted.filter(e=>e.preferred_for_catalog===true);
+  const allowed=reviewed.length?reviewed:permitted;
   const ranked = rankRepresentativeEditions(allowed.map(e => ({
     ...e, languageCodes: [e.language!], openLibraryEditionId: e.open_library_edition_id, isbn13: e.isbn_13,
   })), { workTitle: title, preferredLanguages: [language === 'nl' ? 'nld' : 'eng'] });
