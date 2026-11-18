@@ -1,0 +1,21 @@
+# Remaining cover recovery: 18 November 2026
+
+The input is the 217 Work/language pairs left by the previous 469-cover audit. All 23 edition/source conflicts were examined first. The reviewed proposal restores 133 fronts (86 Dutch, 47 English), including seven verified alternative editions. Images were downloaded, checked for valid raster dimensions and visually reviewed against the ISBN source. Interior pages, multilingual substitutes and prepublication placeholders are excluded.
+
+Eight edition language labels are corrected from explicit bibliographic evidence, including one additional Latin/English parallel edition found during image review. This is a metadata repair, not a recovered cover. Martin Heylen and Lisa Goudsmit receive their own author identities; the subject/designers are not globally renamed. The isolated Bart/Bert Nederlof typo, two truncated/wrong titles and four missing volume labels are corrected.
+
+`conflicts.json` records all 23 conflict decisions. `audit.json` retains every original input that has not received a verified cover; there are 84 such pairs in this proposal. Eight of these have a wrong original language classification. Do not report their exclusion as recovered covers. The seven alternative editions retain the originals and use the existing per-language preferred-edition mechanism. The review does not modify scores, ratings, user lists, collections or recommendation algorithms.
+
+Public bibliographic sources include the ISBN publisher registry, publisher catalogues, public Google Books volume records, NetGalley, institutional catalogues and exact-ISBN bookseller records. Source and image hashes are in `proposal.json`; source downloads and contact sheets are in the local audit directory. A generic title/author match is insufficient when an ISBN, volume or language conflicts.
+
+## Apply and rollback
+
+`production.sql` and `rollback.sql` default to ROLLBACK. Both use a transaction and compare-and-swap guards. Apply checks the complete affected Work/edition snapshot and refuses shared author renames, competing reviews and conflicting identifiers. Replace only the final ROLLBACK with COMMIT after reviewing the dry-run receipt. Never reapply this batch over changed catalogue rows. Rollback refuses newer edits and removes only this batch's reviews and newly inserted editions. It retains newly created author identities rather than deleting potentially shared author records.
+
+Regenerate the SQL with `node scripts/build-remaining-cover-conflicts.mjs`. Run `node --experimental-strip-types --test scripts/remaining-cover-conflicts.test.mjs`. The PGlite tests exercise the actual strict edition selector, SQL search selector and stored presentation binding for every proposal, atomic drift rejection, dry run and guarded rollback, with user ratings and lists preserved.
+
+The main batch is applied in production and all 133 cover bindings passed the live API and real catalogue selector checks. One art-catalogue replacement was withdrawn when a different subject focus was established. A supplemental review in `language-cover.sql` supplies the correct English front for Electronic Power Control after its language correction. Apply/reverse that supplemental review separately; reverse it before rolling back the main batch.
+
+The final result is **134 fronts: 86 Dutch and 48 English**. Seven replacement editions preserve the originals. After language corrections, 77 active NL/EN catalogue selections remain without a verified front, while six French or multilingual records leave the incorrect monolingual selection. The original-input audit keeps its original language keys; `live-verification.json` records the reconciled remaining list.
+
+Five local database/selector tests pass. All 134 image URLs were fetched and visually reviewed; all 134 live cover API bindings passed. Mobile browser checks at 360, 390 and 430 pixels covered search cards, book detail pages, internal book links and the existing taste-result recommendations. Representative fronts from the publisher registry, Google Books, NetGalley and BoekenBalie loaded with nonzero image dimensions and no horizontal overflow. No test rating or user-list write was made; the temporary viewport and language were restored. Public scores and counts remained unchanged across the recommendation inventory comparison.
