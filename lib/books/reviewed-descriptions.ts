@@ -25,6 +25,7 @@ import { TWENTY_FIRST_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-reco
 import { TWENTY_SECOND_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery22.ts';
 import { TWENTY_THIRD_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery23.ts';
 import { TWENTY_FOURTH_RECOVERY_DESCRIPTIONS } from './reviewed-descriptions-recovery24.ts';
+import { GSC_PRIORITY_DESCRIPTIONS } from './reviewed-descriptions-gsc-priorities.ts';
 
 /** Own short summaries, reviewed against an exact edition and named primary source. */
 type ReviewedDescription = {
@@ -34,7 +35,7 @@ type ReviewedDescription = {
   language:Locale; reviewedAt:string; sourceName:string; sourceUrl:string; text:string;
   source?:'official_publisher'|'official_catalog';
 };
-export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [{
+export const REVIEWED_DESCRIPTIONS:readonly ReviewedDescription[] = [...GSC_PRIORITY_DESCRIPTIONS,{
   workId: '1305', editionId: '1305', title: 'Madonna', author: 'Suzanne Vermeer',
   isbn13: '9789044970791', language: 'nl' as const, reviewedAt: '2026-10-18',
   sourceName: 'A.W. Bruna Uitgevers',
