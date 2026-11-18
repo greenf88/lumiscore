@@ -2,7 +2,7 @@
 
 Starting point: 469 selected NL/EN editions without a verified cover, across 462 Works. The complete cohort was checked against Open Library edition records, the Dutch ISBN registry and, where necessary, independent publisher/library catalogues and Internet Archive metadata. This does **not** claim that all missing covers have been recovered.
 
-The reviewed proposal recovers **250 covers: 76 Dutch and 174 English**. It reuses 18 exact existing editions and adds 232 source-verified editions, retaining every original edition. `audit.json` lists the **219 unresolved** locale/Work pairs with the remaining evidence gaps; those remain visible using the normal cover fallback. No recommendation is hidden to improve this count.
+The reviewed proposal recovers **252 covers: 78 Dutch and 174 English**. It reuses 19 exact existing editions and adds 233 source-verified editions, retaining every original edition. `audit.json` lists the **217 unresolved** locale/Work pairs with the remaining evidence gaps; those remain visible using the normal cover fallback. No recommendation is hidden to improve this count.
 
 ## Evidence and safeguards
 
@@ -16,7 +16,7 @@ The reviewed proposal recovers **250 covers: 76 Dutch and 174 English**. It reus
 
 1. Apply the two checked schema migrations (preferred-edition support, then the Dutch language alias constraint/index). All preferences initially remain false.
 2. Deploy the matching selector, presentation loader and `catalog-alternative-covers-20261117.json`.
-3. Execute `production.sql` as supplied for a dry run; verify its 250-row receipt. Run the identical script with only its final `rollback` changed to `commit` after the matching deployment is ready.
+3. Execute `production.sql` as supplied for a dry run; verify its 252-row receipt. Run the identical script with only its final `rollback` changed to `commit` after the matching deployment is ready.
 4. Re-load all 469 original pairs, check the full recommendation inventory and live search/detail responses, then visually verify NL/EN mobile routes.
 
 `rollback.sql` restores the original selected editions via guarded preference changes, while retaining all bibliographic rows. It requires the current preference-aware application and defaults to a dry run. Do not roll the application back to a selector that ignores these preferences as a substitute for the data rollback.
