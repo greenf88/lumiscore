@@ -21,6 +21,8 @@ export type ReviewedCoverOverride = {
 };
 
 export const REVIEWED_COVER_OVERRIDES: readonly ReviewedCoverOverride[] = [
+  // Exact publisher ISBN and jacket confirm English volume 17 after title repair.
+  {workId:'4408',openLibraryWorkId:'OL5753059W',title:'Dragon Ball Z, Vol. 17: The Cell Game',author:'鳥山 明 [Akira Toriyama]',isbn13:'9781591165057',editionLanguage:'eng',openLibraryEditionId:'OL23028075M',coverUrl:'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781591165057/dragon-ball-z-vol-17-9781591165057_hr.jpg',source:'official_publisher',evidenceUrl:'https://www.simonandschuster.com/books/Dragon-Ball-Z-Vol-17/Akira-Toriyama/Dragon-Ball-Z/9781591165057',reviewedAt:'2026-11-18'},
   // Exact English ISBN pages and linked jacket images inspected together.
   // Rejected placeholders and conflicting jackets are recorded in the cover audit.
   {workId:'180',openLibraryWorkId:'OL81626W',title:'Carrie',author:'Stephen King',isbn13:'9780816156887',editionLanguage:'eng',openLibraryEditionId:'OL9787395M',coverUrl:'https://pictures.abebooks.com/isbn/9780816156887-us.jpg',source:'reviewed_bookseller',evidenceUrl:'https://www.abebooks.com/9780816156887/Carrie-Hall-Large-Print-Book-0816156883/plp',reviewedAt:'2026-11-17'},

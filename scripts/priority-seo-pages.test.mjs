@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { inspectPriorityPage, prioritySeoPaths, firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, seventhPrioritySeoPaths, eighthPrioritySeoPaths, ninthPrioritySeoPaths, tenthPrioritySeoPaths, eleventhPrioritySeoPaths, twelfthPrioritySeoPaths, thirteenthPrioritySeoPaths, fourteenthPrioritySeoPaths, fifteenthPrioritySeoPaths, sixteenthPrioritySeoPaths, seventeenthPrioritySeoPaths, eighteenthPrioritySeoPaths, nineteenthPrioritySeoPaths, twentiethPrioritySeoPaths, twentyFirstPrioritySeoPaths, prioritySeoCohort } from './operations/priority-seo-pages.mjs';
+import { inspectPriorityPage, prioritySeoPaths, firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, seventhPrioritySeoPaths, eighthPrioritySeoPaths, ninthPrioritySeoPaths, tenthPrioritySeoPaths, eleventhPrioritySeoPaths, twelfthPrioritySeoPaths, thirteenthPrioritySeoPaths, fourteenthPrioritySeoPaths, fifteenthPrioritySeoPaths, sixteenthPrioritySeoPaths, seventeenthPrioritySeoPaths, eighteenthPrioritySeoPaths, nineteenthPrioritySeoPaths, twentiethPrioritySeoPaths, twentyFirstPrioritySeoPaths, twentyThirdPrioritySeoPaths, prioritySeoCohort } from './operations/priority-seo-pages.mjs';
 
 const path = '/en/book/9912';
 const section = content => `<section class="book-description" aria-labelledby="book-description-heading"><h2 id="book-description-heading">About this book</h2>${content}</section>`;
@@ -10,7 +10,7 @@ const streamed = `${loading}<div hidden id="S:0">${resolved}</div><script>$RC("B
 const html = `<html><head><title>A book</title><meta name="description" content="Book details"><link rel="canonical" href="https://lumisco.re/en/book/9912"><meta name="robots" content="index, follow"></head><body><h1>A book</h1>${streamed}<script type="application/ld+json">{"@type":"Book"}</script><a href="/nl/book/17">Mars</a></body></html>`;
 const inspect = overrides => inspectPriorityPage({ path, html, status: 200, inSitemap: true, ...overrides });
 
-test('twenty-one cohorts retain 502 distinct canonical paths and preserve language exclusions', () => {
+test('reviewed cohorts retain 532 distinct canonical paths and preserve language exclusions', () => {
   assert.equal(firstPrioritySeoPaths.length, 20);
   assert.equal(secondPrioritySeoPaths.length, 20);
   assert.equal(thirdPrioritySeoPaths.length, 20);
@@ -32,8 +32,10 @@ test('twenty-one cohorts retain 502 distinct canonical paths and preserve langua
   assert.equal(nineteenthPrioritySeoPaths.length, 30);
   assert.equal(twentiethPrioritySeoPaths.length, 7);
   assert.equal(twentyFirstPrioritySeoPaths.length, 35);
-  assert.equal(prioritySeoPaths.length, 502);
-  assert.equal(new Set(prioritySeoPaths).size, 502);
+  assert.equal(twentyThirdPrioritySeoPaths.length, 30);
+  assert.ok(twentyThirdPrioritySeoPaths.every(path => prioritySeoCohort(path) === 'recovery-23'));
+  assert.equal(prioritySeoPaths.length, 532);
+  assert.equal(new Set(prioritySeoPaths).size, 532);
   for (const [i, cohort] of [firstPrioritySeoPaths, secondPrioritySeoPaths, thirdPrioritySeoPaths, fourthPrioritySeoPaths, fifthPrioritySeoPaths, sixthPrioritySeoPaths, seventhPrioritySeoPaths, eighthPrioritySeoPaths, ninthPrioritySeoPaths, tenthPrioritySeoPaths, eleventhPrioritySeoPaths, twelfthPrioritySeoPaths, thirteenthPrioritySeoPaths, fourteenthPrioritySeoPaths, fifteenthPrioritySeoPaths, sixteenthPrioritySeoPaths, seventeenthPrioritySeoPaths, eighteenthPrioritySeoPaths, nineteenthPrioritySeoPaths, twentiethPrioritySeoPaths, twentyFirstPrioritySeoPaths].entries()) {
     assert.ok(cohort.every(path => prioritySeoCohort(path) === 'recovery-' + (i + 1)));
   }
@@ -42,7 +44,7 @@ test('twenty-one cohorts retain 502 distinct canonical paths and preserve langua
   assert.ok(!prioritySeoPaths.includes('/en/book/1219'));
 });
 test('recovered book pages require real synopsis text and a labelled HTTPS source in the same section', () => {
-  for (const nextPath of ['/en/book/2062', '/nl/book/1309', '/en/book/168', '/en/book/4884', '/nl/book/1229', '/en/book/1412', '/nl/book/1513', '/en/book/4424', '/nl/book/3168', '/en/book/135', '/nl/book/5067', '/en/book/9487', '/nl/book/5440', '/nl/book/2376', '/en/book/8249', '/en/book/9507', '/en/book/7512', '/en/book/4186', '/en/book/4185', '/nl/book/5063', '/en/book/4702', '/nl/book/5109', '/en/book/2122', '/en/book/9846', '/en/book/2147', '/en/book/10021', '/en/book/9213', '/en/book/1958', '/en/book/7801', '/nl/book/5714', '/nl/book/2353', '/en/book/9534', '/en/book/4291', '/nl/book/3293', ...twentyFirstPrioritySeoPaths]) {
+  for (const nextPath of ['/en/book/2062', '/nl/book/1309', '/en/book/168', '/en/book/4884', '/nl/book/1229', '/en/book/1412', '/nl/book/1513', '/en/book/4424', '/nl/book/3168', '/en/book/135', '/nl/book/5067', '/en/book/9487', '/nl/book/5440', '/nl/book/2376', '/en/book/8249', '/en/book/9507', '/en/book/7512', '/en/book/4186', '/en/book/4185', '/nl/book/5063', '/en/book/4702', '/nl/book/5109', '/en/book/2122', '/en/book/9846', '/en/book/2147', '/en/book/10021', '/en/book/9213', '/en/book/1958', '/en/book/7801', '/nl/book/5714', '/nl/book/2353', '/en/book/9534', '/en/book/4291', '/nl/book/3293', ...twentyFirstPrioritySeoPaths, ...twentyThirdPrioritySeoPaths]) {
   const inspectNext = description => inspect({ path: nextPath, html: html.replaceAll(path, nextPath).replace(streamed, description) });
   assert.deepEqual(inspectNext(resolved).errors, []);
   assert.deepEqual(inspectNext(streamed).errors, []);

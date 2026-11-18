@@ -1,4 +1,4 @@
-// Public book identities and editorial comparisons checked through 2026-11-17.
+// Public book identities and editorial comparisons checked through 2026-11-18.
 // The resolver verifies each source identity before displaying production links.
 export const REVIEWED_BOOK_LINKS = [
   {
@@ -252,6 +252,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3269",
         "reason": "Wil je je verder verdiepen in Amerikaanse macht in het buitenland? Weiner onderzoekt de geschiedenis van de CIA."
+      },
+      {
+        "workId": "5999",
+        "reason": "Wie na Folletts waargebeurde reddingsactie een militaire thriller zoekt, volgt Nick Stone naar Congo voor een opdracht die persoonlijk wordt."
       }
     ]
   },
@@ -692,6 +696,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2760",
         "reason": "Move from human companions and spirit beasts to a fantasy told through the rival Clans of wild cats."
+      },
+      {
+        "workId": "8704",
+        "reason": "For an animal story rooted in wildlife rather than magic, George follows a peregrine falcon learning to survive after life with a human companion."
       }
     ]
   },
@@ -882,6 +890,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5023",
         "reason": "Lees verder met een avontuurlijk kindermysterie: de vier vrienden en hun hond onderzoeken een geheimzinnig eiland."
+      },
+      {
+        "workId": "3403",
+        "reason": "Geronimo Stilton, Thea, Klem en Benjamin zoeken aanwijzingen in een schilderij. Een geïllustreerd avontuur waarin samen onderzoeken centraal staat."
       }
     ]
   },
@@ -2440,6 +2452,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6900",
         "reason": "Explore Sunstein’s proposals for pooling knowledge and reducing the errors that groups can reinforce."
+      },
+      {
+        "workId": "3802",
+        "reason": "Wylie narrows the focus to a participant’s account of Cambridge Analytica, personal-data profiling and efforts to influence voters."
       }
     ]
   },
@@ -3032,6 +3048,584 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "1695",
         "reason": "Vergelijk Davids moeite om zich uit te spreken met Boris, die thuis botst en steun zoekt in zijn band."
+      }
+    ]
+  },
+  {
+    "workId": "6081",
+    "title": "Het verleden spreekt",
+    "author": "Dennis Lehane",
+    "openLibraryWorkId": "OL15587800W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5833",
+        "reason": "Ook een thriller waarin gevaar dichtbij een gezin komt. Barclay maakt een verborgen getuige in een Amerikaanse buitenwijk tot de sleutel van de zaak."
+      }
+    ]
+  },
+  {
+    "workId": "5833",
+    "title": "Dicht bij huis",
+    "author": "Linwood Barclay",
+    "openLibraryWorkId": "OL771886W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6081",
+        "reason": "Lehane laat twee privédetectives terugkeren naar een oude vermissing. De gevolgen voor een kind geven het onderzoek een morele lading."
+      }
+    ]
+  },
+  {
+    "workId": "6039",
+    "title": "Verborgen lichamen",
+    "author": "Christopher Brookmyre",
+    "openLibraryWorkId": "OL17456733W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5009",
+        "reason": "Voor een onderzoek waarin professionele belangen meespelen: Garano moet een oude moord oplossen terwijl zijn leidinggevende er politiek voordeel in ziet."
+      }
+    ]
+  },
+  {
+    "workId": "5009",
+    "title": "Het risico",
+    "author": "Patricia Cornwell",
+    "openLibraryWorkId": "OL134369W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6039",
+        "reason": "Brookmyre zet een ervaren rechercheur naast een beginnende privédetective. Hun afzonderlijke zaken brengen de lezer naar de onderwereld van Glasgow."
+      }
+    ]
+  },
+  {
+    "workId": "3190",
+    "title": "Kikkermuziek",
+    "author": "Emma Donoghue",
+    "openLibraryWorkId": "OL17670692W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3356",
+        "reason": "Nog een historische roman over een vrouw met weinig veilige keuzes. Hier verschuift het decor van negentiende-eeuws San Francisco naar bezet Nederland."
+      }
+    ]
+  },
+  {
+    "workId": "3356",
+    "title": "Wieg van mijn vijand",
+    "author": "Sara Pennypacker",
+    "openLibraryWorkId": "OL9324709W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3190",
+        "reason": "Donoghue verbindt een echte onopgeloste moord met moederschap en de positie van vrouwen in San Francisco in 1876."
+      }
+    ]
+  },
+  {
+    "workId": "5364",
+    "title": "Een gouden kind",
+    "author": "Jean-Paul Franssens",
+    "openLibraryWorkId": "OL817068W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6461",
+        "reason": "Ook een roman voor volwassenen waarin een jonge verteller een ontregeld gezin probeert te begrijpen. Boris belandt met zijn moeder in Spanje."
+      }
+    ]
+  },
+  {
+    "workId": "6461",
+    "title": "Snoepreis",
+    "author": "Victor Meijer",
+    "openLibraryWorkId": "OL23127158W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5364",
+        "reason": "Franssens laat een jongen terugkijken op ziekte en familiegeschiedenis. Zijn herinneringen maken de verhouding tot zijn ouders steeds ingewikkelder."
+      }
+    ]
+  },
+  {
+    "workId": "6186",
+    "title": "Rich boy",
+    "author": "Sharon Pomerantz",
+    "openLibraryWorkId": "OL15408835W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1037",
+        "reason": "Voor een ander verhaal over ambitie en ontsnappen aan je afkomst: Wieringa onderzoekt de invloed van een ondernemende nieuwkomer op een Nederlands dorp."
+      }
+    ]
+  },
+  {
+    "workId": "1037",
+    "title": "Joe Speedboot",
+    "author": "Tommy Wieringa",
+    "openLibraryWorkId": "OL14988838W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6186",
+        "reason": "Pomerantz volgt sociale stijging op grotere schaal: van een eenvoudig milieu in Philadelphia naar de wereld van rijkdom en status in New York."
+      }
+    ]
+  },
+  {
+    "workId": "6074",
+    "title": "De neushoorn van de paus",
+    "author": "Lawrence Norfolk",
+    "openLibraryWorkId": "OL2566594W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "4143",
+        "reason": "Ook een historische roman over de nabijheid van macht. Graves kiest een veel vroeger tijdperk en laat Claudius de intriges van zijn Romeinse familie vertellen."
+      }
+    ]
+  },
+  {
+    "workId": "4143",
+    "title": "Ik, Claudius",
+    "author": "Robert Graves",
+    "openLibraryWorkId": "OL5036952W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6074",
+        "reason": "Norfolk verplaatst de machtsstrijd naar het Europa van paus Leo X. Een uitzonderlijk dier wordt inzet van diplomatieke rivaliteit."
+      }
+    ]
+  },
+  {
+    "workId": "5050",
+    "title": "Nora, het maandagelfje",
+    "author": "Daisy Meadows",
+    "openLibraryWorkId": "OL5886959W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6354",
+        "reason": "Voor kinderen die na een korte elfenmissie verder willen met magie en verhalen: deze raamvertelling voert naar een verhalenverteller in Damascus."
+      }
+    ]
+  },
+  {
+    "workId": "6354",
+    "title": "De toverkast",
+    "author": "Rafik Schami",
+    "openLibraryWorkId": "OL8938431W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5050",
+        "reason": "Een korter magisch avontuur met een duidelijk doel: Sanne en Eva helpen Nora het plezier van de maandag terug te vinden."
+      }
+    ]
+  },
+  {
+    "workId": "3403",
+    "title": "De glimlach van Lisa",
+    "author": "Elisabetta Dami",
+    "openLibraryWorkId": "OL8115877W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1103",
+        "reason": "Ook een speurverhaal met humor en dieren. Minoes helpt journalist Tibbe dankzij het nieuws dat ze van katten hoort."
+      }
+    ]
+  },
+  {
+    "workId": "3561",
+    "title": "De vloek",
+    "author": "Suzanne Collins",
+    "openLibraryWorkId": "OL5735361W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1111",
+        "reason": "Ook een gevaarlijke tocht waarbij kinderen verantwoordelijkheid dragen. Beckman verruilt Gregors onderwereld voor een reis naar de middeleeuwen."
+      }
+    ]
+  },
+  {
+    "workId": "1111",
+    "title": "Kruistocht in spijkerbroek",
+    "author": "Thea Beckman",
+    "openLibraryWorkId": "OL1736494W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3561",
+        "reason": "Collins laat Gregor opnieuw afdalen naar de onderwereld, waar een ziekte het voortbestaan van verschillende volken bedreigt."
+      }
+    ]
+  },
+  {
+    "workId": "5004",
+    "title": "In de wouden van de nacht",
+    "author": "Amelia Atwater-Rhodes",
+    "openLibraryWorkId": "OL100079W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5877",
+        "reason": "Voor een ander jeugdverhaal over onsterfelijkheid en een pijnlijk verleden: Ever moet kiezen tussen het herstellen van haar oude leven en haar band met Damen."
+      }
+    ]
+  },
+  {
+    "workId": "5877",
+    "title": "Blauwe Maan",
+    "author": "Alyson Noël",
+    "openLibraryWorkId": "OL15638721W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5004",
+        "reason": "Atwater-Rhodes kiest de blik van een eeuwenoude vampier. Een zwarte roos dwingt Risika terug te kijken op haar menselijke bestaan."
+      }
+    ]
+  },
+  {
+    "workId": "5999",
+    "title": "Terugslag",
+    "author": "Andy McNab",
+    "openLibraryWorkId": "OL8140204W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "4975",
+        "reason": "Naast de fictieve missies van Nick Stone biedt Follett een verslag van een echte reddingsoperatie: twee Amerikaanse werknemers zitten vast in Iran."
+      }
+    ]
+  },
+  {
+    "workId": "1961",
+    "title": "Pinocchio",
+    "author": "Carlo Collodi",
+    "openLibraryWorkId": "OL1527356W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9382",
+        "reason": "For a modern story about finding your place and learning beyond lessons, follow Lucy through middle school, friendship and the limits of being good at maths."
+      },
+      {
+        "workId": "9682",
+        "reason": "Novik reshapes fairy-tale bargains into an adult fantasy of debt, power and survival, told through several women’s perspectives."
+      }
+    ]
+  },
+  {
+    "workId": "9382",
+    "title": "The miscalculations of Lightning Girl",
+    "author": "Stacy McAnulty",
+    "openLibraryWorkId": "OL19739397W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1961",
+        "reason": "Collodi approaches growing up through a much older fantasy: a wooden puppet learns how his decisions affect the people who care about him."
+      }
+    ]
+  },
+  {
+    "workId": "9826",
+    "title": "Sneezy the Snowman",
+    "author": "Maureen Wright",
+    "openLibraryWorkId": "OL20339612W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "389",
+        "reason": "Another picture book that invites conversation about helping others. Silverstein follows a boy and a tree across a lifetime, with a more reflective tone."
+      }
+    ]
+  },
+  {
+    "workId": "389",
+    "title": "The giving tree",
+    "author": "Shel Silverstein",
+    "openLibraryWorkId": "OL3368288W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9826",
+        "reason": "For a lighter read-aloud about giving help, a group of children keeps rebuilding a snowman whose attempts to warm up go wrong."
+      }
+    ]
+  },
+  {
+    "workId": "6611",
+    "title": "Stormbringers",
+    "author": "Philippa Gregory",
+    "openLibraryWorkId": "OL17627863W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1379",
+        "reason": "For another young-adult story where attraction and uncertainty travel together, Caraval replaces historical religious mystery with an elaborate magical performance."
+      }
+    ]
+  },
+  {
+    "workId": "1379",
+    "title": "Caraval",
+    "author": "Stephanie Garber",
+    "openLibraryWorkId": "OL17715454W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6611",
+        "reason": "Gregory sets the uncertainty in 1453: a young investigator must judge claims of divine guidance while travelling with Isolde."
+      }
+    ]
+  },
+  {
+    "workId": "4896",
+    "title": "Michael Jordan",
+    "author": "Roland Lazenby",
+    "openLibraryWorkId": "OL19976674W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8423",
+        "reason": "For a fictional look at the pressure a community places on sporting success, Backman turns to a small town and its junior ice-hockey team."
+      }
+    ]
+  },
+  {
+    "workId": "8423",
+    "title": "Beartown",
+    "author": "Fredrik Backman",
+    "openLibraryWorkId": "OL20654696W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4896",
+        "reason": "Lazenby examines sporting ambition through a real life: Jordan’s family, teammates and career reveal the demands surrounding elite basketball."
+      }
+    ]
+  },
+  {
+    "workId": "8669",
+    "title": "The Cloud Castle",
+    "author": "Elisabetta Dami",
+    "openLibraryWorkId": "OL17314300W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8357",
+        "reason": "For a longer dragon adventure in an established series, follow David Rain to the Arctic, where the stories he writes begin to affect his world."
+      }
+    ]
+  },
+  {
+    "workId": "8357",
+    "title": "Fire star",
+    "author": "Chris D'Lacey",
+    "openLibraryWorkId": "OL5735053W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8669",
+        "reason": "For an illustrated quest built around cooperation, the Thea Sisters travel through Everest to a kingdom whose clouds are disappearing."
+      }
+    ]
+  },
+  {
+    "workId": "726",
+    "title": "Black rose",
+    "author": "Nora Roberts",
+    "openLibraryWorkId": "OL111418W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9661",
+        "reason": "Continue the In the Garden trilogy with its third novel. Hayley’s new life and romance unfold alongside the unresolved story of the Harper Bride."
+      }
+    ]
+  },
+  {
+    "workId": "9661",
+    "title": "Red lily",
+    "author": "Nora Roberts",
+    "openLibraryWorkId": "OL111561W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "726",
+        "reason": "Return to the trilogy’s second novel for Roz Harper’s relationship with genealogist Mitchell Carnegie and their investigation of the family ghost."
+      }
+    ]
+  },
+  {
+    "workId": "4408",
+    "title": "Dragon Ball Z, Vol. 17: The Cell Game",
+    "author": "鳥山 明 [Akira Toriyama]",
+    "openLibraryWorkId": "OL5753059W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4251",
+        "reason": "Another long-running action manga with dangerous powers and rival fighters. This is Naruto’s volume 33, so read earlier volumes for its ongoing storyline."
+      }
+    ]
+  },
+  {
+    "workId": "4251",
+    "title": "Naruto vol 33",
+    "author": "Masashi Kishimoto",
+    "openLibraryWorkId": "OL13268171W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4408",
+        "reason": "Toriyama brings Trunks and Cell into conflict in Dragon Ball Z volume 17. It is a later series instalment with battles shaped by earlier events."
+      }
+    ]
+  },
+  {
+    "workId": "8704",
+    "title": "Frightful's mountain",
+    "author": "Jean Craighead George",
+    "openLibraryWorkId": "OL111827W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8673",
+        "reason": "For a fantasy contrast to Frightful’s life in the wild, Wild Born gives four young people magical bonds with animal companions."
+      }
+    ]
+  },
+  {
+    "workId": "7336",
+    "title": "Rebalancing Society",
+    "author": "Henry Mintzberg",
+    "openLibraryWorkId": "OL21090936W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7717",
+        "reason": "For a historically focused argument about inequality, Krugman examines changes in American politics and the fortunes of its middle class."
+      }
+    ]
+  },
+  {
+    "workId": "7717",
+    "title": "The conscience of a liberal",
+    "author": "Paul R. Krugman",
+    "openLibraryWorkId": "OL275080W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7336",
+        "reason": "Mintzberg broadens the institutional question beyond American party politics, asking how public, private and community sectors might regain balance."
+      }
+    ]
+  },
+  {
+    "workId": "9682",
+    "title": "Spinning silver",
+    "author": "Naomi Novik",
+    "openLibraryWorkId": "OL19145737W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1961",
+        "reason": "For an earlier tale about wishes, temptation and consequences, return to Collodi’s original puppet story. Its moral fable differs from Novik’s adult fantasy."
+      }
+    ]
+  },
+  {
+    "workId": "8771",
+    "title": "The Sellout",
+    "author": "Paul Beatty",
+    "openLibraryWorkId": "OL17616758W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3648",
+        "reason": "For a nonfiction companion to Beatty’s racial satire, Alexander argues that mass incarceration sustains a racial caste system in the United States."
+      }
+    ]
+  },
+  {
+    "workId": "3648",
+    "title": "The New Jim Crow",
+    "author": "Michelle Alexander",
+    "openLibraryWorkId": "OL13826369W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8771",
+        "reason": "For a fictional and deliberately provocative treatment of race, Beatty uses a neighbourhood’s disappearance and a Supreme Court case as the frame for satire."
+      }
+    ]
+  },
+  {
+    "workId": "3802",
+    "title": "Mindf*ck",
+    "author": "Christopher Wylie",
+    "openLibraryWorkId": "OL20385508W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8027",
+        "reason": "For a wider view of the same political information crisis, Kakutani examines how rhetoric, media habits and distrust undermine shared facts."
       }
     ]
   }
