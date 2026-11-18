@@ -12,6 +12,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7611",
         "reason": "Follow the relationship between farming and political power with an environmental history of the American Dust Bowl."
+      },
+      {
+        "workId": "8942",
+        "reason": "For a fictional view of an earlier world, follow Ayla’s training, family responsibilities and encounters with painted caves."
       }
     ]
   },
@@ -186,6 +190,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6686",
         "reason": "Try a different young hero’s magical adventure, drawing on Hispanic folklore and a search for missing parents."
+      },
+      {
+        "workId": "3037",
+        "reason": "Try an illustrated adventure in which villagers train as warriors while danger grows beyond their home."
       }
     ]
   },
@@ -562,6 +570,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3743",
         "reason": "Move from workplace satire to Julie Zhuo’s practical reflections on becoming a responsible manager."
+      },
+      {
+        "workId": "6601",
+        "reason": "Look beyond the magazine office at Cline’s reporting on how cheap clothing is produced, bought and discarded."
       }
     ]
   },
@@ -612,6 +624,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3660",
         "reason": "For gothic horror aimed at older teens, follow Silas’s investigation of missing students at a sinister institution."
+      },
+      {
+        "workId": "2273",
+        "reason": "Read Jackson’s shorter fiction, where ordinary rituals and encounters become sources of dread."
       }
     ]
   },
@@ -1220,6 +1236,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6786",
         "reason": "Compare this methods textbook with Sowell’s argument about the causes of economic disparities, paying attention to how empirical evidence supports a claim."
+      },
+      {
+        "workId": "3769",
+        "reason": "Gujarati’s fourth edition offers another route into regression, statistical inference and the assumptions behind economic models."
       }
     ]
   },
@@ -2812,6 +2832,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "8463",
         "reason": "Compare Faust’s bargain with Lestat’s dangerous experiment in exchanging bodies and experiencing mortality."
+      },
+      {
+        "workId": "8668",
+        "reason": "Explore another literary treatment of life’s choices through Judge William’s argument for commitment and ethical responsibility."
       }
     ]
   },
@@ -3058,6 +3082,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4163",
         "reason": "Yin’s methods guide provides a framework for thinking about case selection, evidence and the reporting of research such as field observations."
+      },
+      {
+        "workId": "7350",
+        "reason": "Compare this fieldwork account with Collins’s explanations of the less obvious social patterns behind everyday behaviour."
       }
     ]
   },
@@ -3128,6 +3156,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4953",
         "reason": "Ga verder met een andere campusromance van Kennedy, over buren die voor hun exen een relatie spelen."
+      },
+      {
+        "workId": "3245",
+        "reason": "Ga van campusromance naar Nadine’s ontmoeting met een ontwerper wiens luxueuze leven haar eigen keuzes onder druk zet."
       }
     ]
   },
@@ -3864,6 +3896,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "3802",
         "reason": "Set this framework for human–AI cooperation alongside an insider’s account of personal-data misuse and its political consequences."
+      },
+      {
+        "workId": "6803",
+        "reason": "Consider another source of organisational change: users who develop and share their own product improvements."
       }
     ]
   },
@@ -4628,6 +4664,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2898",
         "reason": "Try another young-adult science-fiction story about a damaged Earth and an uncertain future, told from a teenager’s perspective."
+      },
+      {
+        "workId": "8684",
+        "reason": "Explore another disruption of ordinary time through a man repeatedly born into the same life with his memories intact."
       }
     ]
   },
@@ -4688,6 +4728,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5515",
         "reason": "Voor een persoonlijke getuigenis over familieverlies: een zus beschrijft de zoektocht naar Loubna en het gerechtelijke onderzoek."
+      },
+      {
+        "workId": "6075",
+        "reason": "Lees een andere literaire verkenning van oorlogsherinneringen, nu via twee vriendinnen en hun reis vanuit Bosnië."
       }
     ]
   },
@@ -4864,6 +4908,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "4784",
         "reason": "Another coming-of-age novel connecting Caribbean family history with race, class and a girl’s search for independence."
+      },
+      {
+        "workId": "8476",
+        "reason": "Move from Clare’s coming of age to an adult woman’s search for ancestry, linking Brazil with a family history in Europe."
       }
     ]
   },
@@ -4984,6 +5032,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5707",
         "reason": "Verdiep je in één theoretische traditie: Van Oers werkt de betekenis van handelingspsychologie voor onderwijs en begripsvorming uit."
+      },
+      {
+        "workId": "5718",
+        "reason": "Bekijk hoe een afgebakend maatschappelijk onderwerp wordt onderzocht in deze bundel over seksuele gezondheid en zorggebruik."
       }
     ]
   },
@@ -5026,6 +5078,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "2314",
         "reason": "Een speelser taalavontuur voor jongere lezers, waarin Lexie ondanks haar angst op onderzoek uit moet wanneer haar wens misgaat."
+      },
+      {
+        "workId": "6326",
+        "reason": "Voor jongere lezers is er dit kortere, eenvoudiger vertelde ruimteavontuur naar een planeet waar computers oorlog voeren."
       }
     ]
   },
@@ -5040,6 +5096,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "7993",
         "reason": "Colomina offers a historical counterpoint to Zumthor’s reflections, examining how ideas about the body and medical images shaped architecture."
+      },
+      {
+        "workId": "7054",
+        "reason": "Set Zumthor’s personal reflections beside a chronological account of the cultural forces shaping American buildings."
       }
     ]
   },
@@ -5072,6 +5132,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "6476",
         "reason": "Bakker onderzoekt afzondering en verzwegen gebeurtenissen vanuit een vrouw die zich terugtrekt in Wales; de aanleiding en vertelwijze verschillen."
+      },
+      {
+        "workId": "5773",
+        "reason": "Vergelijk Rivka’s geschiedenis met een korte christelijke roman over een echtpaar dat een pijnlijke gebeurtenis opnieuw onder ogen ziet."
       }
     ]
   },
@@ -5304,6 +5368,10 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "9941",
         "reason": "Try a fantastical rescue journey after this historical adventure in which children take on a dangerous mission."
+      },
+      {
+        "workId": "4902",
+        "reason": "Read another wartime story involving young people, now following an Okinawan teenager and a novice American Marine."
       }
     ]
   },
@@ -5570,6 +5638,446 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5984",
         "reason": "Voor een psychologische zoektocht naar een moordenaar: een teruggetrokken schrijfster probeert de dader van vroeger te ontmaskeren."
+      }
+    ]
+  },
+  {
+    "workId": "3037",
+    "title": "Diary of an 8-Bit Warrior : Forging Destiny",
+    "author": "Cube Kid",
+    "openLibraryWorkId": "OL19368094W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6940",
+        "reason": "Try another illustrated comic adventure, replacing Minecraft-inspired quests with prehistoric newspaper rivalry."
+      },
+      {
+        "workId": "1307",
+        "reason": "Follow another young hero whose training and friendships are tested by a threat to his familiar world."
+      }
+    ]
+  },
+  {
+    "workId": "6940",
+    "title": "Get the scoop, Geronimo!",
+    "author": "Elisabetta Dami",
+    "openLibraryWorkId": "OL17114708W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3037",
+        "reason": "Move from prehistoric reporting to Runt’s illustrated quest in a world inspired by Minecraft."
+      }
+    ]
+  },
+  {
+    "workId": "3650",
+    "title": "Power play",
+    "author": "Kate William",
+    "openLibraryWorkId": "OL3551997W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4507",
+        "reason": "Compare exclusion from a school club with a classroom movement that turns belonging into enforced obedience."
+      },
+      {
+        "workId": "4465",
+        "reason": "Move from exclusion within a school club to Lou’s friendship with a homeless teenager in Paris."
+      }
+    ]
+  },
+  {
+    "workId": "4507",
+    "title": "The Wave",
+    "author": "Todd Strasser",
+    "openLibraryWorkId": "OL999053W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3650",
+        "reason": "For a school story with different stakes, follow the Wakefield twins’ disagreement over a club’s treatment of Robin."
+      },
+      {
+        "workId": "2273",
+        "reason": "Explore group pressure in a different fictional form through Jackson’s unsettling village ritual."
+      }
+    ]
+  },
+  {
+    "workId": "3769",
+    "title": "Basic econometrics",
+    "author": "Damodar N. Gujarati",
+    "openLibraryWorkId": "OL1823523W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6628",
+        "reason": "Compare this introduction to regression with Wooldridge’s approach to economic questions using cross-sectional, time-series and panel data."
+      }
+    ]
+  },
+  {
+    "workId": "3948",
+    "title": "The Cambridge History of Warfare",
+    "author": "Geoffrey Parker",
+    "openLibraryWorkId": "OL218764W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8340",
+        "reason": "Narrow the focus from Western military history to Britain’s rulers, succession and disputed early traditions."
+      }
+    ]
+  },
+  {
+    "workId": "8340",
+    "title": "The British Chronicles, Book One",
+    "author": "David Hughes",
+    "openLibraryWorkId": "OL2850964W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3948",
+        "reason": "Set this account of royal succession beside a broader history of warfare and the societies that sustain armies."
+      }
+    ]
+  },
+  {
+    "workId": "4710",
+    "title": "Story",
+    "author": "Robert McKee",
+    "openLibraryWorkId": "OL273896W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7088",
+        "reason": "Explore a different writing craft through Mayes’s discussion of poetic images, rhythm and revision."
+      }
+    ]
+  },
+  {
+    "workId": "7088",
+    "title": "The discovery of poetry",
+    "author": "Frances Mayes",
+    "openLibraryWorkId": "OL14860157W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4710",
+        "reason": "Move from poetic form to McKee’s account of how character and structure work together in a narrative."
+      }
+    ]
+  },
+  {
+    "workId": "5718",
+    "title": "Seksuele gezondheid in Nederland 2006",
+    "author": "Floor Bakker",
+    "openLibraryWorkId": "OL41920817W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5342",
+        "reason": "Plaats dit bevolkingsonderzoek naast een overzicht van psychologische stromingen en hun betekenis voor hulpverlening."
+      }
+    ]
+  },
+  {
+    "workId": "5773",
+    "title": "Tilly",
+    "author": "Frank E. Peretti",
+    "openLibraryWorkId": "OL8199337W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6518",
+        "reason": "Lees een andere roman waarin geloof en een verzwegen verleden doorwerken in een gezin, nu tegen de achtergrond van de Tweede Wereldoorlog."
+      }
+    ]
+  },
+  {
+    "workId": "6075",
+    "title": "Vang de haas",
+    "author": "Lana Bastašić",
+    "openLibraryWorkId": "OL20824310W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1066",
+        "reason": "Vergelijk de doorwerking van de Bosnische oorlog in een vriendschap met Brouwers’ herinneringen aan zijn jeugd in een Japans interneringskamp."
+      }
+    ]
+  },
+  {
+    "workId": "6601",
+    "title": "Overdressed",
+    "author": "Elizabeth L. Cline",
+    "openLibraryWorkId": "OL16510092W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7636",
+        "reason": "Compare the social costs hidden behind inexpensive clothing with reporting on unequal access to dental care."
+      },
+      {
+        "workId": "8727",
+        "reason": "Move from reporting on the clothing industry to a workplace novel about ambition and the demands of a fashion magazine."
+      }
+    ]
+  },
+  {
+    "workId": "7636",
+    "title": "Teeth",
+    "author": "Mary Otto",
+    "openLibraryWorkId": "OL20052301W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6601",
+        "reason": "Explore another investigation of appearance and inequality, following clothing from production to consumption and waste."
+      }
+    ]
+  },
+  {
+    "workId": "6803",
+    "title": "Democratizing innovation",
+    "author": "Eric von Hippel",
+    "openLibraryWorkId": "OL5275396W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6789",
+        "reason": "Compare user-led invention with a management framework for redesigning work around cooperation between people and AI."
+      }
+    ]
+  },
+  {
+    "workId": "7054",
+    "title": "A History of American Architecture",
+    "author": "Mark Gelernter",
+    "openLibraryWorkId": "OL2003970W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4096",
+        "reason": "Follow this cultural history with an architect’s reflections on the experience of materials, light and space."
+      }
+    ]
+  },
+  {
+    "workId": "7350",
+    "title": "Sociological insight",
+    "author": "Randall Collins",
+    "openLibraryWorkId": "OL28951W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4892",
+        "reason": "See sociological questions about power and everyday relationships explored through fieldwork in a Chicago housing project."
+      }
+    ]
+  },
+  {
+    "workId": "7368",
+    "title": "You'd Be Paranoid Too (If Everyone Was Out to Get You)",
+    "author": "Awsten Knight",
+    "openLibraryWorkId": "OL20860273W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7092",
+        "reason": "Read another musician’s personal account, combining Zayn’s move into solo work with photographs and creative notes."
+      }
+    ]
+  },
+  {
+    "workId": "7092",
+    "title": "Zayn",
+    "author": "Zayn",
+    "openLibraryWorkId": "OL20045478W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7368",
+        "reason": "Try a different musician’s autobiographical voice through Awsten Knight’s reflections on relationships and self-acceptance."
+      }
+    ]
+  },
+  {
+    "workId": "8476",
+    "title": "The Seven Sisters",
+    "author": "Lucinda Riley",
+    "openLibraryWorkId": "OL20779796W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9366",
+        "reason": "Compare Maia’s search for her origins with a Jamaican girl’s discovery of the conflicting histories within her family."
+      }
+    ]
+  },
+  {
+    "workId": "8668",
+    "title": "Either or",
+    "author": "Søren Kierkegaard",
+    "openLibraryWorkId": "OL112738W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2107",
+        "reason": "Compare this debate about ethical commitment with Goethe’s dramatic poem about desire, temptation and responsibility."
+      }
+    ]
+  },
+  {
+    "workId": "8703",
+    "title": "Bride at Whangatapu",
+    "author": "Robyn Donald",
+    "openLibraryWorkId": "OL3476070W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8536",
+        "reason": "Try another romance built around an uneasy marriage agreement, this time prompted by blackmail and a threatened business merger."
+      }
+    ]
+  },
+  {
+    "workId": "8536",
+    "title": "Untouched Wife",
+    "author": "Rachel Lindsay",
+    "openLibraryWorkId": "OL17179785W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8703",
+        "reason": "Compare a marriage intended to neutralise scandal with Fiona’s decision to marry for her child’s future."
+      }
+    ]
+  },
+  {
+    "workId": "8942",
+    "title": "The Land of Painted Caves",
+    "author": "Jean M. Auel",
+    "openLibraryWorkId": "OL15488687W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7801",
+        "reason": "Move from prehistoric fiction to a nonfiction argument about farming, settled life and the growth of early states."
+      }
+    ]
+  },
+  {
+    "workId": "3245",
+    "title": "De ontmoeting",
+    "author": "Maas, Marique pseud. van Esther Verhoef",
+    "openLibraryWorkId": "OL26174459W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1362",
+        "reason": "Probeer een andere romance over aantrekking en afspraken, met een Amerikaanse campus als omgeving."
+      }
+    ]
+  },
+  {
+    "workId": "2273",
+    "title": "The Lottery and Other Stories",
+    "author": "Shirley Jackson",
+    "openLibraryWorkId": "OL3171083W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1894",
+        "reason": "Continue with Jackson’s longer exploration of psychological unease, following visitors drawn into a disturbing house."
+      },
+      {
+        "workId": "4507",
+        "reason": "Compare the pressure of a community ritual with a school experiment that makes conformity increasingly dangerous."
+      }
+    ]
+  },
+  {
+    "workId": "4465",
+    "title": "No and me",
+    "author": "Delphine de Vigan",
+    "openLibraryWorkId": "OL12948406W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3650",
+        "reason": "Try a school-centred story about friendship and exclusion, with the Wakefield twins divided over who deserves to belong."
+      }
+    ]
+  },
+  {
+    "workId": "4902",
+    "title": "Grenade",
+    "author": "Alan Gratz",
+    "openLibraryWorkId": "OL19755255W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4461",
+        "reason": "Compare two perspectives on the fighting in Okinawa with a historical adventure about children carrying gold past occupying soldiers in Norway."
+      }
+    ]
+  },
+  {
+    "workId": "6326",
+    "title": "Door het dode land",
+    "author": "Teng, Tais pseud. van Thijs van Ebbenhorst Tengbergen",
+    "openLibraryWorkId": "OL26182962W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1675",
+        "reason": "Lees een uitgebreider planeetavontuur waarin Edu zelf wil onderzoeken wat de waarschuwingen en computers over Venus verzwijgen."
+      }
+    ]
+  },
+  {
+    "workId": "8684",
+    "title": "The first fifteen lives of Harry August",
+    "author": "Claire North",
+    "openLibraryWorkId": "OL19159115W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3066",
+        "reason": "Compare Harry’s repeated lifetimes with a young space traveller who experiences time differently from the people on Earth."
       }
     ]
   }
