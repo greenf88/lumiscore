@@ -2,6 +2,20 @@ import type { ReviewedWorkTraitCorrection } from './work-trait-evidence.ts';
 
 export const REVIEWED_WORK_TRAIT_CORRECTIONS = [
   {
+    workId: '1376',
+    removeTraits: ['fantasy', 'speculative'],
+    addTraits: [{ trait: 'literary', weight: 1 }],
+    reason: 'Against the Grain / À rebours by Joris-Karl Huysmans (OL2239396W) is literary fiction about Des Esseintes and aesthetic isolation. The sole imported Fantasy label is not reliable genre evidence. Publisher and live source review: docs/operations/reviewed-literary-match-round26-20261118.json.',
+    reviewedAt: '2026-11-18T00:00:00.000Z',
+  },
+  {
+    workId: '1859',
+    removeTraits: ['thriller_mystery'],
+    addTraits: [{ trait: 'literary', weight: 1 }],
+    reason: 'Hopscotch / Rayuela by Julio Cortázar (OL14860424W) is an experimental literary novel about Horacio Oliveira. Imported suspense labels do not justify a thriller recommendation. Publisher and live source review: docs/operations/reviewed-literary-match-round26-20261118.json.',
+    reviewedAt: '2026-11-18T00:00:00.000Z',
+  },
+  {
     workId: '6',
     removeTraits: ['science_fiction'],
     addTraits: [],

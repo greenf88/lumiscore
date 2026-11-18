@@ -1,0 +1,31 @@
+{
+  "reviewedAt": "2026-11-18",
+  "trigger": "Post-release mobile review of round26 showed inaccurate personal genre claims on two repaired book pages.",
+  "publicEvidenceRead": "Read-only query of works, authors and work_trait_evidence for IDs 1376 and 1859; no reader data or database writes.",
+  "corrections": [
+    {
+      "workId": "1376",
+      "title": "Against the Grain / À rebours",
+      "author": "Joris-Karl Huysmans",
+      "openLibraryWorkId": "OL2239396W",
+      "before": { "source": "open_library", "rawLabels": ["Fantasy"], "traits": { "fantasy": 1, "speculative": 0.8 }, "confidence": 0.85 },
+      "observedUiClaim": "Fantasy that fits your reading preferences.",
+      "reviewedGenre": "literary",
+      "source": "Penguin Classics",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/292441/against-nature-a-rebours-by-joris-karl-huysmans/"
+    },
+    {
+      "workId": "1859",
+      "title": "Hopscotch / Rayuela",
+      "author": "Julio Cortázar",
+      "openLibraryWorkId": "OL14860424W",
+      "before": { "source": "open_library", "rawLabels": ["Fiction, suspense", "Fiction, thrillers, suspense"], "traits": { "thriller_mystery": 1 }, "confidence": 0.85 },
+      "observedUiClaim": "A pick for your interest in thrillers and mysteries.",
+      "reviewedGenre": "literary",
+      "source": "Penguin Random House",
+      "sourceUrl": "https://www.penguinrandomhouse.com/books/32202/hopscotch-by-julio-cortazar/"
+    }
+  ],
+  "scope": "Use the existing reviewed Work-trait correction path to suppress contradicted genre evidence and supply a reviewed literary genre. Shared ranking, profile and explanation algorithms are unchanged; raw evidence remains intact. No arbitrary pacing, tone or confidence percentages added. The classification applies to both languages of each Work.",
+  "validation": "Regression fixtures reproduce the observed raw genre labels. Genre-only synthetic readers must not receive a genre claim or precise match; supported literary readers receive a literary explanation in EN and NL. No user ratings or reading lists are modified."
+}
