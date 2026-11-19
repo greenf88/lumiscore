@@ -152,9 +152,9 @@ export const THIRTY_THIRD_RECOVERY_DESCRIPTIONS = [
     "editionLanguage": "nld",
     "language": "nl",
     "reviewedAt": "2026-11-19",
-    "source": "official_publisher",
-    "sourceName": "Lannoo — uitgeversfragment",
-    "sourceUrl": "https://www.lannoo.be/sites/default/files/books/issuu/9789020999631.pdf",
+    "source": "official_catalog",
+    "sourceName": "De Slegte — uitgeversgegevens",
+    "sourceUrl": "https://www.deslegte.com/profiling-417310/",
     "text": "Danièle Zucker onderzoekt hoe gedrag op een plaats delict kan helpen bij het opstellen van een daderprofiel. Ze bespreekt het reconstrueren van feiten, de betrouwbaarheid van informatie en het onderscheid tussen werkwijze, rituelen en motieven.\n\nAan de hand van verschillende vormen van criminaliteit behandelt ze wat een profiel aan een onderzoek kan toevoegen. Ook de grenzen van de methode komen aan bod: welke conclusies volgen uit het beschikbare bewijs en waar kunnen interpretatie en denkfouten het overnemen? Het boek combineert uitleg van onderzoekstechnieken met kritische vragen over hun onderbouwing."
   },
   {
@@ -165,8 +165,8 @@ export const THIRTY_THIRD_RECOVERY_DESCRIPTIONS = [
     "language": "nl",
     "reviewedAt": "2026-11-19",
     "source": "official_catalog",
-    "sourceName": "CaGeWeB — bibliotheekcatalogus",
-    "sourceUrl": "https://www.cageweb.be/catalog/kub01%3A000725472",
+    "sourceName": "Google Books — Ludion catalogue",
+    "sourceUrl": "https://books.google.com/books/about/De_Belgische_beeldende_kunstenaars_van_d.html?id=M_Ug0AEACAAJ",
     "text": "Paul L. Piron brengt in dit tweedelige naslagwerk Belgische beeldende kunstenaars uit de negentiende, twintigste en eenentwintigste eeuw bijeen. De biografische beschrijvingen bestrijken onder meer schilderkunst, beeldhouwkunst, grafiek, fotografie en keramiek.\n\nDe opzet helpt lezers een afzonderlijke kunstenaar op te zoeken en diens plaats binnen de Belgische kunstwereld te verkennen. Het is daarmee vooral een hulpmiddel voor gerichte raadpleging: een brede verzameling kunstenaarsgegevens, in plaats van één doorlopend verhaal over de opeenvolgende kunststromingen."
   },
   {
@@ -189,8 +189,8 @@ export const THIRTY_THIRD_RECOVERY_DESCRIPTIONS = [
     "language": "nl",
     "reviewedAt": "2026-11-19",
     "source": "official_catalog",
-    "sourceName": "CaGeWeB — Amsab-ISG",
-    "sourceUrl": "https://www.cageweb.be/catalog/ams01%3A000140427",
+    "sourceName": "dwars — interview met Erdal Balci",
+    "sourceUrl": "https://www.dwars.be/index.php/en/artikel/van-ataturk-tot-de-zwarte-zee",
     "text": "Erdal Balci verkent de geschiedenis van het hedendaagse Turkije aan de hand van vier levensverhalen. Die persoonlijke invalshoek maakt zichtbaar hoe grote veranderingen doorwerken in de ervaringen en overtuigingen van afzonderlijke mensen.\n\nHet boek verbindt historische achtergrond met de blik van een journalist op de samenleving waarin hij werkt. Nationale identiteit en de verhouding tot Europa vormen daarbij belangrijke vragen. De lezer krijgt een ingang tot de spanningen van modern Turkije via mensen en hun geschiedenis, in plaats van uitsluitend via een chronologisch overzicht van regeringen en gebeurtenissen."
   },
   {
@@ -212,9 +212,9 @@ export const THIRTY_THIRD_RECOVERY_DESCRIPTIONS = [
     "editionLanguage": "nld",
     "language": "nl",
     "reviewedAt": "2026-11-19",
-    "source": "official_publisher",
-    "sourceName": "MER. Paper Kunsthalle",
-    "sourceUrl": "https://www.merpaperkunsthalle.org/projects/view/777",
+    "source": "official_catalog",
+    "sourceName": "KASK & Conservatorium — onderzoekspublicatie",
+    "sourceUrl": "https://schoolofartsgent.be/lees-kijk-luister/mooi-is-nuttig-de-kunstpraktijk-als-ervarings-en-reflectiemodel",
     "text": "Kristof Van Gestel onderzoekt hoe een kunstpraktijk kan functioneren als een manier om te ervaren en te reflecteren. Zijn eigen werk vormt het vertrekpunt voor vragen over hoe betekenis ontstaat tijdens het maken en bekijken van kunst.\n\nHet boek verbindt de dagelijkse praktijk van een kunstenaar met de persoonlijke en maatschappelijke context waarin die praktijk plaatsvindt. Zo verschuift de aandacht van het kunstwerk als eindproduct naar het proces van onderzoeken, handelen en nadenken. Deze publicatie komt voort uit Van Gestels doctoraatsonderzoek aan de Gentse kunstopleiding."
   },
   {

@@ -219,8 +219,8 @@ const editions = [
     "openLibraryWorkId": "OL23316987W",
     "openLibraryEditionId": "OL31165603M",
     "sourceKey": "9789020999631",
-    "source": "official_publisher",
-    "href": "https://www.lannoo.be/sites/default/files/books/issuu/9789020999631.pdf",
+    "source": "official_catalog",
+    "href": "https://www.deslegte.com/profiling-417310/",
     "marker": "Danièle Zucker onderzoekt hoe",
     "start": "Danièle Zucker onderzoekt"
   },
@@ -236,7 +236,7 @@ const editions = [
     "openLibraryEditionId": "OL44534028M",
     "sourceKey": "9789491819643",
     "source": "official_catalog",
-    "href": "https://www.cageweb.be/catalog/kub01%3A000725472",
+    "href": "https://books.google.com/books/about/De_Belgische_beeldende_kunstenaars_van_d.html?id=M_Ug0AEACAAJ",
     "marker": "Paul L. Piron brengt",
     "start": "Paul L. Piron"
   },
@@ -268,7 +268,7 @@ const editions = [
     "openLibraryEditionId": "OL19428804M",
     "sourceKey": "9789085420385",
     "source": "official_catalog",
-    "href": "https://www.cageweb.be/catalog/ams01%3A000140427",
+    "href": "https://www.dwars.be/index.php/en/artikel/van-ataturk-tot-de-zwarte-zee",
     "marker": "Erdal Balci verkent de",
     "start": "Erdal Balci verkent"
   },
@@ -299,8 +299,8 @@ const editions = [
     "openLibraryWorkId": "OL23129204W",
     "openLibraryEditionId": "OL30969671M",
     "sourceKey": "9789490693701",
-    "source": "official_publisher",
-    "href": "https://www.merpaperkunsthalle.org/projects/view/777",
+    "source": "official_catalog",
+    "href": "https://schoolofartsgent.be/lees-kijk-luister/mooi-is-nuttig-de-kunstpraktijk-als-ervarings-en-reflectiemodel",
     "marker": "Kristof Van Gestel onderzoekt",
     "start": "Kristof Van Gestel"
   },
