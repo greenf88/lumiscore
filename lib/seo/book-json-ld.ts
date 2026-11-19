@@ -7,7 +7,7 @@ import { breadcrumbJsonLd } from './breadcrumb-json-ld.ts';
 import { catalogBreadcrumbs } from './breadcrumbs.ts';
 import { LUMISCORE_WEBSITE_ID } from './site-identity.ts';
 import { absoluteLumiScoreUrl } from './site-origin.ts';
-import { reviewedCoauthor } from '../catalog/reviewed-coauthors.ts';
+import { reviewedCoauthors } from '../catalog/reviewed-coauthors.ts';
 
 export function bookPageJsonLd(book: Book, locale: Locale) {
   const path = `/book/${book.workId}`;
@@ -22,10 +22,11 @@ export function bookPageJsonLd(book: Book, locale: Locale) {
       ? absoluteLumiScoreUrl(`/#author-${encodeURIComponent(book.authorId)}`)
       : `${workId}-author`
     : null;
-  const coauthor = reviewedCoauthor(book);
-  const coauthorId = coauthor ? absoluteLumiScoreUrl(`/#author-credit-${coauthor.slug}`) : null;
+  const coauthors = reviewedCoauthors(book).map(credit => ({
+    ...credit, id: absoluteLumiScoreUrl(`/#author-credit-${credit.slug}`),
+  }));
   const author = authorId
-    ? { author: coauthorId ? [{ '@id': authorId }, { '@id': coauthorId }] : { '@id': authorId } }
+    ? { author: coauthors.length ? [{ '@id': authorId }, ...coauthors.map(credit => ({ '@id': credit.id }))] : { '@id': authorId } }
     : {};
   const { itemListElement } = breadcrumbJsonLd(catalogBreadcrumbs('book', book.title, path, locale), locale);
   const breadcrumbId = `${url}#breadcrumb`;
@@ -54,8 +55,8 @@ export function bookPageJsonLd(book: Book, locale: Locale) {
       ...(cover && /^https?:\/\//i.test(cover) ? { image: getBookCoverImageSource(cover, 'detail').src } : {}),
     });
   }
-  if (authorId) graph.push({ '@type': 'Person', '@id': authorId, name: authorName });
-  if (coauthor && coauthorId) graph.push({ '@type': 'Person', '@id': coauthorId, name: coauthor.name });
+  if (authorId) graph.push({ '@type': authorName === 'Routledge' ? 'Organization' : 'Person', '@id': authorId, name: authorName });
+  for (const credit of coauthors) graph.push({ '@type': 'Person', '@id': credit.id, name: credit.name });
   graph.push({ '@type': 'BreadcrumbList', '@id': breadcrumbId, itemListElement });
   return { '@context': 'https://schema.org', '@graph': graph };
 }

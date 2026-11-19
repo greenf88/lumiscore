@@ -2,7 +2,7 @@
 
 import { LocaleLink } from './LumiScoreLocale';
 import { localizedHref } from '@/lib/i18n/paths';
-import { bookAuthorByline, reviewedCoauthor } from '@/lib/catalog/reviewed-coauthors';
+import { bookAuthorByline } from '@/lib/catalog/reviewed-coauthors';
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -107,7 +107,6 @@ export function LumiScoreBookDetail({
 }: LumiScoreBookDetailProps) {
   const { locale, pagePath, t } = useLumiScoreLocale();
   const [searchQuery, setSearchQuery] = useState('');
-  const coauthor = reviewedCoauthor(book);
   const [ratingState, setRatingState] = useState(initialRatingState);
   const [readingStatus, setReadingStatus] = useState<ReadingStatus | null>(
     initialReadingStatus,
@@ -404,7 +403,7 @@ export function LumiScoreBookDetail({
             <dl>
               <div><dt>{t('detail.author')}</dt><dd>{book.authorId && /^[1-9]\d*$/.test(book.authorId) && Number.isSafeInteger(Number(book.authorId))
                 ? <LocaleLink className="detail-author-link" href={'/browse?author=' + book.authorId}>{book.author}</LocaleLink>
-                : book.author}{coauthor && [locale === 'nl' ? ' en ' : ' and ', coauthor.name].join('')}</dd></div>
+                : book.author}{bookAuthorByline(book, locale).slice(book.author.length)}</dd></div>
               <div><dt>{t('detail.firstPublishedLabel')}</dt><dd>{book.firstPublishYear ?? t('common.unknown')}</dd></div>
               {book.editionTitle && book.editionTitle !== book.title && <div><dt>{t('detail.edition')}</dt><dd>{book.editionTitle}</dd></div>}
               {book.editionPublisher && <div><dt>{t('detail.publisher')}</dt><dd>{book.editionPublisher}</dd></div>}
