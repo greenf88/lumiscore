@@ -52,12 +52,28 @@ export function buildSitemapIndex(): string {
   return `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</sitemapindex>`;
 }
 
+// Reviewed published page copy; a later edit invalidates its change date until reviewed.
 const verifiedContentDates: Partial<Record<string, { key: InformationPageKey; date: string; hash: string }>> = {
-  // Content reviewed for the 13 November recovery release. Exact hashes keep
-  // later editorial edits from silently advertising an obsolete change date.
-  '/zo-werkt-het': { key: 'howItWorks', date: '2026-11-13', hash: '72cf70b13f193cc607c55495a4f02544ecc64750531405ac21f6bb7f0b2d5cb3' },
-  // Unchanged since production release 46ae50b, 4 November.
-  '/imdb-for-books': { key: 'imdbComparison', date: '2026-11-04', hash: '2d0c45e0255161dc24460ba46d0e168a839b8f730ecbb73f97371f5d6a4f0082' },
+  "/nl/zo-werkt-het": {
+    "key": "howItWorks",
+    "date": "2026-11-19",
+    "hash": "ea1e03dd5a2b9445a30496766c5400c61d70b42903ece3abc531d57554e42384"
+  },
+  "/nl/imdb-for-books": {
+    "key": "imdbComparison",
+    "date": "2026-11-19",
+    "hash": "2f977e858e3a8a643622d064cfaf66503d4469a8ab16435dc586539bdaab88ce"
+  },
+  "/en/zo-werkt-het": {
+    "key": "howItWorks",
+    "date": "2026-11-19",
+    "hash": "4078171715ac11e2942515387782c057fc1afbf60c823f298eda91fff308117c"
+  },
+  "/en/imdb-for-books": {
+    "key": "imdbComparison",
+    "date": "2026-11-19",
+    "hash": "116894e2190df5b7d4763016ca809861305036627cb38cbde0446a6fda6ff9c1"
+  }
 };
 
 const verifiedGuideDates: Readonly<Record<string, { date: string; hash: string }>> = {
@@ -79,7 +95,7 @@ const verifiedGuideDates: Readonly<Record<string, { date: string; hash: string }
 };
 
 function sitemapLastModified(path: string, locale: Locale): string {
-  const entry = locale === 'nl' ? verifiedContentDates[path] : undefined;
+  const entry = verifiedContentDates['/' + locale + path];
   const dates: Readonly<Record<string, { date: string; hash: string }>> = locale === 'nl' ? verifiedGuideDates : englishGuideDates;
   const guide = Object.hasOwn(dates, path) ? dates[path] : undefined;
   const revision = entry ?? guide;

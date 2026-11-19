@@ -259,9 +259,25 @@ const en: Record<InformationPageKey, InformationPageContent> = {
       {
         heading: 'How do you rate a book from 1 to 10?',
         paragraphs: [
-          ['Sign in and find a book you have read. Tap a whole number from 1 to 10 to save your rating. In the taste test, the next book appears only after a successful save.'],
+          ['On a book page, sign in and give a book you have read a whole-number rating from 1 to 10. Your account rating is saved only when the save succeeds.'],
           ['You have one rating per book, even when you view a different edition. You can change your own score on the book page. Not read it? Skip it in the taste test; skipping does not count as a rating.'],
           [link('Find a book to rate', '/browse'), ' or ', link('start the taste test', '/taste-test'), '.'],
+        ],
+      },
+      {
+        heading: 'Try ten books without an account',
+        paragraphs: [
+          ['In the guest taste test, rate ten books you have read. Skip unfamiliar books or search for a title you know; skips do not count towards the ten ratings.'],
+          ['Your result includes a personal reading profile and, when enough suitable books are available, new recommendations with an explanation for each choice. Books you rated during the test are excluded from those suggestions.'],
+          ['Your guest answers and result are kept in the same browser tab for up to 24 hours, including when you open a book and return. They do not become public book ratings or change reader scores. Closing the tab or blocked browser storage can clear your progress.'],
+          [link('Start the guest taste test', '/taste-test/preferences'), ' or ', link('choose a reading list', '/toplijsten'), '.'],
+        ],
+      },
+      {
+        heading: 'When does an account taste test save?',
+        paragraphs: [
+          ['Choose a round length. Answers are held temporarily in this tab so you can move straight to the next book. They are saved together at the end; you can also save progress when pausing or loading more books.'],
+          ['Only a successful save adds those ratings to your account. If saving fails, your answers remain ready for you to try again.'],
         ],
       },
       {

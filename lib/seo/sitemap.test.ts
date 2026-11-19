@@ -123,11 +123,13 @@ test('only matching published content advertises a stable lastmod', () => {
     ...Object.fromEntries(editorialTopLists.map(list=>['https://lumisco.re/en/toplijsten/'+list.slug,'2026-11-16'])),
     ...Object.fromEntries(['fantasy-sciencefiction','fantasy-om-mee-te-beginnen','na-project-hail-mary','sciencefiction-om-mee-te-beginnen','thrillers-met-een-twist','na-de-rivierkreeften','historische-romans','korte-romans-en-novelles','eerste-delen-fantasyreeksen','overleven-in-extreme-omstandigheden','feelgood-voor-een-leesavond'].map(slug=>['https://lumisco.re/nl/toplijsten/'+slug,'2026-11-16'])),
     'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990': '2026-11-16',
-    'https://lumisco.re/nl/zo-werkt-het': '2026-11-13',
-    'https://lumisco.re/nl/imdb-voor-boeken': '2026-11-04',
+    'https://lumisco.re/nl/zo-werkt-het': '2026-11-19',
+    'https://lumisco.re/nl/imdb-voor-boeken': '2026-11-19',
+    'https://lumisco.re/en/imdb-for-books': '2026-11-19',
+    'https://lumisco.re/en/zo-werkt-het': '2026-11-19',
     'https://lumisco.re/nl/collection/suzanne-vermeer': '2026-11-04',
   });
-  assert.equal(dates.length, 27);
+  assert.equal(dates.length, 29);
   assert.doesNotMatch(buildLocalizedSitemap([{ workId: '1', locales: ['en'] }], [], 'en'), /<lastmod>/);
 });
 
@@ -148,7 +150,7 @@ test('changed information or guide content loses its lastmod until the new finge
     howItWorks.lead = originalLead;
     dystopia.intro = [...originalIntro, 'Synthetic unreviewed change.'];
     assert.equal(lastmodFor(sitemap(), '/toplijsten/dystopie-vanaf-1990'), undefined);
-    assert.equal(lastmodFor(sitemap(), '/zo-werkt-het'), '2026-11-13');
+    assert.equal(lastmodFor(sitemap(), '/zo-werkt-het'), '2026-11-19');
     assert.equal(lastmodFor(sitemap(), '/collection/suzanne-vermeer'), '2026-11-04');
   } finally {
     howItWorks.lead = originalLead;

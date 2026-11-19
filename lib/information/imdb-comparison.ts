@@ -36,7 +36,7 @@ export const IMDB_COMPARISON_CONTENT: Record<'nl' | 'en', InformationPageContent
       ] },
       { heading: 'Hoe kies je van hieruit een volgend boek?', paragraphs: [
         ['Begin bij een boek dat je kent, verken een collectie of kies een redactionele leesroute. Zoek je bijvoorbeeld een eerste fantasyboek, dan helpt een inhoudelijke keuzehulp je verder dan alleen het hoogste cijfer.'],
-        [{ type: 'link', text: 'Bekijk de redactionele leesroutes', href: '/toplijsten' }, ', ', { type: 'link', text: 'ontdek boeken', href: '/browse' }, ' of ', { type: 'link', text: 'start de smaaktest', href: '/taste-test' }, '. Daar beoordeel je gelezen boeken; onbekende boeken mag je overslaan. Voor het bewaren van boekbeoordelingen meld je je aan.'],
+        [{ type: 'link', text: 'Bekijk de redactionele leesroutes', href: '/toplijsten' }, ', ', { type: 'link', text: 'ontdek boeken', href: '/browse' }, ' of ', { type: 'link', text: 'probeer de gasttest', href: '/taste-test/preferences' }, '. Na tien beoordeelde boeken krijg je een smaakprofiel en, bij voldoende passende kandidaten, nieuwe persoonlijke leestips. Onbekende boeken sla je over. Gastkeuzes veranderen de openbare boekcijfers niet; voor bewaarde accountbeoordelingen meld je je aan.'],
       ] },
     ],
     faq: { heading: 'Kort antwoord op je vragen', items: [
@@ -70,7 +70,9 @@ export const IMDB_COMPARISON_CONTENT: Record<'nl' | 'en', InformationPageContent
         ['LumiScore is a growing platform. Many books still have few ratings, so one new rating can noticeably change an early score.'],
       ] },
       { heading: 'Discover your next read', paragraphs: [
-        [{ type: 'link', text: 'Browse the book catalog', href: '/browse' }, ' by title or author. In the ', { type: 'link', text: 'taste test', href: '/taste-test' }, ', rate books you’ve read to build your reading profile. Your ratings help inform personal recommendations where there is enough supporting evidence.'],
+        [{ type: 'link', text: 'Search for a book you know', href: '/search' }, ', explore ', { type: 'link', text: 'reading lists', href: '/toplijsten' }, ' or ', { type: 'link', text: 'try the guest taste test', href: '/taste-test/preferences' }, ' without an account. Rate ten books you have read; skip unfamiliar ones or search for another title.'],
+        ['The guest result combines your reading profile with new recommendations when enough suitable candidates are available. Each suggestion explains a connection to your preferences. Books you rated during the test are excluded, and your guest choices do not change public reader scores.'],
+        [{ type: 'link', text: 'See how ratings, guest results and saving work', href: '/zo-werkt-het' }, '.'],
       ] },
       { heading: 'Keep track of books and series', paragraphs: [
         ['Use your account to track what you want to read, are reading or have read. Rated books also count as read. My books brings your own list together.'],
@@ -80,8 +82,8 @@ export const IMDB_COMPARISON_CONTENT: Record<'nl' | 'en', InformationPageContent
     faq: { heading: 'A few quick answers', items: [
       { question: 'Is there an IMDb for books?', answer: 'If you want ratings and an overview for books, try LumiScore. The comparison describes the approach, not a promise of every IMDb feature.' },
       { question: 'Can I rate books from 1 to 10?', answer: 'Yes. Sign in to give a book you’ve read a whole-number rating from 1 to 10, on its book page or in the taste test.' },
-      { question: 'Do I need an account?', answer: 'You can browse without an account. Sign in to rate books and keep reading progress in your account. Guest preferences are not saved account ratings.' },
-      { question: 'How do I get personal book recommendations?', answer: 'Rate books you’ve read. The taste test helps you get started; your reading profile and recommendations share the same taste calculation. With little supporting evidence, suggestions stay exploratory.' },
+      { question: 'Do I need an account?', answer: 'You can browse and take the ten-book guest taste test without an account. Guest choices do not become public book ratings. Sign in to keep account ratings and reading progress.' },
+      { question: 'How do I get personal book recommendations?', answer: 'Rate ten books you have read in the guest taste test, or use an account round. Your result explains your reading preferences and suggests new books when enough suitable candidates are available. With limited evidence, suggestions stay exploratory.' },
     ] },
     disclaimer: 'LumiScore is an independent platform and is not affiliated with IMDb.',
   },
