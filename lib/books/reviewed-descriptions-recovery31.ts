@@ -762,7 +762,7 @@ export const THIRTY_FIRST_RECOVERY_DESCRIPTIONS = [
   {
     "title": "Odessa Star",
     "author": "Herman Koch",
-    "isbn13": "9789045703217",
+    "isbn13": "9789045703213",
     "isbn10": "9045703211",
     "editionLanguage": "nld",
     "language": "nl",

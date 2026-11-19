@@ -1034,7 +1034,7 @@ const editions = [
     "isbn10": "9045703211",
     "openLibraryWorkId": "OL2486919W",
     "openLibraryEditionId": "OL3349681M",
-    "sourceKey": "9789045703217",
+    "sourceKey": "9789045703213",
     "source": "official_publisher",
     "href": "https://www.amboanthos.nl/boek/odessa-star/",
     "marker": "Fred",
@@ -1646,6 +1646,11 @@ for (const edition of editions) {
   const { locale } = edition;
 
   test(`recovery31 ${edition.id}: synchronous synopsis and metadata match the recorded edition without external reads`, async () => {
+    assert.match(edition.sourceKey, /^97[89]\d{10}$/);
+    assert.equal([...edition.sourceKey].reduce((sum, digit, i) => sum + Number(digit) * (i % 2 ? 3 : 1), 0) % 10, 0, 'attribution uses a valid ISBN-13 checksum');
+    if (!edition.isbn && edition.isbn10) {
+      assert.equal(edition.sourceKey.slice(0, 12), '978' + edition.isbn10.slice(0, 9), 'ISBN-10 attribution retains the edition identifier');
+    }
     const initial = getInitialPublicBookDescription(book, locale);
     assert.ok(initial);
     assert.match(initial.text, new RegExp(edition.marker));
