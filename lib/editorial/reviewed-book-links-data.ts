@@ -1,6 +1,17 @@
 // Public book identities and editorial comparisons checked through 2026-11-19.
 // The resolver verifies each source identity and locale before displaying production links.
-export const REVIEWED_BOOK_LINKS = [
+type ReviewedBookLinkEntry = {
+  readonly workId: string;
+  readonly title: string;
+  readonly author: string;
+  readonly openLibraryWorkId: string | null;
+  readonly language: 'nl' | 'en';
+  readonly editionLanguage: 'nld' | 'eng';
+  readonly links: readonly { readonly workId: string; readonly reason: string }[];
+};
+
+// A stable structural type avoids a combinatorial literal union as the catalogue grows.
+export const REVIEWED_BOOK_LINKS: readonly ReviewedBookLinkEntry[] = [
   {
     "workId": "7801",
     "title": "Against the Grain",
@@ -12720,6 +12731,4342 @@ export const REVIEWED_BOOK_LINKS = [
       {
         "workId": "5883",
         "reason": "Voor een ander avontuur onder de stad kun je verder met Ananka en de geheime schaduwstad van New York; deze keer met menselijke speurders."
+      }
+    ]
+  },
+  {
+    "workId": "3203",
+    "title": "Wat ik was",
+    "author": "Meg Rosoff",
+    "openLibraryWorkId": "OL5707253W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2031",
+        "reason": "Een andere roman over een jeugdvriendschap die een heel leven blijft bepalen, nu in de bergen."
+      }
+    ]
+  },
+  {
+    "workId": "2031",
+    "title": "De acht bergen",
+    "author": "Paolo Cognetti",
+    "openLibraryWorkId": "OL19740449W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3203",
+        "reason": "Verplaats de vraag wat een jeugdvriend voor je betekent van de bergen naar de Engelse kust."
+      }
+    ]
+  },
+  {
+    "workId": "6508",
+    "title": "Het grote zwijgen",
+    "author": "Erik Menkveld",
+    "openLibraryWorkId": "OL16454700W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6530",
+        "reason": "Lees verder over kunstenaars en denkers wier persoonlijke verhoudingen hun idealen doorkruisen."
+      },
+      {
+        "workId": "1013",
+        "reason": "Hermans kiest de wetenschap als decor voor een satirisch onderzoek naar aanzien, afgunst en professionele macht."
+      }
+    ]
+  },
+  {
+    "workId": "6530",
+    "title": "De stok van Schopenhauer",
+    "author": "H. C. ten Berge",
+    "openLibraryWorkId": "OL39457318W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6508",
+        "reason": "Ook Menkveld verbindt historische kunstenaars met een vriendschap die door liefde onder druk komt."
+      }
+    ]
+  },
+  {
+    "workId": "6532",
+    "title": "Poolse tranen",
+    "author": "Miriam Guensberg",
+    "openLibraryWorkId": "OL40362424W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1357",
+        "reason": "Ook hier probeert een volgende generatie te begrijpen hoe een verzwegen oorlogsverleden thuis doorwerkt."
+      }
+    ]
+  },
+  {
+    "workId": "1357",
+    "title": "De tolk van Java",
+    "author": "Alfred Birney",
+    "openLibraryWorkId": "OL34953874W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6532",
+        "reason": "Deze familiegeschiedenis verplaatst de doorwerking van oorlog van Java naar Polen en Nederland."
+      }
+    ]
+  },
+  {
+    "workId": "6252",
+    "title": "De regels van het spel",
+    "author": "Heather Lewis",
+    "openLibraryWorkId": "OL26179237W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5601",
+        "reason": "Voor een persoonlijk verslag over de langdurige gevolgen van seksueel geweld, naast Lewis’ roman."
+      }
+    ]
+  },
+  {
+    "workId": "5601",
+    "title": "Brief aan een onbekende man",
+    "author": "Marieke Storm",
+    "openLibraryWorkId": "OL26185744W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6252",
+        "reason": "Lewis benadert kwetsbaarheid en seksueel geweld via een roman over een jonge vrouw in de paardensport."
+      }
+    ]
+  },
+  {
+    "workId": "5368",
+    "title": "Tumult",
+    "author": "Frank Okker",
+    "openLibraryWorkId": "OL7826128W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2037",
+        "reason": "Vergelijk de biografische reconstructie van een schrijfster met een schrijver die zijn moeder portretteert."
+      }
+    ]
+  },
+  {
+    "workId": "2037",
+    "title": "Magdalena",
+    "author": "Maarten 't Hart",
+    "openLibraryWorkId": "OL17092729W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5368",
+        "reason": "Deze biografie onderzoekt eveneens een vrouwenleven via familiegeschiedenis, herinneringen en geschreven bronnen."
+      }
+    ]
+  },
+  {
+    "workId": "5543",
+    "title": "Waarnemer, adviseur, beslisser",
+    "author": "Uri Rosenthal",
+    "openLibraryWorkId": "OL31244174W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1159",
+        "reason": "Naast Rosenthals eigen herinneringen: een biografische reconstructie van een Nederlandse ondernemer."
+      }
+    ]
+  },
+  {
+    "workId": "1159",
+    "title": "Gerard Heineken",
+    "author": "Annejet van der Zijl",
+    "openLibraryWorkId": "OL23358669W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5543",
+        "reason": "Lees een ander Nederlands levensverhaal, verteld door de hoofdpersoon zelf en gericht op wetenschap en politiek."
+      }
+    ]
+  },
+  {
+    "workId": "6124",
+    "title": "Birk",
+    "author": "Jaap Robben",
+    "openLibraryWorkId": "OL31431303W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1179",
+        "reason": "Ook deze roman onderzoekt hoe het verlies van een partner de verhouding tussen ouder en kind verandert."
+      }
+    ]
+  },
+  {
+    "workId": "1179",
+    "title": "De weduwnaar",
+    "author": "Kluun is Raymond van de Klundert",
+    "openLibraryWorkId": "OL26189493W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6124",
+        "reason": "Robben kiest het perspectief van een zoon op het verdriet en de verwachtingen binnen een achtergebleven gezin."
+      }
+    ]
+  },
+  {
+    "workId": "5909",
+    "title": "De donkere bruid",
+    "author": "Laura Restrepo",
+    "openLibraryWorkId": "OL97953W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1207",
+        "reason": "Voor een andere roman waarin een vrouwenleven nauw verbonden is met een plantage- of industriële omgeving."
+      }
+    ]
+  },
+  {
+    "workId": "1207",
+    "title": "De tienduizend dingen",
+    "author": "Maria Dermoût",
+    "openLibraryWorkId": "OL45328704W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5909",
+        "reason": "Restrepo verbindt een vrouwenleven met de sociale verhoudingen van een Colombiaans oliestadje."
+      }
+    ]
+  },
+  {
+    "workId": "6046",
+    "title": "De verloofdes van meneer Hire",
+    "author": "Georges Simenon",
+    "openLibraryWorkId": "OL1242881W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "52",
+        "reason": "Highsmith onderzoekt eveneens de afstand tussen iemands verlangens en het beeld dat anderen van hem hebben."
+      }
+    ]
+  },
+  {
+    "workId": "52",
+    "title": "De getalenteerde Mr. Ripley",
+    "author": "Patricia Highsmith",
+    "openLibraryWorkId": "OL59434W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6046",
+        "reason": "Simenon volgt juist een teruggetrokken buitenstaander die door zijn omgeving als schuldige wordt aangewezen."
+      }
+    ]
+  },
+  {
+    "workId": "6363",
+    "title": "Mannen na 50",
+    "author": "Laurens De Keyzer",
+    "openLibraryWorkId": "OL26411573W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3417",
+        "reason": "Van individuele gesprekken over ouder worden naar een autobiografie die ook een generatie portretteert."
+      },
+      {
+        "workId": "1498",
+        "reason": "Mindgym biedt een praktische tegenhanger bij persoonlijke reflecties, met oefeningen rond aandacht en mentale gewoonten."
+      }
+    ]
+  },
+  {
+    "workId": "3417",
+    "title": "De jaren",
+    "author": "Annie Ernaux",
+    "openLibraryWorkId": "OL102389W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6363",
+        "reason": "Deze interviews bekijken terugblikken en ouder worden via vijftien afzonderlijke mannenlevens."
+      }
+    ]
+  },
+  {
+    "workId": "5454",
+    "title": "De Republiek, 1477-1806",
+    "author": "Jonathan I. Israel",
+    "openLibraryWorkId": "OL24821964W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5485",
+        "reason": "Verdiep de vroegmoderne Nederlandse geschiedenis via het leven van Willem van Oranjes tweede vrouw."
+      }
+    ]
+  },
+  {
+    "workId": "5485",
+    "title": "Anna van Saksen",
+    "author": "Femke Deen",
+    "openLibraryWorkId": "OL30561093W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5454",
+        "reason": "Plaats Anna’s leven naast Israels bredere geschiedenis van de Nederlanden en de vroege Republiek."
+      }
+    ]
+  },
+  {
+    "workId": "2038",
+    "title": "De mens is een plofkip :",
+    "author": "Teun van de Keuken",
+    "openLibraryWorkId": "OL45003955W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3129",
+        "reason": "Kingsolver onderzoekt in romanvorm hoe wetenschap, economische belangen en dagelijkse keuzes botsen."
+      }
+    ]
+  },
+  {
+    "workId": "3129",
+    "title": "Vlieggedrag",
+    "author": "Barbara Kingsolver",
+    "openLibraryWorkId": "OL16700025W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2038",
+        "reason": "Van een roman over klimaat en armoede naar een kritisch betoog over industrie en voedselkeuzes."
+      }
+    ]
+  },
+  {
+    "workId": "3371",
+    "title": "De kinderen van Hurin",
+    "author": "J.R.R. Tolkien",
+    "openLibraryWorkId": "OL27471W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6350",
+        "reason": "Voor een andere sombere strijd tegen draken, gesitueerd in een alternatieve twintigste eeuw."
+      },
+      {
+        "workId": "3188",
+        "reason": "Heitz kiest een avontuurlijker benadering van verzet tegen een magische dreiging, met dwergen als hoofdpersonen."
+      }
+    ]
+  },
+  {
+    "workId": "6350",
+    "title": "Drakenkeizer",
+    "author": "Markus Heitz",
+    "openLibraryWorkId": "OL20237415W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3371",
+        "reason": "Tolkien plaatst de dreiging van een draak binnen een tragische familiegeschiedenis in Midden-aarde."
+      }
+    ]
+  },
+  {
+    "workId": "1215",
+    "title": "Alles wat er was",
+    "author": "Hanna Bervoets",
+    "openLibraryWorkId": "OL23118085W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3335",
+        "reason": "Ook dit verhaal zet een afgesloten groep onder druk wanneer vertrouwde verklaringen wegvallen."
+      }
+    ]
+  },
+  {
+    "workId": "3335",
+    "title": "Sfeer",
+    "author": "Michael Crichton",
+    "openLibraryWorkId": "OL46917W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1215",
+        "reason": "Bervoets onderzoekt het samenleven van een groep die plotseling van de buitenwereld wordt afgesneden."
+      },
+      {
+        "workId": "9527",
+        "reason": "Paver gebruikt eveneens een geïsoleerde expeditie, maar maakt de dreiging expliciet bovennatuurlijk."
+      }
+    ]
+  },
+  {
+    "workId": "3278",
+    "title": "Teerbemind",
+    "author": "Gillian Flynn",
+    "openLibraryWorkId": "OL5842018W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "580",
+        "reason": "Ook deze rechercheur ziet een moordonderzoek verstrengeld raken met een onopgehelderd jeugdtrauma."
+      }
+    ]
+  },
+  {
+    "workId": "580",
+    "title": "De offerplaats",
+    "author": "Tana French",
+    "openLibraryWorkId": "OL7989979W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3278",
+        "reason": "Flynn laat een journalist terugkeren naar de familieomgeving die haar onderzoek persoonlijk maakt."
+      }
+    ]
+  },
+  {
+    "workId": "3397",
+    "title": "Kringen in een bos",
+    "author": "Dalene Matthee",
+    "openLibraryWorkId": "OL2412107W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1461",
+        "reason": "Naast de roman: een persoonlijk wandelverslag waarin landschap, verlies en bestaanszekerheid samenkomen."
+      }
+    ]
+  },
+  {
+    "workId": "1461",
+    "title": "Het Zoutpad",
+    "author": "Raynor Winn",
+    "openLibraryWorkId": "OL20153160W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3397",
+        "reason": "Matthee onderzoekt in fictie hoe afhankelijkheid van een landschap botst met de aantasting ervan."
+      }
+    ]
+  },
+  {
+    "workId": "1068",
+    "title": "De wetten",
+    "author": "Connie Palmen",
+    "openLibraryWorkId": "OL748333W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1197",
+        "reason": "Van filosofische ontmoetingen tussen volwassenen naar een symbolische zoektocht van een kind naar zijn levensweg."
+      }
+    ]
+  },
+  {
+    "workId": "1197",
+    "title": "De kleine Johannes",
+    "author": "Frederik van Eeden",
+    "openLibraryWorkId": "OL27339889W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1068",
+        "reason": "Palmen onderzoekt vragen over waarheid en een eigen levenswijze via zeven opeenvolgende ontmoetingen."
+      }
+    ]
+  },
+  {
+    "workId": "1011",
+    "title": "De donkere kamer van Damokles",
+    "author": "Willem Frederik Hermans",
+    "openLibraryWorkId": "OL109957W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5073",
+        "reason": "Een tweede oorlogsverhaal van Hermans waarin verzetsplannen en menselijke bedoelingen moeilijk te doorzien zijn."
+      }
+    ]
+  },
+  {
+    "workId": "5073",
+    "title": "In de mist van het schimmenrijk",
+    "author": "Willem Frederik Hermans",
+    "openLibraryWorkId": "OL15253352W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1011",
+        "reason": "Hermans werkt de onzekerheid over verzet, bewijs en schuld hier uit tot een grotere roman."
+      }
+    ]
+  },
+  {
+    "workId": "1130",
+    "title": "Brainwash",
+    "author": "Carry Slee",
+    "openLibraryWorkId": "OL24739344W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5834",
+        "reason": "Ook Knapp onderzoekt hoe kwetsbaarheid en de invloed van anderen de ruimte voor eigen keuzes beperken."
+      }
+    ]
+  },
+  {
+    "workId": "5834",
+    "title": "De namen",
+    "author": "Florence Knapp",
+    "openLibraryWorkId": "OL42406530W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1130",
+        "reason": "Slee richt zich op jonge mensen die houvast zoeken en met de invloed van een sekte te maken krijgen."
+      },
+      {
+        "workId": "5053",
+        "reason": "Zola onderzoekt een andere verstikkende huiselijke verhouding en de gevolgen van verlangen en overspel."
+      }
+    ]
+  },
+  {
+    "workId": "1376",
+    "title": "Tegen de keer",
+    "author": "Joris-Karl Huysmans",
+    "openLibraryWorkId": "OL2239396W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1199",
+        "reason": "Vergelijk een zorgvuldig ingerichte afzondering met Japi’s weigering zich door werk en bezit te laten vastleggen."
+      }
+    ]
+  },
+  {
+    "workId": "1199",
+    "title": "De uitvreter",
+    "author": "Nescio",
+    "openLibraryWorkId": "OL2795316W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1376",
+        "reason": "Huysmans laat een andere buitenstaander proberen een bestaan buiten de gewone samenleving te bouwen."
+      }
+    ]
+  },
+  {
+    "workId": "1382",
+    "title": "IJsbreker",
+    "author": "Hannah Grace",
+    "openLibraryWorkId": "OL28952677W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6140",
+        "reason": "Voor een volgende campusromance waarin aanvankelijke ergernis en een praktische afspraak tot toenadering leiden."
+      }
+    ]
+  },
+  {
+    "workId": "6140",
+    "title": "Lessons in Faking",
+    "author": "Selina Mae",
+    "openLibraryWorkId": "OL44040798W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1382",
+        "reason": "Ook deze romance laat een gedwongen samenwerking tussen studenten uitgroeien tot iets persoonlijkers."
+      }
+    ]
+  },
+  {
+    "workId": "1481",
+    "title": "De wet van staal",
+    "author": "Brandon Sanderson",
+    "openLibraryWorkId": "OL16597059W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3285",
+        "reason": "Voor lezers die graag ontdekken hoe een fantasiewereld verandert: hier staat de ontwikkeling van beschavingen centraal."
+      }
+    ]
+  },
+  {
+    "workId": "3285",
+    "title": "Kinderen van de tijd",
+    "author": "Adrian Tchaikovsky",
+    "openLibraryWorkId": "OL17373843W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1481",
+        "reason": "Sanderson onderzoekt een veranderde magische samenleving waarin nieuwe technologie en oude krachten samenleven."
+      }
+    ]
+  },
+  {
+    "workId": "3554",
+    "title": "Wild",
+    "author": "Harlan Coben",
+    "openLibraryWorkId": "OL22297473W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3519",
+        "reason": "Een andere Coben-thriller waarin een verdwijning iemand dwingt tegenstrijdige aanwijzingen te volgen."
+      }
+    ]
+  },
+  {
+    "workId": "3519",
+    "title": "Geen tweede kans",
+    "author": "Harlan Coben",
+    "openLibraryWorkId": "OL79331W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3554",
+        "reason": "Hier zoekt een buitenstaander naar een verdwenen meisje dat door haar omgeving nauwelijks wordt gemist."
+      }
+    ]
+  },
+  {
+    "workId": "5011",
+    "title": "De onschuldigen",
+    "author": "Harlan Coben",
+    "openLibraryWorkId": "OL14963222W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3404",
+        "reason": "Ook hier zet een onverwacht digitaal beeld alles op losse schroeven wat iemand over de partner denkt te weten."
+      }
+    ]
+  },
+  {
+    "workId": "3404",
+    "title": "De verbeelding",
+    "author": "Harlan Coben",
+    "openLibraryWorkId": "OL17356545W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5011",
+        "reason": "Deze Coben-thriller begint eveneens met een videobeeld dat een ogenschijnlijk nieuw begin verstoort."
+      }
+    ]
+  },
+  {
+    "workId": "675",
+    "title": "Things we never got over",
+    "author": "Lucy Score",
+    "openLibraryWorkId": "OL26955716W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5853",
+        "reason": "Nog een kleine-stadromance waarin onverwachte zorg voor een kind mensen bij elkaar brengt."
+      }
+    ]
+  },
+  {
+    "workId": "5853",
+    "title": "Het Strawberry Patch Pannenkoekenhuis",
+    "author": "Laurie Gilmore",
+    "openLibraryWorkId": "OL44077231W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "675",
+        "reason": "Naomi’s onverwachte verantwoordelijkheid voor haar nichtje maakt ook deze romance meer dan een ontmoeting alleen."
+      }
+    ]
+  },
+  {
+    "workId": "1114",
+    "title": "Het rad van fortuin",
+    "author": "Thea Beckman",
+    "openLibraryWorkId": "OL1736489W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1119",
+        "reason": "Van een jonge spion in middeleeuws Frankrijk naar een jongen die tijdens de bezetting verantwoordelijkheid krijgt."
+      }
+    ]
+  },
+  {
+    "workId": "1119",
+    "title": "Oorlogswinter",
+    "author": "Jan Terlouw",
+    "openLibraryWorkId": "OL3681911W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1114",
+        "reason": "Beckman vertelt eveneens over een jonge hoofdpersoon die in oorlogstijd informatie en vertrouwen moet afwegen."
+      }
+    ]
+  },
+  {
+    "workId": "1142",
+    "title": "De tunnel",
+    "author": "Anna Woltz",
+    "openLibraryWorkId": "OL42541061W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1143",
+        "reason": "Een tweede jeugdboek over oorlog, onderdak en onverwachte ontmoetingen, nu op de Veluwe."
+      }
+    ]
+  },
+  {
+    "workId": "1143",
+    "title": "De kinderen van het Achtste Woud",
+    "author": "Els Pelgrom",
+    "openLibraryWorkId": "OL1664786W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1142",
+        "reason": "Woltz laat jonge mensen tijdens de bombardementen op Londen een tijdelijke gemeenschap vormen."
+      }
+    ]
+  },
+  {
+    "workId": "1146",
+    "title": "De eeuw van mijn vader",
+    "author": "Geert Mak",
+    "openLibraryWorkId": "OL931621W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1170",
+        "reason": "Verdiep de Indonesische onafhankelijkheidsstrijd die ook met Nederlandse familiegeschiedenissen verweven is."
+      }
+    ]
+  },
+  {
+    "workId": "1170",
+    "title": "Revolusi",
+    "author": "David Van Reybrouck",
+    "openLibraryWorkId": "OL24234444W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1146",
+        "reason": "Mak verbindt de grote geschiedenis, inclusief de oorlogen in Azië, met het dagelijks leven van zijn familie."
+      }
+    ]
+  },
+  {
+    "workId": "1223",
+    "title": "Cruise",
+    "author": "Suzanne Vermeer",
+    "openLibraryWorkId": "OL21609237W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1238",
+        "reason": "Nog een thriller waarin een buitenlandse vakantie verandert in een zoektocht naar een verdwenen naaste."
+      }
+    ]
+  },
+  {
+    "workId": "1238",
+    "title": "Het paradijs",
+    "author": "Suzanne Vermeer",
+    "openLibraryWorkId": "OL30599005W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1223",
+        "reason": "Ook hier onthult een verdwijning op vakantie geheimen binnen een vertrouwde relatie."
+      }
+    ]
+  },
+  {
+    "workId": "1248",
+    "title": "Pluk van de Petteflet",
+    "author": "Annie M. G. Schmidt",
+    "openLibraryWorkId": "OL34952258W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6285",
+        "reason": "Een kleiner voorleesavontuur waarin een ongewoon dier laat zien dat bewondering niet alleen om uiterlijk draait."
+      },
+      {
+        "workId": "3555",
+        "reason": "Geronimo gaat zelf op onderzoek uit wanneer zijn naam en de oorsprong van Stiltonkaas ter discussie staan."
+      }
+    ]
+  },
+  {
+    "workId": "6285",
+    "title": "De raaf die op zijn snavel kon staan",
+    "author": "Rafik Schami",
+    "openLibraryWorkId": "OL18916886W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1248",
+        "reason": "Pluk biedt een langer avontuur vol bijzondere ontmoetingen en kinderen die voor anderen opkomen."
+      }
+    ]
+  },
+  {
+    "workId": "1312",
+    "title": "Vlammen",
+    "author": "Suzanne Collins",
+    "openLibraryWorkId": "OL5735360W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1391",
+        "reason": "Voor een andere gevaarlijke strijd waarin jonge helden tegenover veel machtiger tegenstanders staan, nu met Griekse mythen."
+      }
+    ]
+  },
+  {
+    "workId": "1391",
+    "title": "Het bloed van Olympus",
+    "author": "Rick Riordan",
+    "openLibraryWorkId": "OL17059943W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1312",
+        "reason": "Collins verplaatst de ongelijke strijd naar een samenleving die jonge mensen voor haar eigen macht gebruikt."
+      }
+    ]
+  },
+  {
+    "workId": "146",
+    "title": "Het gouden kompas",
+    "author": "Philip Pullman",
+    "openLibraryWorkId": "OL28988W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5056",
+        "reason": "Rumo biedt een andere reis door een fantasiewereld vol vreemde wezens, gevaren en onverwachte bondgenoten."
+      },
+      {
+        "workId": "5817",
+        "reason": "Morgan ontdekt in deze bundeling haar eigen magische mogelijkheden en een verborgen verleden."
+      }
+    ]
+  },
+  {
+    "workId": "5056",
+    "title": "Rumo & de wonderen in het donker",
+    "author": "Walter Moers",
+    "openLibraryWorkId": "OL867705W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "146",
+        "reason": "Pullman laat een jonge hoofdpersoon eveneens een onbekende wereld doorkruisen op zoek naar iemand die verdwenen is."
+      }
+    ]
+  },
+  {
+    "workId": "1881",
+    "title": "Jihad van liefde",
+    "author": "Mohamed El Bachiri",
+    "openLibraryWorkId": "OL45524188W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2364",
+        "reason": "Naast dit persoonlijke getuigenis: een jeugdroman over gemis en de angst een overleden dierbare te vergeten."
+      }
+    ]
+  },
+  {
+    "workId": "2364",
+    "title": "Mijn nacht met Vedder",
+    "author": "Buddy Tegenbosch",
+    "openLibraryWorkId": "OL44651244W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1881",
+        "reason": "El Bachiri schrijft vanuit zijn eigen leven over liefde en verlies na de dood van zijn vrouw."
+      }
+    ]
+  },
+  {
+    "workId": "1936",
+    "title": "De Schaduw van de Wind",
+    "author": "Carlos Ruiz Zafón",
+    "openLibraryWorkId": "OL34874211W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3291",
+        "reason": "Van een roman die levens verbindt naar computerspellen als bron van vriendschap, samenwerking en conflict."
+      }
+    ]
+  },
+  {
+    "workId": "3291",
+    "title": "Morgen en morgen en morgen",
+    "author": "Gabrielle Zevin",
+    "openLibraryWorkId": "OL26004554W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1936",
+        "reason": "Zafón laat een kunstwerk eveneens relaties en levenslopen met elkaar verweven, nu rond een vergeten schrijver."
+      }
+    ]
+  },
+  {
+    "workId": "2197",
+    "title": "De verre kust",
+    "author": "Diana Gabaldon",
+    "openLibraryWorkId": "OL3261154W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "9001",
+        "reason": "Voor historische romantiek met een lichtere toon, familieverwachtingen en misverstanden in de Regencytijd."
+      }
+    ]
+  },
+  {
+    "workId": "9001",
+    "title": "Een onverwacht duet",
+    "author": "Julia Quinn",
+    "openLibraryWorkId": "OL16667087W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2197",
+        "reason": "Gabaldon combineert historische romantiek met tijdreizen en een liefde die door afstand wordt beproefd."
+      }
+    ]
+  },
+  {
+    "workId": "2210",
+    "title": "De verbannen koningin",
+    "author": "Holly Black",
+    "openLibraryWorkId": "OL20485895W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3462",
+        "reason": "Ook Oraya moet na verraad haar positie aan een gevaarlijk hof opnieuw bepalen."
+      }
+    ]
+  },
+  {
+    "workId": "3462",
+    "title": "The Ashes & the Star-Cursed King",
+    "author": "Carissa Broadbent",
+    "openLibraryWorkId": "OL35014570W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2210",
+        "reason": "Jude keert eveneens terug naar een machtsstrijd waarin persoonlijke gevoelens en politieke plannen botsen."
+      },
+      {
+        "workId": "6198",
+        "reason": "Katee Robert laat twee onwaarschijnlijke bondgenoten samenwerken terwijl toenadering hun plannen ingewikkelder maakt."
+      }
+    ]
+  },
+  {
+    "workId": "2493",
+    "title": "Nacht van het kwaad",
+    "author": "Ken Follett",
+    "openLibraryWorkId": "OL16531911W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "41",
+        "reason": "Vergelijk families in de Tweede Wereldoorlog met Tolstojs brede roman over de napoleontische oorlogen."
+      }
+    ]
+  },
+  {
+    "workId": "41",
+    "title": "Oorlog en vrede",
+    "author": "Leo Tolstoy",
+    "openLibraryWorkId": "OL45017724W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2493",
+        "reason": "Follett gebruikt eveneens verbonden families om de gevolgen van grote oorlogen van dichtbij te laten zien."
+      }
+    ]
+  },
+  {
+    "workId": "2531",
+    "title": "Heartstopper",
+    "author": "Alice Oseman",
+    "openLibraryWorkId": "OL45345337W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3435",
+        "reason": "Voor een veel zwaardere roman over identiteit en het verschil tussen iemands eigen leven en de verwachtingen van anderen."
+      }
+    ]
+  },
+  {
+    "workId": "3435",
+    "title": "De dood van Vivek Oji",
+    "author": "Akwaeke Emezi",
+    "openLibraryWorkId": "OL20649783W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2531",
+        "reason": "Heartstopper biedt een zachtere, grafische benadering van identiteit, verbondenheid en ruimte voor een eigen toekomst."
+      }
+    ]
+  },
+  {
+    "workId": "2980",
+    "title": "Het uur van de zonde",
+    "author": "David Baldacci",
+    "openLibraryWorkId": "OL41245W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6334",
+        "reason": "Een volgend onderzoek waarin een moordenaar met de verwachtingen en informatie van anderen speelt."
+      }
+    ]
+  },
+  {
+    "workId": "6334",
+    "title": "Niemand die je hoort",
+    "author": "Steve Mosby",
+    "openLibraryWorkId": "OL8475512W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "2980",
+        "reason": "Baldacci verbindt een reeks moorden met een afzonderlijk onderzoek naar een familie vol geheimen."
+      }
+    ]
+  },
+  {
+    "workId": "3332",
+    "title": "De voorlezer",
+    "author": "Bernhard Schlink",
+    "openLibraryWorkId": "OL14871157W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3012",
+        "reason": "Ook Atwood laat een volwassene terugkijken op vroegere verhoudingen die haar zelfbeeld blijven bepalen."
+      }
+    ]
+  },
+  {
+    "workId": "3012",
+    "title": "Katteoog",
+    "author": "Margaret Atwood",
+    "openLibraryWorkId": "OL675713W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3332",
+        "reason": "Schlink verbindt herinneringen aan een vroegere geliefde met vragen over schuld en verantwoordelijkheid."
+      }
+    ]
+  },
+  {
+    "workId": "3555",
+    "title": "De geheimzinnige kaasdief",
+    "author": "Elisabetta Dami",
+    "openLibraryWorkId": "OL8115893W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "1248",
+        "reason": "Voor een ander kinderavontuur waarin een kleine held op onderzoek uitgaat en hulp van bijzondere vrienden krijgt."
+      }
+    ]
+  },
+  {
+    "workId": "4176",
+    "title": "Vogels zonder vleugels",
+    "author": "Louis de Bernières",
+    "openLibraryWorkId": "OL1912225W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3387",
+        "reason": "Ook deze roman laat zien hoe politieke macht de intieme verhoudingen binnen een gemeenschap aantast."
+      }
+    ]
+  },
+  {
+    "workId": "3387",
+    "title": "Het feest van de bok",
+    "author": "Mario Vargas Llosa",
+    "openLibraryWorkId": "OL857600W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "4176",
+        "reason": "De Bernières verplaatst de botsing tussen politieke veranderingen en persoonlijke levens naar het uiteenvallende Ottomaanse rijk."
+      }
+    ]
+  },
+  {
+    "workId": "6196",
+    "title": "Tuin der vrouwen",
+    "author": "Patricia Gaffney",
+    "openLibraryWorkId": "OL56571W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6486",
+        "reason": "Voor een speelser opgebouwde roman die de verwachtingen rond liefde en een vrouwenleven ondervraagt."
+      }
+    ]
+  },
+  {
+    "workId": "6486",
+    "title": "Steffie Steek in de klauwen van het leven",
+    "author": "Dubravka Ugrešić",
+    "openLibraryWorkId": "OL10556778W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6196",
+        "reason": "Gaffney benadert relatieproblemen en persoonlijke crises via vier langdurige vriendinnen."
+      }
+    ]
+  },
+  {
+    "workId": "6198",
+    "title": "Bloed op de Golven",
+    "author": "Katee Robert",
+    "openLibraryWorkId": "OL37579398W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3462",
+        "reason": "Voor meer romantische fantasy waarin vampiers, wantrouwen en een noodzakelijk bondgenootschap samenkomen."
+      }
+    ]
+  },
+  {
+    "workId": "9527",
+    "title": "De geest van Gruhuken",
+    "author": "Michelle Paver",
+    "openLibraryWorkId": "OL20625154W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3335",
+        "reason": "Verplaats de beklemming van een afgelegen expeditie naar een wetenschappelijk onderzoek op de oceaanbodem."
+      }
+    ]
+  },
+  {
+    "workId": "1498",
+    "title": "Mindgym",
+    "author": "Wouter de Jong",
+    "openLibraryWorkId": "OL19740456W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6363",
+        "reason": "Naast oefeningen voor persoonlijke ontwikkeling bieden deze gesprekken verschillende ervaringen met ouder worden."
+      }
+    ]
+  },
+  {
+    "workId": "3188",
+    "title": "De dwergen",
+    "author": "Markus Heitz",
+    "openLibraryWorkId": "OL12302586W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3371",
+        "reason": "Voor een donkerder fantasyverhaal waarin dwang, oorlog en de macht van een draak een familie treffen."
+      }
+    ]
+  },
+  {
+    "workId": "3239",
+    "title": "De ster Henry Smart",
+    "author": "Roddy Doyle",
+    "openLibraryWorkId": "OL762609W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6250",
+        "reason": "Ook dit verhaal volgt een man wiens levensloop door burgeroorlog en ontworteling wordt gevormd."
+      }
+    ]
+  },
+  {
+    "workId": "6250",
+    "title": "Alle dagen",
+    "author": "Terézia Mora",
+    "openLibraryWorkId": "OL973511W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "3239",
+        "reason": "Doyle plaatst een mannenleven tegen de achtergrond van de Ierse strijd en de burgeroorlog."
+      }
+    ]
+  },
+  {
+    "workId": "5053",
+    "title": "Thérèse Raquin",
+    "author": "Émile Zola",
+    "openLibraryWorkId": "OL7982341W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "5834",
+        "reason": "Vergelijk Zola’s benauwende verhoudingen met drie mogelijke levenslopen binnen een gezin dat door controle wordt bepaald."
+      }
+    ]
+  },
+  {
+    "workId": "5817",
+    "title": "3× wicca",
+    "author": "Gabrielle Charbonnet",
+    "openLibraryWorkId": "OL16622409W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "146",
+        "reason": "Voor een volgend jeugdig avontuur waarin een onbekende wereld en vragen over de eigen achtergrond opengaan."
+      }
+    ]
+  },
+  {
+    "workId": "2942",
+    "title": "Unraveled",
+    "author": "Gennifer Albin",
+    "openLibraryWorkId": "OL19989444W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8645",
+        "reason": "Another struggle over power in which young women must weigh personal loyalties against a dangerous political order."
+      }
+    ]
+  },
+  {
+    "workId": "8645",
+    "title": "Three Dark Crowns",
+    "author": "Kendare Blake",
+    "openLibraryWorkId": "OL19669206W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2942",
+        "reason": "Adelice faces a different system of control, where cooperation and resistance can both carry a terrible cost."
+      }
+    ]
+  },
+  {
+    "workId": "6972",
+    "title": "Authority and the Individual",
+    "author": "Bertrand Russell",
+    "openLibraryWorkId": "OL1088583W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6763",
+        "reason": "Move from philosophical questions about authority to the institutions and decisions involved in making public policy."
+      },
+      {
+        "workId": "6957",
+        "reason": "Singer applies ethical questions about responsibility to poverty, charitable giving and political action."
+      }
+    ]
+  },
+  {
+    "workId": "6763",
+    "title": "An Introduction To The Policy Process",
+    "author": "Thomas A. Birkland",
+    "openLibraryWorkId": "OL2640747W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6972",
+        "reason": "Russell provides a philosophical counterpart to policy analysis, asking how collective control can coexist with individual initiative."
+      }
+    ]
+  },
+  {
+    "workId": "7858",
+    "title": "If... Then",
+    "author": "Taina Bucher",
+    "openLibraryWorkId": "OL21161195W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7946",
+        "reason": "Follow the effects of online selection into a discussion of echo chambers and democratic public debate."
+      },
+      {
+        "workId": "7298",
+        "reason": "Malik supplies a programming textbook counterpart to Bucher’s social analysis of algorithmic systems."
+      }
+    ]
+  },
+  {
+    "workId": "7946",
+    "title": "Republic.com 2.0",
+    "author": "Cass R. Sunstein",
+    "openLibraryWorkId": "OL1952272W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7858",
+        "reason": "Bucher examines the ranking systems and everyday encounters that help shape what people see online."
+      }
+    ]
+  },
+  {
+    "workId": "7466",
+    "title": "A short history of the Jewish people",
+    "author": "Raymond P. Scheindlin",
+    "openLibraryWorkId": "OL15702008W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7917",
+        "reason": "Explore one part of this history through the development of anti-Jewish imagery in medieval Christian art."
+      }
+    ]
+  },
+  {
+    "workId": "7917",
+    "title": "Dark mirror",
+    "author": "Sara Lipton",
+    "openLibraryWorkId": "OL19993094W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7466",
+        "reason": "Place Lipton’s focused study alongside a wider history of Jewish communities across periods and regions."
+      }
+    ]
+  },
+  {
+    "workId": "3880",
+    "title": "The drowned and the saved",
+    "author": "Primo Levi",
+    "openLibraryWorkId": "OL860027W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2451",
+        "reason": "For a fictional perspective on deportation and survival, set in Soviet rather than Nazi captivity."
+      }
+    ]
+  },
+  {
+    "workId": "2451",
+    "title": "Between shades of gray",
+    "author": "Ruta Sepetys",
+    "openLibraryWorkId": "OL15749193W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3880",
+        "reason": "Levi offers survivor reflection on memory and testimony in relation to Auschwitz and the Holocaust."
+      }
+    ]
+  },
+  {
+    "workId": "6838",
+    "title": "Employee engagement",
+    "author": "Emma Bridger",
+    "openLibraryWorkId": "OL20000897W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6603",
+        "reason": "Compare an engagement programme with Lencioni’s broader argument about organisational health."
+      }
+    ]
+  },
+  {
+    "workId": "6603",
+    "title": "The Advantage",
+    "author": "Patrick Lencioni",
+    "openLibraryWorkId": "OL16362472W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6838",
+        "reason": "Bridger concentrates on how managers and HR teams can understand, develop and assess employee engagement."
+      }
+    ]
+  },
+  {
+    "workId": "4781",
+    "title": "A Tale of Love and Darkness",
+    "author": "עמוס עוז",
+    "openLibraryWorkId": "OL1580894W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4236",
+        "reason": "Another memoir that connects a difficult childhood with the wider history of a family and its surroundings."
+      }
+    ]
+  },
+  {
+    "workId": "4236",
+    "title": "Angela's ashes",
+    "author": "Frank McCourt",
+    "openLibraryWorkId": "OL27634W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4781",
+        "reason": "Oz places family memories within Jerusalem and the European histories that preceded his childhood."
+      }
+    ]
+  },
+  {
+    "workId": "6730",
+    "title": "Schoolteacher",
+    "author": "Dan C. Lortie",
+    "openLibraryWorkId": "OL5956649W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8063",
+        "reason": "Move from the professional culture of schoolteachers to the practical design of learning experiences."
+      }
+    ]
+  },
+  {
+    "workId": "8063",
+    "title": "Design for how people learn",
+    "author": "Julie Dirksen",
+    "openLibraryWorkId": "OL16703370W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6730",
+        "reason": "Lortie offers a sociological view of the profession behind the day-to-day work of teaching."
+      },
+      {
+        "workId": "7776",
+        "reason": "Atkinson offers a more philosophical view of learning, equality and the possibilities of art practice."
+      }
+    ]
+  },
+  {
+    "workId": "6774",
+    "title": "Dark Fiber: Tracking Critical Internet Culture (Electronic Culture: History, Theory, and Practice)",
+    "author": "Geert Lovink",
+    "openLibraryWorkId": "OL8105280W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7315",
+        "reason": "Broaden this critique of internet culture with a survey of computing’s social and ethical consequences."
+      }
+    ]
+  },
+  {
+    "workId": "7315",
+    "title": "Computers and Society",
+    "author": "Ronald M. Baecker",
+    "openLibraryWorkId": "OL21206512W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6774",
+        "reason": "Lovink concentrates on internet culture and the political assumptions surrounding networked communication."
+      },
+      {
+        "workId": "8226",
+        "reason": "Zetter provides a detailed case study of digital technology becoming an instrument of international conflict."
+      }
+    ]
+  },
+  {
+    "workId": "6848",
+    "title": "Disciplined Entrepreneurship 24 Steps To A Successful Startup",
+    "author": "Bill Aulet",
+    "openLibraryWorkId": "OL17579389W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6626",
+        "reason": "Compare a structured startup method with an approach centred on communities, small beginnings and sustainable growth."
+      }
+    ]
+  },
+  {
+    "workId": "6626",
+    "title": "The Minimalist Entrepreneur",
+    "author": "Sahil Lavingia",
+    "openLibraryWorkId": "OL24326694W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6848",
+        "reason": "Aulet provides a step-by-step framework for investigating customers and building a new venture."
+      }
+    ]
+  },
+  {
+    "workId": "6858",
+    "title": "Technological Revolutions and Financial Capital",
+    "author": "Carlota Perez",
+    "openLibraryWorkId": "OL224128W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7787",
+        "reason": "Compare technological and financial cycles with a history of the industrial turn towards fossil fuels."
+      }
+    ]
+  },
+  {
+    "workId": "7787",
+    "title": "Fossil Capital: The Rise of Steam Power and the Roots of Global Warming",
+    "author": "Andreas Malm",
+    "openLibraryWorkId": "OL17315959W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6858",
+        "reason": "Perez offers a wider account of technological change and its relationship with investment and financial upheaval."
+      }
+    ]
+  },
+  {
+    "workId": "6965",
+    "title": "All of the Marvels",
+    "author": "Douglas Wolk",
+    "openLibraryWorkId": "OL25290104W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7921",
+        "reason": "Move from a critical survey of superhero comics to a manga story about identity within an established fictional universe."
+      }
+    ]
+  },
+  {
+    "workId": "7921",
+    "title": "Kingdom hearts",
+    "author": "Shiro Amano",
+    "openLibraryWorkId": "OL19974839W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6965",
+        "reason": "Wolk offers a nonfiction route into how a large comics universe develops across many interconnected stories."
+      }
+    ]
+  },
+  {
+    "workId": "7016",
+    "title": "The Wizard and the Prophet",
+    "author": "Charles C. Mann",
+    "openLibraryWorkId": "OL17923653W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7828",
+        "reason": "Extend the question of human needs and natural limits into the feeding habits and food chains of different species."
+      }
+    ]
+  },
+  {
+    "workId": "7828",
+    "title": "The Primal Feast",
+    "author": "Susan Allport",
+    "openLibraryWorkId": "OL3274465W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7016",
+        "reason": "Mann frames questions about resources and environmental limits through two contrasting twentieth-century thinkers."
+      },
+      {
+        "workId": "7284",
+        "reason": "Hölldobler and Wilson examine cooperation, communication and division of labour within social insect colonies."
+      }
+    ]
+  },
+  {
+    "workId": "7103",
+    "title": "The Faithful Executioner",
+    "author": "Joel F. Harrington",
+    "openLibraryWorkId": "OL16726859W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8209",
+        "reason": "Place an executioner’s working life beside a broader account of the transition from medieval to Renaissance Europe."
+      }
+    ]
+  },
+  {
+    "workId": "8209",
+    "title": "A World Lit Only by Fire",
+    "author": "William Manchester",
+    "openLibraryWorkId": "OL4116624W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7103",
+        "reason": "Harrington narrows the historical lens to a German executioner’s diary, family and occupation."
+      }
+    ]
+  },
+  {
+    "workId": "7214",
+    "title": "The Boys Who Challenged Hitler",
+    "author": "Phillip M. Hoose",
+    "openLibraryWorkId": "OL17628536W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9005",
+        "reason": "Pair the documented Danish resistance group with a historical novel about a child resisting Nazi forced labour."
+      },
+      {
+        "workId": "8977",
+        "reason": "Gleitzman approaches Nazi persecution through the perilous journey of two young fictional survivors."
+      }
+    ]
+  },
+  {
+    "workId": "9005",
+    "title": "Making bombs for Hitler",
+    "author": "Marsha Forchuk Skrypuch",
+    "openLibraryWorkId": "OL19746122W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7214",
+        "reason": "Hoose tells the documented story of Danish teenagers who organised resistance to Nazi occupation."
+      },
+      {
+        "workId": "9866",
+        "reason": "D’Adamo bases this story on a Pakistani child who challenged bonded labour in carpet production."
+      }
+    ]
+  },
+  {
+    "workId": "6631",
+    "title": "Rise and Fall of Nations",
+    "author": "Ruchir Sharma",
+    "openLibraryWorkId": "OL20029931W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7826",
+        "reason": "Compare national economic trajectories with a focused account of entrepreneurship in China and India."
+      }
+    ]
+  },
+  {
+    "workId": "7826",
+    "title": "Billions of Entrepreneurs",
+    "author": "Tarun Khanna",
+    "openLibraryWorkId": "OL4784380W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6631",
+        "reason": "Sharma takes a broader comparative view of the forces behind national growth and decline."
+      }
+    ]
+  },
+  {
+    "workId": "1",
+    "title": "Project Hail Mary",
+    "author": "Andy Weir",
+    "openLibraryWorkId": "OL21745884W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2914",
+        "reason": "For another survival story in which an unexpected discovery changes the apparent fate of humanity, aimed at younger readers."
+      }
+    ]
+  },
+  {
+    "workId": "2914",
+    "title": "The Last 8",
+    "author": "Laura Pohl",
+    "openLibraryWorkId": "OL20162066W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1",
+        "reason": "Weir places the survival problem aboard a distant spacecraft and builds the story around scientific investigation."
+      },
+      {
+        "workId": "9978",
+        "reason": "Patterson brings an established cast of winged teenagers into a post-apocalyptic finale."
+      }
+    ]
+  },
+  {
+    "workId": "7507",
+    "title": "Militainment, Inc.",
+    "author": "Roger Stahl",
+    "openLibraryWorkId": "OL13770112W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8351",
+        "reason": "Ballard approaches media imagery and violence through experimental fiction rather than cultural analysis."
+      }
+    ]
+  },
+  {
+    "workId": "8351",
+    "title": "The Atrocity Exhibition",
+    "author": "J. G. Ballard",
+    "openLibraryWorkId": "OL2745901W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7507",
+        "reason": "Stahl examines the presentation of war as entertainment across games, television, film and other media."
+      }
+    ]
+  },
+  {
+    "workId": "3672",
+    "title": "Being Mortal",
+    "author": "Atul Gawande",
+    "openLibraryWorkId": "OL17079567W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8105",
+        "reason": "Riggs offers a personal memoir about living with terminal illness alongside Gawande’s medical reflections."
+      }
+    ]
+  },
+  {
+    "workId": "8105",
+    "title": "The bright hour",
+    "author": "Nina Riggs",
+    "openLibraryWorkId": "OL19721897W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3672",
+        "reason": "Gawande examines how care can better account for the priorities of people facing aging and death."
+      },
+      {
+        "workId": "2245",
+        "reason": "Li writes about the deaths of her sons and the difficult work of living with irreparable loss."
+      }
+    ]
+  },
+  {
+    "workId": "7267",
+    "title": "Design is storytelling",
+    "author": "Ellen Lupton",
+    "openLibraryWorkId": "OL19732310W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8265",
+        "reason": "Add a guide to perception and behaviour to the use of storytelling in design."
+      }
+    ]
+  },
+  {
+    "workId": "8265",
+    "title": "100 Things Every Designer Needs to Know about People",
+    "author": "Susan Weinschenk",
+    "openLibraryWorkId": "OL19906923W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7267",
+        "reason": "Lupton shows how narrative techniques can help organise a person’s experience of a design."
+      }
+    ]
+  },
+  {
+    "workId": "3655",
+    "title": "The Saturday Night Ghost Club",
+    "author": "Craig Davidson",
+    "openLibraryWorkId": "OL20935119W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8570",
+        "reason": "For a younger-reader ghost story in which apparently playful behaviour uncovers a place’s troubled past."
+      }
+    ]
+  },
+  {
+    "workId": "8570",
+    "title": "All the lovely bad ones",
+    "author": "Mary Downing Hahn",
+    "openLibraryWorkId": "OL60173W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3655",
+        "reason": "Davidson combines a coming-of-age story with haunted places, family secrets and lost innocence."
+      },
+      {
+        "workId": "9715",
+        "reason": "Stine makes a family’s new house the setting for a ghost’s deliberate revenge."
+      }
+    ]
+  },
+  {
+    "workId": "6731",
+    "title": "The vanquished",
+    "author": "Robert Gerwarth",
+    "openLibraryWorkId": "OL19664779W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6778",
+        "reason": "Compare the violence after a major war with research into the conditions needed to end civil wars."
+      },
+      {
+        "workId": "6588",
+        "reason": "Morris offers a contrasting, large-scale argument about the relationship between warfare and political organisation."
+      }
+    ]
+  },
+  {
+    "workId": "6778",
+    "title": "Committing to Peace",
+    "author": "Barbara F. Walter",
+    "openLibraryWorkId": "OL8328324W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6731",
+        "reason": "Gerwarth offers a historical account of why the end of formal fighting did not bring peace across Europe."
+      }
+    ]
+  },
+  {
+    "workId": "6809",
+    "title": "The culture of curating and the curating of culture(s)",
+    "author": "Paul O'Neill",
+    "openLibraryWorkId": "OL16416280W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7353",
+        "reason": "Move from the changing role of curators to the question of how cultural institutions become meaningful to their communities."
+      }
+    ]
+  },
+  {
+    "workId": "7353",
+    "title": "The art of relevance",
+    "author": "Nina Simon",
+    "openLibraryWorkId": "OL20044180W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6809",
+        "reason": "O’Neill examines how curating developed from collection care into a visible form of cultural production."
+      }
+    ]
+  },
+  {
+    "workId": "6922",
+    "title": "Youth, Identity, and Digital Media (John D. and Catherine T. MacArthur Foundation Series on Digital Media and Learning)",
+    "author": "David Buckingham",
+    "openLibraryWorkId": "OL2944014W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7348",
+        "reason": "Explore the language of online and mobile communication alongside questions about young people’s digital identities."
+      }
+    ]
+  },
+  {
+    "workId": "7348",
+    "title": "Always On",
+    "author": "Naomi S. Baron",
+    "openLibraryWorkId": "OL482051W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6922",
+        "reason": "This collection broadens the discussion of digital communication to learning, participation and young people’s sense of self."
+      }
+    ]
+  },
+  {
+    "workId": "7",
+    "title": "The Lord of the Rings",
+    "author": "J.R.R. Tolkien",
+    "openLibraryWorkId": "OL27448W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9893",
+        "reason": "Another quest fantasy in which a powerful object places its bearer within a much larger conflict."
+      }
+    ]
+  },
+  {
+    "workId": "9893",
+    "title": "Castle of wizardry",
+    "author": "David Eddings",
+    "openLibraryWorkId": "OL1923091W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7",
+        "reason": "Tolkien builds an extended struggle around the burden of carrying and destroying a powerful ring."
+      }
+    ]
+  },
+  {
+    "workId": "7670",
+    "title": "Magic, Science and Religion and Other Essays",
+    "author": "Bronisław Malinowski",
+    "openLibraryWorkId": "OL1211009W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8191",
+        "reason": "For a contrasting esoteric approach to celestial symbolism, rather than an anthropological study of ritual and belief."
+      }
+    ]
+  },
+  {
+    "workId": "8191",
+    "title": "Moon phase astrology",
+    "author": "Raven Kaldera",
+    "openLibraryWorkId": "OL16013957W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7670",
+        "reason": "Malinowski offers an anthropological perspective on magic, religion and ritual alongside an astrological account of meaning."
+      }
+    ]
+  },
+  {
+    "workId": "3682",
+    "title": "Bare III",
+    "author": "Jackie Phamotse",
+    "openLibraryWorkId": "OL32122618W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9994",
+        "reason": "Another dark crime narrative in which power and exploitation endanger a young woman."
+      }
+    ]
+  },
+  {
+    "workId": "9994",
+    "title": "Daddy Cool",
+    "author": "Donald Goines",
+    "openLibraryWorkId": "OL2617872W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3682",
+        "reason": "Phamotse places coercion and criminal power within the wealthy social world surrounding a young model."
+      },
+      {
+        "workId": "7192",
+        "reason": "St. James offers a nonfiction account of New York club life and the killing associated with that scene."
+      }
+    ]
+  },
+  {
+    "workId": "4637",
+    "title": "SP4RX",
+    "author": "Wren McDonald",
+    "openLibraryWorkId": "OL20045621W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4677",
+        "reason": "Another young outsider navigates a technologically controlled city, this time in a surveillance thriller."
+      }
+    ]
+  },
+  {
+    "workId": "4677",
+    "title": "Rat runners",
+    "author": "Oisín McGann",
+    "openLibraryWorkId": "OL17903044W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4637",
+        "reason": "This graphic novel uses hacking and cybernetic technology to explore class divisions in a future society."
+      }
+    ]
+  },
+  {
+    "workId": "9296",
+    "title": "What the day owes the night",
+    "author": "Yasmina Khadra",
+    "openLibraryWorkId": "OL2291647W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4218",
+        "reason": "Compare a love story shaped by colonial Algeria with a multigenerational family saga between Korea and Japan."
+      }
+    ]
+  },
+  {
+    "workId": "4218",
+    "title": "Pachinko",
+    "author": "Min Jin Lee",
+    "openLibraryWorkId": "OL17762217W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9296",
+        "reason": "Khadra follows a divided sense of belonging and a long attachment within Algeria’s colonial history."
+      }
+    ]
+  },
+  {
+    "workId": "9791",
+    "title": "Not Part of the Bargain (Harlequin Romance, No 2983)",
+    "author": "Susan Fox",
+    "openLibraryWorkId": "OL5853928W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9477",
+        "reason": "Another reunion romance in which old judgments and unresolved attraction complicate a return."
+      }
+    ]
+  },
+  {
+    "workId": "9477",
+    "title": "Storm over Paradise",
+    "author": "Robyn Donald",
+    "openLibraryWorkId": "OL3476086W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9791",
+        "reason": "Fox centres a reunion on a ranch, an inheritance and conflicting expectations about the past."
+      },
+      {
+        "workId": "8407",
+        "reason": "Graham intensifies the conflict between mistaken judgment and desire through revenge and an unexpected pregnancy."
+      }
+    ]
+  },
+  {
+    "workId": "9960",
+    "title": "Pereira maintains",
+    "author": "Antonio Tabucchi",
+    "openLibraryWorkId": "OL550573W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9562",
+        "reason": "Another novel places private choices under an authoritarian political order, in a different country and period."
+      }
+    ]
+  },
+  {
+    "workId": "9562",
+    "title": "We the living",
+    "author": "Ayn Rand",
+    "openLibraryWorkId": "OL731732W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9960",
+        "reason": "Tabucchi follows a journalist whose encounters lead him towards resistance in 1930s Portugal."
+      }
+    ]
+  },
+  {
+    "workId": "10007",
+    "title": "The Legend of Luke",
+    "author": "Brian Jacques",
+    "openLibraryWorkId": "OL465893W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8957",
+        "reason": "Compare a hero’s search for his father with a darker retelling of how a familiar children’s-story antagonist began."
+      }
+    ]
+  },
+  {
+    "workId": "8957",
+    "title": "Lost Boy",
+    "author": "Christina Henry",
+    "openLibraryWorkId": "OL19652832W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10007",
+        "reason": "Jacques returns to a fantasy hero’s family history through a journey with old friends and new allies."
+      }
+    ]
+  },
+  {
+    "workId": "10055",
+    "title": "Slay",
+    "author": "Brittney Morris",
+    "openLibraryWorkId": "OL20140604W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2838",
+        "reason": "Another young-adult novel asks what ordinary personal struggles mean alongside expectations about being a hero."
+      }
+    ]
+  },
+  {
+    "workId": "2838",
+    "title": "The rest of us just live here",
+    "author": "Patrick Ness",
+    "openLibraryWorkId": "OL19668198W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10055",
+        "reason": "Morris turns a teenager’s game world into a setting for questions of identity, community and responsibility."
+      }
+    ]
+  },
+  {
+    "workId": "10085",
+    "title": "Mary Queen of Scotland & The Isles",
+    "author": "Margaret George",
+    "openLibraryWorkId": "OL4985209W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7686",
+        "reason": "Pair a fictional portrait of Mary Stuart with a biography of another sixteenth-century queen facing political danger."
+      },
+      {
+        "workId": "7293",
+        "reason": "Konigsburg approaches a queen’s life through the playful device of Eleanor and her companions recalling it from heaven."
+      }
+    ]
+  },
+  {
+    "workId": "7686",
+    "title": "Catherine de Medici",
+    "author": "Leonie Frieda",
+    "openLibraryWorkId": "OL5785658W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10085",
+        "reason": "George approaches female royal power through a historical novel about Mary Queen of Scots."
+      }
+    ]
+  },
+  {
+    "workId": "10088",
+    "title": "If you find me",
+    "author": "Emily Murdoch",
+    "openLibraryWorkId": "OL17359876W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8983",
+        "reason": "For another difficult coming-of-age story shaped by family loyalty, poverty and abuse."
+      }
+    ]
+  },
+  {
+    "workId": "8983",
+    "title": "Bastard out of Carolina",
+    "author": "Dorothy Allison",
+    "openLibraryWorkId": "OL1810279W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10088",
+        "reason": "Murdoch follows sisters whose rescue from isolation does not erase the secrets and loyalties of their earlier lives."
+      }
+    ]
+  },
+  {
+    "workId": "1308",
+    "title": "Harry Potter and the Goblet of Fire",
+    "author": "J. K. Rowling",
+    "openLibraryWorkId": "OL82560W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9116",
+        "reason": "Another young magic-user must learn within a powerful institution while facing fears attached to unusual abilities."
+      }
+    ]
+  },
+  {
+    "workId": "9116",
+    "title": "The bone witch",
+    "author": "Rin Chupeco",
+    "openLibraryWorkId": "OL19670996W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1308",
+        "reason": "The fourth Harry Potter novel combines magical training with a dangerous contest and widening conflict."
+      },
+      {
+        "workId": "4586",
+        "reason": "Okorafor places magical destiny within a much harsher post-apocalyptic story about violence and genocide."
+      }
+    ]
+  },
+  {
+    "workId": "1381",
+    "title": "Animal Farm",
+    "author": "George Orwell",
+    "openLibraryWorkId": "OL1168007W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6636",
+        "reason": "For a nonfiction counterpart on the ideas used to justify unequal social arrangements."
+      }
+    ]
+  },
+  {
+    "workId": "6636",
+    "title": "Capital and Ideology",
+    "author": "Thomas Piketty",
+    "openLibraryWorkId": "OL20667486W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "1381",
+        "reason": "Orwell turns the gap between equality’s promises and new privilege into a short political fable."
+      }
+    ]
+  },
+  {
+    "workId": "151",
+    "title": "Gideon the Ninth",
+    "author": "Tamsyn Muir",
+    "openLibraryWorkId": "OL20128158W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4436",
+        "reason": "Another dark fantasy ties bodily danger to an uneasy alliance and the ethics of exploiting supernatural beings."
+      }
+    ]
+  },
+  {
+    "workId": "4436",
+    "title": "Not Even Bones",
+    "author": "Rebecca Schaeffer",
+    "openLibraryWorkId": "OL19749581W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "151",
+        "reason": "Muir combines necromancy, swordsmanship and a hostile partnership within a dangerous contest."
+      }
+    ]
+  },
+  {
+    "workId": "2436",
+    "title": "Daring Greatly",
+    "author": "Brené Brown",
+    "openLibraryWorkId": "OL16664399W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7078",
+        "reason": "Follow the discussion of vulnerability with brief reflections on responding to difficult days with kindness."
+      }
+    ]
+  },
+  {
+    "workId": "7078",
+    "title": "Kind Words for Unkind Days",
+    "author": "Jayne Hardy",
+    "openLibraryWorkId": "OL21698525W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2436",
+        "reason": "Brown examines vulnerability in relationships, work and creative life rather than treating it simply as weakness."
+      }
+    ]
+  },
+  {
+    "workId": "245",
+    "title": "A Storm of Swords",
+    "author": "George R. R. Martin",
+    "openLibraryWorkId": "OL257914W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8804",
+        "reason": "Compare a fictional struggle for a throne with a historical novel about rival ambitions in Republican Rome."
+      }
+    ]
+  },
+  {
+    "workId": "8804",
+    "title": "The first man in Rome",
+    "author": "Colleen McCullough",
+    "openLibraryWorkId": "OL1882554W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "245",
+        "reason": "Martin turns rivalry for political power into an expansive fantasy conflict among competing houses."
+      }
+    ]
+  },
+  {
+    "workId": "2724",
+    "title": "Unwind",
+    "author": "Neal Shusterman",
+    "openLibraryWorkId": "OL1954412W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8954",
+        "reason": "Another young protagonist is offered survival only on terms that make the body an instrument of state power."
+      }
+    ]
+  },
+  {
+    "workId": "8954",
+    "title": "Poison Study",
+    "author": "Maria V. Snyder",
+    "openLibraryWorkId": "OL8032275W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2724",
+        "reason": "Shusterman imagines a society that disguises the dismantling of teenagers as a legal compromise."
+      }
+    ]
+  },
+  {
+    "workId": "2846",
+    "title": "The Year of the Flood",
+    "author": "Margaret Atwood",
+    "openLibraryWorkId": "OL675774W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9201",
+        "reason": "Continue Atwood’s MaddAddam sequence as survivors and the Crakers attempt to shape a life after the plague."
+      }
+    ]
+  },
+  {
+    "workId": "9201",
+    "title": "MaddAddam",
+    "author": "Margaret Atwood",
+    "openLibraryWorkId": "OL17046610W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2846",
+        "reason": "Return to the preceding MaddAddam novel for Toby and Ren’s experiences around God’s Gardeners and the catastrophe."
+      }
+    ]
+  },
+  {
+    "workId": "2864",
+    "title": "The road to winter",
+    "author": "Smith, Mark",
+    "openLibraryWorkId": "OL19721856W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2766",
+        "reason": "Another young-adult survival novel follows the daily practical consequences of a civilisation-wide catastrophe."
+      }
+    ]
+  },
+  {
+    "workId": "2766",
+    "title": "Life As We Knew It",
+    "author": "Susan Beth Pfeffer",
+    "openLibraryWorkId": "OL860483W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2864",
+        "reason": "Smith concentrates on survival along an Australian coast and the responsibility of helping another survivor."
+      }
+    ]
+  },
+  {
+    "workId": "2878",
+    "title": "Nod",
+    "author": "Adrian Barnes",
+    "openLibraryWorkId": "OL20980379W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3886",
+        "reason": "Alongside a novel about the loss of sleep, read a cultural critique of a world that demands constant activity."
+      }
+    ]
+  },
+  {
+    "workId": "3886",
+    "title": "24/7: Late Capitalism and the Ends of Sleep",
+    "author": "Jonathan Crary",
+    "openLibraryWorkId": "OL19241070W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2878",
+        "reason": "Barnes turns a world without sleep into speculative fiction about the collapse of ordinary social life."
+      }
+    ]
+  },
+  {
+    "workId": "2943",
+    "title": "Travelers rest",
+    "author": "Keith Lee Morris",
+    "openLibraryWorkId": "OL20017841W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8745",
+        "reason": "Another unsettling story brings young people into contact with a place whose apparent shelter conceals a supernatural threat."
+      }
+    ]
+  },
+  {
+    "workId": "8745",
+    "title": "Small Spaces",
+    "author": "Katherine Arden",
+    "openLibraryWorkId": "OL19760806W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2943",
+        "reason": "Morris places a family inside an isolated hotel where ordinary tensions become increasingly uncanny."
+      }
+    ]
+  },
+  {
+    "workId": "348",
+    "title": "The Remains of the Day",
+    "author": "Kazuo Ishiguro",
+    "openLibraryWorkId": "OL59048W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3905",
+        "reason": "Compare fictional recollection of service and loyalty with a political leader’s own retrospective account."
+      }
+    ]
+  },
+  {
+    "workId": "3905",
+    "title": "Sowing the Mustard Seed",
+    "author": "Yoweri Kaguta Museveni",
+    "openLibraryWorkId": "OL9273749W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "348",
+        "reason": "Ishiguro uses a butler’s memories to question how a life devoted to service is understood afterwards."
+      }
+    ]
+  },
+  {
+    "workId": "3652",
+    "title": "Flow",
+    "author": "Mihaly Csikszentmihalyi",
+    "openLibraryWorkId": "OL278571W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6846",
+        "reason": "Move from the psychology of absorption to practical proposals about arranging periods of concentrated work."
+      }
+    ]
+  },
+  {
+    "workId": "6846",
+    "title": "Two awesome hours",
+    "author": "Josh Davis",
+    "openLibraryWorkId": "OL19667840W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3652",
+        "reason": "Csikszentmihalyi examines the experience of sustained involvement that productivity methods often seek to support."
+      },
+      {
+        "workId": "7646",
+        "reason": "Meisel offers a complementary productivity approach built around simplifying, delegating and reducing demands."
+      }
+    ]
+  },
+  {
+    "workId": "4061",
+    "title": "Misbehaving",
+    "author": "Richard H. Thaler",
+    "openLibraryWorkId": "OL17940527W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7526",
+        "reason": "Explore decision-making through an account of learning poker, where uncertainty and outcomes remain distinct."
+      }
+    ]
+  },
+  {
+    "workId": "7526",
+    "title": "The Biggest Bluff",
+    "author": "Maria Konnikova",
+    "openLibraryWorkId": "OL20873691W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4061",
+        "reason": "Thaler examines the predictable mistakes that challenge economic models of perfectly rational choice."
+      },
+      {
+        "workId": "7226",
+        "reason": "Tendulkar reflects on the development and pressures of a long career in international cricket."
+      }
+    ]
+  },
+  {
+    "workId": "4175",
+    "title": "Inside Out & Back Again",
+    "author": "Thanhha Lai",
+    "openLibraryWorkId": "OL15987908W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8974",
+        "reason": "Another young person experiences a family journey into unfamiliar surroundings, in a different historical setting."
+      }
+    ]
+  },
+  {
+    "workId": "8974",
+    "title": "Bound for Oregon",
+    "author": "Jean Van Leeuwen",
+    "openLibraryWorkId": "OL57602W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4175",
+        "reason": "Lai tells a child’s migration from wartime Vietnam to Alabama through a novel in verse."
+      }
+    ]
+  },
+  {
+    "workId": "4462",
+    "title": "Flint",
+    "author": "Louis L'Amour",
+    "openLibraryWorkId": "OL51076W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9836",
+        "reason": "For a more romantic historical story in which competing men and difficult choices shape a woman’s future."
+      }
+    ]
+  },
+  {
+    "workId": "9836",
+    "title": "Hummingbird",
+    "author": "LaVyrle Spencer",
+    "openLibraryWorkId": "OL1860319W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4462",
+        "reason": "L’Amour centres a western on a dying man drawn into defending a threatened ranch."
+      }
+    ]
+  },
+  {
+    "workId": "4494",
+    "title": "Ahsoka",
+    "author": "E. K. Johnston",
+    "openLibraryWorkId": "OL17843491W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8155",
+        "reason": "Another Star Wars novel follows familiar characters confronting the consequences of earlier conflicts beyond the main films."
+      }
+    ]
+  },
+  {
+    "workId": "8155",
+    "title": "Star Wars: Survivor's Quest",
+    "author": "Timothy Zahn",
+    "openLibraryWorkId": "OL83596W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4494",
+        "reason": "Johnston follows Ahsoka between leaving the Jedi Order and her later work with the Rebellion."
+      }
+    ]
+  },
+  {
+    "workId": "4870",
+    "title": "Stolen: A Letter to My Captor",
+    "author": "Lucy Christopher",
+    "openLibraryWorkId": "OL13847356W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9450",
+        "reason": "Compare a captive teenager’s struggle in the outback with a boy who voluntarily enters dangerous wilderness."
+      }
+    ]
+  },
+  {
+    "workId": "9450",
+    "title": "The honest truth",
+    "author": "Dan Gemeinhart",
+    "openLibraryWorkId": "OL19991892W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4870",
+        "reason": "Christopher uses an isolated Australian landscape to make a teenager’s captivity and lack of escape tangible."
+      }
+    ]
+  },
+  {
+    "workId": "6578",
+    "title": "Why architecture matters",
+    "author": "Paul Goldberger",
+    "openLibraryWorkId": "OL5113496W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6683",
+        "reason": "Extend the experience of individual buildings to questions about urban design and everyday wellbeing."
+      },
+      {
+        "workId": "7521",
+        "reason": "Schwartz places architectural and design arguments within the technological and economic changes preceding the First World War."
+      }
+    ]
+  },
+  {
+    "workId": "6683",
+    "title": "Happy city",
+    "author": "Charles Montgomery",
+    "openLibraryWorkId": "OL19975101W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6578",
+        "reason": "Goldberger concentrates on the emotional and intellectual experience of encountering architecture."
+      }
+    ]
+  },
+  {
+    "workId": "6588",
+    "title": "War! What is it good for? : conflict and the progress of civilization from primates to robots",
+    "author": "Ian Morris",
+    "openLibraryWorkId": "OL18819704W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6731",
+        "reason": "Set Morris’s argument about war and social development alongside a history of destructive postwar violence."
+      }
+    ]
+  },
+  {
+    "workId": "6606",
+    "title": "Global Macro Trading",
+    "author": "Greg Gliner",
+    "openLibraryWorkId": "OL20347660W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7969",
+        "reason": "Pair trading strategies with the memoir of a mathematician who applied probability to gambling and investing."
+      }
+    ]
+  },
+  {
+    "workId": "7969",
+    "title": "A Man for All Markets",
+    "author": "Edward O. Thorp",
+    "openLibraryWorkId": "OL20050810W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6606",
+        "reason": "Gliner provides a practical overview of global macro markets alongside Thorp’s personal investing history."
+      }
+    ]
+  },
+  {
+    "workId": "675",
+    "title": "Things We Never Got Over",
+    "author": "Lucy Score",
+    "openLibraryWorkId": "OL26955716W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8793",
+        "reason": "Another contemporary romance begins with a woman rebuilding life with a child and accepting an unexpected job or help."
+      }
+    ]
+  },
+  {
+    "workId": "8793",
+    "title": "The masterpiece",
+    "author": "Francine Rivers",
+    "openLibraryWorkId": "OL19730225W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "675",
+        "reason": "Score places the new beginning in a small town, with an unexpected niece and a reluctant helper."
+      },
+      {
+        "workId": "9674",
+        "reason": "Atwood takes artistic identity and a concealed past in a more comic, fantastical direction."
+      }
+    ]
+  },
+  {
+    "workId": "6757",
+    "title": "The Lost Art of Reading",
+    "author": "David L. Ulin",
+    "openLibraryWorkId": "OL16132348W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7808",
+        "reason": "Compare reflection through reading with a memoir about reconsidering life through the act of telling its story."
+      }
+    ]
+  },
+  {
+    "workId": "7808",
+    "title": "A million miles in a thousand years",
+    "author": "Donald Miller",
+    "openLibraryWorkId": "OL109491W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6757",
+        "reason": "Ulin reflects on the space for attention and reflection that reading can provide within digital culture."
+      }
+    ]
+  },
+  {
+    "workId": "6760",
+    "title": "All these beautiful strangers",
+    "author": "Elizabeth Klehfoth",
+    "openLibraryWorkId": "OL19746420W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8782",
+        "reason": "Another atmospheric story combines an educational institution, family mysteries and concealed danger, with a darker romantic emphasis."
+      }
+    ]
+  },
+  {
+    "workId": "8782",
+    "title": "Nocticadia",
+    "author": "Keri Lake",
+    "openLibraryWorkId": "OL42842288W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6760",
+        "reason": "Klehfoth connects a family disappearance to a school’s secret society and a web of deception."
+      }
+    ]
+  },
+  {
+    "workId": "6821",
+    "title": "The managed heart",
+    "author": "Arlie Russell Hochschild",
+    "openLibraryWorkId": "OL2627283W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7555",
+        "reason": "Extend the sociology of paid emotional work to the people and judgments that produce fashionable goods."
+      }
+    ]
+  },
+  {
+    "workId": "7555",
+    "title": "Fashion and the Cultural Economy (Dress, Body, Culture)",
+    "author": "Joanne Entwistle",
+    "openLibraryWorkId": "OL8457287W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6821",
+        "reason": "Hochschild examines how paid work can require people to manage and display particular emotions."
+      }
+    ]
+  },
+  {
+    "workId": "6853",
+    "title": "India's war",
+    "author": "Srinath Raghavan",
+    "openLibraryWorkId": "OL20034137W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6902",
+        "reason": "Compare India’s wartime experience with testimony and reconstruction of the atomic bombings in Japan."
+      }
+    ]
+  },
+  {
+    "workId": "6902",
+    "title": "To hell and back",
+    "author": "Charles R. Pellegrino",
+    "openLibraryWorkId": "OL2693102W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6853",
+        "reason": "Raghavan examines the Second World War’s effects on colonial India, both overseas and on the home front."
+      }
+    ]
+  },
+  {
+    "workId": "6870",
+    "title": "The President's shadow",
+    "author": "Brad Meltzer",
+    "openLibraryWorkId": "OL17198022W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7455",
+        "reason": "Another suspense story makes a disputed document and a hidden organisation central to its investigation."
+      }
+    ]
+  },
+  {
+    "workId": "7455",
+    "title": "The school of night",
+    "author": "Louis Bayard",
+    "openLibraryWorkId": "OL15909777W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6870",
+        "reason": "Meltzer places documents and a secret society at the centre of a thriller involving the US presidency."
+      }
+    ]
+  },
+  {
+    "workId": "6896",
+    "title": "Vienna Blood",
+    "author": "Frank Tallis",
+    "openLibraryWorkId": "OL817130W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7464",
+        "reason": "Compare a physician-assisted investigation in Vienna with classic mysteries solved through Holmes’s deductions."
+      }
+    ]
+  },
+  {
+    "workId": "7464",
+    "title": "The Best of Sherlock Holmes",
+    "author": "Arthur Conan Doyle",
+    "openLibraryWorkId": "OL20626733W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6896",
+        "reason": "Tallis combines murder investigation with a doctor’s perspective in early twentieth-century Vienna."
+      }
+    ]
+  },
+  {
+    "workId": "6957",
+    "title": "The life you can save",
+    "author": "Peter Singer",
+    "openLibraryWorkId": "OL1819641W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6972",
+        "reason": "Russell offers a broader philosophical discussion of the relationship between personal responsibility and collective life."
+      }
+    ]
+  },
+  {
+    "workId": "6962",
+    "title": "The history of sexuality",
+    "author": "Michel Foucault",
+    "openLibraryWorkId": "OL26873W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8140",
+        "reason": "For another theoretical examination of how identity is shaped through social and cultural power."
+      }
+    ]
+  },
+  {
+    "workId": "8140",
+    "title": "The location of culture",
+    "author": "Homi K. Bhabha",
+    "openLibraryWorkId": "OL3913579W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6962",
+        "reason": "Foucault examines the connection between power, knowledge and the ways people understand sexuality."
+      }
+    ]
+  },
+  {
+    "workId": "6974",
+    "title": "Architecture of Migration",
+    "author": "Anooradha Iyer Siddiqi",
+    "openLibraryWorkId": "OL37563758W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7975",
+        "reason": "Compare the material environments of displacement with immigrants’ work and ambitions in the restaurant industry."
+      }
+    ]
+  },
+  {
+    "workId": "7975",
+    "title": "The Ethnic Restaurateur",
+    "author": "Krishnendu Ray",
+    "openLibraryWorkId": "OL17463172W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6974",
+        "reason": "Siddiqi studies how refugee settlements acquire histories and political meaning through their built environments."
+      }
+    ]
+  },
+  {
+    "workId": "6991",
+    "title": "The Lucifer effect",
+    "author": "Philip G. Zimbardo",
+    "openLibraryWorkId": "OL15843900W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7574",
+        "reason": "Examine the pressure of group belonging through a focused study of dangerous initiation rituals."
+      }
+    ]
+  },
+  {
+    "workId": "7574",
+    "title": "Wrongs of Passage",
+    "author": "Hank Nuwer",
+    "openLibraryWorkId": "OL2926448W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6991",
+        "reason": "Zimbardo considers how situations and group dynamics can influence harmful behaviour."
+      }
+    ]
+  },
+  {
+    "workId": "7008",
+    "title": "The devil's chessboard",
+    "author": "David Talbot",
+    "openLibraryWorkId": "OL20010095W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8223",
+        "reason": "Compare a history centred on CIA leadership with the story of an insider exposing the Pentagon Papers."
+      }
+    ]
+  },
+  {
+    "workId": "8223",
+    "title": "Most Dangerous",
+    "author": "Steve Sheinkin",
+    "openLibraryWorkId": "OL17358408W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7008",
+        "reason": "Talbot examines intelligence power through a portrait of Allen Dulles and his influence on the CIA."
+      },
+      {
+        "workId": "7430",
+        "reason": "Smithson supplies a first-person view of military service rather than an account centred on government decision-makers."
+      }
+    ]
+  },
+  {
+    "workId": "7039",
+    "title": "Winterdance",
+    "author": "Gary Paulsen",
+    "openLibraryWorkId": "OL14850212W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8196",
+        "reason": "Another first-person account makes relationships with animals central, this time through veterinary work in Yorkshire."
+      },
+      {
+        "workId": "6873",
+        "reason": "Elphinstone imagines a prehistoric community whose dependence on the land is disrupted by a hunter’s disappearance."
+      }
+    ]
+  },
+  {
+    "workId": "8196",
+    "title": "All creatures great and small",
+    "author": "James Herriot",
+    "openLibraryWorkId": "OL19667827W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7039",
+        "reason": "Paulsen takes the human-animal relationship into the demands and dangers of a long sled-dog race."
+      }
+    ]
+  },
+  {
+    "workId": "7043",
+    "title": "The Lost Continent",
+    "author": "Bill Bryson",
+    "openLibraryWorkId": "OL74124W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8017",
+        "reason": "Compare a return to America with a memoir of belonging in Britain through family, music and migration."
+      }
+    ]
+  },
+  {
+    "workId": "8017",
+    "title": "Greetings from Bury Park",
+    "author": "Sarfraz Manzoor",
+    "openLibraryWorkId": "OL17734157W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7043",
+        "reason": "Bryson examines his relationship with his country of origin through a journey across its towns and roads."
+      },
+      {
+        "workId": "7415",
+        "reason": "Hirsch combines personal experience with a wider argument about race, history and British identity."
+      }
+    ]
+  },
+  {
+    "workId": "7122",
+    "title": "How to make it in the new music business",
+    "author": "Ari Herstand",
+    "openLibraryWorkId": "OL20050044W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7689",
+        "reason": "Place practical advice about a music career alongside a sociological account of production and audiences."
+      }
+    ]
+  },
+  {
+    "workId": "7689",
+    "title": "Popular Music and Society",
+    "author": "Brian Longhurst",
+    "openLibraryWorkId": "OL3753094W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7122",
+        "reason": "Herstand takes the music industry from analysis into practical decisions facing working musicians."
+      }
+    ]
+  },
+  {
+    "workId": "7132",
+    "title": "One touch of scandal",
+    "author": "Liz Carlyle",
+    "openLibraryWorkId": "OL16490707W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9337",
+        "reason": "Another historical romance turns an encounter with a powerful, secretive man into a question of trust."
+      }
+    ]
+  },
+  {
+    "workId": "9337",
+    "title": "Tempt me at twilight",
+    "author": "Lisa Kleypas",
+    "openLibraryWorkId": "OL4331812W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7132",
+        "reason": "Carlyle combines historical romance with a governess’s attempt to clear herself of a murder accusation."
+      },
+      {
+        "workId": "9749",
+        "reason": "Banks sets the romantic challenge among Scottish clans, with communication and mistaken assumptions at its heart."
+      }
+    ]
+  },
+  {
+    "workId": "7171",
+    "title": "Our Mathematical Universe: My Quest for the Ultimate Nature of Reality",
+    "author": "Max Tegmark",
+    "openLibraryWorkId": "OL17785472W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7931",
+        "reason": "Compare Tegmark’s proposal about mathematical reality with a physicist’s reflection on the limits of knowledge."
+      }
+    ]
+  },
+  {
+    "workId": "7931",
+    "title": "The island of knowledge",
+    "author": "Marcelo Gleiser",
+    "openLibraryWorkId": "OL17687911W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7171",
+        "reason": "Tegmark offers a contrasting exploration of cosmology, mathematical structure and possible universes."
+      }
+    ]
+  },
+  {
+    "workId": "7183",
+    "title": "The anatomy of violence",
+    "author": "Adrian Raine",
+    "openLibraryWorkId": "OL19967595W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7373",
+        "reason": "Move from research on violence to the motives and methods behind deception and confidence tricks."
+      }
+    ]
+  },
+  {
+    "workId": "7373",
+    "title": "The confidence game",
+    "author": "Maria Konnikova",
+    "openLibraryWorkId": "OL20020475W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7183",
+        "reason": "Raine examines biological and environmental questions about violent behaviour rather than the mechanics of deception."
+      }
+    ]
+  },
+  {
+    "workId": "7192",
+    "title": "Disco Bloodbath",
+    "author": "James St. James",
+    "openLibraryWorkId": "OL8312014W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9994",
+        "reason": "For a fictional crime story about exploitation and revenge alongside a real account of a murder in club culture."
+      }
+    ]
+  },
+  {
+    "workId": "7226",
+    "title": "Playing it my way",
+    "author": "Sachin Tendulkar",
+    "openLibraryWorkId": "OL21731900W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7526",
+        "reason": "Compare a cricketer’s account of performance with a novice’s attempt to learn competitive poker."
+      }
+    ]
+  },
+  {
+    "workId": "7284",
+    "title": "The Superorganism",
+    "author": "Bert Holldobler and E.O.Wilson",
+    "openLibraryWorkId": "OL17078714W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7828",
+        "reason": "Broaden an account of insect societies with a natural-history exploration of how different animals obtain food."
+      }
+    ]
+  },
+  {
+    "workId": "7293",
+    "title": "A proud taste for scarlet and miniver",
+    "author": "E. L. Konigsburg",
+    "openLibraryWorkId": "OL10633018W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10085",
+        "reason": "Compare an imaginative account of Eleanor of Aquitaine with a historical novel about Mary Queen of Scots."
+      }
+    ]
+  },
+  {
+    "workId": "7338",
+    "title": "The prose Edda of Snorri Sturluson",
+    "author": "Snorri Sturluson",
+    "openLibraryWorkId": "OL1133520W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9003",
+        "reason": "Move from Norse myths and poetic traditions to retellings of the Greek legends around Troy."
+      },
+      {
+        "workId": "7914",
+        "reason": "Bly offers a modern psychological and personal interpretation of myth through the story of Iron John."
+      }
+    ]
+  },
+  {
+    "workId": "9003",
+    "title": "Trojan War",
+    "author": "Olivia E. Coolidge",
+    "openLibraryWorkId": "OL1935058W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7338",
+        "reason": "Snorri’s account offers Norse mythology together with the poetic conventions that preserved its stories."
+      }
+    ]
+  },
+  {
+    "workId": "7366",
+    "title": "Members only",
+    "author": "Julie Tibbott",
+    "openLibraryWorkId": "OL20004781W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7963",
+        "reason": "Deepen the broad survey of secret societies with an account focused on the history of Freemasonry."
+      }
+    ]
+  },
+  {
+    "workId": "7963",
+    "title": "The Secret History of Freemasonry",
+    "author": "Paul Naudon",
+    "openLibraryWorkId": "OL18178403W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7366",
+        "reason": "Tibbott places Freemasonry among a wider range of secret societies and closed organisations."
+      }
+    ]
+  },
+  {
+    "workId": "7415",
+    "title": "Brit(ish)",
+    "author": "Afua Hirsch",
+    "openLibraryWorkId": "OL20561309W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8017",
+        "reason": "Another personal account explores British belonging through family history, cultural expectations and migration."
+      }
+    ]
+  },
+  {
+    "workId": "7430",
+    "title": "Ghosts of war",
+    "author": "Ryan Smithson",
+    "openLibraryWorkId": "OL12037574W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8223",
+        "reason": "Compare a soldier’s Iraq memoir with a historical account of dissent inside the US defence establishment during Vietnam."
+      }
+    ]
+  },
+  {
+    "workId": "7470",
+    "title": "Abby and the Secret Society",
+    "author": "Ann M. Martin",
+    "openLibraryWorkId": "OL4026748W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8808",
+        "reason": "For a more action-driven young-reader mystery involving an undercover mission and a suspicious offer of help."
+      }
+    ]
+  },
+  {
+    "workId": "8808",
+    "title": "Spy School Goes South",
+    "author": "Stuart Gibbs",
+    "openLibraryWorkId": "OL19662713W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7470",
+        "reason": "The Baby-Sitters Club investigate a smaller-scale mystery while helping reopen an old country club."
+      }
+    ]
+  },
+  {
+    "workId": "7521",
+    "title": "The Werkbund",
+    "author": "Frederic Schwartz",
+    "openLibraryWorkId": "OL9107014W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6578",
+        "reason": "Follow historical debates about architecture and design with a guide to experiencing buildings in everyday life."
+      }
+    ]
+  },
+  {
+    "workId": "7646",
+    "title": "Less doing, more living",
+    "author": "Ari Meisel",
+    "openLibraryWorkId": "OL19977922W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "6846",
+        "reason": "Compare reducing and organising tasks with a method focused on the conditions for short periods of effective work."
+      }
+    ]
+  },
+  {
+    "workId": "7776",
+    "title": "Art, equality and learning",
+    "author": "Dennis Atkinson",
+    "openLibraryWorkId": "OL16963866W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8063",
+        "reason": "Compare a theoretical discussion of learning through art with practical decisions about designing learning experiences."
+      }
+    ]
+  },
+  {
+    "workId": "7878",
+    "title": "Twenty ads that shook the world",
+    "author": "James Twitchell",
+    "openLibraryWorkId": "OL8198196W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7985",
+        "reason": "Set advertising’s cultural influence beside an argument about art’s possibilities beyond commercial artifice."
+      }
+    ]
+  },
+  {
+    "workId": "7985",
+    "title": "Reclaiming Art in the Age of Artifice",
+    "author": "J. F. Martel",
+    "openLibraryWorkId": "OL21087689W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7878",
+        "reason": "Twitchell examines the shared cultural language produced by particular advertising campaigns."
+      }
+    ]
+  },
+  {
+    "workId": "7914",
+    "title": "Iron John",
+    "author": "Robert Bly",
+    "openLibraryWorkId": "OL6529432W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7338",
+        "reason": "Explore an older body of myth alongside Bly’s use of a fairy tale to interpret masculinity."
+      }
+    ]
+  },
+  {
+    "workId": "7967",
+    "title": "The Charm School",
+    "author": "Nelson DeMille",
+    "openLibraryWorkId": "OL22905W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "3162",
+        "reason": "Another Cold War thriller turns hidden manipulation and American vulnerability into the central threat."
+      },
+      {
+        "workId": "9530",
+        "reason": "Hayes centres a former intelligence operative whose own investigative expertise becomes part of a new threat."
+      }
+    ]
+  },
+  {
+    "workId": "3162",
+    "title": "The Manchurian Candidate",
+    "author": "Richard Condon",
+    "openLibraryWorkId": "OL3391067W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7967",
+        "reason": "DeMille imagines a secret Soviet operation that exploits American prisoners for espionage training."
+      }
+    ]
+  },
+  {
+    "workId": "8010",
+    "title": "Better Day Coming",
+    "author": "Adam Fairclough",
+    "openLibraryWorkId": "OL3459397W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9456",
+        "reason": "Trace the Reconstruction period that precedes the long struggle for civil rights described by Fairclough."
+      }
+    ]
+  },
+  {
+    "workId": "9456",
+    "title": "Reconstruction",
+    "author": "Eric Foner",
+    "openLibraryWorkId": "OL1805114W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8010",
+        "reason": "Continue beyond Reconstruction into the campaigns and organisations fighting for Black civil rights."
+      }
+    ]
+  },
+  {
+    "workId": "8226",
+    "title": "Countdown to Zero Day: Stuxnet and the Launch of the World's First Digital Weapon",
+    "author": "Kim Zetter",
+    "openLibraryWorkId": "OL19323198W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7315",
+        "reason": "Place a documented cyberweapon within a broader discussion of computing, conflict and public responsibility."
+      }
+    ]
+  },
+  {
+    "workId": "827",
+    "title": "Just Kids",
+    "author": "Patti Smith",
+    "openLibraryWorkId": "OL15474046W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8321",
+        "reason": "Compare the beginnings of an artistic life in New York with a biography of a Bollywood star and his industry."
+      }
+    ]
+  },
+  {
+    "workId": "8321",
+    "title": "King of Bollywood",
+    "author": "Anupama Chopra",
+    "openLibraryWorkId": "OL6050966W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "827",
+        "reason": "Smith offers a first-person account of artistic ambition and friendship in a different creative world."
+      }
+    ]
+  },
+  {
+    "workId": "8368",
+    "title": "The Tiger Rising",
+    "author": "Kate DiCamillo",
+    "openLibraryWorkId": "OL468676W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9673",
+        "reason": "Another young protagonist develops a strong attachment to an animal whose future is uncertain."
+      }
+    ]
+  },
+  {
+    "workId": "9673",
+    "title": "A boy called Bat",
+    "author": "Elana K. Arnold",
+    "openLibraryWorkId": "OL19671166W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8368",
+        "reason": "DiCamillo makes a captive tiger the focus of two children’s friendship, anger and longing."
+      }
+    ]
+  },
+  {
+    "workId": "8583",
+    "title": "Life Is What You Make It",
+    "author": "Preeti Shenoy",
+    "openLibraryWorkId": "OL16084910W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8312",
+        "reason": "Alongside a novel about a young woman’s crisis, read poetry exploring mental health, family and ordinary life."
+      }
+    ]
+  },
+  {
+    "workId": "8312",
+    "title": "Depression & other magic tricks",
+    "author": "Sabrina Benaim",
+    "openLibraryWorkId": "OL19739497W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8583",
+        "reason": "Shenoy approaches vulnerability through a novel about a student whose promising life changes dramatically."
+      }
+    ]
+  },
+  {
+    "workId": "8657",
+    "title": "Not Once But Twice",
+    "author": "Betty Neels",
+    "openLibraryWorkId": "OL3457830W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9638",
+        "reason": "Another romance sets a woman’s expectations about love against what she begins to feel in practice."
+      }
+    ]
+  },
+  {
+    "workId": "9638",
+    "title": "Research into Marriage",
+    "author": "Penny Jordan",
+    "openLibraryWorkId": "OL11327965W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8657",
+        "reason": "Neels uses a hospital setting and two brothers to challenge a heroine’s initial idea of love."
+      }
+    ]
+  },
+  {
+    "workId": "8715",
+    "title": "Small Steps",
+    "author": "Louis Sachar",
+    "openLibraryWorkId": "OL116257W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "10047",
+        "reason": "Compare an attempt to rebuild a life after detention with a school story about status, manipulation and violence."
+      }
+    ]
+  },
+  {
+    "workId": "10047",
+    "title": "Shattering Glass",
+    "author": "Gail Giles",
+    "openLibraryWorkId": "OL16076352W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8715",
+        "reason": "Sachar follows a young man trying to choose a different future while old friendships complicate his plans."
+      }
+    ]
+  },
+  {
+    "workId": "8726",
+    "title": "Payment Due",
+    "author": "Penny Jordan",
+    "openLibraryWorkId": "OL3759345W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9396",
+        "reason": "Another romance places family ties and a woman’s fragile new beginning under pressure from misunderstanding."
+      }
+    ]
+  },
+  {
+    "workId": "9396",
+    "title": "The Greek's Christmas Baby",
+    "author": "Lucy Monroe",
+    "openLibraryWorkId": "OL15715739W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8726",
+        "reason": "Jordan centres a mother whose new life is threatened by a man’s mistaken view of her involvement in a family dispute."
+      }
+    ]
+  },
+  {
+    "workId": "8737",
+    "title": "The Snowman",
+    "author": "Raymond Briggs",
+    "openLibraryWorkId": "OL15845200W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9517",
+        "reason": "For another story in which pictures do essential narrative work, with a longer and more complex dual structure."
+      }
+    ]
+  },
+  {
+    "workId": "9517",
+    "title": "Wonderstruck",
+    "author": "Brian Selznick",
+    "openLibraryWorkId": "OL15936008W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8737",
+        "reason": "Briggs tells a compact, largely visual adventure through a boy’s encounter with a living snowman."
+      }
+    ]
+  },
+  {
+    "workId": "8774",
+    "title": "Quicksilver",
+    "author": "Neal Stephenson",
+    "openLibraryWorkId": "OL38495W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7958",
+        "reason": "Alongside historical fiction about science and power, read a biography of the inventor and statesman Benjamin Franklin."
+      }
+    ]
+  },
+  {
+    "workId": "7958",
+    "title": "Poor Richard",
+    "author": "James Daugherty",
+    "openLibraryWorkId": "OL2813215W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8774",
+        "reason": "Stephenson turns the worlds of science, invention and political ambition into a sprawling historical novel."
+      }
+    ]
+  },
+  {
+    "workId": "8863",
+    "title": "I smell a pop quiz!",
+    "author": "Lincoln Peirce",
+    "openLibraryWorkId": "OL17870742W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9544",
+        "reason": "Another school comedy follows a disruptive pupil whose plans to improve do not come easily."
+      },
+      {
+        "workId": "9506",
+        "reason": "Pilkey turns comic-making and schoolboy humour into puzzles, drawing activities and an interactive adventure."
+      }
+    ]
+  },
+  {
+    "workId": "9544",
+    "title": "Class clown",
+    "author": "Johanna Hurwitz",
+    "openLibraryWorkId": "OL152042W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8863",
+        "reason": "Big Nate uses comic-strip episodes to turn school discipline and daily frustrations into humour."
+      }
+    ]
+  },
+  {
+    "workId": "8977",
+    "title": "Then",
+    "author": "Morris Gleitzman",
+    "openLibraryWorkId": "OL2402285W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7214",
+        "reason": "Alongside a fictional child’s survival under Nazi occupation, read about a documented Danish resistance group."
+      }
+    ]
+  },
+  {
+    "workId": "9234",
+    "title": "Tales of the peculiar",
+    "author": "Ransom Riggs",
+    "openLibraryWorkId": "OL19622246W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9552",
+        "reason": "For another unsettling young-reader book, this time allowing choices that lead to different endings."
+      }
+    ]
+  },
+  {
+    "workId": "9552",
+    "title": "Escape From the Carnival of Horrors",
+    "author": "Robert Lawrence Stine",
+    "openLibraryWorkId": "OL8404844W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9234",
+        "reason": "Riggs presents a collection of strange tales connected to the world of Miss Peregrine."
+      }
+    ]
+  },
+  {
+    "workId": "9245",
+    "title": "The Racketeer",
+    "author": "John Grisham",
+    "openLibraryWorkId": "OL19987302W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9529",
+        "reason": "Another legal thriller makes the apparent position of the killer within the justice system dangerously misleading."
+      }
+    ]
+  },
+  {
+    "workId": "9529",
+    "title": "Thirteen",
+    "author": "Steve Cavanagh",
+    "openLibraryWorkId": "OL20112580W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9245",
+        "reason": "Grisham places a murdered federal judge and an imprisoned lawyer at the centre of an elaborate legal puzzle."
+      }
+    ]
+  },
+  {
+    "workId": "9259",
+    "title": "The Green Mile: Part Three",
+    "author": "Stephen King",
+    "openLibraryWorkId": "OL149107W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "4509",
+        "reason": "Another horror story asks whether an apparently brutal act conceals something that ordinary explanations cannot account for."
+      }
+    ]
+  },
+  {
+    "workId": "4509",
+    "title": "Monster",
+    "author": "Christopher Pike",
+    "openLibraryWorkId": "OL1000819W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9259",
+        "reason": "This instalment of The Green Mile introduces extraordinary uncertainty inside a prison’s death-row routine."
+      }
+    ]
+  },
+  {
+    "workId": "9715",
+    "title": "The Second Horror",
+    "author": "Robert Lawrence Stine",
+    "openLibraryWorkId": "OL72330W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8570",
+        "reason": "Another haunted-place story grows from a past that refuses to stay buried, aimed at a younger audience."
+      }
+    ]
+  },
+  {
+    "workId": "9749",
+    "title": "Never Seduce a Scot",
+    "author": "Maya Banks",
+    "openLibraryWorkId": "OL17317426W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9337",
+        "reason": "Another historical romance makes understanding a partner more difficult than the marriage arrangement itself."
+      }
+    ]
+  },
+  {
+    "workId": "9866",
+    "title": "Iqbal",
+    "author": "Francesco D'Adamo",
+    "openLibraryWorkId": "OL16027483W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9005",
+        "reason": "Compare fictionalised resistance to child labour with a historical novel about Nazi forced labour."
+      }
+    ]
+  },
+  {
+    "workId": "9978",
+    "title": "Maximum Ride Forever",
+    "author": "James Patterson",
+    "openLibraryWorkId": "OL19086609W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "2914",
+        "reason": "Another young group must decide how to act after a catastrophe has transformed the world around them."
+      }
+    ]
+  },
+  {
+    "workId": "7298",
+    "title": "C++ programming",
+    "author": "D. S. Malik",
+    "openLibraryWorkId": "OL8221396W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7858",
+        "reason": "After the technical study of programming, examine how algorithms operate within social and political life."
+      }
+    ]
+  },
+  {
+    "workId": "7029",
+    "title": "Code Name God",
+    "author": "Mani Bhaumik",
+    "openLibraryWorkId": "OL8552921W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7262",
+        "reason": "Compare a scientist’s spiritual autobiography with another physicist’s recollections of discovering and teaching the subject."
+      }
+    ]
+  },
+  {
+    "workId": "7262",
+    "title": "For the Love of Physics",
+    "author": "Walter Lewin",
+    "openLibraryWorkId": "OL15745563W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7029",
+        "reason": "Bhaumik connects his scientific career and personal journey with his own reflections on spirituality."
+      }
+    ]
+  },
+  {
+    "workId": "9530",
+    "title": "I am Pilgrim",
+    "author": "Terry Hayes",
+    "openLibraryWorkId": "OL17354744W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7967",
+        "reason": "For another espionage thriller built around a hidden adversary and the legacy of intelligence work."
+      }
+    ]
+  },
+  {
+    "workId": "2245",
+    "title": "Things in Nature Merely Grow",
+    "author": "Yiyun Li",
+    "openLibraryWorkId": "OL42429940W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8105",
+        "reason": "Another personal work confronts mortality and family love, written from the perspective of terminal illness."
+      }
+    ]
+  },
+  {
+    "workId": "6873",
+    "title": "The gathering night",
+    "author": "Margaret Elphinstone",
+    "openLibraryWorkId": "OL15174236W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "7039",
+        "reason": "Alongside prehistoric fiction about survival close to the land, read a personal account of endurance in an Alaskan winter."
+      }
+    ]
+  },
+  {
+    "workId": "8407",
+    "title": "The Contaxis Baby",
+    "author": "Lynne Graham",
+    "openLibraryWorkId": "OL3773896W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9477",
+        "reason": "Another romance begins with a man’s harsh assumptions about a woman and a difficult reckoning with attraction."
+      }
+    ]
+  },
+  {
+    "workId": "4586",
+    "title": "Who fears death",
+    "author": "Nnedi Okorafor",
+    "openLibraryWorkId": "OL15935869W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "9116",
+        "reason": "Another young woman’s feared magical abilities become part of a struggle over her community’s future."
+      }
+    ]
+  },
+  {
+    "workId": "9506",
+    "title": "The Captain Underpants' Extra-Crunchy Book O'Fun!",
+    "author": "Dav Pilkey",
+    "openLibraryWorkId": "OL14871249W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8863",
+        "reason": "For more school humour in comic form, follow Nate’s daily clashes with teachers and classmates."
+      }
+    ]
+  },
+  {
+    "workId": "9674",
+    "title": "Lady Oracle",
+    "author": "Margaret Atwood",
+    "openLibraryWorkId": "OL675693W",
+    "language": "en",
+    "editionLanguage": "eng",
+    "links": [
+      {
+        "workId": "8793",
+        "reason": "Compare a writer’s tangled secret life with a romance about an artist whose success conceals personal turmoil."
+      }
+    ]
+  },
+  {
+    "workId": "1013",
+    "title": "Onder professoren",
+    "author": "Willem Frederik Hermans",
+    "openLibraryWorkId": "OL15250238W",
+    "language": "nl",
+    "editionLanguage": "nld",
+    "links": [
+      {
+        "workId": "6508",
+        "reason": "Vergelijk rivaliteit in de universitaire wereld met een roman over bewondering en conflict tussen componisten."
       }
     ]
   }
