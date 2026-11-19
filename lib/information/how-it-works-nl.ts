@@ -24,8 +24,9 @@ export const HOW_IT_WORKS_NL: InformationPageContent = {
     ] },
     { heading: '3. Ontdek je smaak: niet gelezen mag je overslaan', paragraphs: [
       ['In de smaaktest geef je cijfers aan boeken die je hebt gelezen. Een onbekend of niet gelezen boek sla je over. Overgeslagen boeken tellen niet mee voor het aantal beoordelingen dat nodig is voor je resultaat.'],
-      ['Zonder account kun je een gasttest doen. Na tien beoordeelde boeken zie je een eerste beeld van je leessmaak. Deze keuzes en het resultaat blijven alleen in de geopende pagina; ze worden niet als boekbeoordelingen opgeslagen en verdwijnen bij vernieuwen of verlaten van de pagina.'],
-      ['Met een account worden je beoordelingen opgeslagen. Je kiest de lengte van een ronde en kunt pauzeren en later verdergaan. Na het gekozen aantal opgeslagen beoordelingen opent je resultaat. Het volgende boek verschijnt na een geslaagde actie; bij een opslagfout kun je opnieuw proberen.'],
+      ['Zonder account kun je direct tien gelezen boeken beoordelen. Je krijgt een persoonlijk smaakprofiel en, als er voldoende passende kandidaten zijn, nieuwe leestips met een uitleg per boek. Boeken die je in de test al beoordeelde komen niet terug als leestip. Je kunt ook zelf een bekend boek zoeken.'],
+      ['Je gastkeuzes en resultaat blijven maximaal 24 uur in hetzelfde browsertabblad bewaard, ook als je een boek opent en teruggaat. Ze worden niet als boekbeoordelingen opgeslagen en veranderen de openbare scores niet. Sluiten van het tabblad of geblokkeerde browseropslag kan je voortgang wissen.'],
+      ['Met een account kies je de lengte van een ronde. Je antwoorden worden tijdelijk in dit tabblad bijgehouden, zodat je direct naar het volgende boek kunt. Aan het einde worden ze samen opgeslagen; ook bij pauzeren of het laden van meer boeken kun je je voortgang opslaan. Pas na succesvolle opslag telt de beoordeling mee in je account. Bij een fout blijven de antwoorden klaarstaan om opnieuw te proberen.'],
       [{ type: 'link', text: 'Start de smaaktest', href: '/taste-test' }, ' of ', { type: 'link', text: 'probeer de gasttest', href: '/taste-test/preferences' }, '.'],
     ] },
     { heading: 'Openbare score, jouw cijfer en persoonlijke match', paragraphs: [
