@@ -1,6 +1,7 @@
 import { probeCoverTransport } from '../../lib/seo/cover-health.ts';
 import assert from 'node:assert/strict';
 import { inspectPriorityPage, prioritySeoPaths, prioritySeoCohort } from './priority-seo-pages.mjs';
+import { scheduledSeoPaths } from './seo-monitor-schedule.mjs';
 
 const origin = 'https://lumisco.re';
 const childPaths = ['/sitemap-pages.xml', '/sitemap-books-en.xml', '/sitemap-books-nl.xml'];
@@ -56,8 +57,11 @@ for (const [url, links] of bookEntries) {
 }
 
 const priorityPages = [];
-for (let offset = 0; offset < prioritySeoPaths.length; offset += 4) {
-  priorityPages.push(...await Promise.all(prioritySeoPaths.slice(offset, offset + 4).map(async path => {
+const daily = process.argv.includes('--daily');
+const scheduledPaths = scheduledSeoPaths(prioritySeoPaths, { daily });
+console.log(JSON.stringify({ monitoringMode: daily ? 'daily-core-and-weekly-rotation' : 'full', scheduledPages: scheduledPaths.length, totalMonitoredPages: prioritySeoPaths.length }));
+for (let offset = 0; offset < scheduledPaths.length; offset += 4) {
+  priorityPages.push(...await Promise.all(scheduledPaths.slice(offset, offset + 4).map(async path => {
     const { body, response } = await read(origin + path);
     return { ...inspectPriorityPage({ path, status: response.status, html: body,
       xRobots: response.headers.get('x-robots-tag') ?? '', inSitemap: urls.has(origin + path) }),
