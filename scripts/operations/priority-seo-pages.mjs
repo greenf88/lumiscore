@@ -1067,8 +1067,112 @@ export const thirtySecondPrioritySeoPaths = Object.freeze([
   "/en/book/7663",
   "/en/book/7852"
 ]);
-export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths, ...nineteenthPrioritySeoPaths, ...twentiethPrioritySeoPaths, ...twentyFirstPrioritySeoPaths, ...twentyThirdPrioritySeoPaths, ...twentyFourthPrioritySeoPaths, ...twentyFifthPrioritySeoPaths, ...twentySixthPrioritySeoPaths, ...twentySeventhPrioritySeoPaths, ...twentyEighthPrioritySeoPaths, ...twentyNinthPrioritySeoPaths, ...thirtiethPrioritySeoPaths, ...thirtyFirstPrioritySeoPaths, ...thirtySecondPrioritySeoPaths]);
-export const prioritySeoCohort = path => thirtySecondPrioritySeoPaths.includes(path) ? 'recovery-32'
+// 100 additional canonical URLs with same-day readonly GSC CNI evidence.
+export const thirtyThirdPrioritySeoPaths = Object.freeze([
+  "/en/book/3627",
+  "/en/book/3675",
+  "/en/book/3800",
+  "/en/book/3910",
+  "/en/book/3621",
+  "/en/book/4670",
+  "/en/book/4876",
+  "/nl/book/4966",
+  "/nl/book/5017",
+  "/nl/book/5088",
+  "/nl/book/5194",
+  "/nl/book/5259",
+  "/nl/book/5317",
+  "/nl/book/5402",
+  "/nl/book/5500",
+  "/nl/book/5547",
+  "/nl/book/5564",
+  "/nl/book/5630",
+  "/nl/book/5659",
+  "/nl/book/5687",
+  "/nl/book/5843",
+  "/nl/book/5957",
+  "/nl/book/6280",
+  "/nl/book/6357",
+  "/nl/book/6479",
+  "/nl/book/6502",
+  "/en/book/9471",
+  "/en/book/7206",
+  "/en/book/3902",
+  "/en/book/4084",
+  "/en/book/4127",
+  "/en/book/7323",
+  "/en/book/7941",
+  "/en/book/8072",
+  "/en/book/8390",
+  "/en/book/8504",
+  "/en/book/8548",
+  "/en/book/8653",
+  "/en/book/9454",
+  "/en/book/8291",
+  "/nl/book/6283",
+  "/nl/book/3315",
+  "/en/book/9493",
+  "/en/book/51",
+  "/en/book/2239",
+  "/en/book/2275",
+  "/en/book/2770",
+  "/en/book/2871",
+  "/nl/book/3189",
+  "/nl/book/3243",
+  "/en/book/3613",
+  "/en/book/3907",
+  "/en/book/4834",
+  "/nl/book/4974",
+  "/nl/book/5052",
+  "/nl/book/5166",
+  "/nl/book/5172",
+  "/nl/book/5525",
+  "/nl/book/5635",
+  "/nl/book/5858",
+  "/nl/book/5900",
+  "/nl/book/6243",
+  "/en/book/4703",
+  "/en/book/4760",
+  "/en/book/4900",
+  "/nl/book/5068",
+  "/nl/book/5426",
+  "/nl/book/5749",
+  "/nl/book/5883",
+  "/nl/book/5915",
+  "/nl/book/6425",
+  "/nl/book/6442",
+  "/nl/book/6481",
+  "/en/book/7388",
+  "/en/book/2901",
+  "/en/book/2952",
+  "/en/book/4008",
+  "/en/book/4010",
+  "/en/book/4333",
+  "/en/book/4673",
+  "/nl/book/6269",
+  "/en/book/7543",
+  "/en/book/2937",
+  "/en/book/7701",
+  "/en/book/8698",
+  "/en/book/2477",
+  "/en/book/2797",
+  "/en/book/2853",
+  "/en/book/2912",
+  "/en/book/3884",
+  "/en/book/4115",
+  "/en/book/4198",
+  "/en/book/4209",
+  "/en/book/4621",
+  "/en/book/4707",
+  "/en/book/4725",
+  "/nl/book/5600",
+  "/nl/book/6107",
+  "/nl/book/6466",
+  "/nl/book/1128"
+]);
+export const prioritySeoPaths = Object.freeze([...firstPrioritySeoPaths, ...secondPrioritySeoPaths, ...thirdPrioritySeoPaths, ...fourthPrioritySeoPaths, ...fifthPrioritySeoPaths, ...sixthPrioritySeoPaths, ...seventhPrioritySeoPaths, ...eighthPrioritySeoPaths, ...ninthPrioritySeoPaths, ...tenthPrioritySeoPaths, ...eleventhPrioritySeoPaths, ...twelfthPrioritySeoPaths, ...thirteenthPrioritySeoPaths, ...fourteenthPrioritySeoPaths, ...fifteenthPrioritySeoPaths, ...sixteenthPrioritySeoPaths, ...seventeenthPrioritySeoPaths, ...eighteenthPrioritySeoPaths, ...nineteenthPrioritySeoPaths, ...twentiethPrioritySeoPaths, ...twentyFirstPrioritySeoPaths, ...twentyThirdPrioritySeoPaths, ...twentyFourthPrioritySeoPaths, ...twentyFifthPrioritySeoPaths, ...twentySixthPrioritySeoPaths, ...twentySeventhPrioritySeoPaths, ...twentyEighthPrioritySeoPaths, ...twentyNinthPrioritySeoPaths, ...thirtiethPrioritySeoPaths, ...thirtyFirstPrioritySeoPaths, ...thirtySecondPrioritySeoPaths, ...thirtyThirdPrioritySeoPaths]);
+export const prioritySeoCohort = path => thirtyThirdPrioritySeoPaths.includes(path) ? 'recovery-33'
+  : thirtySecondPrioritySeoPaths.includes(path) ? 'recovery-32'
   : thirtyFirstPrioritySeoPaths.includes(path) ? 'recovery-31'
   : thirtiethPrioritySeoPaths.includes(path) ? 'recovery-30'
   : twentyNinthPrioritySeoPaths.includes(path) ? 'recovery-29'
@@ -1098,7 +1202,7 @@ export const prioritySeoCohort = path => thirtySecondPrioritySeoPaths.includes(p
   : fourthPrioritySeoPaths.includes(path) ? 'recovery-4'
   : thirdPrioritySeoPaths.includes(path) ? 'recovery-3'
   : secondPrioritySeoPaths.includes(path) ? 'recovery-2' : 'recovery-1';
-export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path) || nineteenthPrioritySeoPaths.includes(path) || twentiethPrioritySeoPaths.includes(path) || twentyFirstPrioritySeoPaths.includes(path) || twentyThirdPrioritySeoPaths.includes(path) || twentyFourthPrioritySeoPaths.includes(path) || twentyFifthPrioritySeoPaths.includes(path) || twentySixthPrioritySeoPaths.includes(path) || twentySeventhPrioritySeoPaths.includes(path) || twentyEighthPrioritySeoPaths.includes(path) || twentyNinthPrioritySeoPaths.includes(path) || thirtiethPrioritySeoPaths.includes(path) || thirtyFirstPrioritySeoPaths.includes(path) || thirtySecondPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
+export const requiresVerifiedSynopsis = path => (secondPrioritySeoPaths.includes(path) || thirdPrioritySeoPaths.includes(path) || fourthPrioritySeoPaths.includes(path) || fifthPrioritySeoPaths.includes(path) || sixthPrioritySeoPaths.includes(path) || seventhPrioritySeoPaths.includes(path) || eighthPrioritySeoPaths.includes(path) || ninthPrioritySeoPaths.includes(path) || tenthPrioritySeoPaths.includes(path) || eleventhPrioritySeoPaths.includes(path) || twelfthPrioritySeoPaths.includes(path) || thirteenthPrioritySeoPaths.includes(path) || fourteenthPrioritySeoPaths.includes(path) || fifteenthPrioritySeoPaths.includes(path) || sixteenthPrioritySeoPaths.includes(path) || seventeenthPrioritySeoPaths.includes(path) || eighteenthPrioritySeoPaths.includes(path) || nineteenthPrioritySeoPaths.includes(path) || twentiethPrioritySeoPaths.includes(path) || twentyFirstPrioritySeoPaths.includes(path) || twentyThirdPrioritySeoPaths.includes(path) || twentyFourthPrioritySeoPaths.includes(path) || twentyFifthPrioritySeoPaths.includes(path) || twentySixthPrioritySeoPaths.includes(path) || twentySeventhPrioritySeoPaths.includes(path) || twentyEighthPrioritySeoPaths.includes(path) || twentyNinthPrioritySeoPaths.includes(path) || thirtiethPrioritySeoPaths.includes(path) || thirtyFirstPrioritySeoPaths.includes(path) || thirtySecondPrioritySeoPaths.includes(path) || thirtyThirdPrioritySeoPaths.includes(path)) && /\/book\//.test(path);
 
 const attribute = (tag, name) => tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1]?.replaceAll('&amp;', '&') ?? '';
 const renderedMarkup = html => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
