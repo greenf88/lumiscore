@@ -9,6 +9,10 @@ export function createFormSubmissionLatch() {
       pending = true;
       return true;
     },
-    reset() { pending = false; },
+    restore(persisted: boolean): boolean {
+      if (!persisted) return false;
+      pending = false;
+      return true;
+    },
   };
 }

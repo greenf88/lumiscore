@@ -10,7 +10,9 @@ export function useAuthFormSubmission() {
   useEffect(() => {
     // A native POST leaves this page. Returning through the browser's back/forward
     // cache must make the preserved form usable again, without resubmitting it.
-    const reset = () => { latch.reset(); setPending(false); };
+    const reset = (event: PageTransitionEvent) => {
+      if (latch.restore(event.persisted)) setPending(false);
+    };
     window.addEventListener('pageshow', reset);
     return () => window.removeEventListener('pageshow', reset);
   }, [latch]);
