@@ -27,6 +27,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - id: unit
         run: pnpm test:unit
+      - name: Verify isolated Auth failures and confirmation callbacks
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/test-auth-availability.mjs
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: pnpm exec tsc --noEmit
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}

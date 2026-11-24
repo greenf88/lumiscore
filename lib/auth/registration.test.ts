@@ -84,6 +84,4 @@ test('route boundaries preserve CSRF protection, PKCE, privacy headers and singl
   assert.match(callback, /registrationCallbackDestination\(request.url, next, false\)/);
   const login = await readFile(new URL('../../app/login/page.tsx', import.meta.url), 'utf8');
   assert.match(login, /isSignupError\(errorKey\)/);
-  const signIn = await readFile(new URL('../../app/auth/sign-in/route.ts', import.meta.url), 'utf8');
-  assert.match(signIn, /error\?\.code === 'email_not_confirmed'/);
 });

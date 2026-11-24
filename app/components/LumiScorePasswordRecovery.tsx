@@ -3,7 +3,7 @@
 import { LocaleLink } from './LumiScoreLocale';
 
 import { useEffect, useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useAuthFormSubmission } from './useAuthFormSubmission';
 import { NEW_ACCOUNT_PASSWORD_MIN_LENGTH } from '@/lib/auth/credentials';
 import { ThemeToggle } from './LumiScoreHome';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
@@ -12,8 +12,7 @@ import { readRecoveryLink, recoveryLanguageHref } from '@/lib/auth/recovery-link
 
 type RecoveryMode = 'request' | 'update';
 
-function SubmitButton({ mode }: { mode: RecoveryMode }) {
-  const { pending } = useFormStatus();
+function SubmitButton({ mode, pending }: { mode: RecoveryMode; pending: boolean }) {
   const { t } = useLumiScoreLocale();
   return (
     <button
@@ -46,6 +45,7 @@ export function LumiScorePasswordRecovery({
   hasRecoverySession?: boolean;
 }) {
   const { t, locale } = useLumiScoreLocale();
+  const submission = useAuthFormSubmission();
   const noticeRef = useRef<HTMLDivElement>(null);
   const [linkProof, setLinkProof] = useState<string | null | undefined>(undefined);
   const processedLink = useRef(false);
@@ -127,15 +127,18 @@ export function LumiScorePasswordRecovery({
             ? '/auth/request-password-reset'
             : '/auth/update-password'}
           method="post"
+          aria-busy={submission.pending}
           onSubmit={event => {
-            if (mode !== 'update') return;
-            const form = event.currentTarget;
-            const password = form.elements.namedItem('password');
-            const confirmation = form.elements.namedItem('passwordConfirmation');
-            if (password instanceof HTMLInputElement && confirmation instanceof HTMLInputElement) {
-              confirmation.setCustomValidity(password.value === confirmation.value ? '' : t('auth.passwordMismatch'));
-              if (!form.reportValidity()) event.preventDefault();
+            if (mode === 'update') {
+              const form = event.currentTarget;
+              const password = form.elements.namedItem('password');
+              const confirmation = form.elements.namedItem('passwordConfirmation');
+              if (password instanceof HTMLInputElement && confirmation instanceof HTMLInputElement) {
+                confirmation.setCustomValidity(password.value === confirmation.value ? '' : t('auth.passwordMismatch'));
+                if (!form.reportValidity()) event.preventDefault();
+              }
             }
+            submission.onSubmit(event);
           }}
           onInput={event => {
             const confirmation = event.currentTarget.elements.namedItem('passwordConfirmation');
@@ -176,7 +179,7 @@ export function LumiScorePasswordRecovery({
               </p>
             </>
           )}
-          <SubmitButton mode={mode} />
+          <SubmitButton mode={mode} pending={submission.pending} />
         </form>}
         <LocaleLink className="detail-back-link auth-back" href="/login">
           ← {t('auth.backToSignIn')}

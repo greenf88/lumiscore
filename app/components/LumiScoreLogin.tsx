@@ -10,6 +10,7 @@ import { ThemeToggle } from './LumiScoreHome';
 import { LanguageSwitcher, useLumiScoreLocale } from './LumiScoreLocale';
 import { LumiScoreWordmark } from './LumiScoreWordmark';
 import { MeasurementFormContext } from './ProductMeasurements';
+import { useAuthFormSubmission } from './useAuthFormSubmission';
 
 type LumiScoreLoginProps = {
   next: string;
@@ -26,6 +27,7 @@ export function LumiScoreLogin({
 }: LumiScoreLoginProps) {
   const { locale, t } = useLumiScoreLocale();
   const [mode, setMode] = useState(initialMode);
+  const submission = useAuthFormSubmission();
   const toggleTheme = () => {
     const theme =
       document.documentElement.dataset.theme === 'ink' ? 'paper' : 'ink';
@@ -58,6 +60,8 @@ export function LumiScoreLogin({
           className="auth-form"
           action={mode === 'sign-up' ? '/auth/sign-up' : '/auth/sign-in'}
           method="post"
+          onSubmit={submission.onSubmit}
+          aria-busy={submission.pending}
         >
           <input type="hidden" name="next" value={localizedHref(next, locale)} />
           <MeasurementFormContext />
@@ -97,12 +101,13 @@ export function LumiScoreLogin({
               {t('auth.forgotPassword')}
             </LocaleLink>
           )}
-          <button className="primary-cta auth-submit" type="submit">
-            {t(mode === 'sign-up' ? 'auth.create' : 'auth.signIn')} <span>→</span>
+          <button className="primary-cta auth-submit" type="submit" disabled={submission.pending}>
+            <span aria-live="polite">{t(submission.pending ? 'auth.recoverySubmitting' : mode === 'sign-up' ? 'auth.create' : 'auth.signIn')}</span> <span aria-hidden="true">→</span>
           </button>
           <button
             className="auth-create"
             type="button"
+            disabled={submission.pending}
             onClick={() => setMode((current) => current === 'sign-up' ? 'sign-in' : 'sign-up')}
           >
             {t(mode === 'sign-up' ? 'auth.backToSignIn' : 'auth.create')}
