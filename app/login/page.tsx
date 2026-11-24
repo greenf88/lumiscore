@@ -4,6 +4,7 @@ import { getSafeNextPath } from '@/lib/auth/request';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 import { translate, type TranslationKey } from '@/lib/i18n/translations';
 import { isSignupError, SIGNUP_ERROR_MESSAGES } from '@/lib/auth/registration';
+import { SIGN_IN_ERROR_MESSAGES } from '@/lib/auth/sign-in';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,9 +25,8 @@ type LoginPageProps = {
 };
 
 const errorMessages: Record<string, TranslationKey> = {
-  invalid_credentials: 'auth.invalidCredentials',
+  ...SIGN_IN_ERROR_MESSAGES,
   ...SIGNUP_ERROR_MESSAGES,
-  email_not_confirmed: 'auth.emailNotConfirmed',
   confirmation_failed: 'auth.confirmationFailed',
 };
 
