@@ -1,11 +1,13 @@
 export const DISCOVERY_EVENTS = ['search_started', 'search_results', 'search_empty', 'search_failed', 'search_book_opened', 'guest_round_started', 'guest_round_completed', 'guest_book_saved', 'guest_save_failed', 'guest_suggestions_empty', 'guest_suggestions_failed'] as const;
-export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded', 'referral_arrival', ...DISCOVERY_EVENTS] as const;
+import { PRIORITY_DESTINATIONS } from '../editorial/priority-destinations.ts';
+export const METRIC_LIST_IDS = ['dystopie-vanaf-1990', 'other', ...PRIORITY_DESTINATIONS.map(item => item.id)] as const;
+export const METRIC_EVENTS = ['recommendation_impression', 'recommendation_open', 'want_to_read_saved', 'taste_round_started', 'taste_round_completed', 'page_opened', 'editorial_list_opened', 'reading_guide_opened', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'taste_result_opened', 'sign_in_succeeded', 'referral_arrival', ...DISCOVERY_EVENTS] as const;
 export const METRIC_SURFACES = ['home', 'recommendations', 'taste_result', 'book_detail', 'collection', 'editorial', 'browse', 'login', 'taste_test', 'other'] as const;
 export const RANKER_VERSION = '8f337dd';
 export const METRIC_CONTEXT_HEADER = 'x-lumiscore-product-context';
 export type MetricEvent = typeof METRIC_EVENTS[number];
-export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'google' | 'bing' | 'other_search' | 'leesroutes' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'referral' | 'unknown'; campaign: 'dystopie_202610' | 'none'; traffic: 'synthetic' | 'production' };
-export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: 'dystopie-vanaf-1990' | 'other'; operation?: 'new' | 'updated'; device?: 'mobile' | 'desktop' };
+export type MetricContext = { locale: 'nl' | 'en'; surface: typeof METRIC_SURFACES[number]; source: 'facebook' | 'instagram' | 'google' | 'bing' | 'other_search' | 'leesroutes' | 'direct_unknown'; medium: 'organic_social' | 'organic_search' | 'referral' | 'unknown'; campaign: 'dystopie_202610' | 'leesroutes_202611' | 'none'; traffic: 'synthetic' | 'production' };
+export type MetricProperties = { locale: 'nl' | 'en'; surface?: typeof METRIC_SURFACES[number]; work_id?: number; position?: number; ranker_version?: string; goal?: number; source?: MetricContext['source']; medium?: MetricContext['medium']; campaign?: MetricContext['campaign']; traffic?: MetricContext['traffic']; list_id?: typeof METRIC_LIST_IDS[number]; operation?: 'new' | 'updated'; device?: 'mobile' | 'desktop' };
 export type MetricEnvelope = { event_id: string; event: MetricEvent; properties: MetricProperties };
 export const isMetricReceipt = (value: unknown): value is string => typeof value === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 const exact = (object: Record<string, unknown>, keys: readonly string[]) => Object.keys(object).every(k => keys.includes(k));
@@ -23,7 +25,7 @@ export function parseMetricContext(value: unknown): MetricContext | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const p = value as Record<string, unknown>;
   if (!exact(p, ['locale', 'surface', 'source', 'medium', 'campaign', 'traffic']) || !['nl', 'en'].includes(String(p.locale)) || !METRIC_SURFACES.includes(p.surface as MetricContext['surface']) || !['synthetic','production'].includes(String(p.traffic))) return null;
-  const attributed = p.source === 'facebook' && p.medium === 'organic_social' && p.campaign === 'dystopie_202610';
+  const attributed = p.medium === 'organic_social' && ((p.source === 'facebook' && p.campaign === 'dystopie_202610') || (['facebook','instagram'].includes(String(p.source)) && p.campaign === 'leesroutes_202611'));
   const search = ['google', 'bing', 'other_search'].includes(String(p.source)) && p.medium === 'organic_search' && p.campaign === 'none';
   const referral = p.source === 'leesroutes' && p.medium === 'referral' && p.campaign === 'none';
   const unknown = p.source === 'direct_unknown' && p.medium === 'unknown' && p.campaign === 'none';
@@ -44,7 +46,7 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   if (p.device !== undefined && !['mobile', 'desktop'].includes(String(p.device))) return null;
   const round = event.startsWith('taste_round_'), recommendation = event.startsWith('recommendation_');
   const book = recommendation || ['want_to_read_saved', 'book_card_opened', 'book_detail_opened', 'rating_saved', 'search_book_opened', 'guest_book_saved', 'guest_save_failed'].includes(event);
-  const allowed = [...common, ...(round ? ['goal'] : []), ...(book ? ['work_id'] : []), ...(recommendation ? ['position', 'ranker_version'] : []), ...(event === 'want_to_read_saved' ? ['ranker_version'] : []), ...(['editorial_list_opened', 'book_card_opened'].includes(event) ? ['list_id'] : []), ...(event === 'rating_saved' ? ['operation'] : [])];
+  const allowed = [...common, ...(round ? ['goal'] : []), ...(book ? ['work_id'] : []), ...(recommendation ? ['position', 'ranker_version'] : []), ...(event === 'want_to_read_saved' ? ['ranker_version'] : []), ...(['editorial_list_opened', 'reading_guide_opened', 'book_card_opened'].includes(event) ? ['list_id'] : []), ...(event === 'rating_saved' ? ['operation'] : [])];
   if (!exact(p, allowed)) return null;
   if (p.surface !== undefined && !METRIC_SURFACES.includes(p.surface as MetricContext['surface'])) return null;
   if (round && (typeof p.goal !== 'number' || ![10, 15, 20, 30].includes(p.goal))) return null;
@@ -52,11 +54,12 @@ export function parseMetric(value: unknown): MetricEnvelope | null {
   if (!round && !METRIC_SURFACES.includes(p.surface as MetricContext['surface'])) return null;
   if (recommendation && (typeof p.position !== 'number' || !Number.isInteger(p.position) || p.position < 1 || p.position > 100 || p.ranker_version !== RANKER_VERSION)) return null;
   if (p.ranker_version !== undefined && p.ranker_version !== RANKER_VERSION) return null;
-  if (p.list_id !== undefined && !['dystopie-vanaf-1990', 'other'].includes(String(p.list_id))) return null;
+  if (p.list_id !== undefined && !METRIC_LIST_IDS.includes(p.list_id as typeof METRIC_LIST_IDS[number])) return null;
+  if (event === 'reading_guide_opened' && (p.locale !== 'nl' || !PRIORITY_DESTINATIONS.some(item => item.id === p.list_id))) return null;
   if (event === 'rating_saved' && !['new', 'updated'].includes(String(p.operation))) return null;
   return value as MetricEnvelope;
 }
-export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened', 'referral_arrival', ...DISCOVERY_EVENTS];
+export const BROWSER_METRIC_EVENTS: readonly MetricEvent[] = ['recommendation_impression', 'recommendation_open', 'page_opened', 'editorial_list_opened', 'reading_guide_opened', 'book_card_opened', 'book_detail_opened', 'taste_result_opened', 'referral_arrival', ...DISCOVERY_EVENTS];
 export function metricSurfaceForPath(path: string): MetricContext['surface'] {
   const p = path.replace(/^\/(nl|en)(?=\/|$)/, '') || '/';
   if (p === '/') return 'home';
@@ -92,6 +95,9 @@ export function campaignContext(url: string, referrer: string, locale: 'nl' | 'e
   const current = new URL(url), surface = metricSurfaceForPath(current.pathname);
   const base: MetricContext = { locale, surface, source: 'direct_unknown', medium: 'unknown', campaign: 'none', traffic };
   if (isLeesroutesReferral(url, referrer)) return { ...base, source: 'leesroutes', medium: 'referral' };
+  const utmKeys = [...current.searchParams.keys()].filter(key => key.startsWith('utm_'));
+  const social = current.searchParams.get('utm_source');
+  if (utmKeys.length === 3 && new Set(utmKeys).size === 3 && (social === 'facebook' || social === 'instagram') && current.searchParams.get('utm_medium') === 'organic_social' && current.searchParams.get('utm_campaign') === 'leesroutes_202611') return { ...base, source: social, medium: 'organic_social', campaign: 'leesroutes_202611' };
   if (current.searchParams.get('utm_source') === 'facebook' && current.searchParams.get('utm_medium') === 'organic_social' && current.searchParams.get('utm_campaign') === 'dystopie_202610') return { ...base, source: 'facebook', medium: 'organic_social', campaign: 'dystopie_202610' };
   if ([...current.searchParams.keys()].some(k => k.startsWith('utm_'))) return base;
   try {

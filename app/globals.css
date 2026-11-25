@@ -1816,3 +1816,15 @@ button, input, select, textarea { font-family: var(--sans); }
 @keyframes taste-brush { from { transform:rotate(-13deg) scaleX(.8); opacity:.4; } to { transform:rotate(-8deg) scaleX(1); opacity:.8; } }
 @media(prefers-reduced-motion:reduce) { .taste-painting-art :is(i,span) { animation:none; } }
 @media(max-width:430px) { .taste-profile { padding:20px; } .taste-persona-image { width:200px; } .taste-portrait-share .primary-cta { width:100%; } }
+/* Existing reading guides: lightweight, crawlable home entries and visible choice notes. */
+.priority-reading-routes { border-block: 1px solid var(--border); }
+.priority-reading-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 0; list-style: none; }
+.priority-reading-grid li { min-width: 0; padding: 22px; border: 1px solid var(--border); background: var(--surface); }
+.priority-reading-grid h3 { margin-top: 0; font-size: 1.25rem; line-height: 1.35; }
+.priority-reading-grid a { display: inline-block; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.priority-reading-grid p { line-height: 1.65; }
+.guide-responsibility { max-width: 78ch; font-size: .85rem; line-height: 1.6; color: var(--muted); }
+.editorial-destination .guide-choice { line-height: 1.65; padding-left: 12px; border-left: 3px solid var(--teal); }
+.guide-next-step { margin-block: 32px; padding: 24px; border: 1px solid var(--border); background: var(--surface); }
+.guide-next-step .reading-list-actions { flex-wrap: wrap; }
+@media (max-width: 760px) { .priority-reading-grid { grid-template-columns: 1fr; } .priority-reading-grid li, .guide-next-step { padding: 16px; } }

@@ -9,13 +9,15 @@ import { getGuestWantedStorageId } from '@/lib/collections/guest-want-to-read';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import type { EditorialList } from '@/lib/catalog/top-lists';
 import { availableGuideQuestions, getGuideBookNote, getLandingGuide } from '@/lib/editorial/landing-guides';
-import { GuideQuestions, GuideSources, ReadingGuideIntro } from './EditorialLandingGuide';
+import { GuideNextStep, GuideQuestions, GuideSources, ReadingGuideIntro } from './EditorialLandingGuide';
+import { priorityDestination } from '@/lib/editorial/priority-destinations';
 import type { Locale } from '@/lib/i18n/config';
 export type EditorialSelection = { sourceId: string; source: string; basis: {nl:string;en:string}; note: {nl:string;en:string}; href: string | null };
 function EditorialReadingNote({ id, title, note, text, choice, locale }: { id: string; title: string; note: ReturnType<typeof getGuideBookNote>; text: string; choice: EditorialSelection; locale: Locale }) {
   const [expanded, setExpanded] = useState(false);
   return <div className="editorial-reading-note" data-expanded={expanded}>
     {note && <h3 className="editorial-angle">{note.reader_angle}</h3>}
+    {note?.choice && <p className="guide-choice">{note.choice}</p>}
     <p id={'reading-note-' + id} className="editorial-reason">{text}</p>
     <button type="button" className="editorial-read-more" aria-expanded={expanded} aria-controls={'reading-note-' + id + ' reading-sources-' + id}
       aria-label={(locale === 'nl' ? (expanded ? 'Minder over ' : 'Lees meer over ') : (expanded ? 'Less about ' : 'Read more about ')) + title}
@@ -33,7 +35,8 @@ export function EditorialTopList({ list, books, selections, relatedLists, unavai
   const availableIds = list.workIds.filter(id => selections[id]?.href && books.some(book => book.openLibraryWorkId === selections[id].sourceId && book.editionAvailable !== false));
   const renderedIds = guide ? availableIds : list.workIds;
   const missingCount = list.workIds.length - availableIds.length;
-  return <section className="featured-section editorial-lists" data-product-list={list.slug} data-editorial-guide={guide ? list.slug : undefined}>
+  const priority = priorityDestination('/' + locale + '/toplijsten/' + list.slug);
+  return <section className="featured-section editorial-lists" data-product-list={list.slug} data-editorial-guide={guide ? list.slug : undefined} data-reading-destination={!unavailable && priority ? priority.id : undefined}>
     {error && <p role="alert">{error}</p>}
     <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
@@ -54,7 +57,8 @@ export function EditorialTopList({ list, books, selections, relatedLists, unavai
         </BookCard></li>;
     })}</ol>
     {guide && <GuideQuestions items={availableGuideQuestions(guide, books)} locale={locale}/>}
-    <div className="reading-list-actions"><LocaleLink className="ui-control ui-action ui-primary" href="/taste-test">{locale === 'nl' ? 'Ontdek je eigen smaak →' : 'Discover your own taste →'}</LocaleLink><LocaleLink className="ui-control ui-action ui-secondary" href="/toplijsten">{locale === 'nl' ? 'Alle leesroutes' : 'All reading routes'}</LocaleLink></div>
+    {priority?.id === 'na-project-hail-mary' && <p className="landing-guide"><LocaleLink href="/nieuws/andy-weir-volgende-boek-geen-project-hail-mary-2">Meer over Andy Weirs volgende boek: waarom dit geen Project Hail Mary 2 is</LocaleLink>. De boeken hierboven zijn verwante leestips, geen vervolgdelen.</p>}
+    {priority ? <GuideNextStep authenticated={authenticated} returnTo={'/nl/toplijsten/' + list.slug}/> : <div className="reading-list-actions"><LocaleLink className="ui-control ui-action ui-primary" href="/taste-test">{locale === 'nl' ? 'Ontdek je eigen smaak →' : 'Discover your own taste →'}</LocaleLink><LocaleLink className="ui-control ui-action ui-secondary" href="/toplijsten">{locale === 'nl' ? 'Alle leesroutes' : 'All reading routes'}</LocaleLink></div>}
     {relatedLists.length > 0 && <nav className="editorial-related" aria-label={locale === 'nl' ? 'Verder lezen' : 'More reading routes'}><h2>{locale === 'nl' ? 'Een andere leesrichting' : 'Another reading direction'}</h2><div className="reading-list-actions">{relatedLists.map(related=><LocaleLink className="ui-control ui-action ui-secondary" key={related.slug} href={'/toplijsten/'+related.slug}>{related.title[locale]}</LocaleLink>)}</div></nav>}
   </section>;
 }
