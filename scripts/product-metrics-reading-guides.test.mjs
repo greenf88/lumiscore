@@ -9,6 +9,7 @@ import {readingGuidesPatch} from '../test-support/product-metrics/reading-guides
 import {readFile} from 'node:fs/promises';
 
 for(const target of ['production','test'])test(`reading guides ${target}: opt-in, bounded dimensions, idempotence, ACL preservation and committed rollback`,async()=>{
+ for(const rollback of [false,true])assert.equal(await readFile(new URL('../supabase/operations/reading-guides-20261125/'+target+'-'+(rollback?'restore':'apply')+'.sql',import.meta.url),'utf8'),readingGuidesPatch(rollback,target));
  const db=new PGlite();try{
   await db.exec(fixture);
   const schema=target==='production'?'product_metrics':'product_metrics_test',suffix=target==='production'?'':'_test',project=target==='production'?'qvplwejffhjvxaypmjut':'hlvujbrmfdlrfxdjwsmb';
