@@ -4,6 +4,7 @@ import { priorityDestination, PRIORITY_DESTINATIONS } from './priority-destinati
 import { getLandingGuide } from './landing-guides.ts';
 import { parseMetric, campaignContext } from '../product-metrics/contract.ts';
 import { readingGuidesReport } from '../product-metrics/reading-guides-report.ts';
+import { productMeasurementReport } from '../product-metrics/report.ts';
 
 test('only the three real Dutch destinations receive dedicated measurement IDs', () => {
   for (const item of PRIORITY_DESTINATIONS) {
@@ -28,9 +29,14 @@ test('fixed social attribution and guide IDs reject free text, extra UTM fields 
   }
 });
 test('aggregate report separates home clicks, destination views, book clicks and confirmed saves', () => {
- const dimensions={locale:'nl',traffic:'production',source:'facebook',medium:'organic_social',campaign:'leesroutes_202611',list_id:'suzanne-vermeer'};
- const rows=[{event:'reading_guide_opened',dimensions:{...dimensions,surface:'home'},n:3},{event:'editorial_list_opened',dimensions:{...dimensions,surface:'collection'},n:2},{event:'book_card_opened',dimensions:{...dimensions,surface:'collection'},n:1},{event:'want_to_read_saved',dimensions:{...dimensions,surface:'book_detail'},n:1}].map(row=>({day:'2026-11-25',...row}));
+ const actionDimensions={locale:'nl',traffic:'production',source:'facebook',medium:'organic_social',campaign:'leesroutes_202611'};
+ const dimensions={...actionDimensions,list_id:'suzanne-vermeer'};
+ const rows=[{event:'reading_guide_opened',dimensions:{...dimensions,surface:'home'},n:3},{event:'editorial_list_opened',dimensions:{...dimensions,surface:'collection'},n:2},{event:'book_card_opened',dimensions:{...dimensions,surface:'collection',work_id:1},n:1},{event:'want_to_read_saved',dimensions:{...actionDimensions,surface:'book_detail',work_id:1},n:1}].map(row=>({day:'2026-11-25',...row}));
  const report=readingGuidesReport([...rows,{...rows[0],n:100,dimensions:{...dimensions,surface:'home',traffic:'synthetic'}}]);
  assert.deepEqual(report.destinations[0],{id:'suzanne-vermeer',path:'/nl/collection/suzanne-vermeer',contentViews:2,homeClicks:3,bookClicks:1});
  assert.equal(report.social[0].confirmedAccountSaves,1);assert.equal(report.returningVisitors,null);assert.equal(report.linkedConversion,null);
+ const input={available:true,period:{from:'2026-11-25',through:'2026-11-25'},rows};
+ assert.equal(productMeasurementReport(input).readingGuides,null,'historical instrumentation must not invent zero guide traffic');
+ const validated=productMeasurementReport({...input,readingGuidesAvailable:true});
+ assert.equal(validated.readingGuides?.destinations[0].homeClicks,3);
 });

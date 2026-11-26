@@ -52,6 +52,13 @@ RAPPORTAGE
 lib/product-metrics/reading-guides-report.ts geeft per gids contentweergaven,
 homeklikken en boekklikken, plus gescheiden socialacties. Gebruik alleen gevalideerde
 productierijen uit de bestaande beheerquery, traffic=production, vaste UTC-periode.
+Deze uitsplitsing zit ook in het bestaande rapportcommando:
+node --experimental-strip-types scripts/product-measurement-report.mjs <input.json>
+Gebruik de bestaande read-only PR51-beheerquery voor input, geen privéprofielexport.
+Zet readingGuidesAvailable alleen in die rapportinput op true nadat SQL én code
+voor de volledige gekozen periode aantoonbaar actief waren. Standaard is de
+uitsplitsing null/onbekend; oude meetrijen worden niet als nul gidsbezoek getoond.
+Dit is een rapportlabel, geen productieconfiguratie of automatische activatie.
 Testgebeurtenissen en API-fouten apart houden. Retentie90dagen blijft voldoende
 voor vier weken; niets uit privéprofielen of volledige zoekteksten verzamelen.
 
