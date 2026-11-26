@@ -27,6 +27,7 @@ test('source HTML exposes three home entries, differentiated choices and honest 
    const selections=Object.fromEntries(list.workIds.map((id,i)=>[id,{...getEditorialTopBook(id),sourceId:getEditorialWorkSourceId(id),href:'/book/'+books[i].workId}]));
    const html=render(h(EditorialTopList,{list,books,selections,relatedLists:[],authenticated:false}),'nl',item.path);
    assert.equal((html.match(/<h1/g)??[]).length,1);assert.ok(html.includes('data-reading-destination="'+item.id+'"'));
+   assert.match(html,/aria-label="Broodkruimels"/);assert.ok(html.includes('aria-current="page">'+guide.h1));
    assert.equal((html.match(/class="guide-choice"/g)??[]).length,10);
    assert.match(html,/Als gast bewaar je je keuze in deze browser/);assert.match(html,/href="\/nl\/taste-test\/preferences"/);
    assert.ok(html.includes('next='+encodeURIComponent('/nl'+item.path)));

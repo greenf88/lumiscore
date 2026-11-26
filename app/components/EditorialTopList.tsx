@@ -11,6 +11,7 @@ import type { EditorialList } from '@/lib/catalog/top-lists';
 import { availableGuideQuestions, getGuideBookNote, getLandingGuide } from '@/lib/editorial/landing-guides';
 import { GuideNextStep, GuideQuestions, GuideSources, ReadingGuideIntro } from './EditorialLandingGuide';
 import { priorityDestination } from '@/lib/editorial/priority-destinations';
+import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
 import type { Locale } from '@/lib/i18n/config';
 export type EditorialSelection = { sourceId: string; source: string; basis: {nl:string;en:string}; note: {nl:string;en:string}; href: string | null };
 function EditorialReadingNote({ id, title, note, text, choice, locale }: { id: string; title: string; note: ReturnType<typeof getGuideBookNote>; text: string; choice: EditorialSelection; locale: Locale }) {
@@ -38,7 +39,7 @@ export function EditorialTopList({ list, books, selections, relatedLists, unavai
   const priority = priorityDestination('/' + locale + '/toplijsten/' + list.slug);
   return <section className="featured-section editorial-lists" data-product-list={list.slug} data-editorial-guide={guide ? list.slug : undefined} data-reading-destination={!unavailable && priority ? priority.id : undefined}>
     {error && <p role="alert">{error}</p>}
-    <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
+    {priority ? <LumiScoreBreadcrumbs locale={locale} entries={[{name:'LumiScore',path:'/'},{name:'Leesroutes',path:'/toplijsten'},{name:guide?.h1 ?? list.title[locale],path:'/toplijsten/'+list.slug}]}/> : <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>}
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
     <h1>{guide?.h1 ?? list.title[locale]}</h1>{guide ? <ReadingGuideIntro guide={guide} books={books} locale={locale}/> : <p>{list.description[locale]}</p>}
     <details className="editorial-criteria"><summary>{locale === 'nl' ? 'Zo is deze selectie gemaakt' : 'How this selection was made'}</summary><p>{list.criteria?.[locale] ?? (locale === 'nl' ? 'De volgorde is een redactionele leesroute, geen claim over populariteit of consensus.' : 'The order is an editorial reading route, not a claim about popularity or consensus.')}</p></details>
