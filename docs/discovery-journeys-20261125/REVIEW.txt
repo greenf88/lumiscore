@@ -1,0 +1,184 @@
+LumiScore — drie bestaande Nederlandse bezoekersroutes
+Onderzoek: 25 november; nulmeting ververst 26 november 2026.
+Draft-PR: https://github.com/greenf88/lumiscore/pull/162
+Basis: 2cc617b9bc9090b0b8ce08f7857ea1caef6412fe (PR161, productie).
+Runtimewijzigingen: 6b0e29160e158f3cc2e72d31e22248f4c75217e2 en
+02e79b01f95a87e3b318115fb63bad26a8ff4cf5 (zichtbare broodkruimels).
+Definitieve head, Preview en CI worden bij de oplevering aan deze review gekoppeld.
+
+DIAGNOSE EN NULMETING
+De drie bestemmingen geven publiek rechtstreeks 200, met index/follow en één
+absolute self-canonical in de oorspronkelijke head. De homepage bevatte geen
+directe link naar deze drie bestemmingen. De keuzehulp was al uitgebreid en
+brongebonden; het verschil tussen passende lezers, losse verhalen en reeksen
+was niet bij iedere keuze direct zichtbaar. Er is geen nieuwe brede canonical-,
+taal- of sitemapfout gereproduceerd. Bestaande fixes zijn niet heropend.
+
+GSC: sc-domain:lumisco.re, Web, geen overige filters, definitieve gegevens.
+11–17 november: 0 klikken, 9 vertoningen, CTR 0%, positie 60,11.
+18–24 november: 0 klikken, 6 vertoningen, CTR 0%, positie 62,83.
+Tijdzone voor rapportdagen: America/Los_Angeles. Eerste voorlopige dag: 25 november.
+Meting: 26 november 08:21:56 UTC / 09:21:56 Europe/Amsterdam.
+NL: 3 -> 4 vertoningen, positie 65,33 -> 74. EN: 4 -> 2, positie 83,75 -> 40,5.
+Locale-/pagina-aggregaties vormen niet noodzakelijk een optelsom van propertytotalen.
+
+De API rapporteert bij beide perioden alleen de query ‘stad in de storm’:
+2 -> 1 vertoning, positie 93 -> 63. Verborgen/geanonimiseerde queryrijen ontbreken;
+dat zijn geen bewezen nullen. Laatste periode: NL2376 2 vertoningen, NL1267 en
+NL5541 ieder 1; EN3624 en EN1386 met returnTo ieder 1. Alle klikken zijn 0.
+De drie gidsen ontbreken in de geretourneerde paginarijen; geen verzonnen
+bezoek-, conversie- of paginavertoningsnulmeting. Zie GSC-BASELINE.json.
+
+Opgeslagen Google-inspecties, ook gecontroleerd op 26 november:
+- Suzanne: gecrawld, niet geïndexeerd; crawl 12 oktober 12:19:35 UTC.
+  Google-canonical is zichzelf; userCanonical ontbreekt in die oude crawl.
+- Fantasy en Hail Mary: gecrawld, niet geïndexeerd; beide 4 november 19:54:36 UTC.
+  Opgegeven en gekozen canonical zijn de juiste eigen NL-URL.
+Alle drie staan vandaag in de sitemap. Oude crawls bewijzen niet dat de nieuwe
+inhoud onjuist is. De API is geen Google-livetest.
+
+Echte Google-livetests op publieke productie, 25 november:
+- Fantasy: 15:58:14 CET, ophalen geslaagd, indexering toegestaan,
+  eigen opgegeven canonical, één geldig BreadcrumbList-item.
+- Hail Mary: 16:01:49 CET, dezelfde geslaagde uitkomst.
+- Suzanne: live test gestart; resultaat niet uitgelezen doordat browserbediening
+  werd onderbroken. Uitkomst onbekend, niet als geslaagd geregistreerd.
+Geen indexeringsaanvragen gedaan. Een geslaagde live test is geen indexopname.
+
+Het algemene indexeringsrapport is op 25 november bekeken met echte rapportdatum
+16 november: 8.347 geïndexeerd, 16.082 niet geïndexeerd. Daaronder 12.077 gecrawld/
+niet geïndexeerd, 3.159 gevonden/niet geïndexeerd, 577 redirects, 166 duplicaten
+zonder aangegeven canonical, 61 robots-blokkades, 35 noindex, 5 Soft404 en
+2 afwijkende Google-canonicals. Dit is geen actuele hertelling van alle URL’s.
+Het algemene broodkruimelrapport toont 0/0; de twee geldige live items zijn
+afzonderlijk bewijs en geen telling van dat rapport.
+
+SITEMAPS: XML WEL GECONTROLEERD, GSC-RAPPORTAGE NIET GOEDGEPRAAT
+Live index: drie deelbestanden; pages165, EN6373, NL3440, totaal9978 URL’s.
+De drie gidsen staan in sitemap-pages.xml; geen UTM-varianten toegevoegd.
+GSC toont de index als succesvol, laatst gelezen 18 november, 0 ontdekt en
+geen onderliggende sitemaps. De child-list API rapporteert eveneens geen items.
+Afzonderlijke bestanden zijn wel succesvol gelezen: pages165 (24 november),
+EN6373 en NL3415 (19 november), elk zonder gemelde fouten of waarschuwingen.
+Het verschil van25 NL-URL’s valt tussen die oude verwerking en de huidige set;
+dit is geen opdracht om selectie of catalogus aan te passen. De huidige XML is
+bereikbaar en consistent; waarom Google de index-relatie niet rapporteert blijft
+onbekend. Geen bewijs om nu de generator te vervangen of opnieuw in te dienen.
+De API-waarde contents.indexed=0 is VERVALEN, geen bewijs van nul geïndexeerde
+pagina’s: https://developers.google.com/webmaster-tools/v1/sitemaps
+
+BING
+De bestaande sessie bleek uitgelogd. De automatische goedkeuringscontrole
+weigerde selectie van een Google-account, omdat die mogelijk een Bing-account
+koppelt. Geen account gekoppeld, geen instellingen gewijzigd. Actuele Bing-
+indexstatus, sitemapverwerking en prestaties blijven onbekend. Historische
+Bing-gegevens zijn niet als huidige nulmeting gebruikt.
+
+WIJZIGINGEN
+Homepage: één statische NL-sectie met drie gewone links en eigen leesvragen.
+Geen extra databron, coverdownload of afhankelijkheid van personalisatie.
+Suzanne: title/description/H1 beantwoorden ‘welk boek eerst?’. Drie bestaande
+ingangen en twee bevestigde verhaalparen blijven behouden; geen verplichte
+publicatievolgorde of claim op volledigheid. Verantwoordelijkheid en echte
+inhoudelijke wijzigingsdatum zichtbaar. Geen boek- of editiegegevens gewijzigd.
+Fantasy/Hail Mary: twintig korte, verschillende keuzeadviezen naast de bestaande
+gecontroleerde tekst. Verhaalvorm en reeksingang worden eerlijk benoemd; Hail
+Mary-tips zijn geen vervolgdelen. Afzonderlijk Nederlands Moordbot-e-book blijft
+onderscheiden van een bundel. Selectie en editiegeschiktheid blijven gelijk.
+Twee zichtbare broodkruimelpaden sluiten aan op bestaande JSON-LD. Suzanne had
+die voorziening al. Geen extra rich-resultclaims of fictieve beoordelingen.
+Hail Mary en het bestaande Andy Weir-artikel verwijzen inhoudelijk naar elkaar.
+Bestaande selectieve boek-naar-leesroute-links blijven behouden.
+Gasten krijgen uitleg over bewaren in de eigen browser en accountgebruik.
+De smaaktest-CTA legt eerst beoordelen uit; geen belofte van direct persoonlijk
+advies. Inloggen bewaart de gidscontext. Bestaande schone boeklinks houden
+terugnavigatie in de tab via de bestaande gecontroleerde return-memory.
+
+VERIFICATIE
+Productie:19 oorspronkelijke responses (vier UA’s op home/drie gidsen plus
+drie Facebook-UTM-varianten). Alle19 200, één juiste canonical in de head,
+geen productie-noindex. UA’s letterlijk in HTTP-EVIDENCE.json: gewone desktop,
+mobiel, Googlebot-simulatie en InspectionTool-simulatie; geen echte botbezoeken.
+Aanvullend34 publieke pagina’s:27 boeksteekproeven, drie gidsen met EN-varianten
+en Andy Weir-artikel. Status, self-canonical, robots en toepasselijke wederkerige
+hreflang gecontroleerd; complete sitemapsets opgehaald, geen volledige HTTP-
+controle van alle9978 sitemapleden geclaimd.
+Preview:19 oorspronkelijke responses op runtime6b0e291 geslaagd, geïsoleerde
+testidentiteiten, juiste productiecanonicals en afzonderlijke Preview-noindex.
+Zichtbare broodkruimels uit02e79b0 aanvullend met SSR-test gecontroleerd.
+Preview toegang via bestaand tijdelijk OIDC in één proces; geen deellink,
+beveiligingswijziging of geheimenbestand nodig. Een brede env-export is door
+automatische goedkeuring geweigerd en niet uitgevoerd.
+Browser: homepage -> Fantasy als gast, weigeren van analyse, 10 echte test-
+cataloguskeuzes, zichtbare keuzehulp en schone DOM-canonical; viewport320px,
+Paper, geen horizontale overflow (document305px bij viewport320px). Twee cover-
+resources waren gedecodeerd; zichtbaarheid en overige lazy images zijn hiermee
+niet volledig beoordeeld.
+Verdere browserbediening is gestopt omdat de actieve Windows-URL niet betrouwbaar
+kon worden vastgesteld. Desktop, Ink, overige gidsen, toetsenbord, bewaren en
+terugnavigatie zijn daarom GEEN volledig afgeronde hosted browseracceptatie.
+NL/EN/ingelogde vervolg-CTA’s, selectie, bron-HTML en breadcrumb-pariteit zijn
+wel automatisch getest. Geen fysiek telefoontoestel getest.
+
+Lokale build geslaagd. Typecheck geslaagd; lint0 fouten,5 bestaande waarschuwingen.
+Volledige eerste lokale reeks:3789 tests,3761 geslaagd,22 overgeslagen,6 fouten.
+Twee gewijzigde lastmod-verwachtingen gerepareerd en9 sitemaptests groen.
+Vier overige fouten waren bestaande CRLF/hashfixtures: exacte oorspronkelijke
+Git-bytes lokaal gebruikt,14/14 hercontroles groen; geen fixturewijziging in diff.
+Gerichte bron-HTML/privacy/SQL-tests groen. CI op6b0e291:
+https://github.com/greenf88/lumiscore/actions/runs/45645098370 (success).
+Definitieve CI moet bij de uiteindelijke head afzonderlijk groen zijn.
+
+MEETVOORZIENING EN INSTALLATIEVOORSTEL — NOG GEEN PRODUCTIEAKKOORD
+PR51 blijft opt-in, respecteert weigeren/intrekken/DNT/GPC, geen historische
+replay, nieuwe tracker, persoonsgegevens, zoektekst of permanente bezoeker-ID.
+Drie vaste list_id’s, reading_guide_opened en de vaste campagne leesroutes_202611
+met Facebook/Instagram. Bevestigd bewaren blijft apart van klikken.
+Er veranderen alleen drie bestaande functie-bodies: product_metrics.valid_context,
+product_metrics.record_event en public.record_product_event_v1. Geen tabellen,
+ACL/RLS, rechten, accountgegevens, retentie, scheduler of configuratie op productie.
+Behoud bestaande servertransitieguards voor ratings/bewaren/rondes.
+SQL-HASHES.json bindt vier apply/restore-bestanden aan exacte UTF-8/LF-bytes.
+Alle wijzigingen hebben baseline-/resultaathashguards en een expliciete projectguard.
+
+Test: geïnstalleerd op hlvujbrmfdlrfxdjwsmb. Hosted SQL bewijst9 gebeurtenistypen/
+bestemmingscombinaties, toestemming, intrekken, dedup en afwijzen van vrije tekst;
+die proefgegevens zijn transactioneel teruggedraaid. Hosted HTTP-API bewijst
+204 vóór toestemming, actieve toestemming,202 voor een nieuwe klik en herhaling,
+400 voor vrije tekst,204 bij GPC en na bevestigde intrekking. Eén synthetische
+klikreceipt/aggregaat blijft onder bestaande testretentie; geen catalogus/account.
+De API202 voor een herhaalde receipt is geen extra klik; database-dedup is apart
+bewezen. Zie METRICS-HTTP.json en MEASUREMENT-EVIDENCE.json.
+Lokale gecommitteerde installatie/herhaling/herstel slaagt voor productie- en
+testvariant, inclusief behoud van ACL/configuratie. De afzonderlijke hosted
+gecommitteerde restore/herhaal/installatiebevestiging is verlopen: NIET uitgevoerd.
+De testfuncties staan dus nog op de nieuwe variant, uitsluitend op test.
+
+Voorgestelde productievolgorde na afronding van de open acceptatie en afzonderlijk
+SHA-/hashakkoord: actuele head/main/CI/hashes/alias en drie functiesnapshotten
+read-only controleren; alleen production-apply.sql guarded installeren; valideren;
+daarna uitsluitend deze code publiceren. Oude code is compatibel met de ruimere
+validators. Nieuwe code zonder SQL verandert geen catalogus- of accountacties,
+maar nieuwe meetdimensies worden dan afgewezen: geen bruikbare nieuwe nulmeting.
+Geen nieuwe Vercel-/analyticsproductie-instelling nodig.
+
+ROLLBACK
+Vorige Ready-productie dpl_2s56gjuXw4orJjxikDGArazYVv3T, SHA2cc617b...
+Stop eerst nieuwe code door uitsluitend deze releaserevert/voorgaand getest
+deployment te herstellen. Herstel daarna alleen de drie functie-bodies via
+production-restore.sql, met onveranderde hash-/projectguards. Stop bij latere
+functieaanpassingen; geen force-restore. Geen catalogus- of gebruikersrecords
+worden verwijderd. Nieuwe geaggregeerde meetrijen blijven onder bestaande
+retentie; oude rapportage moet die vaste nieuwe dimensies expliciet filteren
+in plaats van historie te verwijderen. Geen SQL-installatie of rollback uitgevoerd
+op productie. Sitemap-, taal-, score-, cover-, PR86- en PR51-beleid blijft staan.
+
+OPEN VOOR RELEASEBEOORDELING
+1. Overige hosted scherm-/actietests afronden zodra veilige browserbediening werkt.
+2. Hosted gecommitteerd functieherstel met een actuele bevestiging afronden.
+3. Definitieve head/Preview/CI en gerichte HTML-matrix aan elkaar binden.
+Pas daarna releaseakkoord vragen. Bing-aanmelding en de derde Google-livetest
+zijn afzonderlijke toegangspunten, geen reden voor ongefundeerde codewijzigingen.
+Geen publicatie, catalogusimport, GSC-inzending of socialactie in deze opdracht.
+Het binnengekomen Murdoku2-verzoek blijft een afzonderlijk catalogusdossier;
+het wordt niet aan deze releasediff of toestemming toegevoegd.

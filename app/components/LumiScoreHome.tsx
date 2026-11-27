@@ -1,4 +1,6 @@
 'use client';
+
+import { PriorityReadingRoutes } from './PriorityReadingRoutes';
 import { optimizedCover, coverSizes } from '@/lib/books/cover-delivery';
 import { hasDeferredCover, parsePublicBooks } from '@/lib/books/public-book';
 
@@ -896,6 +898,7 @@ export function LumiScoreHome({
     <main className="site-shell">
       <Header onThemeToggle={toggleTheme} query={query} onQueryChange={updateQuery} authState={authState} returnTo="/" searchTargetId="home-book-search" />
       <Hero catalogStats={catalogStats} personalization={personalization} deferred={deferred} authenticated={authState.authenticated} query={query} onQueryChange={updateQuery} />
+      {locale === 'nl' && <PriorityReadingRoutes/>}
       {deferred?<Suspense fallback={null}><DeferredSeries data={deferred.series}/></Suspense>:seriesContinuations.length > 0 && (
         <ContinueSeries continuations={seriesContinuations} />
       )}

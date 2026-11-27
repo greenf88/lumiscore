@@ -31,7 +31,7 @@ import { QUICK_RATING_COLLECTION } from '@/lib/collections/quick-rating';
 import { getLandingGuide } from '@/lib/editorial/landing-guides';
 import { catalogBreadcrumbs } from '@/lib/seo/breadcrumbs';
 import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
-import { SuzanneGuideAfter, SuzanneGuideEntries } from './EditorialLandingGuide';
+import { EditorialResponsibility, GuideNextStep, SuzanneGuideAfter, SuzanneGuideEntries } from './EditorialLandingGuide';
 
 const STATUS_KEYS: Record<ReadingStatus, 'collection.wantToRead' | 'collection.reading' | 'collection.read' | 'collection.dnf'> = {
   want_to_read: 'collection.wantToRead',
@@ -260,7 +260,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         returnTo={returnTo}
       />
       <LumiScoreBreadcrumbs entries={catalogBreadcrumbs('collection', guide?.h1 ?? collection.name, `/collection/${collection.slug}`, locale)} locale={locale}/>
-      <section className="collection-hero">
+      <section className="collection-hero" data-reading-destination={guide && locale === 'nl' && collection.slug === 'suzanne-vermeer' ? 'suzanne-vermeer' : undefined}>
         <LocaleLink className="detail-back-link" href="/">← {t('collection.backToBooks')}</LocaleLink>
         <span className="eyebrow">{typeLabel.toUpperCase()}</span>
         <h1>{guide?.h1 ?? collection.name}</h1>
@@ -280,6 +280,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
           ? `${books.length} van ${progressBooks.length} gekoppelde boeken beschikbaar in deze taal. Voor ${unavailableEditionCount} boeken ontbreekt een passende Nederlandse editie. Je leesvoortgang blijft behouden.`
           : `${books.length} of ${progressBooks.length} linked books available in this language. ${unavailableEditionCount} books have no suitable English edition. Your reading progress is retained.`}</p>}
         {guide ? guide.intro.map(p => <p key={p}>{p}</p>) : collection.description && <p>{collection.description}</p>}
+        {guide && <EditorialResponsibility guide={guide}/>}
         {authenticated ? (
           <>
             <div className="collection-progress" aria-label={progressLabel}>
@@ -375,6 +376,7 @@ export function LumiScoreCollectionPage({ data }: { data: CollectionPageData }) 
         })}
       </section>
       {guide && <SuzanneGuideAfter books={books.map(item => item.book)}/>}
+      {guide && <GuideNextStep authenticated={authenticated} returnTo="/nl/collection/suzanne-vermeer"/>}
       <Footer onThemeToggle={toggleTheme} />
     </main>
   );

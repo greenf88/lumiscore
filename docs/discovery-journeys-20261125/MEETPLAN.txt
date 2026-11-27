@@ -1,0 +1,92 @@
+Vier weken vergelijken — voorstel, geen nieuwe automatisering
+
+STARTPUNT
+Gebruik GSC-BASELINE.json: Domain sc-domain:lumisco.re, Web, geen overige filters.
+Definitieve vergelijkbare weken11–17 en18–24 november2026;25 november is nog
+voorlopig. Rapportdagen in America/Los_Angeles, releasemoment ook in UTC en
+Europe/Amsterdam vastleggen. De eerste nulmeting van25 november blijft lokaal
+bewaard; de verversing van26 november is de actuele versie in dit pakket.
+GSC-totalen:9 ->6 vertoningen,0 ->0 klikken, CTR0%, positie60,11 ->62,83.
+Dit zijn echte lage aantallen, geen bewijs van herstel of een nieuwe oorzaak.
+Ontbrekende query-/paginarijen zijn onbekend, geen gemeten nul.
+
+BESTAANDE PRODUCTMETING
+Read-only productiequery11–24 november UTC levert alleen op24 november
+22 consented gebeurtenissen:5 page_opened (home3/detail2),2 book_card_opened,
+2 book_detail_opened,2 rating_saved,9 recommendation_impression,
+2 recommendation_open. Dit zijn geen22 bezoekers of conversies.
+Voor de drie nieuwe gids-ID’s, home->gids en de nieuwe socialcampagne bestaat
+nog GEEN historische uitsplitsing. Vul daarvoor geen nullen of ratio’s in.
+De bestaande analysekeuze, korte grant, batch- en retentiegrenzen blijven gelijk.
+Geen nieuwe dienst, cookie, permanente ID of tracking vóór toestemming.
+
+DEFINITIES
+- Gidsinhoud bekeken: editorial_list_opened met één van de drie vaste list_id’s,
+  pas als de bijbehorende inhoudsmarker in de DOM staat. Suzanne=collection,
+  beide leesroutes=editorial. Geen marker bij catalogusfout. Een herladen document
+  telt als een nieuwe contentweergave; dit zijn geen unieke bezoeken.
+- Home->gids: reading_guide_opened, surface=home, vaste bestemming. Dit is een
+  native linkactivering, geen gegarandeerde aankomst. Dezelfde handler voorkomt
+  click/auxclick-dubbeltellingen binnen750ms; één receipt telt eenmaal in opslag.
+- Gids->boek: book_card_opened met vaste list_id en daadwerkelijk Work-ID.
+  Boekdetailweergave is apart book_detail_opened, geen klikconversie.
+- Bewaren: want_to_read_saved voor bevestigde accounttransitie;
+  guest_book_saved alleen na geslaagde lokale opslag. guest_save_failed apart.
+  Geen succes tellen bij alleen een buttonklik of een fout.
+- Smaaktest: bestaande taste_round_started/completed voor accounttransities;
+  guest_round_started/completed voor gastflow. taste_result_opened is alleen
+  resultaatweergave. Begin/einde kunnen in verschillende weken vallen.
+- Herkomst: exact facebook/instagram + organic_social + leesroutes_202611.
+  Alleen vaste enums na toestemming; onbekende/extra UTM-velden worden niet
+  als vrije dimensies opgeslagen. Andere bestaande herkomst blijft behouden.
+- Terugkerende bezoekers en gekoppelde persoonsconversie: onbekend. Geen nieuwe
+  identificatie introduceren om dit cijfer te maken. Rapportage gebruikt events.
+
+De bestaande page_opened blijft algemeen; tel die niet bij gidsweergaven op als
+een extra bezoek. Redactionele selectie, score en persoonlijke aanbeveling blijven
+verschillende productbegrippen. Zonder SQL-installatie is de nieuwe uitsplitsing
+niet beschikbaar. GSC en productmetrics hebben verschillende tijdzones en
+populaties; tel ze nooit bij elkaar op als één funnel.
+
+RAPPORTAGE
+lib/product-metrics/reading-guides-report.ts geeft per gids contentweergaven,
+homeklikken en boekklikken, plus gescheiden socialacties. Gebruik alleen gevalideerde
+productierijen uit de bestaande beheerquery, traffic=production, vaste UTC-periode.
+Deze uitsplitsing zit ook in het bestaande rapportcommando:
+node --experimental-strip-types scripts/product-measurement-report.mjs <input.json>
+Gebruik de bestaande read-only PR51-beheerquery voor input, geen privéprofielexport.
+Zet readingGuidesAvailable alleen in die rapportinput op true nadat SQL én code
+voor de volledige gekozen periode aantoonbaar actief waren. Standaard is de
+uitsplitsing null/onbekend; oude meetrijen worden niet als nul gidsbezoek getoond.
+Dit is een rapportlabel, geen productieconfiguratie of automatische activatie.
+Testgebeurtenissen en API-fouten apart houden. Retentie90dagen blijft voldoende
+voor vier weken; niets uit privéprofielen of volledige zoekteksten verzamelen.
+
+WEEKINDELING NA EVENTUELE RELEASE
+R=werkelijk goedgekeurd releasemoment. Week1 begint op de eerste volledige
+GSC-rapportdag na R; vergelijk zeven definitieve dagen met zeven definitieve
+dagen direct vóór R. Gebruik voor productevents volledige UTC-dagen en vermeld
+het andere venster. Bewaar R, SHA, alle filters en gegevensgrens bij elke export.
+Week2: dezelfde vaste drie gidsen en7dagen; bekijk bron- en boekklikken naast
+opgeslagen crawl/canonical, niet alleen één propertytotaal.
+Week3: herhaal en controleer of verschil door één pagina/query, socialplaatsing
+of een andere release wordt gedreven. Geen causale rankingclaim.
+Week4: vergelijk28 volledige dagen na R met de voorafgaande28 waar beschikbaar;
+rapporteer ook de vier losse weken om veranderingen zichtbaar te houden.
+Wanneer een dag nog voorlopig is: verschuif het hele vergelijkingsvenster of wacht,
+niet ontbrekende dagen met nul aanvullen. Geen wijziging van de vaste meetgroep.
+
+MIJLPALEN
+1 Technisch: oorspronkelijke HTML/links/SEO en gebruikersacties gecontroleerd.
+2 Google: werkelijk nieuwe opgeslagen crawl, gekozen canonical en indexstatus.
+3 Bereik/gebruik: vertoningen, klikken en consented acties over volledige perioden.
+Een geslaagde Google-livetest, geldige breadcrumb of geaccepteerde sitemap is
+geen bewijs van mijlpaal2 of3. Geen indexeringsaanvragen of sitemapinzendingen.
+De eerder gestopte dagelijkse automation wordt niet opnieuw aangezet.
+
+WEKELIJKSE CONTROLELIJST
+Controleer drie canonieke URL’s en hun sitemapvermelding. Lees stored inspections
+en echte rapportdatums; live test uitsluitend productie waar een afwijking actueel
+onderzoek vraagt. Houd onbekende velden/API-fouten apart van afwijzingen.
+Noteer productie-SHA, release/socialmomenten, cookie-/netwerklimieten en ontbrekende
+Bing-toegang. Houd bestaande native planning aan; dit meetplan plant geen posts.

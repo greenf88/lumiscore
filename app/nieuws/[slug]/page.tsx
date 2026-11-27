@@ -63,6 +63,7 @@ export default async function NewsArticlePage(props: Props) {
         </section>
         <section className="information-section">
           <h2>Verder lezen</h2>
+          {article.slug === 'andy-weir-volgende-boek-geen-project-hail-mary-2' && <p>Zoek je intussen een volgend boek? <a href="/nl/toplijsten/na-project-hail-mary">Kies na Project Hail Mary op wetenschap, humor of ontdekking</a>.</p>}
           <div className="information-actions">
             <a className="ui-control ui-primary" href={article.book.href}>Bekijk {article.book.title}</a>
             <a className="ui-control ui-secondary" href="/nl/taste-test">Ontdek je leessmaak</a>

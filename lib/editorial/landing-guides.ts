@@ -8,8 +8,9 @@ export type GuideSource = { title: string; url: string; checkedOn: string };
 export type GuideQuestion = { question: string; answer: string; sources?: GuideSource[]; requires?: string[] };
 export type LandingGuide = {
   path: string; seo_title: string; meta_description: string; h1: string; intro: string[];
+  editorial_review?: { responsible: string; updated: string; scope: string };
   groups?: { heading: string; work_ids: number[] }[];
-  cards?: { work_id: string; reader_angle: string; text: string; sources: GuideSource[] }[];
+  cards?: { work_id: string; reader_angle: string; text: string; choice?: string; sources: GuideSource[] }[];
   faq: GuideQuestion[];
 };
 export const LANDING_GUIDES = data.pages as LandingGuide[];

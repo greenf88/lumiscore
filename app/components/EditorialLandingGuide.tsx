@@ -16,10 +16,25 @@ export function GuideQuestions({ items, locale = 'nl' }: { items: GuideQuestion[
 export function ReadingGuideIntro({ guide, books, locale = 'nl' }: { guide: LandingGuide; books: Book[]; locale?: Locale }) {
   const groups = availableGuideGroups(guide, books);
   return <div className="landing-guide reading-guide-intro">{guide.intro.map(p => <p key={p}>{p}</p>)}
+    <EditorialResponsibility guide={guide}/>
     {groups.length > 0 && <nav aria-label={locale === 'nl' ? 'Kies je leesrichting' : 'Choose a reading direction'}><h2>{locale === 'nl' ? 'Waar wil je beginnen?' : 'Where would you like to start?'}</h2><ul>{groups.map(group => <li key={group.heading}>
       <strong>{group.heading}: </strong>{group.entries.map((entry, i) => <span key={entry.workId}>{i > 0 ? ' · ' : ''}<a href={'#keuze-' + entry.candidateId}>{entry.title}</a></span>)}
     </li>)}</ul></nav>}
   </div>;
+}
+export function EditorialResponsibility({ guide }: { guide: LandingGuide }) {
+  const review = guide.editorial_review;
+  if (!review) return null;
+  return <p className="guide-responsibility">Selectie en keuzehulp: {review.responsible}. Bijgewerkt op <time dateTime={review.updated}>{new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(review.updated + 'T00:00:00Z'))}</time>. {review.scope} De boekcijfers komen van lezers; persoonlijke tips vragen eerst om jouw beoordelingen.</p>;
+}
+export function GuideNextStep({ authenticated, returnTo }: { authenticated: boolean; returnTo: string }) {
+  return <section className="landing-guide guide-next-step" aria-label="Je volgende stap">
+    <h2>Een boek gevonden dat je aanspreekt?</h2>
+    <p>Open de boekpagina voor de beschikbare editie en bewaar het boek. {authenticated ? 'Je leeslijst blijft bij je account bewaard.' : 'Als gast bewaar je je keuze in deze browser. Log in om je leeslijst bij je account te bewaren.'}</p>
+    <p>Wil je persoonlijke leestips? Beoordeel eerst boeken die je kent in de smaaktest; de selectie hierboven blijft redactioneel.</p>
+    <div className="reading-list-actions"><LocaleLink className="ui-control ui-action ui-primary" href={authenticated ? '/taste-test' : '/taste-test/preferences'}>Start de smaaktest →</LocaleLink>
+      {!authenticated && <LocaleLink className="ui-control ui-action ui-secondary" href={'/login?next=' + encodeURIComponent(returnTo)}>Inloggen en hier verdergaan</LocaleLink>}</div>
+  </section>;
 }
 const starts = [
   { title: 'All-inclusive', heading: 'Een vakantie die ontspoort', text: 'Een gezinsvakantie naar Turkije krijgt een dreigende wending. Een redactionele ingang als het contrast tussen een zonnige bestemming en gevaar je aanspreekt.', source: SUZANNE_SOURCES.S04 },

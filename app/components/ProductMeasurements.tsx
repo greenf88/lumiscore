@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useLumiScoreLocale } from './LumiScoreLocale';
 import { browserMetricContext, browserMetricsEnabled, emitBrowserMetric, flushBrowserMetrics,subscribeAnalysis,analysisRevision,serverAnalysisRevision,analysisChangeReason } from '@/lib/product-metrics/browser';
 import { metricSurfaceForPath, referralArrivalEligible } from '@/lib/product-metrics/contract';
+import { priorityDestination } from '@/lib/editorial/priority-destinations';
 
 /** No visible UI, cookies, visitor identifiers or third-party tracker. */
 export function ProductMeasurements() {
@@ -33,13 +34,18 @@ export function ProductMeasurements() {
       if(entry.markerSent)return true;
       const editorial=document.querySelector<HTMLElement>('[data-product-list]');
       const detail=document.querySelector<HTMLElement>('[data-product-work]');
+      const destination=priorityDestination(location.pathname);
+      const guide=document.querySelector<HTMLElement>('[data-reading-destination]');
+      if(destination && guide?.dataset.readingDestination === destination.id){
+        entry.markerSent=true;emitBrowserMetric('editorial_list_opened',{locale,surface,list_id:destination.id});return true;
+      }
       if(surface==='editorial'&&editorial&&location.pathname.endsWith('/'+editorial.dataset.productList)){
         entry.markerSent=true;emitBrowserMetric('editorial_list_opened',{locale,surface,list_id:editorial.dataset.productList==='dystopie-vanaf-1990'?'dystopie-vanaf-1990':'other'});return true;
       }
       if(surface==='book_detail'&&detail&&location.pathname.replace(/\/$/,'').endsWith('/'+detail.dataset.productWork)){
         entry.markerSent=true;emitBrowserMetric('book_detail_opened',{locale,surface,work_id:Number(detail.dataset.productWork)});return true;
       }
-      return surface!=='editorial'&&surface!=='book_detail';
+      return !destination&&surface!=='editorial'&&surface!=='book_detail';
     };
     if(observeContent())return;
     const observer=new MutationObserver(()=>{if(observeContent())observer.disconnect();});
@@ -55,11 +61,17 @@ export function ProductMeasurements() {
       const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null;
       if (!(anchor instanceof HTMLAnchorElement) || anchor.origin !== location.origin) return;
       const match = /^\/(?:nl|en)\/books?\/(\d+)$/.exec(anchor.pathname);
-      if (!match) return;
+      const destination = priorityDestination(anchor.pathname);
+      if (!match && !destination) return;
       const previous = activated.get(anchor);
       if (previous !== undefined && performance.now() - previous < 750) return;
       activated.set(anchor, performance.now());
       const surface = metricSurfaceForPath(location.pathname);
+      if(destination){
+        if(locale==='nl')emitBrowserMetric('reading_guide_opened',{locale,surface,list_id:destination.id});
+        flushBrowserMetrics();return;
+      }
+      if(!match)return;
       const search = anchor.closest<HTMLElement>('[data-search-results]');
       if (search && search.dataset.searchResults) {
         const key = `${locale}:${surface}:${search.dataset.searchResults.trim().toLocaleLowerCase()}`;
@@ -69,7 +81,7 @@ export function ProductMeasurements() {
           emitBrowserMetric('search_book_opened', {locale, surface, work_id:Number(match[1])});
         }
       }
-      emitBrowserMetric('book_card_opened', { locale, surface, work_id: Number(match[1]), list_id: location.pathname.endsWith('/dystopie-vanaf-1990') ? 'dystopie-vanaf-1990' : 'other' });
+      emitBrowserMetric('book_card_opened', { locale, surface, work_id: Number(match[1]), list_id: priorityDestination(location.pathname)?.id ?? (location.pathname.endsWith('/dystopie-vanaf-1990') ? 'dystopie-vanaf-1990' : 'other') });
       flushBrowserMetrics(); // keepalive; never prevent native/keyboard/middle-click navigation.
     };
     document.addEventListener('click', click, true);
