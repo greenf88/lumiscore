@@ -2,6 +2,7 @@ import {resolveRequestLocale} from '@/lib/i18n/server';
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { LumiScoreCollectionsPage } from '@/app/components/LumiScoreCollectionsPage';
+import { LumiScoreDirectoryBreadcrumbs } from '@/app/components/LumiScoreDirectoryBreadcrumbs';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { normalizeCollectionDirectoryFilter } from '@/lib/collections/directory';
 import type { CollectionsDirectoryData } from '@/lib/supabase/collections';
@@ -55,6 +56,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
         data={data}
         filter={filter}
         authState={authState}
+        breadcrumbs={<LumiScoreDirectoryBreadcrumbs path="/collections" locale={locale} />}
       />
     </>
   );
