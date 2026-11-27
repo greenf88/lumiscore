@@ -13,6 +13,27 @@ try{
  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Fixture start timed out\n'+log.slice(-3000))),45000);child.once('exit',c=>{clearTimeout(timer);reject(Error('Fixture exited '+c+'\n'+log.slice(-3000)));});for(const stream of[child.stdout,child.stderr])stream.on('data',b=>{log=(log+b).slice(-10000);if(log.includes('SYNTHETIC SEO SSR PREVIEW')){clearTimeout(timer);resolve();}});});
  // Compile the real home route before the bounded parallel audit; compilation is not metadata latency.
  const warm=await fetch('http://127.0.0.1:'+port+'/en',{signal:AbortSignal.timeout(90000)});assert.equal(warm.status,200);await warm.text();
+ // Directory navigation must be present in original HTML and agree with its schema,
+ // including filtered collections whose canonical stays on the public directory.
+ for (const locale of ['nl', 'en']) for (const path of ['/toplijsten', '/categories', '/collections', '/collections?type=series']) {
+  const pathname = path.split('?')[0];
+  const response = await fetch('http://127.0.0.1:' + port + '/' + locale + path);
+  assert.equal(response.status, 200, locale + path);
+  const html = await response.text(), head = html.split('</head>')[0];
+  const navigation = html.match(/<nav class="catalog-breadcrumbs"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(navigation, 'Visible directory breadcrumbs: ' + locale + path);
+  assert.match(navigation, new RegExp('href="/' + locale + '"'));
+  const current = navigation.match(/<span aria-current="page">([^<]+)<\/span>/)?.[1];
+  const schemas = [...html.matchAll(/<script type="application\/ld\+json">([^<]+)<\/script>/g)]
+   .map(match => JSON.parse(match[1])).filter(value => value['@type'] === 'BreadcrumbList');
+  assert.equal(schemas.length, 1, 'One directory breadcrumb schema: ' + locale + path);
+  assert.deepEqual(schemas[0].itemListElement.map(item => [item.position, item.item]), [
+   [1, 'https://lumisco.re/' + locale], [2, 'https://lumisco.re/' + locale + pathname],
+  ]);
+  assert.equal(schemas[0].itemListElement[1].name, current);
+  assert.equal(head.includes('name="robots" content="noindex, follow"'), path.includes('?'));
+  assert.match(head, /name="msvalidate.01" content="9858C95D1CEB8130A23BBDFE79EBDDEC"/);
+ }
  const sitemap=(await readSitemapShards('http://127.0.0.1:'+port)).join('');
  for (const slug of ['synthetic-nl-only', 'synthetic-empty']) for (const locale of ['en', 'nl']) {
   const path = '/' + locale + '/collection/' + slug;

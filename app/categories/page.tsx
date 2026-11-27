@@ -1,6 +1,7 @@
 
 import { LocaleLink } from '@/app/components/LumiScoreLocale';
 import { DiscoveryPageShell } from '@/app/components/DiscoveryPageShell';
+import { LumiScoreDirectoryBreadcrumbs } from '@/app/components/LumiScoreDirectoryBreadcrumbs';
 import { createLocalizedPageMetadata } from '@/lib/seo/localized-metadata';
 import { resolveRequestLocale } from '@/lib/i18n/server';
 export const dynamic = 'force-dynamic';
@@ -21,7 +22,9 @@ export default async function CategoriesPage() {
     }).catch(() => null),
   ]);
   const nl = locale === 'nl';
-  return <DiscoveryPageShell authState={authState} path="/categories"><section className="featured-section">
+  return <DiscoveryPageShell authState={authState} path="/categories">
+    <section className="featured-section">
+    <LumiScoreDirectoryBreadcrumbs path="/categories" locale={locale} />
     <h1>{nl ? 'Categorieën' : 'Categories'}</h1>
     <p>{nl ? 'Kies een categorie als je al weet welk soort boek je zoekt. In het boekenoverzicht kun je daarna verder filteren. Wil je liever op een verhaalelement kiezen? Bekijk dan onze redactionele leesroutes.' : 'Choose a category if you know what kind of book you want to read, then refine your choice in the catalog. If you prefer to start with a story element, explore our editorial reading routes.'}</p>
     <p><LocaleLink href="/toplijsten">{nl ? 'Ontdek de leesroutes' : 'Explore reading routes'}</LocaleLink></p>

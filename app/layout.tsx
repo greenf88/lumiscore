@@ -53,6 +53,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} data-theme="paper" suppressHydrationWarning>
       <head>
+        <meta name="msvalidate.01" content="9858C95D1CEB8130A23BBDFE79EBDDEC" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeWebsiteJsonLd() }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeOrganizationJsonLd() }} />
         <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />

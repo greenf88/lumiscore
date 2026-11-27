@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createServer } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -23,13 +24,11 @@ test('category hub renders counts for its requested language and distinguishes m
           facets:{fiction_fantasy:locale==='nl'?2:9,nonfiction_cooking_food:0}};
       }`,
     shell: `export function DiscoveryPageShell({children}) { return children; }`,
-    links: `import {createElement} from 'react'; import {state} from 'virtual:category-state';
-      export function LocaleLink({href,children,...props}) { return createElement('a',{...props,href:'/'+state.locale+href},children); }`,
   };
   const replacements = {
     '@/lib/i18n/server': 'locale', '@/lib/seo/localized-metadata': 'metadata',
     '@/lib/supabase/auth': 'auth', '@/lib/supabase/editorial-catalog': 'catalog',
-    '@/app/components/DiscoveryPageShell': 'shell', '@/app/components/LumiScoreLocale': 'links',
+    '@/app/components/DiscoveryPageShell': 'shell',
   };
   const vite = await createServer({ root, configFile: false, envFile: false,
     cacheDir: root + '.wrangler/node_modules/category-hub-html',
@@ -45,9 +44,14 @@ test('category hub renders counts for its requested language and distinguishes m
   try {
     const { state } = await vite.ssrLoadModule('virtual:category-state');
     const { default: Page, generateMetadata } = await vite.ssrLoadModule('/app/categories/page.tsx');
+    const { LumiScoreLocaleProvider } = await vite.ssrLoadModule('/app/components/LumiScoreLocale.tsx');
+    // Match the real root layout so links in nested components receive the same
+    // language context as the route, rather than mocking only direct imports.
+    const renderPage = async () => renderToStaticMarkup(createElement(LumiScoreLocaleProvider,
+      {initialLocale:state.locale,initialPath:'/categories',hasPersistedChoice:false}, await Page()));
     for (const locale of ['nl','en']) {
       state.locale = locale;
-      const html = renderToStaticMarkup(await Page());
+      const html = await renderPage();
       assert.deepEqual(state.calls.at(-1), {locale,hydrateBooks:false});
       assert.match(html, new RegExp(`<span>${locale==='nl'?2:9} (?:<!-- -->)?${locale==='nl'?'boeken':'books'}`));
       assert.match(html, new RegExp(`href="/${locale}/browse\\?category=fiction_fantasy"`));
@@ -55,14 +59,14 @@ test('category hub renders counts for its requested language and distinguishes m
       assert.match(html, locale==='nl' ? /nog geen beschikbare boeken/ : /no available books yet/);
       assert.doesNotMatch(html, /role="status"/);
       state.discoveryAvailable = false;
-      const missing = renderToStaticMarkup(await Page());
+      const missing = await renderPage();
       assert.match(missing, /role="status"/);
       assert.doesNotMatch(missing, /category-overview|0 (?:<!-- -->)?(?:publieke|public) categorie/);
       assert.match(missing, new RegExp(`href="/${locale}/browse"`));
       state.discoveryAvailable = true;
     }
     state.fail = true;
-    assert.match(renderToStaticMarkup(await Page()), /role="status"/);
+    assert.match(await renderPage(), /role="status"/);
     const metadata = await generateMetadata();
     assert.equal(metadata.canonicalPath, '/categories');
     assert.match(metadata.description, /Browse books by category/);

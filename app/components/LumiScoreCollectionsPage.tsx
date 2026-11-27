@@ -2,7 +2,7 @@
 
 import { LocaleLink } from './LumiScoreLocale';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import type { HeaderAuthState } from '@/lib/auth/header';
 import { hasUsableInitialBookCover } from '@/lib/books/book-cover-state';
 import {
@@ -71,10 +71,12 @@ export function LumiScoreCollectionsPage({
   data,
   filter,
   authState,
+  breadcrumbs,
 }: {
   data: CollectionsDirectoryData & { available: boolean };
   filter: CollectionDirectoryFilter;
   authState: HeaderAuthState;
+  breadcrumbs: ReactNode;
 }) {
   const { locale, t } = useLumiScoreLocale();
   const [query, setQuery] = useState('');
@@ -100,6 +102,7 @@ export function LumiScoreCollectionsPage({
         returnTo={getCollectionDirectoryHref(filter)}
       />
       <section className="collections-directory" aria-labelledby="collections-title">
+        {breadcrumbs}
         <nav className="directory-switcher" aria-label={t('browse.directoryNavigation')}>
           <LocaleLink href="/browse">{t('browse.books')}</LocaleLink>
           <LocaleLink href="/collections" aria-current="page">{t('browse.collections')}</LocaleLink>
