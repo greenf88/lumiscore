@@ -1779,7 +1779,11 @@ button, input, select, textarea { font-family: var(--sans); }
   [data-editorial-guide] .editorial-books { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   [data-editorial-guide] .book-card { height: auto; }
   [data-editorial-guide] .book-card-main-link { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: start; padding: 14px 14px 0; gap: 16px; }
-  [data-editorial-guide] .book-card-main-link > .book-cover { width: 104px; margin: 0; }
+  [data-editorial-guide] .card-cover-wrap { width: 104px; padding: 0; background: transparent; }
+  /* Fallback title text must not enlarge the cover underneath a loaded image. */
+  [data-editorial-guide] .card-cover-wrap .book-cover { height: calc(104px / .66); padding: 12px 10px; }
+  [data-editorial-guide] .card-cover-wrap .cover-title { min-height: 0; overflow: hidden; }
+  [data-editorial-guide] .book-cover-image { object-fit: contain; background: var(--surface); }
   [data-editorial-guide] .book-card-body { padding: 0; }
   [data-editorial-guide] .book-year { min-height: 0; }
   [data-editorial-guide] .book-card-body > :is(h2,h3) { height: auto; min-height: 0; display: block; overflow: visible; margin-block: 8px; }
