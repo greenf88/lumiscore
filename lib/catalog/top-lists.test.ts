@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { editorialTopLists, editorialTopBooks, topListBookHref, getEditorialWorkSourceId } from './top-lists.ts';
 import { bookAuthenticationReturnPath, resolveBookReturnNavigation } from '../navigation/book-return.ts';
 import { buildPublicSitemapPaths } from '../seo/sitemap.ts';
-test('two preserved lists and ten new Top10s reference unique existing Work identities, never scores or editions',()=>{
-  assert.deepEqual(editorialTopLists.map(l=>l.workIds.length),[10,25,...Array(10).fill(10)]);
+test('preserved and seasonal lists reference unique portable Work identities, never scores or editions',()=>{
+  assert.deepEqual(editorialTopLists.map(l=>l.workIds.length),[10,25,...Array(15).fill(10)]);
   assert.equal(new Set(editorialTopBooks.map(b=>b.workId)).size,editorialTopBooks.length);
-  assert.equal(new Set(editorialTopLists.map(l=>l.slug)).size,12);
+  assert.equal(new Set(editorialTopLists.map(l=>l.slug)).size,17);
   for(const list of editorialTopLists){
     assert.equal(new Set(list.workIds).size,list.workIds.length);
     for(const id of list.workIds){

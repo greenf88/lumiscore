@@ -40,7 +40,12 @@ function publicBibliographicHost(u:URL){return u.protocol==='https:'&&!u.usernam
  * Do not strip them into a different image; reject credentials/expiring links. */
 export function safePublicCoverUrl(value:unknown):value is string {
  if(typeof value!=='string'||value.length>2048)return false;
- try{const u=new URL(value);return publicBibliographicHost(u)&&!u.hash&&[...u.searchParams.keys()].every(k=>
+ try{const u=new URL(value);
+  if(!publicBibliographicHost(u)||u.hash)return false;
+  // Reviewed Dutch library covers use a stable PPN, not a generic image search.
+  if(u.hostname==='www.sambis.nl'&&u.pathname==='/iguana/KB.AZB.cls')return [...u.searchParams].length===2&&
+   /^\d{8}[\dX]$/.test(u.searchParams.get('ppn')??'')&&u.searchParams.get('ExternalProfile')==='InforAll';
+  return [...u.searchParams.keys()].every(k=>
   ['default','id','printsec','img','zoom','edge','source','w','h','width','height','fife','locale','resize','t'].includes(k.toLowerCase()))&&
   [...u.searchParams].every(([k,v])=>k.toLowerCase()==='t'?/^\d{1,16}$/.test(v):k.toLowerCase()!=='resize'||/^[1-9]\d{0,3},[1-9]\d{0,3}$/.test(v)&&v.split(',').every(n=>Number(n)<=4096));}catch{return false;}
 }

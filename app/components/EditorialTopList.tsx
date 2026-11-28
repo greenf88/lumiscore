@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LocaleLink } from './LumiScoreLocale';
+import { LumiScoreBreadcrumbs } from './LumiScoreBreadcrumbs';
 import type { Book } from '../data/books';
 import { BookCard } from './LumiScoreHome';
 import { useWantToRead } from './useWantToRead';
@@ -35,7 +36,11 @@ export function EditorialTopList({ list, books, selections, relatedLists, unavai
   const missingCount = list.workIds.length - availableIds.length;
   return <section className="featured-section editorial-lists" data-product-list={list.slug} data-editorial-guide={guide ? list.slug : undefined}>
     {error && <p role="alert">{error}</p>}
-    <LocaleLink className="editorial-back" href="/toplijsten">{locale === 'nl' ? '← Alle toplijsten' : '← All reading lists'}</LocaleLink>
+    <LumiScoreBreadcrumbs locale={locale} entries={[
+      {name:'LumiScore',path:'/'},
+      {name:locale==='nl'?'Leesroutes':'Reading routes',path:'/toplijsten'},
+      {name:list.title[locale],path:'/toplijsten/'+list.slug},
+    ]}/>
     <p className="eyebrow">{locale === 'nl' ? 'Redactionele selectie · geen gebruikersranglijst' : 'Editorial selection · not a reader-score ranking'}</p>
     <h1>{guide?.h1 ?? list.title[locale]}</h1>{guide ? <ReadingGuideIntro guide={guide} books={books} locale={locale}/> : <p>{list.description[locale]}</p>}
     <details className="editorial-criteria"><summary>{locale === 'nl' ? 'Zo is deze selectie gemaakt' : 'How this selection was made'}</summary><p>{list.criteria?.[locale] ?? (locale === 'nl' ? 'De volgorde is een redactionele leesroute, geen claim over populariteit of consensus.' : 'The order is an editorial reading route, not a claim about popularity or consensus.')}</p></details>

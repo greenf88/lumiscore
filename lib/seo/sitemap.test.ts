@@ -120,7 +120,8 @@ test('only matching published content advertises a stable lastmod', () => {
   assert.equal(buildLocalizedSitemap([], ['suzanne-vermeer', 'dune'], 'pages'), first);
   const dates = [...first.matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)];
   assert.deepEqual(Object.fromEntries(dates.map(([, url, date]) => [url, date])), {
-    ...Object.fromEntries(editorialTopLists.map(list=>['https://lumisco.re/en/toplijsten/'+list.slug,'2026-11-16'])),
+    ...Object.fromEntries(editorialTopLists.map(list=>['https://lumisco.re/en/toplijsten/'+list.slug,list.slug.endsWith('-top-10')?'2026-11-28':'2026-11-16'])),
+    ...Object.fromEntries(editorialTopLists.filter(list=>list.slug.endsWith('-top-10')).map(list=>['https://lumisco.re/nl/toplijsten/'+list.slug,'2026-11-28'])),
     ...Object.fromEntries(['fantasy-sciencefiction','fantasy-om-mee-te-beginnen','na-project-hail-mary','sciencefiction-om-mee-te-beginnen','thrillers-met-een-twist','na-de-rivierkreeften','historische-romans','korte-romans-en-novelles','eerste-delen-fantasyreeksen','overleven-in-extreme-omstandigheden','feelgood-voor-een-leesavond'].map(slug=>['https://lumisco.re/nl/toplijsten/'+slug,'2026-11-16'])),
     'https://lumisco.re/nl/toplijsten/dystopie-vanaf-1990': '2026-11-16',
     'https://lumisco.re/nl/zo-werkt-het': '2026-11-19',
@@ -129,7 +130,7 @@ test('only matching published content advertises a stable lastmod', () => {
     'https://lumisco.re/en/zo-werkt-het': '2026-11-19',
     'https://lumisco.re/nl/collection/suzanne-vermeer': '2026-11-04',
   });
-  assert.equal(dates.length, 29);
+  assert.equal(dates.length, 39);
   assert.doesNotMatch(buildLocalizedSitemap([{ workId: '1', locales: ['en'] }], [], 'en'), /<lastmod>/);
 });
 

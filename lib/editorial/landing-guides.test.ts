@@ -14,7 +14,7 @@ test('target guides retain candidates/order while links use real language-select
     assert.equal(new Set(localized.workIds).size,localized.workIds.length);
     assert.deepEqual(guide.cards!.map(c=>c.work_id),localized.workIds);
     assert.deepEqual(guide.groups!.flatMap(g=>g.work_ids.map(String)).sort(),[...localized.workIds].sort());
-    assert.doesNotMatch(guide.h1,/\btien\b|\b10\b/);
+    if(!list.slug.endsWith('-top-10'))assert.doesNotMatch(guide.h1,/\btien\b|\b10\b/);
     const first=guide.cards![0].work_id, chosen={...book(first),workId:'999999',title:'Actual Dutch edition title'};
     const groups=availableGuideGroups(guide,[{...chosen,editionAvailable:false},chosen]);
     assert.deepEqual(groups.flatMap(g=>g.entries),[{candidateId:first,workId:'999999',title:'Actual Dutch edition title'}]);
@@ -27,7 +27,7 @@ test('target guides retain candidates/order while links use real language-select
 });
 
 test('all English guides retain the original selections and give complete, source-bound reading advice',()=>{
-  assert.equal(ENGLISH_LANDING_GUIDES.length,12);
+  assert.equal(ENGLISH_LANDING_GUIDES.length,17);
   for(const guide of ENGLISH_LANDING_GUIDES){
     const list=editorialTopLists.find(l=>guide.path==='/en/toplijsten/'+l.slug)!;
     assert.deepEqual(guide.cards!.map(c=>c.work_id),list.workIds);
