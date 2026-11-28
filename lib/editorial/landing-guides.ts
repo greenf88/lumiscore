@@ -1,5 +1,7 @@
 import data from './landing-guides.json' with { type: 'json' };
 import english from './english-landing-guides.json' with { type: 'json' };
+import seasonalDutch from './seasonal-guides-nl.json' with { type: 'json' };
+import seasonalEnglish from './seasonal-guides-en.json' with { type: 'json' };
 import type { Locale } from '../i18n/config.ts';
 import type { Book } from '../../app/data/books.ts';
 import { editorialTopLists, getEditorialWorkSourceId, localizeEditorialList } from '../catalog/top-lists.ts';
@@ -12,8 +14,8 @@ export type LandingGuide = {
   cards?: { work_id: string; reader_angle: string; text: string; sources: GuideSource[] }[];
   faq: GuideQuestion[];
 };
-export const LANDING_GUIDES = data.pages as LandingGuide[];
-export const ENGLISH_LANDING_GUIDES = english.pages as LandingGuide[];
+export const LANDING_GUIDES = [...data.pages, ...seasonalDutch.pages] as LandingGuide[];
+export const ENGLISH_LANDING_GUIDES = [...english.pages, ...seasonalEnglish.pages] as LandingGuide[];
 export const SUZANNE_SOURCES = data.sources;
 export function getLandingGuide(path: string, locale: Locale): LandingGuide | null {
   return (locale === 'nl' ? LANDING_GUIDES : ENGLISH_LANDING_GUIDES).find(g => g.path === '/' + locale + path) ?? null;

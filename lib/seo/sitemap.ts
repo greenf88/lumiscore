@@ -2,6 +2,7 @@ import { verifiedPageLastmod, type VerifiedPageRevision } from './verified-lastm
 import { createHash } from 'node:crypto';
 import { getLandingGuide } from '../editorial/landing-guides.ts';
 import englishGuideDates from './english-guide-revisions.json' with { type: 'json' };
+import seasonalGuideDates from './seasonal-guide-revisions.json' with { type: 'json' };
 import { NEWS_PATH, publishedNews } from '../editorial/news.ts';
 import { getInformationPageContent, type InformationPageKey } from '../information/pages.ts';
 import { languageAlternates, localizedHref } from '../i18n/paths.ts';
@@ -98,7 +99,8 @@ function sitemapLastModified(path: string, locale: Locale): string {
   const entry = verifiedContentDates['/' + locale + path];
   const dates: Readonly<Record<string, { date: string; hash: string }>> = locale === 'nl' ? verifiedGuideDates : englishGuideDates;
   const guide = Object.hasOwn(dates, path) ? dates[path] : undefined;
-  const revision = entry ?? guide;
+  const seasonal: Readonly<Record<string, { date: string; hash: string }>> = seasonalGuideDates;
+  const revision = entry ?? guide ?? seasonal['/' + locale + path];
   if (!revision) return '';
   const content = entry ? getInformationPageContent(entry.key, locale) : getLandingGuide(path, locale);
   const hash = createHash('sha256').update(JSON.stringify(content)).digest('hex');
